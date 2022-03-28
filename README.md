@@ -4,7 +4,7 @@
 
 ## 下载
 
-[前往下载](https://github.com/hiroi-sora/Umi-OCR/releases/tag/v0.1)
+[前往下载：Umi-OCR 批量图片转文字v0.1](https://github.com/hiroi-sora/Umi-OCR/releases/tag/v0.1)
 
 ## 简介
 
