@@ -126,4 +126,4 @@
 
 本软件是python调用c++编译的识别器exe程序，识别器exe再加载模型文件和必要的dll链接库，完成图片识别工作。因此可切换不同识别器和模型文件，实现切换多国语言的识别。
 
-`PaddleOCR_json.exe`接收输入一个本地图片路径，以json格式字符串输出这张图片的识别结果，如此循环往复。具体见 [PaddleOCR_Green\README.md](PaddleOCR_Green\README.md)
+`PaddleOCR_json.exe`接收输入一个本地图片路径，以json格式字符串输出这张图片的识别结果，如此循环往复。具体见 [PaddleOCR_Green/readme.md](PaddleOCR_Green/readme.md)
