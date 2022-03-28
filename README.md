@@ -14,7 +14,7 @@
 > 类似含水印的视频截图、含有UI/按钮的游戏截图等，往往只需要提取台词区域的文本，而避免水印和UI文本。本软件可设置忽略某些区域内的文字，来实现这一目的。尤其是对于干净地提取Galgame截图中的台词特别有效。
 > 当有大量的影视和游戏截图需要整理归档，或者想翻找包含某一段台词/文字的截图；将这些图片提取出文字、然后Ctrl+F是一个很有效的方法；这也是开发本软件的初衷。
 
-本软件使用离线OCR模块 [PaddleOCR](https://github.com/maxogden) ，使用过程中无需联网。支持更换 [官方模型](https://gitee.com/paddlepaddle/PaddleOCR)（v2.x版本）或自己训练的模型。通过更换不同的语言模型，软件可识别多国语言。
+本软件使用离线OCR模块 [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR) ，使用过程中无需联网。支持更换 [官方模型](https://gitee.com/paddlepaddle/PaddleOCR#pp-ocr%E7%B3%BB%E5%88%97%E6%A8%A1%E5%9E%8B%E5%88%97%E8%A1%A8%E6%9B%B4%E6%96%B0%E4%B8%AD)（v2.x版本）或自己训练的模型。通过更换不同的语言模型，软件可识别多国语言。
 
 ## 简单使用
 
