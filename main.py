@@ -1,6 +1,10 @@
+"""
+Umi-OCR 批量图片转文字
+https://github.com/hiroi-sora/Umi-OCR
+"""
 
-
-from SelectAreaWin import SelectAreaWin
+from SelectAreaWin import SelectAreaWin  # 子窗口
+from asset import iconBase64, helpText  # 资源
 
 import os
 import time
@@ -11,6 +15,7 @@ from PIL import Image
 import tkinter as tk
 import tkinter.filedialog
 from tkinter import ttk
+from base64 import b64decode  # 图标解码
 from json import loads as jsonLoads
 from windnd import hook_dropfiles  # 文件拖拽
 from sys import platform as sysPlatform  # popen静默模式
@@ -27,6 +32,13 @@ class Win:
         self.imgDict = {}  # 当前载入的图片信息字典，key为表格组件id。必须为有序字典，python3.6以上默认是。
         self.areaInfo = None  # 特殊处理区域数据
         self.isRunning = 0  # 0未在运行，1正在运行，2正在停止
+
+        def initIcon():  # 载入图标
+            with open("tmp.ico", "wb") as f:
+                f.write(b64decode(iconBase64))
+            self.win.iconbitmap("tmp.ico")
+            os.remove("tmp.ico")
+        initIcon()
 
         def initTop():  # 顶部按钮
             tk.Frame(self.win, height=5).pack(side='top')
@@ -515,7 +527,7 @@ class Win:
             if not tkinter.messagebox.askokcancel('提示', '将清空输出面板。要继续吗？'):
                 return
             self.textOutput.delete('1.0', tk.END)
-        self.textOutput.insert(tk.END, UmiOCR)
+        self.textOutput.insert(tk.END, helpText)
 
     def onClose(self):  # 关闭窗口事件
         if self.isRunning == 0:  # 未在运行
@@ -580,15 +592,7 @@ class CallingOCR:
         self.ret.kill()  # 关闭子进程
 
 
-UmiOCR = """
-
-UmiOCR 批量图片转文字工具 v0.1
-
-
-本软件
-"""
-
 if __name__ == "__main__":
     Win()
 
-# pyinstaller - F main.py - w
+# pyinstaller -F -w -i icon/icon.ico -n "Umi-OCR 批量图片转文字" main.py
