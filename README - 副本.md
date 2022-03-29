@@ -1,14 +1,11 @@
 # Umi-OCR 批量图片转文字工具
 
-软件用途：批量对本地图片文件进行离线OCR文字识别。
-
-> 本软件只能处理图片文件，没有实时屏幕截图识别的功能。
-
-![](https://tupian.li/images/2022/03/29/win-12.png)
+图片批量离线OCR文字识别工具。可设置忽略选区，排除视频截图的水印、游戏截图的按钮等干扰。
+![](/readme_img/win-1+2.png)
 
 ## 下载
 
-[Umi-OCR 批量图片转文字 v1.0](https://github.com/hiroi-sora/Umi-OCR/releases/tag/v1.0)
+[前往下载：Umi-OCR 批量图片转文字 v1.0](https://github.com/hiroi-sora/Umi-OCR/releases/tag/v1.0)
 
 ## 简介
 
@@ -19,31 +16,29 @@
 > 
 > 当有大量的影视和游戏截图需要整理归档，或者想翻找包含某一段台词/字幕的截图；将这些图片提取出文字、然后Ctrl+F是一个很有效的方法。这是开发本软件的初衷。
 
-本软件使用离线OCR模块 [PaddleOCR-json 图片转文字程序](https://github.com/hiroi-sora/PaddleOCR-json) ，使用过程中无需联网。支持更换 [Paddle官方模型](https://gitee.com/paddlepaddle/PaddleOCR#pp-ocr%E7%B3%BB%E5%88%97%E6%A8%A1%E5%9E%8B%E5%88%97%E8%A1%A8%E6%9B%B4%E6%96%B0%E4%B8%AD)（v2.x版本）或自己训练的模型，支持修改PaddleOCR参数。通过添加不同的语言模型，软件可识别多国语言。
+本软件使用离线OCR模块 [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR) ，使用过程中无需联网。支持更换 [官方模型](https://gitee.com/paddlepaddle/PaddleOCR#pp-ocr%E7%B3%BB%E5%88%97%E6%A8%A1%E5%9E%8B%E5%88%97%E8%A1%A8%E6%9B%B4%E6%96%B0%E4%B8%AD)（v2.x版本）或自己训练的模型。通过更换不同的语言模型，软件可识别多国语言。
 
 ## 简单使用
 
 ### 准备
 
-下载压缩包并解压，主程序 `Umi-OCR 批量图片转文字.exe` 与识别器模块文件夹 `PaddleOCR-json` 需置于同一目录下。
+主程序exe与识别器模块`PaddleOCR_Green`解压到同一目录下。
+![](/readme_img/rm-1.png)
 
 ### 快速开始
-
-![](https://tupian.li/images/2022/03/29/rm-2.jpg)
 
 1. 打开主程序，将任意 **图片/文件夹** 拖入窗口中的白色背景表格区域，或点击左上方的 **浏览** 选择图片。
    - 若拖入文件夹，则加载文件夹下所有 **符合后缀（见后）** 的图片文件。
 2. 点击右上方 **开始任务** ，等待进度条走完。
    - 任务进行中，可随时点击 **终止任务**（原开始任务按钮）来停止，但下次开始时依然会从头开始。
-3. 点击 **识别内容** 选项卡查看输出文字，或者前往 **第一张图片的目录** 查看识别结果txt文件。
-   - 识别内容选项卡中，可一键将全部文本 **复制到剪贴板** 。
+3. 点击 **识别内容** 选项卡查看输出文字，或者前往第一张图片的目录查看识别结果txt文件。
+   - 识别内容选项卡中，可快速将全部文本 **复制到剪贴板** 。
 
+![](/readme_img/rm-2.jpg)
 
 ### 基础设置
 
 点击 **设置** 选项卡，配置参数。目前，所有设置项不会保存，下次打开软件将重置。
-
-![](https://tupian.li/images/2022/03/29/win-2-0-1.png)
 
 #### 本地输出文件：
 - 将 **启用识别内容写入txt文件** 取消勾选后，不会再生成本地文件，只能在 **识别内容** 选项卡中查看输出信息。
@@ -75,26 +70,26 @@
 
 简单案例见下。
 
-#### 简单排除视频截图中的水印：
+#### 排除视频截图中的水印：
 
 1. 打开忽略区域设置窗口，拖入任一张截图。
 2. 点击选择 **+忽略区域 1** ，鼠标按住，绘制矩形完全包裹住水印区域，范围可以大一些。
 3. 点击 **完成** 。返回主窗口， **开始任务** 。
-![](https://tupian.li/images/2022/03/29/rm-3.jpg)
+![](/readme_img/rm-3.jpg)
 
-#### 排除游戏截图中的两种UI：
+#### 排除游戏截图中的UI：
 
 - 假设有一组游戏截图，主要分为两类图片，这两类图片的文字位置和UI位置不太相同：
   - A类为对话模式，字数少，要保留的台词文本在画面下方，要排除的UI分布于底端。
   - B类为历史文本模式，字数多，从上到下都有要保留的文本（与A类UI位置有重合），要排除的UI分布在两侧。
 1. 拖入一张A类图片。选择 **+忽略区域 1** ，绘制矩形包裹住要排除的 **底端UI** 。
-![](https://tupian.li/images/2022/03/29/rm-4.png)
+![](/readme_img/rm-4.png)
 1. 拖入一张B类图片。选择 **+识别区域** ，绘制矩形包裹住 **小部分要保留的文本** 。注意只要该区域内含有任意保留文本即可，不需要画得很大，不需要包裹住所有保留文本；不能与A类图中 **可能存在的任何文本** 重合。
 2. 然后选择 **+忽略区域 2** ，绘制矩形包裹住B类图要排除的 **两侧UI** 。
-![](https://tupian.li/images/2022/03/29/rm-5.jpg)
-1. 点击 **完成** 。返回主窗口， **开始任务** 。
+![](/readme_img/rm-5.jpg#pic_center)
+3. 点击 **完成** 。返回主窗口， **开始任务** 。
 
-#### 忽略区域功能说明：
+#### 注意：
 
 - **忽略区域1** ：正常情况下，处于 **忽略区域1** 内的文字 **不会** 输出。
 - **识别区域** ：当识别区域内存在文本时，**忽略区域1失效** ；即处于忽略区域1内的文字也 **会** 被输出。
@@ -105,22 +100,22 @@
     | × 不存在文字 | √ 生效    | × 失效    |
     | √ 存在文字   | × 失效    | √ 生效    |
 - “忽略区域配置”只针对一种分辨率生效。假如配置的分辨率是1920x1080，那么批量识别图片时，只有符合1920x1080的图片才会排除干扰文本。
-- 拖入预览的图片必须分辨率相同。假如先拖入1920x1080的图片，再拖入其它分辨率的图片；软件会弹窗警告。只有点击 **清空** 删除当前已配置的忽略区域，才能拖入其他分辨率图片，并应用此分辨率。
+- 拖入预览的图片必须分辨率相同。假如先拖入1920x1080的图片，再拖入其它分辨率的图片；软件会弹窗警告。只有点击 **清空** 删除当前已配置的忽略区域，才能拖入其他分辨率图片比应用此分辨率。
 
 
 ## 切换模型库和语言
 
 #### 切换日文模式
 
-软件自带日文识别库，将 **识别器路径** 修改为 `PaddleOCR-json\PaddleOCR_json_jp.exe` 即可。
-![](https://tupian.li/images/2022/03/29/rm-6.png)
+软件自带日文识别库，将 **识别器路径** 修改为 `PaddleOCR_Green\PaddleOCR_json_jp.exe` 即可。
+![](/readme_img/rm-6.jpg)
 
 #### 载入新语言
 
 以法文为例：
 
 1. 前往 [PP-OCR系列 多语言识别模型列表](https://gitee.com/paddlepaddle/PaddleOCR/blob/release/2.4/doc/doc_ch/models_list.md#23-%E5%A4%9A%E8%AF%AD%E8%A8%80%E8%AF%86%E5%88%AB%E6%A8%A1%E5%9E%8B%E6%9B%B4%E5%A4%9A%E8%AF%AD%E8%A8%80%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0%E4%B8%AD) 下载对应的 **推理模型**`french_mobile_v2.0_rec_infer.tar` 和 **字典文件**`french_dict.txt`。
-2. 在`PaddleOCR-json`目录下创建文件夹`rec_fr`，将解压后的三个模型文件放进去。字典文件可直接放在目录下。
+2. 在`PaddleOCR_Green`目录下创建文件夹`rec_fr`，将解压后的三个模型文件放进去。字典文件可直接放在目录下。
 3. 复制一份识别器`PaddleOCR_json.exe`，命名为`PaddleOCR_json_fr.exe`
 4. 复制一份配置单`PaddleOCR_json_config.txt`，命名为`PaddleOCR_json_fr_config.txt`
 5. 打开配置单`PaddleOCR_json_fr_config.txt`，将`# rec config`相关的两个配置项改为：
@@ -129,7 +124,7 @@
     rec_model_dir  rec_fr
     char_list_file french_dict.txt
     ```
-6. 保存文件，打开软件，将 **识别器路径** 改为 `PaddleOCR-json\PaddleOCR_json_fr.exe`。
+6. 保存文件，打开软件，将 **识别器路径** 改为 `PaddleOCR_Green\PaddleOCR_json_fr.exe`。
 
 #### 切换模型库
 
@@ -144,11 +139,11 @@
 - 打开PaddleOcr_json.exe。若无报错，则模型文件已正确加载。“Active code page: 65001”是正常现象。
 
 3. 调整配置
-- `[exe名称]_config.txt`是全局配置文件，可设置模型位置、识别参数、开启GPU等。具体参考[官方文档](https://gitee.com/paddlepaddle/PaddleOCR/blob/release/2.4/doc/doc_ch/config.md#2-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%8F%82%E6%95%B0%E4%BB%8B%E7%BB%8D)。
+- `[exe名称]_config.txt`是全局配置文件，可设置模型位置、识别参数、开启GPU等。具体参考[官方文档](https://gitee.com/paddlepaddle/PaddleOCR/blob/release/2.4/doc/doc_ch/config.md)。
 - 如果修改了exe名称，也需要同步修改配置文件名的前缀。
 
 ## 开发说明
 
 本软件是python调用c++编译的识别器exe程序，识别器exe再加载模型文件和必要的dll链接库，完成图片识别工作。因此可切换不同识别器和模型文件，实现切换多国语言的识别。
 
-`PaddleOCR_json.exe`接收输入一个本地图片路径，以json格式字符串输出这张图片的识别结果，如此循环往复。具体见 [PaddleOCR-json 图片转文字程序](https://github.com/hiroi-sora/PaddleOCR-json#paddleocr-json-%E5%9B%BE%E7%89%87%E8%BD%AC%E6%96%87%E5%AD%97%E7%A8%8B%E5%BA%8F)
+`PaddleOCR_json.exe`接收输入一个本地图片路径，以json格式字符串输出这张图片的识别结果，如此循环往复。具体见 [PaddleOCR_Green\README.md](PaddleOCR_Green\README.md)
