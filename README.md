@@ -1,11 +1,11 @@
 # Umi-OCR 批量图片转文字工具
 
 图片批量离线OCR文字识别工具。可设置忽略选区，排除视频截图的水印、游戏截图的按钮等干扰。
-![](/readme_img/win-1+2.png)
+![](https://tupian.li/images/2022/03/29/win-12.png)
 
 ## 下载
 
-[前往下载：Umi-OCR 批量图片转文字 v1.0](https://github.com/hiroi-sora/Umi-OCR/releases/tag/v1.0)
+[Umi-OCR 批量图片转文字 v1.0](https://github.com/hiroi-sora/Umi-OCR/releases/tag/v1.0)
 
 ## 简介
 
@@ -16,14 +16,14 @@
 > 
 > 当有大量的影视和游戏截图需要整理归档，或者想翻找包含某一段台词/字幕的截图；将这些图片提取出文字、然后Ctrl+F是一个很有效的方法。这是开发本软件的初衷。
 
-本软件使用离线OCR模块 [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR) ，使用过程中无需联网。支持更换 [官方模型](https://gitee.com/paddlepaddle/PaddleOCR#pp-ocr%E7%B3%BB%E5%88%97%E6%A8%A1%E5%9E%8B%E5%88%97%E8%A1%A8%E6%9B%B4%E6%96%B0%E4%B8%AD)（v2.x版本）或自己训练的模型。通过更换不同的语言模型，软件可识别多国语言。
+本软件使用离线OCR模块 [PaddleOCR-json 图片转文字程序](https://github.com/hiroi-sora/PaddleOCR-json) ，使用过程中无需联网。支持更换 [Paddle官方模型](https://gitee.com/paddlepaddle/PaddleOCR#pp-ocr%E7%B3%BB%E5%88%97%E6%A8%A1%E5%9E%8B%E5%88%97%E8%A1%A8%E6%9B%B4%E6%96%B0%E4%B8%AD)（v2.x版本）或自己训练的模型。通过更换不同的语言模型，软件可识别多国语言。
 
 ## 简单使用
 
 ### 准备
 
-主程序exe与识别器模块`PaddleOCR_Green`解压到同一目录下。
-![](/readme_img/rm-1.png)
+主程序exe与识别器模块`PaddleOCR-json`解压到同一目录下。
+![](https://tupian.li/images/2022/03/29/rm-1f30e97eaa3533d10.png)
 
 ### 快速开始
 
@@ -34,7 +34,7 @@
 3. 点击 **识别内容** 选项卡查看输出文字，或者前往第一张图片的目录查看识别结果txt文件。
    - 识别内容选项卡中，可快速将全部文本 **复制到剪贴板** 。
 
-![](/readme_img/rm-2.jpg)
+![](https://tupian.li/images/2022/03/29/rm-2.jpg)
 
 ### 基础设置
 
@@ -75,7 +75,7 @@
 1. 打开忽略区域设置窗口，拖入任一张截图。
 2. 点击选择 **+忽略区域 1** ，鼠标按住，绘制矩形完全包裹住水印区域，范围可以大一些。
 3. 点击 **完成** 。返回主窗口， **开始任务** 。
-![](/readme_img/rm-3.jpg)
+![](https://tupian.li/images/2022/03/29/rm-3.jpg)
 
 #### 排除游戏截图中的UI：
 
@@ -83,11 +83,11 @@
   - A类为对话模式，字数少，要保留的台词文本在画面下方，要排除的UI分布于底端。
   - B类为历史文本模式，字数多，从上到下都有要保留的文本（与A类UI位置有重合），要排除的UI分布在两侧。
 1. 拖入一张A类图片。选择 **+忽略区域 1** ，绘制矩形包裹住要排除的 **底端UI** 。
-![](/readme_img/rm-4.png)
+![](https://tupian.li/images/2022/03/29/rm-4.png)
 1. 拖入一张B类图片。选择 **+识别区域** ，绘制矩形包裹住 **小部分要保留的文本** 。注意只要该区域内含有任意保留文本即可，不需要画得很大，不需要包裹住所有保留文本；不能与A类图中 **可能存在的任何文本** 重合。
 2. 然后选择 **+忽略区域 2** ，绘制矩形包裹住B类图要排除的 **两侧UI** 。
-![](/readme_img/rm-5.jpg#pic_center)
-3. 点击 **完成** 。返回主窗口， **开始任务** 。
+![](https://tupian.li/images/2022/03/29/rm-5.jpg)
+1. 点击 **完成** 。返回主窗口， **开始任务** 。
 
 #### 注意：
 
@@ -107,15 +107,15 @@
 
 #### 切换日文模式
 
-软件自带日文识别库，将 **识别器路径** 修改为 `PaddleOCR_Green\PaddleOCR_json_jp.exe` 即可。
-![](/readme_img/rm-6.jpg)
+软件自带日文识别库，将 **识别器路径** 修改为 `PaddleOCR-json\PaddleOCR_json_jp.exe` 即可。
+![](https://tupian.li/images/2022/03/29/rm-6.png)
 
 #### 载入新语言
 
 以法文为例：
 
 1. 前往 [PP-OCR系列 多语言识别模型列表](https://gitee.com/paddlepaddle/PaddleOCR/blob/release/2.4/doc/doc_ch/models_list.md#23-%E5%A4%9A%E8%AF%AD%E8%A8%80%E8%AF%86%E5%88%AB%E6%A8%A1%E5%9E%8B%E6%9B%B4%E5%A4%9A%E8%AF%AD%E8%A8%80%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0%E4%B8%AD) 下载对应的 **推理模型**`french_mobile_v2.0_rec_infer.tar` 和 **字典文件**`french_dict.txt`。
-2. 在`PaddleOCR_Green`目录下创建文件夹`rec_fr`，将解压后的三个模型文件放进去。字典文件可直接放在目录下。
+2. 在`PaddleOCR-json`目录下创建文件夹`rec_fr`，将解压后的三个模型文件放进去。字典文件可直接放在目录下。
 3. 复制一份识别器`PaddleOCR_json.exe`，命名为`PaddleOCR_json_fr.exe`
 4. 复制一份配置单`PaddleOCR_json_config.txt`，命名为`PaddleOCR_json_fr_config.txt`
 5. 打开配置单`PaddleOCR_json_fr_config.txt`，将`# rec config`相关的两个配置项改为：
@@ -124,7 +124,7 @@
     rec_model_dir  rec_fr
     char_list_file french_dict.txt
     ```
-6. 保存文件，打开软件，将 **识别器路径** 改为 `PaddleOCR_Green\PaddleOCR_json_fr.exe`。
+6. 保存文件，打开软件，将 **识别器路径** 改为 `PaddleOCR-json\PaddleOCR_json_fr.exe`。
 
 #### 切换模型库
 
@@ -139,11 +139,11 @@
 - 打开PaddleOcr_json.exe。若无报错，则模型文件已正确加载。“Active code page: 65001”是正常现象。
 
 3. 调整配置
-- `[exe名称]_config.txt`是全局配置文件，可设置模型位置、识别参数、开启GPU等。具体参考[官方文档](https://gitee.com/paddlepaddle/PaddleOCR/blob/release/2.4/doc/doc_ch/config.md)。
+- `[exe名称]_config.txt`是全局配置文件，可设置模型位置、识别参数、开启GPU等。具体参考[官方文档](https://gitee.com/paddlepaddle/PaddleOCR/blob/release/2.4/doc/doc_ch/config.md#2-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%8F%82%E6%95%B0%E4%BB%8B%E7%BB%8D)。
 - 如果修改了exe名称，也需要同步修改配置文件名的前缀。
 
 ## 开发说明
 
 本软件是python调用c++编译的识别器exe程序，识别器exe再加载模型文件和必要的dll链接库，完成图片识别工作。因此可切换不同识别器和模型文件，实现切换多国语言的识别。
 
-`PaddleOCR_json.exe`接收输入一个本地图片路径，以json格式字符串输出这张图片的识别结果，如此循环往复。具体见 [PaddleOCR_Green\README.md](PaddleOCR_Green\README.md)
+`PaddleOCR_json.exe`接收输入一个本地图片路径，以json格式字符串输出这张图片的识别结果，如此循环往复。具体见 [PaddleOCR-json 图片转文字程序](https://github.com/hiroi-sora/PaddleOCR-json#paddleocr-json-%E5%9B%BE%E7%89%87%E8%BD%AC%E6%96%87%E5%AD%97%E7%A8%8B%E5%BA%8F)
