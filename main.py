@@ -1,10 +1,5 @@
-"""
-Umi-OCR 批量图片转文字
-https://github.com/hiroi-sora/Umi-OCR
-"""
-
 from SelectAreaWin import SelectAreaWin  # 子窗口
-from asset import iconBase64, helpText  # 资源
+from asset import iconPngBase64, getHelpText  # 资源
 
 import os
 import time
@@ -20,25 +15,34 @@ from json import loads as jsonLoads
 from windnd import hook_dropfiles  # 文件拖拽
 from sys import platform as sysPlatform  # popen静默模式
 from pyperclip import copy as pyperclipCopy  # 剪贴板
+from webbrowser import open as webOpen  # “关于”面板打开项目网址
+
+ProjectVer = "1.0"  # 版本号
+ProjectName = f"Umi-OCR 批量图片转文字 v{ProjectVer}"  # 名称
+ProjectWeb = "https://github.com/hiroi-sora/Umi-OCR"
 
 
 class Win:
     def __init__(self):
-        self.win = tk.Tk()
-        self.win.title("Umi-OCR 批量图片转文字 v0.1")
-        self.win.minsize(350, 520)
-        self.win.geometry("360x520")
-        self.win.protocol("WM_DELETE_WINDOW", self.onClose)  # 窗口关闭
         self.imgDict = {}  # 当前载入的图片信息字典，key为表格组件id。必须为有序字典，python3.6以上默认是。
         self.areaInfo = None  # 特殊处理区域数据
         self.isRunning = 0  # 0未在运行，1正在运行，2正在停止
 
-        def initIcon():  # 载入图标
-            with open("tmp.ico", "wb") as f:
-                f.write(b64decode(iconBase64))
-            self.win.iconbitmap("tmp.ico")
-            os.remove("tmp.ico")
-        initIcon()
+        def initWin():  # 初始化主窗口
+            self.win = tk.Tk()
+            self.win.title(ProjectName)
+            # 窗口大小与位置
+            w, h = 360, 520  # 窗口初始大小与最小大小
+            ws, hs = self.win.winfo_screenwidth(), self.win.winfo_screenheight()
+            x, y = round(ws/2 - w/2), round(hs/2 - h/2)  # 初始位置，屏幕正中
+            self.win.minsize(w, h)  # 最小大小
+            self.win.geometry(f"{w}x{h}+{x}+{y}")  # 初始大小与位置
+            self.win.protocol("WM_DELETE_WINDOW", self.onClose)  # 窗口关闭
+            # 图标
+            self.iconImg = tkinter.PhotoImage(
+                data=iconPngBase64)  # 载入图标，base64转
+            self.win.iconphoto(False, self.iconImg)  # 设置窗口图标
+        initWin()
 
         def initTop():  # 顶部按钮
             tk.Frame(self.win, height=5).pack(side='top')
@@ -190,7 +194,21 @@ class Win:
             self.enInSuffix = tk.Entry(vFrame4)
             self.enInSuffix.pack(side='top', fill="x", padx=5)
             self.enInSuffix.insert(
-                0, ".jpg .jpeg .JPG .JPEG .png .PNG .webp .WEBP")
+                0, ".jpg .jpeg .png .webp")
+            # 关于面板，隐藏在设置选项卡默认大小的下方外面
+            tk.Frame(tabFrame, height=20).pack()
+            vFrameAbout = tk.LabelFrame(
+                tabFrame, text="关于")
+            vFrameAbout.pack(side='top', fill='both', padx=5, ipady=10)
+            tk.Label(vFrameAbout, image=self.iconImg).pack()  # 图标
+            tk.Label(vFrameAbout, text=ProjectName, fg="gray").pack()
+            labelWeb = tk.Label(vFrameAbout, text=ProjectWeb, cursor="hand2",
+                                fg="deeppink")
+            labelWeb.pack()  # 文字
+            labelWeb.bind(  # 绑定鼠标左键点击，打开网页
+                '<Button-1>', self.openProjectWeb)
+            tk.Frame(tabFrame, height=150).pack()
+            tk.Label(tabFrame, text="真没有啦！", fg="gray").pack()
         initTab3()
 
         self.win.mainloop()
@@ -250,7 +268,7 @@ class Win:
 
     def addImage(self, path, okSuf=None):  # 添加一张图片。传入路径，许可后缀。
         path = path.replace("/", "\\")  # 浏览是左斜杠，拖入是右斜杠；需要统一
-        if okSuf and os.path.splitext(path)[1] not in okSuf:
+        if okSuf and os.path.splitext(path)[1].lower() not in okSuf:
             return  # 需要判别许可后缀 且 文件后缀不在许可内，不添加。
         # 检测是否重复
         for key, value in self.imgDict.items():
@@ -527,7 +545,10 @@ class Win:
             if not tkinter.messagebox.askokcancel('提示', '将清空输出面板。要继续吗？'):
                 return
             self.textOutput.delete('1.0', tk.END)
-        self.textOutput.insert(tk.END, helpText)
+        self.textOutput.insert(tk.END, getHelpText(ProjectWeb))
+
+    def openProjectWeb(self, e=None):  # 打开项目网页
+        webOpen(ProjectWeb)
 
     def onClose(self):  # 关闭窗口事件
         if self.isRunning == 0:  # 未在运行

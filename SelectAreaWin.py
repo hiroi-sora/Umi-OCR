@@ -206,4 +206,4 @@ class SelectAreaWin:
 
 # 测试
 if __name__ == "__main__":
-    SelectAreaWin(defaultPath="D:\图片\分类\LOOPERS\屏幕截图(4074).png")
+    SelectAreaWin()
