@@ -186,7 +186,7 @@ class Win:
                 side='left', padx=5)
             self.enEXE = tk.Entry(vFrame5)
             self.enEXE.pack(side='top', fill="x", padx=5)
-            self.enEXE.insert(0, "PaddleOCR_Green\\PaddleOCR_json.exe")
+            self.enEXE.insert(0, "PaddleOCR-json\\PaddleOCR_json.exe")
             vFrame4 = tk.Frame(vFrameEXE)
             vFrame4.pack(side='top', fill='x', pady=2)
             tk.Label(vFrame4, text="图片后缀：   ").pack(
