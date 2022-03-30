@@ -132,6 +132,8 @@ class SelectAreaWin:
                 data = self.getData()
         if self.closeSendData:  # 通信接口存在，则回传数据
             self.closeSendData(data)
+        if self.ocr:
+            del self.ocr  # 关闭OCR进程
         self.win.destroy()  # 销毁窗口
 
     def getData(self):  # 将数据传给接口，然后关闭窗口

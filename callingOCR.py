@@ -22,6 +22,7 @@ class CallingOCR:
             startupinfo=startupinfo  # 开启静默模式
         )
         self.ret.stdout.readline()  # 读掉第一行
+        print("初始化OCR！")
 
     def run(self, imgPath):
         """对一张图片文字识别。
@@ -50,3 +51,4 @@ class CallingOCR:
 
     def __del__(self):
         self.ret.kill()  # 关闭子进程
+        print("关闭OCR！")
