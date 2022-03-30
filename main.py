@@ -138,14 +138,18 @@ class Win:
             self.labelOptionTips = tk.Label(tabFrame, fg="red")  # 提示
             self.labelOptionTips.pack()
             # 输出文件设置
-            vFrameOutFile = tk.LabelFrame(tabFrame, text="本地输出文件")
+            vFrameOutFile = tk.LabelFrame(tabFrame, text="输出设置")
             vFrameOutFile.pack(side='top', fill='x', pady=2, padx=5)
             vFrameO1 = tk.Frame(vFrameOutFile)
             vFrameO1.pack(side='top', fill='x', pady=2)
             self.isOutputFile = tk.IntVar()
             self.isOutputFile.set(1)
-            tk.Checkbutton(vFrameO1, variable=self.isOutputFile, text="启用 将识别内容写入txt文件").pack(
+            tk.Checkbutton(vFrameO1, variable=self.isOutputFile, text="将识别内容写入txt文件").pack(
                 side='left')
+            self.isOutputDebug = tk.IntVar()
+            self.isOutputDebug.set(0)
+            tk.Checkbutton(vFrameO1, variable=self.isOutputDebug, text="输出调试信息").pack(
+                side='left', padx=23)
             tk.Label(vFrameOutFile, fg="gray", text="下面两项为空时，默认输出到第一张图片所在的文件夹").pack(
                 side='top', padx=5)
             vFrameO2 = tk.Frame(vFrameOutFile)
@@ -335,7 +339,7 @@ class Win:
             exePath = self.enEXE.get()
             if not os.path.exists(exePath):
                 tk.messagebox.showerror(
-                    '警告', f'未在以下地址找到识别器！\n{exePath}')
+                    '遇到了一点小问题', f'未在以下地址找到识别器！\n{exePath}')
                 return
             # 创建输出文件
             if self.isOutputFile.get() == 1:
@@ -346,14 +350,14 @@ class Win:
                     open(outPath, 'w').close()  # 创建文件
                 except FileNotFoundError:
                     tk.messagebox.showerror(
-                        '创建文件失败', f'创建输出文件失败。请检查以下地址是否正确。\n{outPath}')
+                        '遇到了亿点小问题', f'创建输出文件失败。请检查以下地址是否正确。\n{outPath}')
                     return
                 except Exception as e:
                     tk.messagebox.showerror(
-                        '创建文件失败', f'创建输出文件失败。文件地址：\n{outPath}\n\n错误信息：\n{e}')
+                        '遇到了亿点小问题', f'创建输出文件失败。文件地址：\n{outPath}\n\n错误信息：\n{e}')
                     return
             self.setRunning(1)
-            # 在当前线程下创建时间循环，在start_loop里面启动它
+            # 在当前线程下创建事件循环，在start_loop里面启动它
             newLoop = asyncio.new_event_loop()
             # 通过当前线程开启新的线程去启动事件循环
             threading.Thread(target=self.getLoop, args=(newLoop,)).start()
@@ -368,13 +372,15 @@ class Win:
         self.loop.run_forever()
 
     async def run_(self):  # 异步，执行任务
-        isOutputFile = self.isOutputFile.get()
+        self.labelPercentage["text"] = "初始化"
+        isOutputFile = self.isOutputFile.get()  # 是否输出文件
+        isOutputDebug = self.isOutputDebug.get()  # 是否输出调试
         areaInfo = self.areaInfo
-        if isOutputFile == 1:
-            outPath = self.enOutPath.get() + "\\" + self.enOutName.get()  # 输出文件
+        if isOutputFile:
+            outPath = self.enOutPath.get() + "\\" + self.enOutName.get()  # 输出文件路径
 
         def output(str_):  # 输出字符串
-            if isOutputFile == 1:
+            if isOutputFile:
                 with open(outPath, "a", encoding='utf-8') as f:  # 追加写入本地文件
                     f.write(str_)
             self.textOutput.insert(tk.END, str_)  # 1写入输出面板
@@ -386,20 +392,19 @@ class Win:
             self.loop.stop()  # 关闭异步事件循环
             self.setRunning(0)
             self.labelPercentage["text"] = "已终止"
-            # print("异步任务结束！")
 
         def getText(oget, img):  # 分析一张图转出的文字
             def isInBox(aPos0, aPos1, bPos0, bPos1):  # 检测框左上、右下角，待测者左上、右下角
-                return bPos0[0] > aPos0[0] and bPos0[1] > aPos0[1] and bPos1[0] < aPos1[0] and bPos1[1] < aPos1[1]
+                return bPos0[0] >= aPos0[0] and bPos0[1] >= aPos0[1] and bPos1[0] <= aPos1[0] and bPos1[1] <= aPos1[1]
 
-            def isIden():  # 是识别区域模式
+            def isIden():  # 是否识别区域模式
                 if areaInfo[1][1]:  # 需要检测
                     for o in oget:  # 遍历每一个文字块
                         for a in areaInfo[1][1]:  # 遍历每一个检测块
                             if isInBox(a[0], a[1], (o["box"][0], o["box"][1]), (o["box"][4], o["box"][5])):
                                 return True
             text = ""
-            textLog = ""
+            textDebug = ""  # 调试信息
             score = 0  # 平均置信度
             scoreNum = 0
             if not areaInfo or not areaInfo[0][0] == img["size"][0] or not areaInfo[0][1] == img["size"][1]:
@@ -422,7 +427,8 @@ class Win:
                         scoreNum += 1
                     else:
                         fn += 1
-                # textLog = f"〔忽略模式2：忽略{fn}条〕\n"
+                if isOutputDebug:
+                    textDebug = f"〔忽略模式2：忽略{fn}条〕\n"
             else:  # 否则，忽略模式1
                 fn = 0  # 记录忽略的数量
                 for o in oget:
@@ -437,31 +443,35 @@ class Win:
                         scoreNum += 1
                     else:
                         fn += 1
-                # textLog = f"〔忽略模式1：忽略{fn}条〕\n"
+                if isOutputDebug:
+                    textDebug = f"〔忽略模式1：忽略{fn}条〕\n"
             if text and not scoreNum == 0:
-                text = textLog+text
+                text = textDebug+text
                 score /= scoreNum
                 score = str(score)
             else:
-                text = textLog+"所有文字在忽略范围内\n"
+                text = textDebug+"所有文字在忽略范围内\n"
                 score = "全部忽略"
             return text, score
 
         # 开始
         startStr = f"\n任务开始时间：{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))}\n"
-        if areaInfo:
-            startStr += f"忽略区域：开启\n适用分辨率：{areaInfo[0]}\n"
-            startStr += f"忽略区域1：{areaInfo[1][0]}\n"
-            startStr += f"识别区域：{areaInfo[1][1]}\n"
-            startStr += f"忽略区域2：{areaInfo[1][2]}\n"
-        else:
-            startStr += f"忽略区域：关闭\n"
+        if isOutputDebug:
+            if areaInfo:
+                startStr += f"忽略区域：开启\n适用分辨率：{areaInfo[0]}\n"
+                startStr += f"忽略区域1：{areaInfo[1][0]}\n"
+                startStr += f"识别区域：{areaInfo[1][1]}\n"
+                startStr += f"忽略区域2：{areaInfo[1][2]}\n"
+            else:
+                startStr += f"忽略区域：关闭\n"
         output(startStr)
         # 创建OCR进程
         exe = self.enEXE.get()
-        cwd = os.path.abspath(os.path.join(exe, os.pardir))  # exe父文件夹
-        self.ocr = CallingOCR(exe, cwd)
-        # 计数器
+        self.ocr = CallingOCR(exe)
+        # 初始化UI
+        for key in self.imgDict.keys():  # 清空表格参数
+            self.table.set(key, column='time', value="")
+            self.table.set(key, column='score', value="")
         allNum, nowNum = len(self.imgDict), 0
         startTime = time.time()  # 开始时间
         costTime = 0
@@ -473,10 +483,6 @@ class Win:
         numOK = 0  # 成功数量
         numNON = 0  # 不存在数量
         numERR = 0  # 出错数量
-        # 清空表格参数
-        for key in self.imgDict.keys():
-            self.table.set(key, column='time', value="")
-            self.table.set(key, column='score', value="")
 
         # 主任务循环
         for key, value in self.imgDict.items():
@@ -497,36 +503,41 @@ class Win:
                 self.table.set(key, column='time',
                                value=needTimeStr[:4])  # 时间写入表格
                 # 分析数据
+                dataStr = ""
                 if isinstance(oget, dict):  # 识别失败
                     numERR += 1
-                    dataStr = "识别失败"
+                    dataStr = "识别失败"  # 不管开不开输出调试，都要输出报错
                     if "text" in oget.keys():  # 在python中报的错
                         dataStr += f"，python报错\n原因：{oget['error']}\nC++模块返回值：{oget['text']}\n"
                     elif "error" in oget.keys():  # 在c++中报的错
                         dataStr += f"，C++报错\n原因：{oget['error']}\n"
                     score = "失败"
-                elif len(oget) == 0:
+                elif len(oget) == 0:  # 无文字
                     numNON += 1
-                    dataStr = "未识别到文字\n"
                     score = "无文字"
-                else:
+                else:  # 成功
                     numOK += 1
                     dataStr, score = getText(oget, value)  # 获取文字
-                writeStr = f'\n\n≦ {value["name"]} ≧\n〔识别耗时：{needTimeStr}s 置信度：{score}〕\n{dataStr}'
+                writeStr = f'\n\n≦ {value["name"]} ≧\n'
+                if isOutputDebug:  # 输出调试
+                    writeStr += f"〔识别耗时：{needTimeStr}s 置信度：{score}〕\n"
+                writeStr += dataStr  # 输出内容
                 self.table.set(key, column='score', value=score[:4])  # 写入表格
                 output(writeStr)
             except Exception as e:
                 tk.messagebox.showerror(
-                    '图片识别异常', f'图片识别异常：\n{value["name"]}\n异常信息：\n{e}')
+                    '遇到了亿点小问题', f'图片识别异常：\n{value["name"]}\n异常信息：\n{e}')
                 # print(f'出问题了：{value["name"]}\n{e}')
         # 结束
         endTime = time.time()
         endStr = f"\n\n\n任务结束时间：{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(endTime))}\n"
-        endStr += f"任务耗时（秒）：        {endTime-startTime}\n"
-        endStr += f"单张平均耗时：          {(endTime-startTime)/allNum}\n"
-        endStr += f"识别正常 的图片数量：    {numOK}\n"
-        endStr += f"未识别到文字 的图片数量：{numNON}\n"
-        endStr += f"识别失败 的图片数量：    {numERR}\n\n"
+        if isOutputDebug:
+            endStr += f"任务耗时（秒）：        {endTime-startTime}\n"
+            endStr += f"单张平均耗时：          {(endTime-startTime)/allNum}\n"
+            endStr += f"共计图片数量：          {numOK+numNON+numERR}\n"
+            endStr += f"识别正常 的图片数量：    {numOK}\n"
+            endStr += f"未识别到文字 的图片数量：{numNON}\n"
+            endStr += f"识别失败 的图片数量：    {numERR}\n\n"
         output(endStr)
         close()  # 完成后关闭
         self.labelPercentage["text"] = "完成！"
@@ -554,13 +565,13 @@ class Win:
             self.setRunning(2)
             # self.win.after( # 非阻塞弹出提示框
             #     0, lambda: tk.messagebox.showinfo('请稍候', '等待进程终止，程序稍后将关闭'))
-            self.win.after(100, self.waitClose)  # 等待关闭
+            self.win.after(50, self.waitClose)  # 等待关闭，50ms轮询一次是否已结束子进程
 
     def waitClose(self):  # 等待进程关闭后销毁窗口
         if self.isRunning == 0:
             self.win.destroy()  # 销毁窗口
         else:
-            self.win.after(100, self.waitClose)  # 等待关闭
+            self.win.after(50, self.waitClose)  # 等待关闭，50ms轮询一次是否已结束子进程
 
 
 if __name__ == "__main__":

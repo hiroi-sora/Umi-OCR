@@ -1,13 +1,14 @@
-
+import os
 import subprocess  # 进程，管道
 from sys import platform as sysPlatform  # popen静默模式
 from json import loads as jsonLoads
 
 
 class CallingOCR:
-    def __init__(self, exePath, cwd=None):
+    def __init__(self, exePath):
         """初始化识别器。\n
-        传入识别器exe路径，子进程目录(exe父目录)"""
+        传入识别器exe路径"""
+        cwd = os.path.abspath(os.path.join(exePath, os.pardir))  # exe父文件夹
         startupinfo = None  # 静默模式设置
         if 'win32' in str(sysPlatform).lower():
             startupinfo = subprocess.STARTUPINFO()

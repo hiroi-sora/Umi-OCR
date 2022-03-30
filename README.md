@@ -1,14 +1,16 @@
 # Umi-OCR 批量图片转文字工具
 
-软件用途：批量对本地图片文件进行离线OCR文字识别。
+软件用途：批量对本地图片文件进行离线OCR文字识别。win10 x64平台。
 
 > 本软件是本地图片文件处理工具，没有实时屏幕截图识别的功能。
 
-![](https://tupian.li/images/2022/03/29/win-12.png)
+![](https://tupian.li/images/2022/03/30/image.png)
+
+![](https://tupian.li/images/2022/03/30/win-2-2.png)
 
 ## 下载
 
-[Umi-OCR 批量图片转文字 v1.0](https://github.com/hiroi-sora/Umi-OCR/releases/tag/v1.0)
+[Umi-OCR 批量图片转文字 v1.1](https://github.com/hiroi-sora/Umi-OCR/releases/tag/v1.1)
 
 ## 简介
 
@@ -78,20 +80,24 @@
 #### 简单排除视频截图中的水印：
 
 1. 打开忽略区域设置窗口，拖入任一张截图。
+    稍等约1秒，面板上会显示出图片，识别到的文字区域会被虚线框起来。发现右上角的水印也被识别到了。
+![](https://tupian.li/images/2022/03/30/image04bea2a47232088b.png)
 2. 点击选择 **+忽略区域 1** ，鼠标按住，绘制矩形完全包裹住水印区域，范围可以大一些。
+![](https://tupian.li/images/2022/03/30/image4a49b65bbd22c4a6.png)
 3. 点击 **完成** 。返回主窗口， **开始任务** 。
-![](https://tupian.li/images/2022/03/29/rm-3.jpg)
 
 #### 排除游戏截图中的两种UI：
 
 - 假设有一组游戏截图，主要分为两类图片，这两类图片的文字位置和UI位置不太相同：
+![](https://tupian.li/images/2022/03/30/image1.png)
   - A类为对话模式，字数少，要保留的台词文本在画面下方，要排除的UI分布于底端。
   - B类为历史文本模式，字数多，从上到下都有要保留的文本（与A类UI位置有重合），要排除的UI分布在两侧。
 1. 拖入一张A类图片。选择 **+忽略区域 1** ，绘制矩形包裹住要排除的 **底端UI** 。
-![](https://tupian.li/images/2022/03/29/rm-4.png)
-1. 拖入一张B类图片。选择 **+识别区域** ，绘制矩形包裹住 **小部分要保留的文本** 。注意只要该区域内含有任意保留文本即可，不需要画得很大，不需要包裹住所有保留文本；不能与A类图中 **可能存在的任何文本** 重合。
-2. 然后选择 **+忽略区域 2** ，绘制矩形包裹住B类图要排除的 **两侧UI** 。
-![](https://tupian.li/images/2022/03/29/rm-5.jpg)
+![](https://tupian.li/images/2022/03/30/image2ad97ff898e39d82f.png)
+2. 拖入一张B类图片。选择 **+识别区域** ，绘制矩形包裹住 **小部分要保留的文本** 。注意只要该区域内含有任意保留文本即可，不需要画得很大，不需要包裹住所有保留文本；不能与A类图中 **可能存在的任何文本** 重合。
+![](https://tupian.li/images/2022/03/30/image3.png)
+1. 然后选择 **+忽略区域 2** ，绘制矩形包裹住B类图要排除的 **两侧UI** 。
+![](https://tupian.li/images/2022/03/30/image4.png)
 1. 点击 **完成** 。返回主窗口， **开始任务** 。
 
 #### 忽略区域功能说明：
@@ -147,8 +153,20 @@
 - `[exe名称]_config.txt`是全局配置文件，可设置模型位置、识别参数等。调整它也许能获得更高的识别精度和效率。具体参考[官方文档](https://gitee.com/paddlepaddle/PaddleOCR/blob/release/2.4/doc/doc_ch/config.md#2-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%8F%82%E6%95%B0%E4%BB%8B%E7%BB%8D)。
 - 如果修改了exe名称，也需要同步修改配置文件名的前缀。
 
+## 测试报告
+
+用它跑完了我~~珍藏的7000多张~~各类截图文件，效果十分满意。
+跟半年前使用[百度云在线OCR接口](https://cloud.baidu.com/doc/OCR/index.html)（标准文字识别）跑的对比：
+
+- Umi-OCR使用轻量模型时速度很快，平均识别耗时<1s（使用笔记本低压u）。在线OCR受限于网络，耗时>1s。
+- Umi-OCR对符号的正确识别率更高，比如能正确识别中文逗号。在线OCR的结果中，很大一部分中文逗号被识别为英文。
+- 对于文字内容，Umi-OCR与在线OCR的准确度差异不大。都能满足所需。
+- 排除UI与水印干扰，是Umi-OCR的独有技能。不过理论上在线OCR的高精度识别接口也能做到，~~不过那玩意死贵死贵~~。
+
 ## 开发说明
 
-本软件是python调用c++编译的识别器exe程序，识别器exe再加载模型文件和必要的dll链接库，完成图片识别工作。因此可切换不同识别器和模型文件，实现切换多国语言的识别。
-
-`PaddleOCR_json.exe`接收输入一个本地图片路径，以json格式字符串输出这张图片的识别结果，如此循环往复。具体见 [PaddleOCR-json 图片转文字程序](https://github.com/hiroi-sora/PaddleOCR-json#paddleocr-json-%E5%9B%BE%E7%89%87%E8%BD%AC%E6%96%87%E5%AD%97%E7%A8%8B%E5%BA%8F)
+- 本软件工作流程是python调用c++编译的识别器exe程序，识别器exe再加载模型文件和必要的dll链接库，完成图片识别工作。因此可切换不同exe识别器和模型文件，实现切换多国语言的识别。而且，c++识别器比python版PaddleOCR具有更高的性能。
+- 启动任务时，运行tk的主线程创建了一个新线程和一个事件循环。耗时量大的OCR任务在新线程中执行，对tk界面的修改由事件循环提交到主线程中执行。~~大概是这么回事？反正能跑起来就对了~~。无论任务跑得多满，界面都不会卡，除非实在顶不住。
+- `PaddleOCR_json.exe`接收输入一个本地图片路径，以json格式字符串输出这张图片的识别结果，如此循环往复。具体见 [PaddleOCR-json 图片转文字程序](https://github.com/hiroi-sora/PaddleOCR-json#paddleocr-json-%E5%9B%BE%E7%89%87%E8%BD%AC%E6%96%87%E5%AD%97%E7%A8%8B%E5%BA%8F)
+- 使用`pyinstaller`打包，参数为
+  ```pyinstaller -F -w -i icon/icon.ico -n "Umi-OCR 批量图片转文字" main.py```
