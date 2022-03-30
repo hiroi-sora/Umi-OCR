@@ -1,23 +1,20 @@
 from SelectAreaWin import SelectAreaWin  # 子窗口
 from asset import iconPngBase64, getHelpText  # 资源
+from callingOCR import CallingOCR  # OCR调用接口
 
 import os
 import time
 import asyncio  # 异步
 import threading  # 线程
-import subprocess  # 进程，管道
 from PIL import Image
 import tkinter as tk
 import tkinter.filedialog
 from tkinter import ttk
-from base64 import b64decode  # 图标解码
-from json import loads as jsonLoads
 from windnd import hook_dropfiles  # 文件拖拽
-from sys import platform as sysPlatform  # popen静默模式
 from pyperclip import copy as pyperclipCopy  # 剪贴板
 from webbrowser import open as webOpen  # “关于”面板打开项目网址
 
-ProjectVer = "1.0"  # 版本号
+ProjectVer = "1.1"  # 版本号
 ProjectName = f"Umi-OCR 批量图片转文字 v{ProjectVer}"  # 名称
 ProjectWeb = "https://github.com/hiroi-sora/Umi-OCR"
 
@@ -564,53 +561,6 @@ class Win:
             self.win.destroy()  # 销毁窗口
         else:
             self.win.after(100, self.waitClose)  # 等待关闭
-
-
-class CallingOCR:
-    def __init__(self, exePath, cwd=None):
-        """初始化识别器。\n
-        传入识别器exe路径，子进程目录(exe父目录)"""
-        startupinfo = None  # 静默模式设置
-        if 'win32' in str(sysPlatform).lower():
-            startupinfo = subprocess.STARTUPINFO()
-            startupinfo.dwFlags = subprocess.CREATE_NEW_CONSOLE | subprocess.STARTF_USESHOWWINDOW
-            startupinfo.wShowWindow = subprocess.SW_HIDE
-        self.ret = subprocess.Popen(  # 打开管道
-            exePath,
-            cwd=cwd,
-            stdout=subprocess.PIPE,
-            stdin=subprocess.PIPE,
-            startupinfo=startupinfo  # 开启静默模式
-        )
-        self.ret.stdout.readline()  # 读掉第一行
-
-    def run(self, imgPath):
-        """对一张图片文字识别。
-        输入图片路径。\n
-        识别成功时，返回列表，每项是一组文字的信息。\n
-        识别失败时，返回字典 {error:异常信息，text:(若存在)原始识别字符串} 。"""
-        if not imgPath[-1] == "\n":
-            imgPath += "\n"
-        try:
-            self.ret.stdin.write(imgPath.encode("gbk"))
-            self.ret.stdin.flush()
-        except Exception as e:
-            return {"error": f"向识别器进程写入图片地址失败，疑似该进程已崩溃。{e}", "text": ""}
-        try:
-            getStr = self.ret.stdout.readline().decode('utf-8', errors='ignore')
-        except Exception as e:
-            if imgPath[-1] == "\n":
-                imgPath = imgPath[:-1]
-            return {"error": f"读取识别器进程输出值失败，疑似传入了不存在或无法识别的图片【{imgPath}】。{e}", "text": ""}
-        try:
-            return jsonLoads(getStr)
-        except Exception as e:
-            if imgPath[-1] == "\n":
-                imgPath = imgPath[:-1]
-            return {"error": f"识别器输出值反序列化JSON失败，疑似传入了不存在或无法识别的图片【{imgPath}】。{e}", "text": getStr}
-
-    def __del__(self):
-        self.ret.kill()  # 关闭子进程
 
 
 if __name__ == "__main__":
