@@ -1,4 +1,4 @@
-from SelectAreaWin import SelectAreaWin  # 子窗口
+from selectAreaWin import SelectAreaWin  # 子窗口
 from asset import iconPngBase64, getHelpText  # 资源
 from callingOCR import CallingOCR  # OCR调用接口
 
