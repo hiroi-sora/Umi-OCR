@@ -170,3 +170,7 @@
 - `PaddleOCR_json.exe`接收输入一个本地图片路径，以json格式字符串输出这张图片的识别结果，如此循环往复。具体见 [PaddleOCR-json 图片转文字程序](https://github.com/hiroi-sora/PaddleOCR-json#paddleocr-json-%E5%9B%BE%E7%89%87%E8%BD%AC%E6%96%87%E5%AD%97%E7%A8%8B%E5%BA%8F)
 - 使用`pyinstaller`打包，参数为
   ```pyinstaller -F -w -i icon/icon.ico -n "Umi-OCR 批量图片转文字" main.py```
+
+## 更新日志
+
+`v1.1` 添加新功能：忽略区域窗口以虚线框 展示识别出的文字块。
