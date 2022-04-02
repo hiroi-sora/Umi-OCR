@@ -159,7 +159,7 @@ class SelectAreaWin:
             img = Image.open(path)
         except Exception as e:
             tk.messagebox.showwarning(
-                "遇到了亿点小问题", f"图片载入失败。图片地址：\n{path}\n\n错误信息：\n{e}")
+                "遇到了一点小问题", f"图片载入失败。图片地址：\n{path}\n\n错误信息：\n{e}")
             return
         # 检测图片大小
         if self.imgSize == (-1, -1):  # 初次设定
@@ -178,29 +178,39 @@ class SelectAreaWin:
                                       f"当前图像尺寸限制为{self.imgSize[0]}x{self.imgSize[1]}，不允许加载{img.size[0]}x{img.size[1]}的图片。\n若要解除限制、更改为其他分辨率，请点击“清空”后重新拖入图片。")
             return
         self.clearCanvasImage()  # 清理上次绘制的图像
+
         # OCR识别
-        if self.ocr and self.isAutoOCR.get():
-            self.win.title(f"分析中…………")  # 改变标题
-            pathStr = path if len(
-                path) <= 50 else path[:50]+"……"  # 路径太长显示不全，截取
-            canvasText = self.canvas.create_text(self.cW/2, self.cH/2, font=('', 15, 'bold'), fill='white', anchor="c",
-                                                 text=f'图片分析中，请稍候……\n\n\n\n{pathStr}')
-            self.win.update()  # 刷新窗口
-            oget = self.ocr.run(path)  # 开始识别，耗时长
-            self.canvas.delete(canvasText)  # 删除提示文字
-            for o in oget:  # 绘制矩形框
-                p1x = round(o['box'][0]*self.imgScale)
-                p1y = round(o['box'][1]*self.imgScale)
-                p2x = round(o['box'][4]*self.imgScale)
-                p2y = round(o['box'][5]*self.imgScale)
-                r1 = self.canvas.create_rectangle(
-                    p1x, p1y, p2x, p2y, outline='white', width=1)  # 绘制白实线基底
-                r2 = self.canvas.create_rectangle(
-                    p1x, p1y, p2x, p2y, outline='black', width=1, dash=4)  # 绘制黑虚线表层
-                self.canvas.tag_lower(r2)  # 移动到最下方
-                self.canvas.tag_lower(r1)
-                self.areaTextRec.append(r1)
-                self.areaTextRec.append(r2)
+        def runOCR():
+            if self.ocr and self.isAutoOCR.get():
+                # 任务前：显示提示信息
+                self.win.title(f"分析中…………")  # 改变标题
+                pathStr = path if len(
+                    path) <= 50 else path[:50]+"……"  # 路径太长显示不全，截取
+                canvasText = self.canvas.create_text(self.cW/2, self.cH/2, font=('', 15, 'bold'), fill='white', anchor="c",
+                                                     text=f'图片分析中，请稍候……\n\n\n\n{pathStr}')
+                self.win.update()  # 刷新窗口
+                # 开始识别，耗时长
+                oget = self.ocr.run(path)
+                # 任务后：刷新提示信息
+                self.canvas.delete(canvasText)  # 删除提示文字
+                if oget["code"] == 100:  # 存在内容
+                    for o in oget["data"]:  # 绘制矩形框
+                        p1x = round(o['box'][0]*self.imgScale)
+                        p1y = round(o['box'][1]*self.imgScale)
+                        p2x = round(o['box'][4]*self.imgScale)
+                        p2y = round(o['box'][5]*self.imgScale)
+                        r1 = self.canvas.create_rectangle(
+                            p1x, p1y, p2x, p2y, outline='white', width=1)  # 绘制白实线基底
+                        r2 = self.canvas.create_rectangle(
+                            p1x, p1y, p2x, p2y, outline='black', width=1, dash=4)  # 绘制黑虚线表层
+                        self.canvas.tag_lower(r2)  # 移动到最下方
+                        self.canvas.tag_lower(r1)
+                        self.areaTextRec.append(r1)
+                        self.areaTextRec.append(r2)
+                elif not oget["code"] == 101:  # 发生异常
+                    tk.messagebox.showwarning(
+                        "遇到了一点小问题", f"图片分析失败。图片地址：\n{path}\n\n错误信息：\n{str(oget['data'])}")
+        runOCR()
         self.win.title(f"选择区域 {path}")  # 改变标题
         # 缓存图片并显示
         img = img.resize(self.imgReSize, Image.ANTIALIAS)  # 改变图片大小

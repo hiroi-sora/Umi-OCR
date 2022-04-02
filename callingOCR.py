@@ -5,6 +5,8 @@ from json import loads as jsonLoads
 
 
 class CallingOCR:
+    """调用OCR"""
+
     def __init__(self, exePath):
         """初始化识别器。\n
         传入识别器exe路径"""
@@ -35,19 +37,19 @@ class CallingOCR:
             self.ret.stdin.write(imgPath.encode("gbk"))
             self.ret.stdin.flush()
         except Exception as e:
-            return {"error": f"向识别器进程写入图片地址失败，疑似该进程已崩溃。{e}", "text": ""}
+            return {"code": 300, "data": f"向识别器进程写入图片地址失败，疑似该进程已崩溃。{e}"}
         try:
             getStr = self.ret.stdout.readline().decode('utf-8', errors='ignore')
         except Exception as e:
             if imgPath[-1] == "\n":
                 imgPath = imgPath[:-1]
-            return {"error": f"读取识别器进程输出值失败，疑似传入了不存在或无法识别的图片【{imgPath}】。{e}", "text": ""}
+            return {"code": 301, "data": f"读取识别器进程输出值失败，疑似传入了不存在或无法识别的图片 \"{imgPath}\" 。{e}"}
         try:
             return jsonLoads(getStr)
         except Exception as e:
             if imgPath[-1] == "\n":
                 imgPath = imgPath[:-1]
-            return {"error": f"识别器输出值反序列化JSON失败，疑似传入了不存在或无法识别的图片【{imgPath}】。{e}", "text": getStr}
+            return {"code": 302, "data": f"识别器输出值反序列化JSON失败，疑似传入了不存在或无法识别的图片 \"{imgPath}\" 。异常信息：{e}。原始内容：{getStr}"}
 
     def __del__(self):
         self.ret.kill()  # 关闭子进程

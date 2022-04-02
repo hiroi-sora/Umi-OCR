@@ -93,7 +93,6 @@ class Win:
                 columns=columns,  # 显示的列
                 show='headings',  # 隐藏首列
             )
-            # self.table.get
             hook_dropfiles(self.table, func=self.draggedImages)  # 注册文件拖入
             self.table.pack(expand=True, side="left", fill='both')
             self.table.heading('name', text='文件名称')
@@ -187,7 +186,7 @@ class Win:
                 side='left', padx=5)
             self.enEXE = tk.Entry(vFrame5)
             self.enEXE.pack(side='top', fill="x", padx=5)
-            self.enEXE.insert(0, "PaddleOCR-json\\PaddleOCR_json.exe")
+            self.enEXE.insert(0, "PaddleOCR-json\PaddleOCR_json.exe")
             vFrame4 = tk.Frame(vFrameEXE)
             vFrame4.pack(side='top', fill='x', pady=2)
             tk.Label(vFrame4, text="图片后缀：   ").pack(
@@ -195,7 +194,7 @@ class Win:
             self.enInSuffix = tk.Entry(vFrame4)
             self.enInSuffix.pack(side='top', fill="x", padx=5)
             self.enInSuffix.insert(
-                0, ".jpg .jpeg .png .webp")
+                0, ".jpg .jpe .jpeg .jfif .png .webp .bmp .tif .tiff")
             # 关于面板，隐藏在设置选项卡默认大小的下方外面
             tk.Frame(tabFrame, height=20).pack()
             vFrameAbout = tk.LabelFrame(
@@ -275,6 +274,14 @@ class Win:
         for key, value in self.imgDict.items():
             if value["path"] == path:
                 return
+        # 检测是否可用
+        try:
+            s = Image.open(path).size
+        except Exception as e:
+            tk.messagebox.showwarning(
+                "遇到了一点小问题", f"图片载入失败。图片地址：\n{path}\n\n错误信息：\n{e}")
+            return
+        # 计算路径
         p = os.path.abspath(os.path.join(path, os.pardir))  # 父文件夹
         if not self.enOutPath.get():  # 初始化输出路径
             self.enOutPath.delete('0', tk.END)
@@ -283,11 +290,12 @@ class Win:
             n = f"[转文字]_{os.path.basename(p)}.txt"
             self.enOutName.delete('0', tk.END)
             self.enOutName.insert(0, n)
+        # 加入待处理列表
         name = os.path.basename(path)  # 带后缀的文件名
         tableInfo = (name, "", "")
         id = self.table.insert('', 'end', values=tableInfo)  # 添加到表格组件中
-        info = {"name": name, "path": path, "size": Image.open(path).size}
-        self.imgDict[id] = (info)  # 添加到列表中
+        dictInfo = {"name": name, "path": path, "size": s}
+        self.imgDict[id] = (dictInfo)  # 添加到字典中
 
     def clearTable(self):  # 清空表格
         if not self.isRunning == 0:
@@ -504,25 +512,23 @@ class Win:
                                value=needTimeStr[:4])  # 时间写入表格
                 # 分析数据
                 dataStr = ""
-                if isinstance(oget, dict):  # 识别失败
-                    numERR += 1
-                    dataStr = "识别失败"  # 不管开不开输出调试，都要输出报错
-                    if "text" in oget.keys():  # 在python中报的错
-                        dataStr += f"，python报错\n原因：{oget['error']}\nC++模块返回值：{oget['text']}\n"
-                    elif "error" in oget.keys():  # 在c++中报的错
-                        dataStr += f"，C++报错\n原因：{oget['error']}\n"
-                    score = "失败"
-                elif len(oget) == 0:  # 无文字
+                if oget['code'] == 100:  # 成功
+                    numOK += 1
+                    dataStr, score = getText(oget['data'], value)  # 获取文字
+                elif oget['code'] == 101:  # 无文字
                     numNON += 1
                     score = "无文字"
-                else:  # 成功
-                    numOK += 1
-                    dataStr, score = getText(oget, value)  # 获取文字
+                else:  # 识别失败
+                    numERR += 1
+                    dataStr = "识别失败"  # 不管开不开输出调试，都要输出报错
+                    dataStr += f"，错误码：{oget['code']}\n错误信息：{str(oget['data'])}\n"
+                    score = "失败"
                 writeStr = f'\n\n≦ {value["name"]} ≧\n'
                 if isOutputDebug:  # 输出调试
                     writeStr += f"〔识别耗时：{needTimeStr}s 置信度：{score}〕\n"
                 writeStr += dataStr  # 输出内容
-                self.table.set(key, column='score', value=score[:4])  # 写入表格
+                self.table.set(key, column='score',
+                               value=score[:4])  # 写入表格
                 output(writeStr)
             except Exception as e:
                 tk.messagebox.showerror(
