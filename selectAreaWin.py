@@ -1,5 +1,6 @@
 from callingOCR import CallingOCR  # OCR调用接口
-from asset import iconPngBase64  # 资源
+from asset import IconPngBase64  # 资源
+from config import Config
 
 import os
 import tkinter as tk
@@ -33,7 +34,7 @@ class SelectAreaWin:
         self.areaTypeIndex = [-1, -1, -1]  # 当前绘制的矩形的序号
         # 图标
         self.iconImg = tkinter.PhotoImage(
-            data=iconPngBase64)  # 载入图标，base64转
+            data=IconPngBase64)  # 载入图标，base64转
         self.win.iconphoto(False, self.iconImg)  # 设置窗口图标
         # initWin()
 
@@ -123,32 +124,31 @@ class SelectAreaWin:
         self.win.mainloop()
 
     def onClose(self, isAsk=True):  # 点击关闭。isAsk为T时询问。
-        data = None  # 默认不回传数据
+
+        def getData():  # 将数据传给接口，然后关闭窗口
+            area = [[], [], []]
+            for i in range(3):
+                for a in self.area[i]:
+                    a00, a01, a10, a11 = round(
+                        a[0][0]/self.imgScale), round(a[0][1]/self.imgScale), round(a[1][0]/self.imgScale), round(a[1][1]/self.imgScale)
+                    if a00 > a10:  # x对调
+                        a00, a10 = a10, a00
+                    if a01 > a11:  # y对调
+                        a01, a11 = a11, a01
+                    area[i].append([(a00, a01), (a10, a11)])
+            return {"size": self.imgSize, "area": area}
+
         if self.area[0] or self.area[1] or self.area[2]:  # 数据存在
             if isAsk:  # 需要问
                 if tk.messagebox.askokcancel('关闭窗口', '要应用选区吗？'):  # 需要应用
-                    data = self.getData()
+                    Config.set("ignoreArea", getData())
             else:  # 不需要问
-                data = self.getData()
+                Config.set("ignoreArea", getData())
         if self.closeSendData:  # 通信接口存在，则回传数据
-            self.closeSendData(data)
+            self.closeSendData()
         if self.ocr:
             del self.ocr  # 关闭OCR进程
         self.win.destroy()  # 销毁窗口
-
-    def getData(self):  # 将数据传给接口，然后关闭窗口
-        area = [[], [], []]
-        # self.imgScale = self.imgSize[0] / self.imgReSize[0]
-        for i in range(3):
-            for a in self.area[i]:
-                a00, a01, a10, a11 = round(
-                    a[0][0]/self.imgScale), round(a[0][1]/self.imgScale), round(a[1][0]/self.imgScale), round(a[1][1]/self.imgScale)
-                if a00 > a10:  # x对调
-                    a00, a10 = a10, a00
-                if a01 > a11:  # y对调
-                    a01, a11 = a11, a01
-                area[i].append([(a00, a01), (a10, a11)])
-        return (self.imgSize, area)
 
     def draggedFiles(self, paths):  # 拖入文件
         self.loadImage(paths[0].decode("gbk"))
