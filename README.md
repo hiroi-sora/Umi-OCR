@@ -15,6 +15,17 @@
 
 [Umi-OCR 批量图片转文字 v1.2.0](https://github.com/hiroi-sora/Umi-OCR/releases/tag/v1.2)
 
+## 系统支持
+
+- 支持 win10 x64 。
+- 不建议使用 win7 ，核心c++模块`PaddleOCR-json`基本无法运行。如果想尝试，win7 x64 sp1 打满系统升级补丁+安装vc运行库后有**小概率**能跑起来……
+
+## Umi-系列图片处理软件
+
+**Umi-OCR 批量图片转文字软件 ◁**
+
+[Umi-CUT 批量图片去黑边/裁剪/压缩软件 (支持Win7)](https://github.com/hiroi-sora/Umi-CUT)
+
 ## 简介
 
 本软件用于批量导入本地图片，识别图片中的文本，输出到软件面板或本地txt文件。
