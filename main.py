@@ -15,7 +15,7 @@ from windnd import hook_dropfiles  # 文件拖拽
 from pyperclip import copy as pyperclipCopy  # 剪贴板
 from webbrowser import open as webOpen  # “关于”面板打开项目网址
 
-ProjectVer = "1.2.0"  # 版本号
+ProjectVer = "1.2.2"  # 版本号
 ProjectName = f"Umi-OCR 批量图片转文字 v{ProjectVer}"  # 名称
 ProjectWeb = "https://github.com/hiroi-sora/Umi-OCR"
 
@@ -23,7 +23,6 @@ ProjectWeb = "https://github.com/hiroi-sora/Umi-OCR"
 class Win:
     def __init__(self):
         self.imgDict = {}  # 当前载入的图片信息字典，key为表格组件id。必须为有序字典，python3.6以上默认是。
-        # self.areaInfo = None  # 特殊处理区域数据
         self.isRunning = 0  # 0未在运行，1正在运行，2正在停止
 
         # 1.初始化主窗口
@@ -48,6 +47,8 @@ class Win:
             self.cfgVar = {  # 设置项tk变量
                 # 输出文件设置
                 "isOutputFile": tk.BooleanVar(),  # T时输出内容写入本地文件
+                "isOpenExplorer": tk.BooleanVar(),  # T时任务完成后打开资源管理器到输出目录。isOutputFile为T时才管用
+                "isOpenOutputFile": tk.BooleanVar(),  # T时任务完成后打开输出文件。isOutputFile为T时才管用
                 "outputFilePath": tk.StringVar(),  # 输出文件目录
                 "outputFileName": tk.StringVar(),  # 输出文件名称
                 # 输出格式设置
@@ -226,13 +227,17 @@ class Win:
                                ).grid(column=0, row=1, sticky="w")
                 tk.Checkbutton(fr1, text="忽略无文字的图片", variable=self.cfgVar["isIgnoreNoText"],
                                ).grid(column=1, row=1, sticky="w")
-                tk.Radiobutton(fr1, text='纯文本.txt文件', value=1, variable=self.cfgVar["outputStyle"],
+                tk.Checkbutton(fr1, text="完成后打开文件", variable=self.cfgVar["isOpenOutputFile"]
                                ).grid(column=0, row=2, sticky="w")
-                tk.Radiobutton(fr1, text='Markdown风格.md文件', value=2, variable=self.cfgVar["outputStyle"],
+                tk.Checkbutton(fr1, text="完成后打开目录", variable=self.cfgVar["isOpenExplorer"],
                                ).grid(column=1, row=2, sticky="w")
+                tk.Radiobutton(fr1, text='纯文本.txt文件', value=1, variable=self.cfgVar["outputStyle"],
+                               ).grid(column=0, row=3, sticky="w")
+                tk.Radiobutton(fr1, text='Markdown风格.md文件', value=2, variable=self.cfgVar["outputStyle"],
+                               ).grid(column=1, row=3, sticky="w")
                 tk.Label(fr1, fg="gray",
                          text="下面两项为空时，默认输出到第一张图片所在的文件夹"
-                         ).grid(column=0, row=3, columnspan=2, sticky="nsew")
+                         ).grid(column=0, row=4, columnspan=2, sticky="nsew")
 
                 fr2 = tk.Frame(frameOutFile)
                 fr2.pack(side='top', fill='x', pady=2, padx=5)
@@ -492,9 +497,10 @@ class Win:
         outputStyle = Config.get("outputStyle")  # 输出风格
         areaInfo = Config.get("ignoreArea")
         if isOutputFile:
+            outputPath = Config.get("outputFilePath")  # 输出路径（文件夹）
             suffix = ".txt" if outputStyle == 1 else ".md"
-            outPath = Config.get("outputFilePath") + \
-                "\\" + Config.get("outputFileName")+suffix
+            outputFile = outputPath+"\\" + \
+                Config.get("outputFileName")+suffix  # 输出文件
 
         def output(outStr, type_):  # 输出字符串
             """
@@ -526,7 +532,7 @@ class Win:
                     elif type_ == "name":
                         path = outStr.replace(" ", "%20")
                         outStr = f"---\n![{outStr}]({path})\n[{outStr}]({path})\n"
-                with open(outPath, "a", encoding='utf-8') as f:  # 追加写入本地文件
+                with open(outputFile, "a", encoding='utf-8') as f:  # 追加写入本地文件
                     f.write(outStr)
 
         def close():  # 关闭所有异步相关的东西
@@ -694,6 +700,11 @@ class Win:
             output(endStr, "debug")
         close()  # 完成后关闭
         self.labelPercentage["text"] = "完成！"
+        if isOutputFile:
+            if Config.get("isOpenExplorer"):  # 打开输出目录
+                os.startfile(outputPath)
+            if Config.get("isOpenOutputFile"):  # 打开输出文件
+                os.startfile(outputFile)
 
     def showInstructions(self, e):  # 打开使用说明
         if not self.isRunning == 0:
@@ -725,10 +736,6 @@ class Win:
             self.win.destroy()  # 销毁窗口
         else:
             self.win.after(50, self.waitClose)  # 等待关闭，50ms轮询一次是否已结束子进程
-
-    # def showTest(self):
-    #     tk.messagebox.showwarning(
-    #         "警告", "此功能尚未完工。")
 
 
 if __name__ == "__main__":
