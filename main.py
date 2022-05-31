@@ -7,7 +7,8 @@ import os
 import time
 import asyncio  # 异步
 import threading  # 线程
-from PIL import Image
+import keyboard  # 绑定快捷键
+from PIL import Image, ImageGrab  # 图像，剪贴板
 import tkinter as tk
 import tkinter.filedialog
 from tkinter import Variable, ttk
@@ -15,9 +16,10 @@ from windnd import hook_dropfiles  # 文件拖拽
 from pyperclip import copy as pyperclipCopy  # 剪贴板
 from webbrowser import open as webOpen  # “关于”面板打开项目网址
 
-ProjectVer = "1.2.2"  # 版本号
+ProjectVer = "1.2.3"  # 版本号
 ProjectName = f"Umi-OCR 批量图片转文字 v{ProjectVer}"  # 名称
 ProjectWeb = "https://github.com/hiroi-sora/Umi-OCR"
+TempFilePath = "Umi-OCR_temp"
 
 
 class Win:
@@ -45,6 +47,9 @@ class Win:
         # 2.初始化变量、配置项
         def initVar():
             self.cfgVar = {  # 设置项tk变量
+                # 读取剪贴板设置
+                "isGlobalHotkey": tk.BooleanVar(),  # T时绑定全局快捷键
+                "globalHotkey": tk.StringVar(),  # 全局快捷键
                 # 输出文件设置
                 "isOutputFile": tk.BooleanVar(),  # T时输出内容写入本地文件
                 "isOpenExplorer": tk.BooleanVar(),  # T时任务完成后打开资源管理器到输出目录。isOutputFile为T时才管用
@@ -80,7 +85,7 @@ class Win:
                     "w", lambda *e, key=key: valueChange(key))
         initVar()
 
-        # 3. 初始化组件
+        # 3.初始化组件
         def initTop():  # 顶部按钮
             tk.Frame(self.win, height=5).pack(side='top')
             fr = tk.Frame(self.win)
@@ -152,12 +157,14 @@ class Win:
             fr1.pack(side='top', fill='x', pady=2)
             self.isAutoRoll = tk.IntVar()
             self.isAutoRoll.set(1)
-            tk.Checkbutton(fr1, variable=self.isAutoRoll, text="自动滚动到底部").pack(
+            tk.Checkbutton(fr1, variable=self.isAutoRoll, text="自动滚动").pack(
                 side='left')
-            tk.Button(fr1, text='清空版面', width=12,
+            tk.Button(fr1, text='清空', width=6,
                       command=lambda: self.textOutput.delete('1.0', tk.END)).pack(side='right')
-            tk.Button(fr1, text='复制到剪贴板', width=12,
+            tk.Button(fr1, text='复制文字', width=8,
                       command=lambda: pyperclipCopy(self.textOutput.get("1.0", tk.END))).pack(side='right', padx=5)
+            tk.Button(fr1, text='剪贴板读取', width=10,
+                      command=self.runClipboard).pack(side='right', padx=5)
             fr2 = tk.Frame(self.tabFrameOutput)
             fr2.pack(side='top', fill='both')
             vbar = tk.Scrollbar(fr2, orient='vertical')  # 滚动条
@@ -213,6 +220,63 @@ class Win:
                                         bg="black")
                 self.canvas.grid(column=3, row=0, rowspan=10)
             initArea()
+
+            def initClipboard():  # 剪贴板设置
+                def addHotkey(hotkey):  # 注册新快捷键
+                    if hotkey == "":
+                        Config.set("isGlobalHotkey", False)
+                        tk.messagebox.showwarning("提示",
+                                                  f"请先录制快捷键")
+                        return
+                    try:
+                        keyboard.add_hotkey(
+                            hotkey, self.runClipboard, suppress=False)  # 添加新的
+                    except ValueError as err:
+                        print(f"注册快捷键异常：{err}")
+                        Config.set("isGlobalHotkey", False)
+                        Config.set("globalHotkey", "")
+                        tk.messagebox.showwarning("提示",
+                                                  f"无法注册快捷键【{hotkey}】")
+
+                def updateHotket():  # 刷新快捷键
+                    try:
+                        keyboard.unhook_all_hotkeys()  # 移除 所有旧快捷键
+                    except Exception as err:  # 影响不大。未注册过就调用移除 会报这个异常
+                        # print(f"移除快捷键异常：{err}")
+                        pass
+                    if Config.get("isGlobalHotkey"):  # 添加
+                        addHotkey(Config.get("globalHotkey"))
+                updateHotket()  # 初始化时执行一次
+
+                def readHotkey():  # 录制快捷键
+                    hotkey = keyboard.read_hotkey(suppress=False)
+                    if hotkey == "esc":  # 不绑定ESC
+                        return
+                    Config.set("globalHotkey", hotkey)  # 写入设置
+                    updateHotket()
+
+                def delHotkey():  # 清除快捷键
+                    Config.set("globalHotkey", "")
+                    Config.set("isGlobalHotkey", False)
+                    updateHotket()
+
+                areaLabel = tk.LabelFrame(
+                    self.optFrame, text="从剪贴板读取图片")
+                areaLabel.pack(side='top', fill='x',
+                                    ipady=2, pady=LabelFramePadY, padx=4)
+                fr1 = tk.Frame(areaLabel)
+                fr1.pack(side='top', fill='x', pady=2, padx=5)
+                tk.Checkbutton(fr1, variable=self.cfgVar["isGlobalHotkey"],
+                               text="启用全局快捷键（在其它窗口也可响应）", command=updateHotket).grid(column=0, row=0, columnspan=9, sticky="w")
+                tk.Button(fr1, text='录制按键',
+                          command=readHotkey).grid(column=0, row=2, sticky="w")
+                tk.Label(fr1, textvariable=self.cfgVar["globalHotkey"]).grid(
+                    column=2, row=2,  sticky="nsew")
+                tk.Button(fr1, text='清除', width=8,
+                          command=delHotkey).grid(column=3, row=2, sticky="w")
+                fr1.grid_columnconfigure(2, weight=1)
+                fr1.grid_columnconfigure(1, minsize=6)
+            initClipboard()
 
             def initOutFile():  # 输出文件设置
                 frameOutFile = tk.LabelFrame(self.optFrame, text="输出设置")
@@ -309,10 +373,12 @@ class Win:
                         1 if event.delta < 0 else -1, "units")
                 self.optCanvas.bind_all("<MouseWheel>", onCanvasMouseWheel)
             initOptFrameWH()
-
-            # self.notebook.select(tabFrame)
-
         initTab3()
+
+        # 4.绑定快捷键
+        def bindKey():
+            self.win.bind("<Control-V>", self.runClipboard)
+        bindKey()
 
         self.win.mainloop()
 
@@ -373,6 +439,33 @@ class Win:
                     addImage(path+"\\"+s)  # 添加
             elif os.path.isfile(path):  # 若是文件：
                 addImage(path)  # 直接添加
+
+    def runClipboard(self, e=None):  # 识别剪贴板
+        if not self.isRunning == 0:  # 正在运行，不执行
+            return
+        img = ImageGrab.grabclipboard()  # 读取
+        if not isinstance(img, Image.Image):
+            return  # 未读到图像
+        # 窗口临时置顶
+        self.win.attributes('-topmost', 1)
+        self.win.attributes('-topmost', 0)
+        # 保存临时文件
+        if not os.path.exists(TempFilePath):  # 创建临时文件夹
+            os.makedirs(TempFilePath)
+        else:  # 清空临时文件夹
+            delList = os.listdir(TempFilePath)
+            for f in delList:
+                p = f"{TempFilePath}\\{f}"
+                if os.path.isfile(p):
+                    os.remove(p)
+        imgPath = f"{TempFilePath}\\temp_{int(time.time()*1000)}.png"
+        img.save(imgPath)
+        # 载入队列
+        imgPath = os.path.abspath(imgPath)  # 转绝对路径
+        self.clearTable()  # 清空表格
+        self.addImagesList([imgPath])  # 加入表格
+        self.run()  # 开始执行
+        self.notebook.select(self.tabFrameOutput)  # 转到输出卡
 
     # 忽略区域 ===============================================
 

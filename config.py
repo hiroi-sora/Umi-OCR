@@ -5,14 +5,18 @@ ConfigJsonFile = "Umi-OCR_config.json"
 
 # 配置项
 ConfigDict = {
+    # 读取剪贴板设置
+    "isGlobalHotkey": False,  # T时绑定全局快捷键
+    "globalHotkey": "",  # 全局快捷键
+
     # 忽略区域设置
     "ignoreArea": None,  # 忽略区域
     # "ignoreAreaPreset": [],  # 忽略区域预设列表
 
     # 输出文件设置
     "isOutputFile": True,  # T时输出内容写入本地文件
-    "isOpenExplorer": True,  # T时任务完成后打开资源管理器到输出目录。isOutputFile为T时才管用
-    "isOpenOutputFile": False,  # T时任务完成后打开输出文件。isOutputFile为T时才管用
+    "isOpenExplorer": False,  # T时任务完成后打开资源管理器到输出目录。isOutputFile为T时才管用
+    "isOpenOutputFile": True,  # T时任务完成后打开输出文件。isOutputFile为T时才管用
     "outputFilePath": "",  # 输出文件目录
     "outputFileName": "",  # 输出文件名称
 
@@ -28,6 +32,8 @@ ConfigDict = {
 
 #  需要保存的设置项
 SaveItem = [
+    "isGlobalHotkey",
+    "globalHotkey",
     "isOutputFile",
     "isOpenExplorer",
     "isOpenOutputFile",
