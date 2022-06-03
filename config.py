@@ -17,7 +17,7 @@ ConfigDict = {
     # 输出文件设置
     "isOutputFile": True,  # T时输出内容写入本地文件
     "isOpenExplorer": False,  # T时任务完成后打开资源管理器到输出目录。isOutputFile为T时才管用
-    "isOpenOutputFile": True,  # T时任务完成后打开输出文件。isOutputFile为T时才管用
+    "isOpenOutputFile": False,  # T时任务完成后打开输出文件。isOutputFile为T时才管用
     "outputFilePath": "",  # 输出文件目录
     "outputFileName": "",  # 输出文件名称
 

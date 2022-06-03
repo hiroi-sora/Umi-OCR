@@ -14,7 +14,7 @@
 
 Github下载：
 
-[Umi-OCR 批量图片转文字 v1.2.3](https://github.com/hiroi-sora/Umi-OCR/releases/tag/v1.2.3)
+[Umi-OCR 批量图片转文字 v1.2.4](https://github.com/hiroi-sora/Umi-OCR/releases/tag/v1.2.4)
 
 蓝奏云下载：（请留意发布日期和版本号）
 
