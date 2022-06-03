@@ -453,9 +453,9 @@ class Win:
             return  # 未读到图像
         # 窗口恢复前台，并临时置顶
         if self.win.state() == "iconic":  # 窗口最小化状态下
-            self.win.state("normal")  # 恢复前台
-        self.win.attributes('-topmost', 1)
-        self.win.attributes('-topmost', 0)  # 层级最前，并解除
+            self.win.state("normal")  # 恢复前台状态
+        self.win.attributes('-topmost', 1)  # 设置层级最前
+        self.win.attributes('-topmost', 0)  # 然后立刻解除
         # 保存临时文件
         if not os.path.exists(TempFilePath):  # 创建临时文件夹
             os.makedirs(TempFilePath)
