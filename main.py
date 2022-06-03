@@ -1,3 +1,4 @@
+from distutils.command.config import config
 from selectAreaWin import SelectAreaWin  # 子窗口
 from asset import IconPngBase64, GetHelpText  # 资源
 from callingOCR import CallingOCR  # OCR调用接口
@@ -49,6 +50,7 @@ class Win:
             self.cfgVar = {  # 设置项tk变量
                 # 读取剪贴板设置
                 "isGlobalHotkey": tk.BooleanVar(),  # T时绑定全局快捷键
+                "isNeedCopy": tk.BooleanVar(),  # T时识别完成后自动复制文字
                 "globalHotkey": tk.StringVar(),  # 全局快捷键
                 # 输出文件设置
                 "isOutputFile": tk.BooleanVar(),  # T时输出内容写入本地文件
@@ -83,6 +85,7 @@ class Win:
             for key in self.cfgVar:
                 self.cfgVar[key].trace(  # 跟踪值改变事件
                     "w", lambda *e, key=key: valueChange(key))
+            self.isNeedCopy = False  # 标志值，T时识图后复制文字
         initVar()
 
         # 3.初始化组件
@@ -268,6 +271,8 @@ class Win:
                 fr1.pack(side='top', fill='x', pady=2, padx=5)
                 tk.Checkbutton(fr1, variable=self.cfgVar["isGlobalHotkey"],
                                text="启用全局快捷键（在其它窗口也可响应）", command=updateHotket).grid(column=0, row=0, columnspan=9, sticky="w")
+                tk.Checkbutton(fr1, variable=self.cfgVar["isNeedCopy"],
+                               text="自动复制识别文本").grid(column=0, row=1, columnspan=9, sticky="w")
                 tk.Button(fr1, text='录制按键',
                           command=readHotkey).grid(column=0, row=2, sticky="w")
                 tk.Label(fr1, textvariable=self.cfgVar["globalHotkey"]).grid(
@@ -460,6 +465,9 @@ class Win:
                     os.remove(p)
         imgPath = f"{TempFilePath}\\temp_{int(time.time()*1000)}.png"
         img.save(imgPath)
+        # 刷新自动复制
+        if Config.get("isNeedCopy"):
+            self.isNeedCopy = True
         # 载入队列
         imgPath = os.path.abspath(imgPath)  # 转绝对路径
         self.clearTable()  # 清空表格
@@ -583,6 +591,8 @@ class Win:
         self.loop.run_forever()
 
     async def run_(self):  # 异步，执行任务
+        # 这个函数非常，非常之丑
+        # 有生之年一定，一定重构
         self.labelPercentage["text"] = "初始化"
         isOutputFile = Config.get("isOutputFile")  # 是否输出文件
         isOutputDebug = Config.get("isOutputDebug")  # 是否输出调试
@@ -755,6 +765,9 @@ class Win:
                     numOK += 1
                     dataStr, textDebug, score = analyzeText(
                         oget['data'], value)  # 获取文字
+                    if self.isNeedCopy:  # 识图后复制到剪贴板
+                        pyperclipCopy(dataStr)
+                        self.isNeedCopy = False  # 一次性
                 elif oget['code'] == 101:  # 无文字
                     numNON += 1
                     score = "无文字"

@@ -7,6 +7,7 @@ ConfigJsonFile = "Umi-OCR_config.json"
 ConfigDict = {
     # 读取剪贴板设置
     "isGlobalHotkey": False,  # T时绑定全局快捷键
+    "isNeedCopy": False,  # T时识别完成后自动复制文字
     "globalHotkey": "",  # 全局快捷键
 
     # 忽略区域设置
@@ -33,6 +34,7 @@ ConfigDict = {
 #  需要保存的设置项
 SaveItem = [
     "isGlobalHotkey",
+    "isNeedCopy",
     "globalHotkey",
     "isOutputFile",
     "isOpenExplorer",
