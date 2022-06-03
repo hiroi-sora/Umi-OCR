@@ -769,7 +769,6 @@ class Win:
                         oget['data'], value)  # 获取文字
                     if self.isNeedCopy:  # 识图后复制到剪贴板
                         pyperclipCopy(dataStr)
-                        self.isNeedCopy = False  # 一次性
                 elif oget['code'] == 101:  # 无文字
                     numNON += 1
                     score = "无文字"
@@ -778,6 +777,7 @@ class Win:
                     dataStr = "识别失败"  # 不管开不开输出调试，都要输出报错
                     dataStr += f"，错误码：{oget['code']}\n错误信息：{str(oget['data'])}\n"
                     score = "失败"
+                self.isNeedCopy = False  # 成功与否都将复制标志置F
 
                 # 写入表格
                 self.table.set(key, column='score', value=score[:4])
