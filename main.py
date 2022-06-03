@@ -17,7 +17,7 @@ from windnd import hook_dropfiles  # 文件拖拽
 from pyperclip import copy as pyperclipCopy  # 剪贴板
 from webbrowser import open as webOpen  # “关于”面板打开项目网址
 
-ProjectVer = "1.2.3"  # 版本号
+ProjectVer = "1.2.4"  # 版本号
 ProjectName = f"Umi-OCR 批量图片转文字 v{ProjectVer}"  # 名称
 ProjectWeb = "https://github.com/hiroi-sora/Umi-OCR"
 TempFilePath = "Umi-OCR_temp"
@@ -451,9 +451,11 @@ class Win:
         img = ImageGrab.grabclipboard()  # 读取
         if not isinstance(img, Image.Image):
             return  # 未读到图像
-        # 窗口临时置顶
+        # 窗口恢复前台，并临时置顶
+        if self.win.state() == "iconic":  # 窗口最小化状态下
+            self.win.state("normal")  # 恢复前台
         self.win.attributes('-topmost', 1)
-        self.win.attributes('-topmost', 0)
+        self.win.attributes('-topmost', 0)  # 层级最前，并解除
         # 保存临时文件
         if not os.path.exists(TempFilePath):  # 创建临时文件夹
             os.makedirs(TempFilePath)
