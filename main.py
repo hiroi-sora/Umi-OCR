@@ -27,6 +27,7 @@ class Win:
     def __init__(self):
         self.imgDict = {}  # 当前载入的图片信息字典，key为表格组件id。必须为有序字典，python3.6以上默认是。
         self.isRunning = 0  # 0未在运行，1正在运行，2正在停止
+        self.lockWidget = []  # 需要运行时锁定的组件
 
         # 1.初始化主窗口
         def initWin():
@@ -196,8 +197,6 @@ class Win:
                 self.optFrame.pack()
                 self.optCanvas.create_window(  # 框架塞进画布
                     (0, 0), window=self.optFrame, anchor="nw")
-                self.labelOptionTips = tk.Label(self.optFrame, fg="red")
-                self.labelOptionTips.pack()
             initOptFrame()
 
             LabelFramePadY = 3  # 每个区域上下间距
@@ -208,10 +207,14 @@ class Win:
                 self.areaLabel.pack(side='top', fill='x',
                                     ipady=2, pady=LabelFramePadY, padx=4)
                 self.areaLabel.grid_columnconfigure(0, minsize=4)
-                tk.Button(self.areaLabel, text='添加区域',
-                          command=self.openSelectArea).grid(column=1, row=0, sticky="w")
-                tk.Button(self.areaLabel, text='清空区域',
-                          command=self.clearArea).grid(column=1, row=1, sticky="w")
+                wid = tk.Button(self.areaLabel, text='添加区域',
+                                command=self.openSelectArea)
+                wid.grid(column=1, row=0, sticky="w")
+                self.lockWidget.append(wid)
+                wid = tk.Button(self.areaLabel, text='清空区域',
+                                command=self.clearArea)
+                wid.grid(column=1, row=1, sticky="w")
+                self.lockWidget.append(wid)
                 self.areaLabel.grid_rowconfigure(2, minsize=10)
                 # tk.Button(self.areaLabel, text='读取预设',
                 #           command=self.showTest).grid(column=1, row=3, sticky="w")
@@ -269,16 +272,24 @@ class Win:
                                     ipady=2, pady=LabelFramePadY, padx=4)
                 fr1 = tk.Frame(areaLabel)
                 fr1.pack(side='top', fill='x', pady=2, padx=5)
-                tk.Checkbutton(fr1, variable=self.cfgVar["isGlobalHotkey"],
-                               text="启用全局快捷键（在其它窗口也可响应）", command=updateHotket).grid(column=0, row=0, columnspan=9, sticky="w")
-                tk.Checkbutton(fr1, variable=self.cfgVar["isNeedCopy"],
-                               text="自动复制识别文本").grid(column=0, row=1, columnspan=9, sticky="w")
-                tk.Button(fr1, text='录制按键',
-                          command=readHotkey).grid(column=0, row=2, sticky="w")
+                wid = tk.Checkbutton(fr1, variable=self.cfgVar["isGlobalHotkey"],
+                                     text="启用全局快捷键（在其它窗口也可响应）", command=updateHotket)
+                wid.grid(column=0, row=0, columnspan=9, sticky="w")
+                self.lockWidget.append(wid)
+                wid = tk.Checkbutton(fr1, variable=self.cfgVar["isNeedCopy"],
+                                     text="自动复制识别文本")
+                wid.grid(column=0, row=1, columnspan=9, sticky="w")
+                self.lockWidget.append(wid)
+                wid = tk.Button(fr1, text='录制按键',
+                                command=readHotkey)
+                wid.grid(column=0, row=2, sticky="w")
+                self.lockWidget.append(wid)
                 tk.Label(fr1, textvariable=self.cfgVar["globalHotkey"]).grid(
                     column=2, row=2,  sticky="nsew")
-                tk.Button(fr1, text='清除', width=8,
-                          command=delHotkey).grid(column=3, row=2, sticky="w")
+                wid = tk.Button(fr1, text='清除', width=8,
+                                command=delHotkey)
+                wid.grid(column=3, row=2, sticky="w")
+                self.lockWidget.append(wid)
                 fr1.grid_columnconfigure(2, weight=1)
                 fr1.grid_columnconfigure(1, minsize=6)
             initClipboard()
@@ -290,20 +301,32 @@ class Win:
 
                 fr1 = tk.Frame(frameOutFile)
                 fr1.pack(side='top', fill='x', pady=2, padx=5)
-                tk.Checkbutton(fr1, variable=self.cfgVar["isOutputFile"],
-                               text="将识别内容写入本地文件").grid(column=0, row=0, columnspan=2, sticky="w")
-                tk.Checkbutton(fr1, text="输出调试信息", variable=self.cfgVar["isOutputDebug"]
-                               ).grid(column=0, row=1, sticky="w")
-                tk.Checkbutton(fr1, text="忽略无文字的图片", variable=self.cfgVar["isIgnoreNoText"],
-                               ).grid(column=1, row=1, sticky="w")
-                tk.Checkbutton(fr1, text="完成后打开文件", variable=self.cfgVar["isOpenOutputFile"]
-                               ).grid(column=0, row=2, sticky="w")
-                tk.Checkbutton(fr1, text="完成后打开目录", variable=self.cfgVar["isOpenExplorer"],
-                               ).grid(column=1, row=2, sticky="w")
-                tk.Radiobutton(fr1, text='纯文本.txt文件', value=1, variable=self.cfgVar["outputStyle"],
-                               ).grid(column=0, row=3, sticky="w")
-                tk.Radiobutton(fr1, text='Markdown风格.md文件', value=2, variable=self.cfgVar["outputStyle"],
-                               ).grid(column=1, row=3, sticky="w")
+                wid = tk.Checkbutton(
+                    fr1, variable=self.cfgVar["isOutputFile"], text="将识别内容写入本地文件")
+                wid.grid(column=0, row=0, columnspan=2, sticky="w")
+                self.lockWidget.append(wid)
+                wid = tk.Checkbutton(fr1, text="输出调试信息",
+                                     variable=self.cfgVar["isOutputDebug"])
+                wid.grid(column=0, row=1, sticky="w")
+                self.lockWidget.append(wid)
+                wid = tk.Checkbutton(fr1, text="忽略无文字的图片",
+                                     variable=self.cfgVar["isIgnoreNoText"],)
+                wid.grid(column=1, row=1, sticky="w")
+                self.lockWidget.append(wid)
+                wid = tk.Checkbutton(fr1, text="完成后打开文件",
+                                     variable=self.cfgVar["isOpenOutputFile"])
+                wid.grid(column=0, row=2, sticky="w")
+                wid = tk.Checkbutton(fr1, text="完成后打开目录",
+                                     variable=self.cfgVar["isOpenExplorer"],)
+                wid.grid(column=1, row=2, sticky="w")
+                wid = tk.Radiobutton(
+                    fr1, text='纯文本.txt文件', value=1, variable=self.cfgVar["outputStyle"],)
+                wid.grid(column=0, row=3, sticky="w")
+                self.lockWidget.append(wid)
+                wid = tk.Radiobutton(
+                    fr1, text='Markdown风格.md文件', value=2, variable=self.cfgVar["outputStyle"],)
+                wid.grid(column=1, row=3, sticky="w")
+                self.lockWidget.append(wid)
                 tk.Label(fr1, fg="gray",
                          text="下面两项为空时，默认输出到第一张图片所在的文件夹"
                          ).grid(column=0, row=4, columnspan=2, sticky="nsew")
@@ -314,11 +337,13 @@ class Win:
                 enOutPath = tk.Entry(
                     fr2, textvariable=self.cfgVar["outputFilePath"])
                 enOutPath.grid(column=1, row=3,  sticky="nsew")
+                self.lockWidget.append(enOutPath)
                 fr2.grid_rowconfigure(4, minsize=2)  # 第二行拉开间距
                 tk.Label(fr2, text="输出文件名：").grid(column=0, row=5, sticky="w")
                 enOutName = tk.Entry(
                     fr2, textvariable=self.cfgVar["outputFileName"])
                 enOutName.grid(column=1, row=5, sticky="nsew")
+                self.lockWidget.append(enOutName)
                 fr2.grid_columnconfigure(1, weight=1)  # 第二列自动扩充
             initOutFile()
 
@@ -334,11 +359,13 @@ class Win:
                 tk.Label(fr1, text="识别器路径：").grid(column=0, row=0, sticky="w")
                 enEXE = tk.Entry(fr1, textvariable=self.cfgVar["ocrToolPath"])
                 enEXE.grid(column=1, row=0,  sticky="nsew")
+                self.lockWidget.append(enEXE)
 
                 tk.Label(fr1, text="图片后缀：").grid(column=0, row=2, sticky="w")
                 enInSuffix = tk.Entry(
                     fr1, textvariable=self.cfgVar["imageSuffix"])
                 enInSuffix.grid(column=1, row=2, sticky="nsew")
+                self.lockWidget.append(enInSuffix)
                 fr1.grid_columnconfigure(1, weight=1)
                 fr1.grid_rowconfigure(1, minsize=2)
             initOcrUI()
@@ -538,17 +565,22 @@ class Win:
 
     def setRunning(self, r):  # 设置运行状态。0停止，1运行中，2停止中
         self.isRunning = r
+        state = ""  # 组件状态
         if r == 0:
             self.btnRun["text"] = "开始任务"
             self.btnRun['state'] = "normal"
-            self.labelOptionTips["text"] = ""
+            state = "normal"
         elif r == 1:
             self.btnRun["text"] = "停止任务"
             self.btnRun['state'] = "normal"
-            self.labelOptionTips["text"] = " 任务进行中。不要改动任何配置！！ "
+            state = "disable"
         elif r == 2:
             self.btnRun["text"] = "正在停止"
             self.btnRun['state'] = "disable"
+            state = "normal"
+        for w in self.lockWidget:  # 改变组件状态（禁用，启用）
+
+            w['state'] = state
 
     def run(self):  # 开始任务，创建新线程和事件循环
         if self.isRunning == 0:  # 未在运行，开始运行
