@@ -1,4 +1,5 @@
 from distutils.command.config import config
+from turtle import width
 from selectAreaWin import SelectAreaWin  # 子窗口
 from asset import IconPngBase64, GetHelpText  # 资源
 from callingOCR import CallingOCR  # OCR调用接口
@@ -49,14 +50,18 @@ class Win:
         # 2.初始化变量、配置项
         def initVar():
             self.cfgVar = {  # 设置项tk变量
+                # 计划任务设置
+                "isOpenExplorer": tk.BooleanVar(),  # T时任务完成后打开资源管理器到输出目录。isOutputFile为T时才管用
+                "isOpenOutputFile": tk.BooleanVar(),  # T时任务完成后打开输出文件。isOutputFile为T时才管用
+                "okMissionName": tk.StringVar(),  # 当前选择的计划任务的name。
+                "isOkMission": tk.BooleanVar(),  # T时本次任务完成后执行指定任务。
+
                 # 读取剪贴板设置
                 "isGlobalHotkey": tk.BooleanVar(),  # T时绑定全局快捷键
                 "isNeedCopy": tk.BooleanVar(),  # T时识别完成后自动复制文字
                 "globalHotkey": tk.StringVar(),  # 全局快捷键
                 # 输出文件设置
                 "isOutputFile": tk.BooleanVar(),  # T时输出内容写入本地文件
-                "isOpenExplorer": tk.BooleanVar(),  # T时任务完成后打开资源管理器到输出目录。isOutputFile为T时才管用
-                "isOpenOutputFile": tk.BooleanVar(),  # T时任务完成后打开输出文件。isOutputFile为T时才管用
                 "outputFilePath": tk.StringVar(),  # 输出文件目录
                 "outputFileName": tk.StringVar(),  # 输出文件名称
                 # 输出格式设置
@@ -201,6 +206,30 @@ class Win:
 
             LabelFramePadY = 3  # 每个区域上下间距
 
+            def initScheduler():  # 计划任务设置
+                frameScheduler = tk.LabelFrame(self.optFrame, text="计划任务")
+                frameScheduler.pack(side='top', fill='x',
+                                    ipady=2, pady=LabelFramePadY, padx=4)
+
+                fr1 = tk.Frame(frameScheduler)
+                fr1.pack(side='top', fill='x', pady=2, padx=5)
+                tk.Checkbutton(fr1, text="完成后打开文件",
+                               variable=self.cfgVar["isOpenOutputFile"]).pack(side='left')
+                tk.Checkbutton(fr1, text="完成后打开目录",
+                               variable=self.cfgVar["isOpenExplorer"],).pack(side='left', padx=15)
+
+                fr2 = tk.Frame(frameScheduler)
+                fr2.pack(side='top', fill='x', pady=2, padx=5)
+                tk.Checkbutton(fr2, text="本次完成后执行",
+                               variable=self.cfgVar["isOkMission"]).pack(side='left')
+                okMissionList = Config.get("okMission")
+                okMissionNameList = [i["name"] for i in okMissionList]
+                wid = ttk.Combobox(fr2, width=10, state="readonly", textvariable=self.cfgVar["okMissionName"],
+                                   value=okMissionNameList)
+                wid.pack(side='left')
+                wid.current(0)  # 初始化Combobox和okMissionName
+            initScheduler()
+
             def initArea():  # 忽略区域设置
                 self.areaLabel = tk.LabelFrame(
                     self.optFrame, text="忽略图片中某些区域内的文字")
@@ -313,12 +342,12 @@ class Win:
                                      variable=self.cfgVar["isIgnoreNoText"],)
                 wid.grid(column=1, row=1, sticky="w")
                 self.lockWidget.append(wid)
-                wid = tk.Checkbutton(fr1, text="完成后打开文件",
-                                     variable=self.cfgVar["isOpenOutputFile"])
-                wid.grid(column=0, row=2, sticky="w")
-                wid = tk.Checkbutton(fr1, text="完成后打开目录",
-                                     variable=self.cfgVar["isOpenExplorer"],)
-                wid.grid(column=1, row=2, sticky="w")
+                # wid = tk.Checkbutton(fr1, text="完成后打开文件",
+                #                      variable=self.cfgVar["isOpenOutputFile"])
+                # wid.grid(column=0, row=2, sticky="w")
+                # wid = tk.Checkbutton(fr1, text="完成后打开目录",
+                #                      variable=self.cfgVar["isOpenExplorer"],)
+                # wid.grid(column=1, row=2, sticky="w")
                 wid = tk.Radiobutton(
                     fr1, text='纯文本.txt文件', value=1, variable=self.cfgVar["outputStyle"],)
                 wid.grid(column=0, row=3, sticky="w")
@@ -405,6 +434,7 @@ class Win:
                         1 if event.delta < 0 else -1, "units")
                 self.optCanvas.bind_all("<MouseWheel>", onCanvasMouseWheel)
             initOptFrameWH()
+            # self.notebook.select(tabFrame)  # 调试用
         initTab3()
 
         # 4.绑定快捷键
@@ -464,6 +494,7 @@ class Win:
             dictInfo = {"name": name, "path": path, "size": s}
             self.imgDict[id] = (dictInfo)  # 添加到字典中
 
+        # TODO: 遍历子文件夹
         for path in paths:  # 遍历拖入的所有路径
             if os.path.isdir(path):  # 若是目录
                 subFiles = os.listdir(path)  # 遍历子文件
@@ -845,6 +876,14 @@ class Win:
                 os.startfile(outputPath)
             if Config.get("isOpenOutputFile"):  # 打开输出文件
                 os.startfile(outputFile)
+        if Config.get("isOkMission"):  # 计划任务
+            Config.set("isOkMission", False)  # 一次性
+            omName = Config.get("okMissionName")
+            okMission = Config.get("okMission")
+            for mission in okMission:
+                if mission["name"] == omName:
+                    os.system(mission["code"])  # 执行cmd语句
+                    return
 
     def showInstructions(self, e):  # 打开使用说明
         if not self.isRunning == 0:
