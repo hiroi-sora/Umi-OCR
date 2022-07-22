@@ -25,6 +25,9 @@ ConfigDict = {
     "ignoreArea": None,  # 忽略区域
     # "ignoreAreaPreset": [],  # 忽略区域预设列表
 
+    # 输入文件设置
+    "isRecursiveSearch": False,  # T时导入文件夹将递归查找子文件夹中所有图片
+
     # 输出文件设置
     "isOutputFile": True,  # T时输出内容写入本地文件
     "outputFilePath": "",  # 输出文件目录
@@ -48,6 +51,7 @@ SaveItem = [
     "isGlobalHotkey",
     "isNeedCopy",
     "globalHotkey",
+    "isRecursiveSearch",
     "isOutputFile",
     "isOutputDebug",
     "isIgnoreNoText",

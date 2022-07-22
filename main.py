@@ -55,11 +55,12 @@ class Win:
                 "isOpenOutputFile": tk.BooleanVar(),  # T时任务完成后打开输出文件。isOutputFile为T时才管用
                 "okMissionName": tk.StringVar(),  # 当前选择的计划任务的name。
                 "isOkMission": tk.BooleanVar(),  # T时本次任务完成后执行指定任务。
-
                 # 读取剪贴板设置
                 "isGlobalHotkey": tk.BooleanVar(),  # T时绑定全局快捷键
                 "isNeedCopy": tk.BooleanVar(),  # T时识别完成后自动复制文字
                 "globalHotkey": tk.StringVar(),  # 全局快捷键
+                # 输入文件设置
+                "isRecursiveSearch": tk.BooleanVar(),  # T时导入文件夹将递归查找子文件夹中所有图片
                 # 输出文件设置
                 "isOutputFile": tk.BooleanVar(),  # T时输出内容写入本地文件
                 "outputFilePath": tk.StringVar(),  # 输出文件目录
@@ -323,6 +324,19 @@ class Win:
                 fr1.grid_columnconfigure(1, minsize=6)
             initClipboard()
 
+            def initInFile():  # 输入设置
+                frameInFile = tk.LabelFrame(self.optFrame, text="输入设置")
+                frameInFile.pack(side='top', fill='x',
+                                 ipady=2, pady=LabelFramePadY, padx=4)
+
+                fr1 = tk.Frame(frameInFile)
+                fr1.pack(side='top', fill='x', pady=2, padx=5)
+                wid = tk.Checkbutton(
+                    fr1, variable=self.cfgVar["isRecursiveSearch"], text="递归读取子文件夹中所有图片")
+                wid.grid(column=0, row=0, columnspan=2, sticky="w")
+                self.lockWidget.append(wid)
+            initInFile()
+
             def initOutFile():  # 输出文件设置
                 frameOutFile = tk.LabelFrame(self.optFrame, text="输出设置")
                 frameOutFile.pack(side='top', fill='x',
@@ -494,12 +508,17 @@ class Win:
             dictInfo = {"name": name, "path": path, "size": s}
             self.imgDict[id] = (dictInfo)  # 添加到字典中
 
-        # TODO: 遍历子文件夹
+        isRecursiveSearch = Config.get("isRecursiveSearch")
         for path in paths:  # 遍历拖入的所有路径
             if os.path.isdir(path):  # 若是目录
-                subFiles = os.listdir(path)  # 遍历子文件
-                for s in subFiles:
-                    addImage(path+"\\"+s)  # 添加
+                if isRecursiveSearch:  # 需要递归子文件夹
+                    for subDir, dirs, subFiles in os.walk(path):
+                        for s in subFiles:
+                            addImage(subDir+"\\"+s)
+                else:  # 非递归，只搜索子文件夹一层
+                    subFiles = os.listdir(path)  # 遍历子文件
+                    for s in subFiles:
+                        addImage(path+"\\"+s)  # 添加
             elif os.path.isfile(path):  # 若是文件：
                 addImage(path)  # 直接添加
 
@@ -877,13 +896,13 @@ class Win:
             if Config.get("isOpenOutputFile"):  # 打开输出文件
                 os.startfile(outputFile)
         if Config.get("isOkMission"):  # 计划任务
-            Config.set("isOkMission", False)  # 一次性
+            Config.set("isOkMission", False)  # 一次性，设回false
             omName = Config.get("okMissionName")
             okMission = Config.get("okMission")
             for mission in okMission:
-                if mission["name"] == omName:
+                if mission["name"] == omName:  # 找到当前要执行的任务
                     os.system(mission["code"])  # 执行cmd语句
-                    return
+                    break
 
     def showInstructions(self, e):  # 打开使用说明
         if not self.isRunning == 0:
