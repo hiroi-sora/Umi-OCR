@@ -10,11 +10,12 @@ ConfigDict = {
     "isOpenOutputFile": False,  # T时任务完成后打开输出文件。isOutputFile为T时才管用
     "isOkMission": False,  # T时本次任务完成后执行指定计划任务。
     "okMissionName": "",  # 当前选择的计划任务的name。
-    "okMission": [{"name": "关机",
-                   "code": 'shutdown /s /t 30 /c "Umi-OCR任务完成，即将关机" /d p:4:1'},  # 30秒后关机 shutdown -a
-                  {"name": "休眠",
-                   "code": 'shutdown /f /h'},  # shutdown的休眠不能定时
-                  ],
+    "okMission": {  # 计划任务事件，code为cmd代码
+        "关机":
+            {"code": 'shutdown /s /t 30 /c "Umi-OCR任务完成，即将关机" /d p:4:1'},
+        "休眠":
+            {"code": 'shutdown /f /h'},  # shutdown的休眠不能定时
+    },
 
     # 读取剪贴板设置
     "isGlobalHotkey": False,  # T时绑定全局快捷键

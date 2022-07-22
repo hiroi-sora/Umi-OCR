@@ -223,8 +223,9 @@ class Win:
                 fr2.pack(side='top', fill='x', pady=2, padx=5)
                 tk.Checkbutton(fr2, text="本次完成后执行",
                                variable=self.cfgVar["isOkMission"]).pack(side='left')
-                okMissionList = Config.get("okMission")
-                okMissionNameList = [i["name"] for i in okMissionList]
+                okMissionDict = Config.get("okMission")
+                print(okMissionDict)
+                okMissionNameList = [i for i in okMissionDict.keys()]
                 wid = ttk.Combobox(fr2, width=10, state="readonly", textvariable=self.cfgVar["okMissionName"],
                                    value=okMissionNameList)
                 wid.pack(side='left')
@@ -675,8 +676,7 @@ class Win:
         self.loop.run_forever()
 
     async def run_(self):  # 异步，执行任务
-        # 这个函数非常，非常之丑
-        # 有生之年一定，一定重构
+        # 有生之年一定重构
         self.labelPercentage["text"] = "初始化"
         isOutputFile = Config.get("isOutputFile")  # 是否输出文件
         isOutputDebug = Config.get("isOutputDebug")  # 是否输出调试
@@ -899,10 +899,8 @@ class Win:
             Config.set("isOkMission", False)  # 一次性，设回false
             omName = Config.get("okMissionName")
             okMission = Config.get("okMission")
-            for mission in okMission:
-                if mission["name"] == omName:  # 找到当前要执行的任务
-                    os.system(mission["code"])  # 执行cmd语句
-                    break
+            if omName in okMission.keys():
+                os.system(okMission[omName]["code"])  # 执行cmd语句
 
     def showInstructions(self, e):  # 打开使用说明
         if not self.isRunning == 0:
