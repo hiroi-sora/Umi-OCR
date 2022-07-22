@@ -12,7 +12,7 @@ ConfigDict = {
     "okMissionName": "",  # 当前选择的计划任务的name。
     "okMission": {  # 计划任务事件，code为cmd代码
         "关机":  # 取消：shutdown /a
-        {"code": r'msg %username% /time:25 "Umi-OCR任务完成，将在30s后关机" & echo 关闭本窗口可取消关机 & choice /t 30 /d y /n >nul & shutdown /f /s'},
+        {"code": r'msg %username% /time:25 "Umi-OCR任务完成，将在30s后关机" & echo 关闭本窗口可取消关机 & choice /t 30 /d y /n >nul & shutdown /f /s /t 0'},
         "休眠":  # 用choice实现延时
         {"code": r'msg %username% /time:25 "Umi-OCR任务完成，将在30s后休眠" & echo 关闭本窗口可取消休眠 & choice /t 30 /d y /n >nul & shutdown /f /h'},
     },

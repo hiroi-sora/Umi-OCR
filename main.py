@@ -18,7 +18,7 @@ from windnd import hook_dropfiles  # 文件拖拽
 from pyperclip import copy as pyperclipCopy  # 剪贴板
 from webbrowser import open as webOpen  # “关于”面板打开项目网址
 
-ProjectVer = "1.2.5 Alpha"  # 版本号
+ProjectVer = "1.2.5"  # 版本号
 ProjectName = f"Umi-OCR 批量图片转文字 v{ProjectVer}"  # 名称
 ProjectWeb = "https://github.com/hiroi-sora/Umi-OCR"
 TempFilePath = "Umi-OCR_temp"
@@ -242,6 +242,11 @@ class Win:
                                    value=okMissionNameList)
                 wid.pack(side='left')
                 wid.current(0)  # 初始化Combobox和okMissionName
+                labelOpenFile = tk.Label(fr2, text="打开设置文件",
+                                         fg="gray", cursor="hand2")
+                labelOpenFile.pack(side='right')
+                labelOpenFile.bind(
+                    '<Button-1>', lambda *e: os.startfile("Umi-OCR_config.json"))
             initScheduler()
 
             def initArea():  # 忽略区域设置
@@ -430,7 +435,7 @@ class Win:
                 labelOpenPath.grid(column=0, row=2, sticky="w")
                 labelOpenPath.bind(
                     '<Button-1>', lambda *e: os.startfile("PaddleOCR-json"))
-                labelOpenFile = tk.Label(fr1, text="　打开配置文件",
+                labelOpenFile = tk.Label(fr1, text="　打开识别器配置文件",
                                          fg="gray", cursor="hand2")
                 labelOpenFile.grid(column=1, row=2, sticky="w")
                 labelOpenFile.bind(
@@ -655,10 +660,9 @@ class Win:
         elif r == 2:
             self.btnRun["text"] = "正在停止"
             self.btnRun['state'] = "disable"
-            state = "normal"
-        for w in self.lockWidget:  # 改变组件状态（禁用，启用）
-
-            w['state'] = state
+        if state:
+            for w in self.lockWidget:  # 改变组件状态（禁用，启用）
+                w['state'] = state
 
     def run(self):  # 开始任务，创建新线程和事件循环
         if self.isRunning == 0:  # 未在运行，开始运行
