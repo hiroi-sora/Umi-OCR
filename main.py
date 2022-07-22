@@ -107,10 +107,23 @@ class Win:
             # 左侧文本和进度条
             vFrame2 = tk.Frame(fr)
             vFrame2.pack(side='top', fill='x')
+
+            def showInstructions(e):  # 打开使用说明
+                if not self.isRunning == 0:
+                    tk.messagebox.showwarning(
+                        '任务进行中', '停止任务后，再打开软件说明')
+                    return
+                self.notebook.select(self.tabFrameOutput)  # 切换到输出选项卡
+                outputNow = self.textOutput.get("1.0", tk.END)
+                if outputNow and not outputNow == "\n":  # 输出面板内容存在，且不是单换行（初始状态）
+                    if not tkinter.messagebox.askokcancel('提示', '将清空输出面板。要继续吗？'):
+                        return
+                    self.textOutput.delete('1.0', tk.END)
+                self.textOutput.insert(tk.END, GetHelpText(ProjectWeb))
             labelUse = tk.Label(vFrame2, text="使用说明",
                                 fg="gray", cursor="hand2")
             labelUse.pack(side='left', padx=5)
-            labelUse.bind('<Button-1>', self.showInstructions)  # 绑定鼠标左键点击
+            labelUse.bind('<Button-1>', showInstructions)  # 绑定鼠标左键点击
             self.labelPercentage = tk.Label(vFrame2, text="0%")  # 进度百分比 99%
             self.labelPercentage.pack(side='right', padx=2)
             self.labelFractions = tk.Label(vFrame2, text="0/0")  # 进度分数 99/100
@@ -224,7 +237,6 @@ class Win:
                 tk.Checkbutton(fr2, text="本次完成后执行",
                                variable=self.cfgVar["isOkMission"]).pack(side='left')
                 okMissionDict = Config.get("okMission")
-                print(okMissionDict)
                 okMissionNameList = [i for i in okMissionDict.keys()]
                 wid = ttk.Combobox(fr2, width=10, state="readonly", textvariable=self.cfgVar["okMissionName"],
                                    value=okMissionNameList)
@@ -336,6 +348,14 @@ class Win:
                     fr1, variable=self.cfgVar["isRecursiveSearch"], text="递归读取子文件夹中所有图片")
                 wid.grid(column=0, row=0, columnspan=2, sticky="w")
                 self.lockWidget.append(wid)
+
+                tk.Label(fr1, text="图片后缀：　").grid(column=0, row=2, sticky="w")
+                enInSuffix = tk.Entry(
+                    fr1, textvariable=self.cfgVar["imageSuffix"])
+                enInSuffix.grid(column=1, row=2, sticky="nsew")
+                self.lockWidget.append(enInSuffix)
+
+                fr1.grid_columnconfigure(1, weight=1)
             initInFile()
 
             def initOutFile():  # 输出文件设置
@@ -357,12 +377,6 @@ class Win:
                                      variable=self.cfgVar["isIgnoreNoText"],)
                 wid.grid(column=1, row=1, sticky="w")
                 self.lockWidget.append(wid)
-                # wid = tk.Checkbutton(fr1, text="完成后打开文件",
-                #                      variable=self.cfgVar["isOpenOutputFile"])
-                # wid.grid(column=0, row=2, sticky="w")
-                # wid = tk.Checkbutton(fr1, text="完成后打开目录",
-                #                      variable=self.cfgVar["isOpenExplorer"],)
-                # wid.grid(column=1, row=2, sticky="w")
                 wid = tk.Radiobutton(
                     fr1, text='纯文本.txt文件', value=1, variable=self.cfgVar["outputStyle"],)
                 wid.grid(column=0, row=3, sticky="w")
@@ -391,27 +405,38 @@ class Win:
                 fr2.grid_columnconfigure(1, weight=1)  # 第二列自动扩充
             initOutFile()
 
-            def initOcrUI():  # 识别器exe与图片后缀设置
+            def initOcrUI():  # 识别器exe设置
                 frameOCR = tk.LabelFrame(
-                    self.optFrame, text="识别器设置  [切换多国语言和不同格式图片]")
+                    self.optFrame, text="识别器设置  [切换多国语言和OCR参数]")
                 frameOCR.pack(side='top', fill='x', ipady=2,
                               pady=LabelFramePadY, padx=4)
-
                 fr1 = tk.Frame(frameOCR)
                 fr1.pack(side='top', fill='x', pady=2, padx=5)
-
                 tk.Label(fr1, text="识别器路径：").grid(column=0, row=0, sticky="w")
                 enEXE = tk.Entry(fr1, textvariable=self.cfgVar["ocrToolPath"])
                 enEXE.grid(column=1, row=0,  sticky="nsew")
                 self.lockWidget.append(enEXE)
 
-                tk.Label(fr1, text="图片后缀：").grid(column=0, row=2, sticky="w")
-                enInSuffix = tk.Entry(
-                    fr1, textvariable=self.cfgVar["imageSuffix"])
-                enInSuffix.grid(column=1, row=2, sticky="nsew")
-                self.lockWidget.append(enInSuffix)
-                fr1.grid_columnconfigure(1, weight=1)
+                def openConfigFile(*e):
+                    ocrToolPath = Config.get("ocrToolPath")
+                    ocrConfigPath = ocrToolPath.replace(".exe", "_config.txt")
+                    try:
+                        os.startfile(ocrConfigPath)
+                    except Exception as e:
+                        tk.messagebox.showerror(
+                            '遇到了一点小问题', f'未在以下地址找到配置文件！\n{ocrConfigPath}')
+                labelOpenPath = tk.Label(fr1, text="打开配置目录",
+                                         fg="gray", cursor="hand2")
+                labelOpenPath.grid(column=0, row=2, sticky="w")
+                labelOpenPath.bind(
+                    '<Button-1>', lambda *e: os.startfile("PaddleOCR-json"))
+                labelOpenFile = tk.Label(fr1, text="　打开配置文件",
+                                         fg="gray", cursor="hand2")
+                labelOpenFile.grid(column=1, row=2, sticky="w")
+                labelOpenFile.bind(
+                    '<Button-1>', lambda *e: openConfigFile())
                 fr1.grid_rowconfigure(1, minsize=2)
+                fr1.grid_columnconfigure(1, weight=1)
             initOcrUI()
 
             def initAbout():  # 关于面板
@@ -425,7 +450,7 @@ class Win:
                                     fg="deeppink")
                 labelWeb.pack()  # 文字
                 labelWeb.bind(  # 绑定鼠标左键点击，打开网页
-                    '<Button-1>', self.openProjectWeb)
+                    '<Button-1>', lambda *e: webOpen(ProjectWeb))
             initAbout()
 
             def initOptFrameWH():  # 初始化框架的宽高
@@ -613,6 +638,8 @@ class Win:
         for i in chi:
             self.table.delete(i)
             del self.imgDict[i]  # 字典删除
+
+    # 进行任务 ===============================================
 
     def setRunning(self, r):  # 设置运行状态。0停止，1运行中，2停止中
         self.isRunning = r
@@ -901,22 +928,6 @@ class Win:
             okMission = Config.get("okMission")
             if omName in okMission.keys():
                 os.system(okMission[omName]["code"])  # 执行cmd语句
-
-    def showInstructions(self, e):  # 打开使用说明
-        if not self.isRunning == 0:
-            tk.messagebox.showwarning(
-                '任务进行中', '停止任务后，再打开软件说明')
-            return
-        self.notebook.select(self.tabFrameOutput)  # 切换到输出选项卡
-        outputNow = self.textOutput.get("1.0", tk.END)
-        if outputNow and not outputNow == "\n":  # 输出面板内容存在，且不是单换行（初始状态）
-            if not tkinter.messagebox.askokcancel('提示', '将清空输出面板。要继续吗？'):
-                return
-            self.textOutput.delete('1.0', tk.END)
-        self.textOutput.insert(tk.END, GetHelpText(ProjectWeb))
-
-    def openProjectWeb(self, e=None):  # 打开项目网页
-        webOpen(ProjectWeb)
 
     def onClose(self):  # 关闭窗口事件
         if self.isRunning == 0:  # 未在运行
