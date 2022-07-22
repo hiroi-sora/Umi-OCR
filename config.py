@@ -11,10 +11,10 @@ ConfigDict = {
     "isOkMission": False,  # T时本次任务完成后执行指定计划任务。
     "okMissionName": "",  # 当前选择的计划任务的name。
     "okMission": {  # 计划任务事件，code为cmd代码
-        "关机":
-            {"code": 'shutdown /s /t 30 /c "Umi-OCR任务完成，即将关机" /d p:4:1'},
-        "休眠":
-            {"code": 'shutdown /f /h'},  # shutdown的休眠不能定时
+        "关机":  # 取消：shutdown /a
+        {"code": r'msg %username% /time:25 "Umi-OCR任务完成，将在30s后关机" & echo 关闭本窗口可取消关机 & choice /t 30 /d y /n >nul & shutdown /f /s'},
+        "休眠":  # 用choice实现延时
+        {"code": r'msg %username% /time:25 "Umi-OCR任务完成，将在30s后休眠" & echo 关闭本窗口可取消休眠 & choice /t 30 /d y /n >nul & shutdown /f /h'},
     },
 
     # 读取剪贴板设置
