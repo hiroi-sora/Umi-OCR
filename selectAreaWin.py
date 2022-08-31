@@ -10,12 +10,12 @@ from PIL import Image, ImageTk
 
 
 class SelectAreaWin:
-    def __init__(self, closeSendData=None, defaultPath="D:\图片\分类\Kud Wafter\屏幕截图(13).png", exePath="PaddleOCR-json\PaddleOCR_json.exe"):
+    def __init__(self, closeSendData=None, defaultPath="", exePath="PaddleOCR-json\PaddleOCR_json.exe"):
         self.closeSendData = closeSendData  # 向父窗口发送数据的接口
         self.cW = 960  # 画板尺寸
         self.cH = 540
         self.areaColor = ["red", "green",  # 各个矩形区域的标志颜色
-                          "gold1", "whitesmoke"]
+                          "darkorange", "white"]
 
         # def initWin():  # 初始化主窗口
         # 主窗口
@@ -46,38 +46,39 @@ class SelectAreaWin:
         ctrlF0.pack(side='left')
         tk.Label(ctrlF0, text="【图像分辨率】").pack()
         tk.Label(ctrlF0, textvariable=self.imgSizeText).pack()
-        tk.Label(ctrlF0, text="不符合该尺寸的图片，将不应用以下设置。", wraplength=120).pack()
+        tk.Label(ctrlF0, text="不符合该分辨率的图片\n忽略区域设置不会生效",
+                 fg='gray', wraplength=120).pack()
         tk.Frame(ctrlFrame, w=22).pack(side='left')
         ctrlF1 = tk.Frame(ctrlFrame)
         ctrlF1.pack(side='left')
         self.buttons = [None, None, None]
-        self.buttons[0] = tk.Button(ctrlF1, text='+忽略区域 1', width=23, height=2, fg=self.areaColor[0],
+        self.buttons[0] = tk.Button(ctrlF1, text='+忽略区域 A', width=23, height=2, fg=self.areaColor[0], bg=self.areaColor[3],
                                     command=lambda: self.changeMode(0))
         self.buttons[0].pack()
-        tk.Label(ctrlF1, text="处于[忽略区域 1]内\n的矩形虚线文字块将被忽略。",
+        tk.Label(ctrlF1, text="处于[忽略区域 A]内\n的矩形虚线文字块将被忽略。",
                  wraplength=180).pack()
         tk.Frame(ctrlFrame, w=22).pack(side='left')
         ctrlF2 = tk.Frame(ctrlFrame)
         ctrlF2.pack(side='left')
-        self.buttons[1] = tk.Button(ctrlF2, text='+识别区域', width=23, height=2, fg=self.areaColor[1],
+        self.buttons[1] = tk.Button(ctrlF2, text='+识别区域', width=23, height=2, fg=self.areaColor[1], bg=self.areaColor[3],
                                     command=lambda: self.changeMode(1))
         self.buttons[1].pack()
-        tk.Label(ctrlF2, text="若[识别区域]内存在虚线块，\n则[忽略区域 1]失效。",
+        tk.Label(ctrlF2, text="若[识别区域]内存在虚线块，\n则[忽略区域 A]失效。",
                  wraplength=180).pack()
         tk.Frame(ctrlFrame, w=22).pack(side='left')
         ctrlF3 = tk.Frame(ctrlFrame)
         ctrlF3.pack(side='left')
-        self.buttons[2] = tk.Button(ctrlF3, text='+忽略区域 2', width=23, height=2, fg=self.areaColor[2],
+        self.buttons[2] = tk.Button(ctrlF3, text='+忽略区域 B', width=23, height=2, fg=self.areaColor[2], bg=self.areaColor[3],
                                     command=lambda: self.changeMode(2))
         self.buttons[2].pack()
-        tk.Label(ctrlF3, text="当[忽略区域 1]失效时，\n[忽略区域 2]生效。",
+        tk.Label(ctrlF3, text="当[忽略区域 A]失效时，\n[忽略区域 B]生效。",
                  wraplength=180).pack()
         tk.Frame(ctrlFrame, w=22).pack(side='left')
         ctrlF4 = tk.Frame(ctrlFrame)
         ctrlF4.pack(side='left')
         tk.Button(ctrlF4, text='清空', width=10,
                   command=self.clearCanvas).pack()
-        tk.Button(ctrlF4, text='撤销\nCtrl+Shift+z', width=10,
+        tk.Button(ctrlF4, text='撤销\nCtrl+Shift+Z', width=10,
                   command=self.revokeCanvas).pack(pady=5)
         self.win.bind("<Control-Z>", self.revokeCanvas)  # 绑定撤销组合键，带shift
         tk.Frame(ctrlFrame, w=22).pack(side='left')
@@ -89,8 +90,10 @@ class SelectAreaWin:
         self.isAutoOCR.set(1)
         tk.Checkbutton(tipsFrame, variable=self.isAutoOCR, text="启用 图片分析").pack(
             side='left', padx=30)
-        tk.Label(
-            tipsFrame, text="↓ ↓ ↓ 将任意图片拖入下方预览。然后点击按钮切换画笔，在图片上按住左键框选出想要的区域。 ↓ ↓ ↓", fg='gray').pack(side='left', padx=70)
+        tk.Label(tipsFrame, text="   ↓ ↓ ↓ 将任意图片拖入下方预览。然后点击按钮切换画笔，在图片上按住左键框选出想要的区域。",
+                 fg='gray').pack(side='left')
+        tk.Label(tipsFrame, text="同一种区域可绘制多个方框。", fg='blue').pack(side='left')
+        tk.Label(tipsFrame, text="↓ ↓ ↓", fg='gray').pack(side='left')
         # initPanel()
 
         # def initCanvas():  # 初始化绘图板
