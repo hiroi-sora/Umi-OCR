@@ -1,0 +1,14 @@
+# det 检测模型库
+det_model_dir ch_PP-OCRv3_det_infer
+
+# cls 方向分类器库
+cls_model_dir ch_ppocr_mobile_v2.0_cls_infer
+
+# rec 识别模型库
+rec_model_dir ch_PP-OCRv3_rec_infer
+
+# 字典路径
+rec_char_dict_path ppocr_keys_v1.txt
+
+# 切换 PPOCR-v2版 模型库需要改为32（删除下一行的#符号）
+#rec_img_h 32
