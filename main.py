@@ -1,7 +1,7 @@
 from distutils.command.config import config
 from turtle import width
 from selectAreaWin import SelectAreaWin  # 子窗口
-from asset import IconPngBase64, GetHelpText  # 资源
+from asset import *  # 资源
 from callingOCR import CallingOCR  # OCR调用接口
 from config import Config
 
@@ -18,7 +18,7 @@ from windnd import hook_dropfiles  # 文件拖拽
 from pyperclip import copy as pyperclipCopy  # 剪贴板
 from webbrowser import open as webOpen  # “关于”面板打开项目网址
 
-ProjectVer = "1.2.5"  # 版本号
+ProjectVer = "1.2.6 Alpha"  # 版本号
 ProjectName = f"Umi-OCR 批量图片转文字 v{ProjectVer}"  # 名称
 ProjectWeb = "https://github.com/hiroi-sora/Umi-OCR"
 TempFilePath = "Umi-OCR_temp"
@@ -70,7 +70,8 @@ class Win:
                 "isIgnoreNoText": tk.BooleanVar(),  # T时忽略(不输出)没有文字的图片信息
                 "outputStyle": tk.IntVar(),  # 1：纯文本，2：Markdown
                 # 识别器设置
-                "ocrToolPath": tk.StringVar(),  # 识别器路径
+                "ocrConfigName": tk.StringVar(),  # 参数文件
+                "argsStr": tk.StringVar(),  # 启动参数字符串
                 "imageSuffix": tk.StringVar(),  # 图片后缀
             }
             Config.initValue(self.cfgVar)  # 初始化设置项
@@ -107,23 +108,11 @@ class Win:
             # 左侧文本和进度条
             vFrame2 = tk.Frame(fr)
             vFrame2.pack(side='top', fill='x')
-
-            def showInstructions(e):  # 打开使用说明
-                if not self.isRunning == 0:
-                    tk.messagebox.showwarning(
-                        '任务进行中', '停止任务后，再打开软件说明')
-                    return
-                self.notebook.select(self.tabFrameOutput)  # 切换到输出选项卡
-                outputNow = self.textOutput.get("1.0", tk.END)
-                if outputNow and not outputNow == "\n":  # 输出面板内容存在，且不是单换行（初始状态）
-                    if not tkinter.messagebox.askokcancel('提示', '将清空输出面板。要继续吗？'):
-                        return
-                    self.textOutput.delete('1.0', tk.END)
-                self.textOutput.insert(tk.END, GetHelpText(ProjectWeb))
             labelUse = tk.Label(vFrame2, text="使用说明",
                                 fg="gray", cursor="hand2")
             labelUse.pack(side='left', padx=5)
-            labelUse.bind('<Button-1>', showInstructions)  # 绑定鼠标左键点击
+            labelUse.bind(
+                '<Button-1>', lambda *e: self.showTips(GetHelpText(ProjectWeb)))  # 绑定鼠标左键点击
             self.labelPercentage = tk.Label(vFrame2, text="0%")  # 进度百分比 99%
             self.labelPercentage.pack(side='right', padx=2)
             self.labelFractions = tk.Label(vFrame2, text="0/0")  # 进度分数 99/100
@@ -412,35 +401,36 @@ class Win:
 
             def initOcrUI():  # 识别器exe设置
                 frameOCR = tk.LabelFrame(
-                    self.optFrame, text="识别器设置  [切换多国语言和OCR参数]")
+                    self.optFrame, text="识别器设置  [切换OCR识别语言]")
                 frameOCR.pack(side='top', fill='x', ipady=2,
                               pady=LabelFramePadY, padx=4)
                 fr1 = tk.Frame(frameOCR)
                 fr1.pack(side='top', fill='x', pady=2, padx=5)
-                tk.Label(fr1, text="识别器路径：").grid(column=0, row=0, sticky="w")
-                enEXE = tk.Entry(fr1, textvariable=self.cfgVar["ocrToolPath"])
-                enEXE.grid(column=1, row=0,  sticky="nsew")
-                self.lockWidget.append(enEXE)
+                tk.Label(fr1, text="参数文件：　").grid(
+                    column=0, row=0, sticky="w")
+                ocrConfigDict = Config.get("ocrConfig")
+                ocrConfigNameList = [i for i in ocrConfigDict]
+                cbox = ttk.Combobox(fr1, width=10, state="readonly", textvariable=self.cfgVar["ocrConfigName"],
+                                    value=ocrConfigNameList)
+                cbox.grid(column=1, row=0,  sticky="nsew")
+                cbox.current(0)  # 初始化Combobox和configName
+                self.lockWidget.append(  # 正常状态为特殊值
+                    {'widget': cbox, 'stateOFnormal': 'readonly'})
+                tk.Label(fr1, text="启动参数：　").grid(
+                    column=0, row=2, sticky="w")
+                argsStr = tk.Entry(
+                    fr1, textvariable=self.cfgVar["argsStr"])
+                argsStr.grid(column=1, row=2, sticky="nsew")
+                self.lockWidget.append(argsStr)
 
-                def openConfigFile(*e):
-                    ocrToolPath = Config.get("ocrToolPath")
-                    ocrConfigPath = ocrToolPath.replace(".exe", "_config.txt")
-                    try:
-                        os.startfile(ocrConfigPath)
-                    except Exception as e:
-                        tk.messagebox.showerror(
-                            '遇到了一点小问题', f'未在以下地址找到配置文件！\n{ocrConfigPath}')
-                labelOpenPath = tk.Label(fr1, text="打开配置目录",
-                                         fg="gray", cursor="hand2")
-                labelOpenPath.grid(column=0, row=2, sticky="w")
-                labelOpenPath.bind(
-                    '<Button-1>', lambda *e: os.startfile("PaddleOCR-json"))
-                labelOpenFile = tk.Label(fr1, text="　打开识别器配置文件",
-                                         fg="gray", cursor="hand2")
-                labelOpenFile.grid(column=1, row=2, sticky="w")
-                labelOpenFile.bind(
-                    '<Button-1>', lambda *e: openConfigFile())
-                fr1.grid_rowconfigure(1, minsize=2)
+                labelTips = tk.Label(fr1, text="如何添加多国语言？如何调整参数以提高不准确度和速度？",
+                                     fg="gray", cursor="hand2")
+                labelTips.grid(column=0, row=4, columnspan=2, sticky="w")
+                labelTips.bind(
+                    '<Button-1>', lambda *e: self.showTips(GetHelpConfigText()))  # 绑定鼠标左键点击
+
+                fr1.grid_rowconfigure(1, minsize=4)
+                fr1.grid_rowconfigure(3, minsize=4)
                 fr1.grid_columnconfigure(1, weight=1)
             initOcrUI()
 
@@ -662,7 +652,13 @@ class Win:
             self.btnRun['state'] = "disable"
         if state:
             for w in self.lockWidget:  # 改变组件状态（禁用，启用）
-                w['state'] = state
+                if 'widget' in w.keys() and 'stateOFnormal' in w.keys():
+                    if state == 'normal':
+                        w['widget']['state'] = w['stateOFnormal']  # 正常状态为特殊值
+                    else:
+                        w['widget']['state'] = state
+                else:
+                    w['state'] = state
 
     def run(self):  # 开始任务，创建新线程和事件循环
         if self.isRunning == 0:  # 未在运行，开始运行
@@ -714,6 +710,10 @@ class Win:
         isIgnoreNoText = Config.get("isIgnoreNoText")  # 是否忽略无字图片
         outputStyle = Config.get("outputStyle")  # 输出风格
         areaInfo = Config.get("ignoreArea")
+        ocrToolPath = Config.get("ocrToolPath")  # 识别器路径
+        configPath = Config.get("ocrConfig")[Config.get(  # 配置文件路径
+            "ocrConfigName")]['path']
+        argsStr = Config.get("argsStr")  # 启动参数
         if isOutputFile:
             outputPath = Config.get("outputFilePath")  # 输出路径（文件夹）
             suffix = ".txt" if outputStyle == 1 else ".md"
@@ -754,7 +754,8 @@ class Win:
                     f.write(outStr)
 
         def close():  # 关闭所有异步相关的东西
-            del self.ocr  # 关闭OCR进程
+            if self.ocr:
+                del self.ocr  # 关闭OCR进程
             self.loop.stop()  # 关闭异步事件循环
             self.setRunning(0)
             self.labelPercentage["text"] = "已终止"
@@ -837,8 +838,6 @@ class Win:
             else:
                 startStr = f"忽略区域：关闭\n"
             output(startStr, "debug")
-        # 创建OCR进程
-        self.ocr = CallingOCR(Config.get("ocrToolPath"))
         # 初始化UI
         for key in self.imgDict.keys():  # 清空表格参数
             self.table.set(key, column='time', value="")
@@ -848,13 +847,23 @@ class Win:
         costTime = 0
         self.progressbar["maximum"] = allNum
         self.progressbar["value"] = 0
-        self.labelPercentage["text"] = "0%"
         self.labelFractions["text"] = f"0/{allNum}"
         self.labelTime["text"] = "0s"
         numOK = 0  # 成功数量
         numNON = 0  # 不存在数量
         numERR = 0  # 出错数量
-
+        # 创建OCR进程
+        self.ocr = None
+        try:
+            self.ocr = CallingOCR(ocrToolPath, configPath, argsStr)
+        except Exception as e:
+            close()
+            tk.messagebox.showerror(
+                '遇到了亿点小问题',
+                f'识别器初始化失败：[{e}]\n\n识别器路径：[{ocrToolPath}]\n\n配置文件路径：[{configPath}]\n\n启动参数：[{argsStr}]\n\n请检查以上配置有无问题！')
+            return
+        # 初始化UI 2
+        self.labelPercentage["text"] = "0%"
         # 主任务循环
         for key, value in self.imgDict.items():
             try:
@@ -947,6 +956,19 @@ class Win:
             self.win.destroy()  # 销毁窗口
         else:
             self.win.after(50, self.waitClose)  # 等待关闭，50ms轮询一次是否已结束子进程
+
+    def showTips(self, tipsText):  # 显示提示
+        if not self.isRunning == 0:
+            tk.messagebox.showwarning(
+                '任务进行中', '停止任务后，再打开软件说明')
+            return
+        self.notebook.select(self.tabFrameOutput)  # 切换到输出选项卡
+        outputNow = self.textOutput.get("1.0", tk.END)
+        if outputNow and not outputNow == "\n":  # 输出面板内容存在，且不是单换行（初始状态）
+            if not tkinter.messagebox.askokcancel('提示', '将清空输出面板。要继续吗？'):
+                return
+            self.textOutput.delete('1.0', tk.END)
+        self.textOutput.insert(tk.END, tipsText)
 
 
 if __name__ == "__main__":
