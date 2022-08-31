@@ -1,4 +1,6 @@
 import json
+import tkinter as tk
+import tkinter.messagebox
 
 # 配置文件路径
 ConfigJsonFile = "Umi-OCR_config.json"
@@ -40,7 +42,14 @@ ConfigDict = {
     "outputStyle": 1,  # 1：纯文本，2：Markdown
 
     # 识别器设置
-    "ocrToolPath": "PaddleOCR-json\PaddleOCR_json.exe",  # 识别器路径
+    "ocrToolPath": "PaddleOCR-json/PaddleOCR_json.exe",  # 识别器路径
+    "ocrConfigName": "",  # 当前选择的配置文件的name。
+    "ocrConfig": {  # 配置文件信息
+        "简体中文": {
+            "path": "PaddleOCR_json_config_简体中文.txt"
+        }
+    },
+    "argsStr": "",  # 启动参数字符串
     "imageSuffix": ".jpg .jpe .jpeg .jfif .png .webp .bmp .tif .tiff"  # 图片后缀
 }
 
@@ -49,6 +58,7 @@ SaveItem = [
     "isOpenExplorer",
     "isOpenOutputFile",
     "okMission",
+    "okMissionName",
     "isGlobalHotkey",
     "isNeedCopy",
     "globalHotkey",
@@ -57,7 +67,9 @@ SaveItem = [
     "isOutputDebug",
     "isIgnoreNoText",
     "outputStyle",
-    "ocrToolPath",
+    "ocrConfigName",
+    "ocrConfig",
+    "argsStr",
     "imageSuffix",
 ]
 
@@ -77,7 +89,12 @@ class ConfigModule:
                         if key in ConfigDict:
                             ConfigDict[key] = jsonData[key]
             except json.JSONDecodeError:  # 反序列化json错误
-                self.save()
+                if tk.messagebox.askyesno(
+                    "遇到了一点小问题",
+                        f"载入配置文件 {ConfigJsonFile} 时，反序列化json失败。\n\n选 “是” 重置该文件。\n选 “否” 将退出程序。"):
+                    self.save()
+                else:
+                    exit(0)
             except FileNotFoundError:  # 无配置文件
                 self.save()
         load()  # 加载配置文件

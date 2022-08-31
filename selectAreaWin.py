@@ -112,12 +112,16 @@ class SelectAreaWin:
             tk.messagebox.showerror(
                 '遇到了一点小问题', f'未在以下路径找到识别器：\n[{exePath}]')
             return
-            # 创建OCR进程
+        # 创建OCR进程
+        configPath = Config.get("ocrConfig")[Config.get(  # 配置文件路径
+            "ocrConfigName")]['path']
+        argsStr = Config.get("argsStr")  # 启动参数
         try:
-            self.ocr = CallingOCR(exePath)
+            self.ocr = CallingOCR(exePath, configPath, argsStr)
         except Exception as e:
             tk.messagebox.showerror(
-                '遇到了亿点小问题', f'识别器初始化失败：\n{e}\n\n识别器路径：\n[{exePath}]')
+                '遇到了亿点小问题',
+                f'识别器初始化失败：[{e}]\n\n识别器路径：[{exePath}]\n\n配置文件路径：[{configPath}]\n\n启动参数：[{argsStr}]\n\n请检查以上配置有无问题！')
             return
         # initOCR()
 
