@@ -276,7 +276,7 @@ Github下载：
 
 - 如果想用接口调用OCR，可试试 [PaddleOCR-json 图片转文字程序](https://github.com/hiroi-sora/PaddleOCR-json#paddleocr-json-%E5%9B%BE%E7%89%87%E8%BD%AC%E6%96%87%E5%AD%97%E7%A8%8B%E5%BA%8F) 。
 - 由于PaddleOCR-json只接受硬盘文件，所以读取剪贴板图片时，会先将内存中的图片保存到同目录下的`Umi-OCR_temp`。每次任务时清空前一次的缓存。
-- PPOCR v2.6 (PaddleOCR-json v1.2.0) 版本提高了批量处理的平均速度，但代价是需要花费更长时间进行初始化。提高了
+- PPOCR v2.6 (PaddleOCR-json v1.2.0) 版本提高了批量处理的平均速度，但代价是需要花费更长时间进行初始化。提高了启用mkldnn加速时的识别速度，但代价时不开启加速时效率更低。（CPU只要不是特别早期的AMD，一般都能使用mkldnn，但加速幅度可能不如同档次的Intel。）
 - 代码很丑，有空重构 ~~下次一定~~
 - 使用`pyinstaller`打包，参数为
   ```pyinstaller -F -w -i icon/icon.ico -n "Umi-OCR 批量图片转文字" main.py```
