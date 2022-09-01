@@ -67,6 +67,7 @@ SaveItem = [
     "isOutputDebug",
     "isIgnoreNoText",
     "outputStyle",
+    "ocrToolPath",
     "ocrConfigName",
     "ocrConfig",
     "argsStr",
