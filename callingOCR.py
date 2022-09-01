@@ -23,7 +23,7 @@ class CallingOCR:
         # 处理启动参数
         if argsStr:  # 添加用户指定的启动参数
             exePath += f' {argsStr}'
-        if configPath and 'config_path' not in exePath:  # 指定配置参数
+        if configPath and 'config_path' not in exePath:  # 指定配置文件
             exePath += f' --config_path="{configPath}"'
         if 'use_system_pause' not in exePath:  # 强制禁用暂停
             exePath += ' --use_system_pause=0'
@@ -42,7 +42,6 @@ class CallingOCR:
         # 启动子进程
         while True:
             if not self.ret.poll() == None:  # 子进程已退出，初始化失败
-                print('OCR init fail!!!!!!!!!')
                 raise Exception('OCR init fail.')
             initStr = self.ret.stdout.readline().decode('gbk', errors='ignore')
             if 'OCR init completed.' in initStr:  # 初始化成功
@@ -54,7 +53,7 @@ class CallingOCR:
         :exePath: 图片路径。\n
         :return:  {'code': 识别码, 'data': 内容列表或错误信息字符串}\n"""
         if not self.ret.poll() == None:
-            return {'code': 400, 'data': f'子进程已崩溃。'}
+            return {'code': 400, 'data': f'子进程已结束。'}
         wirteStr = imgPath if imgPath[-1] == '\n' else imgPath + '\n'
         # 输入路径
         try:
