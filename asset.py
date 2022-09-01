@@ -18,7 +18,7 @@ https://github.com/hiroi-sora/Umi-OCR#下载
 1. 在“设置”选项卡中编辑启动参数。
 
 2. 若图片中的文字方向不是正朝上，启动参数添加：
---cls=1 --use_angle_cls=1。
+--cls=1 --use_angle_cls=1
 
 3. 若要处理的图片的分辨率极大(4K以上)，图中小字无法识别，启动参数添加：
 --limit_side_len=压缩阈值
