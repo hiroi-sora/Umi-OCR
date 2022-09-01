@@ -111,6 +111,9 @@ class SelectAreaWin:
         if not os.path.exists(exePath):
             tk.messagebox.showerror(
                 '遇到了一点小问题', f'未在以下路径找到识别器：\n[{exePath}]')
+            self.win.attributes('-topmost', 1)  # 设置层级最前
+            self.win.attributes('-topmost', 0)  # 然后立刻解除
+            self.isAutoOCR.set(0)  # 关闭自动分析
             return
         # 创建OCR进程
         configPath = Config.get("ocrConfig")[Config.get(  # 配置文件路径
@@ -122,6 +125,9 @@ class SelectAreaWin:
             tk.messagebox.showerror(
                 '遇到了亿点小问题',
                 f'识别器初始化失败：[{e}]\n\n识别器路径：[{exePath}]\n\n配置文件路径：[{configPath}]\n\n启动参数：[{argsStr}]\n\n请检查以上配置有无问题！')
+            self.win.attributes('-topmost', 1)  # 设置层级最前
+            self.win.attributes('-topmost', 0)  # 然后立刻解除
+            self.isAutoOCR.set(0)  # 关闭自动分析
             return
         # initOCR()
 
@@ -167,6 +173,8 @@ class SelectAreaWin:
         except Exception as e:
             tk.messagebox.showwarning(
                 "遇到了一点小问题", f"图片载入失败。图片地址：\n{path}\n\n错误信息：\n{e}")
+            self.win.attributes('-topmost', 1)  # 设置层级最前
+            self.win.attributes('-topmost', 0)  # 然后立刻解除
             return
         # 检测图片大小
         if self.imgSize == (-1, -1):  # 初次设定
@@ -183,6 +191,8 @@ class SelectAreaWin:
         elif not self.imgSize == img.size:  # 尺寸不符合
             tk.messagebox.showwarning("图片尺寸错误！",
                                       f"当前图像尺寸限制为{self.imgSize[0]}x{self.imgSize[1]}，不允许加载{img.size[0]}x{img.size[1]}的图片。\n若要解除限制、更改为其他分辨率，请点击“清空”后重新拖入图片。")
+            self.win.attributes('-topmost', 1)  # 设置层级最前
+            self.win.attributes('-topmost', 0)  # 然后立刻解除
             return
         self.clearCanvasImage()  # 清理上次绘制的图像
 
@@ -216,7 +226,9 @@ class SelectAreaWin:
                         self.areaTextRec.append(r2)
                 elif not oget["code"] == 101:  # 发生异常
                     tk.messagebox.showwarning(
-                        "遇到了一点小问题", f"图片分析失败。图片地址：\n{path}\n\n错误信息：\n{str(oget['data'])}")
+                        "遇到了一点小问题", f"图片分析失败。图片地址：\n{path}\n\n错误码：{str(oget['code'])}\n\n错误信息：\n{str(oget['data'])}")
+                    self.win.attributes('-topmost', 1)  # 设置层级最前
+                    self.win.attributes('-topmost', 0)  # 然后立刻解除
         runOCR()
         self.win.title(f"选择区域 {path}")  # 改变标题
         # 缓存图片并显示
