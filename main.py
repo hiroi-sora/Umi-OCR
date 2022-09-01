@@ -18,7 +18,7 @@ from windnd import hook_dropfiles  # 文件拖拽
 from pyperclip import copy as pyperclipCopy  # 剪贴板
 from webbrowser import open as webOpen  # “关于”面板打开项目网址
 
-ProjectVer = "1.2.6 Alpha"  # 版本号
+ProjectVer = "1.2.6"  # 版本号
 ProjectName = f"Umi-OCR 批量图片转文字 v{ProjectVer}"  # 名称
 ProjectWeb = "https://github.com/hiroi-sora/Umi-OCR"
 TempFilePath = "Umi-OCR_temp"
@@ -45,6 +45,8 @@ class Win:
             self.iconImg = tkinter.PhotoImage(
                 data=IconPngBase64)  # 载入图标，base64转
             self.win.iconphoto(False, self.iconImg)  # 设置窗口图标
+            # 注册文件拖入，整个主窗口内有效
+            hook_dropfiles(self.win, func=self.draggedImages)
         initWin()
 
         # 2.初始化变量、配置项
@@ -127,10 +129,10 @@ class Win:
         self.notebook.pack(expand=True, fill=tk.BOTH)  # 填满父组件
 
         def initTab1():  # 表格卡
-            tabFrame = tk.Frame(self.notebook)  # 选项卡主容器
-            self.notebook.add(tabFrame, text=f'{"处理列表": ^10s}')
+            self.tabFrameTable = tk.Frame(self.notebook)  # 选项卡主容器
+            self.notebook.add(self.tabFrameTable, text=f'{"处理列表": ^10s}')
             # 顶栏
-            fr1 = tk.Frame(tabFrame)
+            fr1 = tk.Frame(self.tabFrameTable)
             fr1.pack(side='top', fill='x', pady=2)
             tk.Button(fr1, text=' 浏览 ',  command=self.openFileWin).pack(
                 side='left', padx=5)
@@ -140,7 +142,7 @@ class Win:
             tk.Button(fr1, text='移除选中图片', width=12, command=self.delImgList).pack(
                 side='right', padx=5)
             # 表格主体
-            fr2 = tk.Frame(tabFrame)
+            fr2 = tk.Frame(self.tabFrameTable)
             fr2.pack(side='top', fill='both')
             self.table = ttk.Treeview(
                 master=fr2,  # 父容器
@@ -148,7 +150,7 @@ class Win:
                 columns=['name', 'time', 'score'],  # 显示的列
                 show='headings',  # 隐藏首列
             )
-            hook_dropfiles(self.table, func=self.draggedImages)  # 注册文件拖入
+            # hook_dropfiles(self.table, func=self.draggedImages)  # 注册文件拖入
             self.table.pack(expand=True, side="left", fill='both')
             self.table.heading('name', text='文件名称')
             self.table.heading('time', text='耗时')
@@ -230,7 +232,8 @@ class Win:
                 wid = ttk.Combobox(fr2, width=10, state="readonly", textvariable=self.cfgVar["okMissionName"],
                                    value=okMissionNameList)
                 wid.pack(side='left')
-                wid.current(0)  # 初始化Combobox和okMissionName
+                if Config.get("okMissionName") not in okMissionNameList:
+                    wid.current(0)  # 初始化Combobox和okMissionName
                 labelOpenFile = tk.Label(fr2, text="打开设置文件",
                                          fg="gray", cursor="hand2")
                 labelOpenFile.pack(side='right')
@@ -260,8 +263,10 @@ class Win:
                 self.areaLabel.grid_columnconfigure(2, minsize=4)
                 self.canvasHeight = 140  # 画板高度不变，宽度根据选区回传数据调整
                 self.canvas = tk.Canvas(self.areaLabel, width=249, height=self.canvasHeight,
-                                        bg="black")
+                                        bg="black", cursor="hand2")
                 self.canvas.grid(column=3, row=0, rowspan=10)
+                self.canvas.bind(
+                    '<Button-1>', lambda *e: self.openSelectArea())
             initArea()
 
             def initClipboard():  # 剪贴板设置
@@ -275,11 +280,10 @@ class Win:
                         keyboard.add_hotkey(
                             hotkey, self.runClipboard, suppress=False)  # 添加新的
                     except ValueError as err:
-                        print(f"注册快捷键异常：{err}")
                         Config.set("isGlobalHotkey", False)
                         Config.set("globalHotkey", "")
                         tk.messagebox.showwarning("提示",
-                                                  f"无法注册快捷键【{hotkey}】")
+                                                  f"无法注册快捷键【{hotkey}】\n\n错误信息：\n{err}")
 
                 def updateHotket():  # 刷新快捷键
                     try:
@@ -401,19 +405,20 @@ class Win:
 
             def initOcrUI():  # 识别器exe设置
                 frameOCR = tk.LabelFrame(
-                    self.optFrame, text="识别器设置  [切换OCR识别语言]")
+                    self.optFrame, text="OCR识别引擎设置")
                 frameOCR.pack(side='top', fill='x', ipady=2,
                               pady=LabelFramePadY, padx=4)
                 fr1 = tk.Frame(frameOCR)
                 fr1.pack(side='top', fill='x', pady=2, padx=5)
-                tk.Label(fr1, text="参数文件：　").grid(
+                tk.Label(fr1, text="识别语言：　").grid(
                     column=0, row=0, sticky="w")
                 ocrConfigDict = Config.get("ocrConfig")
                 ocrConfigNameList = [i for i in ocrConfigDict]
                 cbox = ttk.Combobox(fr1, width=10, state="readonly", textvariable=self.cfgVar["ocrConfigName"],
                                     value=ocrConfigNameList)
                 cbox.grid(column=1, row=0,  sticky="nsew")
-                cbox.current(0)  # 初始化Combobox和configName
+                if Config.get("ocrConfigName") not in ocrConfigNameList:
+                    cbox.current(0)  # 初始化Combobox和ocrConfigName
                 self.lockWidget.append(  # 正常状态为特殊值
                     {'widget': cbox, 'stateOFnormal': 'readonly'})
                 tk.Label(fr1, text="启动参数：　").grid(
@@ -423,7 +428,7 @@ class Win:
                 argsStr.grid(column=1, row=2, sticky="nsew")
                 self.lockWidget.append(argsStr)
 
-                labelTips = tk.Label(fr1, text="如何添加多国语言？如何调整参数以提高不准确度和速度？",
+                labelTips = tk.Label(fr1, text="如何添加多国语言？如何调整参数以提高准确度和速度？",
                                      fg="gray", cursor="hand2")
                 labelTips.grid(column=0, row=4, columnspan=2, sticky="w")
                 labelTips.bind(
@@ -483,7 +488,10 @@ class Win:
 
     def draggedImages(self, paths):  # 拖入图片
         if not self.isRunning == 0:
+            tk.messagebox.showwarning(
+                '任务进行中', '请停止任务后，再拖入图片')
             return
+        self.notebook.select(self.tabFrameTable)  # 切换到表格选项卡
         pathList = []
         for p in paths:  # byte转字符串
             pathList.append(p.decode("gbk"))
@@ -596,7 +604,7 @@ class Win:
         scale = self.canvasHeight / area['size'][1]  # 显示缩放比例
         width = int(self.canvasHeight * (area['size'][0] / area['size'][1]))
         self.canvas["width"] = width
-        areaColor = ["red", "green", "gold1"]
+        areaColor = ["red", "green", "darkorange"]
         for i in range(3):
             for a in area['area'][i]:
                 x0, y0 = a[0][0]*scale, a[0][1]*scale,
@@ -821,37 +829,38 @@ class Win:
 
             if text and not scoreNum == 0:  # 区域内有文本，计算置信度
                 score /= scoreNum
-                score = str(score)  # 转文本
+                # score = str(score)  # 转文本
             else:
-                score = "1"  # 区域内没有文本，置信度为1
+                score = 1  # 区域内没有文本，置信度为1
             return text, textDebug, score
 
         # 开始
         startStr = f"任务开始时间：{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))}\n"
         output(startStr, "text")
         if isOutputDebug:
+            startStr = f'已启用输出调试信息。\n识别器路径识别器路径：[{ocrToolPath}]\n配置文件路径：[{configPath}]\n启动参数：[{argsStr}]\n'
             if areaInfo:
-                startStr = f'忽略区域：开启\n适用分辨率：{areaInfo["size"]}\n'
+                startStr += f'忽略区域：开启\n适用分辨率：{areaInfo["size"]}\n'
                 startStr += f'忽略区域1：{areaInfo["area"][0]}\n'
                 startStr += f'识别区域：{areaInfo["area"][1]}\n'
                 startStr += f'忽略区域2：{areaInfo["area"][2]}\n'
             else:
-                startStr = f"忽略区域：关闭\n"
+                startStr += f"忽略区域：关闭\n"
             output(startStr, "debug")
-        # 初始化UI
+        # 初始化UI 1
         for key in self.imgDict.keys():  # 清空表格参数
             self.table.set(key, column='time', value="")
             self.table.set(key, column='score', value="")
         allNum, nowNum = len(self.imgDict), 0
-        startTime = time.time()  # 开始时间
         costTime = 0
+        numOK = 0  # 成功数量
+        numNON = 0  # 不存在数量
+        numERR = 0  # 出错数量
+        allScore = 0  # 总置信度
         self.progressbar["maximum"] = allNum
         self.progressbar["value"] = 0
         self.labelFractions["text"] = f"0/{allNum}"
         self.labelTime["text"] = "0s"
-        numOK = 0  # 成功数量
-        numNON = 0  # 不存在数量
-        numERR = 0  # 出错数量
         # 创建OCR进程
         self.ocr = None
         try:
@@ -863,6 +872,7 @@ class Win:
                 f'识别器初始化失败：[{e}]\n\n识别器路径：[{ocrToolPath}]\n\n配置文件路径：[{configPath}]\n\n启动参数：[{argsStr}]\n\n请检查以上配置有无问题！')
             return
         # 初始化UI 2
+        startTime = time.time()  # 开始时间
         self.labelPercentage["text"] = "0%"
         # 主任务循环
         for key, value in self.imgDict.items():
@@ -889,6 +899,8 @@ class Win:
                     numOK += 1
                     dataStr, textDebug, score = analyzeText(
                         oget['data'], value)  # 获取文字
+                    allScore += score
+                    score = str(score)  # 转文本
                     if self.isNeedCopy:  # 识图后复制到剪贴板
                         pyperclipCopy(dataStr)
                 elif oget['code'] == 101:  # 无文字
@@ -925,6 +937,8 @@ class Win:
                 endStr += f"单张平均耗时：          {(endTime-startTime)/allNum}\n"
             endStr += f"共计图片数量：          {numOK+numNON+numERR}\n"
             endStr += f"识别正常 的图片数量：    {numOK}\n"
+            if not numOK == 0:
+                endStr += f"正常图片 的平均置信度：  {allScore/numOK}\n"
             endStr += f"未识别到文字 的图片数量：{numNON}\n"
             endStr += f"识别失败 的图片数量：    {numERR}\n"
             output(endStr, "debug")
@@ -960,7 +974,7 @@ class Win:
     def showTips(self, tipsText):  # 显示提示
         if not self.isRunning == 0:
             tk.messagebox.showwarning(
-                '任务进行中', '停止任务后，再打开软件说明')
+                '任务进行中', '请停止任务后，再打开软件说明')
             return
         self.notebook.select(self.tabFrameOutput)  # 切换到输出选项卡
         outputNow = self.textOutput.get("1.0", tk.END)
