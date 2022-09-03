@@ -11,6 +11,17 @@
 
 ![](https://tupian.li/images/2022/03/30/win-2-2.png)
 
+## 兼容性
+
+- 系统支持 Win10 x64 。
+- 不建议使用 Win7 ，识别引擎很可能无法运行。如果想尝试，win7 x64 sp1 打满系统升级补丁+安装vc运行库后有**小概率**能跑起来。
+- CPU必须具有AVX指令集。常见的家用CPU一般都满足该条件。
+
+    | AVX   | 支持的产品系列                                         | 不支持                | 存疑                     |
+    | ----- | ------------------------------------------------------ | --------------------- | ------------------------ |
+    | Intel | 酷睿Core，至强Xeon                                     | 凌动Atom，安腾Itanium | 赛扬Celeron，奔腾Pentium |
+    | AMD   | 推土机架构及之后的产品，如锐龙Ryzen、速龙Athlon、FX 等 | K10架构及之前的产品   |                          |
+
 ## 下载
 
 注意，Umi-OCR 软件本体只含简体中文&英文识别库。下面链接中的 **多国语言识别扩展包** 可导入 `繁中,日,韩,德,法` 语言，请按需下载。
@@ -24,11 +35,6 @@ Github下载：
 [https://wwn.lanzoul.com/b036wwa4d](https://wwn.lanzoul.com/b036wwa4d)
 
 密码:`1111`
-
-## 系统支持
-
-- 支持 Win10 x64 。
-- 不建议使用 Win7 ，识别引擎模块`PaddleOCR-json`可能无法运行。如果想尝试，win7 x64 sp1 打满系统升级补丁+安装vc运行库后有**小概率**能跑起来……
 
 ## Umi-系列图片处理软件
 
@@ -235,10 +241,12 @@ Github下载：
 
 </details>
 
-## 效率测试
+## 效率测试 & 开发说明
 
 <details>
 <summary>展开详情</summary>
+
+### 效率测试
 
 测试机器：
 
@@ -270,16 +278,18 @@ Github下载：
 - 不启用mkldnn时，新版本效率不如前代。故您的CPU若不支持mkldnn（如早期AMD型号），建议使用旧版本Umi-OCR。
 - 虽然Paddle官方文档中说经过压缩剪枝蒸馏量化的slim版模型的性能指标会超过传统算法，但实测 v3 slim 模型的性能远不如原始版本，还可能伴随着内存泄漏的问题。也许是 PP-OCR C++ 引擎不适配。在该问题解决之前，Umi-OCR发行版提供原始版本模型。
 
-</details>
 
-## 开发说明
+### 开发说明
 
 - 如果想用接口调用OCR，可试试 [PaddleOCR-json 图片转文字程序](https://github.com/hiroi-sora/PaddleOCR-json#paddleocr-json-%E5%9B%BE%E7%89%87%E8%BD%AC%E6%96%87%E5%AD%97%E7%A8%8B%E5%BA%8F) 。
 - 由于PaddleOCR-json只接受硬盘文件，所以读取剪贴板图片时，会先将内存中的图片保存到同目录下的`Umi-OCR_temp`。每次任务时清空前一次的缓存。
 - PPOCR v2.6 (PaddleOCR-json v1.2.0) 版本提高了批量处理的平均速度，但代价是需要花费更长时间进行初始化。提高了启用mkldnn加速时的识别速度，但代价时不开启加速时效率更低。（CPU只要不是特别早期的AMD，一般都能使用mkldnn，但加速幅度可能不如同档次的Intel。）
+- 未来将增加 openblas 版识别引擎，进一步优化AMD的效率。
 - 代码很丑，有空重构 ~~下次一定~~
 - 使用`pyinstaller`打包，参数为
   ```pyinstaller -F -w -i icon/icon.ico -n "Umi-OCR 批量图片转文字" main.py```
+
+</details>
 
 ## TODO
 
@@ -291,12 +301,14 @@ Github下载：
 - [x] 计划任务：完成后自动关机/休眠等。
 - [x] 递归导入文件夹。
 - [x] 优化适配PaddleOCR v3模型。
+- [ ] 自动检测CPU指令集是否兼容。
 
 低（有）优（生）先（之）级（年）：
 - [ ] 对图片重命名。
 - [ ] 提高初始化速度。
 - [ ] 忽略区域能保存预设。
 - [ ] 缩减离线OCR模块的体积。
+- [ ] 离线OCR模块增加 `no_avx` 和 `openblas` 版本。
 
 ## 更新日志
 
