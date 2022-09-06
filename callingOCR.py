@@ -6,7 +6,7 @@
 import os
 import subprocess  # 进程，管道
 from sys import platform as sysPlatform  # popen静默模式
-from json import loads as jsonLoads
+from json import loads as jsonLoads, dumps as jsonDumps
 
 
 class CallingOCR:
@@ -27,6 +27,8 @@ class CallingOCR:
             exePath += f' --config_path="{configPath}"'
         if 'use_system_pause' not in exePath:  # 强制禁用暂停
             exePath += ' --use_system_pause=0'
+        if 'ensure_ascii' not in exePath:  # 启用输出值ascii转义，规避编码问题
+            exePath += ' --ensure_ascii=1'
         # 设置子进程启用静默模式，不显示控制台窗口
         startupinfo = None
         if 'win32' in str(sysPlatform).lower():
@@ -54,7 +56,13 @@ class CallingOCR:
         :return:  {'code': 识别码, 'data': 内容列表或错误信息字符串}\n"""
         if not self.ret.poll() == None:
             return {'code': 400, 'data': f'子进程已结束。'}
-        wirteStr = imgPath if imgPath[-1] == '\n' else imgPath + '\n'
+        # wirteStr = imgPath if imgPath[-1] == '\n' else imgPath + '\n'
+        writeDict = {'image_dir': imgPath}
+        try:  # 输入地址转为ascii转义的json字符串，规避编码问题
+            wirteStr = jsonDumps(
+                writeDict, ensure_ascii=True, indent=None)+"\n"
+        except Exception as e:
+            return {'code': 403, 'data': f'输入字典转json失败。字典：{writeDict} || 报错：[{e}]'}
         # 输入路径
         try:
             self.ret.stdin.write(wirteStr.encode('gbk'))

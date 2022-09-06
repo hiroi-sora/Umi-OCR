@@ -18,7 +18,7 @@ from windnd import hook_dropfiles  # 文件拖拽
 from pyperclip import copy as pyperclipCopy  # 剪贴板
 from webbrowser import open as webOpen  # “关于”面板打开项目网址
 
-ProjectVer = "1.2.6"  # 版本号
+ProjectVer = "1.2.7 Alpha 1"  # 版本号
 ProjectName = f"Umi-OCR 批量图片转文字 v{ProjectVer}"  # 名称
 ProjectWeb = "https://github.com/hiroi-sora/Umi-OCR"
 TempFilePath = "Umi-OCR_temp"
@@ -494,7 +494,8 @@ class Win:
         self.notebook.select(self.tabFrameTable)  # 切换到表格选项卡
         pathList = []
         for p in paths:  # byte转字符串
-            pathList.append(p.decode("gbk"))
+            pathList.append(p.decode(Config.sysEncoding,  # 根据系统编码来解码
+                            errors='ignore'))
         self.addImagesList(pathList)
 
     def openFileWin(self):  # 打开选择文件窗

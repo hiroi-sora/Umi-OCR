@@ -164,7 +164,8 @@ class SelectAreaWin:
         self.win.destroy()  # 销毁窗口
 
     def draggedFiles(self, paths):  # 拖入文件
-        self.loadImage(paths[0].decode("gbk"))
+        self.loadImage(paths[0].decode(  # 根据系统编码来解码
+            Config.sysEncoding, errors='ignore'))
 
     def loadImage(self, path):  # 载入新图片
         """载入图片"""
