@@ -45,7 +45,7 @@ class CallingOCR:
         while True:
             if not self.ret.poll() == None:  # 子进程已退出，初始化失败
                 raise Exception('OCR init fail.')
-            initStr = self.ret.stdout.readline().decode('gbk', errors='ignore')
+            initStr = self.ret.stdout.readline().decode('ascii', errors='ignore')
             if 'OCR init completed.' in initStr:  # 初始化成功
                 break
         # print(f'初始化OCR成功，进程号为{self.ret.pid}')
@@ -65,7 +65,7 @@ class CallingOCR:
             return {'code': 403, 'data': f'输入字典转json失败。字典：{writeDict} || 报错：[{e}]'}
         # 输入路径
         try:
-            self.ret.stdin.write(wirteStr.encode('gbk'))
+            self.ret.stdin.write(wirteStr.encode('ascii'))
             self.ret.stdin.flush()
         except Exception as e:
             return {'code': 400, 'data': f'向识别器进程写入图片地址失败，疑似子进程已崩溃。{e}'}

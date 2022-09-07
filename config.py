@@ -76,7 +76,7 @@ SaveItem = [
 
 
 class ConfigModule:
-    sysEncoding = 'gbk'  # 系统编码。初始化时获取
+    sysEncoding = 'cp936'  # 系统编码。初始化时获取
 
     def initValue(self, optVar):
         """初始化配置。传入并设置tk变量字典"""
@@ -84,17 +84,16 @@ class ConfigModule:
 
         def setSysEncoding():  # 获取系统编码
             """初始化编码"""
+            # https://docs.python.org/zh-cn/3.8/library/locale.html#locale.getdefaultlocale
+            # https://docs.python.org/zh-cn/3.8/library/codecs.html#standard-encodings
             from locale import getdefaultlocale
-            loc = getdefaultlocale()[1]
-            if loc == 'cp936':
-                self.sysEncoding = 'gbk'
-            elif loc == 'cp65001':
-                self.sysEncoding = 'utf-8'
-                print('已启动文件系统utf-8模式（Beta）')
-            else:
+            self.sysEncoding = getdefaultlocale()[1]
+            print(f'获取系统编码：{self.sysEncoding}')
+            if not self.sysEncoding:  # 无法获取默认地区
                 tk.messagebox.showwarning(
-                    "警告",
-                    f"当前系统区域为 {loc} ，不属于cp936（中文简体）或cp65001（启用全球语言支持），可能导致Umi-OCR读取图片路径错误。")
+                    '警告',
+                    f'无法获取系统地区。将采用默认utf-8编码，这可能导致Umi-OCR读取图片路径错误。')
+                self.sysEncoding = 'utf-8'
         setSysEncoding()  # 初始化编码
 
         def load():
