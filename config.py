@@ -43,6 +43,11 @@ ConfigDict = {
 
     # 识别器设置
     "ocrToolPath": "PaddleOCR-json/PaddleOCR_json.exe",  # 识别器路径
+    "ocrRunModeName": "",  # 当前选择的运行策略
+    "ocrRunMode": {
+        "按需关闭（减少空闲时内存占用）": 0,
+        "后台常驻（大幅加快任务启动速度）": 1,
+    },
     "ocrConfigName": "",  # 当前选择的配置文件的name。
     "ocrConfig": {  # 配置文件信息
         "简体中文": {
@@ -68,6 +73,7 @@ SaveItem = [
     "isIgnoreNoText",
     "outputStyle",
     "ocrToolPath",
+    "ocrRunModeName"
     "ocrConfigName",
     "ocrConfig",
     "argsStr",
