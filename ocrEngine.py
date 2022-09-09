@@ -16,9 +16,6 @@ class OcrEngine:
     def __init__(self):
         self.__initVar()
 
-    def __del__(self):
-        self.stop()
-
     def start(self):
         """启动引擎。若引擎已启动，且参数有更新，则重启。"""
         def updateOcrInfo():  # 更新OCR参数。若有更新(与当前不同)，返回True
@@ -46,8 +43,14 @@ class OcrEngine:
 
     def stop(self):
         """立刻终止引擎"""
-        del self.ocr  # 关闭OCR进程
+        if hasattr(self.ocr, 'stop'):
+            self.ocr.stop()
+        del self.ocr
         self.__initVar()
+
+    def stopByMode(self):
+        """根据配置决定停止引擎"""
+        # self.stop()
 
     def run(self, path):
         if not self.ocr:
