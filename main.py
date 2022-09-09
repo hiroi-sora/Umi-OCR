@@ -2,7 +2,7 @@ from distutils.command.config import config
 from turtle import width
 from selectAreaWin import SelectAreaWin  # 子窗口
 from asset import *  # 资源
-from callingOCR import CallingOCR  # OCR调用接口
+from ocrEngine import OCRe  # 引擎单例
 from config import Config
 
 import os
@@ -763,8 +763,7 @@ class Win:
                     f.write(outStr)
 
         def close():  # 关闭所有异步相关的东西
-            if self.ocr:
-                del self.ocr  # 关闭OCR进程
+            OCRe.stopByMode()  # 关闭OCR进程
             self.loop.stop()  # 关闭异步事件循环
             self.setRunning(0)
             self.labelPercentage["text"] = "已终止"
@@ -862,15 +861,14 @@ class Win:
         self.progressbar["value"] = 0
         self.labelFractions["text"] = f"0/{allNum}"
         self.labelTime["text"] = "0s"
-        # 创建OCR进程
-        self.ocr = None
+        # 启动OCR引擎
         try:
-            self.ocr = CallingOCR(ocrToolPath, configPath, argsStr)
+            OCRe.start()  # 启动或刷新引擎
         except Exception as e:
             close()
             tk.messagebox.showerror(
                 '遇到了亿点小问题',
-                f'识别器初始化失败：[{e}]\n\n识别器路径：[{ocrToolPath}]\n\n配置文件路径：[{configPath}]\n\n启动参数：[{argsStr}]\n\n请检查以上配置有无问题！')
+                f'识别器初始化失败：{e}\n\n请检查配置有无问题！')
             return
         # 初始化UI 2
         startTime = time.time()  # 开始时间
@@ -881,7 +879,7 @@ class Win:
                 if not self.isRunning == 1:  # 需要停止
                     close()
                     return
-                oget = self.ocr.run(value["path"])  # 调用图片识别
+                oget = OCRe.run(value["path"])  # 调用图片识别
                 # 计数
                 nowNum += 1  # 当前完成个数
                 costTimeNow = time.time() - startTime  # 当前总花费时间

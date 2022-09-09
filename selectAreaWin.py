@@ -1,4 +1,4 @@
-from callingOCR import CallingOCR  # OCR调用接口
+from ocrEngine import OCRe  # 引擎单例
 from asset import IconPngBase64  # 资源
 from config import Config
 
@@ -10,7 +10,7 @@ from PIL import Image, ImageTk
 
 
 class SelectAreaWin:
-    def __init__(self, closeSendData=None, defaultPath="", exePath="PaddleOCR-json\PaddleOCR_json.exe"):
+    def __init__(self, closeSendData=None, defaultPath=""):
         self.closeSendData = closeSendData  # 向父窗口发送数据的接口
         self.cW = 960  # 画板尺寸
         self.cH = 540
@@ -106,30 +106,18 @@ class SelectAreaWin:
         self.canvasImg = None  # 当前在显示的图片
         # initCanvas()
 
-        # def initOCR():  # 初始化识别器
-        self.ocr = None
-        if not os.path.exists(exePath):
-            tk.messagebox.showerror(
-                '遇到了一点小问题', f'未在以下路径找到识别器：\n[{exePath}]')
-            self.win.attributes('-topmost', 1)  # 设置层级最前
-            self.win.attributes('-topmost', 0)  # 然后立刻解除
-            self.isAutoOCR.set(0)  # 关闭自动分析
-            return
-        # 创建OCR进程
-        configPath = Config.get("ocrConfig")[Config.get(  # 配置文件路径
-            "ocrConfigName")]['path']
-        argsStr = Config.get("argsStr")  # 启动参数
-        try:
-            self.ocr = CallingOCR(exePath, configPath, argsStr)
-        except Exception as e:
-            tk.messagebox.showerror(
-                '遇到了亿点小问题',
-                f'识别器初始化失败：[{e}]\n\n识别器路径：[{exePath}]\n\n配置文件路径：[{configPath}]\n\n启动参数：[{argsStr}]\n\n请检查以上配置有无问题！')
-            self.win.attributes('-topmost', 1)  # 设置层级最前
-            self.win.attributes('-topmost', 0)  # 然后立刻解除
-            self.isAutoOCR.set(0)  # 关闭自动分析
-            return
-        # initOCR()
+        def initOCR():  # 初始化识别器
+            try:
+                OCRe.start()  # 启动或刷新引擎
+            except Exception as e:
+                tk.messagebox.showerror(
+                    '遇到了亿点小问题',
+                    f'识别器初始化失败：{e}\n\n请检查配置有无问题！')
+                self.win.attributes('-topmost', 1)  # 设置层级最前
+                self.win.attributes('-topmost', 0)  # 然后立刻解除
+                self.isAutoOCR.set(0)  # 关闭自动分析
+                return
+        initOCR()
 
         if defaultPath:  # 打开默认图片
             self.loadImage(defaultPath)
@@ -159,8 +147,7 @@ class SelectAreaWin:
                 Config.set("ignoreArea", getData())
         if self.closeSendData:  # 通信接口存在，则回传数据
             self.closeSendData()
-        if self.ocr:
-            del self.ocr  # 关闭OCR进程
+        OCRe.stopByMode()  # 关闭OCR进程
         self.win.destroy()  # 销毁窗口
 
     def draggedFiles(self, paths):  # 拖入文件
@@ -199,7 +186,7 @@ class SelectAreaWin:
 
         # OCR识别
         def runOCR():
-            if self.ocr and self.isAutoOCR.get():
+            if self.isAutoOCR.get():
                 # 任务前：显示提示信息
                 self.win.title(f"分析中…………")  # 改变标题
                 pathStr = path if len(
@@ -208,7 +195,7 @@ class SelectAreaWin:
                                                      text=f'图片分析中，请稍候……\n\n\n\n{pathStr}')
                 self.win.update()  # 刷新窗口
                 # 开始识别，耗时长
-                oget = self.ocr.run(path)
+                oget = OCRe.run(path)
                 # 任务后：刷新提示信息
                 self.canvas.delete(canvasText)  # 删除提示文字
                 if oget["code"] == 100:  # 存在内容
@@ -226,6 +213,7 @@ class SelectAreaWin:
                         self.areaTextRec.append(r1)
                         self.areaTextRec.append(r2)
                 elif not oget["code"] == 101:  # 发生异常
+                    self.isAutoOCR.set(0)  # 关闭自动分析
                     tk.messagebox.showwarning(
                         "遇到了一点小问题", f"图片分析失败。图片地址：\n{path}\n\n错误码：{str(oget['code'])}\n\n错误信息：\n{str(oget['data'])}")
                     self.win.attributes('-topmost', 1)  # 设置层级最前
@@ -315,4 +303,6 @@ class SelectAreaWin:
 
 # 测试
 if __name__ == "__main__":
+    Config.initValue({})
+    # Config.set('argsStr', '--Error')
     SelectAreaWin()
