@@ -45,7 +45,7 @@ class OcrAPI:
             startupinfo=startupinfo  # 开启静默模式
         )
 
-        self.initErrorMsg = 'OCR init fail.'
+        self.initErrorMsg = f'OCR init fail.\n{exePath}'
 
         # 子线程检查超时
         def cancelTimeout():
@@ -54,7 +54,7 @@ class OcrAPI:
 
         def checkTimeout():
             # print('进程启动计时器触发')
-            self.initErrorMsg = f'OCR init timeout: {InitTimeout}s.'
+            self.initErrorMsg = f'OCR init timeout: {InitTimeout}s.\n{exePath}'
             self.ret.kill()  # 关闭子进程
         checkTimer = threading.Timer(InitTimeout, checkTimeout)
         checkTimer.start()
@@ -102,6 +102,10 @@ class OcrAPI:
         except Exception as e:
             return {'code': 402, 'data': f'识别器输出值反序列化JSON失败，疑似传入了不存在或无法识别的图片 \"{imgPath}\" 。异常信息：{e}。原始内容：{getStr}'}
 
+    def stop(self):
+        self.ret.kill()  # 关闭子进程。误重复调用似乎不会有坏的影响
+        print("kill OCR")
+
     def __del__(self):
-        self.ret.kill()  # 关闭子进程
-        # print("关闭OCR！")
+        self.stop()
+        print('OCR API 析构！')
