@@ -75,6 +75,7 @@ class Win:
                 "ocrConfigName": tk.StringVar(),  # 参数文件
                 "argsStr": tk.StringVar(),  # 启动参数字符串
                 "imageSuffix": tk.StringVar(),  # 图片后缀
+                "ocrRunModeName": tk.StringVar(),  # 运行策略
             }
             Config.initValue(self.cfgVar)  # 初始化设置项
 
@@ -433,6 +434,16 @@ class Win:
                 labelTips.grid(column=0, row=4, columnspan=2, sticky="w")
                 labelTips.bind(
                     '<Button-1>', lambda *e: self.showTips(GetHelpConfigText()))  # 绑定鼠标左键点击
+
+                tk.Label(fr1, text="进程策略：　").grid(
+                    column=0, row=6, sticky="w")
+                ocrRunModeDict = Config.get("ocrRunMode")
+                ocrRunModeNameList = [i for i in ocrRunModeDict]
+                cboxR = ttk.Combobox(fr1, width=10, state="readonly", textvariable=self.cfgVar["ocrRunModeName"],
+                                     value=ocrRunModeNameList)
+                cboxR.grid(column=1, row=6,  sticky="nsew")
+                if Config.get("ocrRunModeName") not in ocrConfigNameList:
+                    cboxR.current(0)  # 初始化Combobox和ocrConfigName
 
                 fr1.grid_rowconfigure(1, minsize=4)
                 fr1.grid_rowconfigure(3, minsize=4)
