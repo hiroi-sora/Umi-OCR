@@ -50,7 +50,13 @@ class OcrEngine:
 
     def stopByMode(self):
         """根据配置决定停止引擎"""
-        # self.stop()
+        n = Config.get('ocrRunModeName')
+        modeDict = Config.get('ocrRunMode')
+        if n in modeDict.keys():
+            mode = modeDict[n]
+            print(f'引擎停止策略：{mode}')
+            if mode == 0:  # 按需关闭
+                self.stop()
 
     def run(self, path):
         if not self.ocr:
