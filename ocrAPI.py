@@ -4,12 +4,15 @@
 
 
 import os
+import threading
 import subprocess  # 进程，管道
 from sys import platform as sysPlatform  # popen静默模式
 from json import loads as jsonLoads, dumps as jsonDumps
 
+InitTimeout = 5  # 初始化超时时间，秒
 
-class CallingOCR:
+
+class OcrAPI:
     """调用OCR"""
 
     def __init__(self, exePath, configPath="", argsStr=""):
@@ -41,13 +44,31 @@ class CallingOCR:
             stdout=subprocess.PIPE,
             startupinfo=startupinfo  # 开启静默模式
         )
-        # 启动子进程
+
+        self.initErrorMsg = 'OCR init fail.'
+
+        # 子线程检查超时
+        def cancelTimeout():
+            # print('进程启动计时器取消')
+            checkTimer.cancel()
+
+        def checkTimeout():
+            # print('进程启动计时器触发')
+            self.initErrorMsg = f'OCR init timeout: {InitTimeout}s.'
+            self.ret.kill()  # 关闭子进程
+        checkTimer = threading.Timer(InitTimeout, checkTimeout)
+        checkTimer.start()
+
+        # 循环读取，检查成功标志
         while True:
             if not self.ret.poll() == None:  # 子进程已退出，初始化失败
-                raise Exception('OCR init fail.')
+                cancelTimeout()
+                raise Exception(self.initErrorMsg)
+            # 必须按行读，所以不能使用communicate()来规避超时问题
             initStr = self.ret.stdout.readline().decode('ascii', errors='ignore')
             if 'OCR init completed.' in initStr:  # 初始化成功
                 break
+        cancelTimeout()
         # print(f'初始化OCR成功，进程号为{self.ret.pid}')
 
     def run(self, imgPath):
