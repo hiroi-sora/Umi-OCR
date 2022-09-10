@@ -11,7 +11,7 @@ class OcrEngine:
 
     def __initVar(self):
         self.ocr = None  # OCR API对象
-        self.ocrInfo = ()  # OCR参数
+        self.ocrInfo = ()  # 记录之前的OCR参数
         self.ramTips = ''  # 内存占用提示
         self.noticeStatus(0)  # 通知关闭
 
@@ -36,24 +36,22 @@ class OcrEngine:
 
     def start(self):
         '''启动引擎。若引擎已启动，且参数有更新，则重启。'''
-        def updateOcrInfo():  # 更新OCR参数。若有更新(与当前不同)，返回True
-            info = (
-                Config.get('ocrToolPath'),  # 识别器路径
-                Config.get('ocrConfig')[Config.get(
-                    'ocrConfigName')]['path'],  # 配置文件路径
-                Config.get('argsStr'),  # 启动参数
-            )
-            isUpdate = not eq(info, self.ocrInfo)
-            if isUpdate:
-                self.ocrInfo = info
-            return isUpdate
-        isUpdate = updateOcrInfo()
-        if self.ocr:  # 已启动
-            if not isUpdate:  # 无更新则放假
+
+        info = (  # 获取最新OCR参数
+            Config.get('ocrToolPath'),  # 识别器路径
+            Config.get('ocrConfig')[Config.get(
+                'ocrConfigName')]['path'],  # 配置文件路径
+            Config.get('argsStr'),  # 启动参数
+        )
+        isUpdate = not eq(info, self.ocrInfo)  # 检查是否有变化
+
+        if self.ocr:  # OCR进程已启动
+            if not isUpdate:  # 无变化则放假
                 return
-            self.stop()  # 有更新则先停止OCR进程再启动
+            self.stop()  # 有变化则先停止OCR进程再启动
+
+        self.ocrInfo = info  # 记录参数。必须在stop()之后，以免被覆盖。
         self.noticeStatus(1)  # 通知启动中
-        print(f'self.ocrInfo:{self.ocrInfo}')
         try:
             self.ocr = OcrAPI(*self.ocrInfo)  # 启动引擎
             self.noticeStatus(2)  # 通知待命
