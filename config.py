@@ -74,7 +74,7 @@ SaveItem = [
     "isIgnoreNoText",
     "outputStyle",
     "ocrToolPath",
-    "ocrRunModeName"
+    "ocrRunModeName",
     "ocrConfigName",
     "ocrConfig",
     "argsStr",
