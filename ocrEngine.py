@@ -12,9 +12,24 @@ class OcrEngine:
     def __initVar(self):
         self.ocr = None  # OCR API对象
         self.ocrInfo = ()  # OCR参数
+        self.noticeStatus(0)  # 通知关闭
 
     def __init__(self):
         self.__initVar()
+
+    def noticeStatus(self, status):
+        """通知进程运行状态"""
+        msg = {
+            0:  "已关闭",
+            1:  "正在启动",
+            2:  "待命",
+            3:  "工作",
+        }.get(status, f"未知（{status}）")
+        isTkUpdate = False
+        if status == 1:
+            isTkUpdate = True
+        Config.set("ocrProcessStatus", msg, isTkUpdate)  # 设置
+        print(f'状态：{status} {msg}')
 
     def start(self):
         """启动引擎。若引擎已启动，且参数有更新，则重启。"""
@@ -34,10 +49,11 @@ class OcrEngine:
             if not isUpdate:  # 无更新则放假
                 return
             self.stop()  # 有更新则先停止OCR进程再启动
+        self.noticeStatus(1)  # 通知启动中
         try:
             self.ocr = OcrAPI(*self.ocrInfo)  # 启动引擎
+            self.noticeStatus(2)  # 通知待命
         except Exception as e:
-            print(f'OCR进程启动失败：{e}')
             self.stop()
             raise
 
@@ -60,8 +76,12 @@ class OcrEngine:
 
     def run(self, path):
         if not self.ocr:
+            self.noticeStatus(0)  # 通知关闭
             return {'code': 404, 'data': f'引擎未在运行'}
-        return self.ocr.run(path)
+        self.noticeStatus(3)  # 通知工作
+        data = self.ocr.run(path)
+        self.noticeStatus(2)  # 通知待命
+        return data
 
 
 OCRe = OcrEngine()  # 引擎单例

@@ -41,13 +41,14 @@ ConfigDict = {
     "isIgnoreNoText": True,  # T时忽略(不输出)没有文字的图片信息
     "outputStyle": 1,  # 1：纯文本，2：Markdown
 
-    # 识别器设置
-    "ocrToolPath": "PaddleOCR-json/PaddleOCR_json.exe",  # 识别器路径
-    "ocrRunModeName": "",  # 当前选择的运行策略
+    # 引擎设置
+    "ocrToolPath": "PaddleOCR-json/PaddleOCR_json.exe",  # 引擎路径
+    "ocrRunModeName": "",  # 当前选择的进程管理策略
     "ocrRunMode": {
         "按需关闭（减少空闲时内存占用）": 0,
         "后台常驻（大幅加快任务启动速度）": 1,
     },
+    "ocrProcessStatus": "未启动",  # 进程运行状态字符串，由引擎单例传到tk窗口
     "ocrConfigName": "",  # 当前选择的配置文件的name。
     "ocrConfig": {  # 配置文件信息
         "简体中文": {
@@ -84,9 +85,13 @@ SaveItem = [
 class ConfigModule:
     sysEncoding = 'cp936'  # 系统编码。初始化时获取
 
-    def initValue(self, optVar):
-        """初始化配置。传入并设置tk变量字典"""
+    def __init__(self):
+        self.optVar = {}
+
+    def initValue(self, optVar, tkUpdate):
+        """初始化配置。传入并设置tk变量字典，主窗刷新接口。"""
         self.optVar = optVar
+        self.tkUpdate = tkUpdate
 
         def setSysEncoding():  # 获取系统编码
             """初始化编码"""
@@ -143,10 +148,12 @@ class ConfigModule:
         """获取一个配置项的值"""
         return ConfigDict[key]
 
-    def set(self, key, value):
+    def set(self, key, value, isUpdateTK=False):
         """设置一个配置项的值"""
         if key in self.optVar:
             self.optVar[key].set(value)
+            if isUpdateTK:
+                self.tkUpdate()
         else:
             ConfigDict[key] = value
 

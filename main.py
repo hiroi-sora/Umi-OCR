@@ -18,7 +18,7 @@ from windnd import hook_dropfiles  # 文件拖拽
 from pyperclip import copy as pyperclipCopy  # 剪贴板
 from webbrowser import open as webOpen  # “关于”面板打开项目网址
 
-ProjectVer = "1.2.7 Alpha 1"  # 版本号
+ProjectVer = "1.2.7 Alpha 2"  # 版本号
 ProjectName = f"Umi-OCR 批量图片转文字 v{ProjectVer}"  # 名称
 ProjectWeb = "https://github.com/hiroi-sora/Umi-OCR"
 TempFilePath = "Umi-OCR_temp"
@@ -75,9 +75,10 @@ class Win:
                 "ocrConfigName": tk.StringVar(),  # 参数文件
                 "argsStr": tk.StringVar(),  # 启动参数字符串
                 "imageSuffix": tk.StringVar(),  # 图片后缀
-                "ocrRunModeName": tk.StringVar(),  # 运行策略
+                "ocrRunModeName": tk.StringVar(),  # 进程管理策略
+                "ocrProcessStatus": tk.StringVar(),  # 进程运行状态
             }
-            Config.initValue(self.cfgVar)  # 初始化设置项
+            Config.initValue(self.cfgVar, self.win.update)  # 初始化设置项
 
             # 面板值改变时，更新到配置值，并写入本地
             self.saveTimer = None  # 计时器，改变面板值一段时间后写入本地
@@ -435,7 +436,7 @@ class Win:
                 labelTips.bind(
                     '<Button-1>', lambda *e: self.showTips(GetHelpConfigText()))  # 绑定鼠标左键点击
 
-                tk.Label(fr1, text="进程策略：　").grid(
+                tk.Label(fr1, text="子进程管理：").grid(
                     column=0, row=6, sticky="w")
                 ocrRunModeDict = Config.get("ocrRunMode")
                 ocrRunModeNameList = [i for i in ocrRunModeDict]
@@ -444,6 +445,24 @@ class Win:
                 cboxR.grid(column=1, row=6,  sticky="nsew")
                 if Config.get("ocrRunModeName") not in ocrConfigNameList:
                     cboxR.current(0)  # 初始化Combobox和ocrConfigName
+                self.lockWidget.append(  # 正常状态为特殊值
+                    {'widget': cboxR, 'stateOFnormal': 'readonly'})
+
+                frState = tk.Frame(fr1)
+                frState.grid(column=0, row=7, columnspan=2, sticky="nsew")
+                tk.Label(frState, text="子进程状态：").pack(
+                    side='left')
+                tk.Label(frState, textvariable=self.cfgVar["ocrProcessStatus"]).pack(
+                    side='left')
+                labStop = tk.Label(frState, text="强制停止",
+                                   cursor="hand2", fg="red")
+                labStop.pack(side='right')
+                labStart = tk.Label(frState, text="启动", cursor="hand2")
+                labStart.pack(side='right', padx=5)
+                labStart.bind(
+                    '<Button-1>', lambda *e: OCRe.start())
+                labStop.bind(
+                    '<Button-1>', lambda *e: OCRe.stop())
 
                 fr1.grid_rowconfigure(1, minsize=4)
                 fr1.grid_rowconfigure(3, minsize=4)
