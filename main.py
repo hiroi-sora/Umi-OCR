@@ -18,9 +18,10 @@ from windnd import hook_dropfiles  # 文件拖拽
 from pyperclip import copy as pyperclipCopy  # 剪贴板
 from webbrowser import open as webOpen  # “关于”面板打开项目网址
 
-ProjectVer = "1.2.7 Alpha 2"  # 版本号
-ProjectName = f"Umi-OCR 批量图片转文字 v{ProjectVer}"  # 名称
+ProjectVer = "1.2.7 Alpha 3"  # 版本号
+ProjectName = f"Umi-OCR v{ProjectVer}"  # 名称
 ProjectWeb = "https://github.com/hiroi-sora/Umi-OCR"
+ProjectAbout = "免费、开源的离线OCR软件"
 TempFilePath = "Umi-OCR_temp"
 
 
@@ -443,6 +444,7 @@ class Win:
                 cboxR = ttk.Combobox(fr1, width=10, state="readonly", textvariable=self.cfgVar["ocrRunModeName"],
                                      value=ocrRunModeNameList)
                 cboxR.grid(column=1, row=6,  sticky="nsew")
+                cboxR.unbind('<MouseWheel>')
                 if Config.get("ocrRunModeName") not in ocrConfigNameList:
                     cboxR.current(0)  # 初始化Combobox和ocrConfigName
                 self.lockWidget.append(  # 正常状态为特殊值
@@ -476,6 +478,7 @@ class Win:
                                 pady=LabelFramePadY, padx=4)
                 tk.Label(frameAbout, image=self.iconImg).pack()  # 图标
                 tk.Label(frameAbout, text=ProjectName, fg="gray").pack()
+                tk.Label(frameAbout, text=ProjectAbout, fg="gray").pack()
                 labelWeb = tk.Label(frameAbout, text=ProjectWeb, cursor="hand2",
                                     fg="deeppink")
                 labelWeb.pack()  # 文字
