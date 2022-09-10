@@ -6,6 +6,7 @@
 import os
 import threading
 import subprocess  # 进程，管道
+from psutil import Process as psutilProcess  # 内存监控
 from sys import platform as sysPlatform  # popen静默模式
 from json import loads as jsonLoads, dumps as jsonDumps
 
@@ -44,6 +45,7 @@ class OcrAPI:
             stdout=subprocess.PIPE,
             startupinfo=startupinfo  # 开启静默模式
         )
+        self.psutilProcess = psutilProcess(self.ret.pid)  # 进程监控对象
 
         self.initErrorMsg = f'OCR init fail.\n{exePath}'
 
@@ -105,6 +107,14 @@ class OcrAPI:
     def stop(self):
         self.ret.kill()  # 关闭子进程。误重复调用似乎不会有坏的影响
         print("kill OCR")
+
+    def getRam(self):
+        """返回内存占用，字符串"""
+        try:
+            return f'{int(self.psutilProcess.memory_info().rss/1048576)}MB'
+        except Exception as e:
+            print(f'获取子进程内存失败：{e}')
+            return '无法获取'
 
     def __del__(self):
         self.stop()

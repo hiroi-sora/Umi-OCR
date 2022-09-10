@@ -7,38 +7,41 @@ from ocrAPI import OcrAPI
 
 
 class OcrEngine:
-    """OCR引擎，含各种操作的方法"""
+    '''OCR引擎，含各种操作的方法'''
 
     def __initVar(self):
         self.ocr = None  # OCR API对象
         self.ocrInfo = ()  # OCR参数
+        self.ramTips = ''  # 内存占用提示
         self.noticeStatus(0)  # 通知关闭
 
     def __init__(self):
         self.__initVar()
 
     def noticeStatus(self, status):
-        """通知进程运行状态"""
+        '''通知进程运行状态'''
+        if self.ocr:
+            if status == 2:  # 刷新内存占用
+                self.ramTips = f'（内存：{self.ocr.getRam()}）'
         msg = {
-            0:  "已关闭",
-            1:  "正在启动",
-            2:  "待命",
-            3:  "工作",
-        }.get(status, f"未知（{status}）")
+            0:  '已关闭',
+            1:  '正在启动',
+            2:  f'待命{self.ramTips}',
+            3:  f'工作{self.ramTips}',
+        }.get(status, f'未知（{status}）')
         isTkUpdate = False
         if status == 1:
             isTkUpdate = True
-        Config.set("ocrProcessStatus", msg, isTkUpdate)  # 设置
-        print(f'状态：{status} {msg}')
+        Config.set('ocrProcessStatus', msg, isTkUpdate)  # 设置
 
     def start(self):
-        """启动引擎。若引擎已启动，且参数有更新，则重启。"""
+        '''启动引擎。若引擎已启动，且参数有更新，则重启。'''
         def updateOcrInfo():  # 更新OCR参数。若有更新(与当前不同)，返回True
             info = (
-                Config.get("ocrToolPath"),  # 识别器路径
-                Config.get("ocrConfig")[Config.get(
-                    "ocrConfigName")]['path'],  # 配置文件路径
-                Config.get("argsStr"),  # 启动参数
+                Config.get('ocrToolPath'),  # 识别器路径
+                Config.get('ocrConfig')[Config.get(
+                    'ocrConfigName')]['path'],  # 配置文件路径
+                Config.get('argsStr'),  # 启动参数
             )
             isUpdate = not eq(info, self.ocrInfo)
             if isUpdate:
@@ -50,6 +53,7 @@ class OcrEngine:
                 return
             self.stop()  # 有更新则先停止OCR进程再启动
         self.noticeStatus(1)  # 通知启动中
+        print(f'self.ocrInfo:{self.ocrInfo}')
         try:
             self.ocr = OcrAPI(*self.ocrInfo)  # 启动引擎
             self.noticeStatus(2)  # 通知待命
@@ -58,14 +62,14 @@ class OcrEngine:
             raise
 
     def stop(self):
-        """立刻终止引擎"""
+        '''立刻终止引擎'''
         if hasattr(self.ocr, 'stop'):
             self.ocr.stop()
         del self.ocr
         self.__initVar()
 
     def stopByMode(self):
-        """根据配置决定停止引擎"""
+        '''根据配置决定停止引擎'''
         n = Config.get('ocrRunModeName')
         modeDict = Config.get('ocrRunMode')
         if n in modeDict.keys():
