@@ -444,8 +444,7 @@ class Win:
                 cboxR = ttk.Combobox(fr1, width=10, state="readonly", textvariable=self.cfgVar["ocrRunModeName"],
                                      value=ocrRunModeNameList)
                 cboxR.grid(column=1, row=6,  sticky="nsew")
-                cboxR.unbind('<MouseWheel>')
-                if Config.get("ocrRunModeName") not in ocrConfigNameList:
+                if Config.get("ocrRunModeName") not in ocrRunModeNameList:
                     cboxR.current(0)  # 初始化Combobox和ocrConfigName
                 self.lockWidget.append(  # 正常状态为特殊值
                     {'widget': cboxR, 'stateOFnormal': 'readonly'})
