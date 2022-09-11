@@ -18,7 +18,7 @@ from windnd import hook_dropfiles  # 文件拖拽
 from pyperclip import copy as pyperclipCopy  # 剪贴板
 from webbrowser import open as webOpen  # “关于”面板打开项目网址
 
-ProjectVer = "1.2.7 Alpha 3"  # 版本号
+ProjectVer = "1.2.7 Alpha 4"  # 版本号
 ProjectName = f"Umi-OCR v{ProjectVer}"  # 名称
 ProjectWeb = "https://github.com/hiroi-sora/Umi-OCR"
 ProjectAbout = "免费、开源的离线OCR软件"
@@ -988,15 +988,16 @@ class Win:
                 os.system(okMission[omName]["code"])  # 执行cmd语句
 
     def onClose(self):  # 关闭窗口事件
+        OCRe.stop()  # 强制关闭引擎进程，加快子线程结束
         if self.isRunning == 0:  # 未在运行
             self.win.destroy()  # 直接关闭
-        if not self.isRunning == 0:  # 正在运行，需要停止
+        if not self.isRunning == 0:  # 正在运行，需要等待子线程停止
             self.setRunning(2)
             # self.win.after( # 非阻塞弹出提示框
-            #     0, lambda: tk.messagebox.showinfo('请稍候', '等待进程终止，程序稍后将关闭'))
-            self.win.after(50, self.waitClose)  # 等待关闭，50ms轮询一次是否已结束子进程
+            #     0, lambda: tk.messagebox.showinfo('请稍候', '等待线程终止，程序稍后将关闭'))
+            self.win.after(50, self.waitClose)  # 等待关闭，50ms轮询一次是否已结束子线程
 
-    def waitClose(self):  # 等待进程关闭后销毁窗口
+    def waitClose(self):  # 等待线程关闭后销毁窗口
         if self.isRunning == 0:
             self.win.destroy()  # 销毁窗口
         else:
@@ -1019,4 +1020,5 @@ class Win:
 if __name__ == "__main__":
     Win()
 
+# cd /d D:\MyCode\PythonCode\Umi-OCR
 # pyinstaller -F -w -i icon/icon.ico -n "Umi-OCR 批量图片转文字" main.py
