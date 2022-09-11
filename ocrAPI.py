@@ -4,6 +4,7 @@
 
 
 import os
+import atexit  # 退出处理
 import threading
 import subprocess  # 进程，管道
 from psutil import Process as psutilProcess  # 内存监控
@@ -45,6 +46,7 @@ class OcrAPI:
             stdout=subprocess.PIPE,
             startupinfo=startupinfo  # 开启静默模式
         )
+        atexit.register(self.stop)  # 注册程序终止时执行强制停止子进程
         self.psutilProcess = psutilProcess(self.ret.pid)  # 进程监控对象
 
         self.initErrorMsg = f'OCR init fail.\n{exePath}'
@@ -118,4 +120,5 @@ class OcrAPI:
 
     def __del__(self):
         self.stop()
+        atexit.unregister(self.stop)  # 移除退出处理
         print('OCR API 析构！')
