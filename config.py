@@ -1,6 +1,17 @@
 import json
 import tkinter as tk
 import tkinter.messagebox
+from locale import getdefaultlocale
+
+
+# 项目属性
+class Umi:
+    name = None
+    ver = None
+    website = None
+    about = None
+    test = None  # 开发使用
+
 
 # 配置文件路径
 ConfigJsonFile = "Umi-OCR_config.json"
@@ -97,7 +108,6 @@ class ConfigModule:
             """初始化编码"""
             # https://docs.python.org/zh-cn/3.8/library/locale.html#locale.getdefaultlocale
             # https://docs.python.org/zh-cn/3.8/library/codecs.html#standard-encodings
-            from locale import getdefaultlocale
             self.sysEncoding = getdefaultlocale()[1]
             print(f'获取系统编码：{self.sysEncoding}')
             if not self.sysEncoding:  # 无法获取默认地区

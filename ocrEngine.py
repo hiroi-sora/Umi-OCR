@@ -1,9 +1,6 @@
-import time
 from operator import eq
 from config import Config
 from ocrAPI import OcrAPI
-
-# TODO：目前这个类是线程不安全的，也是我想把OCR子线程常驻后台的阻碍
 
 
 class OcrEngine:

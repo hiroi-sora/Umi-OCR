@@ -2,14 +2,13 @@ from ocrEngine import OCRe  # 引擎单例
 from asset import IconPngBase64  # 资源
 from config import Config
 
-import os
 import tkinter as tk
 import tkinter.messagebox
 from windnd import hook_dropfiles  # 文件拖拽
 from PIL import Image, ImageTk
 
 
-class SelectAreaWin:
+class IgnoreAreaWin:
     def __init__(self, closeSendData=None, defaultPath=""):
         self.closeSendData = closeSendData  # 向父窗口发送数据的接口
         self.cW = 960  # 画板尺寸
@@ -107,6 +106,8 @@ class SelectAreaWin:
         # initCanvas()
 
         def initOCR():  # 初始化识别器
+            canvasText = self.canvas.create_text(self.cW/2, self.cH/2, font=('', 15, 'bold'), fill='white', anchor="c",
+                                                 text=f'引擎启动中，请稍候……')
             try:
                 OCRe.start()  # 启动或刷新引擎
             except Exception as e:
@@ -117,6 +118,8 @@ class SelectAreaWin:
                 self.win.attributes('-topmost', 0)  # 然后立刻解除
                 self.isAutoOCR.set(0)  # 关闭自动分析
                 return
+            finally:
+                self.canvas.delete(canvasText)  # 删除提示文字
         initOCR()
 
         if defaultPath:  # 打开默认图片
@@ -305,4 +308,4 @@ class SelectAreaWin:
 if __name__ == "__main__":
     Config.initValue({})
     # Config.set('argsStr', '--Error')
-    SelectAreaWin()
+    IgnoreAreaWin()
