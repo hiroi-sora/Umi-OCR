@@ -1,8 +1,11 @@
 
 from config import Config, Umi  # 最先加载配置
+from logger import GetLog
 from uiSelectArea import IgnoreAreaWin  # 子窗口
 from asset import *  # 资源
-from ocrEngine import OCRe  # 引擎单例
+from ocrEngine import OCRe, MsnFlag, EngFlag  # 引擎
+from msnBatch import MsnBatch
+from dataStructure import KeyList
 
 import os
 import time
@@ -19,10 +22,14 @@ from webbrowser import open as webOpen  # “关于”面板打开项目网址
 
 TempFilePath = "Umi-OCR_temp"
 
+TestWin = None  # 用来测试的全局变量
+Log = GetLog()
+
 
 class MainWin:
     def __init__(self):
-        self.imgDict = {}  # 当前载入的图片信息字典，key为表格组件id。必须为有序字典，python3.6以上默认是。
+        self.batList = KeyList()  # 管理批量图片的信息及表格id的列表
+        self.tableKeyList = []  # 顺序存放self.imgDict
         self.isRunning = 0  # 0未在运行，1正在运行，2正在停止
         self.lockWidget = []  # 需要运行时锁定的组件
 
@@ -44,6 +51,8 @@ class MainWin:
             # 注册文件拖入，整个主窗口内有效
             hook_dropfiles(self.win, func=self.draggedImages)
         initWin()
+        global TestWin
+        TestWin = self
 
         # 2.初始化变量、配置项
         def initVar():
@@ -132,13 +141,16 @@ class MainWin:
             # 顶栏
             fr1 = tk.Frame(self.tabFrameTable)
             fr1.pack(side='top', fill='x', pady=2)
-            tk.Button(fr1, text=' 浏览 ',  command=self.openFileWin).pack(
-                side='left', padx=5)
+            btn = tk.Button(fr1, text=' 浏览 ',  command=self.openFileWin)
+            btn.pack(side='left', padx=5)
+            self.lockWidget.append(btn)
             tk.Label(fr1, text="或直接拖入").pack(side='left')
-            tk.Button(fr1, text='清空表格', width=12, command=self.clearTable).pack(
-                side='right')
-            tk.Button(fr1, text='移除选中图片', width=12, command=self.delImgList).pack(
-                side='right', padx=5)
+            btn = tk.Button(fr1, text='清空', width=8, command=self.clearTable)
+            btn.pack(side='right')
+            self.lockWidget.append(btn)
+            btn = tk.Button(fr1, text='移除', width=8, command=self.delImgList)
+            btn.pack(side='right', padx=5)
+            self.lockWidget.append(btn)
             # 表格主体
             fr2 = tk.Frame(self.tabFrameTable)
             fr2.pack(side='top', fill='both')
@@ -287,7 +299,6 @@ class MainWin:
                     try:
                         keyboard.unhook_all_hotkeys()  # 移除 所有旧快捷键
                     except Exception as err:  # 影响不大。未注册过就调用移除 会报这个异常
-                        # print(f"移除快捷键异常：{err}")
                         pass
                     if Config.get("isGlobalHotkey"):  # 添加
                         addHotkey(Config.get("globalHotkey"))
@@ -541,9 +552,8 @@ class MainWin:
             if suf and os.path.splitext(path)[1].lower() not in suf:
                 return  # 需要判别许可后缀 且 文件后缀不在许可内，不添加。
             # 检测是否重复
-            for key, value in self.imgDict.items():
-                if value["path"] == path:
-                    return
+            if self.batList.isDataItem('path', path):
+                return
             # 检测是否可用
             try:
                 s = Image.open(path).size
@@ -563,7 +573,7 @@ class MainWin:
             tableInfo = (name, "", "")
             id = self.table.insert('', 'end', values=tableInfo)  # 添加到表格组件中
             dictInfo = {"name": name, "path": path, "size": s}
-            self.imgDict[id] = (dictInfo)  # 添加到字典中
+            self.batList.append(id, dictInfo)
 
         isRecursiveSearch = Config.get("isRecursiveSearch")
         for path in paths:  # 遍历拖入的所有路径
@@ -617,8 +627,8 @@ class MainWin:
         if not self.isRunning == 0:
             return
         defaultPath = ""
-        if self.imgDict:
-            defaultPath = next(iter(self.imgDict.values()))["path"]
+        if not self.batList.isEmpty():
+            defaultPath = self.batList.get(index=0)["path"]
         self.win.attributes("-disabled", 1)  # 禁用父窗口
         IgnoreAreaWin(self.closeSelectArea, defaultPath)
 
@@ -657,7 +667,7 @@ class MainWin:
         self.labelTime["text"] = "0s"
         Config.set("outputFilePath", "")
         Config.set("outputFileName", "")
-        self.imgDict = {}
+        self.batList.clear()
         chi = self.table.get_children()
         for i in chi:
             self.table.delete(i)  # 表格组件移除
@@ -668,24 +678,62 @@ class MainWin:
         chi = self.table.selection()
         for i in chi:
             self.table.delete(i)
-            del self.imgDict[i]  # 字典删除
+            self.batList.delete(key=i)
+
+    def setTableItem(self, time, score, key=None, index=-1):  # 改变表中第index项的数据信息
+        if not key:
+            key = self.batList.indexToKey(index)
+        self.table.set(key, column='time', value=time)
+        self.table.set(key, column='score', value=score)
+
+    def clearTableItem(self):  # 清空表格数据信息
+        keys = self.batList.getKeys()
+        for key in keys:  # 清空表格参数
+            self.table.set(key, column='time', value="")
+            self.table.set(key, column='score', value="")
+
+    # 写字板操作 =============================================
+
+    def textOutputInsert(self, text, position=tk.END):
+        self.textOutput.insert(position, text)
+        if self.isAutoRoll.get():  # 需要自动滚动
+            self.textOutput.see(position)
 
     # 进行任务 ===============================================
 
-    def setRunning(self, r):  # 设置运行状态。0停止，1运行中，2停止中
-        self.isRunning = r
-        state = ""  # 组件状态
-        if r == 0:
-            self.btnRun["text"] = "开始任务"
-            self.btnRun['state'] = "normal"
-            state = "normal"
-        elif r == 1:
-            self.btnRun["text"] = "停止任务"
-            self.btnRun['state'] = "normal"
-            state = "disable"
-        elif r == 2:
-            self.btnRun["text"] = "正在停止"
-            self.btnRun['state'] = "disable"
+    def setRunning(self, batFlag):  # 设置运行状态。
+
+        def setNone():
+            self.btnRun['text'] = '开始任务'
+            self.btnRun['state'] = 'normal'
+            self.labelPercentage["text"] = "已终止"
+            return 'normal'
+
+        def setIniting():
+            self.btnRun['text'] = '正在准备'
+            self.btnRun['state'] = 'disable'
+            self.labelPercentage["text"] = "初始化"
+            return 'disable'
+
+        def setRunning():
+            self.btnRun['text'] = '停止任务'
+            self.btnRun['state'] = 'normal'
+            return 'disable'
+
+        def setStopping():
+            self.btnRun['text'] = '正在停止'
+            self.btnRun['state'] = 'disable'
+            return ''
+
+        def setDefault():
+            return ''
+
+        state = {
+            MsnFlag.none: setNone,
+            MsnFlag.initing: setIniting,
+            MsnFlag.running: setRunning,
+            MsnFlag.stopping: setStopping,
+        }.get(batFlag, setDefault)()
         if state:
             for w in self.lockWidget:  # 改变组件状态（禁用，启用）
                 if 'widget' in w.keys() and 'stateOFnormal' in w.keys():
@@ -695,22 +743,17 @@ class MainWin:
                         w['widget']['state'] = state
                 else:
                     w['state'] = state
+        self.win.update()
 
-    def run(self):  # 开始任务，创建新线程和事件循环
-        if self.isRunning == 0:  # 未在运行，开始运行
-            if not self.imgDict:
-                return
-            # 检测识别器存在
-            ocrToolPath = Config.get("ocrToolPath")
-            if not os.path.exists(ocrToolPath):
-                tk.messagebox.showerror(
-                    '遇到了一点小问题', f'未在以下地址找到识别器！\n{ocrToolPath}')
+    def run(self):
+        if OCRe.msnFlag == MsnFlag.none:  # 未在运行
+            if self.batList.isEmpty():
                 return
             # 创建输出文件
-            if Config.get("isOutputFile"):
-                suffix = ".txt" if Config.get("outputStyle") == 1 else ".md"
-                outPath = Config.get("outputFilePath") + \
-                    "\\" + Config.get("outputFileName")+suffix
+            if Config.get('isOutputFile'):
+                suffix = '.txt' if Config.get('outputStyle') == 1 else '.md'
+                outPath = Config.get('outputFilePath') + \
+                    '\\' + Config.get('outputFileName')+suffix
                 try:
                     if os.path.exists(outPath):  # 文件存在
                         os.remove(outPath)  # 删除文件
@@ -723,277 +766,35 @@ class MainWin:
                     tk.messagebox.showerror(
                         '遇到了亿点小问题', f'创建输出文件失败。文件地址：\n{outPath}\n\n错误信息：\n{e}')
                     return
-            self.setRunning(1)
-            # 在当前线程下创建事件循环，在start_loop里面启动它
-            newLoop = asyncio.new_event_loop()
-            # 通过当前线程开启新的线程去启动事件循环
-            threading.Thread(target=self.getLoop, args=(newLoop,)).start()
-            # 在新线程中事件循环不断“游走”执行
-            asyncio.run_coroutine_threadsafe(self.run_(), newLoop)
-        elif self.isRunning == 1:  # 正在运行，停止运行
-            self.setRunning(2)
+            # 锁定UI
+            # self.setRunning(MsnFlag.initing)
+            # 初始化文本处理器
+            tb = MsnBatch(self, self.batList, self.setTableItem,
+                          self.textOutputInsert, self.setRunning,
+                          self.clearTableItem)
+            # 开始运行
+            paths = self.batList.getItemValueList('path')
+            OCRe.runMission(paths,
+                            onStart=tb.onStart, onGet=tb.onGet,
+                            onStop=tb.onStop, onError=tb.onError,
+                            winSetMsnFlag=self.setRunning)
+        elif OCRe.msnFlag == MsnFlag.running:  # 正在运行，停止运行
+            OCRe.stopByMode()
 
     def getLoop(self, loop):  # 获取事件循环
         self.loop = loop
         asyncio.set_event_loop(self.loop)
         self.loop.run_forever()
 
-    async def run_(self):  # 异步，执行任务
-        # 有生之年一定重构
-        self.labelPercentage["text"] = "初始化"
-        isOutputFile = Config.get("isOutputFile")  # 是否输出文件
-        isOutputDebug = Config.get("isOutputDebug")  # 是否输出调试
-        isIgnoreNoText = Config.get("isIgnoreNoText")  # 是否忽略无字图片
-        outputStyle = Config.get("outputStyle")  # 输出风格
-        areaInfo = Config.get("ignoreArea")
-        ocrToolPath = Config.get("ocrToolPath")  # 识别器路径
-        configPath = Config.get("ocrConfig")[Config.get(  # 配置文件路径
-            "ocrConfigName")]['path']
-        argsStr = Config.get("argsStr")  # 启动参数
-        if isOutputFile:
-            outputPath = Config.get("outputFilePath")  # 输出路径（文件夹）
-            suffix = ".txt" if outputStyle == 1 else ".md"
-            outputFile = outputPath+"\\" + \
-                Config.get("outputFileName")+suffix  # 输出文件
-
-        def output(outStr, type_):  # 输出字符串
-            """
-            debug ：调试信息
-            text ：正文
-            name ：文件名
-            none ：不做修改
-            """
-            # 写入输出面板，无需格式
-            self.textOutput.insert(tk.END, f"\n{outStr}\n")
-            if self.isAutoRoll.get():  # 需要自动滚动
-                self.textOutput.see(tk.END)
-
-            # 写入本地文件，按照格式
-            if isOutputFile:
-                if outputStyle == 1:  # 纯文本风格
-                    if type_ == "debug":
-                        outStr = f"```\n{outStr}```\n"
-                    elif type_ == "name":
-                        outStr = f"\n\n≦ {outStr} ≧\n"
-                elif outputStyle == 2:  # markdown风格
-                    if type_ == "debug":
-                        outStr = f"```\n{outStr}```\n"
-                    elif type_ == "text":
-                        outList = outStr.split("\n")
-                        outStr = ""
-                        for i in outList:
-                            outStr += f"> {i}  \n"
-                    elif type_ == "name":
-                        path = outStr.replace(" ", "%20")
-                        outStr = f"---\n![{outStr}]({path})\n[{outStr}]({path})\n"
-                with open(outputFile, "a", encoding='utf-8') as f:  # 追加写入本地文件
-                    f.write(outStr)
-
-        def close():  # 关闭所有异步相关的东西
-            OCRe.stopByMode()  # 关闭OCR进程
-            self.loop.stop()  # 关闭异步事件循环
-            self.setRunning(0)
-            self.labelPercentage["text"] = "已终止"
-
-        def analyzeText(oget, img):  # 分析一张图转出的文字
-            def isInBox(aPos0, aPos1, bPos0, bPos1):  # 检测框左上、右下角，待测者左上、右下角
-                return bPos0[0] >= aPos0[0] and bPos0[1] >= aPos0[1] and bPos1[0] <= aPos1[0] and bPos1[1] <= aPos1[1]
-
-            def isIden():  # 是否识别区域模式
-                if areaInfo["area"][1]:  # 需要检测
-                    for o in oget:  # 遍历每一个文字块
-                        for a in areaInfo["area"][1]:  # 遍历每一个检测块
-                            if isInBox(a[0], a[1], (o["box"][0], o["box"][1]), (o["box"][4], o["box"][5])):
-                                return True
-            text = ""
-            textDebug = ""  # 调试信息
-            score = 0  # 平均置信度
-            scoreNum = 0
-
-            # 无需忽略区域
-            if not areaInfo or not areaInfo["size"][0] == img["size"][0] or not areaInfo["size"][1] == img["size"][1]:
-
-                for i in oget:
-                    text += i["text"]+"\n"
-                    score += i["score"]
-                    scoreNum += 1
-
-            # 忽略模式2
-            elif isIden():
-                fn = 0  # 记录忽略的数量
-                for o in oget:
-                    flag = True
-                    for a in areaInfo["area"][2]:  # 遍历每一个检测块
-                        if isInBox(a[0], a[1], (o["box"][0], o["box"][1]), (o["box"][4], o["box"][5])):
-                            flag = False  # 踩到任何一个块，GG
-                            break
-                    if flag:
-                        text += o["text"]+"\n"
-                        score += o["score"]
-                        scoreNum += 1
-                    else:
-                        fn += 1
-                if isOutputDebug:
-                    textDebug = f"忽略模式2：忽略{fn}条\n"
-
-            # 忽略模式1
-            else:
-                fn = 0  # 记录忽略的数量
-                for o in oget:
-                    flag = True
-                    for a in areaInfo["area"][0]:  # 遍历每一个检测块
-                        if isInBox(a[0], a[1], (o["box"][0], o["box"][1]), (o["box"][4], o["box"][5])):
-                            flag = False  # 踩到任何一个块，GG
-                            break
-                    if flag:
-                        text += o["text"]+"\n"
-                        score += o["score"]
-                        scoreNum += 1
-                    else:
-                        fn += 1
-                if isOutputDebug:
-                    textDebug = f"忽略模式1：忽略{fn}条\n"
-
-            if text and not scoreNum == 0:  # 区域内有文本，计算置信度
-                score /= scoreNum
-                # score = str(score)  # 转文本
-            else:
-                score = 1  # 区域内没有文本，置信度为1
-            return text, textDebug, score
-
-        # 开始
-        startStr = f"任务开始时间：{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))}\n"
-        output(startStr, "text")
-        if isOutputDebug:
-            startStr = f'已启用输出调试信息。\n识别器路径识别器路径：[{ocrToolPath}]\n配置文件路径：[{configPath}]\n启动参数：[{argsStr}]\n'
-            if areaInfo:
-                startStr += f'忽略区域：开启\n适用分辨率：{areaInfo["size"]}\n'
-                startStr += f'忽略区域1：{areaInfo["area"][0]}\n'
-                startStr += f'识别区域：{areaInfo["area"][1]}\n'
-                startStr += f'忽略区域2：{areaInfo["area"][2]}\n'
-            else:
-                startStr += f"忽略区域：关闭\n"
-            output(startStr, "debug")
-        # 初始化UI 1
-        for key in self.imgDict.keys():  # 清空表格参数
-            self.table.set(key, column='time', value="")
-            self.table.set(key, column='score', value="")
-        allNum, nowNum = len(self.imgDict), 0
-        costTime = 0
-        numOK = 0  # 成功数量
-        numNON = 0  # 不存在数量
-        numERR = 0  # 出错数量
-        allScore = 0  # 总置信度
-        self.progressbar["maximum"] = allNum
-        self.progressbar["value"] = 0
-        self.labelFractions["text"] = f"0/{allNum}"
-        self.labelTime["text"] = "0s"
-        # 启动OCR引擎
-        try:
-            OCRe.start()  # 启动或刷新引擎
-        except Exception as e:
-            close()
-            tk.messagebox.showerror(
-                '遇到了亿点小问题',
-                f'识别器初始化失败：{e}\n\n请检查配置有无问题！')
-            return
-        # 初始化UI 2
-        startTime = time.time()  # 开始时间
-        self.labelPercentage["text"] = "0%"
-        # 主任务循环
-        for key, value in self.imgDict.items():
-            try:
-                if not self.isRunning == 1:  # 需要停止
-                    close()
-                    return
-                oget = OCRe.run(value["path"])  # 调用图片识别
-                # 计数
-                nowNum += 1  # 当前完成个数
-                costTimeNow = time.time() - startTime  # 当前总花费时间
-                needTimeStr = str(costTimeNow-costTime)  # 单个花费时间
-                costTime = round(costTimeNow, 2)  # 刷新花费时间
-                self.progressbar["value"] = nowNum
-                self.labelPercentage["text"] = f"{round((nowNum/allNum)*100)}%"
-                self.labelFractions["text"] = f"{nowNum}/{allNum}"
-                self.labelTime["text"] = f"{costTime}s"
-                self.table.set(key, column='time',
-                               value=needTimeStr[:4])  # 时间写入表格
-                # 分析数据
-                dataStr = ""
-                textDebug = ""
-                if oget['code'] == 100:  # 成功
-                    numOK += 1
-                    dataStr, textDebug, score = analyzeText(
-                        oget['data'], value)  # 获取文字
-                    allScore += score
-                    score = str(score)  # 转文本
-                    if self.isNeedCopy:  # 识图后复制到剪贴板
-                        pyperclipCopy(dataStr)
-                elif oget['code'] == 101:  # 无文字
-                    numNON += 1
-                    score = "无文字"
-                else:  # 识别失败
-                    numERR += 1
-                    dataStr = "识别失败"  # 不管开不开输出调试，都要输出报错
-                    dataStr += f"，错误码：{oget['code']}\n错误信息：{str(oget['data'])}\n"
-                    score = "失败"
-                self.isNeedCopy = False  # 成功与否都将复制标志置F
-
-                # 写入表格
-                self.table.set(key, column='score', value=score[:4])
-                # 格式化输出
-                if isIgnoreNoText and not dataStr:
-                    continue  # 忽略无字图片
-                output(value["name"], "name")
-                if isOutputDebug:
-                    output(
-                        f"识别耗时：{needTimeStr}s 置信度：{score}\n{textDebug}", "debug")
-                output(dataStr, "text")
-            except Exception as e:
-                tk.messagebox.showerror(
-                    '遇到了亿点小问题', f'图片识别异常：\n{value["name"]}\n异常信息：\n{e}')
-        # 结束
-        endTime = time.time()
-        output("\n\n---\n", "none")
-        endStr = f"任务结束时间：{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(endTime))}\n"
-        output(endStr, "text")
-        if isOutputDebug:
-            endStr = f"任务耗时（秒）：        {endTime-startTime}\n"
-            if not allNum == 0:
-                endStr += f"单张平均耗时：          {(endTime-startTime)/allNum}\n"
-            endStr += f"共计图片数量：          {numOK+numNON+numERR}\n"
-            endStr += f"识别正常 的图片数量：    {numOK}\n"
-            if not numOK == 0:
-                endStr += f"正常图片 的平均置信度：  {allScore/numOK}\n"
-            endStr += f"未识别到文字 的图片数量：{numNON}\n"
-            endStr += f"识别失败 的图片数量：    {numERR}\n"
-            output(endStr, "debug")
-        close()  # 完成后关闭
-        self.labelPercentage["text"] = "完成！"
-        if isOutputFile:
-            if Config.get("isOpenExplorer"):  # 打开输出目录
-                os.startfile(outputPath)
-            if Config.get("isOpenOutputFile"):  # 打开输出文件
-                os.startfile(outputFile)
-        if Config.get("isOkMission"):  # 计划任务
-            Config.set("isOkMission", False)  # 一次性，设回false
-            omName = Config.get("okMissionName")
-            okMission = Config.get("okMission")
-            if omName in okMission.keys():
-                os.system(okMission[omName]["code"])  # 执行cmd语句
-
     def onClose(self):  # 关闭窗口事件
         OCRe.stop()  # 强制关闭引擎进程，加快子线程结束
-        if self.isRunning == 0:  # 未在运行
+        if OCRe.engFlag == EngFlag.none:  # 未在运行
             self.win.destroy()  # 直接关闭
-        if not self.isRunning == 0:  # 正在运行，需要等待子线程停止
-            self.setRunning(2)
-            # self.win.after( # 非阻塞弹出提示框
-            #     0, lambda: tk.messagebox.showinfo('请稍候', '等待线程终止，程序稍后将关闭'))
+        else:
             self.win.after(50, self.waitClose)  # 等待关闭，50ms轮询一次是否已结束子线程
 
     def waitClose(self):  # 等待线程关闭后销毁窗口
-        if self.isRunning == 0:
+        if OCRe.engFlag == EngFlag.none:  # 未在运行
             self.win.destroy()  # 销毁窗口
         else:
             self.win.after(50, self.waitClose)  # 等待关闭，50ms轮询一次是否已结束子进程
@@ -1010,3 +811,18 @@ class MainWin:
                 return
             self.textOutput.delete('1.0', tk.END)
         self.textOutput.insert(tk.END, tipsText)
+
+
+# if __name__ == "__main__":
+#     Umi.ver = '测试'
+#     Umi.name = f'Umi-OCR v{Umi.ver}'
+#     # addImagesList()
+
+#     def testADD():
+#         TestWin.addImagesList([
+#             'D:\图片\Screenshots',
+#         ])
+#     timer = threading.Timer(1, testADD)
+#     timer.start()
+
+#     MainWin()
