@@ -710,8 +710,10 @@ class MainWin:
             return 'normal'
 
         def setIniting():
-            self.btnRun['text'] = '正在准备'
-            self.btnRun['state'] = 'disable'
+            # self.btnRun['text'] = '正在准备'
+            # self.btnRun['state'] = 'disable'
+            self.btnRun['text'] = '停止任务'
+            self.btnRun['state'] = 'normal'
             self.labelPercentage["text"] = "初始化"
             return 'disable'
 
@@ -778,7 +780,8 @@ class MainWin:
                             onStart=tb.onStart, onGet=tb.onGet,
                             onStop=tb.onStop, onError=tb.onError,
                             winSetMsnFlag=self.setRunning)
-        elif OCRe.msnFlag == MsnFlag.running:  # 正在运行，停止运行
+        # 允许任务进行中或初始化的中途停止任务
+        elif OCRe.msnFlag == MsnFlag.running or OCRe.msnFlag == MsnFlag.initing:
             OCRe.stopByMode()
 
     def getLoop(self, loop):  # 获取事件循环
@@ -788,13 +791,14 @@ class MainWin:
 
     def onClose(self):  # 关闭窗口事件
         OCRe.stop()  # 强制关闭引擎进程，加快子线程结束
-        if OCRe.engFlag == EngFlag.none:  # 未在运行
+        if OCRe.engFlag == EngFlag.none and OCRe.msnFlag == MsnFlag.none:  # 未在运行
             self.win.destroy()  # 直接关闭
         else:
             self.win.after(50, self.waitClose)  # 等待关闭，50ms轮询一次是否已结束子线程
 
     def waitClose(self):  # 等待线程关闭后销毁窗口
-        if OCRe.engFlag == EngFlag.none:  # 未在运行
+        Log.info(f'关闭中，等待 {OCRe.engFlag} | {OCRe.msnFlag}')
+        if OCRe.engFlag == EngFlag.none and OCRe.msnFlag == MsnFlag.none:  # 未在运行
             self.win.destroy()  # 销毁窗口
         else:
             self.win.after(50, self.waitClose)  # 等待关闭，50ms轮询一次是否已结束子进程
@@ -813,16 +817,14 @@ class MainWin:
         self.textOutput.insert(tk.END, tipsText)
 
 
-# if __name__ == "__main__":
-#     Umi.ver = '测试'
-#     Umi.name = f'Umi-OCR v{Umi.ver}'
-#     # addImagesList()
+if __name__ == "__main__":
+    Umi.ver = '测试'
+    Umi.name = f'Umi-OCR v{Umi.ver}'
 
-#     def testADD():
-#         TestWin.addImagesList([
-#             'D:\图片\Screenshots',
-#         ])
-#     timer = threading.Timer(1, testADD)
-#     timer.start()
-
-#     MainWin()
+    def testADD():
+        TestWin.addImagesList([
+            'D:\图片\Screenshots',
+        ])
+    timer = threading.Timer(1, testADD)
+    timer.start()
+    MainWin()

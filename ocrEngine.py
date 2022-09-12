@@ -34,7 +34,6 @@ class OcrEngine:
         self.__ocrInfo = ()  # 记录之前的OCR参数
         self.__ramTips = ''  # 内存占用提示
         self.ocr = None  # OCR API对象
-        self.engFlag = EngFlag.none  # 引擎状态
         # self.msnFlag = MsnFlag.none  # 任务状态不能在这里改，可能引擎已经关了，任务线程还在继续
         self.setEngFlag(EngFlag.none)  # 通知关闭
 
@@ -60,12 +59,14 @@ class OcrEngine:
         if engFlag == EngFlag.initing:  # 启动中，刷新一下UI
             isTkUpdate = True
         Config.set('ocrProcessStatus', msg, isTkUpdate)  # 设置
+        Log.info(f'引擎 ⇒ {engFlag}')
 
     def setMsnFlag(self, msnFlag):
         '''更新任务状态并向主窗口通知'''
         self.msnFlag = msnFlag
         if self.winSetMsnFlag:
             self.winSetMsnFlag(msnFlag)
+        Log.info(f'任务 ⇒ {msnFlag}')
 
     def start(self):
         '''启动引擎。若引擎已启动，且参数有更新，则重启。'''
@@ -84,9 +85,14 @@ class OcrEngine:
             self.stop()  # 有变化则先停止OCR进程再启动
 
         self.__ocrInfo = info  # 记录参数。必须在stop()之后，以免被覆盖。
-        self.setEngFlag(EngFlag.initing)  # 通知启动中
         try:
+            self.setEngFlag(EngFlag.initing)  # 通知启动中
             self.ocr = OcrAPI(*self.__ocrInfo)  # 启动引擎
+            # 检查启动引擎这段时间里，引擎有没有被叫停
+            if not self.engFlag == EngFlag.initing:  # 状态被改变过了
+                Log.info('初始化后，引擎被叫停！{self.engFlag}')
+                self.stop()
+                return
             self.setEngFlag(EngFlag.waiting)  # 通知待命
         except Exception as e:
             self.stop()
@@ -94,7 +100,9 @@ class OcrEngine:
 
     def stop(self):
         '''立刻终止引擎'''
-        if self.msnFlag == MsnFlag.initing or self.msnFlag == MsnFlag.running:
+        if (self.msnFlag == MsnFlag.initing or self.msnFlag == MsnFlag.running)\
+                and not self.engFlag == EngFlag.none:
+            Log.info(f'引擎stop，停止任务！')
             self.setMsnFlag(MsnFlag.stopping)  # 设任务需要停止
         if hasattr(self.ocr, 'stop'):
             self.ocr.stop()
@@ -103,7 +111,8 @@ class OcrEngine:
 
     def stopByMode(self):
         '''根据配置模式决定是否停止引擎'''
-        if self.msnFlag == MsnFlag.initing or self.msnFlag == MsnFlag.running:
+        if self.msnFlag == MsnFlag.initing or self.msnFlag == MsnFlag.running\
+                and not self.engFlag == EngFlag.none:
             self.setMsnFlag(MsnFlag.stopping)  # 设任务需要停止
         n = Config.get('ocrRunModeName')
         modeDict = Config.get('ocrRunMode')
@@ -119,7 +128,11 @@ class OcrEngine:
             return {'code': 404, 'data': f'引擎未在运行'}
         self.setEngFlag(EngFlag.running)  # 通知工作
         data = self.ocr.run(path)
-        self.setEngFlag(EngFlag.waiting)  # 通知待命
+        # 有可能因为提早停止任务或关闭软件，引擎被关闭，OCR.run提前出结果
+        # 此时 engFlag 已经被主线程设为 none，如果再设waiting可能导致bug
+        # 所以检测一下是否还是正常的状态 running ，没问题才通知待命
+        if self.engFlag == EngFlag.running:
+            self.setEngFlag(EngFlag.waiting)  # 通知待命
         return data
 
     def runMission(self, paths, onStart=None, onGet=None, onStop=None, onError=None,
@@ -158,9 +171,10 @@ class OcrEngine:
                     onStop()
                 except Exception as e:
                     Log.error(f'任务线程 onClose() 异常： {e}')
+            Log.info(f'任务close！')
             self.setMsnFlag(MsnFlag.none)  # 设任务停止
 
-        # 启动OCR引擎
+        # 启动OCR引擎，批量任务初始化 =========================
         try:
             self.start()  # 启动或刷新引擎
         except Exception as e:
@@ -188,9 +202,11 @@ class OcrEngine:
         timeStart = time.time()  # 启动时间
         timeLast = timeStart  # 上一轮结束时间
 
+        # 检查启动引擎这段时间里，任务有没有被叫停 =========================
         if self.msnFlag == MsnFlag.stopping:  # 需要停止
             close()
             return
+        # 任务处理器初始化 =========================
         self.setMsnFlag(MsnFlag.running)  # 设任务运行
         if onStart:
             try:
@@ -198,6 +214,7 @@ class OcrEngine:
             except Exception as e:
                 Log.error(f'任务线程 onStart() 异常： {e}')
 
+        # 正式开始任务 =========================
         for path in paths:
             if self.msnFlag == MsnFlag.stopping:  # 需要停止
                 close()
@@ -263,5 +280,5 @@ if __name__ == "__main__":
 
     OCRe.runMission(['1'], start, get, close)
 
-t = threading.currentThread()
-print(f'主线程. id: {t.ident}  name:{t.getName()}')
+    t = threading.currentThread()
+    print(f'主线程. id: {t.ident}  name:{t.getName()}')
