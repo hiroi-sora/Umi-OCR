@@ -108,7 +108,6 @@ class OcrAPI:
 
     def stop(self):
         self.ret.kill()  # 关闭子进程。误重复调用似乎不会有坏的影响
-        print("kill OCR")
 
     def getRam(self):
         """返回内存占用，字符串"""
