@@ -1,3 +1,5 @@
+# 简中 PP-OCR v3
+
 # det 检测模型库
 det_model_dir ch_PP-OCRv3_det_infer
 

@@ -1,4 +1,5 @@
 import json
+from enum import Enum
 import tkinter as tk
 import tkinter.messagebox
 from locale import getdefaultlocale
@@ -11,6 +12,12 @@ class Umi:
     website = None
     about = None
     test = None  # 开发使用
+
+
+class RunModeFlag(Enum):
+    '''进程管理模式标志'''
+    short = 0  # 按需关闭（减少空闲时内存占用）
+    long = 1  # 后台常驻（大幅加快任务启动速度）
 
 
 # 配置文件路径
@@ -56,14 +63,14 @@ ConfigDict = {
     "ocrToolPath": "PaddleOCR-json/PaddleOCR_json.exe",  # 引擎路径
     "ocrRunModeName": "",  # 当前选择的进程管理策略
     "ocrRunMode": {
-        "按需关闭（减少空闲时内存占用）": 0,
-        "后台常驻（大幅加快任务启动速度）": 1,
+        "后台常驻（大幅加快任务启动速度）": RunModeFlag.long,
+        "按需关闭（减少空闲时内存占用）": RunModeFlag.short,
     },
     "ocrProcessStatus": "未启动",  # 进程运行状态字符串，由引擎单例传到tk窗口
     "ocrConfigName": "",  # 当前选择的配置文件的name。
     "ocrConfig": {  # 配置文件信息
         "简体中文": {
-            "path": "PaddleOCR_json_config_简体中文.txt"
+            "path": "PaddleOCR_json_config_ch.txt"
         }
     },
     "argsStr": "",  # 启动参数字符串
@@ -95,6 +102,9 @@ SaveItem = [
 
 class ConfigModule:
     sysEncoding = 'cp936'  # 系统编码。初始化时获取
+    # ↓ 在这些编码下能使用全部功能，其它编码不保证能使用如拖入含中文路径的图片等功能。
+    # ↓ 但识图功能是可以正常使用的。
+    sysEncodingSalf = ['cp936', 'cp65001']
 
     def __init__(self):
         self.optVar = {}
@@ -110,11 +120,6 @@ class ConfigModule:
             # https://docs.python.org/zh-cn/3.8/library/codecs.html#standard-encodings
             self.sysEncoding = getdefaultlocale()[1]
             print(f'获取系统编码：{self.sysEncoding}')
-            if not self.sysEncoding:  # 无法获取默认地区
-                tk.messagebox.showwarning(
-                    '警告',
-                    f'无法获取系统地区。将采用默认utf-8编码，这可能导致Umi-OCR读取图片路径错误。')
-                self.sysEncoding = 'utf-8'
         setSysEncoding()  # 初始化编码
 
         def load():
@@ -134,7 +139,16 @@ class ConfigModule:
                     exit(0)
             except FileNotFoundError:  # 无配置文件
                 self.save()
+                # 当成是首次启动软件，提示
+                if self.sysEncoding not in self.sysEncodingSalf:  # 不安全的地区
+                    tk.messagebox.showwarning(
+                        '警告',
+                        f'您的系统地区编码为[{self.sysEncoding}]，可能导致拖入图片的功能异常，建议使用浏览按钮导入图片。其它功能应该能正常使用。')
         load()  # 加载配置文件
+
+        if not self.sysEncoding:  # 无法获取地区，赋默认值
+            self.sysEncoding = 'utf-8'
+
         for key in optVar:
             if key in ConfigDict:
                 optVar[key].set(ConfigDict[key])
