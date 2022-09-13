@@ -1,6 +1,6 @@
 from logger import GetLog
 from operator import eq
-from config import Config
+from config import Config, RunModeFlag
 from ocrAPI import OcrAPI
 
 import time
@@ -30,18 +30,22 @@ class MsnFlag(Enum):
 class OcrEngine:
     '''OCR引擎，含各种操作的方法'''
 
+    def __init__(self):
+        # self.__initVar() # 不能使用__initVar，不能调用self.setEngFlag()，因为不能保证主tk已经启动事件循环
+        self.__ocrInfo = ()  # 记录之前的OCR参数
+        self.__ramTips = ''  # 内存占用提示
+        self.__runMissionLoop = None  # 批量识别的事件循环
+        self.ocr = None  # OCR API对象
+        self.winSetMsnFlag = None
+        self.engFlag = EngFlag.none
+        self.msnFlag = MsnFlag.none
+
     def __initVar(self):
         self.__ocrInfo = ()  # 记录之前的OCR参数
         self.__ramTips = ''  # 内存占用提示
         self.ocr = None  # OCR API对象
         # self.msnFlag = MsnFlag.none  # 任务状态不能在这里改，可能引擎已经关了，任务线程还在继续
         self.setEngFlag(EngFlag.none)  # 通知关闭
-
-    def __init__(self):
-        self.__initVar()
-        self.winSetMsnFlag = None
-        self.__runMissionLoop = None  # 批量识别的事件循环
-        self.msnFlag = MsnFlag.none
 
     def setEngFlag(self, engFlag):
         '''更新引擎状态并向主窗口通知'''
@@ -82,7 +86,7 @@ class OcrEngine:
         if self.ocr:  # OCR进程已启动
             if not isUpdate:  # 无变化则放假
                 return
-            self.stop()  # 有变化则先停止OCR进程再启动
+            self.stop(True)  # 有变化则先停止OCR进程再启动。传入T表示是在重启，无需中断任务。
 
         self.__ocrInfo = info  # 记录参数。必须在stop()之后，以免被覆盖。
         try:
@@ -98,10 +102,10 @@ class OcrEngine:
             self.stop()
             raise
 
-    def stop(self):
-        '''立刻终止引擎'''
+    def stop(self, isRestart=False):
+        '''立刻终止引擎。isRE为T时表示这是在重启，无需中断任务。'''
         if (self.msnFlag == MsnFlag.initing or self.msnFlag == MsnFlag.running)\
-                and not self.engFlag == EngFlag.none:
+                and not self.engFlag == EngFlag.none and not isRestart:
             Log.info(f'引擎stop，停止任务！')
             self.setMsnFlag(MsnFlag.stopping)  # 设任务需要停止
         if hasattr(self.ocr, 'stop'):
@@ -118,7 +122,7 @@ class OcrEngine:
         modeDict = Config.get('ocrRunMode')
         if n in modeDict.keys():
             mode = modeDict[n]
-            if mode == 0:  # 按需关闭
+            if mode == RunModeFlag.short:  # 按需关闭
                 self.stop()
 
     def run(self, path):
@@ -139,6 +143,7 @@ class OcrEngine:
                    winSetMsnFlag=None):
         '''批量识别多张图片，异步。若引擎未启动，则自动启动'''
         if not self.msnFlag == MsnFlag.none:  # 正在运行
+            Log.error(f'已有任务未结束就开始了下一轮任务')
             raise Exception('已有任务未结束')
 
         self.winSetMsnFlag = winSetMsnFlag  # 获取UI任务状态接口
@@ -178,6 +183,7 @@ class OcrEngine:
         try:
             self.start()  # 启动或刷新引擎
         except Exception as e:
+            Log.error(f'批量任务启动引擎失败：{e}')
             close()
             if onError:
                 try:
