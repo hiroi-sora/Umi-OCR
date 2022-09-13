@@ -192,5 +192,7 @@ class MsnBatch(Msn):
         self.__output(dataStr, "text")
 
     def onStop(self):
+        stopStr = f"\n任务结束时间：{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))}\n"
+        self.__output(stopStr, "text")
         Log.info('msnB: onClose')
         self.setRunning(MsnFlag.none)
