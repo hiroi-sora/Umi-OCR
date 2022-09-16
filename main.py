@@ -17,5 +17,4 @@ def main():
 if __name__ == "__main__":
     main()
 
-# cd /d D:\MyCode\PythonCode\Umi-OCR
-# pyinstaller -F -w -i icon/icon.ico -n "Umi-OCR 批量图片转文字" main.py
+# 打包使用 to_exe.py
