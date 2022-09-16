@@ -85,12 +85,14 @@ class MainWin:
 
         self.notebook = ttk.Notebook(self.win)  # 初始化选项卡组件
         self.notebook.pack(expand=True, fill=tk.BOTH)  # 填满父组件
+        self.notebookTab = []
 
         def initTab1():  # 表格卡
-            self.tabFrameTable = tk.Frame(self.notebook)  # 选项卡主容器
-            self.notebook.add(self.tabFrameTable, text=f'{"处理列表": ^10s}')
+            tabFrameTable = tk.Frame(self.notebook)  # 选项卡主容器
+            self.notebookTab.append(tabFrameTable)
+            self.notebook.add(tabFrameTable, text=f'{"处理列表": ^10s}')
             # 顶栏
-            fr1 = tk.Frame(self.tabFrameTable)
+            fr1 = tk.Frame(tabFrameTable)
             fr1.pack(side='top', fill='x', pady=2)
             btn = tk.Button(fr1, text=' 浏览 ',  command=self.openFileWin)
             btn.pack(side='left', padx=5)
@@ -103,7 +105,7 @@ class MainWin:
             btn.pack(side='right', padx=5)
             self.lockWidget.append(btn)
             # 表格主体
-            fr2 = tk.Frame(self.tabFrameTable)
+            fr2 = tk.Frame(tabFrameTable)
             fr2.pack(side='top', fill='both')
             self.table = ttk.Treeview(
                 master=fr2,  # 父容器
@@ -126,9 +128,10 @@ class MainWin:
         initTab1()
 
         def initTab2():  # 输出卡
-            self.tabFrameOutput = tk.Frame(self.notebook)  # 选项卡主容器
-            self.notebook.add(self.tabFrameOutput, text=f'{"识别内容": ^10s}')
-            fr1 = tk.Frame(self.tabFrameOutput)
+            tabFrameOutput = tk.Frame(self.notebook)  # 选项卡主容器
+            self.notebookTab.append(tabFrameOutput)
+            self.notebook.add(tabFrameOutput, text=f'{"识别内容": ^10s}')
+            fr1 = tk.Frame(tabFrameOutput)
             fr1.pack(side='top', fill='x', pady=2)
             self.isAutoRoll = tk.IntVar()
             self.isAutoRoll.set(1)
@@ -140,7 +143,7 @@ class MainWin:
                       command=lambda: pyperclipCopy(self.textOutput.get("1.0", tk.END))).pack(side='right', padx=5)
             tk.Button(fr1, text='剪贴板读取', width=10,
                       command=self.runClipboard).pack(side='right', padx=5)
-            fr2 = tk.Frame(self.tabFrameOutput)
+            fr2 = tk.Frame(tabFrameOutput)
             fr2.pack(side='top', fill='both')
             vbar = tk.Scrollbar(fr2, orient='vertical')  # 滚动条
             vbar.pack(side="right", fill='y')
@@ -151,15 +154,16 @@ class MainWin:
         initTab2()
 
         def initTab3():  # 设置卡
-            tabFrame = tk.Frame(self.notebook)  # 选项卡主容器
-            self.notebook.add(tabFrame, text=f'{"设置": ^10s}')
+            tabFrameConfig = tk.Frame(self.notebook)  # 选项卡主容器
+            self.notebookTab.append(tabFrameConfig)
+            self.notebook.add(tabFrameConfig, text=f'{"设置": ^10s}')
 
             def initOptFrame():  # 初始化可滚动画布 及 内嵌框架
                 optVbar = tk.Scrollbar(
-                    tabFrame, orient="vertical")  # 创建滚动条
+                    tabFrameConfig, orient="vertical")  # 创建滚动条
                 optVbar.pack(side="right", fill="y")
                 self.optCanvas = tk.Canvas(
-                    tabFrame, highlightthickness=0)  # 创建画布，用于承载框架。highlightthickness取消高亮边框
+                    tabFrameConfig, highlightthickness=0)  # 创建画布，用于承载框架。highlightthickness取消高亮边框
                 self.optCanvas.pack(side="left", fill="both",
                                     expand="yes")  # 填满父窗口
                 self.optCanvas["yscrollcommand"] = optVbar.set  # 绑定滚动条
@@ -480,7 +484,7 @@ class MainWin:
             tk.messagebox.showwarning(
                 '任务进行中', '请停止任务后，再拖入图片')
             return
-        self.notebook.select(self.tabFrameTable)  # 切换到表格选项卡
+        self.notebook.select(self.notebookTab[0])  # 切换到表格选项卡
         pathList = []
         for p in paths:  # byte转字符串
             pathList.append(p.decode(Config.sysEncoding,  # 根据系统编码来解码
@@ -567,7 +571,7 @@ class MainWin:
         self.clearTable()  # 清空表格
         self.addImagesList([imgPath])  # 加入表格
         self.run()  # 开始执行
-        self.notebook.select(self.tabFrameOutput)  # 转到输出卡
+        self.notebook.select(self.notebookTab[1])  # 转到输出卡
 
     # 忽略区域 ===============================================
 
@@ -753,7 +757,7 @@ class MainWin:
             tk.messagebox.showwarning(
                 '任务进行中', '请停止任务后，再打开软件说明')
             return
-        self.notebook.select(self.tabFrameOutput)  # 切换到输出选项卡
+        self.notebook.select(self.notebookTab[1])  # 切换到输出选项卡
         outputNow = self.textOutput.get("1.0", tk.END)
         if outputNow and not outputNow == "\n":  # 输出面板内容存在，且不是单换行（初始状态）
             if not tkinter.messagebox.askokcancel('提示', '将清空输出面板。要继续吗？'):
