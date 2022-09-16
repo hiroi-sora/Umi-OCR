@@ -164,6 +164,18 @@ _ConfigDict = {
         'isSave': True,
         'isTK': True,
     },
+
+    # 提示信息
+    'tipsTop1': {  # 主窗口顶部进度条上方的label，左侧
+        'default': '',
+        'isSave': False,
+        'isTK': True,
+    },
+    'tipsTop2': {  # 主窗口顶部进度条上方的label，右侧
+        'default': '欢迎使用Umi-OCR ~',
+        'isSave': False,
+        'isTK': True,
+    },
 }
 
 
@@ -218,6 +230,8 @@ class ConfigModule:
                 self.tkDict[key] = tk.IntVar()
             else:  # 给开发者提醒
                 raise Exception(f'配置项{key}要生成tk变量，但类型不合法！')
+            # 赋予初值
+            self.tkDict[key].set(self.optDict[key])
             # 跟踪值改变事件
             self.tkDict[key].trace(
                 "w", lambda *e, key=key: onTkVarChange(key))

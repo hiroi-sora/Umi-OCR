@@ -11,9 +11,9 @@ Log = GetLog()
 
 class MsnBatch(Msn):
 
-    def __init__(self, mainWin, batList, setTableItem, textOutputInsert,
-                 setRunning, clearTableItem):
-        self.win = mainWin
+    def __init__(self, batList, setTableItem, textOutputInsert,
+                 setRunning, clearTableItem, progressbar):
+        self.progressbar = progressbar  # 进度条组件
         self.batList = batList
         self.setTableItem = setTableItem
         self.textOutputInsert = textOutputInsert
@@ -135,11 +135,12 @@ class MsnBatch(Msn):
 
     def onStart(self, num):
         Log.info('msnB: onStart')
-        # 重置UI显示
-        self.win.progressbar["maximum"] = num['all']
-        self.win.progressbar["value"] = 0
-        self.win.labelFractions["text"] = f"0/{num['all']}"
-        self.win.labelTime["text"] = "0s"
+        # 重置进度提示
+        self.progressbar["maximum"] = num['all']
+        self.progressbar["value"] = 0
+        Config.set('tipsTop1', f'0s  0/{num["all"]}')
+        Config.set('tipsTop2', f'0%')
+
         self.clearTableItem()  # 清空表格参数
         startStr = f"任务开始时间：{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))}\n"
         self.__output(startStr, "text")
@@ -157,10 +158,11 @@ class MsnBatch(Msn):
 
     def onGet(self, num, data):
         Log.info('msnB: onGet')
-        self.win.progressbar["value"] = num['now']
-        self.win.labelPercentage["text"] = f"{round((num['now']/num['all'])*100)}%"
-        self.win.labelFractions["text"] = f"{num['now']}/{num['all']}"
-        self.win.labelTime["text"] = f"{round(num['time'], 2)}s"
+        self.progressbar["value"] = num['now']
+        # 刷新进度提示
+        Config.set('tipsTop2', f'{round((num["now"]/num["all"])*100)}%')
+        Config.set(
+            'tipsTop1', f'{round(num["time"], 2)}s  {num["now"]}/{num["all"]}')
         # 分析数据
         value = self.batList.get(index=num['index'])
         dataStr = ""
@@ -180,8 +182,6 @@ class MsnBatch(Msn):
         # 写入表格
         self.setTableItem(time=str(num['timeNow'])[:4],
                           score=score[:4], index=num['index'])
-        # self.win.table.set(key, column='time', value=)
-        # self.win.table.set(key, column='score', value=)
         # 格式化输出
         if self.isIgnoreNoText and not dataStr:
             return  # 忽略无字图片

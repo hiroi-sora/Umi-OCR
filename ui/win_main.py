@@ -73,12 +73,11 @@ class MainWin:
             labelUse.pack(side='left', padx=5)
             labelUse.bind(
                 '<Button-1>', lambda *e: self.showTips(GetHelpText(Umi.website)))  # 绑定鼠标左键点击
-            self.labelPercentage = tk.Label(vFrame2, text="0%")  # 进度百分比 99%
-            self.labelPercentage.pack(side='right', padx=2)
-            self.labelFractions = tk.Label(vFrame2, text="0/0")  # 进度分数 99/100
-            self.labelFractions.pack(side='right')
-            self.labelTime = tk.Label(vFrame2, text="0s")  # 已用时间 12.3s
-            self.labelTime.pack(side='right', padx=5)
+            # 进度条上方的两个label
+            tk.Label(vFrame2, textvariable=Config.getTK('tipsTop2')).pack(
+                side='right', padx=2)
+            tk.Label(vFrame2, textvariable=Config.getTK('tipsTop1')).pack(
+                side='right', padx=2)
             self.progressbar = ttk.Progressbar(fr)
             self.progressbar.pack(side='top', padx=5, fill="x")
         initTop()
@@ -614,9 +613,8 @@ class MainWin:
         if not self.isRunning == 0:
             return
         self.progressbar["value"] = 0
-        self.labelPercentage["text"] = "0%"
-        self.labelFractions["text"] = "0/0"
-        self.labelTime["text"] = "0s"
+        Config.set('tipsTop1', '')
+        Config.set('tipsTop2', '请导入文件')
         Config.set("outputFilePath", "")
         Config.set("outputFileName", "")
         self.batList.clear()
@@ -658,7 +656,7 @@ class MainWin:
         def setNone():
             self.btnRun['text'] = '开始任务'
             self.btnRun['state'] = 'normal'
-            self.labelPercentage["text"] = "已终止"
+            Config.set('tipsTop2', '已结束')
             return 'normal'
 
         def setIniting():
@@ -666,7 +664,7 @@ class MainWin:
             # self.btnRun['state'] = 'disable'
             self.btnRun['text'] = '停止任务'
             self.btnRun['state'] = 'normal'
-            self.labelPercentage["text"] = "初始化"
+            Config.set('tipsTop2', '初始化')
             return 'disable'
 
         def setRunning():
@@ -723,9 +721,9 @@ class MainWin:
             # 锁定UI
             # self.setRunning(MsnFlag.initing)
             # 初始化文本处理器
-            tb = MsnBatch(self, self.batList, self.setTableItem,
+            tb = MsnBatch(self.batList, self.setTableItem,
                           self.textOutputInsert, self.setRunning,
-                          self.clearTableItem)
+                          self.clearTableItem, self.progressbar)
             # 开始运行
             paths = self.batList.getItemValueList('path')
             OCRe.runMission(paths,
