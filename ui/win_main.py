@@ -8,7 +8,6 @@ from ocr.msn_batch_paths import MsnBatch
 
 import os
 import time
-import asyncio  # 异步
 import keyboard  # 绑定快捷键
 from PIL import Image, ImageGrab  # 图像，剪贴板
 import tkinter as tk
@@ -53,56 +52,9 @@ class MainWin:
 
         TestDict['MainWin'] = self  # 暴露 self 给测试接口
 
-        # 2.初始化变量、配置项
-        def initVar():
-            self.cfgVar = {  # 设置项tk变量
-                # 计划任务设置
-                "isOpenExplorer": tk.BooleanVar(),  # T时任务完成后打开资源管理器到输出目录。isOutputFile为T时才管用
-                "isOpenOutputFile": tk.BooleanVar(),  # T时任务完成后打开输出文件。isOutputFile为T时才管用
-                "okMissionName": tk.StringVar(),  # 当前选择的计划任务的name。
-                "isOkMission": tk.BooleanVar(),  # T时本次任务完成后执行指定任务。
-                # 读取剪贴板设置
-                "isGlobalHotkey": tk.BooleanVar(),  # T时绑定全局快捷键
-                "isNeedCopy": tk.BooleanVar(),  # T时识别完成后自动复制文字
-                "globalHotkey": tk.StringVar(),  # 全局快捷键
-                # 输入文件设置
-                "isRecursiveSearch": tk.BooleanVar(),  # T时导入文件夹将递归查找子文件夹中所有图片
-                # 输出文件设置
-                "isOutputFile": tk.BooleanVar(),  # T时输出内容写入本地文件
-                "outputFilePath": tk.StringVar(),  # 输出文件目录
-                "outputFileName": tk.StringVar(),  # 输出文件名称
-                # 输出格式设置
-                "isOutputDebug": tk.BooleanVar(),  # T时输出调试信息
-                "isIgnoreNoText": tk.BooleanVar(),  # T时忽略(不输出)没有文字的图片信息
-                "outputStyle": tk.IntVar(),  # 1：纯文本，2：Markdown
-                # 识别器设置
-                "ocrConfigName": tk.StringVar(),  # 参数文件
-                "argsStr": tk.StringVar(),  # 启动参数字符串
-                "imageSuffix": tk.StringVar(),  # 图片后缀
-                "ocrRunModeName": tk.StringVar(),  # 进程管理策略
-                "ocrProcessStatus": tk.StringVar(),  # 进程运行状态
-            }
-            Config.initValue(self.cfgVar, self.win.update)  # 初始化设置项
-
-            # 面板值改变时，更新到配置值，并写入本地
-            self.saveTimer = None  # 计时器，改变面板值一段时间后写入本地
-
-            def configSave():  # 保存值的事件
-                Config.save()
-                self.saveTimer = None
-
-            def valueChange(key):  # 值改变的事件
-                Config.update(key)  # 更新配置项
-                if Config.isSaveItem(key):
-                    if self.saveTimer:  # 计时器已存在，则停止已存在的
-                        self.win.after_cancel(self.saveTimer)
-                        self.saveTimer = None
-                    self.saveTimer = self.win.after(200, configSave)
-            for key in self.cfgVar:
-                self.cfgVar[key].trace(  # 跟踪值改变事件
-                    "w", lambda *e, key=key: valueChange(key))
-            self.isNeedCopy = False  # 标志值，T时识图后复制文字
-        initVar()
+        # 2.初始化配置项
+        Config.initTK(self.win)  # 初始化设置项
+        Config.load()  # 加载本地文件
 
         # 3.初始化组件
         def initTop():  # 顶部按钮
@@ -228,17 +180,17 @@ class MainWin:
                 fr1 = tk.Frame(frameScheduler)
                 fr1.pack(side='top', fill='x', pady=2, padx=5)
                 tk.Checkbutton(fr1, text="完成后打开文件",
-                               variable=self.cfgVar["isOpenOutputFile"]).pack(side='left')
+                               variable=Config.getTK('isOpenOutputFile')).pack(side='left')
                 tk.Checkbutton(fr1, text="完成后打开目录",
-                               variable=self.cfgVar["isOpenExplorer"],).pack(side='left', padx=15)
+                               variable=Config.getTK('isOpenExplorer'),).pack(side='left', padx=15)
 
                 fr2 = tk.Frame(frameScheduler)
                 fr2.pack(side='top', fill='x', pady=2, padx=5)
                 tk.Checkbutton(fr2, text="本次完成后执行",
-                               variable=self.cfgVar["isOkMission"]).pack(side='left')
+                               variable=Config.getTK('isOkMission')).pack(side='left')
                 okMissionDict = Config.get("okMission")
                 okMissionNameList = [i for i in okMissionDict.keys()]
-                wid = ttk.Combobox(fr2, width=10, state="readonly", textvariable=self.cfgVar["okMissionName"],
+                wid = ttk.Combobox(fr2, width=10, state="readonly", textvariable=Config.getTK('okMissionName'),
                                    value=okMissionNameList)
                 wid.pack(side='left')
                 if Config.get("okMissionName") not in okMissionNameList:
@@ -321,11 +273,11 @@ class MainWin:
                                     ipady=2, pady=LabelFramePadY, padx=4)
                 fr1 = tk.Frame(areaLabel)
                 fr1.pack(side='top', fill='x', pady=2, padx=5)
-                wid = tk.Checkbutton(fr1, variable=self.cfgVar["isGlobalHotkey"],
+                wid = tk.Checkbutton(fr1, variable=Config.getTK('isGlobalHotkey'),
                                      text="启用全局快捷键（在其它窗口也可响应）", command=updateHotket)
                 wid.grid(column=0, row=0, columnspan=9, sticky="w")
                 self.lockWidget.append(wid)
-                wid = tk.Checkbutton(fr1, variable=self.cfgVar["isNeedCopy"],
+                wid = tk.Checkbutton(fr1, variable=Config.getTK('isNeedCopy'),
                                      text="自动复制识别文本")
                 wid.grid(column=0, row=1, columnspan=9, sticky="w")
                 self.lockWidget.append(wid)
@@ -333,7 +285,7 @@ class MainWin:
                                 command=readHotkey)
                 wid.grid(column=0, row=2, sticky="w")
                 self.lockWidget.append(wid)
-                tk.Label(fr1, textvariable=self.cfgVar["globalHotkey"]).grid(
+                tk.Label(fr1, textvariable=Config.getTK('globalHotkey')).grid(
                     column=2, row=2,  sticky="nsew")
                 wid = tk.Button(fr1, text='清除', width=8,
                                 command=delHotkey)
@@ -351,13 +303,13 @@ class MainWin:
                 fr1 = tk.Frame(frameInFile)
                 fr1.pack(side='top', fill='x', pady=2, padx=5)
                 wid = tk.Checkbutton(
-                    fr1, variable=self.cfgVar["isRecursiveSearch"], text="递归读取子文件夹中所有图片")
+                    fr1, variable=Config.getTK('isRecursiveSearch'), text="递归读取子文件夹中所有图片")
                 wid.grid(column=0, row=0, columnspan=2, sticky="w")
                 self.lockWidget.append(wid)
 
                 tk.Label(fr1, text="图片后缀：　").grid(column=0, row=2, sticky="w")
                 enInSuffix = tk.Entry(
-                    fr1, textvariable=self.cfgVar["imageSuffix"])
+                    fr1, textvariable=Config.getTK('imageSuffix'))
                 enInSuffix.grid(column=1, row=2, sticky="nsew")
                 self.lockWidget.append(enInSuffix)
 
@@ -372,23 +324,23 @@ class MainWin:
                 fr1 = tk.Frame(frameOutFile)
                 fr1.pack(side='top', fill='x', pady=2, padx=5)
                 wid = tk.Checkbutton(
-                    fr1, variable=self.cfgVar["isOutputFile"], text="将识别内容写入本地文件")
+                    fr1, variable=Config.getTK('isOutputFile'), text="将识别内容写入本地文件")
                 wid.grid(column=0, row=0, columnspan=2, sticky="w")
                 self.lockWidget.append(wid)
                 wid = tk.Checkbutton(fr1, text="输出调试信息",
-                                     variable=self.cfgVar["isOutputDebug"])
+                                     variable=Config.getTK('isOutputDebug'))
                 wid.grid(column=0, row=1, sticky="w")
                 self.lockWidget.append(wid)
                 wid = tk.Checkbutton(fr1, text="忽略无文字的图片",
-                                     variable=self.cfgVar["isIgnoreNoText"],)
+                                     variable=Config.getTK('isIgnoreNoText'),)
                 wid.grid(column=1, row=1, sticky="w")
                 self.lockWidget.append(wid)
                 wid = tk.Radiobutton(
-                    fr1, text='纯文本.txt文件', value=1, variable=self.cfgVar["outputStyle"],)
+                    fr1, text='纯文本.txt文件', value=1, variable=Config.getTK('outputStyle'),)
                 wid.grid(column=0, row=3, sticky="w")
                 self.lockWidget.append(wid)
                 wid = tk.Radiobutton(
-                    fr1, text='Markdown风格.md文件', value=2, variable=self.cfgVar["outputStyle"],)
+                    fr1, text='Markdown风格.md文件', value=2, variable=Config.getTK('outputStyle'),)
                 wid.grid(column=1, row=3, sticky="w")
                 self.lockWidget.append(wid)
                 tk.Label(fr1, fg="gray",
@@ -399,13 +351,13 @@ class MainWin:
                 fr2.pack(side='top', fill='x', pady=2, padx=5)
                 tk.Label(fr2, text="输出目录：").grid(column=0, row=3, sticky="w")
                 enOutPath = tk.Entry(
-                    fr2, textvariable=self.cfgVar["outputFilePath"])
+                    fr2, textvariable=Config.getTK('outputFilePath'))
                 enOutPath.grid(column=1, row=3,  sticky="nsew")
                 self.lockWidget.append(enOutPath)
                 fr2.grid_rowconfigure(4, minsize=2)  # 第二行拉开间距
                 tk.Label(fr2, text="输出文件名：").grid(column=0, row=5, sticky="w")
                 enOutName = tk.Entry(
-                    fr2, textvariable=self.cfgVar["outputFileName"])
+                    fr2, textvariable=Config.getTK('outputFileName'))
                 enOutName.grid(column=1, row=5, sticky="nsew")
                 self.lockWidget.append(enOutName)
                 fr2.grid_columnconfigure(1, weight=1)  # 第二列自动扩充
@@ -422,7 +374,7 @@ class MainWin:
                     column=0, row=0, sticky="w")
                 ocrConfigDict = Config.get("ocrConfig")
                 ocrConfigNameList = [i for i in ocrConfigDict]
-                cbox = ttk.Combobox(fr1, width=10, state="readonly", textvariable=self.cfgVar["ocrConfigName"],
+                cbox = ttk.Combobox(fr1, width=10, state="readonly", textvariable=Config.getTK('ocrConfigName'),
                                     value=ocrConfigNameList)
                 cbox.grid(column=1, row=0,  sticky="nsew")
                 if Config.get("ocrConfigName") not in ocrConfigNameList:
@@ -432,7 +384,7 @@ class MainWin:
                 tk.Label(fr1, text="启动参数：　").grid(
                     column=0, row=2, sticky="w")
                 argsStr = tk.Entry(
-                    fr1, textvariable=self.cfgVar["argsStr"])
+                    fr1, textvariable=Config.getTK('argsStr'))
                 argsStr.grid(column=1, row=2, sticky="nsew")
                 self.lockWidget.append(argsStr)
 
@@ -446,7 +398,7 @@ class MainWin:
                     column=0, row=6, sticky="w")
                 ocrRunModeDict = Config.get("ocrRunMode")
                 ocrRunModeNameList = [i for i in ocrRunModeDict]
-                cboxR = ttk.Combobox(fr1, width=10, state="readonly", textvariable=self.cfgVar["ocrRunModeName"],
+                cboxR = ttk.Combobox(fr1, width=10, state="readonly", textvariable=Config.getTK('ocrRunModeName'),
                                      value=ocrRunModeNameList)
                 cboxR.grid(column=1, row=6,  sticky="nsew")
                 if Config.get("ocrRunModeName") not in ocrRunModeNameList:
@@ -458,7 +410,7 @@ class MainWin:
                 frState.grid(column=0, row=7, columnspan=2, sticky="nsew")
                 tk.Label(frState, text="子进程状态：").pack(
                     side='left')
-                tk.Label(frState, textvariable=self.cfgVar["ocrProcessStatus"]).pack(
+                tk.Label(frState, textvariable=Config.getTK('ocrProcessStatus')).pack(
                     side='left')
                 labStop = tk.Label(frState, text="强制停止",
                                    cursor="hand2", fg="red")
@@ -610,9 +562,6 @@ class MainWin:
                     os.remove(p)
         imgPath = f"{TempFilePath}\\temp_{int(time.time()*1000)}.png"
         img.save(imgPath)
-        # 刷新自动复制
-        if Config.get("isNeedCopy"):
-            self.isNeedCopy = True
         # 载入队列
         imgPath = os.path.abspath(imgPath)  # 转绝对路径
         self.clearTable()  # 清空表格
@@ -782,11 +731,6 @@ class MainWin:
         # 允许任务进行中或初始化的中途停止任务
         elif OCRe.msnFlag == MsnFlag.running or OCRe.msnFlag == MsnFlag.initing:
             OCRe.stopByMode()
-
-    def getLoop(self, loop):  # 获取事件循环
-        self.loop = loop
-        asyncio.set_event_loop(self.loop)
-        self.loop.run_forever()
 
     def onClose(self):  # 关闭窗口事件
         OCRe.stop()  # 强制关闭引擎进程，加快子线程结束
