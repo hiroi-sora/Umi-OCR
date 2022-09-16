@@ -176,8 +176,8 @@ class OcrEngine:
                     onStop()
                 except Exception as e:
                     Log.error(f'任务线程 onClose() 异常： {e}')
-            Log.info(f'任务close！')
             self.setMsnFlag(MsnFlag.none)  # 设任务停止
+            Log.info(f'任务close！')
 
         # 启动OCR引擎，批量任务初始化 =========================
         try:

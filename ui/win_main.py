@@ -799,6 +799,8 @@ class MainWin:
         Log.info(f'关闭中，等待 {OCRe.engFlag} | {OCRe.msnFlag}')
         if OCRe.engFlag == EngFlag.none and OCRe.msnFlag == MsnFlag.none:  # 未在运行
             self.win.destroy()  # 销毁窗口
+            Log.info(f'主窗 exit =====================')
+            exit(0)
         else:
             self.win.after(50, self.waitClose)  # 等待关闭，50ms轮询一次是否已结束子进程
 
