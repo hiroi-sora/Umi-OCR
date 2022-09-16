@@ -269,22 +269,3 @@ class OcrEngine:
 
 
 OCRe = OcrEngine()  # 引擎单例
-
-
-if __name__ == "__main__":
-    Config.initValue({}, None)
-    OCRe.start()
-
-    def start(*e):
-        print(f'\nin 开始！\n    {e}')
-
-    def get(*e):
-        print(f'\nin 取得！\n    {e}')
-
-    def close(*e):
-        print(f'\nin 关闭！\n    {e}')
-
-    OCRe.runMission(['1'], start, get, close)
-
-    t = threading.currentThread()
-    print(f'主线程. id: {t.ident}  name:{t.getName()}')

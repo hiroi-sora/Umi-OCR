@@ -302,10 +302,3 @@ class IgnoreAreaWin:
         # 刷新历史记录中最后的图形的坐标
         self.canvas.coords(self.areaHistory[-1]["id"], x0, y0, x, y)
         self.area[self.areaType][-1][1] = (x, y)  # 刷新右下角点
-
-
-# 测试
-if __name__ == "__main__":
-    Config.initValue({})
-    # Config.set('argsStr', '--Error')
-    IgnoreAreaWin()

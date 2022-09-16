@@ -1,4 +1,3 @@
-
 from utils.config import Config, Umi  # 最先加载配置
 from utils.logger import GetLog
 from utils.asset import *  # 资源
@@ -10,7 +9,6 @@ from ocr.msn_batch_paths import MsnBatch
 import os
 import time
 import asyncio  # 异步
-import threading  # 线程
 import keyboard  # 绑定快捷键
 from PIL import Image, ImageGrab  # 图像，剪贴板
 import tkinter as tk
@@ -20,9 +18,9 @@ from windnd import hook_dropfiles  # 文件拖拽
 from pyperclip import copy as pyperclipCopy  # 剪贴板
 from webbrowser import open as webOpen  # “关于”面板打开项目网址
 
-TempFilePath = "Umi-OCR_temp"
+TestDict = {}  # 测试接口，用于暴露内部变量给测试器
 
-TestWin = None  # 用来测试的全局变量
+TempFilePath = "Umi-OCR_temp"
 Log = GetLog()
 
 
@@ -34,8 +32,9 @@ class MainWin:
         self.lockWidget = []  # 需要运行时锁定的组件
 
         # 1.初始化主窗口
+        self.win = tk.Tk()
+
         def initWin():
-            self.win = tk.Tk()
             self.win.title(Umi.name)
             # 窗口大小与位置
             w, h = 360, 500  # 窗口初始大小与最小大小
@@ -51,8 +50,8 @@ class MainWin:
             # 注册文件拖入，整个主窗口内有效
             hook_dropfiles(self.win, func=self.draggedImages)
         initWin()
-        global TestWin
-        TestWin = self
+
+        TestDict['MainWin'] = self  # 暴露 self 给测试接口
 
         # 2.初始化变量、配置项
         def initVar():
@@ -815,16 +814,3 @@ class MainWin:
                 return
             self.textOutput.delete('1.0', tk.END)
         self.textOutput.insert(tk.END, tipsText)
-
-
-if __name__ == "__main__":
-    Umi.ver = '测试'
-    Umi.name = f'Umi-OCR v{Umi.ver}'
-
-    def testADD():
-        TestWin.addImagesList([
-            'D:\图片\Screenshots',
-        ])
-    timer = threading.Timer(1, testADD)
-    timer.start()
-    MainWin()
