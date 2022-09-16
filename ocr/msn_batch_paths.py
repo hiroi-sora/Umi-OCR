@@ -1,7 +1,7 @@
-from config import Config
-from logger import GetLog
-from ocrEngine import MsnFlag
-from msn import Msn
+from utils.config import Config
+from utils.logger import GetLog
+from ocr.engine import MsnFlag
+from ocr.msn import Msn
 
 import tkinter as tk
 import time

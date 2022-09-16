@@ -1,6 +1,6 @@
-from ocrEngine import OCRe  # 引擎单例
-from asset import IconPngBase64  # 资源
-from config import Config
+from ocr.engine import OCRe  # 引擎单例
+from utils.asset import IconPngBase64  # 资源
+from utils.config import Config
 
 import tkinter as tk
 import tkinter.messagebox

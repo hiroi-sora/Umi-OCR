@@ -1,11 +1,11 @@
-from logger import GetLog
-from operator import eq
-from config import Config, RunModeFlag
-from ocrAPI import OcrAPI
+from utils.logger import GetLog
+from utils.config import Config, RunModeFlag
+from ocr.api_ppocr_json import OcrAPI
 
 import time
 import asyncio
 import threading
+from operator import eq
 from enum import Enum
 
 Log = GetLog()

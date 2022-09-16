@@ -1,11 +1,11 @@
 
-from config import Config, Umi  # 最先加载配置
-from logger import GetLog
-from uiSelectArea import IgnoreAreaWin  # 子窗口
-from asset import *  # 资源
-from ocrEngine import OCRe, MsnFlag, EngFlag  # 引擎
-from msnBatch import MsnBatch
-from dataStructure import KeyList
+from utils.config import Config, Umi  # 最先加载配置
+from utils.logger import GetLog
+from utils.asset import *  # 资源
+from utils.data_structure import KeyList
+from ui.win_select_area import IgnoreAreaWin  # 子窗口
+from ocr.engine import OCRe, MsnFlag, EngFlag  # 引擎
+from ocr.msn_batch_paths import MsnBatch
 
 import os
 import time
