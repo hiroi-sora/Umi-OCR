@@ -1,0 +1,5 @@
+keyboard==0.13.5
+Pillow==9.2.0
+psutil==5.9.2
+pyperclip==1.8.2
+windnd==1.0.7
