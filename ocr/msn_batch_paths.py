@@ -5,6 +5,7 @@ from ocr.msn import Msn
 from ocr.output_panel import OutputPanel
 from ocr.output_txt import OutputTxt
 from ocr.output_md import OutputMD
+from ocr.output_jsonl import OutputJsonl
 # 文块处理器
 from ocr.proc_ignore_area import ProcIgnoreArea
 import tkinter as tk
@@ -40,6 +41,8 @@ class MsnBatch(Msn):
             self.outputList.append(OutputTxt())
         if Config.get("isOutputTxt"):  # 输出到markdown
             self.outputList.append(OutputMD())
+        if Config.get("isOutputJsonl"):  # 输出到jsonl
+            self.outputList.append(OutputJsonl())
         # 初始化文块处理器
         self.procList = []
         if Config.get("ignoreArea"):  # 忽略区域

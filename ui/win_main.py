@@ -332,8 +332,12 @@ class MainWin:
                         Config.set('isOutputTxt', False)
                         Config.set('isOutputMD', False)
                 labelOff = tk.Label(fr1, text='关闭本地输出', cursor="hand2")
-                labelOff.grid(column=0, row=0, columnspan=2, sticky="w")
+                labelOff.grid(column=0, row=0, sticky="w")
                 labelOff.bind('<Button-1>', offAllOutput)  # 绑定关闭全部输出
+                wid = tk.Checkbutton(
+                    fr1, variable=Config.getTK('isOutputJsonl'), text="分行.jsonl文件")
+                wid.grid(column=1, row=0,  sticky="w")
+                self.lockWidget.append(wid)
                 wid = tk.Checkbutton(
                     fr1, variable=Config.getTK('isOutputTxt'), text="纯文本.txt文件　")
                 wid.grid(column=0, row=1,  sticky="w")

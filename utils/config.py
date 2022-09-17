@@ -89,6 +89,11 @@ _ConfigDict = {
         'isSave': True,
         'isTK': True,
     },
+    'isOutputJsonl': {  # T时输出内容写入jsonl文件
+        'default': False,
+        'isSave': True,
+        'isTK': True,
+    },
     'outputFilePath': {  # 输出文件目录
         'default': '',
         'isSave': False,
