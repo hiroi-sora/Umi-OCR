@@ -1,6 +1,4 @@
 import logging
-# import os
-# import time
 
 LogName = 'Umi-OCR_log'
 LogFileName = 'Umi-OCR_debug.log'

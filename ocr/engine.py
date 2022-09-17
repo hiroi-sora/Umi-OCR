@@ -45,9 +45,8 @@ class OcrEngine:
         self.__ramTips = ''  # 内存占用提示
         self.ocr = None  # OCR API对象
         # self.msnFlag = MsnFlag.none  # 任务状态不能在这里改，可能引擎已经关了，任务线程还在继续
-        self.setEngFlag(EngFlag.none)  # 通知关闭
 
-    def setEngFlag(self, engFlag):
+    def __setEngFlag(self, engFlag):
         '''更新引擎状态并向主窗口通知'''
         self.engFlag = engFlag
         if self.ocr:
@@ -63,14 +62,14 @@ class OcrEngine:
         if engFlag == EngFlag.initing:  # 启动中，刷新一下UI
             isTkUpdate = True
         Config.set('ocrProcessStatus', msg, isTkUpdate)  # 设置
-        Log.info(f'引擎 ⇒ {engFlag}')
+        # Log.info(f'引擎 ⇒ {engFlag}')
 
-    def setMsnFlag(self, msnFlag):
+    def __setMsnFlag(self, msnFlag):
         '''更新任务状态并向主窗口通知'''
         self.msnFlag = msnFlag
         if self.winSetMsnFlag:
             self.winSetMsnFlag(msnFlag)
-        Log.info(f'任务 ⇒ {msnFlag}')
+        # Log.info(f'任务 ⇒ {msnFlag}')
 
     def start(self):
         '''启动引擎。若引擎已启动，且参数有更新，则重启。'''
@@ -90,14 +89,14 @@ class OcrEngine:
 
         self.__ocrInfo = info  # 记录参数。必须在stop()之后，以免被覆盖。
         try:
-            self.setEngFlag(EngFlag.initing)  # 通知启动中
+            self.__setEngFlag(EngFlag.initing)  # 通知启动中
             self.ocr = OcrAPI(*self.__ocrInfo)  # 启动引擎
             # 检查启动引擎这段时间里，引擎有没有被叫停
             if not self.engFlag == EngFlag.initing:  # 状态被改变过了
                 Log.info('初始化后，引擎被叫停！{self.engFlag}')
                 self.stop()
                 return
-            self.setEngFlag(EngFlag.waiting)  # 通知待命
+            self.__setEngFlag(EngFlag.waiting)  # 通知待命
         except Exception as e:
             self.stop()
             raise
@@ -107,17 +106,18 @@ class OcrEngine:
         if (self.msnFlag == MsnFlag.initing or self.msnFlag == MsnFlag.running)\
                 and not self.engFlag == EngFlag.none and not isRestart:
             Log.info(f'引擎stop，停止任务！')
-            self.setMsnFlag(MsnFlag.stopping)  # 设任务需要停止
+            self.__setMsnFlag(MsnFlag.stopping)  # 设任务需要停止
         if hasattr(self.ocr, 'stop'):
             self.ocr.stop()
         del self.ocr
+        self.__setEngFlag(EngFlag.none)  # 通知关闭
         self.__initVar()
 
     def stopByMode(self):
         '''根据配置模式决定是否停止引擎'''
         if self.msnFlag == MsnFlag.initing or self.msnFlag == MsnFlag.running\
                 and not self.engFlag == EngFlag.none:
-            self.setMsnFlag(MsnFlag.stopping)  # 设任务需要停止
+            self.__setMsnFlag(MsnFlag.stopping)  # 设任务需要停止
         n = Config.get('ocrRunModeName')
         modeDict = Config.get('ocrRunMode')
         if n in modeDict.keys():
@@ -128,15 +128,15 @@ class OcrEngine:
     def run(self, path):
         '''执行单张图片识别，输入路径，返回字典'''
         if not self.ocr:
-            self.setEngFlag(EngFlag.none)  # 通知关闭
+            self.__setEngFlag(EngFlag.none)  # 通知关闭
             return {'code': 404, 'data': f'引擎未在运行'}
-        self.setEngFlag(EngFlag.running)  # 通知工作
+        self.__setEngFlag(EngFlag.running)  # 通知工作
         data = self.ocr.run(path)
         # 有可能因为提早停止任务或关闭软件，引擎被关闭，OCR.run提前出结果
         # 此时 engFlag 已经被主线程设为 none，如果再设waiting可能导致bug
         # 所以检测一下是否还是正常的状态 running ，没问题才通知待命
         if self.engFlag == EngFlag.running:
-            self.setEngFlag(EngFlag.waiting)  # 通知待命
+            self.__setEngFlag(EngFlag.waiting)  # 通知待命
         return data
 
     def runMission(self, paths, onStart=None, onGet=None, onStop=None, onError=None,
@@ -147,7 +147,7 @@ class OcrEngine:
             raise Exception('已有任务未结束')
 
         self.winSetMsnFlag = winSetMsnFlag  # 获取UI任务状态接口
-        self.setMsnFlag(MsnFlag.initing)  # 设任务初始化
+        self.__setMsnFlag(MsnFlag.initing)  # 设任务初始化
 
         def runLoop():  # 启动事件循环
             asyncio.set_event_loop(self.__runMissionLoop)
@@ -176,7 +176,7 @@ class OcrEngine:
                     onStop()
                 except Exception as e:
                     Log.error(f'任务线程 onClose() 异常： {e}')
-            self.setMsnFlag(MsnFlag.none)  # 设任务停止
+            self.__setMsnFlag(MsnFlag.none)  # 设任务停止
             Log.info(f'任务close！')
 
         # 启动OCR引擎，批量任务初始化 =========================
@@ -213,7 +213,7 @@ class OcrEngine:
             close()
             return
         # 任务处理器初始化 =========================
-        self.setMsnFlag(MsnFlag.running)  # 设任务运行
+        self.__setMsnFlag(MsnFlag.running)  # 设任务运行
         if onStart:
             try:
                 onStart(num)
@@ -243,13 +243,12 @@ class OcrEngine:
                 else:
                     num['err'] += 1
                     isAddErr = True
-                    # 设置了进程按需关闭，中途停止任务会导致进程kill，本次识别失败
-                    # 设置了进程后台常驻，中途停止任务会让本次识别完再停止任务
+                    # 若设置了进程按需关闭，中途停止任务会导致进程kill，本次识别失败
+                    # 若设置了进程后台常驻，中途停止任务会让本次识别完再停止任务
                     # 这些都是正常的（设计中的）
                     # 但是，引擎进程意外关闭导致图片识别失败，则是不正常的；所以不检测engFlag
                     if self.msnFlag == MsnFlag.stopping:  # 失败由强制停止引擎导致引起
                         data['data'] = '这是正常情况。中途停止任务、关闭引擎，导致本张图片未识别完。'
-                # print(f'【OCR】 ：{data}\n')
                 # 调用取得事件
                 if onGet:
                     try:
