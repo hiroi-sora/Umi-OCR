@@ -110,6 +110,7 @@ class OcrEngine:
         if hasattr(self.ocr, 'stop'):
             self.ocr.stop()
         del self.ocr
+        self.ocr = None
         self.__setEngFlag(EngFlag.none)  # 通知关闭
         self.__initVar()
 
