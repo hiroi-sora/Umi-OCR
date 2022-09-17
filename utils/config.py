@@ -72,12 +72,6 @@ _ConfigDict = {
         'isSave': True,
         'isTK': True,
     },
-    # 忽略区域设置
-    'ignoreArea':  {  # 忽略区域
-        'default': None,
-        'isSave': False,
-        'isTK': False,
-    },
     # 输入文件设置
     'isRecursiveSearch': {  # T时导入文件夹将递归查找子文件夹中所有图片
         'default': False,
@@ -85,8 +79,13 @@ _ConfigDict = {
         'isTK': True,
     },
     # 输出文件设置
-    'isOutputFile': {  # T时输出内容写入本地文件
+    'isOutputTxt': {  # T时输出内容写入txt文件
         'default': True,
+        'isSave': True,
+        'isTK': True,
+    },
+    'isOutputMD': {  # T时输出内容写入md文件
+        'default': False,
         'isSave': True,
         'isTK': True,
     },
@@ -108,11 +107,6 @@ _ConfigDict = {
     },
     'isIgnoreNoText': {  # T时忽略(不输出)没有文字的图片信息
         'default': True,
-        'isSave': True,
-        'isTK': True,
-    },
-    'outputStyle': {  # 1：纯文本，2：Markdown
-        'default': 1,
         'isSave': True,
         'isTK': True,
     },
@@ -165,16 +159,22 @@ _ConfigDict = {
         'isTK': True,
     },
 
-    # 提示信息
+    # 不同模块交流的接口
+    'ignoreArea':  {  # 忽略区域
+        'default': None,
+        'isSave': False,
+        'isTK': False,
+    },
     'tipsTop1': {  # 主窗口顶部进度条上方的label，左侧
         'default': '',
-        'isSave': False,
         'isTK': True,
     },
     'tipsTop2': {  # 主窗口顶部进度条上方的label，右侧
         'default': '欢迎使用Umi-OCR ~',
-        'isSave': False,
         'isTK': True,
+    },
+    'panelOutput': {  # 主输出面板的接口
+        'default': None,
     },
 }
 

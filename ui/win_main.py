@@ -27,7 +27,6 @@ class MainWin:
     def __init__(self):
         self.batList = KeyList()  # 管理批量图片的信息及表格id的列表
         self.tableKeyList = []  # 顺序存放self.imgDict
-        self.isRunning = 0  # 0未在运行，1正在运行，2正在停止
         self.lockWidget = []  # 需要运行时锁定的组件
 
         # 1.初始化主窗口
@@ -150,6 +149,7 @@ class MainWin:
             self.textOutput.pack(fill='both', side="left")
             vbar["command"] = self.textOutput.yview
             self.textOutput["yscrollcommand"] = vbar.set
+            Config.set('panelOutput', self.panelOutput)
         initTab2()
 
         def initTab3():  # 设置卡
@@ -323,33 +323,30 @@ class MainWin:
                 frameOutFile = tk.LabelFrame(self.optFrame, text="输出设置")
                 frameOutFile.pack(side='top', fill='x',
                                   ipady=2, pady=LabelFramePadY, padx=4)
-
+                # 输出文件类型勾选
                 fr1 = tk.Frame(frameOutFile)
                 fr1.pack(side='top', fill='x', pady=2, padx=5)
-                wid = tk.Checkbutton(
-                    fr1, variable=Config.getTK('isOutputFile'), text="将识别内容写入本地文件")
-                wid.grid(column=0, row=0, columnspan=2, sticky="w")
-                self.lockWidget.append(wid)
-                wid = tk.Checkbutton(fr1, text="输出调试信息",
-                                     variable=Config.getTK('isOutputDebug'))
-                wid.grid(column=0, row=1, sticky="w")
-                self.lockWidget.append(wid)
-                wid = tk.Checkbutton(fr1, text="忽略无文字的图片",
-                                     variable=Config.getTK('isIgnoreNoText'),)
-                wid.grid(column=1, row=1, sticky="w")
-                self.lockWidget.append(wid)
-                wid = tk.Radiobutton(
-                    fr1, text='纯文本.txt文件', value=1, variable=Config.getTK('outputStyle'),)
-                wid.grid(column=0, row=3, sticky="w")
-                self.lockWidget.append(wid)
-                wid = tk.Radiobutton(
-                    fr1, text='Markdown风格.md文件', value=2, variable=Config.getTK('outputStyle'),)
-                wid.grid(column=1, row=3, sticky="w")
-                self.lockWidget.append(wid)
-                tk.Label(fr1, fg="gray",
-                         text="下面两项为空时，默认输出到第一张图片所在的文件夹"
-                         ).grid(column=0, row=4, columnspan=2, sticky="nsew")
 
+                def offAllOutput(e):  # 关闭全部输出
+                    if OCRe.msnFlag == MsnFlag.none:
+                        Config.set('isOutputTxt', False)
+                        Config.set('isOutputMD', False)
+                labelOff = tk.Label(fr1, text='关闭本地输出', cursor="hand2")
+                labelOff.grid(column=0, row=0, columnspan=2, sticky="w")
+                labelOff.bind('<Button-1>', offAllOutput)  # 绑定关闭全部输出
+                wid = tk.Checkbutton(
+                    fr1, variable=Config.getTK('isOutputTxt'), text="纯文本.txt文件　")
+                wid.grid(column=0, row=1,  sticky="w")
+                self.lockWidget.append(wid)
+                wid = tk.Checkbutton(
+                    fr1, variable=Config.getTK('isOutputMD'), text="图文链接.md文件")
+                wid.grid(column=1, row=1,  sticky="w")
+                self.lockWidget.append(wid)
+
+                tk.Label(frameOutFile, fg="gray",
+                         text="下面两项为空时，默认输出到第一张图片所在的文件夹"
+                         ).pack(side='top', fill='x', padx=5)
+                # 输出目录
                 fr2 = tk.Frame(frameOutFile)
                 fr2.pack(side='top', fill='x', pady=2, padx=5)
                 tk.Label(fr2, text="输出目录：").grid(column=0, row=3, sticky="w")
@@ -364,6 +361,18 @@ class MainWin:
                 enOutName.grid(column=1, row=5, sticky="nsew")
                 self.lockWidget.append(enOutName)
                 fr2.grid_columnconfigure(1, weight=1)  # 第二列自动扩充
+                # 其它选项
+                fr3 = tk.Frame(frameOutFile)
+                fr3.pack(side='top', fill='x', pady=2, padx=5)
+                wid = tk.Checkbutton(fr3, text="输出调试信息　",
+                                     variable=Config.getTK('isOutputDebug'))
+                wid.grid(column=0, row=0, sticky="w")
+                self.lockWidget.append(wid)
+                wid = tk.Checkbutton(fr3, text="忽略无文字的图片",
+                                     variable=Config.getTK('isIgnoreNoText'),)
+                wid.grid(column=1, row=0, sticky="w")
+                self.lockWidget.append(wid)
+
             initOutFile()
 
             def initOcrUI():  # 识别器exe设置
@@ -479,7 +488,7 @@ class MainWin:
     # 加载图片 ===============================================
 
     def draggedImages(self, paths):  # 拖入图片
-        if not self.isRunning == 0:
+        if not OCRe.msnFlag == MsnFlag.none:
             tk.messagebox.showwarning(
                 '任务进行中', '请停止任务后，再拖入图片')
             return
@@ -491,7 +500,7 @@ class MainWin:
         self.addImagesList(pathList)
 
     def openFileWin(self):  # 打开选择文件窗
-        if not self.isRunning == 0:
+        if not OCRe.msnFlag == MsnFlag.none:
             return
         suf = Config.get("imageSuffix")  # 许可后缀
         paths = tk.filedialog.askopenfilenames(
@@ -544,7 +553,7 @@ class MainWin:
                 addImage(path)  # 直接添加
 
     def runClipboard(self, e=None):  # 识别剪贴板
-        if not self.isRunning == 0:  # 正在运行，不执行
+        if not OCRe.msnFlag == MsnFlag.none:  # 正在运行，不执行
             return
         img = ImageGrab.grabclipboard()  # 读取
         if not isinstance(img, Image.Image):
@@ -575,7 +584,7 @@ class MainWin:
     # 忽略区域 ===============================================
 
     def openSelectArea(self):  # 打开选择区域
-        if not self.isRunning == 0:
+        if not OCRe.msnFlag == MsnFlag.none:
             return
         defaultPath = ""
         if not self.batList.isEmpty():
@@ -610,7 +619,7 @@ class MainWin:
     # 表格操作 ===============================================
 
     def clearTable(self):  # 清空表格
-        if not self.isRunning == 0:
+        if not OCRe.msnFlag == MsnFlag.none:
             return
         self.progressbar["value"] = 0
         Config.set('tipsTop1', '')
@@ -623,7 +632,7 @@ class MainWin:
             self.table.delete(i)  # 表格组件移除
 
     def delImgList(self):  # 图片列表中删除选中
-        if not self.isRunning == 0:
+        if not OCRe.msnFlag == MsnFlag.none:
             return
         chi = self.table.selection()
         for i in chi:
@@ -644,7 +653,7 @@ class MainWin:
 
     # 写字板操作 =============================================
 
-    def textOutputInsert(self, text, position=tk.END):
+    def panelOutput(self, text, position=tk.END):
         self.textOutput.insert(position, text)
         if self.isAutoRoll.get():  # 需要自动滚动
             self.textOutput.see(position)
@@ -701,29 +710,13 @@ class MainWin:
         if OCRe.msnFlag == MsnFlag.none:  # 未在运行
             if self.batList.isEmpty():
                 return
-            # 创建输出文件
-            if Config.get('isOutputFile'):
-                suffix = '.txt' if Config.get('outputStyle') == 1 else '.md'
-                outPath = Config.get('outputFilePath') + \
-                    '\\' + Config.get('outputFileName')+suffix
-                try:
-                    if os.path.exists(outPath):  # 文件存在
-                        os.remove(outPath)  # 删除文件
-                    open(outPath, 'w').close()  # 创建文件
-                except FileNotFoundError:
-                    tk.messagebox.showerror(
-                        '遇到了亿点小问题', f'创建输出文件失败。请检查以下地址是否正确。\n{outPath}')
-                    return
-                except Exception as e:
-                    tk.messagebox.showerror(
-                        '遇到了亿点小问题', f'创建输出文件失败。文件地址：\n{outPath}\n\n错误信息：\n{e}')
-                    return
-            # 锁定UI
-            # self.setRunning(MsnFlag.initing)
             # 初始化文本处理器
-            tb = MsnBatch(self.batList, self.setTableItem,
-                          self.textOutputInsert, self.setRunning,
-                          self.clearTableItem, self.progressbar)
+            try:
+                tb = MsnBatch(self.batList, self.setTableItem, self.setRunning,
+                              self.clearTableItem, self.progressbar)
+            except Exception as err:
+                tk.messagebox.showwarning('遇到了亿点小问题', f'{err}')
+                return  # 未开始运行，终止本次运行
             # 开始运行
             paths = self.batList.getItemValueList('path')
             OCRe.runMission(paths,
@@ -751,7 +744,7 @@ class MainWin:
             self.win.after(50, self.waitClose)  # 等待关闭，50ms轮询一次是否已结束子进程
 
     def showTips(self, tipsText):  # 显示提示
-        if not self.isRunning == 0:
+        if not OCRe.msnFlag == MsnFlag.none:
             tk.messagebox.showwarning(
                 '任务进行中', '请停止任务后，再打开软件说明')
             return
@@ -762,3 +755,5 @@ class MainWin:
                 return
             self.textOutput.delete('1.0', tk.END)
         self.textOutput.insert(tk.END, tipsText)
+
+# 全角空格：【　】
