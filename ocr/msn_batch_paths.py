@@ -119,6 +119,7 @@ class MsnBatch(Msn):
             textBlockList = [{'box': [0, 0, 0, 0, 0, 0, 0, 0], 'score': 0,
                               'text':f'识别失败，错误码：{ocrData["code"]}\n错误信息：{str(ocrData["data"])}\n'}]
             textDebug += f'耗时：{numData["timeNow"]}s  识别失败\n'
+            textScore = '错误'
         # ==================== 输出 ====================
         self.__output('img', textBlockList, imgInfo, numData, textDebug)
         # ==================== 刷新UI ====================
