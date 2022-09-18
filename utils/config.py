@@ -185,60 +185,60 @@ _ConfigDict = {
 
 
 class ConfigModule:
-    sysEncoding = 'cp936'  # 系统编码。初始化时获取
     # ↓ 在这些编码下能使用全部功能，其它编码不保证能使用如拖入含中文路径的图片等功能。
     # ↓ 但识图功能是可以正常使用的。
-    sysEncodingSalf = ['cp936', 'cp65001']
+    __sysEncodingSalf = ['cp936', 'cp65001']
 
-    tkSaveTime = 200  # tk变量改变多长时间后写入本地。毫秒
+    __tkSaveTime = 200  # tk变量改变多长时间后写入本地。毫秒
 
     # ==================== 初始化 ====================
 
     def __init__(self):
-        self.mainTK = None  # 主窗口tk，可用来刷新界面或创建计时器
-        self.saveTimer = None  # 计时器，用来更新tk变量一段时间后写入本地
-        self.optDict = {}  # 配置项的数据
-        self.tkDict = {}  # tk绑定变量
-        self.saveList = []  # 需要保存的项
+        self.main = None  # win_main的self，可用来获取主it刷新界面或创建计时器
+        self.sysEncoding = 'cp936'  # 系统编码。初始化时获取
+        self.__saveTimer = None  # 计时器，用来更新tk变量一段时间后写入本地
+        self.__optDict = {}  # 配置项的数据
+        self.__tkDict = {}  # tk绑定变量
+        self.__saveList = []  # 需要保存的项
         # 将配置项加载到self
         for key in _ConfigDict:
             value = _ConfigDict[key]
-            self.optDict[key] = value['default']
+            self.__optDict[key] = value['default']
             if value.get('isSave', False):
-                self.saveList.append(key)
+                self.__saveList.append(key)
             if value.get('isTK', False):
-                self.tkDict[key] = None
+                self.__tkDict[key] = None
 
-    def initTK(self, mainTK):
+    def initTK(self, main):
         '''初始化tk变量'''
-        self.mainTK = mainTK  # 主窗口
+        self.main = main  # 主窗口
 
         def toSaveConfig():  # 保存值的事件
             self.save()
-            self.saveTimer = None
+            self.__saveTimer = None
 
         def onTkVarChange(key):  # 值改变的事件
             self.update(key)  # 更新配置项
-            if key in self.saveList:  # 需要保存
-                if self.saveTimer:  # 计时器已存在，则停止已存在的
-                    self.mainTK.after_cancel(self.saveTimer)  # 取消计时
-                    self.saveTimer = None
-                self.saveTimer = self.mainTK.after(  # 重新计时
-                    self.tkSaveTime, toSaveConfig)
+            if key in self.__saveList:  # 需要保存
+                if self.__saveTimer:  # 计时器已存在，则停止已存在的
+                    self.main.win.after_cancel(self.__saveTimer)  # 取消计时
+                    self.__saveTimer = None
+                self.__saveTimer = self.main.win.after(  # 重新计时
+                    self.__tkSaveTime, toSaveConfig)
 
-        for key in self.tkDict:
-            if isinstance(self.optDict[key], bool):  # 布尔最优先，以免被int覆盖
-                self.tkDict[key] = tk.BooleanVar()
-            elif isinstance(self.optDict[key], str):
-                self.tkDict[key] = tk.StringVar()
-            elif isinstance(self.optDict[key], int):
-                self.tkDict[key] = tk.IntVar()
+        for key in self.__tkDict:
+            if isinstance(self.__optDict[key], bool):  # 布尔最优先，以免被int覆盖
+                self.__tkDict[key] = tk.BooleanVar()
+            elif isinstance(self.__optDict[key], str):
+                self.__tkDict[key] = tk.StringVar()
+            elif isinstance(self.__optDict[key], int):
+                self.__tkDict[key] = tk.IntVar()
             else:  # 给开发者提醒
                 raise Exception(f'配置项{key}要生成tk变量，但类型不合法！')
             # 赋予初值
-            self.tkDict[key].set(self.optDict[key])
+            self.__tkDict[key].set(self.__optDict[key])
             # 跟踪值改变事件
-            self.tkDict[key].trace(
+            self.__tkDict[key].trace(
                 "w", lambda *e, key=key: onTkVarChange(key))
 
     # ==================== 读写本地文件 ====================
@@ -249,7 +249,7 @@ class ConfigModule:
             with open(ConfigJsonFile, 'r', encoding='utf8')as fp:
                 jsonData = json.load(fp)  # 读取json文件
                 for key in jsonData:
-                    if key in self.optDict:
+                    if key in self.__optDict:
                         self.set(key, jsonData[key])
         except json.JSONDecodeError:  # 反序列化json错误
             if tk.messagebox.askyesno(
@@ -260,7 +260,7 @@ class ConfigModule:
                 exit(0)
         except FileNotFoundError:  # 无配置文件
             # 当成是首次启动软件，提示
-            if self.sysEncoding not in self.sysEncodingSalf:  # 不安全的地区
+            if self.sysEncoding not in self.__sysEncodingSalf:  # 不安全的地区
                 tk.messagebox.showwarning(
                     '警告',
                     f'您的系统地区编码为[{self.sysEncoding}]，可能导致拖入图片的功能异常，建议使用浏览按钮导入图片。其它功能应该能正常使用。')
@@ -277,8 +277,8 @@ class ConfigModule:
     def save(self):
         '''保存配置到本地json文件'''
         saveDict = {}  # 提取需要保存的项
-        for key in self.saveList:
-            saveDict[key] = self.optDict[key]
+        for key in self.__saveList:
+            saveDict[key] = self.__optDict[key]
         with open(ConfigJsonFile, 'w', encoding='utf8')as fp:
             fp.write(json.dumps(saveDict, indent=4, ensure_ascii=False))
 
@@ -286,24 +286,24 @@ class ConfigModule:
 
     def update(self, key):
         '''更新某个值，从tk变量读取到配置项'''
-        self.optDict[key] = self.tkDict[key].get()
+        self.__optDict[key] = self.__tkDict[key].get()
 
     def get(self, key):
         '''获取一个配置项的值'''
-        return self.optDict[key]
+        return self.__optDict[key]
 
     def set(self, key, value, isUpdateTK=False):
         '''设置一个配置项的值'''
-        if key in self.tkDict:  # 若是tk，则通过tk的update事件去更新optDict值
-            self.tkDict[key].set(value)
+        if key in self.__tkDict:  # 若是tk，则通过tk的update事件去更新optDict值
+            self.__tkDict[key].set(value)
             if isUpdateTK:  # 需要刷新界面
-                self.mainTK.update()
+                self.main.win.update()
         else:  # 不是tk，直接更新optDict
-            self.optDict[key] = value
+            self.__optDict[key] = value
 
     def getTK(self, key):
         '''获取一个TK变量'''
-        return self.tkDict[key]
+        return self.__tkDict[key]
 
 
 Config = ConfigModule()  # 设置模块 单例
