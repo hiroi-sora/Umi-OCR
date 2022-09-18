@@ -82,7 +82,8 @@ class OcrEngine:
 
     def start(self):
         '''启动引擎。若引擎已启动，且参数有更新，则重启。'''
-
+        if self.engFlag == EngFlag.initing:  # 正在初始化中，严禁重复初始化
+            return
         info = (  # 获取最新OCR参数
             Config.get('ocrToolPath'),  # 识别器路径
             Config.get('ocrConfig')[Config.get(
@@ -102,7 +103,7 @@ class OcrEngine:
             self.ocr = OcrAPI(*self.__ocrInfo)  # 启动引擎
             # 检查启动引擎这段时间里，引擎有没有被叫停
             if not self.engFlag == EngFlag.initing:  # 状态被改变过了
-                Log.info('初始化后，引擎被叫停！{self.engFlag}')
+                Log.info(f'初始化后，引擎被叫停！{self.engFlag}')
                 self.stop()
                 return
             self.__setEngFlag(EngFlag.waiting)  # 通知待命

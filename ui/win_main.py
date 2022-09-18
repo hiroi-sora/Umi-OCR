@@ -409,7 +409,7 @@ class MainWin:
                 labelTips.bind(
                     '<Button-1>', lambda *e: self.showTips(GetHelpConfigText()))  # 绑定鼠标左键点击
 
-                tk.Label(fr1, text="子进程管理：").grid(
+                tk.Label(fr1, text="引擎管理策略：").grid(
                     column=0, row=6, sticky="w")
                 ocrRunModeDict = Config.get("ocrRunMode")
                 ocrRunModeNameList = [i for i in ocrRunModeDict]
@@ -425,17 +425,26 @@ class MainWin:
 
                 frState = tk.Frame(fr1)
                 frState.grid(column=0, row=7, columnspan=2, sticky="nsew")
-                tk.Label(frState, text="子进程状态：").pack(
+                tk.Label(frState, text="引擎当前状态：").pack(
                     side='left')
                 tk.Label(frState, textvariable=Config.getTK('ocrProcessStatus')).pack(
                     side='left')
-                labStop = tk.Label(frState, text="强制停止",
+                labStop = tk.Label(frState, text="停止",
                                    cursor="hand2", fg="red")
                 labStop.pack(side='right')
+                self.balloon.bind(labStop, '强制停止引擎进程')
                 labStart = tk.Label(frState, text="启动", cursor="hand2")
                 labStart.pack(side='right', padx=5)
+
+                def engStart():
+                    try:
+                        OCRe.start()
+                    except Exception as err:
+                        tk.messagebox.showerror(
+                            '遇到了亿点小问题',
+                            f'引擎启动失败：{err}')
                 labStart.bind(
-                    '<Button-1>', lambda *e: OCRe.start())
+                    '<Button-1>', lambda *e: engStart())
                 labStop.bind(
                     '<Button-1>', lambda *e: OCRe.stop())
 
@@ -683,7 +692,7 @@ class MainWin:
         def setStopping():
             self.btnRun['text'] = '正在停止'
             self.btnRun['state'] = 'disable'
-            if self.progressbar['mode'] == 'indeterminate':
+            if str(self.progressbar["mode"]) == 'indeterminate':
                 self.progressbar.stop()  # 进度条停止加载动画
                 self.progressbar['mode'] = 'determinate'  # 进度条静止模式
             return ''
