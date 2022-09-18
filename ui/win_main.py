@@ -15,10 +15,8 @@ import tkinter.filedialog
 from tkinter import Variable, ttk
 from ui.pmw.PmwBalloon import Balloon  # 气泡提示
 from windnd import hook_dropfiles  # 文件拖拽
-from pyperclip import copy as pyperclipCopy  # 剪贴板
+# from pyperclip import copy as pyperclipCopy  # TODO : 剪贴板
 from webbrowser import open as webOpen  # “关于”面板打开项目网址
-
-TestDict = {}  # 测试接口，用于暴露内部变量给测试器
 
 TempFilePath = "Umi-OCR_temp"
 Log = GetLog()
@@ -51,10 +49,8 @@ class MainWin:
             hook_dropfiles(self.win, func=self.draggedImages)
         initWin()
 
-        TestDict['MainWin'] = self  # 暴露 self 给测试接口
-
         # 2.初始化配置项
-        Config.initTK(self.win)  # 初始化设置项
+        Config.initTK(self)  # 初始化设置项
         Config.load()  # 加载本地文件
 
         # 3.初始化组件
@@ -140,8 +136,6 @@ class MainWin:
                 side='left')
             tk.Button(fr1, text='清空', width=6,
                       command=lambda: self.textOutput.delete('1.0', tk.END)).pack(side='right')
-            tk.Button(fr1, text='复制文字', width=8,
-                      command=lambda: pyperclipCopy(self.textOutput.get("1.0", tk.END))).pack(side='right', padx=5)
             tk.Button(fr1, text='剪贴板读取', width=10,
                       command=self.runClipboard).pack(side='right', padx=5)
             fr2 = tk.Frame(tabFrameOutput)
@@ -198,7 +192,7 @@ class MainWin:
                 okMissionNameList = [i for i in okMissionDict.keys()]
                 wid = ttk.Combobox(fr2, width=10, state="readonly", textvariable=Config.getTK('okMissionName'),
                                    value=okMissionNameList)
-                wid.unbind_class("TCombobox", "<MouseWheel>") # 解绑默认滚轮事件，防止误触
+                wid.unbind_class("TCombobox", "<MouseWheel>")  # 解绑默认滚轮事件，防止误触
                 wid.pack(side='left')
                 if Config.get("okMissionName") not in okMissionNameList:
                     wid.current(0)  # 初始化Combobox和okMissionName
@@ -396,7 +390,7 @@ class MainWin:
                 ocrConfigNameList = [i for i in ocrConfigDict]
                 cbox = ttk.Combobox(fr1, width=10, state="readonly", textvariable=Config.getTK('ocrConfigName'),
                                     value=ocrConfigNameList)
-                cbox.unbind_class("TCombobox", "<MouseWheel>") # 解绑默认滚轮事件，防止误触
+                cbox.unbind_class("TCombobox", "<MouseWheel>")  # 解绑默认滚轮事件，防止误触
                 cbox.grid(column=1, row=0,  sticky="nsew")
                 if Config.get("ocrConfigName") not in ocrConfigNameList:
                     cbox.current(0)  # 初始化Combobox和ocrConfigName
@@ -421,7 +415,8 @@ class MainWin:
                 ocrRunModeNameList = [i for i in ocrRunModeDict]
                 cboxR = ttk.Combobox(fr1, width=10, state="readonly", textvariable=Config.getTK('ocrRunModeName'),
                                      value=ocrRunModeNameList)
-                cboxR.unbind_class("TCombobox", "<MouseWheel>") # 解绑默认滚轮事件，防止误触
+                cboxR.unbind_class(
+                    "TCombobox", "<MouseWheel>")  # 解绑默认滚轮事件，防止误触
                 cboxR.grid(column=1, row=6,  sticky="nsew")
                 if Config.get("ocrRunModeName") not in ocrRunModeNameList:
                     cboxR.current(0)  # 初始化Combobox和ocrConfigName
@@ -485,13 +480,7 @@ class MainWin:
                         1 if event.delta < 0 else -1, "units")
                 self.optCanvas.bind_all("<MouseWheel>", onCanvasMouseWheel)
             initOptFrameWH()
-            # self.notebook.select(tabFrame)  # 调试用
         initTab3()
-
-        # 4.绑定快捷键
-        def bindKey():
-            self.win.bind("<Control-V>", self.runClipboard)
-        bindKey()
 
         self.win.mainloop()
 
@@ -679,8 +668,6 @@ class MainWin:
             return 'normal'
 
         def setIniting():
-            # self.btnRun['text'] = '正在准备'
-            # self.btnRun['state'] = 'disable'
             self.btnRun['text'] = '停止任务'
             self.btnRun['state'] = 'normal'
             Config.set('tipsTop2', '初始化')
@@ -722,17 +709,13 @@ class MainWin:
                 return
             # 初始化文本处理器
             try:
-                tb = MsnBatch(self.batList, self.setTableItem, self.setRunning,
-                              self.clearTableItem, self.progressbar)
+                msnBat = MsnBatch()
             except Exception as err:
                 tk.messagebox.showwarning('遇到了亿点小问题', f'{err}')
                 return  # 未开始运行，终止本次运行
             # 开始运行
             paths = self.batList.getItemValueList('path')
-            OCRe.runMission(paths,
-                            onStart=tb.onStart, onGet=tb.onGet,
-                            onStop=tb.onStop, onError=tb.onError,
-                            winSetMsnFlag=self.setRunning)
+            OCRe.runMission(paths, msnBat)
         # 允许任务进行中或初始化的中途停止任务
         elif OCRe.msnFlag == MsnFlag.running or OCRe.msnFlag == MsnFlag.initing:
             OCRe.stopByMode()

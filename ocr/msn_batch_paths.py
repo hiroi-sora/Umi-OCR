@@ -18,14 +18,13 @@ Log = GetLog()
 class MsnBatch(Msn):
 
     # __init__ 在主线程内初始化，其余方法在子线程内被调用
-    def __init__(self, batList, setTableItem,
-                 setRunning, clearTableItem, progressbar):
+    def __init__(self):
         # 获取接口
-        self.progressbar = progressbar  # 进度条组件
-        self.batList = batList
-        self.setTableItem = setTableItem
-        self.setRunning = setRunning
-        self.clearTableItem = clearTableItem
+        self.progressbar = Config.main.progressbar  # 进度条组件
+        self.batList = Config.main.batList  # 图片列表
+        self.setTableItem = Config.main.setTableItem  # 设置主表接口
+        self.setRunning = Config.main.setRunning  # 设置运行状态接口
+        self.clearTableItem = Config.main.clearTableItem  # 清理主表接口
         # 获取值
         self.isOutputDebug = Config.get("isOutputDebug")  # 是否输出调试
         self.isIgnoreNoText = Config.get("isIgnoreNoText")  # 是否忽略无字图片
@@ -133,7 +132,7 @@ class MsnBatch(Msn):
         self.setTableItem(time=str(numData['timeNow'])[:4],
                           score=textScore[:4], index=numData['index'])
 
-    def onStop(self):
+    def onStop(self, num):
         stopStr = f"\n任务结束时间：{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))}\n\n"
         self.__output('text', stopStr)
         Log.info('msnB: onClose')

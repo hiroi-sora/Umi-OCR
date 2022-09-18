@@ -36,7 +36,7 @@ class OcrEngine:
         self.__ramTips = ''  # 内存占用提示
         self.__runMissionLoop = None  # 批量识别的事件循环
         self.ocr = None  # OCR API对象
-        self.winSetMsnFlag = None
+        self.winSetRunning = None
         self.engFlag = EngFlag.none
         self.msnFlag = MsnFlag.none
 
@@ -67,9 +67,18 @@ class OcrEngine:
     def __setMsnFlag(self, msnFlag):
         '''更新任务状态并向主窗口通知'''
         self.msnFlag = msnFlag
-        if self.winSetMsnFlag:
-            self.winSetMsnFlag(msnFlag)
+        if self.winSetRunning:
+            self.winSetRunning(msnFlag)
         # Log.info(f'任务 ⇒ {msnFlag}')
+
+    @staticmethod
+    def __tryFunc(func, *e):
+        '''尝试执行func'''
+        if func:
+            try:
+                func(*e)
+            except Exception as e:
+                Log.error(f'调用函数 {str(func)} 异常： {e}')
 
     def start(self):
         '''启动引擎。若引擎已启动，且参数有更新，则重启。'''
@@ -140,14 +149,15 @@ class OcrEngine:
             self.__setEngFlag(EngFlag.waiting)  # 通知待命
         return data
 
-    def runMission(self, paths, onStart=None, onGet=None, onStop=None, onError=None,
-                   winSetMsnFlag=None):
-        '''批量识别多张图片，异步。若引擎未启动，则自动启动'''
+    def runMission(self, paths, msn):
+        '''批量识别多张图片，异步。若引擎未启动，则自动启动。\n
+        paths: 路径\n
+        msn:   任务器对象，Msn的派生类，必须含有 onStart|onGet|onStop|onError 四个方法'''
         if not self.msnFlag == MsnFlag.none:  # 正在运行
             Log.error(f'已有任务未结束就开始了下一轮任务')
             raise Exception('已有任务未结束')
 
-        self.winSetMsnFlag = winSetMsnFlag  # 获取UI任务状态接口
+        self.winSetRunning = Config.main.setRunning  # 设置运行状态接口
         self.__setMsnFlag(MsnFlag.initing)  # 设任务初始化
 
         def runLoop():  # 启动事件循环
@@ -160,40 +170,11 @@ class OcrEngine:
         threading.Thread(target=runLoop).start()
         # 在新线程中事件循环不断游走执行
         asyncio.run_coroutine_threadsafe(self.__runMission(
-            paths, onStart, onGet, onStop, onError
+            paths, msn
         ), self.__runMissionLoop)
 
-    async def __runMission(self, paths, onStart=None, onGet=None, onStop=None, onError=None):
+    async def __runMission(self, paths, msn):
         '''新线程中批量识图。在这个线程里更新UI是安全的。'''
-
-        def close():  # 停止
-            try:
-                self.__runMissionLoop.stop()  # 关闭异步事件循环
-            except Exception as e:
-                Log.error(f'任务线程 关闭任务事件循环失败： {e}')
-            self.stopByMode()  # 按需关闭OCR进程
-            if onStop:
-                try:
-                    onStop()
-                except Exception as e:
-                    Log.error(f'任务线程 onClose() 异常： {e}')
-            self.__setMsnFlag(MsnFlag.none)  # 设任务停止
-            Log.info(f'任务close！')
-
-        # 启动OCR引擎，批量任务初始化 =========================
-        try:
-            self.start()  # 启动或刷新引擎
-        except Exception as e:
-            Log.error(f'批量任务启动引擎失败：{e}')
-            close()
-            if onError:
-                try:
-                    onError(e)
-                except Exception as e:
-                    Log.error(f'任务线程 onError() 异常： {e}')
-                onStop()
-            Log.error(f'任务线程 引擎启动失败： {e}')
-            return
 
         num = {
             'all': len(paths),  # 全部数量
@@ -206,6 +187,25 @@ class OcrEngine:
             'time': 0,  # 执行至今的总时间
             'timeNow': 0,  # 这一轮的耗时
         }
+
+        def close():  # 停止
+            try:
+                self.__runMissionLoop.stop()  # 关闭异步事件循环
+            except Exception as e:
+                Log.error(f'任务线程 关闭任务事件循环失败： {e}')
+            self.stopByMode()  # 按需关闭OCR进程
+            self.__tryFunc(msn.onStop, num)
+            self.__setMsnFlag(MsnFlag.none)  # 设任务停止
+            Log.info(f'任务close！')
+
+        # 启动OCR引擎，批量任务初始化 =========================
+        try:
+            self.start()  # 启动或刷新引擎
+        except Exception as e:
+            Log.error(f'批量任务启动引擎失败：{e}')
+            self.__tryFunc(msn.onError, num, f'批量任务启动引擎失败：{e}')
+            close()
+            return
         timeStart = time.time()  # 启动时间
         timeLast = timeStart  # 上一轮结束时间
 
@@ -215,11 +215,7 @@ class OcrEngine:
             return
         # 任务处理器初始化 =========================
         self.__setMsnFlag(MsnFlag.running)  # 设任务运行
-        if onStart:
-            try:
-                onStart(num)
-            except Exception as e:
-                Log.error(f'任务线程 onStart() 异常： {e}')
+        self.__tryFunc(msn.onStart, num)
 
         # 正式开始任务 =========================
         for path in paths:
@@ -251,11 +247,7 @@ class OcrEngine:
                     if self.msnFlag == MsnFlag.stopping:  # 失败由强制停止引擎导致引起
                         data['data'] = '这是正常情况。中途停止任务、关闭引擎，导致本张图片未识别完。'
                 # 调用取得事件
-                if onGet:
-                    try:
-                        onGet(num, data)
-                    except Exception as e:
-                        Log.error(f'任务线程 onGet() 异常： {e}')
+                self.__tryFunc(msn.onGet, num, data)
             except Exception as e:
                 Log.error(f'任务线程 OCR失败： {e}')
                 if not isAddErr:
