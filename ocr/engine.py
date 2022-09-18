@@ -203,7 +203,7 @@ class OcrEngine:
             self.start()  # 启动或刷新引擎
         except Exception as e:
             Log.error(f'批量任务启动引擎失败：{e}')
-            self.__tryFunc(msn.onError, num, f'批量任务启动引擎失败：{e}')
+            self.__tryFunc(msn.onError, num, f'无法启动引擎：{e}')
             close()
             return
         timeStart = time.time()  # 启动时间
@@ -213,7 +213,7 @@ class OcrEngine:
         if self.msnFlag == MsnFlag.stopping:  # 需要停止
             close()
             return
-        # 任务处理器初始化 =========================
+        # 主窗UI和任务处理器初始化 =========================
         self.__setMsnFlag(MsnFlag.running)  # 设任务运行
         self.__tryFunc(msn.onStart, num)
 

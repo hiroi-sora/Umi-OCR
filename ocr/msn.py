@@ -26,24 +26,21 @@ class Msn:
 
     def onStart(self, num):
         '''流水线初始化完毕时调用'''
-        self.isError = False
-        Log.info(f'Msn onStart 未定义！\nnum: {num}')
+        Log.info(f'Msn onStart 未重写！\nnum: {num}')
 
     def onGet(self, num, data):
         '''流水线获取到一次OCR结果时调用\n
         data: OCR结果，字典'''
-        Log.info(f'Msn onGet 未定义！\nnum: {num}\ndata: {data}')
+        Log.info(f'Msn onGet 未重写！\nnum: {num}\ndata: {data}')
 
     def onStop(self, num):
         '''流水线结束任务时调用。可通过之前onError有没有被调用过，来判断是否正常结束'''
-        Log.info(f'Msn onStop 未定义！\nnum: {num}\n是否正常结束：{not self.isError}')
+        Log.info(f'Msn onStop 未重写！\nnum: {num}')
 
     def onError(self, num, err):
         '''流水线出现严重异常，无法继续工作，必须退出时调用。紧接着会调用onStop\n
-        只是要弹出提示框的话，这个方法可以不用重写\n
+        只是想弹出提示框的话，这个方法可以不用重写\n
         err: 错误信息，字符串'''
-        if hasattr(self, 'isError'):
-            self.isError = True
         tk.messagebox.showerror(
             '遇到了亿点小问题',
             f'任务失败：{err}')
