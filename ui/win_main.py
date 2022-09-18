@@ -671,16 +671,21 @@ class MainWin:
             self.btnRun['text'] = '停止任务'
             self.btnRun['state'] = 'normal'
             Config.set('tipsTop2', '初始化')
+            self.progressbar['mode'] = 'indeterminate'  # 进度条为来回动模式
+            self.progressbar.start()  # 进度条开始加载动画
             return 'disable'
 
         def setRunning():
-            self.btnRun['text'] = '停止任务'
-            self.btnRun['state'] = 'normal'
-            return 'disable'
+            self.progressbar.stop()  # 进度条停止加载动画
+            self.progressbar['mode'] = 'determinate'  # 进度条静止模式
+            return ''
 
         def setStopping():
             self.btnRun['text'] = '正在停止'
             self.btnRun['state'] = 'disable'
+            if self.progressbar['mode'] == 'indeterminate':
+                self.progressbar.stop()  # 进度条停止加载动画
+                self.progressbar['mode'] = 'determinate'  # 进度条静止模式
             return ''
 
         def setDefault():
