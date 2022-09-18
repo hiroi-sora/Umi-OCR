@@ -13,6 +13,7 @@ from PIL import Image, ImageGrab  # 图像，剪贴板
 import tkinter as tk
 import tkinter.filedialog
 from tkinter import Variable, ttk
+from ui.pmw.PmwBalloon import Balloon  # 气泡提示
 from windnd import hook_dropfiles  # 文件拖拽
 from pyperclip import copy as pyperclipCopy  # 剪贴板
 from webbrowser import open as webOpen  # “关于”面板打开项目网址
@@ -31,6 +32,7 @@ class MainWin:
 
         # 1.初始化主窗口
         self.win = tk.Tk()
+        self.balloon = Balloon(self.win)  # 气泡框
 
         def initWin():
             self.win.title(Umi.name)
@@ -64,6 +66,7 @@ class MainWin:
             self.btnRun = tk.Button(
                 fr, text='开始任务', width=12, height=2,  command=self.run)
             self.btnRun.pack(side='right', padx=5)
+            self.balloon.bind(self.btnRun, '开始任务', 'ttttttttt')
             # 左侧文本和进度条
             vFrame2 = tk.Frame(fr)
             vFrame2.pack(side='top', fill='x')
@@ -195,6 +198,7 @@ class MainWin:
                 okMissionNameList = [i for i in okMissionDict.keys()]
                 wid = ttk.Combobox(fr2, width=10, state="readonly", textvariable=Config.getTK('okMissionName'),
                                    value=okMissionNameList)
+                wid.unbind_class("TCombobox", "<MouseWheel>") # 解绑默认滚轮事件，防止误触
                 wid.pack(side='left')
                 if Config.get("okMissionName") not in okMissionNameList:
                     wid.current(0)  # 初始化Combobox和okMissionName
@@ -392,6 +396,7 @@ class MainWin:
                 ocrConfigNameList = [i for i in ocrConfigDict]
                 cbox = ttk.Combobox(fr1, width=10, state="readonly", textvariable=Config.getTK('ocrConfigName'),
                                     value=ocrConfigNameList)
+                cbox.unbind_class("TCombobox", "<MouseWheel>") # 解绑默认滚轮事件，防止误触
                 cbox.grid(column=1, row=0,  sticky="nsew")
                 if Config.get("ocrConfigName") not in ocrConfigNameList:
                     cbox.current(0)  # 初始化Combobox和ocrConfigName
@@ -416,6 +421,7 @@ class MainWin:
                 ocrRunModeNameList = [i for i in ocrRunModeDict]
                 cboxR = ttk.Combobox(fr1, width=10, state="readonly", textvariable=Config.getTK('ocrRunModeName'),
                                      value=ocrRunModeNameList)
+                cboxR.unbind_class("TCombobox", "<MouseWheel>") # 解绑默认滚轮事件，防止误触
                 cboxR.grid(column=1, row=6,  sticky="nsew")
                 if Config.get("ocrRunModeName") not in ocrRunModeNameList:
                     cboxR.current(0)  # 初始化Combobox和ocrConfigName
