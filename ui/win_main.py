@@ -3,6 +3,7 @@ from utils.logger import GetLog
 from utils.asset import *  # 资源
 from utils.data_structure import KeyList
 from ui.win_select_area import IgnoreAreaWin  # 子窗口
+from ui.widget import Widget  # 控件
 from ocr.engine import OCRe, MsnFlag, EngFlag  # 引擎
 from ocr.msn_batch_paths import MsnBatch
 
@@ -231,70 +232,22 @@ class MainWin:
                     '<Button-1>', lambda *e: self.openSelectArea())
             initArea()
 
-            def initClipboard():  # 剪贴板设置
-                def addHotkey(hotkey):  # 注册新快捷键
-                    if hotkey == "":
-                        Config.set("isGlobalHotkey", False)
-                        tk.messagebox.showwarning("提示",
-                                                  f"请先录制快捷键")
-                        return
-                    try:
-                        keyboard.add_hotkey(
-                            hotkey, self.runClipboard, suppress=False)  # 添加新的
-                    except ValueError as err:
-                        Config.set("isGlobalHotkey", False)
-                        Config.set("globalHotkey", "")
-                        tk.messagebox.showwarning("提示",
-                                                  f"无法注册快捷键【{hotkey}】\n\n错误信息：\n{err}")
+            def quickOCR():  # 快捷识图设置
+                def testFunc1():
+                    print(f'热键触发1111111111111')
 
-                def updateHotket():  # 刷新快捷键
-                    try:
-                        keyboard.unhook_all_hotkeys()  # 移除 所有旧快捷键
-                    except Exception as err:  # 影响不大。未注册过就调用移除 会报这个异常
-                        pass
-                    if Config.get("isGlobalHotkey"):  # 添加
-                        addHotkey(Config.get("globalHotkey"))
-                updateHotket()  # 初始化时执行一次
-
-                def readHotkey():  # 录制快捷键
-                    hotkey = keyboard.read_hotkey(suppress=False)
-                    if hotkey == "esc":  # 不绑定ESC
-                        return
-                    Config.set("globalHotkey", hotkey)  # 写入设置
-                    updateHotket()
-
-                def delHotkey():  # 清除快捷键
-                    Config.set("globalHotkey", "")
-                    Config.set("isGlobalHotkey", False)
-                    updateHotket()
-
-                areaLabel = tk.LabelFrame(
-                    self.optFrame, text="从剪贴板读取图片")
-                areaLabel.pack(side='top', fill='x',
-                                    ipady=2, pady=LabelFramePadY, padx=4)
-                fr1 = tk.Frame(areaLabel)
-                fr1.pack(side='top', fill='x', pady=2, padx=5)
-                wid = tk.Checkbutton(fr1, variable=Config.getTK('isGlobalHotkey'),
-                                     text="启用全局快捷键（在其它窗口也可响应）", command=updateHotket)
-                wid.grid(column=0, row=0, columnspan=9, sticky="w")
-                self.lockWidget.append(wid)
-                wid = tk.Checkbutton(fr1, variable=Config.getTK('isNeedCopy'),
-                                     text="自动复制识别文本")
-                wid.grid(column=0, row=1, columnspan=9, sticky="w")
-                self.lockWidget.append(wid)
-                wid = tk.Button(fr1, text='录制按键',
-                                command=readHotkey)
-                wid.grid(column=0, row=2, sticky="w")
-                self.lockWidget.append(wid)
-                tk.Label(fr1, textvariable=Config.getTK('globalHotkey')).grid(
-                    column=2, row=2,  sticky="nsew")
-                wid = tk.Button(fr1, text='清除', width=8,
-                                command=delHotkey)
-                wid.grid(column=3, row=2, sticky="w")
-                self.lockWidget.append(wid)
-                fr1.grid_columnconfigure(2, weight=1)
-                fr1.grid_columnconfigure(1, minsize=6)
-            initClipboard()
+                def testFunc2():
+                    print(f'热键触发2222222222222')
+                quickLabel = tk.LabelFrame(
+                    self.optFrame, text='快捷识图')
+                quickLabel.pack(side='top', fill='x',
+                                ipady=2, pady=LabelFramePadY, padx=4)
+                Widget.hotkeyFrame(quickLabel, '截图识别', 'Clipboard',
+                                   testFunc1).pack(side='top', fill='x', padx=4)
+                Widget.hotkeyFrame(quickLabel, '读剪贴板', 'Screenshot',
+                                   self.runClipboard).pack(side='top', fill='x', padx=4)
+                keyboard.add_hotkey('9+0', testFunc1, suppress=False)
+            quickOCR()
 
             def initInFile():  # 输入设置
                 frameInFile = tk.LabelFrame(self.optFrame, text="输入设置")
@@ -374,7 +327,6 @@ class MainWin:
                                      variable=Config.getTK('isIgnoreNoText'),)
                 wid.grid(column=1, row=0, sticky="w")
                 self.lockWidget.append(wid)
-
             initOutFile()
 
             def initOcrUI():  # 识别器exe设置
@@ -560,35 +512,6 @@ class MainWin:
             elif os.path.isfile(path):  # 若是文件：
                 addImage(path)  # 直接添加
 
-    def runClipboard(self, e=None):  # 识别剪贴板
-        if not OCRe.msnFlag == MsnFlag.none:  # 正在运行，不执行
-            return
-        img = ImageGrab.grabclipboard()  # 读取
-        if not isinstance(img, Image.Image):
-            return  # 未读到图像
-        # 窗口恢复前台，并临时置顶
-        if self.win.state() == "iconic":  # 窗口最小化状态下
-            self.win.state("normal")  # 恢复前台状态
-        self.win.attributes('-topmost', 1)  # 设置层级最前
-        self.win.attributes('-topmost', 0)  # 然后立刻解除
-        # 保存临时文件
-        if not os.path.exists(TempFilePath):  # 创建临时文件夹
-            os.makedirs(TempFilePath)
-        else:  # 清空临时文件夹
-            delList = os.listdir(TempFilePath)
-            for f in delList:
-                p = f"{TempFilePath}\\{f}"
-                if os.path.isfile(p):
-                    os.remove(p)
-        imgPath = f"{TempFilePath}\\temp_{int(time.time()*1000)}.png"
-        img.save(imgPath)
-        # 载入队列
-        imgPath = os.path.abspath(imgPath)  # 转绝对路径
-        self.clearTable()  # 清空表格
-        self.addImagesList([imgPath])  # 加入表格
-        self.run()  # 开始执行
-        self.notebook.select(self.notebookTab[1])  # 转到输出卡
-
     # 忽略区域 ===============================================
 
     def openSelectArea(self):  # 打开选择区域
@@ -680,6 +603,7 @@ class MainWin:
             self.btnRun['text'] = '停止任务'
             self.btnRun['state'] = 'normal'
             Config.set('tipsTop2', '初始化')
+            self.progressbar["maximum"] = 50  # 重置进度条长度，值越小加载动画越快
             self.progressbar['mode'] = 'indeterminate'  # 进度条为来回动模式
             self.progressbar.start()  # 进度条开始加载动画
             return 'disable'
@@ -717,7 +641,7 @@ class MainWin:
                     w['state'] = state
         self.win.update()
 
-    def run(self):
+    def run(self):  # 运行按钮触发
         if OCRe.msnFlag == MsnFlag.none:  # 未在运行
             if self.batList.isEmpty():
                 return
@@ -733,6 +657,35 @@ class MainWin:
         # 允许任务进行中或初始化的中途停止任务
         elif OCRe.msnFlag == MsnFlag.running or OCRe.msnFlag == MsnFlag.initing:
             OCRe.stopByMode()
+
+    def runClipboard(self, e=None):  # 识别剪贴板
+        if not OCRe.msnFlag == MsnFlag.none:  # 正在运行，不执行
+            return
+        img = ImageGrab.grabclipboard()  # 读取
+        if not isinstance(img, Image.Image):
+            return  # 未读到图像
+        # 窗口恢复前台，并临时置顶
+        if self.win.state() == "iconic":  # 窗口最小化状态下
+            self.win.state("normal")  # 恢复前台状态
+        self.win.attributes('-topmost', 1)  # 设置层级最前
+        self.win.attributes('-topmost', 0)  # 然后立刻解除
+        # 保存临时文件
+        if not os.path.exists(TempFilePath):  # 创建临时文件夹
+            os.makedirs(TempFilePath)
+        else:  # 清空临时文件夹
+            delList = os.listdir(TempFilePath)
+            for f in delList:
+                p = f"{TempFilePath}\\{f}"
+                if os.path.isfile(p):
+                    os.remove(p)
+        imgPath = f"{TempFilePath}\\temp_{int(time.time()*1000)}.png"
+        img.save(imgPath)
+        # 载入队列
+        imgPath = os.path.abspath(imgPath)  # 转绝对路径
+        self.clearTable()  # 清空表格
+        self.addImagesList([imgPath])  # 加入表格
+        self.run()  # 开始执行
+        self.notebook.select(self.notebookTab[1])  # 转到输出卡
 
     def onClose(self):  # 关闭窗口事件
         OCRe.stop()  # 强制关闭引擎进程，加快子线程结束

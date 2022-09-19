@@ -56,19 +56,29 @@ _ConfigDict = {
         'isSave': True,
         'isTK': False,
     },
-    # 读取剪贴板设置
-    'isGlobalHotkey': {  # T时绑定全局快捷键
+    # 快捷识图设置
+    'isHotkeyClipboard': {  # T时启用读剪贴板快捷键
         'default': False,
+        'isSave': True,
+        'isTK': True,
+    },
+    'hotkeyClipboard': {  # 读剪贴板快捷键，字符串
+        'default': '',
+        'isSave': True,
+        'isTK': True,
+    },
+    'isHotkeyScreenshot': {  # T时启用截屏快捷键
+        'default': False,
+        'isSave': True,
+        'isTK': True,
+    },
+    'hotkeyScreenshot': {  # 截屏快捷键，字符串
+        'default': '',
         'isSave': True,
         'isTK': True,
     },
     'isNeedCopy': {  # T时识别完成后自动复制文字
         'default': False,
-        'isSave': True,
-        'isTK': True,
-    },
-    'globalHotkey': {  # 全局快捷键
-        'default': '',
         'isSave': True,
         'isTK': True,
     },
