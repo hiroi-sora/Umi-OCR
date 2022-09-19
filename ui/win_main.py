@@ -6,11 +6,12 @@ from ui.win_select_area import IgnoreAreaWin  # 子窗口
 from ui.widget import Widget  # 控件
 from ui.pmw.PmwBalloon import Balloon  # 气泡提示
 from ocr.engine import OCRe, MsnFlag, EngFlag  # 引擎
+# 识图任务处理器
 from ocr.msn_batch_paths import MsnBatch
+from ocr.msn_quick import MsnQuick
 
 import os
 import time
-import keyboard  # 绑定快捷键
 from PIL import Image, ImageGrab  # 图像，剪贴板
 import tkinter as tk
 import tkinter.filedialog
@@ -242,7 +243,8 @@ class MainWin:
                                    testFunc1).pack(side='top', fill='x', padx=4)
                 Widget.hotkeyFrame(quickLabel, '读剪贴板', 'Screenshot',
                                    self.runClipboard).pack(side='top', fill='x', padx=4)
-                keyboard.add_hotkey('9+0', testFunc1, suppress=False)
+                tk.Checkbutton(quickLabel, variable=Config.getTK('isNeedCopy'),
+                               text='复制识别出的文字').pack(side='left', fill='x', padx=4)
             quickOCR()
 
             def initInFile():  # 输入设置
@@ -602,7 +604,7 @@ class MainWin:
             Config.set('tipsTop2', '已结束')
             return 'normal'
 
-        def setIniting():
+        def initing():
             self.btnRun['text'] = '停止任务'
             self.btnRun['state'] = 'normal'
             Config.set('tipsTop2', '初始化')
@@ -611,12 +613,12 @@ class MainWin:
             self.progressbar.start()  # 进度条开始加载动画
             return 'disable'
 
-        def setRunning():
+        def running():
             self.progressbar.stop()  # 进度条停止加载动画
             self.progressbar['mode'] = 'determinate'  # 进度条静止模式
             return ''
 
-        def setStopping():
+        def stopping():
             self.btnRun['text'] = '正在停止'
             self.btnRun['state'] = 'disable'
             if str(self.progressbar["mode"]) == 'indeterminate':
@@ -624,15 +626,12 @@ class MainWin:
                 self.progressbar['mode'] = 'determinate'  # 进度条静止模式
             return ''
 
-        def setDefault():
-            return ''
-
         state = {
             MsnFlag.none: setNone,
-            MsnFlag.initing: setIniting,
-            MsnFlag.running: setRunning,
-            MsnFlag.stopping: setStopping,
-        }.get(batFlag, setDefault)()
+            MsnFlag.initing: initing,
+            MsnFlag.running: running,
+            MsnFlag.stopping: stopping,
+        }.get(batFlag, '')()
         if state:
             for w in self.lockWidget:  # 改变组件状态（禁用，启用）
                 if 'widget' in w.keys() and 'stateOFnormal' in w.keys():
@@ -681,20 +680,18 @@ class MainWin:
                 self.clearTable()  # 清空主表
                 self.addImagesList(clipData)  # 添加到主表
                 self.run()  # 开始任务任务
-            return
 
         # 剪贴板中是图片
         elif isinstance(clipData, Image.Image):
-            # 初始化文本处理器
-            try:
-                msnBat = MsnBatch()
+            try:  # 初始化快捷识图任务处理器
+                msnQui = MsnQuick()
             except Exception as err:
                 tk.messagebox.showwarning('遇到了亿点小问题', f'{err}')
                 return  # 未开始运行，终止本次运行
             # 开始运行
-            OCRe.runMission(['clipboard'], msnBat)
+            OCRe.runMission(['clipboard'], msnQui)
+            self.notebook.select(self.notebookTab[1])  # 转到输出卡
             self.gotoTop()  # 主窗置顶
-            return  # TODO
 
     def onClose(self):  # 关闭窗口事件
         OCRe.stop()  # 强制关闭引擎进程，加快子线程结束

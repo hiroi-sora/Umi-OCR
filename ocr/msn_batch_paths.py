@@ -1,3 +1,5 @@
+# 批量路径 任务处理器
+
 from utils.config import Config
 from ocr.engine import MsnFlag
 from ocr.msn import Msn
