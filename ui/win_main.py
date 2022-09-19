@@ -4,6 +4,7 @@ from utils.asset import *  # 资源
 from utils.data_structure import KeyList
 from ui.win_select_area import IgnoreAreaWin  # 子窗口
 from ui.widget import Widget  # 控件
+from ui.pmw.PmwBalloon import Balloon  # 气泡提示
 from ocr.engine import OCRe, MsnFlag, EngFlag  # 引擎
 from ocr.msn_batch_paths import MsnBatch
 
@@ -14,9 +15,7 @@ from PIL import Image, ImageGrab  # 图像，剪贴板
 import tkinter as tk
 import tkinter.filedialog
 from tkinter import Variable, ttk
-from ui.pmw.PmwBalloon import Balloon  # 气泡提示
 from windnd import hook_dropfiles  # 文件拖拽
-# from pyperclip import copy as pyperclipCopy  # TODO : 剪贴板
 from webbrowser import open as webOpen  # “关于”面板打开项目网址
 
 TempFilePath = "Umi-OCR_temp"
@@ -63,7 +62,7 @@ class MainWin:
             self.btnRun = tk.Button(
                 fr, text='开始任务', width=12, height=2,  command=self.run)
             self.btnRun.pack(side='right', padx=5)
-            self.balloon.bind(self.btnRun, '开始任务', 'ttttttttt')
+            self.balloon.bind(self.btnRun, '开始任务')
             # 左侧文本和进度条
             vFrame2 = tk.Frame(fr)
             vFrame2.pack(side='top', fill='x')
@@ -235,9 +234,6 @@ class MainWin:
             def quickOCR():  # 快捷识图设置
                 def testFunc1():
                     print(f'热键触发1111111111111')
-
-                def testFunc2():
-                    print(f'热键触发2222222222222')
                 quickLabel = tk.LabelFrame(
                     self.optFrame, text='快捷识图')
                 quickLabel.pack(side='top', fill='x',
@@ -589,6 +585,13 @@ class MainWin:
         if self.isAutoRoll.get():  # 需要自动滚动
             self.textOutput.see(position)
 
+    # 窗口操作 =============================================
+    def gotoTop(self):  # 主窗置顶
+        if self.win.state() == "iconic":  # 窗口最小化状态下
+            self.win.state("normal")  # 恢复前台状态
+        self.win.attributes('-topmost', 1)  # 设置层级最前
+        self.win.attributes('-topmost', 0)  # 然后立刻解除
+
     # 进行任务 ===============================================
 
     def setRunning(self, batFlag):  # 设置运行状态。
@@ -661,31 +664,37 @@ class MainWin:
     def runClipboard(self, e=None):  # 识别剪贴板
         if not OCRe.msnFlag == MsnFlag.none:  # 正在运行，不执行
             return
-        img = ImageGrab.grabclipboard()  # 读取
-        if not isinstance(img, Image.Image):
-            return  # 未读到图像
-        # 窗口恢复前台，并临时置顶
-        if self.win.state() == "iconic":  # 窗口最小化状态下
-            self.win.state("normal")  # 恢复前台状态
-        self.win.attributes('-topmost', 1)  # 设置层级最前
-        self.win.attributes('-topmost', 0)  # 然后立刻解除
-        # 保存临时文件
-        if not os.path.exists(TempFilePath):  # 创建临时文件夹
-            os.makedirs(TempFilePath)
-        else:  # 清空临时文件夹
-            delList = os.listdir(TempFilePath)
-            for f in delList:
-                p = f"{TempFilePath}\\{f}"
-                if os.path.isfile(p):
-                    os.remove(p)
-        imgPath = f"{TempFilePath}\\temp_{int(time.time()*1000)}.png"
-        img.save(imgPath)
-        # 载入队列
-        imgPath = os.path.abspath(imgPath)  # 转绝对路径
-        self.clearTable()  # 清空表格
-        self.addImagesList([imgPath])  # 加入表格
-        self.run()  # 开始执行
-        self.notebook.select(self.notebookTab[1])  # 转到输出卡
+        clipData = ImageGrab.grabclipboard()  # 读取剪贴板
+        # 剪贴板中是文件列表（文件管理器中对着文件ctrl+c）
+        if isinstance(clipData, list):
+            # 检验文件列表中是否存在合法文件类型
+            suf = Config.get("imageSuffix").split()  # 许可后缀列表
+            flag = False
+            for path in clipData:  # 检验文件列表中是否存在许可后缀
+                if suf and os.path.splitext(path)[1].lower() in suf:
+                    flag = True
+                    break
+            # 存在，则将文件载入主表并执行任务
+            if flag:
+                self.notebook.select(self.notebookTab[0])  # 转到主表卡
+                self.gotoTop()  # 主窗置顶
+                self.clearTable()  # 清空主表
+                self.addImagesList(clipData)  # 添加到主表
+                self.run()  # 开始任务任务
+            return
+
+        # 剪贴板中是图片
+        elif isinstance(clipData, Image.Image):
+            # 初始化文本处理器
+            try:
+                msnBat = MsnBatch()
+            except Exception as err:
+                tk.messagebox.showwarning('遇到了亿点小问题', f'{err}')
+                return  # 未开始运行，终止本次运行
+            # 开始运行
+            OCRe.runMission(['clipboard'], msnBat)
+            self.gotoTop()  # 主窗置顶
+            return  # TODO
 
     def onClose(self):  # 关闭窗口事件
         OCRe.stop()  # 强制关闭引擎进程，加快子线程结束
