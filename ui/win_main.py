@@ -2,6 +2,7 @@ from utils.config import Config, Umi  # 最先加载配置
 from utils.logger import GetLog
 from utils.asset import *  # 资源
 from utils.data_structure import KeyList
+from utils.tool import Tool
 from ui.win_select_area import IgnoreAreaWin  # 子窗口
 from ui.widget import Widget  # 控件
 from ui.pmw.PmwBalloon import Balloon  # 气泡提示
@@ -12,7 +13,7 @@ from ocr.msn_quick import MsnQuick
 
 import os
 import time
-from PIL import Image, ImageGrab  # 图像，剪贴板
+from PIL import Image  # 图像
 import tkinter as tk
 import tkinter.filedialog
 from tkinter import Variable, ttk
@@ -663,9 +664,22 @@ class MainWin:
     def runClipboard(self, e=None):  # 识别剪贴板
         if not OCRe.msnFlag == MsnFlag.none:  # 正在运行，不执行
             return
-        clipData = ImageGrab.grabclipboard()  # 读取剪贴板
-        # 剪贴板中是文件列表（文件管理器中对着文件ctrl+c）
-        if isinstance(clipData, list):
+        clipData = Tool.getClipboardFormat()  # 读取剪贴板
+
+        # 剪贴板中是位图（优先）
+        if isinstance(clipData, int):
+            try:  # 初始化快捷识图任务处理器
+                msnQui = MsnQuick()
+            except Exception as err:
+                tk.messagebox.showwarning('遇到了亿点小问题', f'{err}')
+                return  # 未开始运行，终止本次运行
+            # 开始运行
+            OCRe.runMission(['clipboard'], msnQui)
+            self.notebook.select(self.notebookTab[1])  # 转到输出卡
+            self.gotoTop()  # 主窗置顶
+
+        # 剪贴板中是文件列表（文件管理器中对着文件ctrl+c得到句柄）
+        elif isinstance(clipData, tuple):
             # 检验文件列表中是否存在合法文件类型
             suf = Config.get("imageSuffix").split()  # 许可后缀列表
             flag = False
@@ -680,18 +694,6 @@ class MainWin:
                 self.clearTable()  # 清空主表
                 self.addImagesList(clipData)  # 添加到主表
                 self.run()  # 开始任务任务
-
-        # 剪贴板中是图片
-        elif isinstance(clipData, Image.Image):
-            try:  # 初始化快捷识图任务处理器
-                msnQui = MsnQuick()
-            except Exception as err:
-                tk.messagebox.showwarning('遇到了亿点小问题', f'{err}')
-                return  # 未开始运行，终止本次运行
-            # 开始运行
-            OCRe.runMission(['clipboard'], msnQui)
-            self.notebook.select(self.notebookTab[1])  # 转到输出卡
-            self.gotoTop()  # 主窗置顶
 
     def onClose(self):  # 关闭窗口事件
         OCRe.stop()  # 强制关闭引擎进程，加快子线程结束
