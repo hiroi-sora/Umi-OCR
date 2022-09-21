@@ -136,7 +136,8 @@ class ASSET():
 
     def initTK(self):
         for im in _ImageDict.values():
-            im['tk'] = tk.PhotoImage(file=im['path'])
+            im['tk'] = tk.PhotoImage(data=im['base64'])
+            # im['tk'] = tk.PhotoImage(file=im['path'])
 
     def getImgTK(self, name):
         '''获取名为name的tk图片'''
