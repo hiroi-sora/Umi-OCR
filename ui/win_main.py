@@ -3,6 +3,7 @@ from utils.logger import GetLog
 from utils.asset import *  # 资源
 from utils.data_structure import KeyList
 from utils.tool import Tool
+from ui.win_screenshot import ScreenshotWin  # 截屏
 from ui.win_select_area import IgnoreAreaWin  # 子窗口
 from ui.widget import Widget  # 控件
 from ui.pmw.PmwBalloon import Balloon  # 气泡提示
@@ -46,7 +47,7 @@ class MainWin:
             # 注册文件拖入，整个主窗口内有效
             hook_dropfiles(self.win, func=self.draggedImages)
             # 图标
-            Asset.initRelease()  # 释放base64资源到本地
+            # Asset.initRelease()  # 释放base64资源到本地
             Asset.initTK()  # 初始化tk图片
             self.win.iconphoto(False, Asset.getImgTK('umiocr64'))  # 设置窗口图标
         initWin()
@@ -95,7 +96,7 @@ class MainWin:
             fr1.pack(side='top', fill='x', padx=1, pady=1)
             # 左
             btn = tk.Button(fr1, image=Asset.getImgTK('screenshot24'),  # 截图按钮
-                            command=None,
+                            command=self.openScreenshot,
                             width=48, bg='white', relief='groove', overrelief='ridge',)
             self.balloon.bind(btn, '屏幕截图')
             btn.pack(side='left')
@@ -159,7 +160,7 @@ class MainWin:
             self.isAutoRoll.set(1)
             # 左
             btn = tk.Button(fr1, image=Asset.getImgTK('screenshot24'),  # 截图按钮
-                            command=None,
+                            command=self.openScreenshot,
                             width=48, bg='white', relief='groove', overrelief='ridge',)
             self.balloon.bind(btn, '屏幕截图')
             btn.pack(side='left')
@@ -276,14 +277,12 @@ class MainWin:
             initArea()
 
             def quickOCR():  # 快捷识图设置
-                def testFunc1():
-                    print(f'热键触发1111111111111')
                 quickLabel = tk.LabelFrame(
                     self.optFrame, text='快捷识图')
                 quickLabel.pack(side='top', fill='x',
                                 ipady=2, pady=LabelFramePadY, padx=4)
                 Widget.hotkeyFrame(quickLabel, '截图识别', 'Clipboard',
-                                   testFunc1).pack(side='top', fill='x', padx=4)
+                                   self.openScreenshot).pack(side='top', fill='x', padx=4)
                 Widget.hotkeyFrame(quickLabel, '读剪贴板', 'Screenshot',
                                    self.runClipboard).pack(side='top', fill='x', padx=4)
                 tk.Checkbutton(quickLabel, variable=Config.getTK('isNeedCopy'),
@@ -741,6 +740,16 @@ class MainWin:
 
         else:
             self.panelOutput('剪贴板中未查询到图片信息\n')
+
+    def openScreenshot(self, e=None):  # 打开截图窗口
+        # try:
+        ScreenshotWin(self.closeScreenshot)
+        # except Exception as err:
+        #     self.panelOutput(f'截图失败：{err}')
+
+    def closeScreenshot(self, flag):  # 关闭截图窗口，返回T表示已复制到剪贴板
+        if flag:  # 成功
+            self.runClipboard()  # 剪贴板识图
 
     def onClose(self):  # 关闭窗口事件
         OCRe.stop()  # 强制关闭引擎进程，加快子线程结束
