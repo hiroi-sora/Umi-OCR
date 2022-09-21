@@ -123,7 +123,7 @@ class IgnoreAreaWin:
         if defaultPath:  # 打开默认图片
             self.loadImage(defaultPath)
 
-        self.win.mainloop()
+        # self.win.mainloop()
 
     def onClose(self, isAsk=True):  # 点击关闭。isAsk为T时询问。
 
