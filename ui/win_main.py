@@ -43,12 +43,12 @@ class MainWin:
             self.win.minsize(w, h)  # 最小大小
             self.win.geometry(f"{w}x{h}+{x}+{y}")  # 初始大小与位置
             self.win.protocol("WM_DELETE_WINDOW", self.onClose)  # 窗口关闭
-            # 图标
-            self.iconImg = tkinter.PhotoImage(
-                data=IconPngBase64)  # 载入图标，base64转
-            self.win.iconphoto(False, self.iconImg)  # 设置窗口图标
             # 注册文件拖入，整个主窗口内有效
             hook_dropfiles(self.win, func=self.draggedImages)
+            # 图标
+            Asset.initRelease()  # 释放base64资源到本地
+            Asset.initTK()  # 初始化tk图片
+            self.win.iconphoto(False, Asset.getImgTK('umiocr64'))  # 设置窗口图标
         initWin()
 
         # 2.初始化配置项
@@ -68,11 +68,11 @@ class MainWin:
             # 左侧文本和进度条
             vFrame2 = tk.Frame(fr)
             vFrame2.pack(side='top', fill='x')
-            labelUse = tk.Label(vFrame2, text="使用说明",
-                                fg="gray", cursor="hand2")
-            labelUse.pack(side='left', padx=5)
-            labelUse.bind(
-                '<Button-1>', lambda *e: self.showTips(GetHelpText(Umi.website)))  # 绑定鼠标左键点击
+            # labelUse = tk.Label(vFrame2, text="使用说明",
+            #                     fg="gray", cursor="hand2")
+            # labelUse.pack(side='left', padx=5)
+            # labelUse.bind(
+            #     '<Button-1>', lambda *e: self.showTips(GetHelpText(Umi.website)))  # 绑定鼠标左键点击
             # 进度条上方的两个label
             tk.Label(vFrame2, textvariable=Config.getTK('tipsTop2')).pack(
                 side='right', padx=2)
@@ -92,15 +92,38 @@ class MainWin:
             self.notebook.add(tabFrameTable, text=f'{"处理列表": ^10s}')
             # 顶栏
             fr1 = tk.Frame(tabFrameTable)
-            fr1.pack(side='top', fill='x', pady=2)
-            btn = tk.Button(fr1, text=' 浏览 ',  command=self.openFileWin)
-            btn.pack(side='left', padx=5)
+            fr1.pack(side='top', fill='x', padx=1, pady=1)
+            # 左
+            btn = tk.Button(fr1, image=Asset.getImgTK('screenshot24'),  # 截图按钮
+                            command=None,
+                            width=48, bg='white', relief='groove', overrelief='ridge',)
+            self.balloon.bind(btn, '屏幕截图')
+            btn.pack(side='left')
             self.lockWidget.append(btn)
-            tk.Label(fr1, text="或直接拖入").pack(side='left')
-            btn = tk.Button(fr1, text='清空', width=8, command=self.clearTable)
+            btn = tk.Button(fr1, image=Asset.getImgTK('paste24'),  # 剪贴板按钮
+                            command=self.runClipboard,
+                            width=48, bg='white', relief='groove', overrelief='ridge',)
+            self.balloon.bind(btn, '读取剪贴板')
+            btn.pack(side='left')
+            self.lockWidget.append(btn)
+            # tk.Label(fr1, text="或直接拖入").pack(side='left')
+            # 右
+            btn = tk.Button(fr1, image=Asset.getImgTK('clear24'),  # 清空按钮
+                            command=self.clearTable,
+                            width=48, bg='white', relief='groove', overrelief='ridge',)
+            self.balloon.bind(btn, '清空表格')
             btn.pack(side='right')
             self.lockWidget.append(btn)
-            btn = tk.Button(fr1, text='移除', width=8, command=self.delImgList)
+            btn = tk.Button(fr1, image=Asset.getImgTK('delete24'),  # 删除按钮
+                            command=self.delImgList,
+                            width=48, bg='white', relief='groove', overrelief='ridge',)
+            self.balloon.bind(btn, '移除选中的条目\nShift+左键 可选中多个条目')
+            btn.pack(side='right')
+            self.lockWidget.append(btn)
+            btn = tk.Button(fr1, image=Asset.getImgTK('openfile24'),  # 打开文件按钮
+                            command=self.openFileWin,
+                            width=48, bg='white', relief='groove', overrelief='ridge',)
+            self.balloon.bind(btn, '浏览文件')
             btn.pack(side='right', padx=5)
             self.lockWidget.append(btn)
             # 表格主体
@@ -131,15 +154,34 @@ class MainWin:
             self.notebookTab.append(tabFrameOutput)
             self.notebook.add(tabFrameOutput, text=f'{"识别内容": ^10s}')
             fr1 = tk.Frame(tabFrameOutput)
-            fr1.pack(side='top', fill='x', pady=2)
+            fr1.pack(side='top', fill='x', padx=1, pady=1)
             self.isAutoRoll = tk.IntVar()
             self.isAutoRoll.set(1)
+            # 左
+            btn = tk.Button(fr1, image=Asset.getImgTK('screenshot24'),  # 截图按钮
+                            command=None,
+                            width=48, bg='white', relief='groove', overrelief='ridge',)
+            self.balloon.bind(btn, '屏幕截图')
+            btn.pack(side='left')
+            self.lockWidget.append(btn)
+            btn = tk.Button(fr1, image=Asset.getImgTK('paste24'),  # 剪贴板按钮
+                            command=self.runClipboard,
+                            width=48, bg='white', relief='groove', overrelief='ridge',)
+            self.balloon.bind(btn, '读取剪贴板')
+            btn.pack(side='left')
+            self.lockWidget.append(btn)
+
+            # 右
+            btn = tk.Button(fr1, image=Asset.getImgTK('clear24'),  # 清空按钮
+                            command=lambda: self.textOutput.delete(
+                                '1.0', tk.END),
+                            width=48, bg='white', relief='groove', overrelief='ridge',)
+            self.balloon.bind(btn, '清空输出面板')
+            btn.pack(side='right')
+
             tk.Checkbutton(fr1, variable=self.isAutoRoll, text="自动滚动").pack(
-                side='left')
-            tk.Button(fr1, text='清空', width=6,
-                      command=lambda: self.textOutput.delete('1.0', tk.END)).pack(side='right')
-            tk.Button(fr1, text='剪贴板读取', width=10,
-                      command=self.runClipboard).pack(side='right', padx=5)
+                side='right', padx=20)
+
             fr2 = tk.Frame(tabFrameOutput)
             fr2.pack(side='top', fill='both')
             vbar = tk.Scrollbar(fr2, orient='vertical')  # 滚动条
@@ -409,7 +451,8 @@ class MainWin:
                     self.optFrame, text="关于")
                 frameAbout.pack(side='top', fill='x', ipady=2,
                                 pady=LabelFramePadY, padx=4)
-                tk.Label(frameAbout, image=self.iconImg).pack()  # 图标
+                tk.Label(frameAbout, image=Asset.getImgTK(
+                    'umiocr64')).pack()  # 图标
                 tk.Label(frameAbout, text=Umi.name, fg="gray").pack()
                 tk.Label(frameAbout, text=Umi.about, fg="gray").pack()
                 labelWeb = tk.Label(frameAbout, text=Umi.website, cursor="hand2",
@@ -589,6 +632,7 @@ class MainWin:
             self.textOutput.see(position)
 
     # 窗口操作 =============================================
+
     def gotoTop(self):  # 主窗置顶
         if self.win.state() == "iconic":  # 窗口最小化状态下
             self.win.state("normal")  # 恢复前台状态
@@ -694,6 +738,9 @@ class MainWin:
                 self.clearTable()  # 清空主表
                 self.addImagesList(clipData)  # 添加到主表
                 self.run()  # 开始任务任务
+
+        else:
+            self.panelOutput('剪贴板中未查询到图片信息\n')
 
     def onClose(self):  # 关闭窗口事件
         OCRe.stop()  # 强制关闭引擎进程，加快子线程结束

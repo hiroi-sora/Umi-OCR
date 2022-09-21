@@ -185,7 +185,7 @@ _ConfigDict = {
         'isTK': True,
     },
     'tipsTop2': {  # 主窗口顶部进度条上方的label，右侧
-        'default': '欢迎使用Umi-OCR ~',
+        'default': '拖入任意图片，或点击截图按钮',
         'isTK': True,
     },
     'panelOutput': {  # 主输出面板的接口

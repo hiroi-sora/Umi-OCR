@@ -1,5 +1,5 @@
 from ocr.engine import OCRe  # 引擎单例
-from utils.asset import IconPngBase64  # 资源
+from utils.asset import Asset  # 资源
 from utils.config import Config
 
 import tkinter as tk
@@ -32,9 +32,7 @@ class IgnoreAreaWin:
         self.areaType = -1  # 当前绘图模式
         self.areaTypeIndex = [-1, -1, -1]  # 当前绘制的矩形的序号
         # 图标
-        self.iconImg = tkinter.PhotoImage(
-            data=IconPngBase64)  # 载入图标，base64转
-        self.win.iconphoto(False, self.iconImg)  # 设置窗口图标
+        self.win.iconphoto(False, Asset.getImgTK('umiocr64'))  # 设置窗口图标
         # initWin()
 
         # def initPanel():  # 初始化面板
