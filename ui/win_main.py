@@ -43,7 +43,7 @@ class MainWin:
             # winnative clam alt default classic vista xpnative
             # style.theme_use('winnative')
             style.configure('icon.TButton', padding=(12, 0))
-            style.configure('main.TButton', font=('Microsoft YaHei', '14', 'bold'),
+            style.configure('main.TButton', font=('Microsoft YaHei', '12', ''),  # bold
                             width=9)
         initStyle()
 
@@ -59,7 +59,7 @@ class MainWin:
             # 调用api设置成由应用程序缩放
             # ctypes.windll.shcore.SetProcessDpiAwareness(1)
             # 调用api获得当前的缩放因子
-            ScaleFactor = ctypes.windll.shcore.GetScaleFactorForDevice(0)
+            # ScaleFactor = ctypes.windll.shcore.GetScaleFactorForDevice(0)
             # 设置缩放因子
             # self.win.tk.call('tk', 'scaling', ScaleFactor/75)
             # 注册文件拖入，整个主窗口内有效
@@ -135,7 +135,7 @@ class MainWin:
             btn = ttk.Button(fr1, image=Asset.getImgTK('delete24'),  # 删除按钮
                              command=self.delImgList,
                              style='icon.TButton',  takefocus=0,)
-            self.balloon.bind(btn, '移除选中的条目\nShift+左键 可选中多个条目')
+            self.balloon.bind(btn, '移除选中的文件\nShift+左键 可选中多个文件')
             btn.pack(side='right')
             self.lockWidget.append(btn)
             btn = ttk.Button(fr1, image=Asset.getImgTK('openfile24'),  # 打开文件按钮
@@ -298,8 +298,14 @@ class MainWin:
                     self.optFrame, text='快捷识图')
                 quickLabel.pack(side='top', fill='x',
                                 ipady=2, pady=LabelFramePadY, padx=4)
+                self.win.bind("<<ScreenshotEvent>>",
+                              self.openScreenshot)  # 绑定截图事件
+                # 截图快捷键触发时，子线程向主线程发送事件，在主线程中启动截图窗口
+                # 避免子线程直接唤起截图窗导致的窗口闪烁现象
                 Widget.hotkeyFrame(quickLabel, '截图识别', 'Clipboard',
-                                   self.openScreenshot).pack(side='top', fill='x', padx=4)
+                                   lambda *e: self.win.event_generate(
+                                       '<<ScreenshotEvent>>')
+                                   ).pack(side='top', fill='x', padx=4)
                 Widget.hotkeyFrame(quickLabel, '读剪贴板', 'Screenshot',
                                    self.runClipboard).pack(side='top', fill='x', padx=4)
                 tk.Checkbutton(quickLabel, variable=Config.getTK('isNeedCopy'),
@@ -573,7 +579,7 @@ class MainWin:
     # 忽略区域 ===============================================
 
     def openSelectArea(self):  # 打开选择区域
-        if not OCRe.msnFlag == MsnFlag.none:
+        if not OCRe.msnFlag == MsnFlag.none or not self.win.attributes('-disabled') == 0:
             return
         defaultPath = ""
         if not self.batList.isEmpty():
@@ -759,12 +765,16 @@ class MainWin:
             self.panelOutput('剪贴板中未查询到图片信息\n')
 
     def openScreenshot(self, e=None):  # 打开截图窗口
+        if not OCRe.msnFlag == MsnFlag.none or not self.win.attributes('-disabled') == 0:
+            return
+        self.win.attributes("-disabled", 1)  # 禁用父窗口
         # try:
         ScreenshotWin(self.closeScreenshot)
         # except Exception as err:
         #     self.panelOutput(f'截图失败：{err}')
 
     def closeScreenshot(self, flag):  # 关闭截图窗口，返回T表示已复制到剪贴板
+        self.win.attributes("-disabled", 0)  # 启用父窗口
         if flag:  # 成功
             self.runClipboard()  # 剪贴板识图
 

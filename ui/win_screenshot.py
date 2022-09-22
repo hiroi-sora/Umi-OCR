@@ -1,3 +1,5 @@
+from utils.logger import GetLog
+
 from win32.win32api import EnumDisplayMonitors  # 获取显示器信息
 from win32clipboard import OpenClipboard, EmptyClipboard, SetClipboardData, CloseClipboard, CF_DIB  # 剪贴板
 from io import BytesIO
@@ -6,6 +8,8 @@ import tkinter as tk
 from PIL import ImageGrab, ImageTk
 from enum import Enum
 import keyboard  # 绑定快捷键
+
+Log = GetLog()
 
 
 class _DrawMode(Enum):
@@ -23,7 +27,8 @@ class ScreenshotWin():
         self.imageResult = None  # 结果图片
         # 创建窗口
         self.topwin = tk.Toplevel()
-        self.topwin.withdraw()  # 初始化期间隐藏截图窗
+        # self.topwin.geometry('700x700+100+500')
+        # self.topwin.withdraw()  # 初始化期间隐藏截图窗
         self.topwin.overrideredirect(True)  # 无边框
         # self.topwin.attributes('-topmost', 1)  # 设置层级最前 TODO
         self.debugEle = []  # 调试信息画布元素
@@ -93,7 +98,7 @@ class ScreenshotWin():
         self.canvas.bind('<Motion>', self.__onMotion)  # 鼠标移动
         self.canvas.bind('<Enter>', self.__onMotion)  # 鼠标进入，用于初始化瞄准线
 
-        self.topwin.deiconify()  # 初始化完毕，显示截图窗
+        # self.topwin.deiconify()  # 初始化完毕，显示截图窗
         self.__flash()
         # self.topwin.mainloop()
 
@@ -153,8 +158,11 @@ class ScreenshotWin():
             self.imageResult = self.image.crop(box)
         self.topwin.destroy()  # 销毁窗口
         # 解绑快捷键
-        keyboard.remove_hotkey('Esc')
-        keyboard.remove_hotkey('Ctrl+Shift+Alt+D')
+        try:
+            keyboard.remove_hotkey('Esc')
+            keyboard.remove_hotkey('Ctrl+Shift+Alt+D')
+        except Exception as err:
+            Log.error(f'移除快捷键失败：{err}')
         if self.closeSendData:
             flag = self.copyImage()
             self.closeSendData(flag)
