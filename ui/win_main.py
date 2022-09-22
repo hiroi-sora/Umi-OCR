@@ -1,3 +1,5 @@
+from tkinter import font
+from turtle import bgcolor, width
 from utils.config import Config, Umi  # 最先加载配置
 from utils.logger import GetLog
 from utils.asset import *  # 资源
@@ -14,6 +16,7 @@ from ocr.msn_quick import MsnQuick
 
 import os
 import time
+import ctypes
 from PIL import Image  # 图像
 import tkinter as tk
 import tkinter.filedialog
@@ -35,6 +38,15 @@ class MainWin:
         self.win = tk.Tk()
         self.balloon = Balloon(self.win)  # 气泡框
 
+        def initStyle():  # 初始化样式
+            style = ttk.Style()
+            # winnative clam alt default classic vista xpnative
+            # style.theme_use('winnative')
+            style.configure('icon.TButton', padding=(12, 0))
+            style.configure('main.TButton', font=('Microsoft YaHei', '14', 'bold'),
+                            width=9)
+        initStyle()
+
         def initWin():
             self.win.title(Umi.name)
             # 窗口大小与位置
@@ -44,6 +56,12 @@ class MainWin:
             self.win.minsize(w, h)  # 最小大小
             self.win.geometry(f"{w}x{h}+{x}+{y}")  # 初始大小与位置
             self.win.protocol("WM_DELETE_WINDOW", self.onClose)  # 窗口关闭
+            # 调用api设置成由应用程序缩放
+            # ctypes.windll.shcore.SetProcessDpiAwareness(1)
+            # 调用api获得当前的缩放因子
+            ScaleFactor = ctypes.windll.shcore.GetScaleFactorForDevice(0)
+            # 设置缩放因子
+            # self.win.tk.call('tk', 'scaling', ScaleFactor/75)
             # 注册文件拖入，整个主窗口内有效
             hook_dropfiles(self.win, func=self.draggedImages)
             # 图标
@@ -62,10 +80,9 @@ class MainWin:
             fr = tk.Frame(self.win)
             fr.pack(side='top', fill="x", padx=5)
             # 右侧按钮
-            self.btnRun = tk.Button(
-                fr, text='开始任务', width=12, height=2,  command=self.run)
-            self.btnRun.pack(side='right', padx=5)
-            self.balloon.bind(self.btnRun, '开始任务')
+            self.btnRun = ttk.Button(fr, command=self.run, text='开始任务',
+                                     style='main.TButton')
+            self.btnRun.pack(side='right', fill='y')
             # 左侧文本和进度条
             vFrame2 = tk.Frame(fr)
             vFrame2.pack(side='top', fill='x')
@@ -80,7 +97,7 @@ class MainWin:
             tk.Label(vFrame2, textvariable=Config.getTK('tipsTop1')).pack(
                 side='right', padx=2)
             self.progressbar = ttk.Progressbar(fr)
-            self.progressbar.pack(side='top', padx=5, fill="x")
+            self.progressbar.pack(side='top', padx=2, pady=2, fill="x")
         initTop()
 
         self.notebook = ttk.Notebook(self.win)  # 初始化选项卡组件
@@ -95,35 +112,35 @@ class MainWin:
             fr1 = tk.Frame(tabFrameTable)
             fr1.pack(side='top', fill='x', padx=1, pady=1)
             # 左
-            btn = tk.Button(fr1, image=Asset.getImgTK('screenshot24'),  # 截图按钮
-                            command=self.openScreenshot,
-                            width=48, bg='white', relief='groove', overrelief='ridge',)
+            btn = ttk.Button(fr1, image=Asset.getImgTK('screenshot24'),  # 截图按钮
+                             command=self.openScreenshot,
+                             style='icon.TButton',  takefocus=0,)
             self.balloon.bind(btn, '屏幕截图')
             btn.pack(side='left')
             self.lockWidget.append(btn)
-            btn = tk.Button(fr1, image=Asset.getImgTK('paste24'),  # 剪贴板按钮
-                            command=self.runClipboard,
-                            width=48, bg='white', relief='groove', overrelief='ridge',)
+            btn = ttk.Button(fr1, image=Asset.getImgTK('paste24'),  # 剪贴板按钮
+                             command=self.runClipboard,
+                             style='icon.TButton',  takefocus=0,)
             self.balloon.bind(btn, '读取剪贴板')
             btn.pack(side='left')
             self.lockWidget.append(btn)
             # tk.Label(fr1, text="或直接拖入").pack(side='left')
             # 右
-            btn = tk.Button(fr1, image=Asset.getImgTK('clear24'),  # 清空按钮
-                            command=self.clearTable,
-                            width=48, bg='white', relief='groove', overrelief='ridge',)
+            btn = ttk.Button(fr1, image=Asset.getImgTK('clear24'),  # 清空按钮
+                             command=self.clearTable,
+                             style='icon.TButton',  takefocus=0,)
             self.balloon.bind(btn, '清空表格')
             btn.pack(side='right')
             self.lockWidget.append(btn)
-            btn = tk.Button(fr1, image=Asset.getImgTK('delete24'),  # 删除按钮
-                            command=self.delImgList,
-                            width=48, bg='white', relief='groove', overrelief='ridge',)
+            btn = ttk.Button(fr1, image=Asset.getImgTK('delete24'),  # 删除按钮
+                             command=self.delImgList,
+                             style='icon.TButton',  takefocus=0,)
             self.balloon.bind(btn, '移除选中的条目\nShift+左键 可选中多个条目')
             btn.pack(side='right')
             self.lockWidget.append(btn)
-            btn = tk.Button(fr1, image=Asset.getImgTK('openfile24'),  # 打开文件按钮
-                            command=self.openFileWin,
-                            width=48, bg='white', relief='groove', overrelief='ridge',)
+            btn = ttk.Button(fr1, image=Asset.getImgTK('openfile24'),  # 打开文件按钮
+                             command=self.openFileWin,
+                             style='icon.TButton',  takefocus=0,)
             self.balloon.bind(btn, '浏览文件')
             btn.pack(side='right', padx=5)
             self.lockWidget.append(btn)
@@ -159,29 +176,29 @@ class MainWin:
             self.isAutoRoll = tk.IntVar()
             self.isAutoRoll.set(1)
             # 左
-            btn = tk.Button(fr1, image=Asset.getImgTK('screenshot24'),  # 截图按钮
-                            command=self.openScreenshot,
-                            width=48, bg='white', relief='groove', overrelief='ridge',)
+            btn = ttk.Button(fr1, image=Asset.getImgTK('screenshot24'),  # 截图按钮
+                             command=self.openScreenshot,
+                             style='icon.TButton',  takefocus=0,)
             self.balloon.bind(btn, '屏幕截图')
             btn.pack(side='left')
             self.lockWidget.append(btn)
-            btn = tk.Button(fr1, image=Asset.getImgTK('paste24'),  # 剪贴板按钮
-                            command=self.runClipboard,
-                            width=48, bg='white', relief='groove', overrelief='ridge',)
+            btn = ttk.Button(fr1, image=Asset.getImgTK('paste24'),  # 剪贴板按钮
+                             command=self.runClipboard,
+                             style='icon.TButton',  takefocus=0,)
             self.balloon.bind(btn, '读取剪贴板')
             btn.pack(side='left')
             self.lockWidget.append(btn)
 
             # 右
-            btn = tk.Button(fr1, image=Asset.getImgTK('clear24'),  # 清空按钮
-                            command=lambda: self.textOutput.delete(
-                                '1.0', tk.END),
-                            width=48, bg='white', relief='groove', overrelief='ridge',)
+            btn = ttk.Button(fr1, image=Asset.getImgTK('clear24'),  # 清空按钮
+                             command=lambda: self.textOutput.delete(
+                '1.0', tk.END),
+                style='icon.TButton',  takefocus=0,)
             self.balloon.bind(btn, '清空输出面板')
             btn.pack(side='right')
 
-            tk.Checkbutton(fr1, variable=self.isAutoRoll, text="自动滚动").pack(
-                side='right', padx=20)
+            tk.Checkbutton(fr1, variable=self.isAutoRoll, text="自动滚动",
+                           takefocus=0,).pack(side='right', padx=20)
 
             fr2 = tk.Frame(tabFrameOutput)
             fr2.pack(side='top', fill='both')
