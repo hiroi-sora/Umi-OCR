@@ -345,7 +345,8 @@ class MainWin:
                     if OCRe.msnFlag == MsnFlag.none:
                         Config.set('isOutputTxt', False)
                         Config.set('isOutputMD', False)
-                labelOff = tk.Label(fr1, text='关闭本地输出', cursor="hand2")
+                        Config.set('isOutputJsonl', False)
+                labelOff = tk.Label(fr1, text='　　关闭本地输出', cursor="hand2")
                 labelOff.grid(column=0, row=0, sticky="w")
                 labelOff.bind('<Button-1>', offAllOutput)  # 绑定关闭全部输出
                 wid = tk.Checkbutton(

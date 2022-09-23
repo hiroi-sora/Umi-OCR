@@ -30,10 +30,8 @@ class OcrAPI:
             exePath += f' {argsStr}'
         if configPath and 'config_path' not in exePath:  # 指定配置文件
             exePath += f' --config_path="{configPath}"'
-        if 'use_system_pause' not in exePath:  # 强制禁用暂停
-            exePath += ' --use_system_pause=0'
-        if 'ensure_ascii' not in exePath:  # 启用输出值ascii转义，规避编码问题
-            exePath += ' --ensure_ascii=1'
+        if 'use_debug' not in exePath:  # 关闭debug模式
+            exePath += ' --use_debug=0'
         # 设置子进程启用静默模式，不显示控制台窗口
         startupinfo = None
         if 'win32' in str(sysPlatform).lower():

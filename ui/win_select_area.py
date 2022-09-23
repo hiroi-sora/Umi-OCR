@@ -196,15 +196,16 @@ class IgnoreAreaWin:
                                                      text=f'图片分析中，请稍候……\n\n\n\n{pathStr}')
                 self.win.update()  # 刷新窗口
                 # 开始识别，耗时长
-                oget = OCRe.run(path)
+                data = OCRe.run(path)
                 # 任务后：刷新提示信息
                 self.canvas.delete(canvasText)  # 删除提示文字
-                if oget["code"] == 100:  # 存在内容
-                    for o in oget["data"]:  # 绘制矩形框
-                        p1x = round(o['box'][0]*self.imgScale)
-                        p1y = round(o['box'][1]*self.imgScale)
-                        p2x = round(o['box'][4]*self.imgScale)
-                        p2y = round(o['box'][5]*self.imgScale)
+                if data["code"] == 100:  # 存在内容
+                    for o in data["data"]:  # 绘制矩形框
+                        # 提取左上角、右下角的坐标
+                        p1x = round(o['box'][0][0]*self.imgScale)
+                        p1y = round(o['box'][0][1]*self.imgScale)
+                        p2x = round(o['box'][2][0]*self.imgScale)
+                        p2y = round(o['box'][2][1]*self.imgScale)
                         r1 = self.canvas.create_rectangle(
                             p1x, p1y, p2x, p2y, outline='white', width=1)  # 绘制白实线基底
                         r2 = self.canvas.create_rectangle(
@@ -213,10 +214,10 @@ class IgnoreAreaWin:
                         self.canvas.tag_lower(r1)
                         self.areaTextRec.append(r1)
                         self.areaTextRec.append(r2)
-                elif not oget["code"] == 101:  # 发生异常
+                elif not data["code"] == 101:  # 发生异常
                     self.isAutoOCR.set(0)  # 关闭自动分析
                     tk.messagebox.showwarning(
-                        "遇到了一点小问题", f"图片分析失败。图片地址：\n{path}\n\n错误码：{str(oget['code'])}\n\n错误信息：\n{str(oget['data'])}")
+                        "遇到了一点小问题", f"图片分析失败。图片地址：\n{path}\n\n错误码：{str(data['code'])}\n\n错误信息：\n{str(data['data'])}")
                     self.win.attributes('-topmost', 1)  # 设置层级最前
                     self.win.attributes('-topmost', 0)  # 然后立刻解除
         runOCR()

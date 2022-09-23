@@ -36,7 +36,7 @@ class ProcIgnoreArea(Proc):
                 for tb in textBlocks:  # 遍历每一个文字块
                     for a in self.areaInfo['area'][1]:  # 遍历每一个检测块
                         # 若任何一个文块 在 识别区域检测块内，返回true
-                        if isInBox(a[0], a[1], (tb['box'][0], tb['box'][1]), (tb['box'][4], tb['box'][5])):
+                        if isInBox(a[0], a[1], (tb['box'][0][0], tb['box'][0][1]), (tb['box'][2][0], tb['box'][2][1])):
                             return True  # 跳出双循环
         isModeB = _isModeB_()
         modeIndex = 2 if isModeB else 0
@@ -47,7 +47,7 @@ class ProcIgnoreArea(Proc):
             flag = True  # True 为没有被忽略
             # 检测当前文块 tb 是否在 modeIndex 模式的任何一个检测块内
             for a in self.areaInfo['area'][modeIndex]:
-                if isInBox(a[0], a[1], (tb['box'][0], tb['box'][1]), (tb['box'][4], tb['box'][5])):
+                if isInBox(a[0], a[1], (tb['box'][0][0], tb['box'][0][1]), (tb['box'][2][0], tb['box'][2][1])):
                     flag = False  # 踩到任何一个块，GG
                     break
             if flag:  # 没有被忽略
