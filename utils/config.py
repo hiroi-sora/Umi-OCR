@@ -115,7 +115,7 @@ _ConfigDict = {
         'isTK': True,
     },
     # 输出格式设置
-    'isOutputDebug': {  # T时输出调试信息
+    'isOutputDebug': {  # T时Debug模式
         'default': False,
         'isSave': True,
         'isTK': True,

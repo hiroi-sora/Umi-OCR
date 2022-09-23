@@ -5,7 +5,7 @@ from utils.logger import GetLog
 from utils.asset import *  # 资源
 from utils.data_structure import KeyList
 from utils.tool import Tool
-from ui.win_screenshot import ScreenshotWin  # 截屏
+from ui.win_screenshot import ScreenshotWin, SSW  # 截屏
 from ui.win_select_area import IgnoreAreaWin  # 子窗口
 from ui.widget import Widget  # 控件
 from ui.pmw.PmwBalloon import Balloon  # 气泡提示
@@ -47,6 +47,15 @@ class MainWin:
                             width=9)
         initStyle()
 
+        def initDPI():
+            # 调用api设置成由应用程序缩放
+            ctypes.windll.shcore.SetProcessDpiAwareness(1)
+            # 调用api获得当前的缩放因子
+            ScaleFactor = ctypes.windll.shcore.GetScaleFactorForDevice(0)
+            # 设置缩放因子
+            self.win.tk.call('tk', 'scaling', ScaleFactor/75)
+        # initDPI()
+
         def initWin():
             self.win.title(Umi.name)
             # 窗口大小与位置
@@ -56,12 +65,6 @@ class MainWin:
             self.win.minsize(w, h)  # 最小大小
             self.win.geometry(f"{w}x{h}+{x}+{y}")  # 初始大小与位置
             self.win.protocol("WM_DELETE_WINDOW", self.onClose)  # 窗口关闭
-            # 调用api设置成由应用程序缩放
-            # ctypes.windll.shcore.SetProcessDpiAwareness(1)
-            # 调用api获得当前的缩放因子
-            # ScaleFactor = ctypes.windll.shcore.GetScaleFactorForDevice(0)
-            # 设置缩放因子
-            # self.win.tk.call('tk', 'scaling', ScaleFactor/75)
             # 注册文件拖入，整个主窗口内有效
             hook_dropfiles(self.win, func=self.draggedImages)
             # 图标
@@ -197,8 +200,8 @@ class MainWin:
             self.balloon.bind(btn, '清空输出面板')
             btn.pack(side='right')
 
-            tk.Checkbutton(fr1, variable=self.isAutoRoll, text="自动滚动",
-                           takefocus=0,).pack(side='right', padx=20)
+            ttk.Checkbutton(fr1, variable=self.isAutoRoll, text="自动滚动",
+                            takefocus=0,).pack(side='right', padx=20)
 
             fr2 = tk.Frame(tabFrameOutput)
             fr2.pack(side='top', fill='both')
@@ -298,7 +301,7 @@ class MainWin:
                     self.optFrame, text='快捷识图')
                 quickLabel.pack(side='top', fill='x',
                                 ipady=2, pady=LabelFramePadY, padx=4)
-                self.win.bind("<<ScreenshotEvent>>",
+                self.win.bind('<<ScreenshotEvent>>',
                               self.openScreenshot)  # 绑定截图事件
                 # 截图快捷键触发时，子线程向主线程发送事件，在主线程中启动截图窗口
                 # 避免子线程直接唤起截图窗导致的窗口闪烁现象
@@ -508,6 +511,7 @@ class MainWin:
             initOptFrameWH()
         initTab3()
 
+        self.gotoTop()
         self.win.mainloop()
 
     # 加载图片 ===============================================
@@ -657,8 +661,8 @@ class MainWin:
     # 窗口操作 =============================================
 
     def gotoTop(self):  # 主窗置顶
-        if self.win.state() == "iconic":  # 窗口最小化状态下
-            self.win.state("normal")  # 恢复前台状态
+        if self.win.state() == 'iconic':  # 窗口最小化状态下
+            self.win.state('normal')  # 恢复前台状态
         self.win.attributes('-topmost', 1)  # 设置层级最前
         self.win.attributes('-topmost', 0)  # 然后立刻解除
 
@@ -768,15 +772,15 @@ class MainWin:
     def openScreenshot(self, e=None):  # 打开截图窗口
         if not OCRe.msnFlag == MsnFlag.none or not self.win.attributes('-disabled') == 0:
             return
-        self.win.attributes("-disabled", 1)  # 禁用父窗口
-        # try:
-        ScreenshotWin(self.closeScreenshot)
-        # except Exception as err:
-        #     self.panelOutput(f'截图失败：{err}')
+        self.win.attributes("-disabled", 1)  # 禁用主窗口
+        SSW.initGrab()
 
     def closeScreenshot(self, flag):  # 关闭截图窗口，返回T表示已复制到剪贴板
         self.win.attributes("-disabled", 0)  # 启用父窗口
-        if flag:  # 成功
+        if not flag and self.win.state() == 'normal':  # 截图不成功，但窗口非最小化
+            self.gotoTop()  # 主窗置顶
+        elif flag:  # 成功
+            self.gotoTop()  # 主窗置顶
             self.runClipboard()  # 剪贴板识图
 
     def onClose(self):  # 关闭窗口事件
