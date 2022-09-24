@@ -124,7 +124,7 @@ class MainWin:
             btn = ttk.Button(fr1, image=Asset.getImgTK('paste24'),  # 剪贴板按钮
                              command=self.runClipboard,
                              style='icon.TButton',  takefocus=0,)
-            self.balloon.bind(btn, '读取剪贴板')
+            self.balloon.bind(btn, '粘贴图片')
             btn.pack(side='left')
             self.lockWidget.append(btn)
             # tk.Label(fr1, text="或直接拖入").pack(side='left')
@@ -188,7 +188,7 @@ class MainWin:
             btn = ttk.Button(fr1, image=Asset.getImgTK('paste24'),  # 剪贴板按钮
                              command=self.runClipboard,
                              style='icon.TButton',  takefocus=0,)
-            self.balloon.bind(btn, '读取剪贴板')
+            self.balloon.bind(btn, '粘贴图片')
             btn.pack(side='left')
             self.lockWidget.append(btn)
 
@@ -268,33 +268,45 @@ class MainWin:
                     '<Button-1>', lambda *e: os.startfile("Umi-OCR_config.json"))
             initScheduler()
 
-            def initArea():  # 忽略区域设置
-                self.areaLabel = tk.LabelFrame(
+            def initIgnore():  # 忽略区域设置
+                ignoreMainFrame = tk.LabelFrame(
                     self.optFrame, text="忽略图片中某些区域内的文字")
-                self.areaLabel.pack(side='top', fill='x',
-                                    ipady=2, pady=LabelFramePadY, padx=4)
-                self.areaLabel.grid_columnconfigure(0, minsize=4)
-                wid = tk.Button(self.areaLabel, text='添加区域',
+                ignoreMainFrame.pack(side='top', fill='x',
+                                     ipady=2, pady=LabelFramePadY, padx=4)
+
+                self.ignoreBtn = ttk.Button(ignoreMainFrame, text='添加忽略区域、排除水印',
+                                            command=self.openSelectArea)
+                self.ignoreBtn.pack(side='top', fill='x',
+                                    ipady=2, padx=4)
+                self.lockWidget.append(self.ignoreBtn)
+                # 忽略区域本体框架
+                self.ignoreFrame = tk.Frame(ignoreMainFrame)
+                self.ignoreFrame.pack(side='top', fill='x',
+                                      ipady=2, padx=4)
+                self.ignoreFrame.pack_forget()  # 隐藏区域
+                self.ignoreFrame.grid_columnconfigure(0, minsize=4)
+                wid = tk.Button(self.ignoreFrame, text='添加区域',
                                 command=self.openSelectArea)
                 wid.grid(column=1, row=0, sticky="w")
                 self.lockWidget.append(wid)
-                wid = tk.Button(self.areaLabel, text='清空区域',
+                wid = tk.Button(self.ignoreFrame, text='清空区域',
                                 command=self.clearArea)
                 wid.grid(column=1, row=1, sticky="w")
                 self.lockWidget.append(wid)
-                self.areaLabel.grid_rowconfigure(2, minsize=10)
-                # tk.Button(self.areaLabel, text='读取预设',
-                #           command=self.showTest).grid(column=1, row=3, sticky="w")
-                # tk.Button(self.areaLabel, text='保存预设',
-                #           command=self.showTest).grid(column=1, row=4, sticky="w")
-                self.areaLabel.grid_columnconfigure(2, minsize=4)
+                self.ignoreLabel = tk.Label(
+                    self.ignoreFrame, anchor='w')  # 显示生效大小
+                self.ignoreLabel.grid(column=1, row=2, sticky="w")
+                self.balloon.bind(
+                    self.ignoreLabel, '批量任务时，只有分辨率与以下相同的图片，才会应用忽略区域。')
+                self.ignoreFrame.grid_rowconfigure(2, minsize=10)
+                self.ignoreFrame.grid_columnconfigure(2, minsize=4)
                 self.canvasHeight = 140  # 画板高度不变，宽度根据选区回传数据调整
-                self.canvas = tk.Canvas(self.areaLabel, width=249, height=self.canvasHeight,
+                self.canvas = tk.Canvas(self.ignoreFrame, width=249, height=self.canvasHeight,
                                         bg="black", cursor="hand2")
                 self.canvas.grid(column=3, row=0, rowspan=10)
                 self.canvas.bind(
                     '<Button-1>', lambda *e: self.openSelectArea())
-            initArea()
+            initIgnore()
 
             def quickOCR():  # 快捷识图设置
                 quickLabel = tk.LabelFrame(
@@ -489,11 +501,12 @@ class MainWin:
             initAbout()
 
             def initOptFrameWH():  # 初始化框架的宽高
-                self.optFrame.update()  # 强制刷新
-                rH = self.optFrame.winfo_height()  # 由组件撑起的 框架高度
-                self.optCanvas.config(scrollregion=(0, 0, 0, rH))  # 画布内高度为框架高度
-                self.optFrame.pack_propagate(False)  # 禁用框架自动宽高调整
-                self.optFrame["height"] = rH  # 手动还原高度。一次性设置，之后无需再管。
+                self.updateFrameHeight()
+                # self.optFrame.update()  # 强制刷新
+                # rH = self.optFrame.winfo_height()  # 由组件撑起的 框架高度
+                # self.optCanvas.config(scrollregion=(0, 0, 0, rH))  # 画布内高度为框架高度
+                # self.optFrame.pack_propagate(False)  # 禁用框架自动宽高调整
+                # self.optFrame["height"] = rH  # 手动还原高度。一次性设置，之后无需再管。
                 self.optCanvasWidth = 1  # 宽度则是随窗口大小而改变。
 
                 def onCanvasResize(event):  # 绑定画布大小改变事件
@@ -583,6 +596,14 @@ class MainWin:
 
     # 忽略区域 ===============================================
 
+    def updateFrameHeight(self):  # 刷新框架高度
+        self.optFrame.pack_propagate(True)  # 启用框架自动宽高调整
+        self.optFrame.update()  # 强制刷新
+        rH = self.optFrame.winfo_height()  # 由组件撑起的 框架高度
+        self.optCanvas.config(scrollregion=(0, 0, 0, rH))  # 画布内高度为框架高度
+        self.optFrame.pack_propagate(False)  # 禁用框架自动宽高调整
+        self.optFrame["height"] = rH  # 手动还原高度
+
     def openSelectArea(self):  # 打开选择区域
         if not OCRe.msnFlag == MsnFlag.none or not self.win.attributes('-disabled') == 0:
             return
@@ -596,23 +617,34 @@ class MainWin:
         self.win.attributes("-disabled", 0)  # 启用父窗口
         area = Config.get("ignoreArea")
         if not area:
+            self.ignoreFrame.pack_forget()  # 隐藏忽略区域窗口
+            self.ignoreBtn.pack(side='top', fill='x',  # 显示按钮
+                                ipady=2, padx=4)
+            self.updateFrameHeight()  # 刷新框架
             return
-        self.areaLabel["text"] = f"忽略区域 生效分辨率：{area['size'][0]}x{area['size'][1]}"
+        self.ignoreLabel["text"] = f"生效大小\n宽 {area['size'][0]}\n高 {area['size'][1]}"
         self.canvas.delete(tk.ALL)  # 清除画布
         scale = self.canvasHeight / area['size'][1]  # 显示缩放比例
         width = int(self.canvasHeight * (area['size'][0] / area['size'][1]))
         self.canvas["width"] = width
         areaColor = ["red", "green", "darkorange"]
-        for i in range(3):
+        for i in range(3):  # 绘制新图
             for a in area['area'][i]:
                 x0, y0 = a[0][0]*scale, a[0][1]*scale,
                 x1, y1 = a[1][0]*scale, a[1][1]*scale,
                 self.canvas.create_rectangle(
-                    x0, y0, x1, y1,  fill=areaColor[i])  # 绘制新图
+                    x0, y0, x1, y1,  fill=areaColor[i])
+        self.ignoreBtn.pack_forget()  # 隐藏按钮
+        self.ignoreFrame.pack(side='top', fill='x',  # 显示忽略区域窗口
+                              ipady=2, padx=4)
+        self.updateFrameHeight()  # 刷新框架
 
     def clearArea(self):  # 清空忽略区域
+        self.ignoreFrame.pack_forget()  # 隐藏忽略区域窗口
+        self.ignoreBtn.pack(side='top', fill='x',  # 显示按钮
+                            ipady=2, padx=4)
+        self.updateFrameHeight()  # 刷新框架
         Config.set("ignoreArea", None)
-        self.areaLabel["text"] = "忽略图片中某些区域内的文字"
         self.canvas.delete(tk.ALL)  # 清除画布
         self.canvas["width"] = int(self.canvasHeight * (16/9))
 
