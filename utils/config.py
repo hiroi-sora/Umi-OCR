@@ -311,14 +311,16 @@ class ConfigModule:
         '''获取一个配置项的值'''
         return self.__optDict[key]
 
-    def set(self, key, value, isUpdateTK=False):
-        '''设置一个配置项的值'''
+    def set(self, key, value, isUpdateTK=False, isSave=False):
+        '''设置一个配置项的值。isSave表示非tk配置项立刻保存本地（需要先在_ConfigDict里设）'''
         if key in self.__tkDict:  # 若是tk，则通过tk的update事件去更新optDict值
             self.__tkDict[key].set(value)
             if isUpdateTK:  # 需要刷新界面
                 self.main.win.update()
         else:  # 不是tk，直接更新optDict
             self.__optDict[key] = value
+            if isSave and _ConfigDict[key].get('isSave', False):
+                self.save()  # 保存本地
 
     def getTK(self, key):
         '''获取一个TK变量'''

@@ -40,8 +40,8 @@ class ScreenshotWin():
         self.topwin.withdraw()  # 隐藏窗口
         self.topwin.overrideredirect(True)  # 无边框
         self.topwin.configure(bg='black')
-        self.topwin.attributes("-alpha", 0.8)  # 透明
-        self.topwin.attributes('-topmost', 1)  # 设置层级最前 TODO
+        # self.topwin.attributes("-alpha", 0.8)  # 透明（调试用）
+        self.topwin.attributes('-topmost', 1)  # 设置层级最前
         self.closeSendData = Config.main.closeScreenshot  # 向父窗口发送数据的接口
         # 创建画布及画布元素。后创建的层级在上。
         self.canvas = tk.Canvas(self.topwin, cursor='plus', bg=None,
@@ -128,7 +128,7 @@ class ScreenshotWin():
 '''):
                     self.promptSss = False
                 else:
-                    Config.set('promptScreenshotScale', False)
+                    Config.set('promptScreenshotScale', False, isSave=True)
 
         # 计算虚拟屏幕最左上角和最右下角的坐标
         scUp, scDown, scLeft, scRight = 0, 0, 0, 0
