@@ -123,7 +123,10 @@ class MsnBatch(Msn):
             textDebug += f'耗时：{numData["timeNow"]}s  识别失败\n'
             textScore = '错误'
         # ==================== 输出 ====================
-        self.__output('img', textBlockList, imgInfo, numData, textDebug)
+        if self.isIgnoreNoText and ocrData['code'] == 101:
+            pass  # 设置了不输出无文字的图片
+        else:
+            self.__output('img', textBlockList, imgInfo, numData, textDebug)
         # ==================== 刷新UI ====================
         # 刷新进度
         self.progressbar["value"] = numData['now']
