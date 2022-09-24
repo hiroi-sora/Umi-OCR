@@ -24,6 +24,7 @@ class ScreenshotWin():
     def __init__(self):
         self.isInitWin = False  # 防止重复初始化窗体
         self.isInitGrab = False  # 防止未初始化截图参数时触发事件
+        self.errMsg = None  # 记录错误，传给调用者
 
     def initWin(self):  # 初始化窗体
         self.isInitWin = True
@@ -202,19 +203,20 @@ class ScreenshotWin():
         if not self.isInitGrab:
             return
         Log.info('关闭截图')
-        self.topwin.withdraw()  # 隐藏窗口
         # 隐藏元素
         for i in (0, 1):
             self.__hideElement(self.sightBox[i])
             self.__hideElement(self.sightLine[i])
+        self.topwin.withdraw()  # 隐藏窗口
         #  初始化参数
         self.isInitGrab = False
         self.drawMode = _DrawMode.ready
         if self.closeSendData:
+            self.errMsg = None
             flag = self.copyImage()  # 复制图像
             self.image = None  # 删除图像
             self.imageResult = None  # 删除
-            self.closeSendData(flag)
+            self.closeSendData(flag, self.errMsg)
 
     def __flash(self):  # 边缘闪光，提示已截图
         color = 'white'
@@ -291,12 +293,23 @@ class ScreenshotWin():
             OpenClipboard()  # 打开剪贴板
             EmptyClipboard()  # 清空剪贴板
             SetClipboardData(CF_DIB, imgData)  # 写入
-            CloseClipboard()  # 关闭
         except Exception as err:
-            tk.messagebox.showerror(
-                '遇到了一点小问题',
-                f'截图写入剪贴板失败，请检测是否有其他程序正在占用。\n{err}')
+            self.errMsg = f'位图无法写入剪贴板，请检测是否有其他程序正在占用。\n{err}'
+            return False
+        finally:
+            try:
+                CloseClipboard()  # 关闭
+            except Exception as err:
+                self.errMsg = f'无法关闭剪贴板。\n{err}'
+                return False
         return True
 
 
 SSW = ScreenshotWin()
+
+# class e:
+#     def __init__(self, x, y):
+#         self.x = x
+#         self.y = y
+# self.__onDown(e(0, 0))
+# self.__onUp(e(50, 20))
