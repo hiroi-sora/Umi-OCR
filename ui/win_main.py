@@ -42,6 +42,9 @@ class MainWin:
             style = ttk.Style()
             # winnative clam alt default classic vista xpnative
             # style.theme_use('winnative')
+            # style.theme_use('clam')
+            # style.theme_use('alt')
+            # style.theme_use('default')
             style.configure('icon.TButton', padding=(12, 0))
             style.configure('main.TButton', font=('Microsoft YaHei', '12', ''),  # bold
                             width=9)
@@ -237,8 +240,46 @@ class MainWin:
 
             LabelFramePadY = 3  # 每个区域上下间距
 
+            def initSoftwareFrame():  # 软件行为设置
+                fSoft = tk.LabelFrame(
+                    self.optFrame, text='软件行为')
+                fSoft.pack(side='top', fill='x',
+                           ipady=2, pady=LabelFramePadY, padx=4)
+                fr1 = tk.Frame(fSoft)
+                fr1.pack(side='top', fill='x', pady=2, padx=5)
+                wid = tk.Checkbutton(fr1, text="调试模式",
+                                     variable=Config.getTK('isDebug'))
+                wid.grid(column=0, row=0, sticky="w")
+                self.lockWidget.append(wid)
+            initSoftwareFrame()
+
+            def quickOCR():  # 快捷识图设置
+                fQuick = tk.LabelFrame(
+                    self.optFrame, text='快捷识图')
+                fQuick.pack(side='top', fill='x',
+                            ipady=2, pady=LabelFramePadY, padx=4)
+                self.win.bind('<<ScreenshotEvent>>',
+                              self.openScreenshot)  # 绑定截图事件
+                # 截图快捷键触发时，子线程向主线程发送事件，在主线程中启动截图窗口
+                # 避免子线程直接唤起截图窗导致的窗口闪烁现象
+                Widget.hotkeyFrame(fQuick, '截图识别', 'Clipboard',
+                                   lambda *e: self.win.event_generate(
+                                       '<<ScreenshotEvent>>')
+                                   ).pack(side='top', fill='x', padx=4)
+                Widget.hotkeyFrame(fQuick, '读取剪贴板', 'Screenshot',
+                                   self.runClipboard).pack(side='top', fill='x', padx=4)
+                tk.Checkbutton(fQuick, variable=Config.getTK('isNeedCopy'),
+                               text='复制识别出的文字').pack(side='left', fill='x', padx=4)
+            quickOCR()
+
+            # 批量任务设置
+            frameBatch = tk.LabelFrame(self.optFrame, text="批量任务")
+            frameBatch.pack(side='top', fill='x',
+                            ipady=2, pady=LabelFramePadY, padx=4)
+
             def initScheduler():  # 计划任务设置
-                frameScheduler = tk.LabelFrame(self.optFrame, text="计划任务")
+                frameScheduler = tk.LabelFrame(
+                    frameBatch, labelanchor='n', text="计划任务")
                 frameScheduler.pack(side='top', fill='x',
                                     ipady=2, pady=LabelFramePadY, padx=4)
 
@@ -268,92 +309,35 @@ class MainWin:
                     '<Button-1>', lambda *e: os.startfile("Umi-OCR_config.json"))
             initScheduler()
 
-            def initIgnore():  # 忽略区域设置
-                ignoreMainFrame = tk.LabelFrame(
-                    self.optFrame, text="忽略图片中某些区域内的文字")
-                ignoreMainFrame.pack(side='top', fill='x',
-                                     ipady=2, pady=LabelFramePadY, padx=4)
-
-                self.ignoreBtn = ttk.Button(ignoreMainFrame, text='添加忽略区域、排除水印',
-                                            command=self.openSelectArea)
-                self.ignoreBtn.pack(side='top', fill='x',
-                                    ipady=2, padx=4)
-                self.lockWidget.append(self.ignoreBtn)
-                # 忽略区域本体框架
-                self.ignoreFrame = tk.Frame(ignoreMainFrame)
-                self.ignoreFrame.pack(side='top', fill='x',
-                                      ipady=2, padx=4)
-                self.ignoreFrame.pack_forget()  # 隐藏区域
-                self.ignoreFrame.grid_columnconfigure(0, minsize=4)
-                wid = tk.Button(self.ignoreFrame, text='添加区域',
-                                command=self.openSelectArea)
-                wid.grid(column=1, row=0, sticky="w")
-                self.lockWidget.append(wid)
-                wid = tk.Button(self.ignoreFrame, text='清空区域',
-                                command=self.clearArea)
-                wid.grid(column=1, row=1, sticky="w")
-                self.lockWidget.append(wid)
-                self.ignoreLabel = tk.Label(
-                    self.ignoreFrame, anchor='w')  # 显示生效大小
-                self.ignoreLabel.grid(column=1, row=2, sticky="w")
-                self.balloon.bind(
-                    self.ignoreLabel, '批量任务时，只有分辨率与以下相同的图片，才会应用忽略区域。')
-                self.ignoreFrame.grid_rowconfigure(2, minsize=10)
-                self.ignoreFrame.grid_columnconfigure(2, minsize=4)
-                self.canvasHeight = 140  # 画板高度不变，宽度根据选区回传数据调整
-                self.canvas = tk.Canvas(self.ignoreFrame, width=249, height=self.canvasHeight,
-                                        bg="black", cursor="hand2")
-                self.canvas.grid(column=3, row=0, rowspan=10)
-                self.canvas.bind(
-                    '<Button-1>', lambda *e: self.openSelectArea())
-            initIgnore()
-
-            def quickOCR():  # 快捷识图设置
-                quickLabel = tk.LabelFrame(
-                    self.optFrame, text='快捷识图')
-                quickLabel.pack(side='top', fill='x',
-                                ipady=2, pady=LabelFramePadY, padx=4)
-                self.win.bind('<<ScreenshotEvent>>',
-                              self.openScreenshot)  # 绑定截图事件
-                # 截图快捷键触发时，子线程向主线程发送事件，在主线程中启动截图窗口
-                # 避免子线程直接唤起截图窗导致的窗口闪烁现象
-                Widget.hotkeyFrame(quickLabel, '截图识别', 'Clipboard',
-                                   lambda *e: self.win.event_generate(
-                                       '<<ScreenshotEvent>>')
-                                   ).pack(side='top', fill='x', padx=4)
-                Widget.hotkeyFrame(quickLabel, '读剪贴板', 'Screenshot',
-                                   self.runClipboard).pack(side='top', fill='x', padx=4)
-                tk.Checkbutton(quickLabel, variable=Config.getTK('isNeedCopy'),
-                               text='复制识别出的文字').pack(side='left', fill='x', padx=4)
-            quickOCR()
-
             def initInFile():  # 输入设置
-                frameInFile = tk.LabelFrame(self.optFrame, text="输入设置")
-                frameInFile.pack(side='top', fill='x',
+                fInput = tk.LabelFrame(
+                    frameBatch, labelanchor='n', text='图片导入')
+                fInput.pack(side='top', fill='x',
                                  ipady=2, pady=LabelFramePadY, padx=4)
 
-                fr1 = tk.Frame(frameInFile)
+                fr1 = tk.Frame(fInput)
                 fr1.pack(side='top', fill='x', pady=2, padx=5)
                 wid = tk.Checkbutton(
-                    fr1, variable=Config.getTK('isRecursiveSearch'), text="递归读取子文件夹中所有图片")
+                    fr1, variable=Config.getTK('isRecursiveSearch'), text='递归读取子文件夹中所有图片')
                 wid.grid(column=0, row=0, columnspan=2, sticky="w")
                 self.lockWidget.append(wid)
 
-                tk.Label(fr1, text="图片后缀：　").grid(column=0, row=2, sticky="w")
+                tk.Label(fr1, text='图片后缀：　').grid(column=0, row=2, sticky='w')
                 enInSuffix = tk.Entry(
                     fr1, textvariable=Config.getTK('imageSuffix'))
-                enInSuffix.grid(column=1, row=2, sticky="nsew")
+                enInSuffix.grid(column=1, row=2, sticky='nsew')
                 self.lockWidget.append(enInSuffix)
 
                 fr1.grid_columnconfigure(1, weight=1)
             initInFile()
 
-            def initOutFile():  # 输出文件设置
-                frameOutFile = tk.LabelFrame(self.optFrame, text="输出设置")
-                frameOutFile.pack(side='top', fill='x',
+            def initOutFile():  # 输出设置
+                fOutput = tk.LabelFrame(
+                    frameBatch, labelanchor='n', text="结果输出")
+                fOutput.pack(side='top', fill='x',
                                   ipady=2, pady=LabelFramePadY, padx=4)
                 # 输出文件类型勾选
-                fr1 = tk.Frame(frameOutFile)
+                fr1 = tk.Frame(fOutput)
                 fr1.pack(side='top', fill='x', pady=2, padx=5)
 
                 def offAllOutput(e):  # 关闭全部输出
@@ -376,12 +360,16 @@ class MainWin:
                     fr1, variable=Config.getTK('isOutputMD'), text="图文链接.md文件")
                 wid.grid(column=1, row=1,  sticky="w")
                 self.lockWidget.append(wid)
+                wid = tk.Checkbutton(fr1, text="忽略无文字的图片",
+                                     variable=Config.getTK('isIgnoreNoText'),)
+                wid.grid(column=1, row=2, sticky="w")
+                self.lockWidget.append(wid)
 
-                tk.Label(frameOutFile, fg="gray",
+                tk.Label(fOutput, fg="gray",
                          text="下面两项为空时，默认输出到第一张图片所在的文件夹"
                          ).pack(side='top', fill='x', padx=5)
                 # 输出目录
-                fr2 = tk.Frame(frameOutFile)
+                fr2 = tk.Frame(fOutput)
                 fr2.pack(side='top', fill='x', pady=2, padx=5)
                 tk.Label(fr2, text="输出目录：").grid(column=0, row=3, sticky="w")
                 enOutPath = tk.Entry(
@@ -395,18 +383,46 @@ class MainWin:
                 enOutName.grid(column=1, row=5, sticky="nsew")
                 self.lockWidget.append(enOutName)
                 fr2.grid_columnconfigure(1, weight=1)  # 第二列自动扩充
-                # 其它选项
-                fr3 = tk.Frame(frameOutFile)
-                fr3.pack(side='top', fill='x', pady=2, padx=5)
-                wid = tk.Checkbutton(fr3, text="输出调试信息　",
-                                     variable=Config.getTK('isOutputDebug'))
-                wid.grid(column=0, row=0, sticky="w")
-                self.lockWidget.append(wid)
-                wid = tk.Checkbutton(fr3, text="忽略无文字的图片",
-                                     variable=Config.getTK('isIgnoreNoText'),)
+            initOutFile()
+
+            def initProcess():  # 后处理设置
+                fProcess = tk.LabelFrame(
+                    frameBatch, labelanchor='n', text='文本后处理')
+                fProcess.pack(side='top', fill='x',
+                              ipady=2, pady=LabelFramePadY, padx=4)
+
+                fIgnore = tk.Frame(fProcess)
+                fIgnore.pack(side='top', fill='x', pady=2, padx=4)
+
+                self.ignoreBtn = ttk.Button(fIgnore, text='添加忽略区域、排除水印',
+                                            command=self.openSelectArea)
+                self.ignoreBtn.pack(side='top', fill='x')
+                self.lockWidget.append(self.ignoreBtn)
+                # 忽略区域本体框架
+                self.ignoreFrame = tk.Frame(fIgnore)  # 不pack，动态添加
+                self.ignoreFrame.grid_columnconfigure(0, minsize=4)
+                wid = tk.Button(self.ignoreFrame, text='添加区域',
+                                command=self.openSelectArea)
                 wid.grid(column=1, row=0, sticky="w")
                 self.lockWidget.append(wid)
-            initOutFile()
+                wid = tk.Button(self.ignoreFrame, text='清空区域',
+                                command=self.clearArea)
+                wid.grid(column=1, row=1, sticky='w')
+                self.lockWidget.append(wid)
+                self.ignoreLabel = tk.Label(
+                    self.ignoreFrame, anchor='w')  # 显示生效大小
+                self.ignoreLabel.grid(column=1, row=2, sticky='w')
+                self.balloon.bind(
+                    self.ignoreLabel, '批量任务时，只有分辨率与之相同的图片，才会应用忽略区域。')
+                self.ignoreFrame.grid_rowconfigure(2, minsize=10)
+                self.ignoreFrame.grid_columnconfigure(2, minsize=4)
+                self.canvasHeight = 140  # 画板高度不变，宽度根据选区回传数据调整
+                self.canvas = tk.Canvas(self.ignoreFrame, width=249, height=self.canvasHeight,
+                                        bg="black", cursor="hand2")
+                self.canvas.grid(column=3, row=0, rowspan=10)
+                self.canvas.bind(
+                    '<Button-1>', lambda *e: self.openSelectArea())
+            initProcess()
 
             def initOcrUI():  # 识别器exe设置
                 frameOCR = tk.LabelFrame(
@@ -618,8 +634,7 @@ class MainWin:
         area = Config.get("ignoreArea")
         if not area:
             self.ignoreFrame.pack_forget()  # 隐藏忽略区域窗口
-            self.ignoreBtn.pack(side='top', fill='x',  # 显示按钮
-                                ipady=2, padx=4)
+            self.ignoreBtn.pack(side='top', fill='x')  # 显示按钮
             self.updateFrameHeight()  # 刷新框架
             return
         self.ignoreLabel["text"] = f"生效大小\n宽 {area['size'][0]}\n高 {area['size'][1]}"
@@ -635,14 +650,12 @@ class MainWin:
                 self.canvas.create_rectangle(
                     x0, y0, x1, y1,  fill=areaColor[i])
         self.ignoreBtn.pack_forget()  # 隐藏按钮
-        self.ignoreFrame.pack(side='top', fill='x',  # 显示忽略区域窗口
-                              ipady=2, padx=4)
+        self.ignoreFrame.pack(side='top', fill='x')  # 显示忽略区域窗口
         self.updateFrameHeight()  # 刷新框架
 
     def clearArea(self):  # 清空忽略区域
         self.ignoreFrame.pack_forget()  # 隐藏忽略区域窗口
-        self.ignoreBtn.pack(side='top', fill='x',  # 显示按钮
-                            ipady=2, padx=4)
+        self.ignoreBtn.pack(side='top', fill='x')  # 显示按钮
         self.updateFrameHeight()  # 刷新框架
         Config.set("ignoreArea", None)
         self.canvas.delete(tk.ALL)  # 清除画布
