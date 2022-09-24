@@ -1,9 +1,14 @@
+from cmath import log
 from utils.logger import GetLog
 from utils.config import Config
 
-from win32.win32api import EnumDisplayMonitors  # 获取显示器信息
-from win32clipboard import OpenClipboard, EmptyClipboard, SetClipboardData, CloseClipboard, CF_DIB  # 剪贴板
+# 获取显示器信息
+from win32api import EnumDisplayMonitors, GetMonitorInfo
+from win32gui import CreateDC
+from win32print import GetDeviceCaps
+# 剪贴板
 from io import BytesIO
+from win32clipboard import OpenClipboard, EmptyClipboard, SetClipboardData, CloseClipboard, CF_DIB
 
 import tkinter as tk
 from PIL import ImageGrab, ImageTk
@@ -25,6 +30,8 @@ class ScreenshotWin():
         self.isInitWin = False  # 防止重复初始化窗体
         self.isInitGrab = False  # 防止未初始化截图参数时触发事件
         self.errMsg = None  # 记录错误，传给调用者
+        self.screenScaleList = None  # 记录各个屏幕分别的缩放比例
+        self.promptSss = True  # 本次使用期间显示缩放提示
 
     def initWin(self):  # 初始化窗体
         self.isInitWin = True
@@ -86,6 +93,43 @@ class ScreenshotWin():
         # 获取所有屏幕的信息，提取其中的坐标信息(虚拟，非物理分辨率)
         scInfos = EnumDisplayMonitors()  # 所有屏幕的信息
         self.scBoxList = [s[2] for s in scInfos]  # 提取虚拟分辨率的信息
+        # 大于一块屏幕时，计算缩放比例，若不一致，则发送提示弹窗
+        scInfosLen = len(scInfos)
+        if self.promptSss and scInfosLen > 1 and Config.get('promptScreenshotScale'):
+            scList = []
+            # 提取所有屏幕缩放比例
+            for index, sc in enumerate(scInfos):
+                # 获取设备信息字典，得到设备名称 Device
+                # 物理设备信息(dict) = GetMonitorInfo(hMonitor)
+                info = GetMonitorInfo(scInfos[index][0])
+                # 为显示设备创建设备上下文，得到物理设备句柄 hDC
+                # 设备句柄(int) = CreateDC (设备名称, 设备名称 , None )
+                hDC = CreateDC(info['Device'], info['Device'], None)
+                w = GetDeviceCaps(hDC, 118)  # 常量 win32con.DESKTOPHORZRES
+                # h = GetDeviceCaps(hDC, 117)  # 常量 win32con.DESKTOPVERTRES
+                s = w / (sc[2][2]-sc[2][0])  # 得到缩放比，即windows的“更改文本、应用等项目的大小”
+                scList.append(s)
+            # 检查缩放比例是否一致
+            isEQ = True
+            for i in range(1, scInfosLen):
+                if not scList[i] == scList[0]:
+                    isEQ = False
+                    break
+            # 不一致，提示
+            if not isEQ:
+                self.screenScaleList = scList
+                if tk.messagebox.askyesno(
+                    '提示',
+                    f'''您当前使用{scInfosLen}块屏幕，且缩放比例不一致，分别为{scList}。
+这可能导致Umi-OCR截图异常，如截图画面不完整、窗口变形、识别不出文字等。
+若出现这种情况，请在系统设置里的 “更改文本、应用等项目的大小” 将所有屏幕调到相同数值。
+
+本次使用不再提示此消息请点击[是]，永久不再提示请点击[否]
+'''):
+                    self.promptSss = False
+                else:
+                    Config.set('promptScreenshotScale', False)
+
         # 计算虚拟屏幕最左上角和最右下角的坐标
         scUp, scDown, scLeft, scRight = 0, 0, 0, 0
         for s in self.scBoxList:  # 遍历所有屏幕，获取最值
@@ -101,7 +145,7 @@ class ScreenshotWin():
         scWidth, scHeight = scRight - scLeft, scDown - scUp
         self.scBoxVirtual = (scLeft, scUp, scRight, scDown,
                              scWidth, scHeight)
-        self.scScale = self.image.size[0] / scWidth  # 缩放比例
+        self.allScale = self.image.size[0] / scWidth  # 整个虚拟屏幕的缩放比例
         # 主窗口设置为铺满虚拟屏幕
         bd, bdp = 2, 1  # 边缘要额外拓展1像素，以免无法接收到鼠标在边缘的点击
         scStr = f'{scWidth+bd}x{scHeight+bd}+{scLeft-bdp}+{scUp-bdp}'
@@ -118,12 +162,11 @@ class ScreenshotWin():
         self.topwin.deiconify()  # 显示窗口
         self.isInitGrab = True
         Log.info('初始化截图')
-        for index, box in enumerate(self.scBoxList):
-            Log.info(f'屏幕{index}: {box} {box[2]-box[0]} {box[3]-box[1]}')
-        Log.info(f'虚拟屏幕：{self.scBoxVirtual}')
-        if Config.get('isDebug') and not self.debugList:
-            self.__switchDebug()
         self.__flash()  # 闪光
+        if Config.get('isDebug'):  # 显示debug信息
+            c = 2 if self.debugList else 1  # 若上一轮已显示，则调用两次以刷新
+            for i in range(c):  # 否则，调用一次以打开
+                self.__switchDebug()
 
     def __hideElement(self, ele, size=4):  # 隐藏一个画布元素
         # 实际上是挪到画布外
@@ -167,8 +210,10 @@ class ScreenshotWin():
             self.canvas.coords(self.debugXYText, event.x+6, event.y+3)
             self.canvas.coords(self.debugXYBox, event.x+3,
                                event.y+3, event.x+130, event.y+28)
+            # self.canvas.itemconfig(self.debugXYText, {'text':
+            #                                           f'{event.x} , {event.y}'})
             self.canvas.itemconfig(self.debugXYText, {'text':
-                                                      f'{event.x} , {event.y}'})
+                                                      f'{event.x_root} , {event.y_root}'})
 
     def __repaint(self, event):  # 重绘
         Log.info('重绘')
@@ -196,7 +241,7 @@ class ScreenshotWin():
             if box[1] > box[3]:
                 box[1], box[3] = box[3], box[1]
             for i in range(4):
-                box[i] *= self.scScale  # 乘上缩放比例
+                box[i] *= self.allScale  # 乘上缩放比例
             self.imageResult = self.image.crop(box)
 
     def __onClose(self, event=None):  # 关闭窗口

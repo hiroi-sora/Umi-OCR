@@ -175,6 +175,14 @@ _ConfigDict = {
         'isTK': True,
     },
 
+    # 记录不再提示
+    'promptScreenshotScale':  {  # 截图时比例不对
+        'default': True,
+        'isSave': True,
+        'isTK': False,
+    },
+
+
     # 不同模块交流的接口
     'ignoreArea':  {  # 忽略区域
         'default': None,
