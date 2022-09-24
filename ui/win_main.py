@@ -93,7 +93,7 @@ class MainWin:
             vFrame2 = tk.Frame(fr)
             vFrame2.pack(side='top', fill='x')
             # labelUse = tk.Label(vFrame2, text="使用说明",
-            #                     fg="gray", cursor="hand2")
+            #                     fg="gray", cursor='hand2')
             # labelUse.pack(side='left', padx=5)
             # labelUse.bind(
             #     '<Button-1>', lambda *e: self.showTips(GetHelpText(Umi.website)))  # 绑定鼠标左键点击
@@ -247,8 +247,8 @@ class MainWin:
                            ipady=2, pady=LabelFramePadY, padx=4)
                 fr1 = tk.Frame(fSoft)
                 fr1.pack(side='top', fill='x', pady=2, padx=5)
-                wid = tk.Checkbutton(fr1, text="调试模式",
-                                     variable=Config.getTK('isDebug'))
+                wid = ttk.Checkbutton(fr1, text="调试模式",
+                                      variable=Config.getTK('isDebug'))
                 wid.grid(column=0, row=0, sticky="w")
                 self.lockWidget.append(wid)
             initSoftwareFrame()
@@ -268,8 +268,8 @@ class MainWin:
                                    ).pack(side='top', fill='x', padx=4)
                 Widget.hotkeyFrame(fQuick, '读取剪贴板', 'Screenshot',
                                    self.runClipboard).pack(side='top', fill='x', padx=4)
-                tk.Checkbutton(fQuick, variable=Config.getTK('isNeedCopy'),
-                               text='复制识别出的文字').pack(side='left', fill='x', padx=4)
+                ttk.Checkbutton(fQuick, variable=Config.getTK('isNeedCopy'),
+                                text='复制识别出的文字').pack(side='left', fill='x', padx=4)
             quickOCR()
 
             # 批量任务设置
@@ -285,15 +285,15 @@ class MainWin:
 
                 fr1 = tk.Frame(frameScheduler)
                 fr1.pack(side='top', fill='x', pady=2, padx=5)
-                tk.Checkbutton(fr1, text="完成后打开文件",
-                               variable=Config.getTK('isOpenOutputFile')).pack(side='left')
-                tk.Checkbutton(fr1, text="完成后打开目录",
-                               variable=Config.getTK('isOpenExplorer'),).pack(side='left', padx=15)
+                ttk.Checkbutton(fr1, text="完成后打开文件",
+                                variable=Config.getTK('isOpenOutputFile')).pack(side='left')
+                ttk.Checkbutton(fr1, text="完成后打开目录",
+                                variable=Config.getTK('isOpenExplorer'),).pack(side='left', padx=15)
 
                 fr2 = tk.Frame(frameScheduler)
                 fr2.pack(side='top', fill='x', pady=2, padx=5)
-                tk.Checkbutton(fr2, text="本次完成后执行",
-                               variable=Config.getTK('isOkMission')).pack(side='left')
+                ttk.Checkbutton(fr2, text="本次完成后执行",
+                                variable=Config.getTK('isOkMission')).pack(side='left')
                 okMissionDict = Config.get("okMission")
                 okMissionNameList = [i for i in okMissionDict.keys()]
                 wid = ttk.Combobox(fr2, width=10, state="readonly", textvariable=Config.getTK('okMissionName'),
@@ -303,7 +303,7 @@ class MainWin:
                 if Config.get("okMissionName") not in okMissionNameList:
                     wid.current(0)  # 初始化Combobox和okMissionName
                 labelOpenFile = tk.Label(fr2, text="打开设置文件",
-                                         fg="gray", cursor="hand2")
+                                         fg="gray", cursor='hand2')
                 labelOpenFile.pack(side='right')
                 labelOpenFile.bind(
                     '<Button-1>', lambda *e: os.startfile("Umi-OCR_config.json"))
@@ -317,7 +317,7 @@ class MainWin:
 
                 fr1 = tk.Frame(fInput)
                 fr1.pack(side='top', fill='x', pady=2, padx=5)
-                wid = tk.Checkbutton(
+                wid = ttk.Checkbutton(
                     fr1, variable=Config.getTK('isRecursiveSearch'), text='递归读取子文件夹中所有图片')
                 wid.grid(column=0, row=0, columnspan=2, sticky="w")
                 self.lockWidget.append(wid)
@@ -345,24 +345,25 @@ class MainWin:
                         Config.set('isOutputTxt', False)
                         Config.set('isOutputMD', False)
                         Config.set('isOutputJsonl', False)
-                labelOff = tk.Label(fr1, text='　　关闭本地输出', cursor="hand2")
+                labelOff = tk.Label(fr1, text='　　关闭本地输出',
+                                    cursor='hand2', fg='blue')
                 labelOff.grid(column=0, row=0, sticky="w")
                 labelOff.bind('<Button-1>', offAllOutput)  # 绑定关闭全部输出
-                wid = tk.Checkbutton(
+                wid = ttk.Checkbutton(
                     fr1, variable=Config.getTK('isOutputJsonl'), text="分行.jsonl文件")
                 wid.grid(column=1, row=0,  sticky="w")
                 self.lockWidget.append(wid)
-                wid = tk.Checkbutton(
+                wid = ttk.Checkbutton(
                     fr1, variable=Config.getTK('isOutputTxt'), text="纯文本.txt文件　")
                 wid.grid(column=0, row=1,  sticky="w")
                 self.lockWidget.append(wid)
-                wid = tk.Checkbutton(
+                wid = ttk.Checkbutton(
                     fr1, variable=Config.getTK('isOutputMD'), text="图文链接.md文件")
                 wid.grid(column=1, row=1,  sticky="w")
                 self.lockWidget.append(wid)
-                wid = tk.Checkbutton(fr1, text="忽略无文字的图片",
-                                     variable=Config.getTK('isIgnoreNoText'),)
-                wid.grid(column=1, row=2, sticky="w")
+                wid = ttk.Checkbutton(fr1, text='图片中不含文字时，不输出信息',
+                                      variable=Config.getTK('isIgnoreNoText'),)
+                wid.grid(column=0, row=2, columnspan=2, sticky="w")
                 self.lockWidget.append(wid)
 
                 tk.Label(fOutput, fg="gray",
@@ -418,7 +419,7 @@ class MainWin:
                 self.ignoreFrame.grid_columnconfigure(2, minsize=4)
                 self.canvasHeight = 140  # 画板高度不变，宽度根据选区回传数据调整
                 self.canvas = tk.Canvas(self.ignoreFrame, width=249, height=self.canvasHeight,
-                                        bg="black", cursor="hand2")
+                                        bg="black", cursor='hand2')
                 self.canvas.grid(column=3, row=0, rowspan=10)
                 self.canvas.bind(
                     '<Button-1>', lambda *e: self.openSelectArea())
@@ -451,7 +452,7 @@ class MainWin:
                 self.lockWidget.append(argsStr)
 
                 labelTips = tk.Label(fr1, text="如何添加多国语言？如何调整参数以提高准确度和速度？",
-                                     fg="gray", cursor="hand2")
+                                     fg="gray", cursor='hand2')
                 labelTips.grid(column=0, row=4, columnspan=2, sticky="w")
                 labelTips.bind(
                     '<Button-1>', lambda *e: self.showTips(GetHelpConfigText()))  # 绑定鼠标左键点击
@@ -471,16 +472,17 @@ class MainWin:
                     {'widget': cboxR, 'stateOFnormal': 'readonly'})
 
                 frState = tk.Frame(fr1)
-                frState.grid(column=0, row=7, columnspan=2, sticky="nsew")
-                tk.Label(frState, text="引擎当前状态：").pack(
+                frState.grid(column=0, row=7, columnspan=2, sticky='nsew')
+                tk.Label(frState, text='引擎当前状态：').pack(
                     side='left')
                 tk.Label(frState, textvariable=Config.getTK('ocrProcessStatus')).pack(
                     side='left')
                 labStop = tk.Label(frState, text="停止",
-                                   cursor="hand2", fg="red")
+                                   cursor='hand2', fg="red")
                 labStop.pack(side='right')
                 self.balloon.bind(labStop, '强制停止引擎进程')
-                labStart = tk.Label(frState, text="启动", cursor="hand2")
+                labStart = tk.Label(frState, text="启动",
+                                    cursor='hand2', fg='blue')
                 labStart.pack(side='right', padx=5)
 
                 def engStart():
@@ -502,15 +504,15 @@ class MainWin:
 
             def initAbout():  # 关于面板
                 frameAbout = tk.LabelFrame(
-                    self.optFrame, text="关于")
+                    self.optFrame, text='关于')
                 frameAbout.pack(side='top', fill='x', ipady=2,
                                 pady=LabelFramePadY, padx=4)
                 tk.Label(frameAbout, image=Asset.getImgTK(
                     'umiocr64')).pack()  # 图标
                 tk.Label(frameAbout, text=Umi.name, fg="gray").pack()
                 tk.Label(frameAbout, text=Umi.about, fg="gray").pack()
-                labelWeb = tk.Label(frameAbout, text=Umi.website, cursor="hand2",
-                                    fg="deeppink")
+                labelWeb = tk.Label(frameAbout, text=Umi.website, cursor='hand2',
+                                    fg='deeppink')
                 labelWeb.pack()  # 文字
                 labelWeb.bind(  # 绑定鼠标左键点击，打开网页
                     '<Button-1>', lambda *e: webOpen(Umi.website))

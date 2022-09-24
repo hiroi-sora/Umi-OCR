@@ -3,6 +3,7 @@ from utils.config import Config
 from utils.logger import GetLog
 
 import tkinter as tk
+from tkinter import ttk
 import keyboard  # 绑定快捷键
 
 Log = GetLog()
@@ -74,8 +75,8 @@ class Widget:
         hFrame.grid_columnconfigure(2, weight=1)
 
         # 标题 | 快捷键Label | 录制
-        wid = tk.Checkbutton(hFrame, variable=Config.getTK(isHotkey),
-                             text=f'{name} 快捷键 ', command=onCheck)
+        wid = ttk.Checkbutton(hFrame, variable=Config.getTK(isHotkey),
+                              text=f'{name} 快捷键 ', command=onCheck)
         wid.grid(column=0, row=0, sticky="w")
 
         btn = tk.Label(hFrame, text='录制', cursor='hand2', fg='blue')
