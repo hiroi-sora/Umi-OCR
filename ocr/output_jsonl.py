@@ -15,7 +15,7 @@ class OutputJsonl(Output):
         outputDir = Config.get('outputFilePath')  # 输出路径（文件夹）
         outputName = Config.get("outputFileName")  # 文件名
         self.outputFile = f'{outputDir}/{outputName}.jsonl'  # 输出路径
-        self.isOutputDebug = Config.get("isOutputDebug")  # 是否输出调试
+        self.isDebug = Config.get('isDebug')  # 是否输出调试
         # 创建输出文件
         try:
             if os.path.exists(self.outputFile):  # 文件存在

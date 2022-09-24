@@ -14,7 +14,7 @@ class OutputTxt(Output):
         outputDir = Config.get('outputFilePath')  # 输出路径（文件夹）
         outputName = Config.get("outputFileName")  # 文件名
         self.outputFile = f'{outputDir}/{outputName}.txt'  # 输出路径
-        self.isOutputDebug = Config.get("isOutputDebug")  # 是否输出调试
+        self.isDebug = Config.get('isDebug')  # 是否输出调试
         # 创建输出文件
         try:
             if os.path.exists(self.outputFile):  # 文件存在
@@ -42,7 +42,7 @@ class OutputTxt(Output):
     def img(self, textBlockList, imgInfo, numData, textDebug):
         '''输出图片结果'''
         # 标题和debug信息
-        textDebug = f'```\n{textDebug}```\n' if self.isOutputDebug and textDebug else ''
+        textDebug = f'```\n{textDebug}```\n' if self.isDebug and textDebug else ''
         textOut = f'\n≦ {imgInfo["name"]} ≧\n\n{textDebug}'
         # 正文
         for tb in textBlockList:

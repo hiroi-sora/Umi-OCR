@@ -120,7 +120,7 @@ class ScreenshotWin():
         for index, box in enumerate(self.scBoxList):
             Log.info(f'屏幕{index}: {box} {box[2]-box[0]} {box[3]-box[1]}')
         Log.info(f'虚拟屏幕：{self.scBoxVirtual}')
-        if Config.get('isOutputDebug') and not self.debugList:
+        if Config.get('isDebug') and not self.debugList:
             self.__switchDebug()
         self.__flash()  # 闪光
 

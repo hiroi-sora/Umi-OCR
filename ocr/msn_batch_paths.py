@@ -28,7 +28,7 @@ class MsnBatch(Msn):
         self.setRunning = Config.main.setRunning  # 设置运行状态接口
         self.clearTableItem = Config.main.clearTableItem  # 清理主表接口
         # 获取值
-        self.isOutputDebug = Config.get("isOutputDebug")  # 是否输出调试
+        self.isDebug = Config.get('isDebug')  # 是否输出调试
         self.isIgnoreNoText = Config.get("isIgnoreNoText")  # 是否忽略无字图片
         self.areaInfo = Config.get("ignoreArea")  # 忽略区域
         self.ocrToolPath = Config.get("ocrToolPath")  # 识别器路径
@@ -80,7 +80,7 @@ class MsnBatch(Msn):
         startStr = f"\n任务开始时间：{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))}\n\n"
         self.__output('text', startStr)
         # 输出各个文块处理器的debug信息
-        if self.isOutputDebug:
+        if self.isDebug:
             debugStr = f'已启用输出调试信息。\n引擎路径：[{self.ocrToolPath}]\n配置文件路径：[{self.configPath}]\n启动参数：[{self.argsStr}]\n'
             if self.procList:
                 for proc in self.procList:

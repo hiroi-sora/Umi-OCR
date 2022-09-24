@@ -10,7 +10,7 @@ class OutputPanel(Output):
 
     def __init__(self):
         self.panelOutput = Config.get('panelOutput')  # 输出接口
-        self.isOutputDebug = Config.get("isOutputDebug")  # 是否输出调试
+        self.isDebug = Config.get('isDebug')  # 是否输出调试
 
     def print(self, text):
         self.panelOutput(text)
@@ -26,7 +26,7 @@ class OutputPanel(Output):
     def img(self, textBlockList, imgInfo, numData, textDebug):
         '''输出图片结果'''
         # 标题和debug信息
-        textDebug = f'{textDebug}\n\n' if self.isOutputDebug and textDebug else ''
+        textDebug = f'{textDebug}\n\n' if self.isDebug and textDebug else ''
         textOut = f'\n{imgInfo["name"]}\n\n{textDebug}'
         # 正文
         for tb in textBlockList:

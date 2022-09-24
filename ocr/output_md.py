@@ -14,7 +14,7 @@ class OutputMD(Output):
         outputDir = Config.get('outputFilePath')  # 输出路径（文件夹）
         outputName = Config.get("outputFileName")  # 文件名
         self.outputFile = f'{outputDir}/{outputName}.md'  # 输出路径
-        self.isOutputDebug = Config.get("isOutputDebug")  # 是否输出调试
+        self.isDebug = Config.get('isDebug')  # 是否输出调试
         # 创建输出文件
         try:
             if os.path.exists(self.outputFile):  # 文件存在
@@ -47,7 +47,7 @@ class OutputMD(Output):
     def img(self, textBlockList, imgInfo, numData, textDebug):
         '''输出图片结果'''
         # 标题和debug信息
-        textDebug = f'```\n{textDebug}```\n' if self.isOutputDebug and textDebug else ''
+        textDebug = f'```\n{textDebug}```\n' if self.isDebug and textDebug else ''
         name = imgInfo["name"]
         path = name.replace(" ", "%20")  # 空格转 %20
         textOut = f'\n---\n![{name}]({path})\n[{name}]({path})\n\n{textDebug}'

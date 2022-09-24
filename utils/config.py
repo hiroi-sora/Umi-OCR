@@ -25,6 +25,38 @@ ConfigJsonFile = 'Umi-OCR_config.json'
 
 # 配置项
 _ConfigDict = {
+    # 软件设置
+    'isDebug': {  # T时Debug模式
+        'default': False,
+        'isSave': True,
+        'isTK': True,
+    },
+    # 快捷识图设置
+    'isHotkeyClipboard': {  # T时启用读剪贴板快捷键
+        'default': False,
+        'isSave': True,
+        'isTK': True,
+    },
+    'hotkeyClipboard': {  # 读剪贴板快捷键，字符串
+        'default': '',
+        'isSave': True,
+        'isTK': True,
+    },
+    'isHotkeyScreenshot': {  # T时启用截屏快捷键
+        'default': False,
+        'isSave': True,
+        'isTK': True,
+    },
+    'hotkeyScreenshot': {  # 截屏快捷键，字符串
+        'default': '',
+        'isSave': True,
+        'isTK': True,
+    },
+    'isNeedCopy': {  # T时识别完成后自动复制文字
+        'default': False,
+        'isSave': True,
+        'isTK': True,
+    },
     # 计划任务设置
     'isOpenExplorer': {   # T时任务完成后打开资源管理器到输出目录。isOutputFile为T时才管用
         'default': False,
@@ -55,32 +87,6 @@ _ConfigDict = {
         },
         'isSave': True,
         'isTK': False,
-    },
-    # 快捷识图设置
-    'isHotkeyClipboard': {  # T时启用读剪贴板快捷键
-        'default': False,
-        'isSave': True,
-        'isTK': True,
-    },
-    'hotkeyClipboard': {  # 读剪贴板快捷键，字符串
-        'default': '',
-        'isSave': True,
-        'isTK': True,
-    },
-    'isHotkeyScreenshot': {  # T时启用截屏快捷键
-        'default': False,
-        'isSave': True,
-        'isTK': True,
-    },
-    'hotkeyScreenshot': {  # 截屏快捷键，字符串
-        'default': '',
-        'isSave': True,
-        'isTK': True,
-    },
-    'isNeedCopy': {  # T时识别完成后自动复制文字
-        'default': False,
-        'isSave': True,
-        'isTK': True,
     },
     # 输入文件设置
     'isRecursiveSearch': {  # T时导入文件夹将递归查找子文件夹中所有图片
@@ -115,11 +121,6 @@ _ConfigDict = {
         'isTK': True,
     },
     # 输出格式设置
-    'isOutputDebug': {  # T时Debug模式
-        'default': False,
-        'isSave': True,
-        'isTK': True,
-    },
     'isIgnoreNoText': {  # T时忽略(不输出)没有文字的图片信息
         'default': True,
         'isSave': True,
