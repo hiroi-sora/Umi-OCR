@@ -31,7 +31,7 @@ class MsnQuick(Msn):
         self.progressbar.start()  # 进度条开始加载动画
         Config.set('tipsTop2', '快捷识图中……')
         # 输出初始信息
-        startStr = f"\n快捷识图开始：{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))}\n\n"
+        startStr = f"\n快捷识图 {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))}\n\n"
         self.outputPanel.print(startStr)
 
     def onGet(self, numData, ocrData):
