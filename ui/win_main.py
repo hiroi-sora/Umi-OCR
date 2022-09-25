@@ -5,7 +5,7 @@ from utils.logger import GetLog
 from utils.asset import *  # 资源
 from utils.data_structure import KeyList
 from utils.tool import Tool
-from ui.win_screenshot import ScreenshotWin, SSW  # 截屏
+from ui.win_screenshot import ScreenshotCopy, ScreenshotWin, SSW  # 截屏
 from ui.win_select_area import IgnoreAreaWin  # 子窗口
 from ui.widget import Widget  # 控件
 from ui.pmw.PmwBalloon import Balloon  # 气泡提示
@@ -508,11 +508,6 @@ class MainWin:
 
             def initOptFrameWH():  # 初始化框架的宽高
                 self.updateFrameHeight()
-                # self.optFrame.update()  # 强制刷新
-                # rH = self.optFrame.winfo_height()  # 由组件撑起的 框架高度
-                # self.optCanvas.config(scrollregion=(0, 0, 0, rH))  # 画布内高度为框架高度
-                # self.optFrame.pack_propagate(False)  # 禁用框架自动宽高调整
-                # self.optFrame["height"] = rH  # 手动还原高度。一次性设置，之后无需再管。
                 self.optCanvasWidth = 1  # 宽度则是随窗口大小而改变。
 
                 def onCanvasResize(event):  # 绑定画布大小改变事件
@@ -808,7 +803,8 @@ class MainWin:
         if not OCRe.msnFlag == MsnFlag.none or not self.win.attributes('-disabled') == 0:
             return
         self.win.attributes("-disabled", 1)  # 禁用主窗口
-        SSW.initGrab()
+        ScreenshotCopy()
+        # SSW.initGrab()
 
     def closeScreenshot(self, flag, errMsg=None):  # 关闭截图窗口，返回T表示已复制到剪贴板
         self.win.attributes("-disabled", 0)  # 启用父窗口
