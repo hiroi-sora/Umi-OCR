@@ -20,6 +20,12 @@ class RunModeFlag(Enum):
     long = 1  # 后台常驻（大幅加快任务启动速度）
 
 
+class ScsModeFlag(Enum):
+    '''截屏模式标志'''
+    multi = 0  # 多屏幕模式，目前仅能适配缩放比相同的多个屏幕
+    single = 1  # 单屏幕模式，只截取主屏画面
+
+
 # 配置文件路径
 ConfigJsonFile = 'Umi-OCR_config.json'
 
@@ -51,6 +57,19 @@ _ConfigDict = {
         'default': '',
         'isSave': True,
         'isTK': True,
+    },
+    'scsModeName': {  # 当前选择的截屏模式名称
+        'default': '',
+        'isSave': True,
+        'isTK': True,
+    },
+    'scsMode': {  # 截屏模式
+        'default': {
+            '多屏幕模式（必须缩放比相同）': ScsModeFlag.multi,
+            '单屏幕模式（只截取主屏画面）': ScsModeFlag.single,
+        },
+        'isSave': False,
+        'isTK': False,
     },
     'isNeedCopy': {  # T时识别完成后自动复制文字
         'default': False,

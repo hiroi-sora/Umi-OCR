@@ -268,8 +268,16 @@ class MainWin:
                                    ).pack(side='top', fill='x', padx=4)
                 Widget.hotkeyFrame(fQuick, '读取剪贴板', 'Screenshot',
                                    self.runClipboard).pack(side='top', fill='x', padx=4)
-                ttk.Checkbutton(fQuick, variable=Config.getTK('isNeedCopy'),
-                                text='复制识别出的文字').pack(side='left', fill='x', padx=4)
+                fr1 = tk.Frame(fQuick)
+                fr1.pack(side='top', fill='x', pady=2, padx=5)
+                ttk.Checkbutton(fr1, variable=Config.getTK('isNeedCopy'),
+                                text='复制识别出的文字').pack(side='left', fill='x')
+                cbox = Widget.comboboxFrame(
+                    fQuick, '截图模式：　', 'scsMode', self.lockWidget)
+                cbox.pack(side='top', fill='x', padx=4)
+                self.balloon.bind(cbox, '''若使用多块屏幕，且缩放比例不一致，可能导致截图异常，如画面不完整、窗口变形、识别不出文字等。
+若出现这种情况，请在系统设置里的 “更改文本、应用等项目的大小” 将所有屏幕调到相同数值。
+或者，在这里更改为别的截图模式。''')
             quickOCR()
 
             # 批量任务设置
@@ -432,18 +440,9 @@ class MainWin:
                               pady=LabelFramePadY, padx=4)
                 fr1 = tk.Frame(frameOCR)
                 fr1.pack(side='top', fill='x', pady=2, padx=5)
-                tk.Label(fr1, text="识别语言：　").grid(
-                    column=0, row=0, sticky="w")
-                ocrConfigDict = Config.get("ocrConfig")
-                ocrConfigNameList = [i for i in ocrConfigDict]
-                cbox = ttk.Combobox(fr1, width=10, state="readonly", textvariable=Config.getTK('ocrConfigName'),
-                                    value=ocrConfigNameList)
-                cbox.unbind_class("TCombobox", "<MouseWheel>")  # 解绑默认滚轮事件，防止误触
-                cbox.grid(column=1, row=0,  sticky="nsew")
-                if Config.get("ocrConfigName") not in ocrConfigNameList:
-                    cbox.current(0)  # 初始化Combobox和ocrConfigName
-                self.lockWidget.append(  # 正常状态为特殊值
-                    {'widget': cbox, 'stateOFnormal': 'readonly'})
+                Widget.comboboxFrame(fr1, '识别语言：　', 'ocrConfig', self.lockWidget
+                                     ).grid(column=0, row=0, columnspan=2, sticky='we')
+
                 tk.Label(fr1, text="启动参数：　").grid(
                     column=0, row=2, sticky="w")
                 argsStr = tk.Entry(
@@ -457,19 +456,8 @@ class MainWin:
                 labelTips.bind(
                     '<Button-1>', lambda *e: self.showTips(GetHelpConfigText()))  # 绑定鼠标左键点击
 
-                tk.Label(fr1, text="引擎管理策略：").grid(
-                    column=0, row=6, sticky="w")
-                ocrRunModeDict = Config.get("ocrRunMode")
-                ocrRunModeNameList = [i for i in ocrRunModeDict]
-                cboxR = ttk.Combobox(fr1, width=10, state="readonly", textvariable=Config.getTK('ocrRunModeName'),
-                                     value=ocrRunModeNameList)
-                cboxR.unbind_class(
-                    "TCombobox", "<MouseWheel>")  # 解绑默认滚轮事件，防止误触
-                cboxR.grid(column=1, row=6,  sticky="nsew")
-                if Config.get("ocrRunModeName") not in ocrRunModeNameList:
-                    cboxR.current(0)  # 初始化Combobox和ocrConfigName
-                self.lockWidget.append(  # 正常状态为特殊值
-                    {'widget': cboxR, 'stateOFnormal': 'readonly'})
+                Widget.comboboxFrame(fr1, '引擎管理策略：', 'ocrRunMode', self.lockWidget
+                                     ).grid(column=0, row=6, columnspan=2, sticky='we')
 
                 frState = tk.Frame(fr1)
                 frState.grid(column=0, row=7, columnspan=2, sticky='nsew')

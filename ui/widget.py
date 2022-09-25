@@ -10,6 +10,29 @@ Log = GetLog()
 
 
 class Widget:
+
+    @staticmethod
+    def comboboxFrame(master, name, configDictName, lockWidget=None):
+        '''添加一个复选框框架
+        父框架 | 模式名称(描述) | 模式在Config中的名称 | 锁定列表'''
+        cFrame = tk.Frame(master)
+        cFrame.grid_columnconfigure(1, weight=1)
+        tk.Label(cFrame, text=name).grid(column=0, row=0, sticky="w")
+
+        modeName = f'{configDictName}Name'
+        modeDict = Config.get(configDictName)
+        modeNameList = [i for i in modeDict]
+        cbox = ttk.Combobox(cFrame, state='readonly',
+                            textvariable=Config.getTK(modeName), value=modeNameList)
+        cbox.unbind_class('TCombobox', '<MouseWheel>')  # 解绑默认滚轮事件，防止误触
+        cbox.grid(column=1, row=0,  sticky="nsew")
+        if Config.get(modeName) not in modeNameList:
+            cbox.current(0)  # 初始化Combobox和configName
+        if lockWidget:  # 添加到锁定列表
+            lockWidget.append(  # 正常状态为特殊值
+                {'widget': cbox, 'stateOFnormal': 'readonly'})
+        return cFrame
+
     @staticmethod
     def hotkeyFrame(master, name, configName, func):
         '''添加一个热键框架
@@ -71,7 +94,7 @@ class Widget:
                 delHotkey(hotkey)  # 注销按键
 
         hFrame = tk.Frame(master)
-        hFrame.pack(side='top', fill='x', padx=5)
+        # hFrame.pack(side='top', fill='x', padx=5)
         hFrame.grid_columnconfigure(2, weight=1)
 
         # 标题 | 快捷键Label | 录制
