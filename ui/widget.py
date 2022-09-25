@@ -49,7 +49,7 @@ class Widget:
                 return
             try:
                 # 添加新的快捷键。suppress=True 捕获到快捷键后，阻止其继续向别的软件下发
-                keyboard.add_hotkey(hotkey, func, suppress=False)
+                keyboard.add_hotkey(hotkey, func, suppress=True)
                 Log.info(f'快捷键【{hotkey}】注册成功')
             except ValueError as err:
                 Config.set(isHotkey, False)
@@ -72,18 +72,20 @@ class Widget:
             btn.grid_remove()  # 移除按钮
             tips2.grid()  # 显示提示
             hFrame.update()  # 刷新UI
-            hotkey = keyboard.read_hotkey(suppress=False)
+            isUsing = Config.get(isHotkey)
+            oldHotkey = Config.get(hotkeyName)
+            if isUsing:  # 已经注册了
+                delHotkey(oldHotkey)  # 先注销已有按键
+            hotkey = keyboard.read_hotkey(suppress=True)
             tips.grid()
             btn.grid()  # 显示按钮
             tips2.grid_remove()
-            if hotkey == "esc":  # ESC为取消
+            if 'esc' in hotkey or hotkey == oldHotkey:  # ESC为取消
+                if isUsing:  # 注册回旧按键
+                    addHotkey(oldHotkey)  # 注册新按键
                 return
-            oldHotkey = Config.get(hotkeyName)
-            if hotkey == oldHotkey:  # 新旧快捷键一样
-                return
-            if Config.get(isHotkey):  # 当前是被注册状态
-                delHotkey(oldHotkey)  # 注销旧按键
-                addHotkey(hotkey)  # 注册新按键
+            if isUsing:  # 需要注册新按键
+                addHotkey(hotkey)
             Config.set(hotkeyName, hotkey)  # 写入设置
             Log.info(
                 f'快捷键【{name}】录制为【{Config.get(hotkeyName)}】')
