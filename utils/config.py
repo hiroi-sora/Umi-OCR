@@ -23,7 +23,7 @@ class RunModeFlag(Enum):
 class ScsModeFlag(Enum):
     '''截屏模式标志'''
     multi = 0  # 多屏幕模式，目前仅能适配缩放比相同的多个屏幕
-    single = 1  # 单屏幕模式，只截取主屏画面
+    system = 1  # 系统截屏模式
 
 
 # 配置文件路径
@@ -65,8 +65,8 @@ _ConfigDict = {
     },
     'scsMode': {  # 截屏模式
         'default': {
-            '多屏幕模式（必须缩放比相同）': ScsModeFlag.multi,
-            '单屏幕模式（只截取主屏画面）': ScsModeFlag.single,
+            'Umi-OCR 软件截图': ScsModeFlag.multi,
+            'Windows 系统截图': ScsModeFlag.system,
         },
         'isSave': False,
         'isTK': False,

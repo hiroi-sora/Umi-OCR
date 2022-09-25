@@ -1,6 +1,6 @@
-from cmath import log
 from utils.logger import GetLog
 from utils.config import Config, ScsModeFlag
+from utils.tool import Tool
 
 # 获取显示器信息
 from win32api import EnumDisplayMonitors, GetMonitorInfo
@@ -14,6 +14,7 @@ import tkinter as tk
 from PIL import ImageGrab, ImageTk
 from enum import Enum
 import keyboard  # 绑定快捷键
+import mouse  # 绑定鼠标键
 
 # TODO :
 # 截图模块的工作原理是：先获取虚拟屏幕（所有显示器的画面拼凑在一起）的完整截图。然后创建一块画布，
@@ -33,7 +34,73 @@ def ScreenshotCopy():
     '''截屏，保存到剪贴板，然后调用主窗的closeScreenshot接口'''
     scsMode = Config.get('scsMode').get(Config.get(
         'scsModeName'), ScsModeFlag.multi)  # 当前截屏模式
-    SSW.initGrab()
+    if scsMode == ScsModeFlag.multi:  # 内置截图模式
+        SSWin.startGrab()
+    elif scsMode == ScsModeFlag.system:  # 系统截图模式
+        SSSys.startGrab()
+    else:
+        Config.main.closeScreenshot(False, '未知的截图模式！')
+
+
+class ScreenshotSys():  # 系统截图模式
+
+    def __init__(self):
+        self.isInitKey = False
+        self.isWorking = False
+        self.checkTimeMax = 10  # 最大检查次数
+        self.checkTimeRate = 10  # 检查间隔频率，毫秒
+        self.checkTime = 0  # 当前剩余检查次数
+        self.position = (0, 0)
+
+    def startGrab(self):  # 启动截屏
+        '''启动系统截图。若通过快捷键进入，必须为win+shift+S'''
+        self.isWorking = True
+        if not self.isInitKey:
+            self.__initKey()
+        if not keyboard.is_pressed('win'):  # 不是通过快捷键进入
+            keyboard.send('win+shift+s')  # 发送系统截图快捷键
+        self.position = mouse.get_position()  # 获取鼠标当前位置
+
+    def __initKey(self):  # 初始化监听
+        # 绑定全局事件
+        keyboard.on_release_key('Esc', lambda e: self.__close(False),   # Esc抬起，系统截图失败
+                                suppress=False)
+        mouse.on_button(self.__onEnd,  # 左键和右键抬起，截图可能成功可能失败
+                        buttons=('left', 'right'), types='up')
+        Log.info(f'注册监听系统截图按键！')
+        self.isInitKey = True
+
+    def __onEnd(self, e=None):  # 用户操作结束
+        if self.isWorking:
+            if self.position == mouse.get_position():  # 鼠标起始结束位置相同，截图失败
+                self.__close(False)
+                return
+            self.checkTime = 0
+            self.__checkClipboard()
+
+    def __checkClipboard(self):  # 检查剪贴板中是否已存在截图
+        if self.checkTime >= self.checkTimeMax:
+            self.__close(False)  # 检查次数超限，截图失败
+            return
+        clipData = Tool.getClipboardFormat()  # 读取剪贴板
+        if clipData == 2:  # 系统截图已保存到剪贴板内存，截图成功
+            Log.info(f'第{self.checkTime}次检查成功')
+            # self.__close(True)
+            self.__close(False)
+            return
+        Log.info(f'第{self.checkTime}次检查')
+        self.checkTime += 1
+        # 定时器指定下一轮查询
+        Config.main.win.after(self.checkTimeRate, self.__checkClipboard)
+
+    def __close(self, flag=False):  # 退出
+        if self.isWorking:
+            Log.info(f'结束：{flag}')
+            self.isWorking = False
+            Config.main.closeScreenshot(flag)
+
+
+SSSys = ScreenshotSys()
 
 
 class _DrawMode(Enum):
@@ -41,7 +108,7 @@ class _DrawMode(Enum):
     drag = 2  # 拖拽中
 
 
-class ScreenshotWin():
+class ScreenshotWin():  # 内置截图模式
     OB = -10  # 元素隐藏屏幕外的位置
 
     def __init__(self):
@@ -52,61 +119,13 @@ class ScreenshotWin():
         self.promptSss = True  # 本次使用期间显示缩放提示
         self.lastScInfos = None  # 上一轮的屏幕参数
 
-    def initWin(self):  # 初始化窗体
-        self.isInitWin = True
-        # 创建窗口
-        self.topwin = tk.Toplevel()
-        self.topwin.withdraw()  # 隐藏窗口
-        self.topwin.overrideredirect(True)  # 无边框
-        self.topwin.configure(bg='black')
-        # self.topwin.attributes("-alpha", 0.8)  # 透明（调试用）
-        self.topwin.attributes('-topmost', 1)  # 设置层级最前
-        self.closeSendData = Config.main.closeScreenshot  # 向父窗口发送数据的接口
-        # 创建画布及画布元素。后创建的层级在上。
-        self.canvas = tk.Canvas(self.topwin, cursor='plus', bg=None,
-                                highlightthickness=0, borderwidth=0)  # 取消边框
-        self.canvas.pack(fill='both')
-        # 瞄准盒
-        rec1 = self.canvas.create_rectangle(  # 实线底层
-            self.OB, self.OB, self.OB, self.OB, outline='white', width=2)
-        rec2 = self.canvas.create_rectangle(  # 虚线表层
-            self.OB, self.OB, self.OB, self.OB, outline='black', width=2, dash=10)
-        self.sightBox = (rec1, rec2)
-        self.sightBoxXY = [self.OB, self.OB, self.OB, self.OB]  # 瞄准盒坐标
-        # 瞄准线
-        lineW = self.canvas.create_line(  # 纵向
-            self.OB, self.OB, self.OB, self.OB, fill='green', width=1)
-        lineH = self.canvas.create_line(  # 横向
-            self.OB, self.OB, self.OB, self.OB, fill='green', width=1)
-        self.sightLine = (lineW, lineH)
-        # debug模块
-        self.debugXYBox = self.canvas.create_rectangle(  # 坐标下面的底
-            self.OB, self.OB, self.OB, self.OB, fill='yellow', outline='#999', width=1)
-        self.debugXYText = self.canvas.create_text(self.OB, self.OB,  # 显示坐标
-                                                   font=('Microsoft YaHei', 15, 'bold'), fill='red', anchor='nw')
-        self.debugList = []  # 显示屏幕信息
-        # 闪光模块
-        self.flashList = []  # 闪光元素
-        # 绑定全局事件
-        keyboard.add_hotkey('Esc', self.__onClose,   # 绑定Esc退出
-                            suppress=False, timeout=1)
-        keyboard.add_hotkey('Ctrl+Shift+Alt+D', self.__switchDebug,  # 切换调试信息
-                            suppress=False, timeout=0)
-        # 绑定画布事件
-        self.canvas.bind(f'<Button-1>', self.__onDown)  # 左键按下
-        self.canvas.bind(f'<Button-3>', self.__repaint)  # 右键按下
-        self.canvas.bind(f'<ButtonRelease-1>', self.__onUp)  # 左键松开
-        self.canvas.bind('<Motion>', self.__onMotion)  # 鼠标移动
-        self.canvas.bind('<Enter>', self.__onMotion)  # 鼠标进入，用于初始化瞄准线
-        Log.info('初始化截图窗口')
-
-    def initGrab(self):  # 初始化截屏
+    def startGrab(self):  # 启动截屏
         '''启动区域截图'''
         # “虚拟屏幕”指多显示器画面的拼凑在一起的完整画面
         self.image = ImageGrab.grab(all_screens=True)  # 对整个虚拟屏幕截图，物理分辨率
 
         if not self.isInitWin:
-            self.initWin()
+            self.__initWin()
 
         self.imageResult = None  # 结果图片
         self.drawMode = _DrawMode.ready  # 准备模式
@@ -192,6 +211,54 @@ class ScreenshotWin():
             c = 2 if self.debugList else 1  # 若上一轮已显示，则调用两次以刷新
             for i in range(c):  # 否则，调用一次以打开
                 self.__switchDebug()
+
+    def __initWin(self):  # 初始化窗体
+        self.isInitWin = True
+        # 创建窗口
+        self.topwin = tk.Toplevel()
+        self.topwin.withdraw()  # 隐藏窗口
+        self.topwin.overrideredirect(True)  # 无边框
+        self.topwin.configure(bg='black')
+        # self.topwin.attributes("-alpha", 0.8)  # 透明（调试用）
+        self.topwin.attributes('-topmost', 1)  # 设置层级最前
+        self.closeSendData = Config.main.closeScreenshot  # 向父窗口发送数据的接口
+        # 创建画布及画布元素。后创建的层级在上。
+        self.canvas = tk.Canvas(self.topwin, cursor='plus', bg=None,
+                                highlightthickness=0, borderwidth=0)  # 取消边框
+        self.canvas.pack(fill='both')
+        # 瞄准盒
+        rec1 = self.canvas.create_rectangle(  # 实线底层
+            self.OB, self.OB, self.OB, self.OB, outline='white', width=2)
+        rec2 = self.canvas.create_rectangle(  # 虚线表层
+            self.OB, self.OB, self.OB, self.OB, outline='black', width=2, dash=10)
+        self.sightBox = (rec1, rec2)
+        self.sightBoxXY = [self.OB, self.OB, self.OB, self.OB]  # 瞄准盒坐标
+        # 瞄准线
+        lineW = self.canvas.create_line(  # 纵向
+            self.OB, self.OB, self.OB, self.OB, fill='green', width=1)
+        lineH = self.canvas.create_line(  # 横向
+            self.OB, self.OB, self.OB, self.OB, fill='green', width=1)
+        self.sightLine = (lineW, lineH)
+        # debug模块
+        self.debugXYBox = self.canvas.create_rectangle(  # 坐标下面的底
+            self.OB, self.OB, self.OB, self.OB, fill='yellow', outline='#999', width=1)
+        self.debugXYText = self.canvas.create_text(self.OB, self.OB,  # 显示坐标
+                                                   font=('Microsoft YaHei', 15, 'bold'), fill='red', anchor='nw')
+        self.debugList = []  # 显示屏幕信息
+        # 闪光模块
+        self.flashList = []  # 闪光元素
+        # 绑定全局事件
+        keyboard.add_hotkey('Esc', self.__onClose,   # 绑定Esc退出
+                            suppress=False, timeout=1)
+        keyboard.add_hotkey('Ctrl+Shift+Alt+D', self.__switchDebug,  # 切换调试信息
+                            suppress=False, timeout=0)
+        # 绑定画布事件
+        self.canvas.bind(f'<Button-1>', self.__onDown)  # 左键按下
+        self.canvas.bind(f'<Button-3>', self.__repaint)  # 右键按下
+        self.canvas.bind(f'<ButtonRelease-1>', self.__onUp)  # 左键松开
+        self.canvas.bind('<Motion>', self.__onMotion)  # 鼠标移动
+        self.canvas.bind('<Enter>', self.__onMotion)  # 鼠标进入，用于初始化瞄准线
+        Log.info('初始化截图窗口')
 
     def __hideElement(self, ele, size=4):  # 隐藏一个画布元素
         # 实际上是挪到画布外
@@ -375,7 +442,7 @@ class ScreenshotWin():
         return True
 
 
-SSW = ScreenshotWin()
+SSWin = ScreenshotWin()
 
 # class e:
 #     def __init__(self, x, y):
