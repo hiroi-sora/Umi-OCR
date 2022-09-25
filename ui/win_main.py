@@ -1,11 +1,9 @@
-from tkinter import font
-from turtle import bgcolor, width
 from utils.config import Config, Umi  # 最先加载配置
 from utils.logger import GetLog
 from utils.asset import *  # 资源
 from utils.data_structure import KeyList
 from utils.tool import Tool
-from ui.win_screenshot import ScreenshotCopy, ScreenshotWin, SSW  # 截屏
+from ui.win_screenshot import ScreenshotCopy  # 截屏
 from ui.win_select_area import IgnoreAreaWin  # 子窗口
 from ui.widget import Widget  # 控件
 from ui.pmw.PmwBalloon import Balloon  # 气泡提示
@@ -20,7 +18,7 @@ import ctypes
 from PIL import Image  # 图像
 import tkinter as tk
 import tkinter.filedialog
-from tkinter import Variable, ttk
+from tkinter import ttk
 from windnd import hook_dropfiles  # 文件拖拽
 from webbrowser import open as webOpen  # “关于”面板打开项目网址
 
@@ -258,10 +256,16 @@ class MainWin:
                     self.optFrame, text='快捷识图')
                 fQuick.pack(side='top', fill='x',
                             ipady=2, pady=LabelFramePadY, padx=4)
-                self.win.bind('<<ScreenshotEvent>>',
-                              self.openScreenshot)  # 绑定截图事件
                 # 截图快捷键触发时，子线程向主线程发送事件，在主线程中启动截图窗口
                 # 避免子线程直接唤起截图窗导致的窗口闪烁现象
+                self.win.bind('<<ScreenshotEvent>>',
+                              self.openScreenshot)  # 绑定截图事件
+                cbox = Widget.comboboxFrame(
+                    fQuick, '截图模式：　', 'scsMode', self.lockWidget)
+                cbox.pack(side='top', fill='x', padx=4)
+                self.balloon.bind(cbox, '''当使用多块屏幕，且缩放比例不一致，可能导致Umi-OCR截图异常，如画面不完整、窗口变形、识别不出文字等。
+若出现这种情况，请在系统设置里的 “更改文本、应用等项目的大小” 将所有屏幕调到相同数值。
+或者，在这里切换到【系统截图模式】。''')
                 Widget.hotkeyFrame(fQuick, '截图识别　', 'Clipboard',
                                    lambda *e: self.win.event_generate(
                                        '<<ScreenshotEvent>>')
@@ -272,12 +276,6 @@ class MainWin:
                 fr1.pack(side='top', fill='x', pady=2, padx=5)
                 ttk.Checkbutton(fr1, variable=Config.getTK('isNeedCopy'),
                                 text='复制识别出的文字').pack(side='left', fill='x')
-                cbox = Widget.comboboxFrame(
-                    fQuick, '截图模式：　', 'scsMode', self.lockWidget)
-                cbox.pack(side='top', fill='x', padx=4)
-                self.balloon.bind(cbox, '''当使用多块屏幕，且缩放比例不一致，可能导致截图异常，如画面不完整、窗口变形、识别不出文字等。
-若出现这种情况，请在系统设置里的 “更改文本、应用等项目的大小” 将所有屏幕调到相同数值。
-或者，在这里切换到其他截图模式。''')
             quickOCR()
 
             # 批量任务设置
@@ -804,7 +802,6 @@ class MainWin:
             return
         self.win.attributes("-disabled", 1)  # 禁用主窗口
         ScreenshotCopy()
-        # SSW.initGrab()
 
     def closeScreenshot(self, flag, errMsg=None):  # 关闭截图窗口，返回T表示已复制到剪贴板
         self.win.attributes("-disabled", 0)  # 启用父窗口
