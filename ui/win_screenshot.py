@@ -32,6 +32,7 @@ class ScreenshotWin():
         self.errMsg = None  # 记录错误，传给调用者
         self.screenScaleList = None  # 记录各个屏幕分别的缩放比例
         self.promptSss = True  # 本次使用期间显示缩放提示
+        self.lastScInfos = None  # 上一轮的屏幕参数
 
     def initWin(self):  # 初始化窗体
         self.isInitWin = True
@@ -93,10 +94,12 @@ class ScreenshotWin():
         # 获取所有屏幕的信息，提取其中的坐标信息(虚拟，非物理分辨率)
         scInfos = EnumDisplayMonitors()  # 所有屏幕的信息
         self.scBoxList = [s[2] for s in scInfos]  # 提取虚拟分辨率的信息
-        # 大于一块屏幕时，计算缩放比例，若不一致，则发送提示弹窗
+        # 计算缩放比例，若不一致，则发送提示弹窗
+        # 条件：需要提示 | 大于一块屏幕时 | 本次信息与上次不同 | 设置需要提示
         scInfosLen = len(scInfos)
-        if self.promptSss and scInfosLen > 1 and Config.get('promptScreenshotScale'):
+        if self.promptSss and scInfosLen > 1 and not self.lastScInfos == scInfos and Config.get('promptScreenshotScale'):
             scList = []
+            self.lastScInfos = scInfos  # 屏幕信息与上次一样时跳过检测，减少耗时
             # 提取所有屏幕缩放比例
             for index, sc in enumerate(scInfos):
                 # 获取设备信息字典，得到设备名称 Device
@@ -112,7 +115,7 @@ class ScreenshotWin():
             # 检查缩放比例是否一致
             isEQ = True
             for i in range(1, scInfosLen):
-                if not scList[i] == scList[0]:
+                if not abs(scList[i] - scList[0]) < 0.001:
                     isEQ = False
                     break
             # 不一致，提示
