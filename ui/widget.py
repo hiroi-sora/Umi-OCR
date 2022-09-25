@@ -69,10 +69,12 @@ class Widget:
 
         def onRead():  # 当 录制键按下
             tips.grid_remove()
+            btn.grid_remove()  # 移除按钮
             tips2.grid()  # 显示提示
             hFrame.update()  # 刷新UI
             hotkey = keyboard.read_hotkey(suppress=False)
-            tips.grid()  # 显示按键
+            tips.grid()
+            btn.grid()  # 显示按钮
             tips2.grid_remove()
             if hotkey == "esc":  # ESC为取消
                 return
@@ -109,7 +111,8 @@ class Widget:
         tips = tk.Label(hFrame, textvariable=Config.getTK(hotkeyName),
                         justify='center')
         tips.grid(column=2, row=0, sticky="nsew")
-        tips2 = tk.Label(hFrame, text='等待输入……(Esc取消)', justify='center')
+        tips2 = tk.Label(hFrame, text='等待输入…… (按Esc取消)',
+                         justify='center', fg='deeppink')
         tips2.grid(column=2, row=0, sticky="nsew")
         tips2.grid_remove()  # 隐藏
 

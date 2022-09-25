@@ -262,7 +262,7 @@ class MainWin:
                               self.openScreenshot)  # 绑定截图事件
                 # 截图快捷键触发时，子线程向主线程发送事件，在主线程中启动截图窗口
                 # 避免子线程直接唤起截图窗导致的窗口闪烁现象
-                Widget.hotkeyFrame(fQuick, '截图识别', 'Clipboard',
+                Widget.hotkeyFrame(fQuick, '截图识别　', 'Clipboard',
                                    lambda *e: self.win.event_generate(
                                        '<<ScreenshotEvent>>')
                                    ).pack(side='top', fill='x', padx=4)
@@ -275,9 +275,9 @@ class MainWin:
                 cbox = Widget.comboboxFrame(
                     fQuick, '截图模式：　', 'scsMode', self.lockWidget)
                 cbox.pack(side='top', fill='x', padx=4)
-                self.balloon.bind(cbox, '''若使用多块屏幕，且缩放比例不一致，可能导致截图异常，如画面不完整、窗口变形、识别不出文字等。
+                self.balloon.bind(cbox, '''当使用多块屏幕，且缩放比例不一致，可能导致截图异常，如画面不完整、窗口变形、识别不出文字等。
 若出现这种情况，请在系统设置里的 “更改文本、应用等项目的大小” 将所有屏幕调到相同数值。
-或者，在这里更改为别的截图模式。''')
+或者，在这里切换到其他截图模式。''')
             quickOCR()
 
             # 批量任务设置
