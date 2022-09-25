@@ -15,6 +15,17 @@ from PIL import ImageGrab, ImageTk
 from enum import Enum
 import keyboard  # 绑定快捷键
 
+# TODO :
+# 截图模块的工作原理是：先获取虚拟屏幕（所有显示器的画面拼凑在一起）的完整截图。然后创建一块画布，
+# 画布的起点(左上角)是虚拟屏幕的左上角(xy可能为负值)，画布的宽高是虚拟屏幕的宽高，
+# 然后在画布上显示完整截图，监听用户按下与拖拽。此时画布上显示的截图的位置应与真实屏幕画面一一对应。
+# 但问题是，画布作为一个窗口，自身有一个缩放比例（即它出生的那块屏幕的缩放比）。
+# 若多屏幕的其中某块屏幕的缩放比与画布的缩放比不一致，在一定排列下，它们的逻辑坐标会错位，表现为画面错位。
+# 我原本希望通过获取全部屏幕的物理分辨率和逻辑分辨率，得到各自的缩放比，进而计算出画布坐标系下的“真实”逻辑坐标。
+# 但是，我没能摸清规律。参数与太多因素相关，
+# 屏幕的排列方式、软件点开时的状态、画布创建时的位置……都可能影响逻辑坐标和逻辑分辨率，
+# 使得很难计算画布坐标系下应该对屏幕矫正的锚点和比例。
+
 Log = GetLog()
 
 
@@ -22,9 +33,7 @@ def ScreenshotCopy():
     '''截屏，保存到剪贴板，然后调用主窗的closeScreenshot接口'''
     scsMode = Config.get('scsMode').get(Config.get(
         'scsModeName'), ScsModeFlag.multi)  # 当前截屏模式
-    if scsMode == ScsModeFlag.multi or scsMode == ScsModeFlag.single:
-        print(scsMode == ScsModeFlag.multi)
-        SSW.initGrab(scsMode == ScsModeFlag.multi)
+    SSW.initGrab()
 
 
 class _DrawMode(Enum):
@@ -91,81 +100,72 @@ class ScreenshotWin():
         self.canvas.bind('<Enter>', self.__onMotion)  # 鼠标进入，用于初始化瞄准线
         Log.info('初始化截图窗口')
 
-    def initGrab(self, allScreens=True):  # 初始化截屏
-        '''启动区域截图。allScreens为T时对所有显示器截图，F只截取主显示器。'''
+    def initGrab(self):  # 初始化截屏
+        '''启动区域截图'''
         # “虚拟屏幕”指多显示器画面的拼凑在一起的完整画面
-        self.image = ImageGrab.grab(all_screens=allScreens)  # 对整个虚拟屏幕截图，物理分辨率
+        self.image = ImageGrab.grab(all_screens=True)  # 对整个虚拟屏幕截图，物理分辨率
 
         if not self.isInitWin:
             self.initWin()
 
         self.imageResult = None  # 结果图片
         self.drawMode = _DrawMode.ready  # 准备模式
-        # 全屏幕模式
-        if allScreens:
-            # 获取所有屏幕的信息，提取其中的坐标信息(虚拟，非物理分辨率)
-            scInfos = EnumDisplayMonitors()  # 所有屏幕的信息
-            self.scBoxList = [s[2] for s in scInfos]  # 提取虚拟分辨率的信息
-            # 计算缩放比例，若不一致，则发送提示弹窗
-            # 条件：需要提示 | 大于一块屏幕时 | 本次信息与上次不同 | 设置需要提示
-            scInfosLen = len(scInfos)
-            if self.promptSss and scInfosLen > 1 and not self.lastScInfos == scInfos and Config.get('promptScreenshotScale'):
-                scList = []
-                self.lastScInfos = scInfos  # 屏幕信息与上次一样时跳过检测，减少耗时
-                # 提取所有屏幕缩放比例
-                for index, sc in enumerate(scInfos):
-                    # 获取设备信息字典，得到设备名称 Device
-                    # 物理设备信息(dict) = GetMonitorInfo(hMonitor)
-                    info = GetMonitorInfo(scInfos[index][0])
-                    # 为显示设备创建设备上下文，得到物理设备句柄 hDC
-                    # 设备句柄(int) = CreateDC (设备名称, 设备名称 , None )
-                    hDC = CreateDC(info['Device'], info['Device'], None)
-                    w = GetDeviceCaps(hDC, 118)  # 常量 win32con.DESKTOPHORZRES
-                    # h = GetDeviceCaps(hDC, 117)  # 常量 win32con.DESKTOPVERTRES
-                    # 得到缩放比，即windows的“更改文本、应用等项目的大小”
-                    s = w / (sc[2][2]-sc[2][0])
-                    scList.append(s)
-                # 检查缩放比例是否一致
-                isEQ = True
-                for i in range(1, scInfosLen):
-                    if not abs(scList[i] - scList[0]) < 0.001:
-                        isEQ = False
-                        break
-                # 不一致，提示
-                if not isEQ:
-                    self.screenScaleList = scList
-                    if tk.messagebox.askyesno(
-                        '提示',
-                        f'''您当前使用{scInfosLen}块屏幕，且缩放比例不一致，分别为{scList}。
+        # 获取所有屏幕的信息，提取其中的坐标信息(虚拟，非物理分辨率)
+        scInfos = EnumDisplayMonitors()  # 所有屏幕的信息
+        self.scBoxList = [s[2] for s in scInfos]  # 提取虚拟分辨率的信息
+        # 计算缩放比例，若不一致，则发送提示弹窗
+        # 条件：需要提示 | 大于一块屏幕时 | 本次信息与上次不同 | 设置需要提示
+        scInfosLen = len(scInfos)
+        if self.promptSss and scInfosLen > 1 and not self.lastScInfos == scInfos and Config.get('promptScreenshotScale'):
+            scList = []
+            self.lastScInfos = scInfos  # 屏幕信息与上次一样时跳过检测，减少耗时
+            # 提取所有屏幕缩放比例
+            for index, sc in enumerate(scInfos):
+                # 获取设备信息字典，得到设备名称 Device
+                # 物理设备信息(dict) = GetMonitorInfo(hMonitor)
+                info = GetMonitorInfo(scInfos[index][0])
+                # 为显示设备创建设备上下文，得到物理设备句柄 hDC
+                # 设备句柄(int) = CreateDC (设备名称, 设备名称 , None )
+                hDC = CreateDC(info['Device'], info['Device'], None)
+                w = GetDeviceCaps(hDC, 118)  # 常量 win32con.DESKTOPHORZRES
+                # h = GetDeviceCaps(hDC, 117)  # 常量 win32con.DESKTOPVERTRES
+                # 得到缩放比，即windows的“更改文本、应用等项目的大小”
+                s = w / (sc[2][2]-sc[2][0])
+                scList.append(s)
+            # 检查缩放比例是否一致
+            isEQ = True
+            for i in range(1, scInfosLen):
+                if not abs(scList[i] - scList[0]) < 0.001:
+                    isEQ = False
+                    break
+            # 不一致，提示
+            if not isEQ:
+                self.screenScaleList = scList
+                if tk.messagebox.askyesno(
+                    '提示',
+                    f'''您当前使用{scInfosLen}块屏幕，且缩放比例不一致，分别为{scList}。
 这可能导致Umi-OCR截图异常，如截图画面不完整、窗口变形、识别不出文字等。
 若出现这种情况，请在系统设置里的 “更改文本、应用等项目的大小” 将所有屏幕调到相同数值。
 
 本次使用不再提示此消息请点击[是]，永久不再提示请点击[否]
 '''):
-                        self.promptSss = False
-                    else:
-                        Config.set('promptScreenshotScale', False, isSave=True)
-            # 计算虚拟屏幕最左上角和最右下角的坐标
-            scUp, scDown, scLeft, scRight = 0, 0, 0, 0
-            for s in self.scBoxList:  # 遍历所有屏幕，获取最值
-                if s[0] < scLeft:  # 左边缘
-                    scLeft = s[0]
-                if s[1] < scUp:  # 上边缘
-                    scUp = s[1]
-                if s[2] > scRight:  # 右边缘
-                    scRight = s[2]
-                if s[3] > scDown:  # 下边缘
-                    scDown = s[3]
-                # 计算虚拟屏幕的宽和高
-                scWidth, scHeight = scRight - scLeft, scDown - scUp
-        # 单屏幕模式
-        else:
-            # 获取主屏幕虚拟分辨率
-            scWidth = Config.main.win.winfo_screenwidth()
-            scHeight = Config.main.win.winfo_screenheight()
-            # 虚拟屏幕最左上角和最右下角的坐标
-            scLeft, scUp,  scRight,  scDown = 0, 0, scWidth, scHeight
-            self.scBoxList = [(scLeft, scUp,  scRight,  scDown)]
+                    self.promptSss = False
+                else:
+                    Config.set('promptScreenshotScale', False, isSave=True)
+        # 计算虚拟屏幕最左上角和最右下角的坐标
+        scUp, scDown, scLeft, scRight = 0, 0, 0, 0
+        for s in self.scBoxList:  # 遍历所有屏幕，获取最值
+            if s[0] < scLeft:  # 左边缘
+                scLeft = s[0]
+            if s[1] < scUp:  # 上边缘
+                scUp = s[1]
+            if s[2] > scRight:  # 右边缘
+                scRight = s[2]
+            if s[3] > scDown:  # 下边缘
+                scDown = s[3]
+            # 计算虚拟屏幕的宽和高
+            scWidth, scHeight = scRight - scLeft, scDown - scUp
+        # 多显示器处理完毕
         self.scBoxVirtual = (scLeft, scUp, scRight, scDown,
                              scWidth, scHeight)
         self.allScale = self.image.size[0] / scWidth  # 整个虚拟屏幕的缩放比例
