@@ -892,13 +892,22 @@ class MainWin:
         else:
             self.win.after(50, self.waitClose)  # 等待关闭，50ms轮询一次是否已结束子线程
 
-    def onClose(self):  # 关闭软件
-        if SysTray.tray:  # 开启了托盘
-            SysTray.stop() # 通过托盘线程关闭软件
-        else: # 无托盘，直接关
+    def onClose(self):  # 关闭窗口事件
+        OCRe.stop()  # 强制关闭引擎进程，加快子线程结束
+        if OCRe.engFlag == EngFlag.none and OCRe.msnFlag == MsnFlag.none:  # 未在运行
             self.exit()
+        else:
+            self.win.after(50, self.waitClose)  # 等待关闭，50ms轮询一次是否已结束子线程
+
+    def waitClose(self):  # 等待线程关闭后销毁窗口
+        Log.info(f'关闭中，等待 {OCRe.engFlag} | {OCRe.msnFlag}')
+        if OCRe.engFlag == EngFlag.none and OCRe.msnFlag == MsnFlag.none:  # 未在运行
+            self.exit()
+        else:
+            self.win.after(50, self.waitClose)  # 等待关闭，50ms轮询一次是否已结束子进程
 
     def exit(self):
+        SysTray.stop()  # 关闭托盘
         # 等待一段时间，保证托盘线程关闭，图标从系统注销
         # 然后强制终止主进程，防止引擎子线程苟且偷生
         self.win.after(100, lambda: os._exit(0))

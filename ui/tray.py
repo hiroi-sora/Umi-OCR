@@ -35,10 +35,10 @@ class Tray:
         atexit.register(self.stop)  # 注册程序终止时执行强制停止子进程
         self.main = Config.main
         # 注册事件，防止跨线程调用方法
-        # self.main.win.bind(
-        #     '<<QuitEvent>>', lambda *e: self.main.onClose())
         self.main.win.bind(
-            '<<QuitEvent>>', lambda *e: self.main.exit())
+            '<<QuitEvent>>', lambda *e: self.main.onClose())
+        # self.main.win.bind(
+        #     '<<QuitEvent>>', lambda *e: self.main.exit())
         self.main.win.bind(
             '<<ClipboardEvent>>', lambda *e: self.main.runClipboard())
         # <<ScreenshotEvent>> 在主窗类内已注册
