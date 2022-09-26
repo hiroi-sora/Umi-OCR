@@ -7,6 +7,7 @@ from ui.win_screenshot import ScreenshotCopy  # 截屏
 from ui.win_select_area import IgnoreAreaWin  # 子窗口
 from ui.widget import Widget  # 控件
 from ui.pmw.PmwBalloon import Balloon  # 气泡提示
+from ui.tray import SysTray
 from ocr.engine import OCRe, MsnFlag, EngFlag  # 引擎
 # 识图任务处理器
 from ocr.msn_batch_paths import MsnBatch
@@ -68,7 +69,7 @@ class MainWin:
             # 注册文件拖入，整个主窗口内有效
             hook_dropfiles(self.win, func=self.draggedImages)
             # 图标
-            # Asset.initRelease()  # 释放base64资源到本地
+            Asset.initRelease()  # 释放base64资源到本地
             Asset.initTK()  # 初始化tk图片
             self.win.iconphoto(False, Asset.getImgTK('umiocr64'))  # 设置窗口图标
         initWin()
@@ -561,6 +562,8 @@ class MainWin:
             initOptFrameWH()
         initTab3()
 
+        SysTray.start()  # 启动托盘
+        self.win.protocol('WM_DELETE_WINDOW', self.onCloseWin)
         self.gotoTop()
         self.win.mainloop()
 
@@ -856,6 +859,11 @@ class MainWin:
         elif flag:  # 成功
             # self.win.after(50, self.runClipboard)
             self.startSingleClipboard()  # 剪贴板识图
+
+    def onCloseWin(self):  # 关闭窗口事件
+        print('onCloseWin!')
+        # TODO : 判断
+        self.win.withdraw()  # 隐藏窗口
 
     def onClose(self):  # 关闭窗口事件
         OCRe.stop()  # 强制关闭引擎进程，加快子线程结束
