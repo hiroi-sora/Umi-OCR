@@ -345,5 +345,14 @@ class ConfigModule:
         '''获取一个TK变量'''
         return self.__tkDict[key]
 
+    def addTKtrace(self, key, func, args=None):
+        '''跟踪一个TK变量，注册值改变时的回调事件'''
+        if args:
+            self.__tkDict[key].trace(
+                'w', lambda *e, a=args: func(*a))
+        else:
+            self.__tkDict[key].trace('w',
+                                     lambda *e: func())
+
 
 Config = ConfigModule()  # 设置模块 单例

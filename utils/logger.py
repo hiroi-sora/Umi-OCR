@@ -24,6 +24,7 @@ class Logger:
         streamHandler.setFormatter(formatPrint)
         self.logger.addHandler(streamHandler)
 
+        return
         # 日志文件
         fileHandler = logging.FileHandler(LogFileName)
         fileHandler.setLevel(logging.ERROR)

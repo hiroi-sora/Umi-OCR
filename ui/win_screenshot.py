@@ -54,23 +54,30 @@ class ScreenshotSys():  # 系统截图模式
 
     def startGrab(self):  # 启动截屏
         '''启动系统截图。若通过快捷键进入，必须为win+shift+S'''
+        Tool.emptyClipboard()  # 清空剪贴板
         self.isWorking = True
         if not self.isInitKey:
             self.__initKey()
         if not keyboard.is_pressed('win'):  # 不是通过快捷键进入
             keyboard.send('win+shift+s')  # 发送系统截图快捷键
-        self.position = mouse.get_position()  # 获取鼠标当前位置
+        Log.info(f'启动系统截图！')
 
     def __initKey(self):  # 初始化监听
         # 绑定全局事件
         keyboard.on_release_key('Esc', lambda e: self.__close(False),   # Esc抬起，系统截图失败
                                 suppress=False)
-        mouse.on_button(self.__onEnd,  # 左键和右键抬起，截图可能成功可能失败
+        mouse.on_button(self.__onDown,  # 左键和右键按下，开始截图
+                        buttons=('left', 'right'), types='down')
+        mouse.on_button(self.__onUp,  # 左键和右键抬起，截图可能成功可能失败
                         buttons=('left', 'right'), types='up')
         Log.info(f'注册监听系统截图按键！')
         self.isInitKey = True
 
-    def __onEnd(self, e=None):  # 用户操作结束
+    def __onDown(self, e=None):  # 用户操作开始
+        if self.isWorking:
+            self.position = mouse.get_position()  # 获取鼠标当前位置
+
+    def __onUp(self, e=None):  # 用户操作结束
         if self.isWorking:
             if self.position == mouse.get_position():  # 鼠标起始结束位置相同，截图失败
                 self.__close(False)
@@ -85,8 +92,7 @@ class ScreenshotSys():  # 系统截图模式
         clipData = Tool.getClipboardFormat()  # 读取剪贴板
         if clipData == 2:  # 系统截图已保存到剪贴板内存，截图成功
             Log.info(f'第{self.checkTime}次检查成功')
-            # self.__close(True)
-            self.__close(False)
+            self.__close(True)
             return
         Log.info(f'第{self.checkTime}次检查')
         self.checkTime += 1
@@ -160,14 +166,17 @@ class ScreenshotWin():  # 内置截图模式
             # 不一致，提示
             if not isEQ:
                 self.screenScaleList = scList
-                if tk.messagebox.askyesno(
-                    '提示',
-                    f'''您当前使用{scInfosLen}块屏幕，且缩放比例不一致，分别为{scList}。
-这可能导致Umi-OCR截图异常，如截图画面不完整、窗口变形、识别不出文字等。
-若出现这种情况，请在系统设置里的 “更改文本、应用等项目的大小” 将所有屏幕调到相同数值。
+                msg = f'''您当前使用{scInfosLen}块屏幕，且缩放比例不一致，分别为 {scList} 。
 
-本次使用不再提示此消息请点击[是]，永久不再提示请点击[否]
-'''):
+可能导致Umi-OCR截图异常，如画面不完整、窗口变形、识别不出文字等。
+若出现这种情况，
+请在系统设置【更改文本、应用等项目的大小】将所有屏幕调到相同数值。
+或者，请在软件设置里将截图模式切换到【Windows 系统截图】。\n'''
+                Config.main.panelOutput(msg)
+                Config.main.notebook.select(
+                    Config.main.notebookTab[1])  # 转到输出卡
+                if tk.messagebox.askyesno('提示',
+                                          f'{msg}\n本次使用不再提示此消息请点击[是]，永久不再提示请点击[否]'):
                     self.promptSss = False
                 else:
                     Config.set('promptScreenshotScale', False, isSave=True)

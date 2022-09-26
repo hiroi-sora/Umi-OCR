@@ -1,4 +1,4 @@
-from utils.config import Config, Umi  # 最先加载配置
+from utils.config import Config, Umi, ScsModeFlag  # 最先加载配置
 from utils.logger import GetLog
 from utils.asset import *  # 资源
 from utils.data_structure import KeyList
@@ -13,8 +13,8 @@ from ocr.msn_batch_paths import MsnBatch
 from ocr.msn_quick import MsnQuick
 
 import os
-import time
 import ctypes
+import keyboard  # 绑定快捷键
 from PIL import Image  # 图像
 import tkinter as tk
 import tkinter.filedialog
@@ -22,7 +22,6 @@ from tkinter import ttk
 from windnd import hook_dropfiles  # 文件拖拽
 from webbrowser import open as webOpen  # “关于”面板打开项目网址
 
-TempFilePath = "Umi-OCR_temp"
 Log = GetLog()
 
 
@@ -263,19 +262,58 @@ class MainWin:
                 cbox = Widget.comboboxFrame(
                     fQuick, '截图模式：　', 'scsMode', self.lockWidget)
                 cbox.pack(side='top', fill='x', padx=4)
-                self.balloon.bind(cbox, '''当使用多块屏幕，且缩放比例不一致，可能导致Umi-OCR截图异常，如画面不完整、窗口变形、识别不出文字等。
-若出现这种情况，请在系统设置里的 “更改文本、应用等项目的大小” 将所有屏幕调到相同数值。
-或者，在这里切换到【系统截图模式】。''')
-                Widget.hotkeyFrame(fQuick, '截图识别　', 'Clipboard',
-                                   lambda *e: self.win.event_generate(
-                                       '<<ScreenshotEvent>>')
-                                   ).pack(side='top', fill='x', padx=4)
-                Widget.hotkeyFrame(fQuick, '读取剪贴板', 'Screenshot',
-                                   self.runClipboard).pack(side='top', fill='x', padx=4)
+                frss = tk.Frame(fQuick)
+                frss.pack(side='top', fill='x')
+                fhkUmi = Widget.hotkeyFrame(frss, '截图识别　', 'Screenshot',
+                                            lambda *e: self.win.event_generate(
+                                                '<<ScreenshotEvent>>'), isAutoBind=False)
+                syssscom = 'windows+shift+s'
+                fhkSys = Widget.hotkeyFrame(frss, '系统截图　', 'Screenshot',
+                                            lambda *e: self.win.event_generate(
+                                                '<<ScreenshotEvent>>'), True, syssscom, isAutoBind=False)
+                self.balloon.bind(fhkUmi, '''当使用多块屏幕，且缩放比例不一致，可能导致Umi-OCR截图异常，如画面不完整、窗口变形、识别不出文字等。
+若出现这种情况，请在系统设置里的【更改文本、应用等项目的大小】将所有屏幕调到相同数值。
+或者，将截图模式切换到【Windows 系统截图】。''')
+                self.balloon.bind(
+                    fhkSys, '监听到系统截图后调用OCR。若截图后软件没有反应，\n请确保windows系统自带的【截图和草图】中\n【自动复制到剪贴板】的开关处于打开状态。')
+
+                Widget.hotkeyFrame(fQuick, '读取剪贴板', 'Clipboard',
+                                   self.runClipboard, isAutoBind=True).pack(side='top', fill='x', padx=4)
                 fr1 = tk.Frame(fQuick)
                 fr1.pack(side='top', fill='x', pady=2, padx=5)
                 ttk.Checkbutton(fr1, variable=Config.getTK('isNeedCopy'),
                                 text='复制识别出的文字').pack(side='left', fill='x')
+
+                # 切换截图模式
+                def onModeChange():
+                    isHotkey = Config.get('isHotkeyScreenshot')
+                    scsName = Config.getTK('scsModeName').get()
+                    umihk = Config.get('hotkeyScreenshot')
+                    scsMode = Config.get('scsMode').get(
+                        scsName, ScsModeFlag.multi)  # 当前截屏模式
+                    if scsMode == ScsModeFlag.system:  # 切换到系统截图
+                        fhkUmi.forget()
+                        fhkSys.pack(side='top', fill='x', padx=4)
+                        if isHotkey:  # 当前已在注册
+                            if umihk:  # 注销软件截图
+                                Widget.delHotkey(umihk)  # 注销按键
+                            keyboard.add_hotkey(
+                                syssscom, lambda *e: self.win.event_generate(
+                                    '<<ScreenshotEvent>>'), suppress=False)
+                            Log.info(f'快捷键【系统截图】注册成功')
+                    elif scsMode == ScsModeFlag.multi:  # 切换到软件截图
+                        fhkSys.forget()
+                        fhkUmi.pack(side='top', fill='x', padx=4)
+                        if isHotkey:
+                            Widget.delHotkey(syssscom)  # 注销按键
+                            if umihk:
+                                keyboard.add_hotkey(
+                                    umihk, lambda *e: self.win.event_generate(
+                                        '<<ScreenshotEvent>>'), suppress=False)
+                                Log.info(f'快捷键【软件截图{umihk}】注册成功')
+                    Log.info(f'截图模式改变：{scsMode}')
+                Config.addTKtrace('scsModeName', onModeChange)
+                onModeChange()
             quickOCR()
 
             # 批量任务设置
@@ -692,7 +730,10 @@ class MainWin:
         if self.win.state() == 'iconic':  # 窗口最小化状态下
             self.win.state('normal')  # 恢复前台状态
         self.win.attributes('-topmost', 1)  # 设置层级最前
-        self.win.attributes('-topmost', 0)  # 然后立刻解除
+        self.win.deiconify()  # 主窗获取焦点
+        # 一段时间后解除
+        self.win.after(500, lambda: self.win.attributes('-topmost', 0))
+        Log.info('主窗置顶！')
 
     # 进行任务 ===============================================
 
@@ -760,6 +801,17 @@ class MainWin:
         elif OCRe.msnFlag == MsnFlag.running or OCRe.msnFlag == MsnFlag.initing:
             OCRe.stopByMode()
 
+    def startSingleClipboard(self):  # 开始单张识别的剪贴板任务
+        try:  # 初始化快捷识图任务处理器
+            msnQui = MsnQuick()
+        except Exception as err:
+            tk.messagebox.showwarning('遇到了亿点小问题', f'{err}')
+            return  # 未开始运行，终止本次运行
+        # 开始运行
+        OCRe.runMission(['clipboard'], msnQui)
+        self.notebook.select(self.notebookTab[1])  # 转到输出卡
+        self.gotoTop()  # 主窗置顶
+
     def runClipboard(self, e=None):  # 识别剪贴板
         if not OCRe.msnFlag == MsnFlag.none:  # 正在运行，不执行
             return
@@ -767,15 +819,7 @@ class MainWin:
 
         # 剪贴板中是位图（优先）
         if isinstance(clipData, int):
-            try:  # 初始化快捷识图任务处理器
-                msnQui = MsnQuick()
-            except Exception as err:
-                tk.messagebox.showwarning('遇到了亿点小问题', f'{err}')
-                return  # 未开始运行，终止本次运行
-            # 开始运行
-            OCRe.runMission(['clipboard'], msnQui)
-            self.notebook.select(self.notebookTab[1])  # 转到输出卡
-            self.gotoTop()  # 主窗置顶
+            self.startSingleClipboard()
 
         # 剪贴板中是文件列表（文件管理器中对着文件ctrl+c得到句柄）
         elif isinstance(clipData, tuple):
@@ -810,8 +854,8 @@ class MainWin:
         if not flag and self.win.state() == 'normal':  # 截图不成功，但窗口非最小化
             self.gotoTop()  # 主窗置顶
         elif flag:  # 成功
-            self.gotoTop()  # 主窗置顶
-            self.runClipboard()  # 剪贴板识图
+            # self.win.after(50, self.runClipboard)
+            self.startSingleClipboard()  # 剪贴板识图
 
     def onClose(self):  # 关闭窗口事件
         OCRe.stop()  # 强制关闭引擎进程，加快子线程结束
