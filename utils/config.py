@@ -26,6 +26,13 @@ class ScsModeFlag(Enum):
     system = 1  # 系统截屏模式
 
 
+class ClickTrayModeFlag(Enum):
+    '''点击托盘时模式标志'''
+    show = 0  # 显示主面板
+    screenshot = 1  # 截屏
+    clipboard = 2  # 粘贴图片
+
+
 # 配置文件路径
 ConfigJsonFile = 'Umi-OCR_config.json'
 
@@ -36,6 +43,30 @@ _ConfigDict = {
         'default': False,
         'isSave': True,
         'isTK': True,
+    },
+    'isTray': {  # T时展示托盘图标
+        'default': True,
+        'isSave': True,
+        'isTK': True,
+    },
+    'isBackground': {  # T时点关闭进入后台运行
+        'default': False,
+        'isSave': True,
+        'isTK': True,
+    },
+    'clickTrayModeName': {  # 当前选择的点击托盘图标模式名称
+        'default': '',
+        'isSave': True,
+        'isTK': True,
+    },
+    'clickTrayMode': {  # 点击托盘图标模式
+        'default': {
+            '显示面板': ClickTrayModeFlag.show,
+            '屏幕截图': ClickTrayModeFlag.screenshot,
+            '粘贴图片': ClickTrayModeFlag.clipboard,
+        },
+        'isSave': False,
+        'isTK': False,
     },
     # 快捷识图设置
     'isHotkeyClipboard': {  # T时启用读剪贴板快捷键

@@ -245,9 +245,22 @@ class MainWin:
                            ipady=2, pady=LabelFramePadY, padx=4)
                 fr1 = tk.Frame(fSoft)
                 fr1.pack(side='top', fill='x', pady=2, padx=5)
-                wid = ttk.Checkbutton(fr1, text="调试模式",
-                                      variable=Config.getTK('isDebug'))
-                wid.grid(column=0, row=0, sticky="w")
+                fr1.grid_columnconfigure(1, weight=1)
+                self.balloon.bind(fr1, '下次打开软件生效')
+                wid = ttk.Checkbutton(fr1, text='显示系统托盘图标',
+                                      variable=Config.getTK('isTray'))
+                wid.grid(column=0, row=0, sticky='w')
+                Widget.comboboxFrame(fr1, '，双击图标', 'clickTrayMode').grid(
+                    column=1, row=0, sticky='w')
+
+                fr2 = tk.Frame(fSoft)
+                fr2.pack(side='top', fill='x', pady=2, padx=5)
+                self.balloon.bind(fr2, '显示系统托盘图标期间才生效')
+                tk.Label(fr2, text='　 关闭主面板：').pack(side='left')
+                ttk.Radiobutton(fr2, text='最小化到托盘',
+                                variable=Config.getTK('isBackground'), value=True).pack(side='left')
+                ttk.Radiobutton(fr2, text='退出软件',
+                                variable=Config.getTK('isBackground'), value=False).pack(side='left', padx=15)
                 self.lockWidget.append(wid)
             initSoftwareFrame()
 
@@ -260,8 +273,7 @@ class MainWin:
                 # 避免子线程直接唤起截图窗导致的窗口闪烁现象
                 self.win.bind('<<ScreenshotEvent>>',
                               self.openScreenshot)  # 绑定截图事件
-                cbox = Widget.comboboxFrame(
-                    fQuick, '截图模式：　', 'scsMode', self.lockWidget)
+                cbox = Widget.comboboxFrame(fQuick, '截图模式：　', 'scsMode')
                 cbox.pack(side='top', fill='x', padx=4)
                 frss = tk.Frame(fQuick)
                 frss.pack(side='top', fill='x')
@@ -541,6 +553,9 @@ class MainWin:
                 labelWeb.pack()  # 文字
                 labelWeb.bind(  # 绑定鼠标左键点击，打开网页
                     '<Button-1>', lambda *e: webOpen(Umi.website))
+                wid = ttk.Checkbutton(self.optFrame, text='调试模式',
+                                      variable=Config.getTK('isDebug'))
+                wid.pack(side='right')
             initAbout()
 
             def initOptFrameWH():  # 初始化框架的宽高
@@ -560,10 +575,13 @@ class MainWin:
                         1 if event.delta < 0 else -1, "units")
                 self.optCanvas.bind_all("<MouseWheel>", onCanvasMouseWheel)
             initOptFrameWH()
+
         initTab3()
 
-        SysTray.start()  # 启动托盘
-        self.win.protocol('WM_DELETE_WINDOW', self.onCloseWin)
+        if Config.get('isTray'):
+            SysTray.start()  # 启动托盘
+            self.win.wm_protocol(  # 注册窗口关闭事件
+                'WM_DELETE_WINDOW', self.onCloseWin)
         self.gotoTop()
         self.win.mainloop()
 
@@ -862,24 +880,28 @@ class MainWin:
 
     def onCloseWin(self):  # 关闭窗口事件
         print('onCloseWin!')
-        # TODO : 判断
-        self.win.withdraw()  # 隐藏窗口
+        if Config.get('isBackground'):
+            self.win.withdraw()  # 隐藏窗口
+        else:
+            self.onClose()  # 直接关闭
 
-    def onClose(self):  # 关闭窗口事件
+    def onClose(self):  # 关闭软件
         OCRe.stop()  # 强制关闭引擎进程，加快子线程结束
         if OCRe.engFlag == EngFlag.none and OCRe.msnFlag == MsnFlag.none:  # 未在运行
-            self.win.destroy()  # 直接关闭
+            self.exit()
         else:
             self.win.after(50, self.waitClose)  # 等待关闭，50ms轮询一次是否已结束子线程
 
-    def waitClose(self):  # 等待线程关闭后销毁窗口
-        Log.info(f'关闭中，等待 {OCRe.engFlag} | {OCRe.msnFlag}')
-        if OCRe.engFlag == EngFlag.none and OCRe.msnFlag == MsnFlag.none:  # 未在运行
-            self.win.destroy()  # 销毁窗口
-            Log.info(f'主窗 exit =====================')
-            exit(0)
-        else:
-            self.win.after(50, self.waitClose)  # 等待关闭，50ms轮询一次是否已结束子进程
+    def onClose(self):  # 关闭软件
+        if SysTray.tray:  # 开启了托盘
+            SysTray.stop() # 通过托盘线程关闭软件
+        else: # 无托盘，直接关
+            self.exit()
+
+    def exit(self):
+        # 等待一段时间，保证托盘线程关闭，图标从系统注销
+        # 然后强制终止主进程，防止引擎子线程苟且偷生
+        self.win.after(100, lambda: os._exit(0))
 
     def showTips(self, tipsText):  # 显示提示
         if not OCRe.msnFlag == MsnFlag.none:
