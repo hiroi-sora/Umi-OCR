@@ -143,3 +143,4 @@ class MsnBatch(Msn):
         self.__output('text', stopStr)
         Log.info('msnB: onClose')
         self.setRunning(MsnFlag.none)
+        Config.main.gotoTop()
