@@ -4,6 +4,7 @@ from utils.config import Config
 from ocr.engine import MsnFlag
 from ocr.msn import Msn
 from ocr.output_panel import OutputPanel  # 输出器
+from ocr.tbpu.ignore_area import TbpuIgnoreArea
 
 import tkinter as tk
 import time
@@ -21,6 +22,14 @@ class MsnQuick(Msn):
         self.progressbar = Config.main.progressbar  # 进度条组件
         self.setRunning = Config.main.setRunning  # 设置运行状态接口
         self.outputPanel = OutputPanel()  # 输出到面板
+        # 初始化文块处理器
+        self.procList = []
+        if Config.get("ignoreArea"):  # 忽略区域
+            self.procList.append(TbpuIgnoreArea())
+        tbpuClass = Config.get('tbpu').get(  # 其它文本块处理器
+            Config.get('tbpuName'), None)
+        if tbpuClass:
+            self.procList.append(tbpuClass())
         Log.info(f'快捷文本处理器初始化完毕！')
 
     def onStart(self, num):
@@ -38,6 +47,9 @@ class MsnQuick(Msn):
         # ==================== 分析文块 ====================
         if ocrData['code'] == 100:  # 成功
             tbList = ocrData['data']  # 获取文块
+            # 将文块组导入每一个文块处理器，获取输出文块组
+            for proc in self.procList:
+                tbList, s = proc.run(tbList, None)
             tbStr = ''
             for tb in tbList:
                 tbStr += tb['text']+'\n'
