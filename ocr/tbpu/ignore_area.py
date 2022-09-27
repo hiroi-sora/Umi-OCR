@@ -1,12 +1,14 @@
 # 文块处理：忽略区域
 from utils.config import Config
-from ocr.proc import Proc
+from ocr.tbpu.tbpu import Tbpu
 from utils.logger import GetLog
+
+from time import time
 
 Log = GetLog()
 
 
-class ProcIgnoreArea(Proc):
+class TbpuIgnoreArea(Tbpu):
 
     def __init__(self):
         self.areaInfo = Config.get('ignoreArea')  # 忽略区域信息
@@ -21,10 +23,10 @@ class ProcIgnoreArea(Proc):
 
     def run(self, textBlocks, imgInfo):
         '''传入 文块组、图片信息。返回文块组、debug信息字符串。'''
-
+        timeIn = time()
         # 尺寸不匹配，无需忽略区域
         if not self.areaInfo['size'][0] == imgInfo['size'][0] or not self.areaInfo['size'][1] == imgInfo['size'][1]:
-            return textBlocks, f'图片尺寸为{self.areaInfo["size"][0]}x{self.areaInfo["size"][1]}，不符合忽略区域{imgInfo["size"][0]}x{imgInfo["size"][1]}'
+            return textBlocks, f'[忽略区域] 图片尺寸为{self.areaInfo["size"][0]}x{self.areaInfo["size"][1]}，不符合忽略区域{imgInfo["size"][0]}x{imgInfo["size"][1]}'
 
         # 返回矩形框 bPos 是否在 aPos 内
         def isInBox(aPos0, aPos1, bPos0, bPos1):  # 检测框左上、右下角，待测者左上、右下角
@@ -55,4 +57,4 @@ class ProcIgnoreArea(Proc):
             else:
                 fn += 1
         # 返回新文块组和debug字符串
-        return tempList, f'忽略模式{modeChar}：忽略{fn}条'
+        return tempList, f'[忽略区域] 模式{modeChar}：忽略{fn}条，耗时{time()-timeIn}s'

@@ -9,8 +9,9 @@ from ocr.output_txt import OutputTxt
 from ocr.output_md import OutputMD
 from ocr.output_jsonl import OutputJsonl
 # 文块处理器
-from ocr.proc_ignore_area import ProcIgnoreArea
-import tkinter as tk
+from ocr.tbpu.ignore_area import TbpuIgnoreArea
+from ocr.tbpu.merge_line_horizontal import TbpuLineHorizontal
+
 import time
 
 from utils.logger import GetLog
@@ -47,7 +48,8 @@ class MsnBatch(Msn):
         # 初始化文块处理器
         self.procList = []
         if Config.get("ignoreArea"):  # 忽略区域
-            self.procList.append(ProcIgnoreArea())
+            self.procList.append(TbpuIgnoreArea())
+        self.procList.append(TbpuLineHorizontal())
 
         Log.info(f'批量文本处理器初始化完毕！')
 
@@ -112,15 +114,15 @@ class MsnBatch(Msn):
             if scoreNum > 0:
                 score /= scoreNum
             textScore = str(score)
-            textDebug += f'耗时：{numData["timeNow"]}s  置信度：{textScore}\n'
+            textDebug += f'总耗时：{numData["timeNow"]}s  置信度：{textScore}\n'
         elif ocrData['code'] == 101:  # 无文字
             textScore = '无文字'
-            textDebug += f'耗时：{numData["timeNow"]}s  图中未发现文字\n'
+            textDebug += f'总耗时：{numData["timeNow"]}s  图中未发现文字\n'
         else:  # 识别失败
             # 将错误信息写入第一个文块
             textBlockList = [{'box': [0, 0, 0, 0, 0, 0, 0, 0], 'score': 0,
                               'text':f'识别失败，错误码：{ocrData["code"]}\n错误信息：{str(ocrData["data"])}\n'}]
-            textDebug += f'耗时：{numData["timeNow"]}s  识别失败\n'
+            textDebug += f'总耗时：{numData["timeNow"]}s  识别失败\n'
             textScore = '错误'
         # ==================== 输出 ====================
         if self.isIgnoreNoText and ocrData['code'] == 101:

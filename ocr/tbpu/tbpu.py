@@ -9,7 +9,7 @@ from utils.logger import GetLog
 Log = GetLog()
 
 
-class Proc:
+class Tbpu:
 
     def getInitInfo(self):
         '''返回初始化信息字符串'''
