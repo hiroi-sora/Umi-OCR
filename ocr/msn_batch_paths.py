@@ -10,7 +10,6 @@ from ocr.output_md import OutputMD
 from ocr.output_jsonl import OutputJsonl
 # 文块处理器
 from ocr.tbpu.ignore_area import TbpuIgnoreArea
-from ocr.tbpu.merge_line_horizontal import TbpuLineHorizontal
 
 import time
 
@@ -49,7 +48,10 @@ class MsnBatch(Msn):
         self.procList = []
         if Config.get("ignoreArea"):  # 忽略区域
             self.procList.append(TbpuIgnoreArea())
-        self.procList.append(TbpuLineHorizontal())
+        tbpuClass = Config.get('tbpu').get(  # 其它文本块处理器
+            Config.get('tbpuName'), None)
+        if tbpuClass:
+            self.procList.append(tbpuClass())
 
         Log.info(f'批量文本处理器初始化完毕！')
 

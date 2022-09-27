@@ -517,8 +517,8 @@ class MainWin:
                 self.canvas.grid(column=3, row=0, rowspan=10)
                 self.canvas.bind(
                     '<Button-1>', lambda *e: self.openSelectArea())
-                Widget.comboboxFrame(fProcess, '文本块后处理', 'tbpu').pack(
-                    side='top', fill='x', pady=2, padx=4)
+                wid = Widget.comboboxFrame(fProcess, '文本块后处理', 'tbpu',self.lockWidget)
+                wid.pack(side='top', fill='x', pady=2, padx=4)
             initProcess()
 
             def initOcrUI():  # OCR引擎设置
@@ -889,7 +889,7 @@ class MainWin:
                         w['widget']['state'] = w['stateOFnormal']  # 正常状态为特殊值
                     else:
                         w['widget']['state'] = state
-                else:
+                elif 'state' in w.keys():
                     w['state'] = state
         self.win.update()
 

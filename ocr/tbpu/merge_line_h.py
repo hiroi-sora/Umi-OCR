@@ -1,14 +1,10 @@
 # 文块处理：合并横排单行
-# from utils.config import Config
 from ocr.tbpu.tbpu import Tbpu
-from utils.logger import GetLog
 
 from time import time
 
-Log = GetLog()
 
-
-class TbpuLineHorizontal(Tbpu):
+class TbpuLineH(Tbpu):
 
     def getInitInfo(self):
         return '文块后处理：[横排单行合并]'
@@ -46,8 +42,8 @@ class TbpuLineHorizontal(Tbpu):
                     yBottom = max(box[2][1], box[3][1], box2[2][1], box2[3][1])
                     box[0][1] = box[1][1] = yTop  # y上
                     box[2][1] = box[3][1] = yBottom  # y下
-                    box[0][0] = box[3][0] = max(box[0][0], box[3][0])  # x右
-                    box[1][0] = box[2][0] = max(box2[1][0], box2[2][0])  # x左
+                    box[0][0] = box[3][0] = min(box[0][0], box[3][0])  # x左
+                    box[1][0] = box[2][0] = max(box2[1][0], box2[2][0])  # x右
                     # 刷新临时变量
                     bx, by = box[1][0], box[1][1]  # 右上角xy
                     bh = box[3][1] - box[0][1]  # 行高
@@ -62,4 +58,4 @@ class TbpuLineHorizontal(Tbpu):
         # 所有新文块，按左上角点的y坐标从高到低排序
         resList.sort(key=lambda tb: tb['box'][0][1])
         # 返回新文块组和debug字符串
-        return resList, f'[横排单行合并] 耗时{time()-timeIn}s'
+        return resList, f'[横排单行合并] 原{listlen}块，合并后{len(resList)}块，耗时{time()-timeIn}s'
