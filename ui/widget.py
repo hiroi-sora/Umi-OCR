@@ -24,8 +24,7 @@ class Widget:
         modeNameList = [i for i in modeDict]
         cbox = ttk.Combobox(cFrame, state='readonly', width=width,
                             textvariable=Config.getTK(modeName), value=modeNameList)
-        cbox.unbind_class('TCombobox', '<MouseWheel>')  # 解绑默认滚轮事件，防止误触
-        cbox.grid(column=1, row=0,  sticky="nsew")
+        cbox.grid(column=1, row=0,  sticky='ew')
         if Config.get(modeName) not in modeNameList:
             cbox.current(0)  # 初始化Combobox和configName
         if lockWidget:  # 添加到锁定列表

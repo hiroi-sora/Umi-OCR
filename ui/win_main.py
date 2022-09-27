@@ -204,13 +204,17 @@ class MainWin:
 
             ttk.Checkbutton(fr1, variable=self.isAutoRoll, text="自动滚动",
                             takefocus=0,).pack(side='right', padx=20)
+            tf = tk.Label(fr1, text='字体', fg='gray', cursor='hand2')
+            tf.pack(side='right')
+            tf.bind(
+                '<Button-1>', lambda *e: self.notebook.select(self.notebookTab[2]))  # 转到设置卡
+            self.balloon.bind(tf, '在【设置】选项卡更改输出面板的字体')
 
             fr2 = tk.Frame(tabFrameOutput)
             fr2.pack(side='top', fill='both')
             vbar = tk.Scrollbar(fr2, orient='vertical')  # 滚动条
             vbar.pack(side="right", fill='y')
-            self.textOutput = tk.Text(fr2, height=500, width=500, font=())
-            # print(f'{tk.font.families()}')
+            self.textOutput = tk.Text(fr2, height=500, width=500)
             self.textOutput.pack(fill='both', side="left")
             vbar["command"] = self.textOutput.yview
             self.textOutput["yscrollcommand"] = vbar.set
@@ -263,6 +267,44 @@ class MainWin:
                                 variable=Config.getTK('isBackground'), value=True).pack(side='left')
                 ttk.Radiobutton(fr2, text='退出软件',
                                 variable=Config.getTK('isBackground'), value=False).pack(side='left', padx=15)
+
+                # 主面板字体设置
+                fr3 = tk.Frame(fSoft)
+                fr3.pack(side='top', fill='x', pady=2, padx=5)
+                fr3.grid_columnconfigure(1, weight=1)
+                self.balloon.bind(fr3, '调整【识别内容】选项卡中输出面板的字体样式')
+                tk.Label(fr3, text='输出面板：字体').grid(column=0, row=0, sticky='w')
+                ff = tk.font.families()  # 获取系统字体
+                fontFamilies = []
+                fontFamiliesABC = []
+                for i in ff:
+                    if not i[0] == '@':  # 排除竖版
+                        if '\u4e00' <= i[0] <= '\u9fff':  # 中文开头的优先
+                            fontFamilies.append(i)
+                        else:
+                            fontFamiliesABC.append(i)
+                fontFamilies += fontFamiliesABC
+                cbox = ttk.Combobox(fr3, state='readonly',
+                                    textvariable=Config.getTK('textpanelFontFamily'), value=fontFamilies)
+                cbox.grid(column=1, row=0, sticky='ew')
+                self.balloon.bind(cbox, '不要使用滚轮。\n请用上下方向键或拉动滚动条来浏览列表')
+                tk.Label(fr3, text='字号').grid(column=2, row=0, sticky='w')
+                tk.Entry(
+                    fr3, textvariable=Config.getTK('textpanelFontSize'), width=4).grid(column=3, row=0, sticky='w')
+                tk.Label(fr3, text=' ').grid(column=4, row=0, sticky='w')
+                ttk.Checkbutton(fr3, text='加粗',
+                                variable=Config.getTK('isTextpanelFontBold')).grid(column=5, row=0, sticky='w')
+
+                def updateTextpanel():
+                    f = Config.get('textpanelFontFamily')
+                    s = Config.get('textpanelFontSize')
+                    b = Config.get('isTextpanelFontBold')
+                    font = (f, s, 'bold' if b else 'normal')
+                    self.textOutput['font'] = font
+                Config.addTrace('textpanelFontFamily', updateTextpanel)
+                Config.addTrace('textpanelFontSize', updateTextpanel)
+                Config.addTrace('isTextpanelFontBold', updateTextpanel)
+                updateTextpanel()
             initSoftwareFrame()
 
             def quickOCR():  # 快捷识图设置
@@ -301,7 +343,7 @@ class MainWin:
                 # 切换截图模式
                 def onModeChange():
                     isHotkey = Config.get('isHotkeyScreenshot')
-                    scsName = Config.getTK('scsModeName').get()
+                    scsName = Config.get('scsModeName')
                     umihk = Config.get('hotkeyScreenshot')
                     scsMode = Config.get('scsMode').get(
                         scsName, ScsModeFlag.multi)  # 当前截屏模式
@@ -326,7 +368,7 @@ class MainWin:
                                         '<<ScreenshotEvent>>'), suppress=False)
                                 Log.info(f'快捷键【软件截图{umihk}】注册成功')
                     Log.info(f'截图模式改变：{scsMode}')
-                Config.addTKtrace('scsModeName', onModeChange)
+                Config.addTrace('scsModeName', onModeChange)
                 onModeChange()
             quickOCR()
 
@@ -356,7 +398,6 @@ class MainWin:
                 okMissionNameList = [i for i in okMissionDict.keys()]
                 wid = ttk.Combobox(fr2, width=10, state="readonly", textvariable=Config.getTK('okMissionName'),
                                    value=okMissionNameList)
-                wid.unbind_class("TCombobox", "<MouseWheel>")  # 解绑默认滚轮事件，防止误触
                 wid.pack(side='left')
                 if Config.get("okMissionName") not in okMissionNameList:
                     wid.current(0)  # 初始化Combobox和okMissionName
@@ -616,7 +657,9 @@ class MainWin:
                 def onCanvasMouseWheel(event):  # 绑定画布中滚轮滚动事件
                     self.optCanvas.yview_scroll(
                         1 if event.delta < 0 else -1, "units")
-                self.optCanvas.bind_all("<MouseWheel>", onCanvasMouseWheel)
+                self.optCanvas.bind_all('<MouseWheel>', onCanvasMouseWheel)
+                # 为所有复选框解绑默认滚轮事件，防止误触
+                self.win.unbind_class('TCombobox', '<MouseWheel>')
             initOptFrameWH()
 
         initTab3()

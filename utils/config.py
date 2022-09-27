@@ -73,6 +73,21 @@ _ConfigDict = {
         'isSave': False,
         'isTK': False,
     },
+    'textpanelFontFamily': {  # 主输出面板字体
+        'default': '',
+        'isSave': True,
+        'isTK': True,
+    },
+    'textpanelFontSize': {  # 主输出面板字体大小
+        'default': 12,
+        'isSave': True,
+        'isTK': True,
+    },
+    'isTextpanelFontBold': {  # T时主输出面板字体加粗
+        'default': False,
+        'isSave': True,
+        'isTK': True,
+    },
     # 快捷识图设置
     'isHotkeyClipboard': {  # T时启用读剪贴板快捷键
         'default': False,
@@ -307,6 +322,7 @@ class ConfigModule:
         self.__optDict = {}  # 配置项的数据
         self.__tkDict = {}  # tk绑定变量
         self.__saveList = []  # 需要保存的项
+        self.__traceDict = {}  # 跟踪值改变
         # 将配置项加载到self
         for key in _ConfigDict:
             value = _ConfigDict[key]
@@ -397,6 +413,8 @@ class ConfigModule:
             self.__optDict[key] = self.__tkDict[key].get()
         except Exception as err:
             Log.error(f'设置项{key}刷新失败：\n{err}')
+        if key in self.__traceDict:
+            self.__traceDict[key]()
 
     def get(self, key):
         '''获取一个配置项的值'''
@@ -417,14 +435,9 @@ class ConfigModule:
         '''获取一个TK变量'''
         return self.__tkDict[key]
 
-    def addTKtrace(self, key, func, args=None):
-        '''跟踪一个TK变量，注册值改变时的回调事件'''
-        if args:
-            self.__tkDict[key].trace(
-                'w', lambda *e, a=args: func(*a))
-        else:
-            self.__tkDict[key].trace('w',
-                                     lambda *e: func())
+    def addTrace(self, key, func):
+        '''跟踪一个变量，值改变时调用函数'''
+        self.__traceDict[key] = func
 
 
 Config = ConfigModule()  # 设置模块 单例
