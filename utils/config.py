@@ -8,9 +8,8 @@ from locale import getdefaultlocale
 
 Log = GetLog()
 
+
 # 项目属性
-
-
 class Umi:
     name = None
     ver = None
@@ -195,6 +194,19 @@ _ConfigDict = {
         'default': True,
         'isSave': True,
         'isTK': True,
+    },
+    # 文块后处理
+    'tbpuName': {  # 当前选择的文块后处理
+        'default': '',
+        'isSave': True,
+        'isTK': True,
+    },
+    'tbpu': {  # 文块后处理。这个参数通过 ocr\tbpu\__init__.py 导入，避免循环引用
+        'default': {
+            '通用': None,
+        },
+        'isSave': False,
+        'isTK': False,
     },
     # 引擎设置
     'ocrToolPath': {  # 引擎路径
@@ -436,7 +448,7 @@ class ConfigModule:
         return self.__tkDict[key]
 
     def addTrace(self, key, func):
-        '''跟踪一个变量，值改变时调用函数'''
+        '''跟踪一个变量，值改变时调用函数。同一个值只能注册一个函数'''
         self.__traceDict[key] = func
 
 

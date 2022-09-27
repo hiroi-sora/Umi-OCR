@@ -1,4 +1,4 @@
-# proc == processing
+# tbpu : text block processing unit
 # 文块处理器的基类。
 # OCR返回的结果中，一项包含文字、包围盒、置信度的元素，称为一个“文块” - text block 。
 # 文块不一定是完整的一句话或一个段落。反之，一般是零散的文字。

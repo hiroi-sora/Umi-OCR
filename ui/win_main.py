@@ -517,6 +517,8 @@ class MainWin:
                 self.canvas.grid(column=3, row=0, rowspan=10)
                 self.canvas.bind(
                     '<Button-1>', lambda *e: self.openSelectArea())
+                Widget.comboboxFrame(fProcess, '文本块后处理', 'tbpu').pack(
+                    side='top', fill='x', pady=2, padx=4)
             initProcess()
 
             def initOcrUI():  # OCR引擎设置
