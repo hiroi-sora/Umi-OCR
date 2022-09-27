@@ -54,13 +54,18 @@ class IgnoreAreaWin:
         ctrlF1.pack(side='left')
         self.isAutoOCR = tk.BooleanVar()
         self.isAutoOCR.set(True)
-        tk.Checkbutton(ctrlF1, variable=self.isAutoOCR, text='启用 OCR结果预览').pack(
-            side='top')
+        wid = tk.Checkbutton(
+            ctrlF1, variable=self.isAutoOCR, text='启用 OCR结果预览')
+        wid.pack(side='top')
+        self.balloon.bind(wid, '以虚线框标出OCR识别到的文本块')
         self.isAutoTbpu = tk.BooleanVar()
-        self.isAutoTbpu.set(True)
+        self.isAutoTbpu.set(False)
         self.isAutoTbpu.trace('w', lambda *e: self.reLoadImage())
-        tk.Checkbutton(ctrlF1, variable=self.isAutoTbpu, text='启用 文块后处理预览').pack(
-            side='top')
+        wid = tk.Checkbutton(
+            ctrlF1, variable=self.isAutoTbpu, text='启用 文块后处理预览')
+        wid.pack(side='top')
+        self.balloon.bind(
+            wid, '以虚线框标出经过文本块后处理的块\n注意，仅用于预览后处理效果，\n忽略区域功能在实际执行时不受任何后处理的影响')
         Widget.comboboxFrame(ctrlF1, '', 'tbpu', width=16).pack(
             side='top')
         # 切换画笔按钮
@@ -73,7 +78,7 @@ class IgnoreAreaWin:
                                     command=lambda: self.changeMode(0))
         self.buttons[0].pack(side='left', padx=5)
         self.balloon.bind(
-            self.buttons[0], '处于 [忽略区域 A] 内的矩形虚线文字块将被忽略')
+            self.buttons[0], '处于 [忽略区域 A] 内的矩形虚线文字块将被忽略\n一般情况下，将需要去除的水印区域全部画上区域A即可')
         tk.Frame(ctrlFrame, w=20).pack(side='left')
         self.buttons[1] = tk.Button(ctrlF2, text='+识别区域', width=btnW, height=3, fg=self.areaColor[1], bg=self.areaColor[3],
                                     command=lambda: self.changeMode(1))
@@ -224,9 +229,7 @@ class IgnoreAreaWin:
                         tbpuClass = Config.get('tbpu').get(
                             Config.get('tbpuName'), None)
                         if tbpuClass:
-                            print(f'启动文本后处理1。{tbpuClass}')
                             tbpu = tbpuClass()
-                            print(f'启动文本后处理2。{tbpu}')
                             data['data'], s = tbpu.run(data['data'], None)
                     for o in data["data"]:  # 绘制矩形框
                         # 提取左上角、右下角的坐标
@@ -235,9 +238,9 @@ class IgnoreAreaWin:
                         p2x = round(o['box'][2][0]*self.imgScale)
                         p2y = round(o['box'][2][1]*self.imgScale)
                         r1 = self.canvas.create_rectangle(
-                            p1x, p1y, p2x, p2y, outline='white', width=1)  # 绘制白实线基底
+                            p1x, p1y, p2x, p2y, outline='white', width=2)  # 绘制白实线基底
                         r2 = self.canvas.create_rectangle(
-                            p1x, p1y, p2x, p2y, outline='black', width=1, dash=4)  # 绘制黑虚线表层
+                            p1x, p1y, p2x, p2y, outline='black', width=2, dash=4)  # 绘制黑虚线表层
                         self.canvas.tag_lower(r2)  # 移动到最下方
                         self.canvas.tag_lower(r1)
                         self.areaTextRec.append(r1)
