@@ -1,6 +1,7 @@
 from ocr.engine import OCRe  # 引擎单例
 from utils.asset import Asset  # 资源
 from utils.config import Config
+from ui.widget import Widget  # 控件
 
 import tkinter as tk
 import tkinter.messagebox
@@ -11,6 +12,7 @@ from PIL import Image, ImageTk
 class IgnoreAreaWin:
     def __init__(self, closeSendData=None, defaultPath=""):
         self.closeSendData = closeSendData  # 向父窗口发送数据的接口
+        self.balloon = Config.main.balloon  # 气泡框
         self.cW = 960  # 画板尺寸
         self.cH = 540
         self.areaColor = ["red", "green",  # 各个矩形区域的标志颜色
@@ -31,6 +33,7 @@ class IgnoreAreaWin:
         self.areaTextRec = []  # 文字区域提示框
         self.areaType = -1  # 当前绘图模式
         self.areaTypeIndex = [-1, -1, -1]  # 当前绘制的矩形的序号
+        self.lastPath = ''  # 上一次导入的图片的路径
         # 图标
         self.win.iconphoto(False, Asset.getImgTK('umiocr64'))  # 设置窗口图标
         # initWin()
@@ -46,31 +49,45 @@ class IgnoreAreaWin:
         tk.Label(ctrlF0, text="不符合该分辨率的图片\n忽略区域设置不会生效",
                  fg='gray', wraplength=120).pack()
         tk.Frame(ctrlFrame, w=22).pack(side='left')
+        # 复选框
         ctrlF1 = tk.Frame(ctrlFrame)
         ctrlF1.pack(side='left')
-        self.buttons = [None, None, None]
-        self.buttons[0] = tk.Button(ctrlF1, text='+忽略区域 A', width=23, height=2, fg=self.areaColor[0], bg=self.areaColor[3],
-                                    command=lambda: self.changeMode(0))
-        self.buttons[0].pack()
-        tk.Label(ctrlF1, text="处于[忽略区域 A]内\n的矩形虚线文字块将被忽略。",
-                 wraplength=180).pack()
-        tk.Frame(ctrlFrame, w=22).pack(side='left')
+        self.isAutoOCR = tk.BooleanVar()
+        self.isAutoOCR.set(True)
+        tk.Checkbutton(ctrlF1, variable=self.isAutoOCR, text='启用 OCR结果预览').pack(
+            side='top')
+        self.isAutoTbpu = tk.BooleanVar()
+        self.isAutoTbpu.set(True)
+        self.isAutoTbpu.trace('w', lambda *e: self.reLoadImage())
+        tk.Checkbutton(ctrlF1, variable=self.isAutoTbpu, text='启用 文块后处理预览').pack(
+            side='top')
+        Widget.comboboxFrame(ctrlF1, '', 'tbpu', width=16).pack(
+            side='top')
+        # 切换画笔按钮
+        tk.Frame(ctrlFrame, w=30).pack(side='left')
         ctrlF2 = tk.Frame(ctrlFrame)
         ctrlF2.pack(side='left')
-        self.buttons[1] = tk.Button(ctrlF2, text='+识别区域', width=23, height=2, fg=self.areaColor[1], bg=self.areaColor[3],
+        self.buttons = [None, None, None]
+        btnW = 15
+        self.buttons[0] = tk.Button(ctrlF2, text='+忽略区域 A', width=btnW, height=3, fg=self.areaColor[0], bg=self.areaColor[3],
+                                    command=lambda: self.changeMode(0))
+        self.buttons[0].pack(side='left', padx=5)
+        self.balloon.bind(
+            self.buttons[0], '处于 [忽略区域 A] 内的矩形虚线文字块将被忽略')
+        tk.Frame(ctrlFrame, w=20).pack(side='left')
+        self.buttons[1] = tk.Button(ctrlF2, text='+识别区域', width=btnW, height=3, fg=self.areaColor[1], bg=self.areaColor[3],
                                     command=lambda: self.changeMode(1))
-        self.buttons[1].pack()
-        tk.Label(ctrlF2, text="若[识别区域]内存在虚线块，\n则[忽略区域 A]失效。",
-                 wraplength=180).pack()
-        tk.Frame(ctrlFrame, w=22).pack(side='left')
-        ctrlF3 = tk.Frame(ctrlFrame)
-        ctrlF3.pack(side='left')
-        self.buttons[2] = tk.Button(ctrlF3, text='+忽略区域 B', width=23, height=2, fg=self.areaColor[2], bg=self.areaColor[3],
+        self.buttons[1].pack(side='left', padx=5)
+        self.balloon.bind(
+            self.buttons[1], '若 [识别区域] 内存在文字块，则 [忽略区域 A] 失效')
+        tk.Frame(ctrlFrame, w=20).pack(side='left')
+        self.buttons[2] = tk.Button(ctrlF2, text='+忽略区域 B', width=btnW, height=3, fg=self.areaColor[2], bg=self.areaColor[3],
                                     command=lambda: self.changeMode(2))
-        self.buttons[2].pack()
-        tk.Label(ctrlF3, text="当[忽略区域 A]失效时，\n[忽略区域 B]生效。",
-                 wraplength=180).pack()
-        tk.Frame(ctrlFrame, w=22).pack(side='left')
+        self.buttons[2].pack(side='left', padx=5)
+        self.balloon.bind(
+            self.buttons[2], '当 [忽略区域 A] 失效时，[忽略区域 B] 生效')
+
+        tk.Frame(ctrlFrame, w=30).pack(side='left')
         ctrlF4 = tk.Frame(ctrlFrame)
         ctrlF4.pack(side='left')
         tk.Button(ctrlF4, text='清空', width=10,
@@ -82,12 +99,8 @@ class IgnoreAreaWin:
         tk.Button(ctrlFrame, text='完成', width=8,
                   command=lambda: self.onClose(False)).pack(side="left", fill="y")
         tipsFrame = tk.Frame(self.win)
-        tipsFrame.pack(fill="x")
-        self.isAutoOCR = tk.IntVar()
-        self.isAutoOCR.set(1)
-        tk.Checkbutton(tipsFrame, variable=self.isAutoOCR, text="启用 图片分析").pack(
-            side='left', padx=30)
-        tk.Label(tipsFrame, text="   ↓ ↓ ↓ 将任意图片拖入下方预览。然后点击按钮切换画笔，在图片上按住左键框选出想要的区域。",
+        tipsFrame.pack()
+        tk.Label(tipsFrame, text="↓ ↓ ↓ 将任意图片拖入下方预览。然后点击按钮切换画笔，在图片上按住左键框选出想要的区域。",
                  fg='gray').pack(side='left')
         tk.Label(tipsFrame, text="同一种区域可绘制多个方框。", fg='blue').pack(side='left')
         tk.Label(tipsFrame, text="↓ ↓ ↓", fg='gray').pack(side='left')
@@ -114,10 +127,13 @@ class IgnoreAreaWin:
                     f'识别器初始化失败：{e}\n\n请检查配置有无问题！')
                 self.win.attributes('-topmost', 1)  # 设置层级最前
                 self.win.attributes('-topmost', 0)  # 然后立刻解除
-                self.isAutoOCR.set(0)  # 关闭自动分析
+                self.isAutoOCR.set(False)  # 关闭自动分析
                 return
             finally:
-                self.canvas.delete(canvasText)  # 删除提示文字
+                try:
+                    self.canvas.delete(canvasText)  # 删除提示文字
+                except:
+                    pass
         initOCR()
 
         if defaultPath:  # 打开默认图片
@@ -154,6 +170,10 @@ class IgnoreAreaWin:
     def draggedFiles(self, paths):  # 拖入文件
         self.loadImage(paths[0].decode(  # 根据系统编码来解码
             Config.sysEncoding, errors='ignore'))
+
+    def reLoadImage(self):  # 载入旧图片
+        if self.lastPath:
+            self.loadImage(self.lastPath)
 
     def loadImage(self, path):  # 载入新图片
         """载入图片"""
@@ -199,7 +219,15 @@ class IgnoreAreaWin:
                 data = OCRe.run(path)
                 # 任务后：刷新提示信息
                 self.canvas.delete(canvasText)  # 删除提示文字
-                if data["code"] == 100:  # 存在内容
+                if data['code'] == 100:  # 存在内容
+                    if self.isAutoTbpu.get():  # 需要后处理
+                        tbpuClass = Config.get('tbpu').get(
+                            Config.get('tbpuName'), None)
+                        if tbpuClass:
+                            print(f'启动文本后处理1。{tbpuClass}')
+                            tbpu = tbpuClass()
+                            print(f'启动文本后处理2。{tbpu}')
+                            data['data'], s = tbpu.run(data['data'], None)
                     for o in data["data"]:  # 绘制矩形框
                         # 提取左上角、右下角的坐标
                         p1x = round(o['box'][0][0]*self.imgScale)
@@ -215,7 +243,7 @@ class IgnoreAreaWin:
                         self.areaTextRec.append(r1)
                         self.areaTextRec.append(r2)
                 elif not data["code"] == 101:  # 发生异常
-                    self.isAutoOCR.set(0)  # 关闭自动分析
+                    self.isAutoOCR.set(False)  # 关闭自动分析
                     tk.messagebox.showwarning(
                         "遇到了一点小问题", f"图片分析失败。图片地址：\n{path}\n\n错误码：{str(data['code'])}\n\n错误信息：\n{str(data['data'])}")
                     self.win.attributes('-topmost', 1)  # 设置层级最前
@@ -228,6 +256,7 @@ class IgnoreAreaWin:
         self.canvasImg = self.canvas.create_image(
             0, 0, anchor='nw', image=self.imgFile)  # 绘制图片
         self.canvas.tag_lower(self.canvasImg)  # 该元素移动到最下方，防止挡住矩形们
+        self.lastPath = path
 
     def changeMode(self, type_):  # 切换绘图模式
         if self.imgSize == (-1, -1):
@@ -240,6 +269,7 @@ class IgnoreAreaWin:
         self.buttons[type_]["bg"] = self.areaColor[type_]  # 切换背景颜色
 
     def clearCanvasImage(self):  # 清除画布上的图片其文字框，不清理忽略框
+        self.lastPath = ''
         if self.canvasImg:  # 删除图片
             self.canvas.delete(self.canvasImg)
         for t in self.areaTextRec:  # 删除文字框
@@ -247,6 +277,7 @@ class IgnoreAreaWin:
         self.areaTextRec = []
 
     def clearCanvas(self):  # 清除画布
+        self.lastPath = ''
         self.win.title(f"选择区域")  # 改变标题
         self.area = [[], [], []]
         self.areaHistory = []
