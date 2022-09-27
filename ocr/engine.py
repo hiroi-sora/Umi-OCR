@@ -84,11 +84,19 @@ class OcrEngine:
         '''启动引擎。若引擎已启动，且参数有更新，则重启。'''
         if self.engFlag == EngFlag.initing:  # 正在初始化中，严禁重复初始化
             return
-        info = (  # 获取最新OCR参数
+        # 获取静态参数
+        ang = ' -cls=1 -use_angle_cls=1' if Config.get('isOcrAngle') else ''
+        limit = f" -limit_type={Config.get('ocrLimitMode').get(Config.get('ocrLimitModeName'),'min')} -limit_side_len={Config.get('ocrLimitSize')}"
+        staticArgs = f"{ang}{limit}\
+ -cpu_threads={Config.get('ocrCpuThreads')}\
+ -enable_mkldnn={Config.get('isOcrMkldnn')}\
+ {Config.get('argsStr')}"  # 静态启动参数字符串。注意每个参数前面的空格
+        # 整合最新OCR参数
+        info = (
             Config.get('ocrToolPath'),  # 识别器路径
             Config.get('ocrConfig')[Config.get(
                 'ocrConfigName')]['path'],  # 配置文件路径
-            Config.get('argsStr'),  # 启动参数
+            staticArgs,  # 启动参数
         )
         isUpdate = not eq(info, self.__ocrInfo)  # 检查是否有变化
 
@@ -99,6 +107,7 @@ class OcrEngine:
 
         self.__ocrInfo = info  # 记录参数。必须在stop()之后，以免被覆盖。
         try:
+            Log.info(f'启动引擎，参数：{info}')
             self.__setEngFlag(EngFlag.initing)  # 通知启动中
             self.ocr = OcrAPI(*self.__ocrInfo)  # 启动引擎
             # 检查启动引擎这段时间里，引擎有没有被叫停

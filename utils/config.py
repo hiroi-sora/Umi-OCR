@@ -1,11 +1,16 @@
+from utils.logger import GetLog
+
 import json
 from enum import Enum
 import tkinter as tk
 import tkinter.messagebox
 from locale import getdefaultlocale
 
+Log = GetLog()
 
 # 项目属性
+
+
 class Umi:
     name = None
     ver = None
@@ -219,6 +224,39 @@ _ConfigDict = {
         'isSave': True,
         'isTK': True,
     },
+    'isOcrAngle': {  # T时启用cls
+        'default': False,
+        'isSave': True,
+        'isTK': True,
+    },
+    'ocrCpuThreads': {  # CPU线程数
+        'default': 10,
+        'isSave': True,
+        'isTK': True,
+    },
+    'isOcrMkldnn': {  # 启用mkldnn加速
+        'default': True,
+        'isSave': True,
+        'isTK': True,
+    },
+    'ocrLimitModeName': {  # 当前选择的压缩限制模式的name
+        'default': '',
+        'isSave': True,
+        'isTK': True,
+    },
+    'ocrLimitMode': {  # 压缩限制模式
+        'default': {
+            '长边压缩模式': 'max',
+            '短边扩大模式': 'min',
+        },
+        'isSave': False,
+        'isTK': False,
+    },
+    'ocrLimitSize': {  # 压缩阈值
+        'default': 960,
+        'isSave': True,
+        'isTK': True,
+    },
     'imageSuffix': {  # 图片后缀
         'default': '.jpg .jpe .jpeg .jfif .png .webp .bmp .tif .tiff',
         'isSave': True,
@@ -355,7 +393,10 @@ class ConfigModule:
 
     def update(self, key):
         '''更新某个值，从tk变量读取到配置项'''
-        self.__optDict[key] = self.__tkDict[key].get()
+        try:
+            self.__optDict[key] = self.__tkDict[key].get()
+        except Exception as err:
+            Log.error(f'设置项{key}刷新失败：\n{err}')
 
     def get(self, key):
         '''获取一个配置项的值'''

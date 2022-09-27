@@ -26,12 +26,13 @@ class OcrAPI:
         """
         cwd = os.path.abspath(os.path.join(exePath, os.pardir))  # 获取exe父文件夹
         # 处理启动参数
+        args = ' '
         if argsStr:  # 添加用户指定的启动参数
-            exePath += f' {argsStr}'
-        if configPath and 'config_path' not in exePath:  # 指定配置文件
-            exePath += f' --config_path="{configPath}"'
-        if 'use_debug' not in exePath:  # 关闭debug模式
-            exePath += ' --use_debug=0'
+            args += f' {argsStr}'
+        if configPath and 'config_path' not in args:  # 指定配置文件
+            args += f' --config_path="{configPath}"'
+        if 'use_debug' not in args:  # 关闭debug模式
+            args += ' --use_debug=0'
         # 设置子进程启用静默模式，不显示控制台窗口
         startupinfo = None
         if 'win32' in str(sysPlatform).lower():
@@ -39,7 +40,7 @@ class OcrAPI:
             startupinfo.dwFlags = subprocess.CREATE_NEW_CONSOLE | subprocess.STARTF_USESHOWWINDOW
             startupinfo.wShowWindow = subprocess.SW_HIDE
         self.ret = subprocess.Popen(  # 打开管道
-            exePath, cwd=cwd,
+            exePath+args, cwd=cwd,
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             startupinfo=startupinfo  # 开启静默模式
@@ -47,7 +48,7 @@ class OcrAPI:
         atexit.register(self.stop)  # 注册程序终止时执行强制停止子进程
         self.psutilProcess = psutilProcess(self.ret.pid)  # 进程监控对象
 
-        self.initErrorMsg = f'OCR init fail.\n{exePath}'
+        self.initErrorMsg = f'OCR init fail.\n引擎路径：{exePath}\n启动参数：{args}'
 
         # 子线程检查超时
         def cancelTimeout():
