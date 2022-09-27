@@ -18,6 +18,7 @@ import ctypes
 import keyboard  # 绑定快捷键
 from PIL import Image  # 图像
 import tkinter as tk
+import tkinter.font
 import tkinter.filedialog
 from tkinter import ttk
 from windnd import hook_dropfiles  # 文件拖拽
@@ -208,7 +209,8 @@ class MainWin:
             fr2.pack(side='top', fill='both')
             vbar = tk.Scrollbar(fr2, orient='vertical')  # 滚动条
             vbar.pack(side="right", fill='y')
-            self.textOutput = tk.Text(fr2, height=500, width=500)
+            self.textOutput = tk.Text(fr2, height=500, width=500, font=())
+            # print(f'{tk.font.families()}')
             self.textOutput.pack(fill='both', side="left")
             vbar["command"] = self.textOutput.yview
             self.textOutput["yscrollcommand"] = vbar.set
@@ -250,7 +252,7 @@ class MainWin:
                 wid = ttk.Checkbutton(fr1, text='显示系统托盘图标',
                                       variable=Config.getTK('isTray'))
                 wid.grid(column=0, row=0, sticky='w')
-                Widget.comboboxFrame(fr1, '，双击图标', 'clickTrayMode').grid(
+                Widget.comboboxFrame(fr1, '，双击图标', 'clickTrayMode', width=12).grid(
                     column=1, row=0, sticky='w')
 
                 fr2 = tk.Frame(fSoft)
@@ -261,7 +263,6 @@ class MainWin:
                                 variable=Config.getTK('isBackground'), value=True).pack(side='left')
                 ttk.Radiobutton(fr2, text='退出软件',
                                 variable=Config.getTK('isBackground'), value=False).pack(side='left', padx=15)
-                self.lockWidget.append(wid)
             initSoftwareFrame()
 
             def quickOCR():  # 快捷识图设置
@@ -359,11 +360,6 @@ class MainWin:
                 wid.pack(side='left')
                 if Config.get("okMissionName") not in okMissionNameList:
                     wid.current(0)  # 初始化Combobox和okMissionName
-                labelOpenFile = tk.Label(fr2, text="打开设置文件",
-                                         fg="gray", cursor='hand2')
-                labelOpenFile.pack(side='right')
-                labelOpenFile.bind(
-                    '<Button-1>', lambda *e: os.startfile("Umi-OCR_config.json"))
             initScheduler()
 
             def initInFile():  # 输入设置
@@ -482,28 +478,64 @@ class MainWin:
                     '<Button-1>', lambda *e: self.openSelectArea())
             initProcess()
 
-            def initOcrUI():  # 识别器exe设置
+            def initOcrUI():  # OCR引擎设置
                 frameOCR = tk.LabelFrame(
                     self.optFrame, text="OCR识别引擎设置")
                 frameOCR.pack(side='top', fill='x', ipady=2,
                               pady=LabelFramePadY, padx=4)
+                wid = Widget.comboboxFrame(
+                    frameOCR, '识别语言：　', 'ocrConfig', self.lockWidget)
+                wid.pack(side='top', fill='x', pady=2, padx=5)
+                self.balloon.bind(
+                    wid, '可下载多国语言扩展包，添加更多模型库\n详情请浏览项目Github主页')
+                # 压缩
+                fLim = tk.Frame(frameOCR)
+                fLim.pack(side='top', fill='x', pady=2, padx=5)
+                self.balloon.bind(
+                    fLim, '长边压缩模式可以大幅加快识别速度，但可能降低大分辨率图片的识别准确率\n大于4000像素的图片，可将数值改为最大边长的一半。必须为大于零的整数\n默认值： 960\n\n短边扩大模式可能提高小分辨率图片的准确度。一般用不着')
+                Widget.comboboxFrame(
+                    fLim, '缩放预处理：', 'ocrLimitMode', self.lockWidget, 14).pack(side='left')
+                tk.Label(fLim, text='至').pack(side='left')
+                wid = tk.Entry(
+                    fLim, width=9, textvariable=Config.getTK('ocrLimitSize'))
+                wid.pack(side='left')
+                self.lockWidget.append(wid)
+                tk.Label(fLim, text='像素').pack(side='left')
+                # 方向
+                wid = ttk.Checkbutton(frameOCR, text='启用方向分类器（文字偏转90度/180度方向矫正）',
+                                      variable=Config.getTK('isOcrAngle'))
+                wid.pack(side='top', fill='x', pady=2, padx=5)
+                self.balloon.bind(
+                    wid, '当图片中的文字偏转90度或180度时，请打开该选项\n可能略微降低识别速度\n小角度偏转无需启用该选项')
+                self.lockWidget.append(wid)
+                # CPU
+                fCpu = tk.Frame(frameOCR, padx=5)
+                fCpu.pack(side='top', fill='x')
+                tk.Label(fCpu, text='线程数：').pack(side='left')
+                wid = tk.Entry(
+                    fCpu, width=6, textvariable=Config.getTK('ocrCpuThreads'))
+                wid.pack(side='left')
+                self.lockWidget.append(wid)
+                self.balloon.bind(
+                    wid, '最好等于CPU的线程数目。必须为大于零的整数')
+                wid = ttk.Checkbutton(fCpu, text='启用MKLDNN加速',
+                                      variable=Config.getTK('isOcrMkldnn'))
+                wid.pack(side='right')
+                self.balloon.bind(
+                    wid, '大幅加快识别速度。内存占用也会增加\nAMD的CPU可能加速幅度不如Intel')
+                self.lockWidget.append(wid)
+
+                # grid
                 fr1 = tk.Frame(frameOCR)
                 fr1.pack(side='top', fill='x', pady=2, padx=5)
-                Widget.comboboxFrame(fr1, '识别语言：　', 'ocrConfig', self.lockWidget
-                                     ).grid(column=0, row=0, columnspan=2, sticky='we')
-
-                tk.Label(fr1, text="启动参数：　").grid(
+                tk.Label(fr1, text='额外启动参数：').grid(
                     column=0, row=2, sticky="w")
-                argsStr = tk.Entry(
+                wid = tk.Entry(
                     fr1, textvariable=Config.getTK('argsStr'))
-                argsStr.grid(column=1, row=2, sticky="nsew")
-                self.lockWidget.append(argsStr)
-
-                labelTips = tk.Label(fr1, text="如何添加多国语言？如何调整参数以提高准确度和速度？",
-                                     fg="gray", cursor='hand2')
-                labelTips.grid(column=0, row=4, columnspan=2, sticky="w")
-                labelTips.bind(
-                    '<Button-1>', lambda *e: self.showTips(GetHelpConfigText()))  # 绑定鼠标左键点击
+                wid.grid(column=1, row=2, sticky="nsew")
+                self.balloon.bind(
+                    wid, 'OCR高级参数指令。请遵守PaddleOCR-json要求的格式。详情参考项目主页')
+                self.lockWidget.append(wid)
 
                 Widget.comboboxFrame(fr1, '引擎管理策略：', 'ocrRunMode', self.lockWidget
                                      ).grid(column=0, row=6, columnspan=2, sticky='we')
@@ -553,10 +585,21 @@ class MainWin:
                 labelWeb.pack()  # 文字
                 labelWeb.bind(  # 绑定鼠标左键点击，打开网页
                     '<Button-1>', lambda *e: webOpen(Umi.website))
-                wid = ttk.Checkbutton(self.optFrame, text='调试模式',
-                                      variable=Config.getTK('isDebug'))
-                wid.pack(side='right')
             initAbout()
+
+            def initEX():  # 额外
+                fEX = tk.Frame(self.optFrame)
+                fEX.pack(side='top', fill='x', padx=4)
+                # self.balloon.bind(fEX, '')
+                labelOpenFile = tk.Label(fEX, text="打开设置文件",
+                                         fg="gray", cursor='hand2')
+                labelOpenFile.pack(side='left')
+                labelOpenFile.bind(
+                    '<Button-1>', lambda *e: os.startfile("Umi-OCR_config.json"))
+                wid = tk.Checkbutton(fEX, text='调试模式', fg="gray",
+                                     variable=Config.getTK('isDebug'))
+                wid.pack(side='right')
+            initEX()
 
             def initOptFrameWH():  # 初始化框架的宽高
                 self.updateFrameHeight()
