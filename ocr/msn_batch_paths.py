@@ -12,6 +12,7 @@ from ocr.output_jsonl import OutputJsonl
 from ocr.tbpu.ignore_area import TbpuIgnoreArea
 
 import time
+import os
 
 from utils.logger import GetLog
 Log = GetLog()
@@ -153,6 +154,12 @@ class MsnBatch(Msn):
             l = len(self.outputList)
             for i in range(1, l):
                 self.outputList[i].openOutputFile()
+        if Config.get("isOkMission"):  # 计划任务
+            Config.set("isOkMission", False)  # 一次性，设回false
+            omName = Config.get('okMissionName')
+            okMission = Config.get('okMission')
+            if omName in okMission.keys() and 'code' in okMission[omName].keys():
+                os.system(okMission[omName]['code'])  # 执行cmd语句
         Log.info('msnB: onClose')
         self.setRunning(MsnFlag.none)
         Config.main.gotoTop()
