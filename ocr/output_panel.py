@@ -11,6 +11,7 @@ class OutputPanel(Output):
     def __init__(self):
         self.panelOutput = Config.get('panelOutput')  # 输出接口
         self.isDebug = Config.get('isDebug')  # 是否输出调试
+        self.outputPath = Config.get('outputFilePath')  # 输出文件夹，用于计划任务的完成后打开文件夹
 
     def print(self, text):
         self.panelOutput(text)

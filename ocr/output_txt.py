@@ -13,22 +13,22 @@ class OutputTxt(Output):
     def __init__(self):
         outputDir = Config.get('outputFilePath')  # 输出路径（文件夹）
         outputName = Config.get("outputFileName")  # 文件名
-        self.outputFile = f'{outputDir}/{outputName}.txt'  # 输出路径
+        self.outputPath = f'{outputDir}/{outputName}.txt'  # 输出路径
         self.isDebug = Config.get('isDebug')  # 是否输出调试
         # 创建输出文件
         try:
-            if os.path.exists(self.outputFile):  # 文件存在
-                os.remove(self.outputFile)  # 删除文件
-            open(self.outputFile, 'w').close()  # 创建文件
+            if os.path.exists(self.outputPath):  # 文件存在
+                os.remove(self.outputPath)  # 删除文件
+            open(self.outputPath, 'w').close()  # 创建文件
         except FileNotFoundError:
-            raise Exception(f'创建txt文件失败。请检查以下地址是否正确。\n{self.outputFile}')
+            raise Exception(f'创建txt文件失败。请检查以下地址是否正确。\n{self.outputPath}')
         except Exception as e:
             raise Exception(
-                f'创建txt文件失败。文件地址：\n{self.outputFile}\n\n错误信息：\n{e}')
+                f'创建txt文件失败。文件地址：\n{self.outputPath}\n\n错误信息：\n{e}')
 
     def print(self, text):
-        if self.outputFile:
-            with open(self.outputFile, "a", encoding='utf-8') as f:  # 追加写入本地文件
+        if self.outputPath:
+            with open(self.outputPath, "a", encoding='utf-8') as f:  # 追加写入本地文件
                 f.write(text)
 
     def debug(self, text):

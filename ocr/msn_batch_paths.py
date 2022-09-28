@@ -130,6 +130,7 @@ class MsnBatch(Msn):
         if self.isIgnoreNoText and ocrData['code'] == 101:
             pass  # 设置了不输出无文字的图片
         else:
+            Log.info(textDebug)
             self.__output('img', textBlockList, imgInfo, numData, textDebug)
         # ==================== 刷新UI ====================
         # 刷新进度
@@ -145,6 +146,12 @@ class MsnBatch(Msn):
     def onStop(self, num):
         stopStr = f"\n任务结束时间：{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))}\n\n"
         self.__output('text', stopStr)
+        if Config.get('isOpenExplorer'):  # 打开输出文件夹
+            self.outputList[0].openOutputFile()
+        if Config.get('isOpenOutputFile'):  # 打开输出文件
+            l = len(self.outputList)
+            for i in range(1, l):
+                self.outputList[i].openOutputFile()
         Log.info('msnB: onClose')
         self.setRunning(MsnFlag.none)
         Config.main.gotoTop()
