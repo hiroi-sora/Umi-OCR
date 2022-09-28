@@ -89,22 +89,22 @@ _ConfigDict = {
     },
     # 快捷识图设置
     'isHotkeyClipboard': {  # T时启用读剪贴板快捷键
-        'default': False,
+        'default': True,
         'isSave': True,
         'isTK': True,
     },
     'hotkeyClipboard': {  # 读剪贴板快捷键，字符串
-        'default': '',
+        'default': 'alt+windows+v',
         'isSave': True,
         'isTK': True,
     },
     'isHotkeyScreenshot': {  # T时启用截屏快捷键
-        'default': False,
+        'default': True,
         'isSave': True,
         'isTK': True,
     },
     'hotkeyScreenshot': {  # 截屏快捷键，字符串
-        'default': '',
+        'default': 'alt+windows+c',
         'isSave': True,
         'isTK': True,
     },
@@ -120,6 +120,21 @@ _ConfigDict = {
         },
         'isSave': False,
         'isTK': False,
+    },
+    'scsColorLine': {  # 截屏瞄准线颜色
+        'default': '#3366ff',
+        'isSave': True,
+        'isTK': True,
+    },
+    'scsColorBoxUp': {  # 截屏瞄准盒上层颜色
+        'default': '#000000',
+        'isSave': True,
+        'isTK': True,
+    },
+    'scsColorBoxDown': {  # 截屏瞄准盒下层颜色
+        'default': '#ffffff',
+        'isSave': True,
+        'isTK': True,
     },
     'isNeedCopy': {  # T时识别完成后自动复制文字
         'default': False,

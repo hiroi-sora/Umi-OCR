@@ -237,16 +237,17 @@ class ScreenshotWin():  # 内置截图模式
         self.canvas.pack(fill='both')
         # 瞄准盒
         rec1 = self.canvas.create_rectangle(  # 实线底层
-            self.OB, self.OB, self.OB, self.OB, outline='white', width=2)
+            self.OB, self.OB, self.OB, self.OB, outline=Config.get('scsColorBoxDown'), width=2)
         rec2 = self.canvas.create_rectangle(  # 虚线表层
-            self.OB, self.OB, self.OB, self.OB, outline='black', width=2, dash=10)
+            self.OB, self.OB, self.OB, self.OB, outline=Config.get('scsColorBoxUp'), width=2, dash=10)
         self.sightBox = (rec1, rec2)
         self.sightBoxXY = [self.OB, self.OB, self.OB, self.OB]  # 瞄准盒坐标
         # 瞄准线
+        lineColor = Config.get('scsColorLine')
         lineW = self.canvas.create_line(  # 纵向
-            self.OB, self.OB, self.OB, self.OB, fill='green', width=1)
+            self.OB, self.OB, self.OB, self.OB, fill=lineColor, width=1)
         lineH = self.canvas.create_line(  # 横向
-            self.OB, self.OB, self.OB, self.OB, fill='green', width=1)
+            self.OB, self.OB, self.OB, self.OB, fill=lineColor, width=1)
         self.sightLine = (lineW, lineH)
         # debug模块
         self.debugXYBox = self.canvas.create_rectangle(  # 坐标下面的底
@@ -277,7 +278,6 @@ class ScreenshotWin():  # 内置截图模式
             self.canvas.coords(ele, self.OB, self.OB, self.OB, self.OB)
 
     def __onDown(self, event):  # 鼠标按下
-        Log.info('左键按下')
         if self.drawMode == _DrawMode.ready:  # 进入拖拽模式
             self.drawMode = _DrawMode.drag
             # 记录起始点
@@ -288,7 +288,6 @@ class ScreenshotWin():  # 内置截图模式
                 self.__hideElement(self.sightLine[i], 4)
 
     def __onUp(self, event):  # 鼠标松开
-        Log.info('左键抬起')
         if self.drawMode == _DrawMode.drag:  # 离开拖拽模式
             self.drawMode = _DrawMode.ready
             # 记录结束点

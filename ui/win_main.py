@@ -20,6 +20,7 @@ from PIL import Image  # 图像
 import tkinter as tk
 import tkinter.font
 import tkinter.filedialog
+import tkinter.colorchooser
 from tkinter import ttk
 from windnd import hook_dropfiles  # 文件拖拽
 from webbrowser import open as webOpen  # “关于”面板打开项目网址
@@ -252,7 +253,8 @@ class MainWin:
                 fr1 = tk.Frame(fSoft)
                 fr1.pack(side='top', fill='x', pady=2, padx=5)
                 fr1.grid_columnconfigure(1, weight=1)
-                self.balloon.bind(fr1, '下次打开软件生效')
+                self.balloon.bind(
+                    fr1, '可关闭/开启系统托盘图标，可修改双击图标时触发的功能\n该项目修改后，下次打开软件生效')
                 wid = ttk.Checkbutton(fr1, text='显示系统托盘图标',
                                       variable=Config.getTK('isTray'))
                 wid.grid(column=0, row=0, sticky='w')
@@ -261,7 +263,7 @@ class MainWin:
 
                 fr2 = tk.Frame(fSoft)
                 fr2.pack(side='top', fill='x', pady=2, padx=5)
-                self.balloon.bind(fr2, '显示系统托盘图标期间才生效')
+                self.balloon.bind(fr2, '不显示系统托盘图标时，关闭面板会退出软件')
                 tk.Label(fr2, text='　 关闭主面板：').pack(side='left')
                 ttk.Radiobutton(fr2, text='最小化到托盘',
                                 variable=Config.getTK('isBackground'), value=True).pack(side='left')
@@ -318,27 +320,59 @@ class MainWin:
                               self.openScreenshot)  # 绑定截图事件
                 cbox = Widget.comboboxFrame(fQuick, '截图模式：　', 'scsMode')
                 cbox.pack(side='top', fill='x', padx=4)
+                self.balloon.bind(cbox, '''使用【Umi-OCR 软件截图】时，若外接多块屏幕，且缩放比例不一致，
+可能导致Umi-OCR截图异常，如画面不完整、窗口变形、识别不出文字等。
+若出现这种情况，请在系统设置里的【更改文本、应用等项目的大小】将所有屏幕调到相同数值
+
+或者，将截图模式切换到【Windows 系统截图】''')
                 frss = tk.Frame(fQuick)
                 frss.pack(side='top', fill='x')
-                fhkUmi = Widget.hotkeyFrame(frss, '截图识别　', 'Screenshot',
-                                            lambda *e: self.win.event_generate(
-                                                '<<ScreenshotEvent>>'), isAutoBind=False)
+                fhkUmi = tk.Frame(frss)
+                fhkUmi.pack(side='top', fill='x')
+                fhkU0 = tk.Frame(fhkUmi)
+                fhkU0.pack(side='top', fill='x', pady=2)
+                tk.Label(fhkU0, text='指示器颜色：').pack(side='left')
+                self.balloon.bind(fhkU0, '修改截图时指示器的颜色\n该项目修改后，下次打开软件生效')
+
+                def changeColor(configName, title=None):
+                    initColor = Config.get(configName)
+                    color = tk.colorchooser.askcolor(
+                        color=initColor, title=title)
+                    if color[1]:
+                        Config.set(configName, color[1])
+                lab1 = tk.Label(fhkU0, text='十字线', cursor='hand2', fg='blue')
+                lab1.pack(side='left', padx=9)
+                lab1.bind(
+                    '<Button-1>', lambda *e: changeColor('scsColorLine', '截图十字线颜色'))
+                lab2 = tk.Label(fhkU0, text='虚线框表层', cursor='hand2', fg='blue')
+                lab2.pack(side='left', padx=9)
+                lab2.bind(
+                    '<Button-1>', lambda *e: changeColor('scsColorBoxUp', '截图矩形框 虚线表层颜色'))
+                lab3 = tk.Label(fhkU0, text='虚线框底层', cursor='hand2', fg='blue')
+                lab3.pack(side='left', padx=9)
+                lab3.bind(
+                    '<Button-1>', lambda *e: changeColor('scsColorBoxDown', '截图矩形框 虚线底层颜色'))
+                wid = Widget.hotkeyFrame(fhkUmi, '截图识别 ', 'Screenshot',
+                                         lambda *e: self.win.event_generate(
+                                             '<<ScreenshotEvent>>'), isAutoBind=False)
+                wid.pack(side='top', fill='x')
+
                 syssscom = 'windows+shift+s'
-                fhkSys = Widget.hotkeyFrame(frss, '系统截图　', 'Screenshot',
+                fhkSys = Widget.hotkeyFrame(frss, '系统截图 ', 'Screenshot',
                                             lambda *e: self.win.event_generate(
                                                 '<<ScreenshotEvent>>'), True, syssscom, isAutoBind=False)
-                self.balloon.bind(fhkUmi, '''当使用多块屏幕，且缩放比例不一致，可能导致Umi-OCR截图异常，如画面不完整、窗口变形、识别不出文字等。
-若出现这种情况，请在系统设置里的【更改文本、应用等项目的大小】将所有屏幕调到相同数值。
-或者，将截图模式切换到【Windows 系统截图】。''')
                 self.balloon.bind(
                     fhkSys, '监听到系统截图后调用OCR。若截图后软件没有反应，\n请确保windows系统自带的【截图和草图】中\n【自动复制到剪贴板】的开关处于打开状态。')
 
-                Widget.hotkeyFrame(fQuick, '读取剪贴板', 'Clipboard',
-                                   self.runClipboard, isAutoBind=True).pack(side='top', fill='x', padx=4)
+                wid = Widget.hotkeyFrame(
+                    fQuick, '粘贴图片 ', 'Clipboard', self.runClipboard, isAutoBind=True)
+                wid.pack(side='top', fill='x', padx=4)
+                self.balloon.bind(wid, '尝试读取剪贴板，若存在图片则调用OCR')
                 fr1 = tk.Frame(fQuick)
                 fr1.pack(side='top', fill='x', pady=2, padx=5)
                 ttk.Checkbutton(fr1, variable=Config.getTK('isNeedCopy'),
                                 text='复制识别出的文字').pack(side='left', fill='x')
+                self.balloon.bind(fr1, '截图或粘贴图片OCR完成后，将文本复制到剪贴板')
 
                 # 切换截图模式
                 def onModeChange():
@@ -350,6 +384,7 @@ class MainWin:
                     if scsMode == ScsModeFlag.system:  # 切换到系统截图
                         fhkUmi.forget()
                         fhkSys.pack(side='top', fill='x', padx=4)
+                        self.updateFrameHeight()  # 刷新框架
                         if isHotkey:  # 当前已在注册
                             if umihk:  # 注销软件截图
                                 Widget.delHotkey(umihk)  # 注销按键
@@ -360,6 +395,7 @@ class MainWin:
                     elif scsMode == ScsModeFlag.multi:  # 切换到软件截图
                         fhkSys.forget()
                         fhkUmi.pack(side='top', fill='x', padx=4)
+                        self.updateFrameHeight()  # 刷新框架
                         if isHotkey:
                             Widget.delHotkey(syssscom)  # 注销按键
                             if umihk:
@@ -392,11 +428,11 @@ class MainWin:
 
                 fr2 = tk.Frame(frameScheduler)
                 fr2.pack(side='top', fill='x', pady=2, padx=5)
-                ttk.Checkbutton(fr2, text="本次完成后执行",
+                ttk.Checkbutton(fr2, text='本次完成后执行',
                                 variable=Config.getTK('isOkMission')).pack(side='left')
                 okMissionDict = Config.get("okMission")
                 okMissionNameList = [i for i in okMissionDict.keys()]
-                wid = ttk.Combobox(fr2, width=10, state="readonly", textvariable=Config.getTK('okMissionName'),
+                wid = ttk.Combobox(fr2, width=14, state="readonly", textvariable=Config.getTK('okMissionName'),
                                    value=okMissionNameList)
                 wid.pack(side='left')
                 if Config.get("okMissionName") not in okMissionNameList:
@@ -434,30 +470,33 @@ class MainWin:
                 fr1 = tk.Frame(fOutput)
                 fr1.pack(side='top', fill='x', pady=2, padx=5)
 
+                wid = ttk.Checkbutton(
+                    fr1, variable=Config.getTK('isOutputTxt'), text='纯文本.txt文件')
+                wid.grid(column=0, row=0,  sticky="w")
+                self.lockWidget.append(wid)
+                wid = ttk.Checkbutton(
+                    fr1, variable=Config.getTK('isOutputMD'), text='图文链接.md文件')
+                wid.grid(column=2, row=0,  sticky="w")
+                self.lockWidget.append(wid)
+                wid = ttk.Checkbutton(
+                    fr1, variable=Config.getTK('isOutputJsonl'), text='原始信息.jsonl文件')
+                wid.grid(column=0, row=1,  sticky="w")
+                self.lockWidget.append(wid)
+                tk.Label(fr1, text=' ').grid(column=1, row=0)
+
                 def offAllOutput(e):  # 关闭全部输出
                     if OCRe.msnFlag == MsnFlag.none:
                         Config.set('isOutputTxt', False)
                         Config.set('isOutputMD', False)
                         Config.set('isOutputJsonl', False)
-                labelOff = tk.Label(fr1, text='　　关闭本地输出',
+                labelOff = tk.Label(fr1, text='　 关闭全部输出',
                                     cursor='hand2', fg='blue')
-                labelOff.grid(column=0, row=0, sticky="w")
+                labelOff.grid(column=2, row=1, sticky="w")
                 labelOff.bind('<Button-1>', offAllOutput)  # 绑定关闭全部输出
-                wid = ttk.Checkbutton(
-                    fr1, variable=Config.getTK('isOutputJsonl'), text="分行.jsonl文件")
-                wid.grid(column=1, row=0,  sticky="w")
-                self.lockWidget.append(wid)
-                wid = ttk.Checkbutton(
-                    fr1, variable=Config.getTK('isOutputTxt'), text="纯文本.txt文件　")
-                wid.grid(column=0, row=1,  sticky="w")
-                self.lockWidget.append(wid)
-                wid = ttk.Checkbutton(
-                    fr1, variable=Config.getTK('isOutputMD'), text="图文链接.md文件")
-                wid.grid(column=1, row=1,  sticky="w")
-                self.lockWidget.append(wid)
+
                 wid = ttk.Checkbutton(fr1, text='图片中不含文字时，不输出信息',
                                       variable=Config.getTK('isIgnoreNoText'),)
-                wid.grid(column=0, row=2, columnspan=2, sticky="w")
+                wid.grid(column=0, row=2, columnspan=9, sticky="w")
                 self.lockWidget.append(wid)
 
                 tk.Label(fOutput, fg="gray",
@@ -489,7 +528,7 @@ class MainWin:
                 fIgnore = tk.Frame(fProcess)
                 fIgnore.pack(side='top', fill='x', pady=2, padx=4)
 
-                self.ignoreBtn = ttk.Button(fIgnore, text='添加忽略区域、排除水印',
+                self.ignoreBtn = ttk.Button(fIgnore, text='打开忽略区域编辑器（设置排除水印）',
                                             command=self.openSelectArea)
                 self.ignoreBtn.pack(side='top', fill='x')
                 self.lockWidget.append(self.ignoreBtn)
@@ -517,8 +556,10 @@ class MainWin:
                 self.canvas.grid(column=3, row=0, rowspan=10)
                 self.canvas.bind(
                     '<Button-1>', lambda *e: self.openSelectArea())
-                wid = Widget.comboboxFrame(fProcess, '文本块后处理', 'tbpu',self.lockWidget)
+                wid = Widget.comboboxFrame(
+                    fProcess, '文本块后处理', 'tbpu', self.lockWidget)
                 wid.pack(side='top', fill='x', pady=2, padx=4)
+                self.balloon.bind(wid, '竖排后处理必须与支持竖排的模型库（识别语言）搭配使用')
             initProcess()
 
             def initOcrUI():  # OCR引擎设置
@@ -530,7 +571,7 @@ class MainWin:
                     frameOCR, '识别语言：　', 'ocrConfig', self.lockWidget)
                 wid.pack(side='top', fill='x', pady=2, padx=5)
                 self.balloon.bind(
-                    wid, '可下载多国语言扩展包，添加更多模型库\n详情请浏览项目Github主页')
+                    wid, '竖排模型库（识别语言）建议与竖排文本块后处理搭配使用\n\n本软件有配套的多国语言扩展包，可导入更多语言模型库，\n详情请浏览项目Github主页')
                 # 压缩
                 fLim = tk.Frame(frameOCR)
                 fLim.pack(side='top', fill='x', pady=2, padx=5)
@@ -565,7 +606,7 @@ class MainWin:
                                       variable=Config.getTK('isOcrMkldnn'))
                 wid.pack(side='right')
                 self.balloon.bind(
-                    wid, '大幅加快识别速度。内存占用也会增加\nAMD的CPU可能加速幅度不如Intel')
+                    wid, '大幅加快识别速度。内存占用也会增加')
                 self.lockWidget.append(wid)
 
                 # grid

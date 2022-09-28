@@ -105,7 +105,7 @@ class Widget:
 
         # 标题 | 快捷键Label | 录制
         wid = ttk.Checkbutton(hFrame, variable=Config.getTK(isHotkey),
-                              text=f'{name} 快捷键 ', command=onCheck)
+                              text=f'{name} 快捷键　', command=onCheck)
         wid.grid(column=0, row=0, sticky="w")
 
         if isFix:  # 固定组合，不给录制
