@@ -4,6 +4,7 @@ from utils.config import Config
 from ui.widget import Widget  # 控件
 
 import tkinter as tk
+from tkinter import ttk
 import tkinter.messagebox
 from windnd import hook_dropfiles  # 文件拖拽
 from PIL import Image, ImageTk
@@ -54,18 +55,18 @@ class IgnoreAreaWin:
         ctrlF1.pack(side='left')
         self.isAutoOCR = tk.BooleanVar()
         self.isAutoOCR.set(True)
-        wid = tk.Checkbutton(
+        wid = ttk.Checkbutton(
             ctrlF1, variable=self.isAutoOCR, text='启用 OCR结果预览')
-        wid.pack(side='top')
+        wid.grid(column=0, row=0, sticky='w')
         self.balloon.bind(wid, '以虚线框标出OCR识别到的文本块')
-        wid = tk.Checkbutton(
+        wid = ttk.Checkbutton(
             ctrlF1, variable=Config.getTK('isAreaWinAutoTbpu'), text='启用 文块后处理预览')
         Config.addTrace('isAreaWinAutoTbpu', self.reLoadImage)
-        wid.pack(side='top')
+        wid.grid(column=0, row=1, sticky='w')
         self.balloon.bind(
             wid, '以虚线框标出经过文本块后处理的块\n注意，仅用于预览后处理效果，\n忽略区域功能在实际执行时不受任何后处理的影响')
-        Widget.comboboxFrame(ctrlF1, '', 'tbpu', width=16).pack(
-            side='top')
+        Widget.comboboxFrame(ctrlF1, '', 'tbpu', width=18).grid(
+            column=0, row=2, sticky='w')
         # 切换画笔按钮
         tk.Frame(ctrlFrame, w=30).pack(side='left')
         ctrlF2 = tk.Frame(ctrlFrame)
@@ -90,7 +91,7 @@ class IgnoreAreaWin:
         self.balloon.bind(
             self.buttons[2], '当 [忽略区域 A] 失效时，[忽略区域 B] 生效')
 
-        tk.Frame(ctrlFrame, w=30).pack(side='left')
+        tk.Frame(ctrlFrame, w=20).pack(side='left')
         ctrlF4 = tk.Frame(ctrlFrame)
         ctrlF4.pack(side='left')
         tk.Button(ctrlF4, text='清空', width=10,
