@@ -89,6 +89,7 @@ class MsnBatch(Msn):
             if self.procList:
                 for proc in self.procList:
                     debugStr += proc.getInitInfo()
+                debugStr += '\n'
             else:
                 debugStr += '未添加文块后处理\n'
             self.__output('debug', debugStr)

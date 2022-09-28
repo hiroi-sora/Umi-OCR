@@ -217,9 +217,10 @@ class MainWin:
             vbar.pack(side="right", fill='y')
             self.textOutput = tk.Text(fr2, height=500, width=500)
             self.textOutput.pack(fill='both', side="left")
+            self.textOutput.tag_config(  # 添加标签
+                'blue', foreground='blue')
             vbar["command"] = self.textOutput.yview
             self.textOutput["yscrollcommand"] = vbar.set
-            Config.set('panelOutput', self.panelOutput)
         initTab2()
 
         def initTab3():  # 设置卡
@@ -876,8 +877,12 @@ class MainWin:
 
     # 写字板操作 =============================================
 
-    def panelOutput(self, text, position=tk.END):
+    def panelOutput(self, text, position=tk.END, highlight=''):
         self.textOutput.insert(position, text)
+        if highlight:  # 需要高亮
+            if position == tk.END:  # 暂时只允许尾部插入
+                self.textOutput.tag_add(  # 尾部插入要高亮前一行
+                    highlight, f'end -1lines linestart', f'end -1lines lineend')
         if self.isAutoRoll.get():  # 需要自动滚动
             self.textOutput.see(position)
 

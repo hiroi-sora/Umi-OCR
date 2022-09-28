@@ -332,9 +332,6 @@ _ConfigDict = {
         'default': '拖入任意图片，或点击截图按钮',
         'isTK': True,
     },
-    'panelOutput': {  # 主输出面板的接口
-        'default': None,
-    },
 }
 
 
