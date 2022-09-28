@@ -7,7 +7,7 @@
 - **高效**：OCR识别引擎是C++编译的 [PaddleOCR-json](https://github.com/hiroi-sora/PaddleOCR-json) （PP-OCRv2.6 cpu_avx_mkl）。只要电脑性能足够，通常能比在线OCR服务更快。
 - **精准**：默认使用PPOCR-v3模型库。除了能准确辨认常规文字，对手写、方向不正、杂乱背景等情景也有不错的识别率。可设置**忽略区域**排除水印，可设置**文块后处理**合并段落。
 
-![](https://tupian.li/images/2022/09/29/1.3-a4cad8c2ce1e8e63.png)
+![](https://tupian.li/images/2022/09/29/1.3-e46104c4fc60cabd.png)
 
 ![](https://tupian.li/images/2022/09/29/1.3-.png)
 
