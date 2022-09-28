@@ -49,7 +49,7 @@ class OcrEngine:
     def __setEngFlag(self, engFlag):
         '''更新引擎状态并向主窗口通知'''
         self.engFlag = engFlag
-        if self.ocr:
+        if self.ocr and Config.get('isDebug'):
             if engFlag == EngFlag.waiting:  # 刷新内存占用
                 self.__ramTips = f'（内存：{self.ocr.getRam()}）'
         msg = {

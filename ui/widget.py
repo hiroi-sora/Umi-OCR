@@ -17,7 +17,7 @@ class Widget:
         父框架 | 模式名称(描述) | 模式在Config中的名称 | 锁定列表'''
         cFrame = tk.Frame(master)
         cFrame.grid_columnconfigure(1, weight=1)
-        tk.Label(cFrame, text=name).grid(column=0, row=0, sticky="w")
+        tk.Label(cFrame, text=name).grid(column=0, row=0, sticky='w')
 
         modeName = f'{configDictName}Name'
         modeDict = Config.get(configDictName)
@@ -106,16 +106,16 @@ class Widget:
         # 标题 | 快捷键Label | 录制
         wid = ttk.Checkbutton(hFrame, variable=Config.getTK(isHotkey),
                               text=f'{name} 快捷键　', command=onCheck)
-        wid.grid(column=0, row=0, sticky="w")
+        wid.grid(column=0, row=0, sticky='w')
 
         if isFix:  # 固定组合，不给录制
             tk.Label(hFrame, text='录制', cursor='hand2', fg='gray').grid(
-                column=1, row=0, sticky="w")
+                column=1, row=0, sticky='w')
             tips = tk.Label(hFrame, text=hotkeyCom, justify='center')
             tips.grid(column=2, row=0, sticky="nsew")
         else:  # 允许自定义录制
             btn = tk.Label(hFrame, text='录制', cursor='hand2', fg='blue')
-            btn.grid(column=1, row=0, sticky="w")
+            btn.grid(column=1, row=0, sticky='w')
             btn.bind('<Button-1>', lambda *e: onRead())
             tips = tk.Label(hFrame, textvariable=Config.getTK(hotkeyName),
                             justify='center')

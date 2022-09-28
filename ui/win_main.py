@@ -92,11 +92,6 @@ class MainWin:
             # 左侧文本和进度条
             vFrame2 = tk.Frame(fr)
             vFrame2.pack(side='top', fill='x')
-            # labelUse = tk.Label(vFrame2, text="使用说明",
-            #                     fg="gray", cursor='hand2')
-            # labelUse.pack(side='left', padx=5)
-            # labelUse.bind(
-            #     '<Button-1>', lambda *e: self.showTips(GetHelpText(Umi.website)))  # 绑定鼠标左键点击
             # 进度条上方的两个label
             tk.Label(vFrame2, textvariable=Config.getTK('tipsTop2')).pack(
                 side='right', padx=2)
@@ -121,7 +116,8 @@ class MainWin:
             btn = ttk.Button(fr1, image=Asset.getImgTK('screenshot24'),  # 截图按钮
                              command=self.openScreenshot,
                              style='icon.TButton',  takefocus=0,)
-            self.balloon.bind(btn, '屏幕截图\n左键拖拽：框选区域\n右键点击：取消框选\nEsc：　　退出截图')
+            self.balloon.bind(
+                btn, '屏幕截图　　说明\n左键拖拽：框选区域\n右键点击：取消框选\n　　 Esc：退出截图')
             btn.pack(side='left')
             self.lockWidget.append(btn)
             btn = ttk.Button(fr1, image=Asset.getImgTK('paste24'),  # 剪贴板按钮
@@ -141,7 +137,7 @@ class MainWin:
             btn = ttk.Button(fr1, image=Asset.getImgTK('delete24'),  # 删除按钮
                              command=self.delImgList,
                              style='icon.TButton',  takefocus=0,)
-            self.balloon.bind(btn, '移除选中的文件\nShift+左键 可选中多个文件')
+            self.balloon.bind(btn, '移除选中的文件\n按住Shift或Ctrl，点击左键可选中多个文件')
             btn.pack(side='right')
             self.lockWidget.append(btn)
             btn = ttk.Button(fr1, image=Asset.getImgTK('openfile24'),  # 打开文件按钮
@@ -185,7 +181,8 @@ class MainWin:
             btn = ttk.Button(fr1, image=Asset.getImgTK('screenshot24'),  # 截图按钮
                              command=self.openScreenshot,
                              style='icon.TButton',  takefocus=0,)
-            self.balloon.bind(btn, '屏幕截图')
+            self.balloon.bind(
+                btn, '屏幕截图　　说明\n左键拖拽：框选区域\n右键点击：取消框选\n　　 Esc：退出截图')
             btn.pack(side='left')
             self.lockWidget.append(btn)
             btn = ttk.Button(fr1, image=Asset.getImgTK('paste24'),  # 剪贴板按钮
@@ -453,7 +450,7 @@ class MainWin:
                 fr1.pack(side='top', fill='x', pady=2, padx=5)
                 wid = ttk.Checkbutton(
                     fr1, variable=Config.getTK('isRecursiveSearch'), text='递归读取子文件夹中所有图片')
-                wid.grid(column=0, row=0, columnspan=2, sticky="w")
+                wid.grid(column=0, row=0, columnspan=2, sticky='w')
                 self.lockWidget.append(wid)
 
                 tk.Label(fr1, text='图片后缀：　').grid(column=0, row=2, sticky='w')
@@ -476,15 +473,15 @@ class MainWin:
 
                 wid = ttk.Checkbutton(
                     fr1, variable=Config.getTK('isOutputTxt'), text='纯文本.txt文件')
-                wid.grid(column=0, row=0,  sticky="w")
+                wid.grid(column=0, row=0,  sticky='w')
                 self.lockWidget.append(wid)
                 wid = ttk.Checkbutton(
                     fr1, variable=Config.getTK('isOutputMD'), text='图文链接.md文件')
-                wid.grid(column=2, row=0,  sticky="w")
+                wid.grid(column=2, row=0,  sticky='w')
                 self.lockWidget.append(wid)
                 wid = ttk.Checkbutton(
                     fr1, variable=Config.getTK('isOutputJsonl'), text='原始信息.jsonl文件')
-                wid.grid(column=0, row=1,  sticky="w")
+                wid.grid(column=0, row=1,  sticky='w')
                 self.lockWidget.append(wid)
                 tk.Label(fr1, text=' ').grid(column=1, row=0)
 
@@ -495,12 +492,12 @@ class MainWin:
                         Config.set('isOutputJsonl', False)
                 labelOff = tk.Label(fr1, text='　 关闭全部输出',
                                     cursor='hand2', fg='blue')
-                labelOff.grid(column=2, row=1, sticky="w")
+                labelOff.grid(column=2, row=1, sticky='w')
                 labelOff.bind('<Button-1>', offAllOutput)  # 绑定关闭全部输出
 
                 wid = ttk.Checkbutton(fr1, text='图片中不含文字时，不输出信息',
                                       variable=Config.getTK('isIgnoreNoText'),)
-                wid.grid(column=0, row=2, columnspan=9, sticky="w")
+                wid.grid(column=0, row=2, columnspan=9, sticky='w')
                 self.lockWidget.append(wid)
 
                 tk.Label(fOutput, fg="gray",
@@ -509,24 +506,23 @@ class MainWin:
                 # 输出目录
                 fr2 = tk.Frame(fOutput)
                 fr2.pack(side='top', fill='x', pady=2, padx=5)
-                tk.Label(fr2, text="输出目录：").grid(column=0, row=3, sticky="w")
+                tk.Label(fr2, text="输出目录：").grid(column=0, row=3, sticky='w')
                 enOutPath = tk.Entry(
                     fr2, textvariable=Config.getTK('outputFilePath'))
-                enOutPath.grid(column=1, row=3,  sticky="nsew")
+                enOutPath.grid(column=1, row=3,  sticky='ew')
                 self.lockWidget.append(enOutPath)
                 fr2.grid_rowconfigure(4, minsize=2)  # 第二行拉开间距
-                tk.Label(fr2, text="输出文件名：").grid(column=0, row=5, sticky="w")
+                tk.Label(fr2, text="输出文件名：").grid(column=0, row=5, sticky='w')
                 enOutName = tk.Entry(
                     fr2, textvariable=Config.getTK('outputFileName'))
-                enOutName.grid(column=1, row=5, sticky="nsew")
+                enOutName.grid(column=1, row=5, sticky='ew')
                 self.lockWidget.append(enOutName)
                 fr2.grid_columnconfigure(1, weight=1)  # 第二列自动扩充
             initOutFile()
 
             # 后处理设置
             def initProcess():  # 后处理设置
-                fProcess = tk.LabelFrame(
-                    frameBatch, labelanchor='n', text='文本后处理')
+                fProcess = tk.LabelFrame(self.optFrame,  text='文本后处理')
                 fProcess.pack(side='top', fill='x',
                               ipady=2, pady=LabelFramePadY, padx=4)
 
@@ -544,7 +540,7 @@ class MainWin:
                 self.ignoreFrame.grid_columnconfigure(0, minsize=4)
                 wid = ttk.Button(self.ignoreFrame, text='添加区域',
                                  command=self.openSelectArea)
-                wid.grid(column=1, row=0, sticky="w")
+                wid.grid(column=1, row=0, sticky='w')
                 self.lockWidget.append(wid)
                 wid = ttk.Button(self.ignoreFrame, text='清空区域',
                                  command=self.clearArea)
@@ -563,11 +559,18 @@ class MainWin:
                 self.canvas.grid(column=3, row=0, rowspan=10)
                 self.canvas.bind(
                     '<Button-1>', lambda *e: self.openSelectArea())
+                fpro = tk.Frame(fProcess)
+                fpro.pack(side='top', fill='x', pady=2, padx=4)
+                fpro.grid_columnconfigure(0, weight=1)
                 wid = Widget.comboboxFrame(
-                    fProcess, '文本块后处理', 'tbpu', self.lockWidget)
-                wid.pack(side='top', fill='x', pady=2, padx=4)
-                self.balloon.bind(
-                    wid, '可更好的排序文本或合并多行文本\n\n竖排后处理必须与支持竖排的模型库（识别语言）搭配使用')
+                    fpro, '文本块后处理', 'tbpu', self.lockWidget)
+                wid.grid(column=0, row=0, sticky='ew')
+                self.balloon.bind(wid, '使用方法请点击右侧说明按钮')
+                labelUse = tk.Label(fpro, text='说明', width=5,
+                                    fg="gray", cursor='hand2')
+                labelUse.grid(column=1, row=0)
+                labelUse.bind(
+                    '<Button-1>', lambda *e: self.showTips(GetTbpuHelp(Umi.website)))  # 绑定鼠标左键点击
             initProcess()
 
             def initOcrUI():  # OCR引擎设置
@@ -621,7 +624,7 @@ class MainWin:
                 fr1 = tk.Frame(frameOCR)
                 fr1.pack(side='top', fill='x', pady=2, padx=5)
                 tk.Label(fr1, text='额外启动参数：').grid(
-                    column=0, row=2, sticky="w")
+                    column=0, row=2, sticky='w')
                 wid = tk.Entry(
                     fr1, textvariable=Config.getTK('argsStr'))
                 wid.grid(column=1, row=2, sticky="nsew")
@@ -892,10 +895,11 @@ class MainWin:
         if self.win.state() == 'iconic':  # 窗口最小化状态下
             self.win.state('normal')  # 恢复前台状态
         self.win.attributes('-topmost', 1)  # 设置层级最前
+        geometry = self.win.geometry()  # 缓存主窗当前位置大小
         self.win.deiconify()  # 主窗获取焦点
+        self.win.geometry(geometry)  # 若主窗正在贴边，获取焦点会退出贴边模式，所以重新设置位置恢复贴边
         # 一段时间后解除
         self.win.after(500, lambda: self.win.attributes('-topmost', 0))
-        Log.info('主窗置顶！')
 
     # 进行任务 ===============================================
 
