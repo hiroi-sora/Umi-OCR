@@ -8,6 +8,7 @@ from tkinter import ttk
 import tkinter.messagebox
 from windnd import hook_dropfiles  # 文件拖拽
 from PIL import Image, ImageTk
+import os
 
 
 class IgnoreAreaWin:
@@ -225,8 +226,11 @@ class IgnoreAreaWin:
                     tbpuClass = Config.get('tbpu').get(
                         Config.get('tbpuName'), None)
                     if tbpuClass:
+                        name = os.path.basename(path)  # 带后缀的文件名
+                        imgInfo = {'name': name,
+                                   'path': path, 'size': img.size}
                         tbpu = tbpuClass()
-                        data['data'], s = tbpu.run(data['data'], None)
+                        data['data'], s = tbpu.run(data['data'], imgInfo)
                 for o in data["data"]:  # 绘制矩形框
                     # 提取左上角、右下角的坐标
                     p1x = round(o['box'][0][0]*self.imgScale)

@@ -1024,7 +1024,6 @@ class MainWin:
             self.startSingleClipboard()  # 剪贴板识图
 
     def onCloseWin(self):  # 关闭窗口事件
-        print('onCloseWin!')
         if Config.get('isBackground'):
             self.win.withdraw()  # 隐藏窗口
         else:
