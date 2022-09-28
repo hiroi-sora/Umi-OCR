@@ -121,7 +121,7 @@ class MainWin:
             btn = ttk.Button(fr1, image=Asset.getImgTK('screenshot24'),  # 截图按钮
                              command=self.openScreenshot,
                              style='icon.TButton',  takefocus=0,)
-            self.balloon.bind(btn, '屏幕截图')
+            self.balloon.bind(btn, '屏幕截图\n左键拖拽：框选区域\n右键点击：取消框选\nEsc：　　退出截图')
             btn.pack(side='left')
             self.lockWidget.append(btn)
             btn = ttk.Button(fr1, image=Asset.getImgTK('paste24'),  # 剪贴板按钮
@@ -356,6 +356,7 @@ class MainWin:
                                          lambda *e: self.win.event_generate(
                                              '<<ScreenshotEvent>>'), isAutoBind=False)
                 wid.pack(side='top', fill='x')
+                self.balloon.bind(wid, '关闭快捷键后，仍能通过面板上的按钮或托盘小图标调用截图')
 
                 syssscom = 'windows+shift+s'
                 fhkSys = Widget.hotkeyFrame(frss, '系统截图 ', 'Screenshot',
@@ -370,9 +371,10 @@ class MainWin:
                 self.balloon.bind(wid, '尝试读取剪贴板，若存在图片则调用OCR')
                 fr1 = tk.Frame(fQuick)
                 fr1.pack(side='top', fill='x', pady=2, padx=5)
-                ttk.Checkbutton(fr1, variable=Config.getTK('isNeedCopy'),
-                                text='复制识别出的文字').pack(side='left', fill='x')
-                self.balloon.bind(fr1, '截图或粘贴图片OCR完成后，将文本复制到剪贴板')
+                wid = ttk.Checkbutton(fr1, variable=Config.getTK('isNeedCopy'),
+                                      text='复制识别出的文字')
+                wid.pack(side='left', fill='x')
+                self.balloon.bind(wid, '截图或粘贴图片OCR完成后，将得到的文本复制到剪贴板')
 
                 # 切换截图模式
                 def onModeChange():
@@ -435,6 +437,7 @@ class MainWin:
                 wid = ttk.Combobox(fr2, width=14, state="readonly", textvariable=Config.getTK('okMissionName'),
                                    value=okMissionNameList)
                 wid.pack(side='left')
+                self.balloon.bind(wid, '可打开软件配置json文件，添加自己的任务（cmd命令）')
                 if Config.get("okMissionName") not in okMissionNameList:
                     wid.current(0)  # 初始化Combobox和okMissionName
             initScheduler()
@@ -519,6 +522,7 @@ class MainWin:
                 fr2.grid_columnconfigure(1, weight=1)  # 第二列自动扩充
             initOutFile()
 
+            # 后处理设置
             def initProcess():  # 后处理设置
                 fProcess = tk.LabelFrame(
                     frameBatch, labelanchor='n', text='文本后处理')
@@ -531,27 +535,29 @@ class MainWin:
                 self.ignoreBtn = ttk.Button(fIgnore, text='打开忽略区域编辑器（设置排除水印）',
                                             command=self.openSelectArea)
                 self.ignoreBtn.pack(side='top', fill='x')
+                self.balloon.bind(
+                    self.ignoreBtn, '添加忽略区域，排除指定位置的文本\n\n附带功能：可以在忽略区域编辑器内预览文本块后处理的效果\n但是，实际任务时忽略区域早于后处理执行，不受后处理的影响')
                 self.lockWidget.append(self.ignoreBtn)
                 # 忽略区域本体框架
                 self.ignoreFrame = tk.Frame(fIgnore)  # 不pack，动态添加
                 self.ignoreFrame.grid_columnconfigure(0, minsize=4)
-                wid = tk.Button(self.ignoreFrame, text='添加区域',
-                                command=self.openSelectArea)
+                wid = ttk.Button(self.ignoreFrame, text='添加区域',
+                                 command=self.openSelectArea)
                 wid.grid(column=1, row=0, sticky="w")
                 self.lockWidget.append(wid)
-                wid = tk.Button(self.ignoreFrame, text='清空区域',
-                                command=self.clearArea)
+                wid = ttk.Button(self.ignoreFrame, text='清空区域',
+                                 command=self.clearArea)
                 wid.grid(column=1, row=1, sticky='w')
                 self.lockWidget.append(wid)
                 self.ignoreLabel = tk.Label(
-                    self.ignoreFrame, anchor='w')  # 显示生效大小
-                self.ignoreLabel.grid(column=1, row=2, sticky='w')
+                    self.ignoreFrame, anchor='w', justify='left')  # 显示生效大小
+                self.ignoreLabel.grid(column=1, row=2, sticky='n')
                 self.balloon.bind(
                     self.ignoreLabel, '批量任务时，只有分辨率与之相同的图片，才会应用忽略区域。')
                 self.ignoreFrame.grid_rowconfigure(2, minsize=10)
                 self.ignoreFrame.grid_columnconfigure(2, minsize=4)
-                self.canvasHeight = 140  # 画板高度不变，宽度根据选区回传数据调整
-                self.canvas = tk.Canvas(self.ignoreFrame, width=249, height=self.canvasHeight,
+                self.canvasHeight = 120  # 画板高度不变，宽度根据选区回传数据调整
+                self.canvas = tk.Canvas(self.ignoreFrame, width=200, height=self.canvasHeight,
                                         bg="black", cursor='hand2')
                 self.canvas.grid(column=3, row=0, rowspan=10)
                 self.canvas.bind(
@@ -559,7 +565,8 @@ class MainWin:
                 wid = Widget.comboboxFrame(
                     fProcess, '文本块后处理', 'tbpu', self.lockWidget)
                 wid.pack(side='top', fill='x', pady=2, padx=4)
-                self.balloon.bind(wid, '竖排后处理必须与支持竖排的模型库（识别语言）搭配使用')
+                self.balloon.bind(
+                    wid, '可更好的排序文本或合并多行文本\n\n竖排后处理必须与支持竖排的模型库（识别语言）搭配使用')
             initProcess()
 
             def initOcrUI():  # OCR引擎设置
@@ -571,7 +578,7 @@ class MainWin:
                     frameOCR, '识别语言：　', 'ocrConfig', self.lockWidget)
                 wid.pack(side='top', fill='x', pady=2, padx=5)
                 self.balloon.bind(
-                    wid, '竖排模型库（识别语言）建议与竖排文本块后处理搭配使用\n\n本软件有配套的多国语言扩展包，可导入更多语言模型库，\n详情请浏览项目Github主页')
+                    wid, '本软件有配套的多国语言扩展包，可导入更多语言模型库，\n详情请浏览项目Github主页\n\n竖排模型库（识别语言）建议与竖排文本块后处理搭配使用')
                 # 压缩
                 fLim = tk.Frame(frameOCR)
                 fLim.pack(side='top', fill='x', pady=2, padx=5)
@@ -679,7 +686,7 @@ class MainWin:
                                          fg="gray", cursor='hand2')
                 labelOpenFile.pack(side='left')
                 labelOpenFile.bind(
-                    '<Button-1>', lambda *e: os.startfile("Umi-OCR_config.json"))
+                    '<Button-1>', lambda *e: os.startfile('Umi-OCR_config.json'))
                 wid = tk.Checkbutton(fEX, text='调试模式', fg="gray",
                                      variable=Config.getTK('isDebug'))
                 wid.pack(side='right')
@@ -808,7 +815,7 @@ class MainWin:
             self.ignoreBtn.pack(side='top', fill='x')  # 显示按钮
             self.updateFrameHeight()  # 刷新框架
             return
-        self.ignoreLabel["text"] = f"生效大小\n宽 {area['size'][0]}\n高 {area['size'][1]}"
+        self.ignoreLabel["text"] = f"生效分辨率：\n宽 {area['size'][0]}\n高 {area['size'][1]}"
         self.canvas.delete(tk.ALL)  # 清除画布
         scale = self.canvasHeight / area['size'][1]  # 显示缩放比例
         width = int(self.canvasHeight * (area['size'][0] / area['size'][1]))

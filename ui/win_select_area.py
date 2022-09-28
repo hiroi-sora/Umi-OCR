@@ -64,7 +64,7 @@ class IgnoreAreaWin:
         Config.addTrace('isAreaWinAutoTbpu', self.reLoadImage)
         wid.grid(column=0, row=1, sticky='w')
         self.balloon.bind(
-            wid, '以虚线框标出经过文本块后处理的块\n注意，仅用于预览后处理效果，\n忽略区域功能在实际执行时不受任何后处理的影响')
+            wid, '以虚线框标出经过文本块后处理的块\n注意，仅用于预览后处理效果，\n实际任务时忽略区域早于后处理执行，不受后处理的影响')
         Widget.comboboxFrame(ctrlF1, '', 'tbpu', width=18).grid(
             column=0, row=2, sticky='w')
         # 切换画笔按钮
@@ -89,18 +89,18 @@ class IgnoreAreaWin:
                                     command=lambda: self.changeMode(2))
         self.buttons[2].pack(side='left', padx=5)
         self.balloon.bind(
-            self.buttons[2], '当 [忽略区域 A] 失效时，[忽略区域 B] 生效')
+            self.buttons[2], '当 [忽略区域 A] 失效，即触发 [识别区域] 时，\n[忽略区域 B] 生效')
 
         tk.Frame(ctrlFrame, w=20).pack(side='left')
         ctrlF4 = tk.Frame(ctrlFrame)
         ctrlF4.pack(side='left')
-        tk.Button(ctrlF4, text='清空', width=10,
+        tk.Button(ctrlF4, text='清空', width=12, bg='white',
                   command=self.clearCanvas).pack()
-        tk.Button(ctrlF4, text='撤销\nCtrl+Shift+Z', width=10,
+        tk.Button(ctrlF4, text='撤销\nCtrl+Shift+Z', width=12, bg='white',
                   command=self.revokeCanvas).pack(pady=5)
         self.win.bind("<Control-Z>", self.revokeCanvas)  # 绑定撤销组合键，带shift
-        tk.Frame(ctrlFrame, w=22).pack(side='left')
-        tk.Button(ctrlFrame, text='完成', width=8,
+        tk.Frame(ctrlFrame, w=10).pack(side='left')
+        tk.Button(ctrlFrame, text='完成', width=8, bg='white',
                   command=lambda: self.onClose(False)).pack(side="left", fill="y")
         tipsFrame = tk.Frame(self.win)
         tipsFrame.pack()
@@ -142,8 +142,6 @@ class IgnoreAreaWin:
 
         if defaultPath:  # 打开默认图片
             self.loadImage(defaultPath)
-
-        # self.win.mainloop()
 
     def onClose(self, isAsk=True):  # 点击关闭。isAsk为T时询问。
 
@@ -211,46 +209,50 @@ class IgnoreAreaWin:
 
         # OCR识别
         def runOCR():
-            if self.isAutoOCR.get():
-                # 任务前：显示提示信息
-                self.win.title(f"分析中…………")  # 改变标题
-                pathStr = path if len(
-                    path) <= 50 else path[:50]+"……"  # 路径太长显示不全，截取
-                canvasText = self.canvas.create_text(self.cW/2, self.cH/2, font=('', 15, 'bold'), fill='white', anchor="c",
-                                                     text=f'图片分析中，请稍候……\n\n\n\n{pathStr}')
-                self.win.update()  # 刷新窗口
-                # 开始识别，耗时长
-                data = OCRe.run(path)
-                # 任务后：刷新提示信息
-                self.canvas.delete(canvasText)  # 删除提示文字
-                if data['code'] == 100:  # 存在内容
-                    if Config.get('isAreaWinAutoTbpu'):  # 需要后处理
-                        tbpuClass = Config.get('tbpu').get(
-                            Config.get('tbpuName'), None)
-                        if tbpuClass:
-                            tbpu = tbpuClass()
-                            data['data'], s = tbpu.run(data['data'], None)
-                    for o in data["data"]:  # 绘制矩形框
-                        # 提取左上角、右下角的坐标
-                        p1x = round(o['box'][0][0]*self.imgScale)
-                        p1y = round(o['box'][0][1]*self.imgScale)
-                        p2x = round(o['box'][2][0]*self.imgScale)
-                        p2y = round(o['box'][2][1]*self.imgScale)
-                        r1 = self.canvas.create_rectangle(
-                            p1x, p1y, p2x, p2y, outline='white', width=2)  # 绘制白实线基底
-                        r2 = self.canvas.create_rectangle(
-                            p1x, p1y, p2x, p2y, outline='black', width=2, dash=4)  # 绘制黑虚线表层
-                        self.canvas.tag_lower(r2)  # 移动到最下方
-                        self.canvas.tag_lower(r1)
-                        self.areaTextRec.append(r1)
-                        self.areaTextRec.append(r2)
-                elif not data["code"] == 101:  # 发生异常
-                    self.isAutoOCR.set(False)  # 关闭自动分析
-                    tk.messagebox.showwarning(
-                        "遇到了一点小问题", f"图片分析失败。图片地址：\n{path}\n\n错误码：{str(data['code'])}\n\n错误信息：\n{str(data['data'])}")
-                    self.win.attributes('-topmost', 1)  # 设置层级最前
-                    self.win.attributes('-topmost', 0)  # 然后立刻解除
-        runOCR()
+            # 任务前：显示提示信息
+            self.win.title(f"分析中…………")  # 改变标题
+            pathStr = path if len(
+                path) <= 50 else path[:50]+"……"  # 路径太长显示不全，截取
+            canvasText = self.canvas.create_text(self.cW/2, self.cH/2, font=('', 15, 'bold'), fill='white', anchor="c",
+                                                 text=f'图片分析中，请稍候……\n\n\n\n{pathStr}')
+            self.win.update()  # 刷新窗口
+            # 开始识别，耗时长
+            data = OCRe.run(path)
+            # 任务后：刷新提示信息
+            self.canvas.delete(canvasText)  # 删除提示文字
+            if data['code'] == 100:  # 存在内容
+                if Config.get('isAreaWinAutoTbpu'):  # 需要后处理
+                    tbpuClass = Config.get('tbpu').get(
+                        Config.get('tbpuName'), None)
+                    if tbpuClass:
+                        tbpu = tbpuClass()
+                        data['data'], s = tbpu.run(data['data'], None)
+                for o in data["data"]:  # 绘制矩形框
+                    # 提取左上角、右下角的坐标
+                    p1x = round(o['box'][0][0]*self.imgScale)
+                    p1y = round(o['box'][0][1]*self.imgScale)
+                    p2x = round(o['box'][2][0]*self.imgScale)
+                    p2y = round(o['box'][2][1]*self.imgScale)
+                    r1 = self.canvas.create_rectangle(
+                        p1x, p1y, p2x, p2y, outline='white', width=2)  # 绘制白实线基底
+                    r2 = self.canvas.create_rectangle(
+                        p1x, p1y, p2x, p2y, outline='black', width=2, dash=4)  # 绘制黑虚线表层
+                    self.canvas.tag_lower(r2)  # 移动到最下方
+                    self.canvas.tag_lower(r1)
+                    self.areaTextRec.append(r1)
+                    self.areaTextRec.append(r2)
+            elif not data["code"] == 101:  # 发生异常
+                self.isAutoOCR.set(False)  # 关闭自动分析
+                tk.messagebox.showwarning(
+                    "遇到了一点小问题", f"图片分析失败。图片地址：\n{path}\n\n错误码：{str(data['code'])}\n\n错误信息：\n{str(data['data'])}")
+                self.win.attributes('-topmost', 1)  # 设置层级最前
+                self.win.attributes('-topmost', 0)  # 然后立刻解除
+        if self.isAutoOCR.get():
+            try:
+                runOCR()
+            except Exception as e:
+                tk.messagebox.showerror('遇到了一点小问题', f'预览OCR失败：\n{e}')
+                return
         self.win.title(f"选择区域 {path}")  # 改变标题
         # 缓存图片并显示
         img = img.resize(self.imgReSize, Image.ANTIALIAS)  # 改变图片大小
