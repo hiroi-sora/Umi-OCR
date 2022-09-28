@@ -17,17 +17,20 @@
 from utils.config import Config
 from ocr.tbpu.merge_line_h import TbpuLineH
 from ocr.tbpu.merge_line_h_m_left import TbpuLineHMultiLeft
+from ocr.tbpu.merge_line_h_m_paragraph import TbpuLineHMultiParagraph
+from ocr.tbpu.merge_line_h_m_fuzzy import TbpuLineHMultiFuzzy
 from ocr.tbpu.merge_line_v_lr import TbpuLineVlr
 from ocr.tbpu.merge_line_v_rl import TbpuLineVrl
 
 
 Tbpus = {
-    '不做处理': None,
-    '横排-单行': TbpuLineH,
+    '横排-优化单行': TbpuLineH,
     '横排-合并多行-左对齐': TbpuLineHMultiLeft,
-    # '横排-合并多行-模糊对齐': TbpuLineHMultiLeft,
+    '横排-合并多行-自然段': TbpuLineHMultiParagraph,
+    '横排-合并多行-模糊匹配': TbpuLineHMultiFuzzy,
     '竖排-从左到右-单行': TbpuLineVlr,
     '竖排-从右至左-单行': TbpuLineVrl,
+    '不做处理': None,
 }
 
 Config.set('tbpu', Tbpus)

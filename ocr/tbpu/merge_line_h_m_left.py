@@ -13,8 +13,9 @@ class TbpuLineHMultiLeft(TbpuLineH):
         # x、y方向上合并的允许阈值，像素。由行高与比例因子动态刷新。
         self.limitX = 10
         self.limitY = 10
-        # 当前合并段数
-        self.mergeNum = 1
+
+        self.mergeNum = 1  # 当前合并段数
+        self.rowHeight = 10  # 当前行高
 
     def getInitInfo(self):
         return f'文块后处理：[{self.tbpuName}]'
@@ -30,8 +31,8 @@ class TbpuLineHMultiLeft(TbpuLineH):
     def isRuleMerge(self, box1, box2):
         '''合并规则：两个box可以合并时返回T'''
         # 1的左下角与2的左上角接壤时OK
-        return abs(box2[0][0]-box1[3][0]) < self.limitX\
-            and abs(box2[0][1]-box1[3][1]) < self.limitY
+        return abs(box2[0][0]-box1[3][0]) <= self.limitX\
+            and abs(box2[0][1]-box1[3][1]) <= self.limitY
 
     def isRuleNew(self, box1, box2):
         '''新段规则：两个box属于同一栏但不同段落时返回T'''
@@ -50,10 +51,10 @@ class TbpuLineHMultiLeft(TbpuLineH):
             if not tb:
                 continue
             box = tb['box']
-            bh = box[3][1] - box[0][1]  # 行高
+            self.rowHeight = box[3][1] - box[0][1]  # 行高
             # 该行的 x、y 合并阈值
-            self.limitX = self.factorX * bh
-            self.limitY = self.factorY * bh
+            self.limitX = self.factorX * self.rowHeight
+            self.limitY = self.factorY * self.rowHeight
             self.mergeNum = 1  # 合并个数
             # 遍历后续文块
             for i in range(index+1, listlen):
@@ -63,7 +64,7 @@ class TbpuLineHMultiLeft(TbpuLineH):
                 box2 = tb2['box']
                 b2h = box2[3][1] - box2[0][1]  # 行高
                 # 当行高一致，即有可能在同一栏内
-                if abs(b2h-bh) < self.limitY:
+                if abs(b2h-self.rowHeight) <= self.limitY:
                     # 符合合并规则，则合并
                     if self.isRuleMerge(box, box2):
                         self.mergeNum += 1
