@@ -1,4 +1,4 @@
-# 文块处理：合并竖排单行合并-从左至右
+# 文块后处理：[竖排-从左到右-单行]
 from ocr.tbpu.tbpu import Tbpu
 
 from time import time
@@ -6,10 +6,11 @@ from time import time
 
 class TbpuLineVlr(Tbpu):
     def __init__(self):
+        self.tbpuName = '竖排-从左到右-单行'
         self.rl = False  # T为从右到左，F为从左到右
 
     def getInitInfo(self):
-        return '文块后处理：[竖排单行合并-从左至右]'
+        return f'文块后处理：[{self.tbpuName}]'
 
     def run(self, textBlocks, imgInfo):
         '''传入 文块组、图片信息。返回文块组、debug信息字符串。'''
@@ -60,4 +61,4 @@ class TbpuLineVlr(Tbpu):
         # 所有新文块，按左上角点的x坐标从左到右排序
         resList.sort(key=lambda tb: tb['box'][0][0], reverse=self.rl)
         # 返回新文块组和debug字符串
-        return resList, f'[竖排单行合并-从左至右] 原{listlen}块，合并后{len(resList)}块，耗时{time()-timeIn}s'
+        return resList, f'[{self.tbpuName}] 原{listlen}块，合并后{len(resList)}块，耗时{time()-timeIn}s'

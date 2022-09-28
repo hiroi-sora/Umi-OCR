@@ -10,13 +10,15 @@ Log = GetLog()
 
 
 class Tbpu:
+    def __init__(self):
+        self.tbpuName = '文块处理单元-未知'
 
     def getInitInfo(self):
         '''返回初始化信息字符串'''
-        return '未知文块处理器\n'
+        return f'文块后处理：[{self.tbpuName}]'
 
     def run(self, textBlocks, img):
         '''输入：textBlocks文块 , img图片信息\n
         输出：textBlocks文块 , 处理日志'''
         Log.info(f'f: {textBlocks}')
-        return textBlocks, '未知文块处理器'
+        return textBlocks, f'[{self.tbpuName}]'

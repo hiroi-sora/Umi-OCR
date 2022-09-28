@@ -1,13 +1,15 @@
-# 文块处理：合并横排单行
+# 文块处理：横排-单行
 from ocr.tbpu.tbpu import Tbpu
 
 from time import time
 
 
 class TbpuLineH(Tbpu):
+    def __init__(self):
+        self.tbpuName = '横排-单行'
 
     def getInitInfo(self):
-        return '文块后处理：[横排单行合并]'
+        return f'文块后处理：[{self.tbpuName}]'
 
     def run(self, textBlocks, imgInfo):
         '''传入 文块组、图片信息。返回文块组、debug信息字符串。'''
@@ -58,4 +60,4 @@ class TbpuLineH(Tbpu):
         # 所有新文块，按左上角点的y坐标从高到低排序
         resList.sort(key=lambda tb: tb['box'][0][1])
         # 返回新文块组和debug字符串
-        return resList, f'[横排单行合并] 原{listlen}块，合并后{len(resList)}块，耗时{time()-timeIn}s'
+        return resList, f'[{self.tbpuName}] 原{listlen}块，合并后{len(resList)}块，耗时{time()-timeIn}s'
