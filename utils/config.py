@@ -142,12 +142,12 @@ _ConfigDict = {
         'isTK': True,
     },
     # 计划任务设置
-    'isOpenExplorer': {   # T时任务完成后打开资源管理器到输出目录。isOutputFile为T时才管用
+    'isOpenExplorer': {   # T时任务完成后打开资源管理器到输出目录
         'default': False,
         'isSave': True,
         'isTK': True,
     },
-    'isOpenOutputFile': {  # T时任务完成后打开输出文件。isOutputFile为T时才管用
+    'isOpenOutputFile': {  # T时任务完成后打开输出文件
         'default': False,
         'isSave': True,
         'isTK': True,
@@ -341,7 +341,7 @@ _ConfigDict = {
 class ConfigModule:
     # ↓ 在这些编码下能使用全部功能，其它编码不保证能使用如拖入含中文路径的图片等功能。
     # ↓ 但识图功能是可以正常使用的。
-    __sysEncodingSalf = ['cp936', 'cp65001']
+    __sysEncodingSafe = ['cp936', 'cp65001']
 
     __tkSaveTime = 200  # tk变量改变多长时间后写入本地。毫秒
 
@@ -349,7 +349,7 @@ class ConfigModule:
 
     def __init__(self):
         self.main = None  # win_main的self，可用来获取主it刷新界面或创建计时器
-        self.sysEncoding = 'cp936'  # 系统编码。初始化时获取
+        self.sysEncoding = 'ascii'  # 系统编码。初始化时获取
         self.__saveTimer = None  # 计时器，用来更新tk变量一段时间后写入本地
         self.__optDict = {}  # 配置项的数据
         self.__tkDict = {}  # tk绑定变量
@@ -400,6 +400,14 @@ class ConfigModule:
 
     def load(self):
         '''从本地json文件读取配置。必须在initTK后执行'''
+
+        # 初始化编码，获取系统编码
+        # https://docs.python.org/zh-cn/3.8/library/locale.html#locale.getdefaultlocale
+        # https://docs.python.org/zh-cn/3.8/library/codecs.html#standard-encodings
+        syse = getdefaultlocale()[1]
+        if syse:
+            self.sysEncoding = syse
+
         try:
             with open(ConfigJsonFile, 'r', encoding='utf8')as fp:
                 jsonData = json.load(fp)  # 读取json文件
@@ -415,19 +423,11 @@ class ConfigModule:
                 exit(0)
         except FileNotFoundError:  # 无配置文件
             # 当成是首次启动软件，提示
-            if self.sysEncoding not in self.__sysEncodingSalf:  # 不安全的地区
+            if self.sysEncoding not in self.__sysEncodingSafe:  # 不安全的地区
                 tk.messagebox.showwarning(
                     '警告',
-                    f'您的系统地区编码为[{self.sysEncoding}]，可能导致拖入图片的功能异常，建议使用浏览按钮导入图片。其它功能应该能正常使用。')
+                    f'您的系统地区语言编码为[{self.sysEncoding}]，可能导致拖入图片的功能异常，建议使用浏览按钮导入图片。其它功能不受影响。')
             self.save()
-
-        def setSysEncoding():  # 获取系统编码
-            '''初始化编码'''
-            # https://docs.python.org/zh-cn/3.8/library/locale.html#locale.getdefaultlocale
-            # https://docs.python.org/zh-cn/3.8/library/codecs.html#standard-encodings
-            self.sysEncoding = getdefaultlocale()[1]
-            print(f'获取系统编码：{self.sysEncoding}')
-        setSysEncoding()  # 初始化编码
 
     def save(self):
         '''保存配置到本地json文件'''
