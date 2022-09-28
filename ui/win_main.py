@@ -245,7 +245,7 @@ class MainWin:
 
             def initSoftwareFrame():  # 软件行为设置
                 fSoft = tk.LabelFrame(
-                    self.optFrame, text='软件行为')
+                    self.optFrame, text='通用设置')
                 fSoft.pack(side='top', fill='x',
                            ipady=2, pady=LabelFramePadY, padx=4)
                 fr1 = tk.Frame(fSoft)

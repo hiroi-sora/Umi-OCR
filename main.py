@@ -4,7 +4,7 @@
 from utils.config import Umi
 from ui.win_main import MainWin
 
-Umi.ver = '1.3.0 Beta 1'
+Umi.ver = '1.3.0'
 Umi.name = f'Umi-OCR v{Umi.ver}'
 Umi.website = 'https://github.com/hiroi-sora/Umi-OCR'
 Umi.about = '免费、开源的离线OCR软件'
