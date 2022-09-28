@@ -41,7 +41,7 @@ class MsnBatch(Msn):
         self.outputList = [outputPanel]
         if Config.get("isOutputTxt"):  # 输出到txt
             self.outputList.append(OutputTxt())
-        if Config.get("isOutputTxt"):  # 输出到markdown
+        if Config.get("isOutputMD"):  # 输出到markdown
             self.outputList.append(OutputMD())
         if Config.get("isOutputJsonl"):  # 输出到jsonl
             self.outputList.append(OutputJsonl())
