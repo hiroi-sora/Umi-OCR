@@ -58,11 +58,9 @@ class IgnoreAreaWin:
             ctrlF1, variable=self.isAutoOCR, text='启用 OCR结果预览')
         wid.pack(side='top')
         self.balloon.bind(wid, '以虚线框标出OCR识别到的文本块')
-        self.isAutoTbpu = tk.BooleanVar()
-        self.isAutoTbpu.set(False)
-        self.isAutoTbpu.trace('w', lambda *e: self.reLoadImage())
         wid = tk.Checkbutton(
-            ctrlF1, variable=self.isAutoTbpu, text='启用 文块后处理预览')
+            ctrlF1, variable=Config.getTK('isAreaWinAutoTbpu'), text='启用 文块后处理预览')
+        Config.addTrace('isAreaWinAutoTbpu', self.reLoadImage)
         wid.pack(side='top')
         self.balloon.bind(
             wid, '以虚线框标出经过文本块后处理的块\n注意，仅用于预览后处理效果，\n忽略区域功能在实际执行时不受任何后处理的影响')
@@ -225,7 +223,7 @@ class IgnoreAreaWin:
                 # 任务后：刷新提示信息
                 self.canvas.delete(canvasText)  # 删除提示文字
                 if data['code'] == 100:  # 存在内容
-                    if self.isAutoTbpu.get():  # 需要后处理
+                    if Config.get('isAreaWinAutoTbpu'):  # 需要后处理
                         tbpuClass = Config.get('tbpu').get(
                             Config.get('tbpuName'), None)
                         if tbpuClass:

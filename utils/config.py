@@ -223,6 +223,11 @@ _ConfigDict = {
         'isSave': False,
         'isTK': False,
     },
+    'isAreaWinAutoTbpu': {  # T时忽略区域编辑器预览文本块后处理
+        'default': False,
+        'isSave': True,
+        'isTK': True,
+    },
     # 引擎设置
     'ocrToolPath': {  # 引擎路径
         'default': 'PaddleOCR-json/PaddleOCR_json.exe',
@@ -441,7 +446,10 @@ class ConfigModule:
         except Exception as err:
             Log.error(f'设置项{key}刷新失败：\n{err}')
         if key in self.__traceDict:
-            self.__traceDict[key]()
+            try:
+                self.__traceDict[key]()
+            except Exception as err:
+                Log.error(f'设置项{key}跟踪事件调用失败：\n{err}')
 
     def get(self, key):
         '''获取一个配置项的值'''
