@@ -53,7 +53,8 @@ class MsnQuick(Msn):
                 tbStr += tb['text']+'\n'
             self.outputPanel.print(tbStr+'\n')  # 输出到面板
             if Config.get('isNeedCopy'):  # 需要复制
-                pyperclipCopy(tbStr)  # 复制到剪贴板
+                if tbStr and tbStr[-1] == '\n':
+                    pyperclipCopy(tbStr[:-1])  # 去除结尾空格，复制到剪贴板
         elif ocrData['code'] == 101:  # 无文字
             self.outputPanel.print('未发现文字\n')
         else:  # 识别失败
