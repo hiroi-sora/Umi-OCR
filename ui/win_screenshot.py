@@ -115,7 +115,7 @@ class _DrawMode(Enum):
 
 
 class ScreenshotWin():  # 内置截图模式
-    OB = -10  # 元素隐藏屏幕外的位置
+    OB = -100  # 元素隐藏屏幕外的位置
 
     def __init__(self):
         self.isInitWin = False  # 防止重复初始化窗体
