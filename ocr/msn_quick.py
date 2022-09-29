@@ -24,9 +24,7 @@ class MsnQuick(Msn):
         self.outputPanel = OutputPanel()  # 输出到面板
         # 初始化文块处理器
         self.procList = []
-        if Config.get("ignoreArea"):  # 忽略区域
-            self.procList.append(TbpuIgnoreArea())
-        tbpuClass = Config.get('tbpu').get(  # 其它文本块处理器
+        tbpuClass = Config.get('tbpu').get(
             Config.get('tbpuName'), None)
         if tbpuClass:
             self.procList.append(tbpuClass())
