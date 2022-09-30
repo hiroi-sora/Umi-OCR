@@ -1,4 +1,4 @@
-from utils.config import Config, Umi, ScsModeFlag  # 最先加载配置
+from utils.config import Config, Umi, ScsModeFlag, WindowTopModeFlag  # 最先加载配置
 from utils.logger import GetLog
 from utils.asset import *  # 资源
 from utils.data_structure import KeyList
@@ -305,6 +305,13 @@ class MainWin:
                 Config.addTrace('textpanelFontSize', updateTextpanel)
                 Config.addTrace('isTextpanelFontBold', updateTextpanel)
                 updateTextpanel()
+
+                # 锁定置顶
+                wid = Widget.comboboxFrame(fSoft, '窗口弹出：　', 'windowTopMode')
+                wid.pack(side='top', fill='x', pady=2, padx=5)
+                self.balloon.bind(
+                    wid, '1：唤起截图或批量任务完成时，窗口临时弹到最前。可被别的窗口覆盖\n2：无论何时，不会主动弹出\n3：保持最前层级，不被别的窗口覆盖。（副作用：提示气泡框也被挡住）')
+                Config.addTrace('windowTopModeName', self.gotoTop)
             initSoftwareFrame()
 
             def quickOCR():  # 快捷识图设置
@@ -371,7 +378,7 @@ class MainWin:
                 fr1.pack(side='top', fill='x', pady=2, padx=5)
                 wid = ttk.Checkbutton(fr1, variable=Config.getTK('isNeedCopy'),
                                       text='复制识别出的文字')
-                wid.pack(side='left', fill='x')
+                wid.pack(side='left')
                 self.balloon.bind(wid, '截图或粘贴图片OCR完成后，将得到的文本复制到剪贴板')
 
                 # 切换截图模式
@@ -891,14 +898,21 @@ class MainWin:
 
     # 窗口操作 =============================================
 
-    def gotoTop(self):  # 主窗置顶
+    def gotoTop(self, isForce=False):  # 主窗置顶
+        flag = Config.get('windowTopMode').get(Config.get(
+            'windowTopModeName'), WindowTopModeFlag.finish)
+        if flag == WindowTopModeFlag.never and not isForce:  # 模式：从不置顶
+            self.win.attributes('-topmost', 0)
+            return
         if self.win.state() == 'iconic':  # 窗口最小化状态下
             self.win.state('normal')  # 恢复前台状态
         self.win.attributes('-topmost', 1)  # 设置层级最前
         geometry = self.win.geometry()  # 缓存主窗当前位置大小
         self.win.deiconify()  # 主窗获取焦点
         self.win.geometry(geometry)  # 若主窗正在贴边，获取焦点会退出贴边模式，所以重新设置位置恢复贴边
-        # 一段时间后解除
+        if flag == WindowTopModeFlag.eternity:  # 模式：永远置顶
+            return
+        # 一段时间后解除置顶
         self.win.after(500, lambda: self.win.attributes('-topmost', 0))
 
     # 进行任务 ===============================================

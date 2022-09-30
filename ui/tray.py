@@ -53,7 +53,7 @@ class Tray:
         self.tray = None  # 将引用置空，主窗口第二次按下关闭时可强行关闭
 
     def showWin(self, e=None):
-        self.main.gotoTop()
+        self.main.gotoTop(True)
 
     def screenshot(self, e=None):
         self.main.win.event_generate('<<ScreenshotEvent>>')

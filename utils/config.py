@@ -18,6 +18,7 @@ class Umi:
     test = None  # 开发使用
 
 
+# 枚举
 class RunModeFlag(Enum):
     '''进程管理模式标志'''
     short = 0  # 按需关闭（减少空闲时内存占用）
@@ -35,6 +36,13 @@ class ClickTrayModeFlag(Enum):
     show = 0  # 显示主面板
     screenshot = 1  # 截屏
     clipboard = 2  # 粘贴图片
+
+
+class WindowTopModeFlag(Enum):
+    '''窗口置顶模式标志'''
+    never = 0  # 永不
+    finish = 1  # 任务完成时置顶
+    eternity = 2  # 永远保持置顶（我喜欢eternity这个单词，哈哈哈哈）
 
 
 # 配置文件路径
@@ -86,6 +94,20 @@ _ConfigDict = {
         'default': False,
         'isSave': True,
         'isTK': True,
+    },
+    'windowTopModeName': {  # 当前选择的置顶模式名称
+        'default': '',
+        'isSave': True,
+        'isTK': True,
+    },
+    'windowTopMode': {  # 置顶模式
+        'default': {
+            '识别时弹到最前': WindowTopModeFlag.finish,
+            '不要弹出': WindowTopModeFlag.never,
+            '永远保持置顶': WindowTopModeFlag.eternity,
+        },
+        'isSave': False,
+        'isTK': False,
     },
     # 快捷识图设置
     'isHotkeyClipboard': {  # T时启用读剪贴板快捷键
@@ -316,7 +338,6 @@ _ConfigDict = {
         'isSave': True,
         'isTK': False,
     },
-
 
     # 不同模块交流的接口
     'ignoreArea':  {  # 忽略区域
