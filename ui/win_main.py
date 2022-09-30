@@ -310,7 +310,7 @@ class MainWin:
                 wid = Widget.comboboxFrame(fSoft, '窗口弹出：　', 'windowTopMode')
                 wid.pack(side='top', fill='x', pady=2, padx=5)
                 self.balloon.bind(
-                    wid, '1：唤起截图或批量任务完成时，窗口临时弹到最前。可被别的窗口覆盖\n2：无论何时，不会主动弹出\n3：保持最前层级，不被别的窗口覆盖。（副作用：提示气泡框也被挡住）')
+                    wid, '1：唤起截图或批量任务完成时，窗口临时弹到最前。可被别的窗口覆盖\n2：无论何时，不会主动弹出\n3：保持最前层级，不被别的窗口覆盖。（副作用：提示气泡框也被挡住）\n\n手动隐藏、最小化窗口不受此项影响')
                 Config.addTrace('windowTopModeName', self.gotoTop)
             initSoftwareFrame()
 
