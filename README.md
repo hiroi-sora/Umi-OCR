@@ -4,7 +4,7 @@
 
 - **免费**：本项目所有代码开源，完全免费。
 - **方便**：解压即用，无需安装。不需要网络。
-- **高效**：OCR识别引擎是C++编译的 [PaddleOCR-json](https://github.com/hiroi-sora/PaddleOCR-json) （PP-OCRv2.6 cpu_avx_mkl）。只要电脑性能足够，通常能比在线OCR服务更快。
+- **高效**：OCR识别引擎是C++编译的 [PaddleOCR-json](https://github.com/hiroi-sora/PaddleOCR-json) 。只要电脑性能足够，通常能比在线OCR服务更快。
 - **精准**：默认使用PPOCR-v3模型库。除了能准确辨认常规文字，对手写、方向不正、杂乱背景等情景也有不错的识别率。可设置**忽略区域**排除水印，可设置**文块后处理**合并段落。
 - **批量**：可批量处理图片，将结果保存为本地 txt / md / jsonl 多种格式文件。
 
