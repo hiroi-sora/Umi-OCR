@@ -64,8 +64,8 @@ class Widget:
             except ValueError as err:
                 Config.set(isHotkey, False)
                 Config.set(hotkeyName, '')
-                tk.messagebox.showwarning("提示",
-                                          f"无法注册快捷键【{hotkey}】[{hotkey}]\n\n错误信息：\n{err}")
+                tk.messagebox.showwarning(
+                    '提示', f'无法注册快捷键【{hotkey}】\n\n错误信息：\n{err}')
 
         def onRead():  # 当 录制键按下
             tips.grid_remove()
@@ -76,13 +76,22 @@ class Widget:
             oldHotkey = Config.get(hotkeyName)
             if isUsing:  # 已经注册了
                 Widget.delHotkey(oldHotkey)  # 先注销已有按键
-            hotkey = keyboard.read_hotkey(suppress=False)
-            tips.grid()
-            btn.grid()  # 显示按钮
-            tips2.grid_remove()
+            print(f'准备录制')
+            try:
+                hotkey = keyboard.read_hotkey(suppress=False)
+            except ValueError as err:
+                if isUsing:  # 注册回旧按键
+                    addHotkey(oldHotkey)
+                tk.messagebox.showwarning(
+                    '提示', f'无法录制快捷键\n\n错误信息：\n{err}\n\n提示：笔记本键盘可能无法录制【Fn+功能键F1~F12】的快捷键。请打开FnLock再尝试，或者不要将Fn作为快捷键')
+                return
+            finally:
+                tips.grid()
+                btn.grid()  # 显示按钮
+                tips2.grid_remove()
             if 'esc' in hotkey or hotkey == oldHotkey:  # ESC为取消
                 if isUsing:  # 注册回旧按键
-                    addHotkey(oldHotkey)  # 注册新按键
+                    addHotkey(oldHotkey)
                 return
             if isUsing:  # 需要注册新按键
                 addHotkey(hotkey)
