@@ -31,11 +31,18 @@ Github下载：
 
 [Umi-OCR 批量图片转文字 v1.3.0](https://github.com/hiroi-sora/Umi-OCR/releases/tag/v1.3.0)
 
-蓝奏云下载：（请留意发布日期和版本号）
+蓝奏云下载：（密码 `1111` 。请留意发布日期和版本号）
 
 [https://wwn.lanzoul.com/b036wwa4d](https://wwn.lanzoul.com/b036wwa4d)
 
-密码:`1111`
+<details>
+<summary>使用源代码：</summary>
+
+- 可直接运行 `main.py` 启动程序，或自己打包为exe。
+- 项目使用`pyinstaller`打包。运行 `to_exe.py` 一键打包。
+- 打包后，请将引擎组件 [PaddleOCR-json 整个文件夹](PaddleOCR-json) 放置于exe同目录下。
+
+</details>
 
 ## 兼容性
 
@@ -313,6 +320,7 @@ OCR识别出的文本是按“块”划分的，通常一行文字分为一块�
 - PPOCR v2.6 (PaddleOCR-json v1.2.0) 版本提高了批量处理的平均速度，但代价是需要花费更长时间进行初始化。提高了启用mkldnn加速时的识别速度，但代价时不开启加速时效率更低。（CPU只要不是特别早期的AMD，一般都能使用mkldnn，但加速幅度可能不如同档次的Intel。）
 - 未来将增加 openblas 版识别引擎，进一步优化AMD的效率。（有 生 之 年）
 - 使用`pyinstaller`打包。可以运行根目录下的 [to_exe.py](to_exe.py) 一键打包。
+- 配置文件`Umi-OCR_config.json`在第一次运行程序时生成。若想自定义引擎组件的路径，可以修改其中的`ocrToolPath`属性。支持绝对/相对路径。可以实现多个前端共用一套引擎组件。
 - `v1.3.0` 几乎重写了整个项目框架，将业务逻辑与UI代码解耦，划分出多个子模块。这些子模块我认为是比较方便拓展的：
   - 文件输出模块 `ocr/output_*.py`
   - 文本块后处理模块 `ocr/tbou/*.py`
