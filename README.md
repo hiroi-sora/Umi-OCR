@@ -441,14 +441,22 @@ OCR识别出的文本是按“块”划分的，通常一行文字分为一块�
 
 ### 感谢
 
-感谢 [PaddlePaddle/PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR)：
+本项目核心引擎组件源自 [PaddlePaddle/PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR)：
 > Awesome multilingual OCR toolkits based on PaddlePaddle
 
-本项目中使用了 [boppreh/keyboard](https://github.com/boppreh/keyboard)：
+##### 本项目中所使用的库：
+
+##### [boppreh/keyboard](https://github.com/boppreh/keyboard)
 > Hook and simulate global keyboard events on Windows and Linux.
-> 
-本项目中使用了 [boppreh/mouse](https://github.com/boppreh/mouse)：
-> Hook and simulate global mouse events in pure Python
+
+##### [boppreh/mouse](https://github.com/boppreh/mouse)
+> Hook and simulate global mouse events in pure Python.
+
+##### [Infinidat/infi.systray](https://github.com/Infinidat/infi.systray)
+> A Windows system tray icon with a right-click context menu.
+
+##### [Pwm](https://pmw.sourceforge.net/)
+> Pmw is a toolkit for building high-level compound widgets in Python using the Tkinter module.
 
 ## Umi-系列图片处理软件
 
