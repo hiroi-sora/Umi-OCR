@@ -40,7 +40,9 @@ Github下载：
 
 - 可直接运行 `main.py` 启动程序，或自己打包为exe。
 - 项目使用`pyinstaller`打包。运行 `to_exe.py` 一键打包。
-- 打包后，请将引擎组件 [PaddleOCR-json 整个文件夹](PaddleOCR-json) 放置于exe同目录下。
+- 打包后，请将引擎组件 [PaddleOCR-json 整个文件夹](PaddleOCR-json) 放置于exe同目录下！
+- 打包后，请将引擎组件 [PaddleOCR-json 整个文件夹](PaddleOCR-json) 放置于exe同目录下！！
+- 打包后，请将引擎组件 [PaddleOCR-json 整个文件夹](PaddleOCR-json) 放置于exe同目录下！！！
 
 </details>
 
@@ -337,6 +339,11 @@ OCR识别出的文本是按“块”划分的，通常一行文字分为一块�
 
 ## TODO
 
+▼ 开发中
+
+- [ ] 开机自启
+- [ ] 多开提示
+
 <details>
 <summary>已完成</summary>
 
@@ -369,6 +376,7 @@ OCR识别出的文本是按“块”划分的，通常一行文字分为一块�
 - 提高初始化速度。
 - 忽略区域能保存预设。
 - 缩减离线OCR模块的体积。
+- 替换更稳定的快捷键模块。
 - 自动检测CPU指令集是否兼容。
 - 离线OCR模块增加 `no_avx` 和 `openblas` 版本。
 
