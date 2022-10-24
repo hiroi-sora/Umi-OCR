@@ -54,11 +54,11 @@ class Widget:
         def addHotkey(hotkey):  # 注册新快捷键
             if hotkey == '':
                 Config.set(isHotkey, False)
-                tk.messagebox.showwarning("提示",
-                                          f"请先录制{name}快捷键")
+                tk.messagebox.showwarning(
+                    '提示', f'请先录制{name}快捷键')
                 return
             try:
-                # 添加新的快捷键。允许按键事件继续向别的软件下发，否则x系统中相同辅助键的快捷键全都失效
+                # 添加新的快捷键。允许按键事件继续向别的软件下发，否则系统中相同辅助键的快捷键全都失效
                 keyboard.add_hotkey(hotkey, func, suppress=False)
                 Log.info(f'快捷键【{hotkey}】注册成功')
             except ValueError as err:
@@ -67,7 +67,7 @@ class Widget:
                 tk.messagebox.showwarning(
                     '提示', f'无法注册快捷键【{hotkey}】\n\n错误信息：\n{err}')
 
-        def onRead():  # 当 录制键按下
+        def onRead():  # 当 修改键按下
             tips.grid_remove()
             btn.grid_remove()  # 移除按钮
             tips2.grid()  # 显示提示
@@ -76,14 +76,13 @@ class Widget:
             oldHotkey = Config.get(hotkeyName)
             if isUsing:  # 已经注册了
                 Widget.delHotkey(oldHotkey)  # 先注销已有按键
-            print(f'准备录制')
             try:
                 hotkey = keyboard.read_hotkey(suppress=False)
             except ValueError as err:
                 if isUsing:  # 注册回旧按键
                     addHotkey(oldHotkey)
                 tk.messagebox.showwarning(
-                    '提示', f'无法录制快捷键\n\n错误信息：\n{err}\n\n提示：笔记本键盘可能无法录制【Fn+功能键F1~F12】的快捷键。请打开FnLock再尝试，或者不要将Fn作为快捷键')
+                    '提示', f'无法修改快捷键\n\n错误信息：\n{err}\n\n提示：笔记本键盘可能无法录制【Fn+功能键F1~F12】的快捷键。请打开FnLock再尝试，或者不要将Fn作为快捷键')
                 return
             finally:
                 tips.grid()
@@ -97,7 +96,7 @@ class Widget:
                 addHotkey(hotkey)
             Config.set(hotkeyName, hotkey)  # 写入设置
             Log.info(
-                f'快捷键【{name}】录制为【{Config.get(hotkeyName)}】')
+                f'快捷键【{name}】修改为【{Config.get(hotkeyName)}】')
 
         def onCheck():  # 当 复选框按下
             if isFix:
@@ -112,18 +111,18 @@ class Widget:
         hFrame = tk.Frame(master)
         hFrame.grid_columnconfigure(2, weight=1)
 
-        # 标题 | 快捷键Label | 录制
+        # 标题 | 快捷键Label | 修改
         wid = ttk.Checkbutton(hFrame, variable=Config.getTK(isHotkey),
                               text=f'{name} 快捷键　', command=onCheck)
         wid.grid(column=0, row=0, sticky='w')
 
-        if isFix:  # 固定组合，不给录制
-            tk.Label(hFrame, text='录制', cursor='hand2', fg='gray').grid(
+        if isFix:  # 固定组合，不给修改
+            tk.Label(hFrame, text='修改', cursor='hand2', fg='gray').grid(
                 column=1, row=0, sticky='w')
             tips = tk.Label(hFrame, text=hotkeyCom, justify='center')
             tips.grid(column=2, row=0, sticky="nsew")
-        else:  # 允许自定义录制
-            btn = tk.Label(hFrame, text='录制', cursor='hand2', fg='blue')
+        else:  # 允许自定义修改
+            btn = tk.Label(hFrame, text='修改', cursor='hand2', fg='blue')
             btn.grid(column=1, row=0, sticky='w')
             btn.bind('<Button-1>', lambda *e: onRead())
             tips = tk.Label(hFrame, textvariable=Config.getTK(hotkeyName),
