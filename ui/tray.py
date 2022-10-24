@@ -17,7 +17,6 @@ class Tray:
         cc = ('粘贴图片', Asset.getPath('paste24ico'), self.clipboard)
         clickTrayMode = Config.get('clickTrayMode').get(
             Config.get('clickTrayModeName'), ClickTrayModeFlag.show)
-        print(f'clickTrayMode: {clickTrayMode}')
         menuOptions = ()
         if clickTrayMode == ClickTrayModeFlag.show:
             menuOptions = (aa, bb, cc)
