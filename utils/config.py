@@ -13,11 +13,12 @@ Log = GetLog()
 
 # 项目属性
 class Umi:
-    name = None
-    ver = None
-    website = None
-    about = None
-    test = None  # 开发使用
+    name = None  # 带版本号的名称
+    pname = None  # 纯名称，固定
+    ver = None  # 版本号
+    website = None  # 主页
+    about = None  # 简介
+    path = None  # 当前入口文件的路径
 
 
 # 枚举
