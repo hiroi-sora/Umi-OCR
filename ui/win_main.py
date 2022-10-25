@@ -942,6 +942,7 @@ class MainWin:
         def initing():
             self.btnRun['text'] = '停止任务'
             self.btnRun['state'] = 'normal'
+            Config.set('tipsTop1', '')
             Config.set('tipsTop2', '初始化')
             self.progressbar["maximum"] = 50  # 重置进度条长度，值越小加载动画越快
             self.progressbar['mode'] = 'indeterminate'  # 进度条为来回动模式

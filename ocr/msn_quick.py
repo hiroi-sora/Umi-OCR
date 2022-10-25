@@ -60,6 +60,7 @@ class MsnQuick(Msn):
         else:  # 识别失败
             self.outputPanel.print(
                 f'识别失败，错误码：{ocrData["code"]}\n错误信息：{str(ocrData["data"])}\n')
+        Config.set('tipsTop1', f'{round(numData["time"], 2)}s ')
 
     def onStop(self, num):
         self.setRunning(MsnFlag.none)

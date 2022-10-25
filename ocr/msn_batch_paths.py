@@ -80,6 +80,7 @@ class MsnBatch(Msn):
         self.progressbar["value"] = 0
         Config.set('tipsTop1', f'0s  0/{num["all"]}')
         Config.set('tipsTop2', f'0%')
+        Config.main.win.update()  # 刷新进度
         self.clearTableItem()  # 清空表格参数
         # 输出初始信息
         startStr = f"\n任务开始时间：{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))}\n\n"
