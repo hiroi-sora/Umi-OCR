@@ -3,6 +3,7 @@ from utils.logger import GetLog
 from utils.asset import *  # 资源
 from utils.data_structure import KeyList
 from utils.tool import Tool
+from utils.startup import Startup
 from ui.win_screenshot import ScreenshotCopy  # 截屏
 from ui.win_select_area import IgnoreAreaWin  # 子窗口
 from ui.widget import Widget  # 控件
@@ -312,11 +313,25 @@ class MainWin:
                 updateTextpanel()
 
                 # 锁定置顶
-                wid = Widget.comboboxFrame(fSoft, '窗口弹出：　', 'windowTopMode')
+                wid = Widget.comboboxFrame(fSoft, '窗口弹出：', 'windowTopMode')
                 wid.pack(side='top', fill='x', pady=2, padx=5)
                 self.balloon.bind(
                     wid, '1：唤起截图或批量任务完成时，窗口临时弹到最前。可被别的窗口覆盖\n2：无论何时，不会主动弹出\n3：保持最前层级，不被别的窗口覆盖。（副作用：提示气泡框也被挡住）\n\n手动隐藏、最小化窗口不受此项影响')
                 Config.addTrace('windowTopModeName', self.gotoTop)
+
+                # 启动方式设置
+                fr4 = tk.Frame(fSoft)
+                fr4.pack(side='top', fill='x', pady=2, padx=5)
+                tk.Label(fr4, text='开机启动：').pack(side='left')
+                lab1 = tk.Label(fr4, text='添加', cursor='hand2', fg='blue')
+                lab1.pack(side='left')
+                lab1.bind('<Button-1>', lambda *e: Startup.autoEnable())
+                lab2 = tk.Label(fr4, text='移除', cursor='hand2', fg='red')
+                lab2.pack(side='left')
+                lab2.bind('<Button-1>', lambda *e: Startup.autoDisable())
+                # ttk.Button(fr4, text='添加',
+                #            command=Startup.autoEnable).pack(side='left')
+
             initSoftwareFrame()
 
             def quickOCR():  # 快捷识图设置
@@ -328,7 +343,7 @@ class MainWin:
                 # 避免子线程直接唤起截图窗导致的窗口闪烁现象
                 self.win.bind('<<ScreenshotEvent>>',
                               self.openScreenshot)  # 绑定截图事件
-                cbox = Widget.comboboxFrame(fQuick, '截图模式：　', 'scsMode')
+                cbox = Widget.comboboxFrame(fQuick, '截图模式：', 'scsMode')
                 cbox.pack(side='top', fill='x', padx=4)
                 self.balloon.bind(cbox, '''使用【Umi-OCR 软件截图】时，若外接多块屏幕，且缩放比例不一致，
 可能导致Umi-OCR截图异常，如画面不完整、窗口变形、识别不出文字等。
