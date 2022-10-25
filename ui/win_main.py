@@ -42,9 +42,6 @@ class MainWin:
         def initStyle():  # 初始化样式
             style = ttk.Style()
             # winnative clam alt default classic vista xpnative
-            # style.theme_use('winnative')
-            # style.theme_use('clam')
-            # style.theme_use('alt')
             # style.theme_use('default')
             style.configure('icon.TButton', padding=(12, 0))
             style.configure('main.TButton', font=('Microsoft YaHei', '12', ''),  # bold
@@ -57,7 +54,7 @@ class MainWin:
             # 调用api获得当前的缩放因子
             ScaleFactor = ctypes.windll.shcore.GetScaleFactorForDevice(0)
             # 设置缩放因子
-            self.win.tk.call('tk', 'scaling', ScaleFactor/75)
+            self.win.tk.call('tk', 'scaling', ScaleFactor/100)
         # initDPI()
 
         def initWin():

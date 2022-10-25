@@ -341,8 +341,9 @@ OCR识别出的文本是按“块”划分的，通常一行文字分为一块�
 
 ▼ 开发中
 
-- [ ] 开机自启
-- [ ] 多开提示
+- [x] 设置开机自启
+- [x] 创建快捷方式到开始菜单、桌面
+- [x] 多开提示
 
 <details>
 <summary>已完成</summary>
@@ -439,7 +440,7 @@ OCR识别出的文本是按“块”划分的，通常一行文字分为一块�
 ##### v1.0.0 `2022.3.28`
 - “梦开始的地方”
 
-### 感谢
+## 感谢
 
 本项目核心引擎组件源自 [PaddlePaddle/PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR)：
 > Awesome multilingual OCR toolkits based on PaddlePaddle
