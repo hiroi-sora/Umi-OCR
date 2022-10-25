@@ -322,20 +322,12 @@ class MainWin:
                 # 启动方式设置
                 fr4 = tk.Frame(fSoft)
                 fr4.pack(side='top', fill='x', pady=2, padx=5)
-                tk.Label(fr4, text='开机启动：').pack(side='left')
-                lab1 = tk.Label(fr4, text='添加', cursor='hand2', fg='blue')
-                lab1.pack(side='left')
-                lab1.bind('<Button-1>', lambda *e: Startup.autoEnable())
-                lab2 = tk.Label(fr4, text='移除', cursor='hand2', fg='red')
-                lab2.pack(side='left')
-                lab2.bind('<Button-1>', lambda *e: Startup.autoDisable())
-                tk.Label(fr4, text='　　桌面快捷方式：').pack(side='left')
-                lab3 = tk.Label(fr4, text='添加', cursor='hand2', fg='blue')
-                lab3.pack(side='left')
-                lab3.bind('<Button-1>', lambda *e: Startup.shortcutDesktop())
-                # ttk.Button(fr4, text='添加',
-                #            command=Startup.autoEnable).pack(side='left')
-
+                ttk.Checkbutton(fr4, variable=Config.getTK('isAutoStartup'),
+                                text='开机自启', command=Startup.switchAutoStartup).pack(side='left')
+                ttk.Checkbutton(fr4, variable=Config.getTK('isStartMenu'),
+                                text='开始菜单', command=Startup.switchStartMenu).pack(side='left', padx=20)
+                ttk.Checkbutton(fr4, variable=Config.getTK('isDesktop'),
+                                text='桌面快捷方式', command=Startup.switchDesktop).pack(side='left')
             initSoftwareFrame()
 
             def quickOCR():  # 快捷识图设置

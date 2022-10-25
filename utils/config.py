@@ -118,6 +118,21 @@ _ConfigDict = {
         'isSave': False,
         'isTK': False,
     },
+    'isAutoStartup': {  # T时已添加开机自启
+        'default': False,
+        'isSave': True,
+        'isTK': True,
+    },
+    'isStartMenu': {  # T时已添加开始菜单
+        'default': False,
+        'isSave': True,
+        'isTK': True,
+    },
+    'isDesktop': {  # T时已添加桌面快捷方式
+        'default': False,
+        'isSave': True,
+        'isTK': True,
+    },
     # 快捷识图设置
     'isHotkeyClipboard': {  # T时启用读剪贴板快捷键
         'default': True,
