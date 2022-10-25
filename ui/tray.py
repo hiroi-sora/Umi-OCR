@@ -25,7 +25,7 @@ class Tray:
         elif clickTrayMode == ClickTrayModeFlag.clipboard:
             menuOptions = (cc, bb, aa)
         self.tray = SysTrayIcon(
-            Asset.getPath('umiocr24ico'),
+            Asset.getPath('umiocr64ico'),
             'Umi-OCR', menuOptions,
             quit_name='退出',
             quit_icon=Asset.getPath('exit24ico'),
