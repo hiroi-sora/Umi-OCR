@@ -38,7 +38,7 @@ class Startup:
                 Startup.RegRoot, Startup.RegPath, 0, Startup.RegFlag)
         except Exception as e:
             tk.messagebox.showerror(
-                '遇到了一点小问题', '打开注册表失败。请以管理员权限运行软件再重试。\n\n{e}')
+                '遇到了一点小问题', f'打开注册表失败。请以管理员权限运行软件再重试。\n\n{e}')
             return
         try:
             tips = ''
@@ -53,11 +53,11 @@ class Startup:
             path = Umi.path
             win32api.RegSetValueEx(
                 key, name, 0, win32con.REG_SZ, path)
-            tips += f'添加开机启动项：【{name}】\n启动路径：{path}'
+            tips += f'添加新的开机启动项：【{name}】\n启动路径：{path}'
             tk.messagebox.showinfo('已设置开机自启', tips)
         except Exception as e:
             tk.messagebox.showerror(
-                '遇到了一点小问题', '添加开机启动项失败。请以管理员权限运行软件再重试。\n\n{e}')
+                '遇到了一点小问题', f'添加开机启动项失败。请以管理员权限运行软件再重试。\n\n{e}')
         finally:
             win32api.RegCloseKey(key)
 
@@ -69,7 +69,7 @@ class Startup:
                 Startup.RegRoot, Startup.RegPath, 0, Startup.RegFlag)
         except Exception as e:
             tk.messagebox.showerror(
-                '遇到了一点小问题', '打开注册表失败。请以管理员权限运行软件再重试。\n\n{e}')
+                '遇到了一点小问题', f'打开注册表失败。请以管理员权限运行软件再重试。\n\n{e}')
             return
         try:
             # 移除旧的启动项
@@ -84,6 +84,6 @@ class Startup:
             tk.messagebox.showinfo('已禁用开机自启', tips)
         except Exception as e:
             tk.messagebox.showerror(
-                '遇到了一点小问题', '移除开机启动项失败。请以管理员权限运行软件再重试。\n\n{e}')
+                '遇到了一点小问题', f'移除开机启动项失败。请以管理员权限运行软件再重试。\n\n{e}')
         finally:
             win32api.RegCloseKey(key)

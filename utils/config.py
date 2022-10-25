@@ -20,6 +20,11 @@ class Umi:
     website = None  # 主页
     about = None  # 简介
     path = os.path.realpath(sys.argv[0])  # 当前入口文件的路径
+    cwd = os.path.dirname(path)  # 当前应设的工作目录
+
+
+# 重设工作目录，防止开机自启丢失工作目录。此行代码必须比asset.py等模块优先执行
+os.chdir(Umi.cwd)
 
 
 # 枚举
