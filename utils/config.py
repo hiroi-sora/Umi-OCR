@@ -1,6 +1,7 @@
 from utils.logger import GetLog
 
 import os
+import sys
 import psutil  # 进程检查
 import json
 from enum import Enum
@@ -18,7 +19,7 @@ class Umi:
     ver = None  # 版本号
     website = None  # 主页
     about = None  # 简介
-    path = None  # 当前入口文件的路径
+    path = os.path.realpath(sys.argv[0])  # 当前入口文件的路径
 
 
 # 枚举
