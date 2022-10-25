@@ -294,6 +294,11 @@ class MainWin:
                 tk.Label(fr3, text=' ').grid(column=4, row=0, sticky='w')
                 ttk.Checkbutton(fr3, text='加粗',
                                 variable=Config.getTK('isTextpanelFontBold')).grid(column=5, row=0, sticky='w')
+                # 检查当前配置字体是否存在
+                f = Config.get('textpanelFontFamily')
+                if f and f not in fontFamilies:
+                    Log.error(f'配置输出面板字体【{f}】不存在。重置为空')
+                    Config.set('textpanelFontFamily', '')
 
                 def updateTextpanel():
                     f = Config.get('textpanelFontFamily')
