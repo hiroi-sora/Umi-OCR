@@ -83,12 +83,12 @@ _ConfigDict = {
         'isTK': False,
     },
     'textpanelFontFamily': {  # 主输出面板字体
-        'default': '',
+        'default': 'Microsoft YaHei UI',
         'isSave': True,
         'isTK': True,
     },
     'textpanelFontSize': {  # 主输出面板字体大小
-        'default': 12,
+        'default': 14,
         'isSave': True,
         'isTK': True,
     },
