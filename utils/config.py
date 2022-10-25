@@ -1,5 +1,7 @@
 from utils.logger import GetLog
 
+import os
+import psutil  # 进程检查
 import json
 from enum import Enum
 import tkinter as tk
@@ -332,8 +334,25 @@ _ConfigDict = {
         'isTK': True,
     },
 
+    # 防止多开相关
+    'processID':  {  # 正在运行的进程的PID
+        'default': -1,
+        'isSave': True,
+        'isTK': False,
+    },
+    'processKey':  {  # 可标识一个进程的信息，如进程名或路径
+        'default': '',
+        'isSave': True,
+        'isTK': False,
+    },
+
     # 记录不再提示
     'promptScreenshotScale':  {  # 截图时比例不对
+        'default': True,
+        'isSave': True,
+        'isTK': False,
+    },
+    'promptMultiOpen':  {  # 多开提示
         'default': True,
         'isSave': True,
         'isTK': False,
@@ -435,10 +454,10 @@ class ConfigModule:
         except json.JSONDecodeError:  # 反序列化json错误
             if tk.messagebox.askyesno(
                 '遇到了一点小问题',
-                    f'载入配置文件 {ConfigJsonFile} 时，反序列化json失败。\n\n选 “是” 重置该文件。\n选 “否” 将退出程序。'):
+                    f'配置文件 {ConfigJsonFile} 格式错误。\n\n【是】 重置该文件\n【否】 退出本次运行'):
                 self.save()
             else:
-                exit(0)
+                os._exit(0)
         except FileNotFoundError:  # 无配置文件
             # 当成是首次启动软件，提示
             if self.sysEncoding not in self.__sysEncodingSafe:  # 不安全的地区
@@ -446,6 +465,33 @@ class ConfigModule:
                     '警告',
                     f'您的系统地区语言编码为[{self.sysEncoding}]，可能导致拖入图片的功能异常，建议使用浏览按钮导入图片。其它功能不受影响。')
             self.save()
+
+        # 检查多开
+        def isMultiOpen():
+            '''主进程多开时返回T'''
+            def getProcessKey(pid):
+                # 区分不同时间和空间上同一个进程的识别信息
+                return str(psutil.Process(pid).create_time())
+            # 检查上次记录的pid和key是否还在运行
+            lastPID = self.get('processID')
+            lastKey = self.get('processKey')
+            if psutil.pid_exists(lastPID):  # 上次记录的pid如今存在
+                runningKey = getProcessKey(lastPID)
+                if lastKey == runningKey:  # 上次记录的key与它pid当前key对应，则证实多开
+                    Log.info(f'检查到进程已在运行。pid：{lastPID}，key：{lastKey}')
+                    if tk.messagebox.askyesno(
+                        '提示',
+                            f'Umi-OCR 已在运行。\n\n【是】 退出本次运行\n【否】 多开软件'):
+                        os._exit(0)
+                    else:  # 忽视警告继续多开，不记录当前信息
+                        return
+            # 本次为唯一的进程，记录当前进程信息
+            nowPid = os.getpid()
+            nowKey = getProcessKey(nowPid)
+            self.set('processID', nowPid)
+            self.set('processKey', nowKey, isSave=True)
+        if self.get('promptMultiOpen'):
+            isMultiOpen()
 
     def save(self):
         '''保存配置到本地json文件'''
