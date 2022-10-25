@@ -12,6 +12,7 @@ class Tool:
 
     @staticmethod
     def emptyClipboard():
+        '''清空剪贴板'''
         try:
             OpenClipboard()  # 打开剪贴板
             EmptyClipboard()  # 清空剪贴板

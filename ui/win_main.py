@@ -362,7 +362,7 @@ class MainWin:
                                              '<<ScreenshotEvent>>'), isAutoBind=False)
                 wid.pack(side='top', fill='x')
                 self.balloon.bind(
-                    wid, '关闭快捷键后，仍能通过面板上的按钮或托盘小图标调用截图\n点击【录制】可设置自定义快捷键')
+                    wid, '关闭快捷键后，仍能通过面板上的按钮或托盘小图标调用截图\n点击【修改】可设置自定义快捷键')
 
                 syssscom = 'windows+shift+s'
                 fhkSys = Widget.hotkeyFrame(frss, '系统截图 ', 'Screenshot',
@@ -374,7 +374,7 @@ class MainWin:
                 wid = Widget.hotkeyFrame(
                     fQuick, '粘贴图片 ', 'Clipboard', self.runClipboard, isAutoBind=True)
                 wid.pack(side='top', fill='x', padx=4)
-                self.balloon.bind(wid, '尝试读取剪贴板，若存在图片则调用OCR\n点击【录制】可设置自定义快捷键')
+                self.balloon.bind(wid, '尝试读取剪贴板，若存在图片则调用OCR\n点击【修改】可设置自定义快捷键')
                 fr1 = tk.Frame(fQuick)
                 fr1.pack(side='top', fill='x', pady=2, padx=5)
                 wid = ttk.Checkbutton(fr1, variable=Config.getTK('isNeedCopy'),
