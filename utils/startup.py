@@ -4,6 +4,7 @@ from utils.config import Config, Umi
 import tkinter as tk
 import win32api
 import win32con
+import winshell
 
 
 class Startup:
@@ -87,3 +88,27 @@ class Startup:
                 '遇到了一点小问题', f'移除开机启动项失败。请以管理员权限运行软件再重试。\n\n{e}')
         finally:
             win32api.RegCloseKey(key)
+
+    @staticmethod
+    def shortcut(path):
+        '''创建快捷方式'''
+        try:
+            spath = f'{path}\\{Umi.name}.lnk'
+            starget = Umi.path
+            sdesc = Umi.name
+            winshell.CreateShortcut(
+                Path=spath,
+                Target=starget,
+                Description=sdesc
+            )
+            return True
+        except Exception as e:
+            tk.messagebox.showerror(
+                '遇到了一点小问题', f'创建快捷方式失败。请以管理员权限运行软件再重试。\n\n{e}')
+            return False
+
+    @staticmethod
+    def shortcutDesktop():
+        '''创建桌面快捷方式'''
+        if Startup.shortcut(winshell.desktop()):
+            tk.messagebox.showinfo('成功', 'Umi-OCR 已添加桌面快捷方式')

@@ -329,6 +329,10 @@ class MainWin:
                 lab2 = tk.Label(fr4, text='移除', cursor='hand2', fg='red')
                 lab2.pack(side='left')
                 lab2.bind('<Button-1>', lambda *e: Startup.autoDisable())
+                tk.Label(fr4, text='　　桌面快捷方式：').pack(side='left')
+                lab3 = tk.Label(fr4, text='添加', cursor='hand2', fg='blue')
+                lab3.pack(side='left')
+                lab3.bind('<Button-1>', lambda *e: Startup.shortcutDesktop())
                 # ttk.Button(fr4, text='添加',
                 #            command=Startup.autoEnable).pack(side='left')
 
