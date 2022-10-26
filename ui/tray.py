@@ -1,6 +1,7 @@
 from logging import raiseExceptions
 from ui.systray.traybar import SysTrayIcon
 from utils.asset import Asset
+from utils.config import Umi
 from utils.config import Config, ClickTrayModeFlag
 
 import atexit  # 退出处理
@@ -25,8 +26,8 @@ class Tray:
         elif clickTrayMode == ClickTrayModeFlag.clipboard:
             menuOptions = (cc, bb, aa)
         self.tray = SysTrayIcon(
-            Asset.getPath('umiocr64ico'),
-            'Umi-OCR', menuOptions,
+            Asset.getPath('umiocrico'),
+            Umi.name, menuOptions,
             quit_name='退出',
             quit_icon=Asset.getPath('exit24ico'),
             on_quit=self.quit)

@@ -71,7 +71,7 @@ class MainWin:
             # 图标
             Asset.initRelease()  # 释放base64资源到本地
             Asset.initTK()  # 初始化tk图片
-            self.win.iconphoto(False, Asset.getImgTK('umiocr64'))  # 设置窗口图标
+            self.win.iconphoto(False, Asset.getImgTK('umiocr24'))  # 设置窗口图标
         initWin()
 
         # 2.初始化配置项

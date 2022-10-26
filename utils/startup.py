@@ -20,7 +20,7 @@ class ShortcutApi:
             Path=f'{path}\\{name}.lnk',
             Target=Umi.path,
             Description=name,
-            Icon=(os.path.realpath(Asset.getPath('umiocr64ico')), 0)
+            Icon=(os.path.realpath(Asset.getPath('umiocrico')), 0)
         )
 
     @staticmethod  # 删除

@@ -37,7 +37,7 @@ class IgnoreAreaWin:
         self.areaTypeIndex = [-1, -1, -1]  # 当前绘制的矩形的序号
         self.lastPath = ''  # 上一次导入的图片的路径
         # 图标
-        self.win.iconphoto(False, Asset.getImgTK('umiocr64'))  # 设置窗口图标
+        self.win.iconphoto(False, Asset.getImgTK('umiocr24'))  # 设置窗口图标
         # initWin()
 
         # def initPanel():  # 初始化面板
