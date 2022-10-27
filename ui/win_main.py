@@ -311,7 +311,7 @@ class MainWin:
                 fr2 = tk.Frame(fSoft)
                 fr2.pack(side='top', fill='x', pady=2, padx=5)
                 self.balloon.bind(fr2, '不显示系统托盘图标时，关闭面板会退出软件')
-                tk.Label(fr2, text='　 关闭主窗口：').pack(side='left')
+                tk.Label(fr2, text='　 关闭主窗口：').pack(side='left', padx=2)
                 ttk.Radiobutton(fr2, text='最小化到托盘',
                                 variable=Config.getTK('isBackground'), value=True).pack(side='left')
                 ttk.Radiobutton(fr2, text='退出软件',
@@ -323,7 +323,7 @@ class MainWin:
                 ttk.Checkbutton(fr4, variable=Config.getTK('isAutoStartup'),
                                 text='开机自启', command=Startup.switchAutoStartup).pack(side='left')
                 ttk.Checkbutton(fr4, variable=Config.getTK('isStartMenu'),
-                                text='开始菜单', command=Startup.switchStartMenu).pack(side='left', padx=20)
+                                text='开始菜单项', command=Startup.switchStartMenu).pack(side='left', padx=20)
                 ttk.Checkbutton(fr4, variable=Config.getTK('isDesktop'),
                                 text='桌面快捷方式', command=Startup.switchDesktop).pack(side='left')
             initSoftwareFrame()
@@ -394,6 +394,11 @@ class MainWin:
                                       text='复制识别出的文字')
                 wid.pack(side='left')
                 self.balloon.bind(wid, '截图或粘贴图片OCR完成后，将得到的文本复制到剪贴板')
+                wid = ttk.Checkbutton(fr1, variable=Config.getTK('isScreenshotHideWindow'),
+                                      text='截图时隐藏窗口')
+                wid.pack(side='left', padx=20)
+                self.balloon.bind(
+                    wid, f'启用后，截图会延迟{Config.get("screenshotHideWindowWaitTime")}毫秒以等待窗口动画')
 
                 # 切换截图模式
                 def onModeChange():
@@ -636,7 +641,7 @@ class MainWin:
                     wid, '最好等于CPU的线程数目。必须为大于零的整数')
                 wid = ttk.Checkbutton(fCpu, text='启用MKLDNN加速',
                                       variable=Config.getTK('isOcrMkldnn'))
-                wid.pack(side='right')
+                wid.pack(side='left', padx=40)
                 self.balloon.bind(
                     wid, '大幅加快识别速度。内存占用也会增加')
                 self.lockWidget.append(wid)
@@ -1033,8 +1038,12 @@ class MainWin:
         if not OCRe.msnFlag == MsnFlag.none or not self.win.attributes('-disabled') == 0:
             return
         self.win.attributes("-disabled", 1)  # 禁用主窗口
-        # TODO：截图时隐藏主窗口
-        ScreenshotCopy()
+        if Config.get('isScreenshotHideWindow'):  # 截图时隐藏主窗口
+            self.win.state('iconic')
+            self.win.after(Config.get('screenshotHideWindowWaitTime'),
+                           ScreenshotCopy)  # 延迟，等待最小化完成再截屏
+        else:
+            ScreenshotCopy()  # 立即截屏
 
     def closeScreenshot(self, flag, errMsg=None):  # 关闭截图窗口，返回T表示已复制到剪贴板
         self.win.attributes("-disabled", 0)  # 启用父窗口

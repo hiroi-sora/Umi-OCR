@@ -133,6 +133,16 @@ _ConfigDict = {
         'isSave': True,
         'isTK': True,
     },
+    'isScreenshotHideWindow': {  # T时截屏前隐藏窗口
+        'default': False,
+        'isSave': True,
+        'isTK': True,
+    },
+    'screenshotHideWindowWaitTime': {  # 截屏隐藏窗口前等待时间
+        'default': 200,
+        'isSave': True,
+        'isTK': False,
+    },
     'hotkeyScreenshot': {  # 截屏快捷键，字符串
         'default': 'alt+windows+c',
         'isSave': True,
