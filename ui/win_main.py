@@ -1,4 +1,4 @@
-from utils.config import Config, Umi, ScsModeFlag, WindowTopModeFlag  # 最先加载配置
+from utils.config import Config, Umi, ScsModeFlag  # 最先加载配置
 from utils.logger import GetLog
 from utils.asset import *  # 资源
 from utils.data_structure import KeyList
@@ -44,8 +44,9 @@ class MainWin:
             # winnative clam alt default classic vista xpnative
             # style.theme_use('default')
             style.configure('icon.TButton', padding=(12, 0))
-            style.configure('main.TButton', font=('Microsoft YaHei', '12', ''),  # bold
+            style.configure('go.TButton', font=('Microsoft YaHei', '12', ''),  # bold
                             width=9)
+            style.configure('gray.TCheckbutton', foreground='gray')
         initStyle()
 
         def initDPI():
@@ -85,12 +86,18 @@ class MainWin:
             fr.pack(side='top', fill="x", padx=5)
             # 右侧按钮
             self.btnRun = ttk.Button(fr, command=self.run, text='开始任务',
-                                     style='main.TButton')
+                                     style='go.TButton')
             self.btnRun.pack(side='right', fill='y')
             # 左侧文本和进度条
             vFrame2 = tk.Frame(fr)
             vFrame2.pack(side='top', fill='x')
-            # 进度条上方的两个label
+            # 进度条上方
+            wid = ttk.Checkbutton(vFrame2, variable=Config.getTK('isWindowTop'),
+                                  text='窗口置顶', style='gray.TCheckbutton')
+            wid.pack(side='left')
+            self.balloon.bind(
+                wid, '窗口锁定于系统顶层\n\n开启后，软件中的提示气泡框也会被隐藏')
+            Config.addTrace('isWindowTop', self.gotoTop)
             tk.Label(vFrame2, textvariable=Config.getTK('tipsTop2')).pack(
                 side='right', padx=2)
             tk.Label(vFrame2, textvariable=Config.getTK('tipsTop1')).pack(
@@ -246,32 +253,13 @@ class MainWin:
                     self.optFrame, text='通用设置')
                 fSoft.pack(side='top', fill='x',
                            ipady=2, pady=LabelFramePadY, padx=4)
-                fr1 = tk.Frame(fSoft)
-                fr1.pack(side='top', fill='x', pady=2, padx=5)
-                fr1.grid_columnconfigure(1, weight=1)
-                self.balloon.bind(
-                    fr1, '可关闭/开启系统托盘图标，可修改双击图标时触发的功能\n该项目修改后，下次打开软件生效')
-                wid = ttk.Checkbutton(fr1, text='显示系统托盘图标',
-                                      variable=Config.getTK('isTray'))
-                wid.grid(column=0, row=0, sticky='w')
-                Widget.comboboxFrame(fr1, '，双击图标', 'clickTrayMode', width=12).grid(
-                    column=1, row=0, sticky='w')
-
-                fr2 = tk.Frame(fSoft)
-                fr2.pack(side='top', fill='x', pady=2, padx=5)
-                self.balloon.bind(fr2, '不显示系统托盘图标时，关闭面板会退出软件')
-                tk.Label(fr2, text='　 关闭主面板：').pack(side='left')
-                ttk.Radiobutton(fr2, text='最小化到托盘',
-                                variable=Config.getTK('isBackground'), value=True).pack(side='left')
-                ttk.Radiobutton(fr2, text='退出软件',
-                                variable=Config.getTK('isBackground'), value=False).pack(side='left', padx=15)
 
                 # 主面板字体设置
                 fr3 = tk.Frame(fSoft)
                 fr3.pack(side='top', fill='x', pady=2, padx=5)
                 fr3.grid_columnconfigure(1, weight=1)
                 self.balloon.bind(fr3, '调整【识别内容】选项卡中输出面板的字体样式')
-                tk.Label(fr3, text='输出面板：字体').grid(column=0, row=0, sticky='w')
+                tk.Label(fr3, text='输出面板字体').grid(column=0, row=0, sticky='w')
                 ff = tk.font.families()  # 获取系统字体
                 fontFamilies = []
                 fontFamiliesABC = []
@@ -282,13 +270,13 @@ class MainWin:
                         else:
                             fontFamiliesABC.append(i)
                 fontFamilies += fontFamiliesABC
-                cbox = ttk.Combobox(fr3, state='readonly',
+                cbox = ttk.Combobox(fr3, state='readonly', takefocus=0,
                                     textvariable=Config.getTK('textpanelFontFamily'), value=fontFamilies)
                 cbox.grid(column=1, row=0, sticky='ew')
                 self.balloon.bind(cbox, '不要使用滚轮。\n请用上下方向键或拉动滚动条来浏览列表')
                 tk.Label(fr3, text='字号').grid(column=2, row=0, sticky='w')
-                tk.Entry(
-                    fr3, textvariable=Config.getTK('textpanelFontSize'), width=4).grid(column=3, row=0, sticky='w')
+                tk.Entry(fr3, textvariable=Config.getTK('textpanelFontSize'),
+                         width=4, takefocus=0).grid(column=3, row=0, sticky='w')
                 tk.Label(fr3, text=' ').grid(column=4, row=0, sticky='w')
                 ttk.Checkbutton(fr3, text='加粗',
                                 variable=Config.getTK('isTextpanelFontBold')).grid(column=5, row=0, sticky='w')
@@ -309,12 +297,25 @@ class MainWin:
                 Config.addTrace('isTextpanelFontBold', updateTextpanel)
                 updateTextpanel()
 
-                # 锁定置顶
-                wid = Widget.comboboxFrame(fSoft, '窗口弹出：', 'windowTopMode')
-                wid.pack(side='top', fill='x', pady=2, padx=5)
+                fr1 = tk.Frame(fSoft)
+                fr1.pack(side='top', fill='x', pady=2, padx=5)
+                fr1.grid_columnconfigure(1, weight=1)
                 self.balloon.bind(
-                    wid, '1：唤起截图或批量任务完成时，窗口临时弹到最前。可被别的窗口覆盖\n2：无论何时，不会主动弹出\n3：保持最前层级，不被别的窗口覆盖。（副作用：提示气泡框也被挡住）\n\n手动隐藏、最小化窗口不受此项影响')
-                Config.addTrace('windowTopModeName', self.gotoTop)
+                    fr1, '可关闭/开启系统托盘图标，可修改双击图标时触发的功能\n该项目修改后，下次打开软件生效')
+                wid = ttk.Checkbutton(fr1, text='显示系统托盘图标',
+                                      variable=Config.getTK('isTray'))
+                wid.grid(column=0, row=0, sticky='w')
+                Widget.comboboxFrame(fr1, '，双击图标', 'clickTrayMode', width=12).grid(
+                    column=1, row=0, sticky='w')
+
+                fr2 = tk.Frame(fSoft)
+                fr2.pack(side='top', fill='x', pady=2, padx=5)
+                self.balloon.bind(fr2, '不显示系统托盘图标时，关闭面板会退出软件')
+                tk.Label(fr2, text='　 关闭主窗口：').pack(side='left')
+                ttk.Radiobutton(fr2, text='最小化到托盘',
+                                variable=Config.getTK('isBackground'), value=True).pack(side='left')
+                ttk.Radiobutton(fr2, text='退出软件',
+                                variable=Config.getTK('isBackground'), value=False).pack(side='left', padx=15)
 
                 # 启动方式设置
                 fr4 = tk.Frame(fSoft)
@@ -338,11 +339,10 @@ class MainWin:
                               self.openScreenshot)  # 绑定截图事件
                 cbox = Widget.comboboxFrame(fQuick, '截图模式：', 'scsMode')
                 cbox.pack(side='top', fill='x', padx=4)
-                self.balloon.bind(cbox, '''使用【Umi-OCR 软件截图】时，若外接多块屏幕，且缩放比例不一致，
-可能导致Umi-OCR截图异常，如画面不完整、窗口变形、识别不出文字等。
-若出现这种情况，请在系统设置里的【更改文本、应用等项目的大小】将所有屏幕调到相同数值
-
-或者，将截图模式切换到【Windows 系统截图】''')
+                self.balloon.bind(cbox, '''切换截图模块
+【Umi-OCR 软件截图】操作简洁精准，
+但可能对多屏幕兼容性不佳，
+此时可尝试切换到【Windows 系统截图】''')
                 frss = tk.Frame(fQuick)
                 frss.pack(side='top', fill='x')
                 fhkUmi = tk.Frame(frss)
@@ -588,7 +588,7 @@ class MainWin:
                 wid.grid(column=0, row=0, sticky='ew')
                 self.balloon.bind(wid, '使用方法请点击右侧说明按钮')
                 labelUse = tk.Label(fpro, text='说明', width=5,
-                                    fg="gray", cursor='hand2')
+                                    fg="gray", cursor='question_arrow')
                 labelUse.grid(column=1, row=0)
                 labelUse.bind(
                     '<Button-1>', lambda *e: self.showTips(GetTbpuHelp(Umi.website)))  # 绑定鼠标左键点击
@@ -912,22 +912,15 @@ class MainWin:
 
     # 窗口操作 =============================================
 
-    def gotoTop(self, isForce=False):  # 主窗置顶
-        flag = Config.get('windowTopMode').get(Config.get(
-            'windowTopModeName'), WindowTopModeFlag.finish)
-        if flag == WindowTopModeFlag.never and not isForce:  # 模式：从不置顶
-            self.win.attributes('-topmost', 0)
-            return
+    def gotoTop(self):  # 主窗置顶
         if self.win.state() == 'iconic':  # 窗口最小化状态下
             self.win.state('normal')  # 恢复前台状态
         self.win.attributes('-topmost', 1)  # 设置层级最前
         geometry = self.win.geometry()  # 缓存主窗当前位置大小
         self.win.deiconify()  # 主窗获取焦点
         self.win.geometry(geometry)  # 若主窗正在贴边，获取焦点会退出贴边模式，所以重新设置位置恢复贴边
-        if flag == WindowTopModeFlag.eternity:  # 模式：永远置顶
-            return
-        # 一段时间后解除置顶
-        self.win.after(500, lambda: self.win.attributes('-topmost', 0))
+        if not Config.get('isWindowTop'):  # 窗口锁定置顶，则一段时间后解除置顶
+            self.win.after(500, lambda: self.win.attributes('-topmost', 0))
 
     # 进行任务 ===============================================
 
@@ -1040,6 +1033,7 @@ class MainWin:
         if not OCRe.msnFlag == MsnFlag.none or not self.win.attributes('-disabled') == 0:
             return
         self.win.attributes("-disabled", 1)  # 禁用主窗口
+        # TODO：截图时隐藏主窗口
         ScreenshotCopy()
 
     def closeScreenshot(self, flag, errMsg=None):  # 关闭截图窗口，返回T表示已复制到剪贴板
@@ -1059,13 +1053,6 @@ class MainWin:
             self.onClose()  # 直接关闭
 
     def onClose(self):  # 关闭软件
-        OCRe.stop()  # 强制关闭引擎进程，加快子线程结束
-        if OCRe.engFlag == EngFlag.none and OCRe.msnFlag == MsnFlag.none:  # 未在运行
-            self.exit()
-        else:
-            self.win.after(50, self.waitClose)  # 等待关闭，50ms轮询一次是否已结束子线程
-
-    def onClose(self):  # 关闭窗口事件
         OCRe.stop()  # 强制关闭引擎进程，加快子线程结束
         if OCRe.engFlag == EngFlag.none and OCRe.msnFlag == MsnFlag.none:  # 未在运行
             self.exit()

@@ -47,11 +47,11 @@ class ClickTrayModeFlag(Enum):
     clipboard = 2  # 粘贴图片
 
 
-class WindowTopModeFlag(Enum):
-    '''窗口置顶模式标志'''
-    never = 0  # 永不
-    finish = 1  # 任务完成时置顶
-    eternity = 2  # 永远保持置顶（我喜欢eternity这个单词，哈哈哈哈）
+# class WindowTopModeFlag(Enum):
+#     '''窗口置顶模式标志'''
+#     never = 0  # 永不
+#     finish = 1  # 任务完成时置顶
+#     eternity = 2  # 永远保持置顶（我喜欢eternity这个单词，哈哈哈哈）
 
 
 # 配置文件路径
@@ -104,20 +104,25 @@ _ConfigDict = {
         'isSave': True,
         'isTK': True,
     },
-    'windowTopModeName': {  # 当前选择的置顶模式名称
-        'default': '',
+    'isWindowTop': {  # T时窗口置顶
+        'default': False,
         'isSave': True,
         'isTK': True,
     },
-    'windowTopMode': {  # 置顶模式
-        'default': {
-            '识别时弹到最前': WindowTopModeFlag.finish,
-            '不要弹出': WindowTopModeFlag.never,
-            '永远保持置顶': WindowTopModeFlag.eternity,
-        },
-        'isSave': False,
-        'isTK': False,
-    },
+    # 'windowTopModeName': {  # 当前选择的置顶模式名称
+    #     'default': '',
+    #     'isSave': True,
+    #     'isTK': True,
+    # },
+    # 'windowTopMode': {  # 置顶模式
+    #     'default': {
+    #         '识别时弹到最前': WindowTopModeFlag.finish,
+    #         '不要弹出': WindowTopModeFlag.never,
+    #         '永远保持置顶': WindowTopModeFlag.eternity,
+    #     },
+    #     'isSave': False,
+    #     'isTK': False,
+    # },
     'isAutoStartup': {  # T时已添加开机自启
         'default': False,
         'isSave': True,
@@ -391,7 +396,7 @@ _ConfigDict = {
         'isTK': True,
     },
     'tipsTop2': {  # 主窗口顶部进度条上方的label，右侧
-        'default': '拖入任意图片，或点击截图按钮',
+        'default': '拖入图片或立即截图',
         'isTK': True,
     },
 }

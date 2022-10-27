@@ -30,6 +30,10 @@ import mouse  # 绑定鼠标键
 Log = GetLog()
 
 
+def _ScreenshotClose(flag, errMsg=None):
+    Config.main.closeScreenshot(flag, errMsg)
+
+
 def ScreenshotCopy():
     '''截屏，保存到剪贴板，然后调用主窗的closeScreenshot接口'''
     scsMode = Config.get('scsMode').get(Config.get(
@@ -39,7 +43,7 @@ def ScreenshotCopy():
     elif scsMode == ScsModeFlag.system:  # 系统截图模式
         SSSys.startGrab()
     else:
-        Config.main.closeScreenshot(False, '未知的截图模式！')
+        _ScreenshotClose(False, '未知的截图模式！')
 
 
 class ScreenshotSys():  # 系统截图模式
@@ -101,9 +105,8 @@ class ScreenshotSys():  # 系统截图模式
 
     def __close(self, flag=False):  # 退出
         if self.isWorking:
-            Log.info(f'结束：{flag}')
             self.isWorking = False
-            Config.main.closeScreenshot(flag)
+            _ScreenshotClose(flag)
 
 
 SSSys = ScreenshotSys()
@@ -230,7 +233,6 @@ class ScreenshotWin():  # 内置截图模式
         self.topwin.configure(bg='black')
         # self.topwin.attributes("-alpha", 0.8)  # 透明（调试用）
         self.topwin.attributes('-topmost', 1)  # 设置层级最前
-        self.closeSendData = Config.main.closeScreenshot  # 向父窗口发送数据的接口
         # 创建画布及画布元素。后创建的层级在上。
         self.canvas = tk.Canvas(self.topwin, cursor='plus', bg=None,
                                 highlightthickness=0, borderwidth=0)  # 取消边框
@@ -356,12 +358,11 @@ class ScreenshotWin():  # 内置截图模式
         #  初始化参数
         self.isInitGrab = False
         self.drawMode = _DrawMode.ready
-        if self.closeSendData:
-            self.errMsg = None
-            flag = self.copyImage()  # 复制图像
-            self.image = None  # 删除图像
-            self.imageResult = None  # 删除
-            self.closeSendData(flag, self.errMsg)
+        self.errMsg = None
+        flag = self.copyImage()  # 复制图像
+        self.image = None  # 删除图像
+        self.imageResult = None  # 删除
+        _ScreenshotClose(flag, self.errMsg)
 
     def __flash(self):  # 边缘闪光，提示已截图
         color = 'white'

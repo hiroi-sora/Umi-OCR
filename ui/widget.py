@@ -117,7 +117,7 @@ class Widget:
         wid.grid(column=0, row=0, sticky='w')
 
         if isFix:  # 固定组合，不给修改
-            tk.Label(hFrame, text='修改', cursor='hand2', fg='gray').grid(
+            tk.Label(hFrame, text='修改', fg='gray').grid(
                 column=1, row=0, sticky='w')
             tips = tk.Label(hFrame, text=hotkeyCom, justify='center')
             tips.grid(column=2, row=0, sticky="nsew")
