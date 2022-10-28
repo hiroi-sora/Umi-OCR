@@ -97,8 +97,7 @@ class MainWin:
                                   text='窗口置顶', style='gray.TCheckbutton')
             wid.pack(side='left')
             self.balloon.bind(
-                wid, '窗口锁定于系统顶层\n\n开启后，鼠标悬停气泡框也会被隐藏')
-            Config.addTrace('isWindowTop', self.gotoTop)
+                wid, '窗口锁定于系统顶层\n\n开启后，鼠标悬停提示框也会被隐藏')
             tk.Label(vFrame2, textvariable=Config.getTK('tipsTop2')).pack(
                 side='right', padx=2)
             tk.Label(vFrame2, textvariable=Config.getTK('tipsTop1')).pack(
@@ -249,6 +248,29 @@ class MainWin:
 
             LabelFramePadY = 3  # 每个区域上下间距
 
+            def initTopTips():  # 顶部提示
+                fTips = tk.Frame(self.optFrame)
+                fTips.pack(side='top')
+                tipsLab = tk.Label(
+                    fTips, fg='red',
+                    text='请关闭窗口置顶，以显示鼠标悬停提示框')
+                if Config.get('isWindowTop'):
+                    tipsLab.pack(side='top')
+                tk.Frame(fTips).pack(side='top')  # 空框架，用于自动调整高度的占位
+
+                def switchWindowTopLock():  # 切换窗口锁定置顶
+                    self.gotoTop()
+                    if Config.get('isWindowTop'):  # 切换到置顶
+                        tipsLab.pack(side='top')
+                    else:
+                        tipsLab.pack_forget()
+                    # 显示置顶提示，会增加页面高度，导致设置页尾部的一行高度超出滚动范围
+                    # 本来应该刷新框架滚动范围。但是刷新会使得界面闪烁
+                    # 由于尾部被吞的影响不大，所以权衡利弊选择不刷新
+                    # self.updateFrameHeight()  # 刷新框架
+                Config.addTrace('isWindowTop', switchWindowTopLock)
+            initTopTips()
+
             def initSoftwareFrame():  # 软件行为设置
                 fSoft = tk.LabelFrame(
                     self.optFrame, text='通用设置')
@@ -397,7 +419,7 @@ class MainWin:
                 self.balloon.bind(wid, '截图或粘贴图片OCR完成后，将得到的文本复制到剪贴板')
                 wid = ttk.Checkbutton(fr1, variable=Config.getTK('isScreenshotHideWindow'),
                                       text='截图时隐藏窗口')
-                wid.pack(side='left', padx=20)
+                wid.pack(side='left', padx=40)
                 self.balloon.bind(
                     wid, f'启用后，截图会延迟{Config.get("screenshotHideWindowWaitTime")}毫秒以等待窗口动画')
 
@@ -817,14 +839,6 @@ class MainWin:
 
     # 忽略区域 ===============================================
 
-    def updateFrameHeight(self):  # 刷新框架高度
-        self.optFrame.pack_propagate(True)  # 启用框架自动宽高调整
-        self.optFrame.update()  # 强制刷新
-        rH = self.optFrame.winfo_height()  # 由组件撑起的 框架高度
-        self.optCanvas.config(scrollregion=(0, 0, 0, rH))  # 画布内高度为框架高度
-        self.optFrame.pack_propagate(False)  # 禁用框架自动宽高调整
-        self.optFrame["height"] = rH  # 手动还原高度
-
     def openSelectArea(self):  # 打开选择区域
         if not OCRe.msnFlag == MsnFlag.none or not self.win.attributes('-disabled') == 0:
             return
@@ -913,6 +927,14 @@ class MainWin:
             self.textOutput.see(position)
 
     # 窗口操作 =============================================
+
+    def updateFrameHeight(self):  # 刷新设置页框架高度
+        self.optFrame.pack_propagate(True)  # 启用框架自动宽高调整
+        self.optFrame.update()  # 强制刷新
+        rH = self.optFrame.winfo_height()  # 由组件撑起的 框架高度
+        self.optCanvas.config(scrollregion=(0, 0, 0, rH))  # 画布内高度为框架高度
+        self.optFrame.pack_propagate(False)  # 禁用框架自动宽高调整
+        self.optFrame["height"] = rH  # 手动还原高度
 
     def gotoTop(self):  # 主窗置顶
         if self.win.state() == 'iconic':  # 窗口最小化状态下
