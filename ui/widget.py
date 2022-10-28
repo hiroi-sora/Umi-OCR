@@ -1,10 +1,10 @@
 # 小组件
 from utils.config import Config
 from utils.logger import GetLog
+from utils.hotkey import Hotkey  # 快捷键
 
 import tkinter as tk
 from tkinter import ttk
-import keyboard  # 绑定快捷键
 
 Log = GetLog()
 
@@ -37,8 +37,7 @@ class Widget:
         if hotkey == '':
             return
         try:
-            keyboard.remove_hotkey(hotkey)  # 移除该快捷键
-            Log.info(f'快捷键【{hotkey}】注销成功')
+            Hotkey.remove(hotkey)  # 移除该快捷键
         except Exception as err:  # 影响不大。未注册过就调用移除 会报这个异常
             Log.info(f'快捷键【{hotkey}】移除错误：{err}')
 
@@ -58,9 +57,7 @@ class Widget:
                     '提示', f'请先录制{name}快捷键')
                 return
             try:
-                # 添加新的快捷键。允许按键事件继续向别的软件下发，否则系统中相同辅助键的快捷键全都失效
-                keyboard.add_hotkey(hotkey, func, suppress=False)
-                Log.info(f'快捷键【{hotkey}】注册成功')
+                Hotkey.add(hotkey, func)  # 添加快捷键监听
             except ValueError as err:
                 Config.set(isHotkey, False)
                 Config.set(hotkeyName, '')
@@ -77,7 +74,7 @@ class Widget:
             if isUsing:  # 已经注册了
                 Widget.delHotkey(oldHotkey)  # 先注销已有按键
             try:
-                hotkey = keyboard.read_hotkey(suppress=False)
+                hotkey = Hotkey.read()  # 录制快捷键
             except ValueError as err:
                 if isUsing:  # 注册回旧按键
                     addHotkey(oldHotkey)

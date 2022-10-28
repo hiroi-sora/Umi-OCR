@@ -1,6 +1,7 @@
 from utils.logger import GetLog
 from utils.config import Config, ScsModeFlag
 from utils.tool import Tool
+from utils.hotkey import Hotkey  # 快捷键
 
 # 获取显示器信息
 from win32api import EnumDisplayMonitors, GetMonitorInfo
@@ -13,7 +14,6 @@ from win32clipboard import OpenClipboard, EmptyClipboard, SetClipboardData, Clos
 import tkinter as tk
 from PIL import ImageGrab, ImageTk
 from enum import Enum
-import keyboard  # 绑定快捷键
 import mouse  # 绑定鼠标键
 
 # TODO :
@@ -31,6 +31,7 @@ Log = GetLog()
 
 
 def _ScreenshotClose(flag, errMsg=None):
+    Log.info('截图结束')
     Config.main.closeScreenshot(flag, errMsg)
 
 
@@ -62,19 +63,18 @@ class ScreenshotSys():  # 系统截图模式
         self.isWorking = True
         if not self.isInitKey:
             self.__initKey()
-        if not keyboard.is_pressed('win'):  # 不是通过快捷键进入
-            keyboard.send('win+shift+s')  # 发送系统截图快捷键
-        Log.info(f'启动系统截图！')
+        if not Hotkey.isPressed('win'):  # 不是通过快捷键进入
+            Hotkey.send('win+shift+s')  # 发送系统截图快捷键
+        Log.info('系统截图启动')
 
     def __initKey(self):  # 初始化监听
         # 绑定全局事件
-        keyboard.on_release_key('Esc', lambda e: self.__close(False),   # Esc抬起，系统截图失败
-                                suppress=False)
+        Hotkey.addRelease(  # Esc抬起，系统截图失败
+            'Esc', lambda e: self.__close(False))
         mouse.on_button(self.__onDown,  # 左键和右键按下，开始截图
                         buttons=('left', 'right'), types='down')
         mouse.on_button(self.__onUp,  # 左键和右键抬起，截图可能成功可能失败
                         buttons=('left', 'right'), types='up')
-        Log.info(f'注册监听系统截图按键！')
         self.isInitKey = True
 
     def __onDown(self, e=None):  # 用户操作开始
@@ -95,10 +95,10 @@ class ScreenshotSys():  # 系统截图模式
             return
         clipData = Tool.getClipboardFormat()  # 读取剪贴板
         if clipData == 2:  # 系统截图已保存到剪贴板内存，截图成功
-            Log.info(f'第{self.checkTime}次检查成功')
+            Log.info(f'  第{self.checkTime}次检查成功')
             self.__close(True)
             return
-        Log.info(f'第{self.checkTime}次检查')
+        Log.info(f'  第{self.checkTime}次检查')
         self.checkTime += 1
         # 定时器指定下一轮查询
         Config.main.win.after(self.checkTimeRate, self.__checkClipboard)
@@ -260,17 +260,15 @@ class ScreenshotWin():  # 内置截图模式
         # 闪光模块
         self.flashList = []  # 闪光元素
         # 绑定全局事件
-        keyboard.add_hotkey('Esc', self.__onClose,   # 绑定Esc退出
-                            suppress=False, timeout=1)
-        keyboard.add_hotkey('Ctrl+Shift+Alt+D', self.__switchDebug,  # 切换调试信息
-                            suppress=False, timeout=0)
+        Hotkey.add('Esc', self.__onClose)  # 绑定Esc退出
+        Hotkey.add('Ctrl+Shift+Alt+D', self.__switchDebug)  # 切换调试信息
         # 绑定画布事件
         self.canvas.bind(f'<Button-1>', self.__onDown)  # 左键按下
         self.canvas.bind(f'<Button-3>', self.__repaint)  # 右键按下
         self.canvas.bind(f'<ButtonRelease-1>', self.__onUp)  # 左键松开
         self.canvas.bind('<Motion>', self.__onMotion)  # 鼠标移动
         self.canvas.bind('<Enter>', self.__onMotion)  # 鼠标进入，用于初始化瞄准线
-        Log.info('初始化截图窗口')
+        Log.info('Umi截图启动')
 
     def __hideElement(self, ele, size=4):  # 隐藏一个画布元素
         # 实际上是挪到画布外
@@ -349,7 +347,6 @@ class ScreenshotWin():  # 内置截图模式
     def __onClose(self, event=None):  # 关闭窗口
         if not self.isInitGrab:
             return
-        Log.info('关闭截图')
         # 隐藏元素
         for i in (0, 1):
             self.__hideElement(self.sightBox[i])

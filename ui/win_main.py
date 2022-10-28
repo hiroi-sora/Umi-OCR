@@ -3,7 +3,8 @@ from utils.logger import GetLog
 from utils.asset import *  # 资源
 from utils.data_structure import KeyList
 from utils.tool import Tool
-from utils.startup import Startup
+from utils.startup import Startup  # 启动方式
+from utils.hotkey import Hotkey  # 快捷键
 from ui.win_screenshot import ScreenshotCopy  # 截屏
 from ui.win_select_area import IgnoreAreaWin  # 子窗口
 from ui.widget import Widget  # 控件
@@ -16,7 +17,6 @@ from ocr.msn_quick import MsnQuick
 
 import os
 import ctypes
-import keyboard  # 绑定快捷键
 from PIL import Image  # 图像
 import tkinter as tk
 import tkinter.font
@@ -78,6 +78,7 @@ class MainWin:
         # 2.初始化配置项
         Config.initTK(self)  # 初始化设置项
         Config.load()  # 加载本地文件
+        Config.checkMultiOpen()  # 检查多开
 
         # 3.初始化组件
         def initTop():  # 顶部按钮
@@ -96,7 +97,7 @@ class MainWin:
                                   text='窗口置顶', style='gray.TCheckbutton')
             wid.pack(side='left')
             self.balloon.bind(
-                wid, '窗口锁定于系统顶层\n\n开启后，软件中的提示气泡框也会被隐藏')
+                wid, '窗口锁定于系统顶层\n\n开启后，鼠标悬停气泡框也会被隐藏')
             Config.addTrace('isWindowTop', self.gotoTop)
             tk.Label(vFrame2, textvariable=Config.getTK('tipsTop2')).pack(
                 side='right', padx=2)
@@ -414,10 +415,8 @@ class MainWin:
                         if isHotkey:  # 当前已在注册
                             if umihk:  # 注销软件截图
                                 Widget.delHotkey(umihk)  # 注销按键
-                            keyboard.add_hotkey(
-                                syssscom, lambda *e: self.win.event_generate(
-                                    '<<ScreenshotEvent>>'), suppress=False)
-                            Log.info(f'快捷键【系统截图】注册成功')
+                            Hotkey.add(syssscom,  # 添加快捷键监听
+                                       lambda *e: self.win.event_generate('<<ScreenshotEvent>>'))
                     elif scsMode == ScsModeFlag.multi:  # 切换到软件截图
                         fhkSys.forget()
                         fhkUmi.pack(side='top', fill='x', padx=4)
@@ -425,10 +424,8 @@ class MainWin:
                         if isHotkey:
                             Widget.delHotkey(syssscom)  # 注销按键
                             if umihk:
-                                keyboard.add_hotkey(
-                                    umihk, lambda *e: self.win.event_generate(
-                                        '<<ScreenshotEvent>>'), suppress=False)
-                                Log.info(f'快捷键【软件截图{umihk}】注册成功')
+                                Hotkey.add(umihk,  # 添加快捷键监听
+                                           lambda *e: self.win.event_generate('<<ScreenshotEvent>>'))
                     Log.info(f'截图模式改变：{scsMode}')
                 Config.addTrace('scsModeName', onModeChange)
                 onModeChange()
