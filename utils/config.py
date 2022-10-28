@@ -482,7 +482,8 @@ class ConfigModule:
                     f'您的系统地区语言编码为[{self.sysEncoding}]，可能导致拖入图片的功能异常，建议使用浏览按钮导入图片。其它功能不受影响。')
             self.save()
 
-        # 检查多开
+    def checkMultiOpen(self):
+        '''检查多开'''
         def isMultiOpen():
             '''主进程多开时返回T'''
             def getProcessKey(pid):
