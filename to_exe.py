@@ -5,4 +5,4 @@ import os
 dirPath = os.getcwd()
 
 os.system(f'cd /d {dirPath}')
-os.system(r'pyinstaller -F -w -i icon/icon.ico -n "Umi-OCR 图片转文字" main.py')
+os.system(r'pyinstaller -F -w -i icon/icon.ico -n "Umi-OCR 文字识别" main.py')

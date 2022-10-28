@@ -1,12 +1,11 @@
 
-'''
+
+class KeyList:
+    '''
     用来维护图片表格列表的数据结构。
     可通过键key和下标index来访问。
     每一项data为字典。
     '''
-
-
-class KeyList:
 
     def __init__(self):
         self.__dataList = []
