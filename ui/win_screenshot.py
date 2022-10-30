@@ -70,7 +70,7 @@ class ScreenshotSys():  # 系统截图模式
     def __initKey(self):  # 初始化监听
         # 绑定全局事件
         Hotkey.addRelease(  # Esc抬起，系统截图失败
-            'Esc', lambda e: self.__close(False))
+            'esc', lambda: self.__close(False))
         mouse.on_button(self.__onDown,  # 左键和右键按下，开始截图
                         buttons=('left', 'right'), types='down')
         mouse.on_button(self.__onUp,  # 左键和右键抬起，截图可能成功可能失败
@@ -260,7 +260,7 @@ class ScreenshotWin():  # 内置截图模式
         # 闪光模块
         self.flashList = []  # 闪光元素
         # 绑定全局事件
-        Hotkey.add('Esc', self.__onClose)  # 绑定Esc退出
+        Hotkey.add('esc', self.__onClose)  # 绑定Esc退出
         Hotkey.add('Ctrl+Shift+Alt+D', self.__switchDebug)  # 切换调试信息
         # 绑定画布事件
         self.canvas.bind(f'<Button-1>', self.__onDown)  # 左键按下

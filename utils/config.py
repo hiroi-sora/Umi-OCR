@@ -124,7 +124,7 @@ _ConfigDict = {
         'isTK': True,
     },
     'hotkeyClipboard': {  # 读剪贴板快捷键，字符串
-        'default': 'alt+windows+v',
+        'default': 'win+alt+v',
         'isSave': True,
         'isTK': True,
     },
@@ -144,7 +144,7 @@ _ConfigDict = {
         'isTK': False,
     },
     'hotkeyScreenshot': {  # 截屏快捷键，字符串
-        'default': 'alt+windows+c',
+        'default': 'win+alt+c',
         'isSave': True,
         'isTK': True,
     },

@@ -1,6 +1,6 @@
-keyboard==0.13.5
 mouse==0.7.1
 psutil==5.9.2
+pynput==1.7.6
 pyperclip==1.8.2
 pywin32==304
 pywin32_ctypes==0.2.0

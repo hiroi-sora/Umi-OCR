@@ -76,7 +76,7 @@ class Widget:
                     if isUsing:  # 注册回旧按键
                         addHotkey(oldHotkey)
                     tk.messagebox.showwarning(
-                        '提示', f'无法修改快捷键\n\n错误信息：\n{errmsg}\n\n提示：笔记本键盘可能无法录制【Fn+功能键F1~F12】的快捷键。请打开FnLock再尝试，或者不要将Fn作为快捷键')
+                        '提示', f'无法修改快捷键\n\n错误信息：\n{errmsg}')
                     return
                 # 检查并注册热键
                 if 'esc' in hotkey or hotkey == oldHotkey:  # ESC为取消

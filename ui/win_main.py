@@ -398,7 +398,7 @@ class MainWin:
                 self.balloon.bind(
                     wid, '关闭快捷键后，仍能通过面板上的按钮或托盘小图标调用截图\n点击【修改】可设置自定义快捷键')
 
-                syssscom = 'windows+shift+s'
+                syssscom = 'win+shift+s'
                 fhkSys = Widget.hotkeyFrame(frss, '系统截图 ', 'Screenshot',
                                             lambda *e: self.win.event_generate(
                                                 '<<ScreenshotEvent>>'), True, syssscom, isAutoBind=False)
