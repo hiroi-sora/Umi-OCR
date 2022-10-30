@@ -1053,6 +1053,9 @@ class MainWin:
 
         else:
             self.panelOutput('剪贴板中未查询到图片信息\n')
+            # 失败也置顶
+            self.gotoTop()  # 主窗置顶
+            self.notebook.select(self.notebookTab[1])  # 转到输出卡
 
     def openScreenshot(self, e=None):  # 打开截图窗口
         if not OCRe.msnFlag == MsnFlag.none or not self.win.attributes('-disabled') == 0:
