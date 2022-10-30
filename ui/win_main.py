@@ -488,6 +488,8 @@ class MainWin:
                     frameBatch, labelanchor='n', text='图片导入')
                 fInput.pack(side='top', fill='x',
                                  ipady=2, pady=LabelFramePadY, padx=4)
+                self.balloon.bind(
+                    fInput, f'允许的图片格式：\n{Config.get("imageSuffix")}')
 
                 fr1 = tk.Frame(fInput)
                 fr1.pack(side='top', fill='x', pady=2, padx=5)
@@ -495,12 +497,12 @@ class MainWin:
                     fr1, variable=Config.getTK('isRecursiveSearch'), text='递归读取子文件夹中所有图片')
                 wid.grid(column=0, row=0, columnspan=2, sticky='w')
                 self.lockWidget.append(wid)
-
-                tk.Label(fr1, text='图片后缀：　').grid(column=0, row=2, sticky='w')
-                enInSuffix = tk.Entry(
-                    fr1, textvariable=Config.getTK('imageSuffix'))
-                enInSuffix.grid(column=1, row=2, sticky='nsew')
-                self.lockWidget.append(enInSuffix)
+                # 精简UI
+                # tk.Label(fr1, text='图片后缀：　').grid(column=0, row=2, sticky='w')
+                # enInSuffix = tk.Entry(
+                #     fr1, textvariable=Config.getTK('imageSuffix'))
+                # enInSuffix.grid(column=1, row=2, sticky='nsew')
+                # self.lockWidget.append(enInSuffix)
 
                 fr1.grid_columnconfigure(1, weight=1)
             initInFile()
@@ -665,15 +667,16 @@ class MainWin:
 
                 # grid
                 fr1 = tk.Frame(frameOCR)
-                fr1.pack(side='top', fill='x', pady=2, padx=5)
-                tk.Label(fr1, text='额外启动参数：').grid(
-                    column=0, row=2, sticky='w')
-                wid = tk.Entry(
-                    fr1, textvariable=Config.getTK('argsStr'))
-                wid.grid(column=1, row=2, sticky="nsew")
-                self.balloon.bind(
-                    wid, 'OCR高级参数指令。请遵守PaddleOCR-json要求的格式。详情参考项目主页')
-                self.lockWidget.append(wid)
+                fr1.pack(side='top', fill='x', padx=5)
+                # 精简UI
+                # tk.Label(fr1, text='额外启动参数：').grid(
+                #     column=0, row=2, sticky='w')
+                # wid = tk.Entry(
+                #     fr1, textvariable=Config.getTK('argsStr'))
+                # wid.grid(column=1, row=2, sticky="nsew")
+                # self.balloon.bind(
+                #     wid, 'OCR高级参数指令。请遵守PaddleOCR-json要求的格式。详情参考项目主页')
+                # self.lockWidget.append(wid)
 
                 Widget.comboboxFrame(fr1, '引擎管理策略：', 'ocrRunMode', self.lockWidget
                                      ).grid(column=0, row=6, columnspan=2, sticky='we')
