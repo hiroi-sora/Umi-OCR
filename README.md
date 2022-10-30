@@ -1,35 +1,66 @@
-# Umi-OCR 批量图片转文字工具
+<p align="center">
+  <a href="https://github.com/hiroi-sora/Umi-OCR">
+    <img width="200" height="128" src="https://tupian.li/images/2022/10/27/icon---256.png" alt="Umi-OCR">
+  </a>
+</p>
 
-适用于 Win10 x64 平台的离线OCR软件。支持截屏识别、粘贴图片，支持批量导入本地图片，将OCR结果输出到软件面板或本地文件。
+<h1 align="center">Umi-OCR 文字识别工具</h1>
+
+<p align="center">
+  <a href="https://github.com/hiroi-sora/Umi-OCR/releases/latest">
+    <img src="https://img.shields.io/github/v/release/hiroi-sora/Umi-OCR?style=flat-square" alt="Umi-OCR">
+  </a>
+  <a href="LICENSE">
+    <img src="https://img.shields.io/github/license/hiroi-sora/Umi-OCR?style=flat-square" alt="LICENSE">
+  </a>
+  <a href="#下载">
+    <img src="https://img.shields.io/github/downloads/hiroi-sora/Umi-OCR/total?style=flat-square" alt="forks">
+  </a>
+  <img src="https://img.shields.io/github/stars/hiroi-sora/Umi-OCR?style=flat-square" alt="stars">
+  <img src="https://img.shields.io/github/forks/hiroi-sora/Umi-OCR?style=flat-square" alt="forks">
+</p>
+
+<div align="center">
+  <strong>免费，开源，可批量的离线OCR软件</strong><br>
+  <sub>适用于 Windows10,11 平台</sub>
+</div>
+
+<div align="center">
+  <h3>
+    <a href="#下载">
+      下载地址
+    </a>
+    <span> • </span>
+    <a href="#简单上手">
+      使用说明
+    </a>
+    <span> • </span>
+    <a href="#更新日志">
+      更新日志
+    </a>
+    <span> • </span>
+    <a href="https://github.com/hiroi-sora/Umi-OCR/issues">
+      提交Bug
+    </a>
+  </h3>
+</div>
 
 - **免费**：本项目所有代码开源，完全免费。
-- **方便**：解压即用，无需安装。离线运行，无需网络。
-- **高效**：采用C++编译的 [PaddleOCR-json](https://github.com/hiroi-sora/PaddleOCR-json) 识别引擎。只要电脑性能足够，通常能比在线OCR服务更快。
-- **精准**：默认使用PPOCR-v3模型库。除了能准确辨认常规文字，对手写、方向不正、杂乱背景等情景也有不错的识别率。可设置**忽略区域**排除水印，可设置**文块后处理**合并段落。
-- **批量**：可批量处理图片，将结果保存为本地 txt / md / jsonl 多种格式文件。
+- **方便**：解压即用，离线运行，无需网络。
+- **批量**：可批量导入处理图片，结果保存到本地 txt / md / jsonl 多种格式文件。也可以即时截屏识别。
+- **高效**：采用 PaddleOCR-json C++ 识别引擎。只要电脑性能足够，通常比在线OCR服务更快。
+- **精准**：默认使用PPOCR-v3模型库。除了能准确辨认常规文字，对手写、方向不正、杂乱背景等情景也有不错的识别率。可设置**忽略区域**排除水印、设置**文块后处理**合并排版段落，得到规整的文本。
 
 ![](https://tupian.li/images/2022/09/29/1.3-e46104c4fc60cabd.png)
 
 ![](https://tupian.li/images/2022/09/29/1.3-.png)
 
-## 更新内容
-
-`v1.3.0` 迎来一波大更新！添加众多新功能：
-
-- **框选截屏**：即时截屏，框选想要的区域，调用OCR。
-- **系统托盘**：可将软件最小化到系统托盘区隐藏。
-- **进程常驻**：省去零碎任务的初始化时间。截图识别/剪贴板识别的耗时比前代减少50%以上。
-- **文本块后处理**：智能匹配并合并同一段落不同行的文字。可识别自然段。支持对竖排文本的排序和整理。
-- **重制UI**：各功能按钮及参数配置页有了更直观的UI，鼠标悬停可显示提示框。
-- **自定义字体**：软件输出面板的字体样式、大小可修改。
-
 ## 下载
 
-注意，Umi-OCR 软件本体只含简体中文&英文识别库。下面链接中的 **多国语言识别扩展包** 可导入 `繁中,日,韩,俄,德,法` 语言，请按需下载。
+> Umi-OCR 软件本体含 **简体中文&英文** 识别库。  
+> 配套 **多国语言识别扩展包** 可导入 `繁中,日,韩,俄,德,法` 识别库，请按需下载。
 
-Github下载：
-
-[Umi-OCR 批量图片转文字 v1.3.0](https://github.com/hiroi-sora/Umi-OCR/releases/tag/v1.3.0)
+Github下载：[Umi-OCR 批量图片转文字 v1.3.0](https://github.com/hiroi-sora/Umi-OCR/releases/tag/v1.3.0)
 
 蓝奏云下载：（密码 `1111` 。请留意发布日期和版本号）
 
@@ -38,6 +69,8 @@ Github下载：
 <details>
 <summary>使用源代码：</summary>
 
+- main分支可能含有开发中的新功能。若您想使用稳定版本，建议切换到[最新的Release分支](https://github.com/hiroi-sora/Umi-OCR/branches)。
+- 安装依赖库：`pip install -r requirements.txt`
 - 可直接运行 `main.py` 启动程序，或自己打包为exe。
 - 项目使用`pyinstaller`打包。运行 `to_exe.py` 一键打包。
 - 打包后，请将引擎组件 [PaddleOCR-json 整个文件夹](PaddleOCR-json) 放置于exe同目录下！
@@ -339,12 +372,6 @@ OCR识别出的文本是按“块”划分的，通常一行文字分为一块�
 
 ## TODO
 
-▼ 开发中
-
-- [x] 设置开机自启
-- [x] 创建快捷方式到开始菜单、桌面
-- [x] 多开提示
-
 <details>
 <summary>已完成</summary>
 
@@ -369,6 +396,14 @@ OCR识别出的文本是按“块”划分的，通常一行文字分为一块�
 
 </details>
 
+▼ 开发中
+
+- [x] 重新快捷键模块，解决失效和录制不正确的Bug
+- [x] 设置开机自启
+- [x] 创建快捷方式到开始菜单、桌面
+- [x] 多开提示
+- [x] 截图时隐藏窗口
+
 <details>
 <summary>画饼（有生之年）</summary>
 
@@ -387,17 +422,27 @@ OCR识别出的文本是按“块”划分的，通常一行文字分为一块�
 
 点击版本号链接可前往对应备份分支。
 
+##### v1.3.1 `测试中` [测试页地址](https://github.com/hiroi-sora/Umi-OCR/issues/43)
+<!-- 2k★撒花~ -->
+- 修Bug：快捷键模块基于pynput库重写，舍弃keyboard库，避免keyboard库的诸多Bug。
+- 新功能：添加开机自启，桌面快捷方式，开始菜单快捷方式。
+- 新功能：多开软件时提示。
+- 新功能：截图时隐藏窗口。
+- 调整UI：小改动。
+- 优化：检查引擎组件是否存在。
+- 优化：`横排-合并多行-自然段` 优化逻辑，支持0~2全角空格首行缩进。
+
 ##### [v1.3.0](https://github.com/hiroi-sora/Umi-OCR/tree/release/1.3.0) `2022.9.29`
-- 重制UI
-- 框选截屏
-- 系统托盘图标
-- 引擎进程常驻
-- 文本块后处理模块
-- 自定义主输出栏字体
+- 新功能：框选截屏。
+- 新功能：系统托盘图标。
+- 新功能：引擎进程常驻。
+- 新功能：文本块后处理模块。
+- 新功能：自定义主输出栏字体。
+- 新功能：设置窗口弹出模式（保持置顶）。
+- 调整UI：自适应Win风格组件。
 - 修正了Bug：系统语言兼容性问题 [issue #16](https://github.com/hiroi-sora/Umi-OCR/issues/16) 。
 - 修正了Bug：微信图片粘贴问题 [issue #22](https://github.com/hiroi-sora/Umi-OCR/issues/22) 。
 - 更新PaddleOCR-json模块至`v1.2.1`，提供剪贴板支持。快捷识图通过剪贴板中转，无需再保存临时文件到硬盘。
-- `2022.10.01 新增` 可设置窗口弹出模式。
 
 ##### [v1.2.6](https://github.com/hiroi-sora/Umi-OCR/tree/release/1.2.6) `2022.9.1`
 <!-- Takahara Umi酱生日快乐~ -->
@@ -409,19 +454,19 @@ OCR识别出的文本是按“块”划分的，通常一行文字分为一块�
 - 优化适配PP-OCRv3模型，彻底解决了v3版模型比v2慢、不准的问题 [issue #4](https://github.com/hiroi-sora/Umi-OCR/issues/4#issuecomment-1141735773) 。
 
 ##### v1.2.5 `2022.7.22`
-- 添加新功能：计划任务。识图完成后执行自动关机等任务。
-- 添加新功能：可选拖入文件夹时递归导入子文件夹中所有图片。
+- 新功能：计划任务。识图完成后执行自动关机等任务。
+- 新功能：可选拖入文件夹时递归导入子文件夹中所有图片。
 - 调整UI：添加一些配置文件的快捷入口。
 
 ##### v1.2.4 `2022.6.4`
-- 添加新功能：可选识别剪贴板图片后自动复制识别的文本。
+- 新功能：可选识别剪贴板图片后自动复制识别的文本。
 - 补充功能：快捷键调用剪贴板识图时，若程序窗口被最小化，则恢复前台状态并挪到最前位置。
   
 ##### v1.2.3 `2022.5.31`
-- 添加新功能：读取剪贴板图片。配置全局快捷键调用该功能。
+- 新功能：读取剪贴板图片。配置全局快捷键调用该功能。
 
 ##### v1.2.2 `2022.4.30`
-- 添加新功能：可选任务完成后自动打开输出文件或目录。
+- 新功能：可选任务完成后自动打开输出文件或目录。
 
 ##### v1.2.1 `2022.4.16`
 - 更新PaddleOCR-json模块至`v1.1.1`，修正了可能得到错误包围盒的漏洞。
@@ -435,7 +480,7 @@ OCR识别出的文本是按“块”划分的，通常一行文字分为一块�
 - 修正了Bug：退出忽略区域窗口时，OCR子进程未关闭。
 
 ##### v1.1.0 `2022.3.30`
-- 添加新功能：忽略区域窗口以虚线框 展示识别出的文字块。
+- 新功能：忽略区域窗口以虚线框 展示识别出的文字块。
 
 ##### v1.0.0 `2022.3.28`
 - “梦开始的地方”
@@ -446,6 +491,9 @@ OCR识别出的文本是按“块”划分的，通常一行文字分为一块�
 > Awesome multilingual OCR toolkits based on PaddlePaddle
 
 ##### 本项目中所使用的库：
+
+##### [moses-palmer/pynput](https://github.com/moses-palmer/pynput)
+> This library allows you to control and monitor input devices.
 
 ##### [boppreh/keyboard](https://github.com/boppreh/keyboard)
 > Hook and simulate global keyboard events on Windows and Linux.
