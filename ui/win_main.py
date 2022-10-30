@@ -253,7 +253,7 @@ class MainWin:
                 fTips.pack(side='top')
                 tipsLab = tk.Label(
                     fTips, fg='red',
-                    text='请关闭窗口置顶，以显示鼠标悬停提示框')
+                    text='关闭窗口置顶，方可显示鼠标悬停提示框')
                 if Config.get('isWindowTop'):
                     tipsLab.pack(side='top')
                 tk.Frame(fTips).pack(side='top')  # 空框架，用于自动调整高度的占位
@@ -264,9 +264,7 @@ class MainWin:
                         tipsLab.pack(side='top')
                     else:
                         tipsLab.pack_forget()
-                    # 显示置顶提示，会增加页面高度，导致设置页尾部的一行高度超出滚动范围
-                    # 本来应该刷新框架滚动范围。但是刷新会使得界面闪烁
-                    # 由于尾部被吞的影响不大，所以权衡利弊选择不刷新
+                    # 不刷新框架，而是在尾部预留空间来容纳高度变化
                     # self.updateFrameHeight()  # 刷新框架
                 Config.addTrace('isWindowTop', switchWindowTopLock)
             initTopTips()
@@ -739,6 +737,9 @@ class MainWin:
                 wid = tk.Checkbutton(fEX, text='调试模式', fg="gray",
                                      variable=Config.getTK('isDebug'))
                 wid.pack(side='right')
+                # 若初始时非置顶，不显示提示，则尾部预留出空间
+                if not Config.get('isWindowTop'):
+                    tk.Label(self.optFrame).pack(side='top')
             initEX()
 
             def initOptFrameWH():  # 初始化框架的宽高
