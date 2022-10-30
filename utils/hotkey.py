@@ -26,11 +26,16 @@ class Hotkey():  # 热键
         Log.info(f'注销按键监听【{hotkey}】')
 
     @staticmethod
-    def read():
-        '''录制快捷键。按下并松开一组按键，返回按键序列字符串'''
-        hotkey = keyboard.read_hotkey(suppress=False)
-        Log.info(f'录制按键组合【{hotkey}】')
-        return hotkey
+    def read(callback):
+        '''录制快捷键。按下并松开一组按键，将按键序列字符串发送到回调函数\n
+            成功：返回hotkey字符串\n
+            失败：hotkey为空，errmsg为错误字符串'''
+        try:
+            hotkey = keyboard.read_hotkey(suppress=False)
+            Log.info(f'录制按键组合【{hotkey}】')
+            callback(hotkey)
+        except ValueError as err:
+            callback('', err)
 
     @staticmethod
     def isPressed(hotkey):

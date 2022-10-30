@@ -65,6 +65,30 @@ class Widget:
                     '提示', f'无法注册快捷键【{hotkey}】\n\n错误信息：\n{err}')
 
         def onRead():  # 当 修改键按下
+
+            def readSucc(hotkey, errmsg=''):  # 录制成功的回调
+                # 显示按钮
+                tips.grid()
+                btn.grid()
+                tips2.grid_remove()
+                # 失败
+                if not hotkey:
+                    if isUsing:  # 注册回旧按键
+                        addHotkey(oldHotkey)
+                    tk.messagebox.showwarning(
+                        '提示', f'无法修改快捷键\n\n错误信息：\n{errmsg}\n\n提示：笔记本键盘可能无法录制【Fn+功能键F1~F12】的快捷键。请打开FnLock再尝试，或者不要将Fn作为快捷键')
+                    return
+                # 检查并注册热键
+                if 'esc' in hotkey or hotkey == oldHotkey:  # ESC为取消
+                    if isUsing:  # 注册回旧按键
+                        addHotkey(oldHotkey)
+                    return
+                if isUsing:  # 需要注册新按键
+                    addHotkey(hotkey)
+                Config.set(hotkeyName, hotkey)  # 写入设置
+                Log.info(
+                    f'快捷键【{name}】修改为【{Config.get(hotkeyName)}】')
+
             tips.grid_remove()
             btn.grid_remove()  # 移除按钮
             tips2.grid()  # 显示提示
@@ -73,27 +97,7 @@ class Widget:
             oldHotkey = Config.get(hotkeyName)
             if isUsing:  # 已经注册了
                 Widget.delHotkey(oldHotkey)  # 先注销已有按键
-            try:
-                hotkey = Hotkey.read()  # 录制快捷键
-            except ValueError as err:
-                if isUsing:  # 注册回旧按键
-                    addHotkey(oldHotkey)
-                tk.messagebox.showwarning(
-                    '提示', f'无法修改快捷键\n\n错误信息：\n{err}\n\n提示：笔记本键盘可能无法录制【Fn+功能键F1~F12】的快捷键。请打开FnLock再尝试，或者不要将Fn作为快捷键')
-                return
-            finally:
-                tips.grid()
-                btn.grid()  # 显示按钮
-                tips2.grid_remove()
-            if 'esc' in hotkey or hotkey == oldHotkey:  # ESC为取消
-                if isUsing:  # 注册回旧按键
-                    addHotkey(oldHotkey)
-                return
-            if isUsing:  # 需要注册新按键
-                addHotkey(hotkey)
-            Config.set(hotkeyName, hotkey)  # 写入设置
-            Log.info(
-                f'快捷键【{name}】修改为【{Config.get(hotkeyName)}】')
+            Hotkey.read(readSucc)  # 录制快捷键
 
         def onCheck():  # 当 复选框按下
             if isFix:
