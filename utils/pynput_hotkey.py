@@ -101,6 +101,10 @@ class Hotkey_Api():  # 热键API，封装 keyboard.Listener
             '''传入热键集合，判断是否与本键相等'''
             return self.hotkeySet == hotkeySet
 
+        def isSetSub(self, hotkeySet):
+            '''传入热键集合，判断是否包含本键'''
+            return self.hotkeySet.issubset(hotkeySet)
+
         def isKeyIn(self, keyName):
             '''传入单个按键，判断是否在本热键组合内'''
             return keyName in self.hotkeySet
@@ -171,8 +175,11 @@ class Hotkey_Api():  # 热键API，封装 keyboard.Listener
         nowKeySet = set(self.pressDict.keys())
         print(f'检测 {nowKeySet}')
         for hk in self.hotkeyList:
-            print(hk.hotkeyName, hk.isKeyIn(key), hk.isSetEQ(nowKeySet))
-            if hk.isKeyIn(key) and hk.isSetEQ(nowKeySet) and hk.isPress == isPress:
+            # print(hk.hotkeyName, hk.isKeyIn(key), hk.isSetEQ(nowKeySet))
+            # 严格模式，已按集合必须与热键集合完全一致才能触发
+            # if hk.isKeyIn(key) and hk.isSetEQ(nowKeySet) and hk.isPress == isPress:
+            # 宽容模式，已按集合包含热键集合即可触发
+            if hk.isKeyIn(key) and hk.isSetSub(nowKeySet) and hk.isPress == isPress:
                 hk.callback()
 
     # ======================= 对外接口 =============================
