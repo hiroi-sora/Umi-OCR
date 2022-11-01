@@ -148,6 +148,16 @@ _ConfigDict = {
         'isSave': True,
         'isTK': True,
     },
+    'hotkeyMaxTtl': {  # 组合键最长TTL（生存时间）
+        'default': 2.0,
+        'isSave': True,
+        'isTK': True,
+    },
+    'isHotkeyStrict': {  # T时组合键严格判定
+        'default': False,
+        'isSave': True,
+        'isTK': True,
+    },
     'scsModeName': {  # 当前选择的截屏模式名称
         'default': '',
         'isSave': True,
@@ -439,6 +449,8 @@ class ConfigModule:
                 self.__tkDict[key] = tk.BooleanVar()
             elif isinstance(self.__optDict[key], str):
                 self.__tkDict[key] = tk.StringVar()
+            elif isinstance(self.__optDict[key], float):
+                self.__tkDict[key] = tk.DoubleVar()
             elif isinstance(self.__optDict[key], int):
                 self.__tkDict[key] = tk.IntVar()
             else:  # 给开发者提醒

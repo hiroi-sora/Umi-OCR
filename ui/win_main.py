@@ -409,11 +409,31 @@ class MainWin:
                 self.balloon.bind(wid, '尝试读取剪贴板，若存在图片则调用OCR\n点击【修改】可设置自定义快捷键')
                 fr1 = tk.Frame(fQuick)
                 fr1.pack(side='top', fill='x', pady=2, padx=5)
-                wid = ttk.Checkbutton(fr1, variable=Config.getTK('isNeedCopy'),
+                tk.Label(fr1, text='　 组合键：').pack(side='left')
+                fr11 = tk.Frame(fr1)
+                fr11.pack(side='left')
+                self.balloon.bind(fr11, '若快捷键设为多个按键的组合，\n则必须在该时间之内全部按下，才能触发')
+                tk.Label(fr11, text='触发时间').pack(side='left')
+                tk.Entry(fr11,
+                         textvariable=Config.getTK('hotkeyMaxTtl'), width=4).pack(side='left')
+                tk.Label(fr11, text='秒，').pack(side='left')
+                fr12 = tk.Frame(fr1)
+                fr12.pack(side='left')
+                self.balloon.bind(
+                    fr12, '宽松：当前按下的按键只要包含设定的组合键，就能触发\n严格：当前按下的按键必须与设定的组合一致，才能触发')
+                tk.Label(fr12, text='判定').pack(side='left')
+                ttk.Radiobutton(fr12, text='宽松',
+                                variable=Config.getTK('isHotkeyStrict'), value=False).pack(side='left')
+                ttk.Radiobutton(fr12, text='严格',
+                                variable=Config.getTK('isHotkeyStrict'), value=True).pack(side='left')
+
+                fr2 = tk.Frame(fQuick)
+                fr2.pack(side='top', fill='x', pady=2, padx=5)
+                wid = ttk.Checkbutton(fr2, variable=Config.getTK('isNeedCopy'),
                                       text='复制识别出的文字')
                 wid.pack(side='left')
                 self.balloon.bind(wid, '截图或粘贴图片OCR完成后，将得到的文本复制到剪贴板')
-                wid = ttk.Checkbutton(fr1, variable=Config.getTK('isScreenshotHideWindow'),
+                wid = ttk.Checkbutton(fr2, variable=Config.getTK('isScreenshotHideWindow'),
                                       text='截图时隐藏窗口')
                 wid.pack(side='left', padx=40)
                 self.balloon.bind(

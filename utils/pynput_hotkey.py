@@ -4,6 +4,8 @@ from pynput._util.win32 import KeyTranslator
 
 from time import time
 
+from utils.config import Config
+
 
 class KeyTranslator_Api:  # 封装 keyTranslator ，负责key、char、vk的转换
 
@@ -49,21 +51,22 @@ class Hotkey_Api():  # 热键API，封装 keyboard.Listener
 
     # 记录一个键按下状态的类
     class Press_Key():
-        # TTL：生存时间，秒。一个键按下超过此时间后将当作它已被释放，直到它下次被按下。
-        # 这是为了防止意外没有接收到一个键的释放事件，导致它长期留在已按字典里，引起组合键误触。
-        MaxTtl = 60
-        # MaxTtl = 3
 
         def __init__(self, keyName):
             self.keyName = keyName
+            # TTL：生存时间，秒。一个键按下超过此时间后将忽略它，直到它下次被按下。
+            # 这是为了防止意外没有接收到一个键的释放事件，导致它长期留在已按字典里，引起组合键误触。
+            self.TTL = 10
             self.updateTTL()
 
         def updateTTL(self):
             '''刷新生存时间'''
-            self.TTL = time()+self.MaxTtl  # 生存时间
+            self.TTL = time()+Config.get('hotkeyMaxTtl')
 
-        def isLive(self):
+        def isLive(self, nowTime=None):
             '''若此键仍存活，返回T'''
+            if nowTime:
+                return nowTime < self.TTL
             return time() < self.TTL
 
     # 记录一组热键状态的类
@@ -134,7 +137,6 @@ class Hotkey_Api():  # 热键API，封装 keyboard.Listener
     def _onPress(self, key_):  # 一个键被按下的回调
         self._checkTTL()  # 检查TTL，移除长久没有释放的异常键
         keyName = KTA(key_)  # 键名字符串
-        print(f'↓ {keyName}')
         # 维护已按字典
         if keyName not in self.pressDict:  # 按下按键，则加入已按字典
             self.pressDict[keyName] = self.Press_Key(keyName)
@@ -167,20 +169,27 @@ class Hotkey_Api():  # 热键API，封装 keyboard.Listener
             del self.pressDict[keyName]  # 移出已按字典
 
     def _checkTTL(self):  # 检测已按字典的存活性
+        nowTime = time()
         for k, v in list(self.pressDict.items()):
-            if not v.isLive():
+            if not v.isLive(nowTime):
                 del self.pressDict[k]
 
     def _callHotkey(self, key, isPress):  # 检测并触发热键
         nowKeySet = set(self.pressDict.keys())
-        print(f'检测 {nowKeySet}')
+        debugMsg = f'🖮 {"↓ " if isPress else " ↑"} {key} | {",".join(nowKeySet)}'
+        flag = Config.get('isHotkeyStrict')
         for hk in self.hotkeyList:
-            # print(hk.hotkeyName, hk.isKeyIn(key), hk.isSetEQ(nowKeySet))
-            # 严格模式，已按集合必须与热键集合完全一致才能触发
-            # if hk.isKeyIn(key) and hk.isSetEQ(nowKeySet) and hk.isPress == isPress:
-            # 宽容模式，已按集合包含热键集合即可触发
-            if hk.isKeyIn(key) and hk.isSetSub(nowKeySet) and hk.isPress == isPress:
-                hk.callback()
+            if hk.isKeyIn(key) and hk.isPress == isPress:
+                # 严格模式，已按集合必须与热键集合完全一致才能触发
+                if flag and hk.isSetEQ(nowKeySet):
+                    hk.callback()
+                    debugMsg += f' | √ {hk.hotkeyName}'
+                # 宽容模式，已按集合包含热键集合即可触发
+                elif not flag and hk.isSetSub(nowKeySet):
+                    hk.callback()
+                    debugMsg += f' | √ {hk.hotkeyName}'
+        if Config.get('isDebug'):
+            print(debugMsg)
 
     # ======================= 对外接口 =============================
 
