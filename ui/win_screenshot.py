@@ -71,19 +71,17 @@ class ScreenshotSys():  # 系统截图模式
         # 绑定全局事件
         Hotkey.addRelease(  # Esc抬起，系统截图失败
             'esc', lambda: self.__close(False))
-        mouse.on_button(self.__onDown,  # 左键和右键按下，开始截图
-                        buttons=('left', 'right'), types='down')
-        mouse.on_button(self.__onUp,  # 左键和右键抬起，截图可能成功可能失败
-                        buttons=('left', 'right'), types='up')
+        Hotkey.addMouseButtonDown(self.__onDown)  # 注册监听鼠标左/右按下
+        Hotkey.addMouseButtonUp(self.__onUp)  # 注册监听鼠标左/右抬起
         self.isInitKey = True
 
-    def __onDown(self, e=None):  # 用户操作开始
+    def __onDown(self, pos):  # 用户操作开始
         if self.isWorking:
-            self.position = mouse.get_position()  # 获取鼠标当前位置
+            self.position = pos  # 获取鼠标当前位置
 
-    def __onUp(self, e=None):  # 用户操作结束
+    def __onUp(self, pos):  # 用户操作结束
         if self.isWorking:
-            if self.position == mouse.get_position():  # 鼠标起始结束位置相同，截图失败
+            if self.position == pos:  # 鼠标起始结束位置相同，截图失败
                 self.__close(False)
                 return
             self.checkTime = 0
@@ -105,6 +103,8 @@ class ScreenshotSys():  # 系统截图模式
 
     def __close(self, flag=False):  # 退出
         if self.isWorking:
+            Hotkey.removeMouse()  # 注销监听鼠标
+            self.isInitKey = False
             self.isWorking = False
             _ScreenshotClose(flag)
 

@@ -1,6 +1,8 @@
 from utils.pynput_hotkey import hotkeyApi
 from utils.logger import GetLog
 
+import mouse  # 绑定鼠标键
+
 
 Log = GetLog()
 
@@ -42,6 +44,29 @@ class Hotkey():  # 热键
         '''发送按键序列'''
         hotkeyApi.send(hotkey)
         Log.info(f'发送按键组合【{hotkey}】')
+
+    @staticmethod
+    def addMouseButtonDown(callback):
+        '''添加一个鼠标按钮监听。按下时调用callback，返回xy坐标元组'''
+        def cb():
+            pos = mouse.get_position()  # 获取鼠标当前位置
+            callback(pos)
+        mouse.on_button(cb,
+                        buttons=('left', 'right'), types='down')
+
+    @staticmethod
+    def addMouseButtonUp(callback):
+        '''添加一个鼠标按钮监听。松开时调用callback，返回xy坐标元组'''
+        def cb():
+            pos = mouse.get_position()  # 获取鼠标当前位置
+            callback(pos)
+        mouse.on_button(cb,
+                        buttons=('left', 'right'), types='up')
+
+    @staticmethod
+    def removeMouse():
+        '''移除鼠标监听'''
+        mouse.unhook_all()
 
 
 """
