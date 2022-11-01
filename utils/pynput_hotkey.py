@@ -1,5 +1,5 @@
 # 封装 pynput ，提供对外 Hotkey 接口
-from pynput import keyboard
+from pynput import keyboard, mouse
 from pynput._util.win32 import KeyTranslator
 
 from time import time
@@ -117,13 +117,12 @@ class Hotkey_Api():  # 热键API，封装 keyboard.Listener
     def __init__(self):
         self.pressDict = {}  # 已按字典
         self.hotkeyList = []  # 热键列表
-        # 监听
+        # 监听键盘
         self.listener = keyboard.Listener(
             on_press=self._onPress,
             on_release=self._onRelease)
         self.listener.start()
         self.controller = keyboard.Controller()
-
         self.isReading = False  # 录制模式
         self.readData = {  # 录制信息
             'keyList': [],  # 本组录制的结果
@@ -131,7 +130,14 @@ class Hotkey_Api():  # 热键API，封装 keyboard.Listener
             'callback': None  # 录制完成的回调
         }
 
+        # 监听鼠标
+        self.mouseListener = None
+        self.isMouseListener = False  # 记录鼠标监听器是否在运行
+        self.mouseCallback = {'up': None, 'down': None}  # 鼠标回调
+        # self.mouseListener.start()
+
     def join(self):
+        '''调试用，键盘监听器运行期间阻塞线程'''
         self.listener.join()
 
     def _onPress(self, key_):  # 一个键被按下的回调
@@ -191,11 +197,29 @@ class Hotkey_Api():  # 热键API，封装 keyboard.Listener
         if Config.get('isDebug'):
             print(debugMsg)
 
-    # ======================= 对外接口 =============================
+    def _addMouseListener(self):
+
+        def _onMouseClick(x, y, button, pressed):  # 鼠标按钮回调
+            print(x, y, button, pressed)
+            if self.mouseCallback['down'] and pressed:
+                self.mouseCallback['down']((x, y))
+            elif self.mouseCallback['up'] and not pressed:
+                self.mouseCallback['up']((x, y))
+
+        if not self.isMouseListener:
+            self.mouseListener = mouse.Listener(on_click=_onMouseClick)
+            self.mouseListener.start()
+            self.isMouseListener = True
+
+    # ======================= 键盘对外接口 =============================
 
     def add(self, hotkey, callback, isPress=True):
         '''添加一个快捷键组合监听。按下时调用callback'''
-        # 同一组键绑多个事件是安全的，无需判重复
+        # 判断重复
+        for h in self.hotkeyList:
+            if h.isNameEQ(hotkey) and h.callback.__name__ == callback.__name__ \
+                    and h.isPress == isPress:
+                return
         hk = self.Hot_Key(hotkey, callback, isPress)
         self.hotkeyList.append(hk)
 
@@ -228,6 +252,9 @@ class Hotkey_Api():  # 热键API，封装 keyboard.Listener
         vks = tuple(vkList)
         with self.controller.pressed(*vks):  # 按需按下和释放
             pass
+        # 手动在已按字典中移除
+        for name in keynameList:
+            del self.pressDict[name]
 
     def read(self, callback):
         '''录制快捷键。按下并松开一组按键，将按键序列字符串发送到回调函数'''
@@ -238,6 +265,25 @@ class Hotkey_Api():  # 热键API，封装 keyboard.Listener
         self.readData['keyList'] = []
         self.readData['keySet'] = set()
         self.readData['callback'] = callback
+
+    # ======================= 鼠标对外接口 =============================
+
+    def addMouseButtonDown(self, callback):
+        '''添加一个鼠标按钮监听。按下时调用callback，返回xy坐标元组'''
+        self._addMouseListener()
+        self.mouseCallback['down'] = callback
+
+    def addMouseButtonUp(self, callback):
+        '''添加一个鼠标按钮监听。松开时调用callback，返回xy坐标元组'''
+        self._addMouseListener()
+        self.mouseCallback['up'] = callback
+
+    def removeMouse(self):
+        '''移除鼠标监听'''
+        if self.isMouseListener:
+            self.mouseListener.stop()
+            self.isMouseListener = False
+            self.mouseCallback = {'up': None, 'down': None}
 
 
 hotkeyApi = Hotkey_Api()

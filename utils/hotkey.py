@@ -8,6 +8,9 @@ Log = GetLog()
 
 
 class Hotkey():  # 热键
+
+    # ========================== 键盘 ==============================
+
     @staticmethod
     def add(hotkey, callback):
         '''添加一个快捷键组合监听。按下时调用callback'''
@@ -45,34 +48,30 @@ class Hotkey():  # 热键
         hotkeyApi.send(hotkey)
         Log.info(f'发送按键组合【{hotkey}】')
 
+    # ========================== 鼠标 ==============================
+
     @staticmethod
     def addMouseButtonDown(callback):
         '''添加一个鼠标按钮监听。按下时调用callback，返回xy坐标元组'''
-        def cb():
-            pos = mouse.get_position()  # 获取鼠标当前位置
-            callback(pos)
-        mouse.on_button(cb,
-                        buttons=('left', 'right'), types='down')
+        hotkeyApi.addMouseButtonDown(callback)
 
     @staticmethod
     def addMouseButtonUp(callback):
         '''添加一个鼠标按钮监听。松开时调用callback，返回xy坐标元组'''
-        def cb():
-            pos = mouse.get_position()  # 获取鼠标当前位置
-            callback(pos)
-        mouse.on_button(cb,
-                        buttons=('left', 'right'), types='up')
+        hotkeyApi.addMouseButtonUp(callback)
 
     @staticmethod
     def removeMouse():
         '''移除鼠标监听'''
-        mouse.unhook_all()
+        hotkeyApi.removeMouse()
 
 
 """
 # 旧版热键类。依赖 keyboard 库，这个库年久失修Bug多，弃之。
+# 顺带 mouse 也遗弃，pynput已经包含鼠标监听的接口。
 
 import keyboard  # 绑定快捷键
+import mouse  # 绑定鼠标键
 
 class Hotkey():  
     @staticmethod
@@ -116,4 +115,46 @@ class Hotkey():
         '''发送按键序列'''
         keyboard.send(hotkey)
         Log.info(f'发送按键组合【{hotkey}】')
+
+    # ========================== 鼠标1 ==============================
+
+    @staticmethod
+    def addMouseButtonDown(callback):
+        '''添加一个鼠标按钮监听。按下时调用callback，返回xy坐标元组'''
+        def cb():
+            pos = mouse.get_position()  # 获取鼠标当前位置
+            callback(pos)
+        mouse.on_button(cb,
+                        buttons=('left', 'right'), types='down')
+
+    @staticmethod
+    def addMouseButtonUp(callback):
+        '''添加一个鼠标按钮监听。松开时调用callback，返回xy坐标元组'''
+        def cb():
+            pos = mouse.get_position()  # 获取鼠标当前位置
+            callback(pos)
+        mouse.on_button(cb,
+                        buttons=('left', 'right'), types='up')
+
+    @staticmethod
+    def removeMouse():
+        '''移除鼠标监听'''
+        mouse.unhook_all()
+
+    # ========================== 鼠标2 ==============================
+
+    @staticmethod
+    def addMouseButtonDown(callback):
+        '''添加一个鼠标按钮监听。按下时调用callback，返回xy坐标元组'''
+        hotkeyApi.addMouseButtonDown(callback)
+
+    @staticmethod
+    def addMouseButtonUp(callback):
+        '''添加一个鼠标按钮监听。松开时调用callback，返回xy坐标元组'''
+        hotkeyApi.addMouseButtonUp(callback)
+
+    @staticmethod
+    def removeMouse():
+        '''移除鼠标监听'''
+        hotkeyApi.removeMouse()
 """
