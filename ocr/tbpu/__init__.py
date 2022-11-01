@@ -24,10 +24,10 @@ from ocr.tbpu.merge_line_v_rl import TbpuLineVrl
 
 
 Tbpus = {
-    '横排-优化单行': TbpuLineH,
-    '横排-合并多行-左对齐': TbpuLineHMultiLeft,
-    '横排-合并多行-自然段': TbpuLineHMultiParagraph,
-    '横排-合并多行-模糊匹配': TbpuLineHMultiFuzzy,
+    '优化单行': TbpuLineH,
+    '合并多行-左对齐': TbpuLineHMultiLeft,
+    '合并多行-自然段': TbpuLineHMultiParagraph,
+    '合并多行-模糊匹配': TbpuLineHMultiFuzzy,
     '竖排-从左到右-单行': TbpuLineVlr,
     '竖排-从右至左-单行': TbpuLineVrl,
     '不做处理': None,

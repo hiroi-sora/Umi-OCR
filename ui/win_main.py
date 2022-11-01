@@ -358,12 +358,10 @@ class MainWin:
                 # 避免子线程直接唤起截图窗导致的窗口闪烁现象
                 self.win.bind('<<ScreenshotEvent>>',
                               self.openScreenshot)  # 绑定截图事件
-                cbox = Widget.comboboxFrame(fQuick, '截图模式：', 'scsMode')
+                cbox = Widget.comboboxFrame(fQuick, '截图模块：', 'scsMode')
                 cbox.pack(side='top', fill='x', padx=4)
-                self.balloon.bind(cbox, '''切换截图模块
-【Umi-OCR 软件截图】操作简洁精准，
-但可能对多屏幕兼容性不佳，
-此时可尝试切换到【Windows 系统截图】''')
+                self.balloon.bind(
+                    cbox, '切换截图工作模块\n\n【Umi-OCR 软件截图】方便、精准\n【Windows 系统截图】兼容性更好')
                 frss = tk.Frame(fQuick)
                 frss.pack(side='top', fill='x')
                 fhkUmi = tk.Frame(frss)
@@ -403,7 +401,7 @@ class MainWin:
                                             lambda *e: self.win.event_generate(
                                                 '<<ScreenshotEvent>>'), True, syssscom, isAutoBind=False)
                 self.balloon.bind(
-                    fhkSys, '监听到系统截图后调用OCR。若截图后软件没有反应，\n请确保windows系统自带的【截图和草图】中\n【自动复制到剪贴板】的开关处于打开状态。')
+                    fhkSys, '监听到系统截图后调用OCR\n\n若截图后软件没有反应，请确保windows系统自带的\n【截图和草图】中【自动复制到剪贴板】开关处于打开状态')
 
                 wid = Widget.hotkeyFrame(
                     fQuick, '粘贴图片 ', 'Clipboard', self.runClipboard, isAutoBind=True)
@@ -578,7 +576,7 @@ class MainWin:
                                             command=self.openSelectArea)
                 self.ignoreBtn.pack(side='top', fill='x')
                 self.balloon.bind(
-                    self.ignoreBtn, '添加忽略区域，排除指定位置的文本\n\n附带功能：可以在忽略区域编辑器内预览文本块后处理的效果\n但是，实际任务时忽略区域早于后处理执行，不受后处理的影响')
+                    self.ignoreBtn, '忽略图片中的指定区域\n可用于批量识别时排除图片水印')
                 self.lockWidget.append(self.ignoreBtn)
                 # 忽略区域本体框架
                 self.ignoreFrame = tk.Frame(fIgnore)  # 不pack，动态添加
@@ -608,9 +606,9 @@ class MainWin:
                 fpro.pack(side='top', fill='x', pady=2, padx=4)
                 fpro.grid_columnconfigure(0, weight=1)
                 wid = Widget.comboboxFrame(
-                    fpro, '文本块后处理', 'tbpu', self.lockWidget)
+                    fpro, '合并段落：　', 'tbpu', self.lockWidget)
                 wid.grid(column=0, row=0, sticky='ew')
-                self.balloon.bind(wid, '使用方法请点击右侧说明按钮')
+                self.balloon.bind(wid, '将OCR划分的单行文本合并成整段文字\n点击右侧按钮，浏览方案说明')
                 labelUse = tk.Label(fpro, text='说明', width=5,
                                     fg="gray", cursor='question_arrow')
                 labelUse.grid(column=1, row=0)
@@ -627,7 +625,7 @@ class MainWin:
                     frameOCR, '识别语言：　', 'ocrConfig', self.lockWidget)
                 wid.pack(side='top', fill='x', pady=2, padx=5)
                 self.balloon.bind(
-                    wid, '本软件有配套的多国语言扩展包，可导入更多语言模型库，\n详情请浏览项目Github主页\n\n竖排模型库（识别语言）建议与竖排文本块后处理搭配使用')
+                    wid, '本软件有配套的多国语言扩展包，可导入更多语言模型库，\n详情请浏览项目Github主页\n\n竖排模型库（识别语言）建议与竖排合并段落搭配使用')
                 # 压缩
                 fLim = tk.Frame(frameOCR)
                 fLim.pack(side='top', fill='x', pady=2, padx=5)
