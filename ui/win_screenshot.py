@@ -14,7 +14,6 @@ from win32clipboard import OpenClipboard, EmptyClipboard, SetClipboardData, Clos
 import tkinter as tk
 from PIL import ImageGrab, ImageTk
 from enum import Enum
-import mouse  # 绑定鼠标键
 
 # TODO :
 # 截图模块的工作原理是：先获取虚拟屏幕（所有显示器的画面拼凑在一起）的完整截图。然后创建一块画布，

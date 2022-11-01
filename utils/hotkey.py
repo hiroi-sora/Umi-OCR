@@ -1,8 +1,6 @@
 from utils.pynput_hotkey import hotkeyApi
 from utils.logger import GetLog
 
-import mouse  # 绑定鼠标键
-
 
 Log = GetLog()
 
