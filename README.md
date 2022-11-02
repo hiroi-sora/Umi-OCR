@@ -44,6 +44,7 @@
     </a>
   </h3>
 </div>
+<br>
 
 - **免费**：本项目所有代码开源，完全免费。
 - **方便**：解压即用，离线运行，无需网络。
@@ -267,7 +268,7 @@ OCR识别出的文本是按“块”划分的，通常一行文字分为一块�
 0. 模型分为三种：det检测，cls方向分类，rec识别。其中det和cls是多语言通用的，只需下载新语言的rec识别模型即可。
 1. 前往 PP-OCR系列 [V3多语言识别模型列表](https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.6/doc/doc_ch/models_list.md#23-%E5%A4%9A%E8%AF%AD%E8%A8%80%E8%AF%86%E5%88%AB%E6%A8%A1%E5%9E%8B%E6%9B%B4%E5%A4%9A%E8%AF%AD%E8%A8%80%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0%E4%B8%AD) ，下载一组**rec识别**模型。
    - 若V3模型列表里没有找到目标语言，可以去[支持语言列表](https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.6/doc/doc_ch/multi_languages.md#5-%E6%94%AF%E6%8C%81%E8%AF%AD%E7%A7%8D%E5%8F%8A%E7%BC%A9%E5%86%99)查看PPOCR有没有提供这种语言。若有，则可能它暂未推出V3模型，可以先使用旧版V2模型。（V3模型网址中的2.x一路换成更小的数字可以查看旧版页面）
-2. 前往 PP-OCR系列 [字典列表](https://github.com/PaddlePaddle/PaddleOCR/tree/release/2.6/ppocr/utils/dict) ，下载对应语言的字典文件。
+2. 前往 PP-OCR系列 [字典列表](https://github.com/PaddlePaddle/PaddleOCR/tree/release/2.6/ppocr/utils/dict) ，下载对应语言的字典文件。（但V3英文字典`en_dict.txt`不是本目录下的那个，而是在[上一级目录](https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.6/ppocr/utils/en_dict.txt)）
 3. 将下载好的文件解压放进软件目录的 `PaddleOCR-json` 文件夹中。
 4. 复制一份 `PaddleOCR_json_config_[模板].txt` ，改一下名。（文件名不允许有非英文字符！）
 5. 打开复制好的 `PaddleOCR_json_config_XX.txt` ，将 rec路径 `rec_model_dir` 和 字典路径 `rec_char_dict_path` 改成目标语言的文件(夹)的名称。若模型库是v2版本，还必须加上一行 `rec_img_h 32` 。

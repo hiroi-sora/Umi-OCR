@@ -260,7 +260,7 @@ class ScreenshotWin():  # 内置截图模式
         self.flashList = []  # 闪光元素
         # 绑定全局事件
         Hotkey.add('esc', self.__onClose)  # 绑定Esc退出
-        Hotkey.add('Ctrl+Shift+Alt+D', self.__switchDebug)  # 切换调试信息
+        Hotkey.add('ctrl+shift+alt+d', self.__switchDebug)  # 切换调试信息
         # 绑定画布事件
         self.canvas.bind(f'<Button-1>', self.__onDown)  # 左键按下
         self.canvas.bind(f'<Button-3>', self.__repaint)  # 右键按下
@@ -382,15 +382,16 @@ class ScreenshotWin():  # 内置截图模式
     def __switchDebug(self, event=None):  # 切换显示/隐藏调试信息
         if not self.isInitGrab:
             return
-        print('__switchDebug')
         color = 'red'
         if self.debugList:  # 删除调试信息
+            Config.set('isDebug', False)
             for i in self.debugList:
                 self.canvas.delete(i)
             self.debugList = []
             self.__hideElement(self.debugXYBox, 4)
             self.__hideElement(self.debugXYText, 2)
         else:  # 创建调试信息
+            Config.set('isDebug', True)
             for index, box in enumerate(self.scBoxList):
                 p1x, p1y, p2x, p2y = box
                 p1x -= self.scBoxVirtual[0]
@@ -416,7 +417,7 @@ class ScreenshotWin():  # 内置截图模式
                 self.debugList.append(e)
                 e = self.canvas.create_text(p1x+15, p1y+43,
                                             font=('', 10, ''), fill=color, anchor='nw',
-                                            text=f'按 Ctrl+Shift+Alt+D 关闭调试信息')
+                                            text=f'按 Ctrl+Shift+Alt+D 退出调试模式')
                 self.debugList.append(e)
             self.canvas.lift(self.debugXYBox)  # 移动到最上方
             self.canvas.lift(self.debugXYText)  # 移动到最上方

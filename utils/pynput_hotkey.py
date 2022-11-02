@@ -215,6 +215,7 @@ class Hotkey_Api():  # 热键API，封装 keyboard.Listener
 
     def add(self, hotkey, callback, isPress=True):
         '''添加一个快捷键组合监听。按下时调用callback'''
+        hotkey = hotkey.lower()  # 转小写
         # 判断重复
         for h in self.hotkeyList:
             if h.isNameEQ(hotkey) and h.callback.__name__ == callback.__name__ \
@@ -254,7 +255,8 @@ class Hotkey_Api():  # 热键API，封装 keyboard.Listener
             pass
         # 手动在已按字典中移除
         for name in keynameList:
-            del self.pressDict[name]
+            if name in self.pressDict:
+                del self.pressDict[name]
 
     def read(self, callback):
         '''录制快捷键。按下并松开一组按键，将按键序列字符串发送到回调函数'''

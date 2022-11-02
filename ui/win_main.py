@@ -113,7 +113,7 @@ class MainWin:
         def initTab1():  # 表格卡
             tabFrameTable = tk.Frame(self.notebook)  # 选项卡主容器
             self.notebookTab.append(tabFrameTable)
-            self.notebook.add(tabFrameTable, text=f'{"处理列表": ^10s}')
+            self.notebook.add(tabFrameTable, text=f'{"批量处理": ^10s}')
             # 顶栏
             fr1 = tk.Frame(tabFrameTable)
             fr1.pack(side='top', fill='x', padx=1, pady=1)
@@ -412,20 +412,20 @@ class MainWin:
                 tk.Label(fr1, text='　 组合键：').pack(side='left')
                 fr11 = tk.Frame(fr1)
                 fr11.pack(side='left')
-                self.balloon.bind(fr11, '若快捷键设为多个按键的组合，\n则必须在该时间之内全部按下，才能触发')
-                tk.Label(fr11, text='触发时间').pack(side='left')
-                tk.Entry(fr11,
-                         textvariable=Config.getTK('hotkeyMaxTtl'), width=4).pack(side='left')
-                tk.Label(fr11, text='秒，').pack(side='left')
+                self.balloon.bind(
+                    fr11, '宽松：当前按下的按键只要包含设定的组合键，就能触发\n严格：当前按下的按键必须与设定的组合一致，才能触发')
+                tk.Label(fr11, text='触发判定').pack(side='left')
+                ttk.Radiobutton(fr11, text='宽松',
+                                variable=Config.getTK('isHotkeyStrict'), value=False).pack(side='left')
+                ttk.Radiobutton(fr11, text='严格',
+                                variable=Config.getTK('isHotkeyStrict'), value=True).pack(side='left')
                 fr12 = tk.Frame(fr1)
                 fr12.pack(side='left')
-                self.balloon.bind(
-                    fr12, '宽松：当前按下的按键只要包含设定的组合键，就能触发\n严格：当前按下的按键必须与设定的组合一致，才能触发')
-                tk.Label(fr12, text='判定').pack(side='left')
-                ttk.Radiobutton(fr12, text='宽松',
-                                variable=Config.getTK('isHotkeyStrict'), value=False).pack(side='left')
-                ttk.Radiobutton(fr12, text='严格',
-                                variable=Config.getTK('isHotkeyStrict'), value=True).pack(side='left')
+                self.balloon.bind(fr12, '必须在该时间之内\n连续按下组合中的所有按键，才能触发')
+                tk.Label(fr12, text='，时限').pack(side='left')
+                tk.Entry(fr12,
+                         textvariable=Config.getTK('hotkeyMaxTtl'), width=4).pack(side='left')
+                tk.Label(fr12, text='秒').pack(side='left')
 
                 fr2 = tk.Frame(fQuick)
                 fr2.pack(side='top', fill='x', pady=2, padx=5)
@@ -1051,6 +1051,8 @@ class MainWin:
             return
         clipData = Tool.getClipboardFormat()  # 读取剪贴板
 
+        failFlag = False
+
         # 剪贴板中是位图（优先）
         if isinstance(clipData, int):
             self.startSingleClipboard()
@@ -1071,8 +1073,12 @@ class MainWin:
                 self.clearTable()  # 清空主表
                 self.addImagesList(clipData)  # 添加到主表
                 self.run()  # 开始任务任务
+            else:
+                failFlag = True
+        else:  # 剪贴板中不是支持的格式
+            failFlag = True
 
-        else:
+        if failFlag:
             self.panelOutput('剪贴板中未查询到图片信息\n')
             # 失败也置顶
             self.gotoTop()  # 主窗置顶

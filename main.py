@@ -4,7 +4,7 @@
 from utils.config import Umi
 from ui.win_main import MainWin
 
-Umi.ver = '1.3.1 alpha2'
+Umi.ver = '1.3.1 alpha3'
 Umi.pname = 'Umi-OCR'
 Umi.name = f'{Umi.pname} v{Umi.ver}'
 Umi.website = 'https://github.com/hiroi-sora/Umi-OCR'
