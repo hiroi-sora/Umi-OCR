@@ -97,7 +97,7 @@ class MainWin:
                                   text='窗口置顶', style='gray.TCheckbutton')
             wid.pack(side='left')
             self.balloon.bind(
-                wid, '窗口锁定于系统顶层\n\n开启后，鼠标悬停提示框也会被隐藏')
+                wid, '窗口锁定于系统顶层\n\n启用后，软件内的鼠标悬停提示框会被隐藏')
             tk.Label(vFrame2, textvariable=Config.getTK('tipsTop2')).pack(
                 side='right', padx=2)
             tk.Label(vFrame2, textvariable=Config.getTK('tipsTop1')).pack(
@@ -322,7 +322,7 @@ class MainWin:
                 fr1.pack(side='top', fill='x', pady=2, padx=5)
                 fr1.grid_columnconfigure(1, weight=1)
                 self.balloon.bind(
-                    fr1, '可关闭/开启系统托盘图标，可修改双击图标时触发的功能\n该项目修改后，下次打开软件生效')
+                    fr1, '可关闭/开启系统托盘图标，修改双击图标时触发的功能\n该项目修改后，下次打开软件生效')
                 wid = ttk.Checkbutton(fr1, text='显示系统托盘图标',
                                       variable=Config.getTK('isTray'))
                 wid.grid(column=0, row=0, sticky='w')
@@ -407,25 +407,26 @@ class MainWin:
                     fQuick, '粘贴图片 ', 'Clipboard', self.runClipboard, isAutoBind=True)
                 wid.pack(side='top', fill='x', padx=4)
                 self.balloon.bind(wid, '尝试读取剪贴板，若存在图片则调用OCR\n点击【修改】可设置自定义快捷键')
-                fr1 = tk.Frame(fQuick)
-                fr1.pack(side='top', fill='x', pady=2, padx=5)
-                tk.Label(fr1, text='　 组合键：').pack(side='left')
-                fr11 = tk.Frame(fr1)
-                fr11.pack(side='left')
-                self.balloon.bind(
-                    fr11, '宽松：当前按下的按键只要包含设定的组合键，就能触发\n严格：当前按下的按键必须与设定的组合一致，才能触发')
-                tk.Label(fr11, text='触发判定').pack(side='left')
-                ttk.Radiobutton(fr11, text='宽松',
-                                variable=Config.getTK('isHotkeyStrict'), value=False).pack(side='left')
-                ttk.Radiobutton(fr11, text='严格',
-                                variable=Config.getTK('isHotkeyStrict'), value=True).pack(side='left')
-                fr12 = tk.Frame(fr1)
-                fr12.pack(side='left')
-                self.balloon.bind(fr12, '必须在该时间之内\n连续按下组合中的所有按键，才能触发')
-                tk.Label(fr12, text='，时限').pack(side='left')
-                tk.Entry(fr12,
-                         textvariable=Config.getTK('hotkeyMaxTtl'), width=4).pack(side='left')
-                tk.Label(fr12, text='秒').pack(side='left')
+                if Config.get('isAdvanced'):  # 隐藏高级选项：组合键判定调节
+                    fr1 = tk.Frame(fQuick)
+                    fr1.pack(side='top', fill='x', pady=2, padx=5)
+                    tk.Label(fr1, text='　 组合键：').pack(side='left')
+                    fr11 = tk.Frame(fr1)
+                    fr11.pack(side='left')
+                    self.balloon.bind(
+                        fr11, '宽松：当前按下的按键只要包含设定的组合键，就能触发\n严格：当前按下的按键必须与设定的组合一致，才能触发')
+                    tk.Label(fr11, text='触发判定').pack(side='left')
+                    ttk.Radiobutton(fr11, text='宽松',
+                                    variable=Config.getTK('isHotkeyStrict'), value=False).pack(side='left')
+                    ttk.Radiobutton(fr11, text='严格',
+                                    variable=Config.getTK('isHotkeyStrict'), value=True).pack(side='left')
+                    fr12 = tk.Frame(fr1)
+                    fr12.pack(side='left')
+                    self.balloon.bind(fr12, '必须在该时间之内\n连续按下组合中的所有按键，才能触发')
+                    tk.Label(fr12, text='，时限').pack(side='left')
+                    tk.Entry(fr12,
+                             textvariable=Config.getTK('hotkeyMaxTtl'), width=4).pack(side='left')
+                    tk.Label(fr12, text='秒').pack(side='left')
 
                 fr2 = tk.Frame(fQuick)
                 fr2.pack(side='top', fill='x', pady=2, padx=5)
@@ -507,7 +508,7 @@ class MainWin:
                 fInput.pack(side='top', fill='x',
                                  ipady=2, pady=LabelFramePadY, padx=4)
                 self.balloon.bind(
-                    fInput, f'允许的图片格式：\n{Config.get("imageSuffix")}')
+                    fInput, f"允许的图片格式：\n{Config.get('imageSuffix')}")
 
                 fr1 = tk.Frame(fInput)
                 fr1.pack(side='top', fill='x', pady=2, padx=5)
@@ -515,12 +516,13 @@ class MainWin:
                     fr1, variable=Config.getTK('isRecursiveSearch'), text='递归读取子文件夹中所有图片')
                 wid.grid(column=0, row=0, columnspan=2, sticky='w')
                 self.lockWidget.append(wid)
-                # 精简UI
-                # tk.Label(fr1, text='图片后缀：　').grid(column=0, row=2, sticky='w')
-                # enInSuffix = tk.Entry(
-                #     fr1, textvariable=Config.getTK('imageSuffix'))
-                # enInSuffix.grid(column=1, row=2, sticky='nsew')
-                # self.lockWidget.append(enInSuffix)
+                if Config.get('isAdvanced'):  # 隐藏高级选项：修改图片许可后缀
+                    tk.Label(fr1, text='图片后缀：　').grid(
+                        column=0, row=2, sticky='w')
+                    enInSuffix = tk.Entry(
+                        fr1, textvariable=Config.getTK('imageSuffix'))
+                    enInSuffix.grid(column=1, row=2, sticky='nsew')
+                    self.lockWidget.append(enInSuffix)
 
                 fr1.grid_columnconfigure(1, weight=1)
             initInFile()
@@ -563,7 +565,7 @@ class MainWin:
                 wid.grid(column=0, row=2, columnspan=9, sticky='w')
                 self.lockWidget.append(wid)
 
-                tk.Label(fOutput, fg="gray",
+                tk.Label(fOutput, fg='gray',
                          text="下面两项为空时，默认输出到第一张图片所在的文件夹"
                          ).pack(side='top', fill='x', padx=5)
                 # 输出目录
@@ -630,7 +632,7 @@ class MainWin:
                 wid.grid(column=0, row=0, sticky='ew')
                 self.balloon.bind(wid, '将OCR划分的单行文本合并成整段文字\n点击右侧按钮，浏览方案说明')
                 labelUse = tk.Label(fpro, text='说明', width=5,
-                                    fg="gray", cursor='question_arrow')
+                                    fg='gray', cursor='question_arrow')
                 labelUse.grid(column=1, row=0)
                 labelUse.bind(
                     '<Button-1>', lambda *e: self.showTips(GetTbpuHelp(Umi.website)))  # 绑定鼠标左键点击
@@ -645,7 +647,7 @@ class MainWin:
                     frameOCR, '识别语言：　', 'ocrConfig', self.lockWidget)
                 wid.pack(side='top', fill='x', pady=2, padx=5)
                 self.balloon.bind(
-                    wid, '本软件有配套的多国语言扩展包，可导入更多语言模型库，\n详情请浏览项目Github主页\n\n竖排模型库（识别语言）建议与竖排合并段落搭配使用')
+                    wid, '本软件有配套的多国语言扩展包，可导入更多语言模型库，\n也可以手动导入PaddleOCR兼容的模型库，\n详情请浏览项目Github主页\n\n竖排模型库（识别语言）建议与竖排合并段落搭配使用')
                 # 压缩
                 fLim = tk.Frame(frameOCR)
                 fLim.pack(side='top', fill='x', pady=2, padx=5)
@@ -686,18 +688,19 @@ class MainWin:
                 # grid
                 fr1 = tk.Frame(frameOCR)
                 fr1.pack(side='top', fill='x', padx=5)
-                # 精简UI
-                # tk.Label(fr1, text='额外启动参数：').grid(
-                #     column=0, row=2, sticky='w')
-                # wid = tk.Entry(
-                #     fr1, textvariable=Config.getTK('argsStr'))
-                # wid.grid(column=1, row=2, sticky="nsew")
-                # self.balloon.bind(
-                #     wid, 'OCR高级参数指令。请遵守PaddleOCR-json要求的格式。详情参考项目主页')
-                # self.lockWidget.append(wid)
-
-                Widget.comboboxFrame(fr1, '引擎管理策略：', 'ocrRunMode', self.lockWidget
-                                     ).grid(column=0, row=6, columnspan=2, sticky='we')
+                if Config.get('isAdvanced'):
+                    # 隐藏高级选项：额外启动参数
+                    tk.Label(fr1, text='额外启动参数：').grid(
+                        column=0, row=2, sticky='w')
+                    wid = tk.Entry(
+                        fr1, textvariable=Config.getTK('argsStr'))
+                    wid.grid(column=1, row=2, sticky="nsew")
+                    self.balloon.bind(
+                        wid, 'OCR高级参数指令。请遵守PaddleOCR-json要求的格式。详情参考项目主页')
+                    self.lockWidget.append(wid)
+                    # 隐藏高级选项：引擎管理策略
+                    Widget.comboboxFrame(fr1, '引擎管理策略：', 'ocrRunMode', self.lockWidget
+                                         ).grid(column=0, row=6, columnspan=2, sticky='we')
 
                 frState = tk.Frame(fr1)
                 frState.grid(column=0, row=7, columnspan=2, sticky='nsew')
@@ -737,8 +740,8 @@ class MainWin:
                                 pady=LabelFramePadY, padx=4)
                 tk.Label(frameAbout, image=Asset.getImgTK(
                     'umiocr64')).pack()  # 图标
-                tk.Label(frameAbout, text=Umi.name, fg="gray").pack()
-                tk.Label(frameAbout, text=Umi.about, fg="gray").pack()
+                tk.Label(frameAbout, text=Umi.name, fg='gray').pack()
+                tk.Label(frameAbout, text=Umi.about, fg='gray').pack()
                 labelWeb = tk.Label(frameAbout, text=Umi.website, cursor='hand2',
                                     fg='deeppink')
                 labelWeb.pack()  # 文字
@@ -749,15 +752,23 @@ class MainWin:
             def initEX():  # 额外
                 fEX = tk.Frame(self.optFrame)
                 fEX.pack(side='top', fill='x', padx=4)
-                # self.balloon.bind(fEX, '')
-                labelOpenFile = tk.Label(fEX, text="打开设置文件",
-                                         fg="gray", cursor='hand2')
+                labelOpenFile = tk.Label(
+                    fEX, text='打开设置文件', fg='gray', cursor='hand2')
                 labelOpenFile.pack(side='left')
                 labelOpenFile.bind(
                     '<Button-1>', lambda *e: os.startfile('Umi-OCR_config.json'))
-                wid = tk.Checkbutton(fEX, text='调试模式', fg="gray",
+                self.balloon.bind(labelOpenFile, 'Umi-OCR_config.json')
+                wid = tk.Checkbutton(fEX, text='调试模式', fg='gray',
                                      variable=Config.getTK('isDebug'))
+                self.balloon.bind(
+                    wid, '调试功能，供开发者使用，立即生效：\nOCR输出额外调试信息 | 内置截图显示调试器')
                 wid.pack(side='right')
+                # 隐藏高级选项
+                wid = tk.Checkbutton(fEX, text='高级选项', fg='gray',
+                                     variable=Config.getTK('isAdvanced'))
+                self.balloon.bind(
+                    wid, '启用隐藏的高级选项，重启后生效：\n组合键判定规则 | 图片许可后缀 | 引擎启动参数 | 引擎管理策略')
+                wid.pack(side='right', padx=10)
                 # 若初始时非置顶，不显示提示，则尾部预留出空间
                 if not Config.get('isWindowTop'):
                     tk.Label(self.optFrame).pack(side='top')
@@ -770,7 +781,7 @@ class MainWin:
                 def onCanvasResize(event):  # 绑定画布大小改变事件
                     cW = event.width-3  # 当前 画布宽度
                     if not cW == self.optCanvasWidth:  # 若与上次不同：
-                        self.optFrame["width"] = cW  # 修改设置页 框架宽度
+                        self.optFrame['width'] = cW  # 修改设置页 框架宽度
                         self.optCanvasWidth = cW
                 self.optCanvas.bind(  # 绑定画布大小改变事件。只有画布组件前台显示时才会触发，减少性能占用
                     '<Configure>', onCanvasResize)
@@ -809,13 +820,13 @@ class MainWin:
     def openFileWin(self):  # 打开选择文件窗
         if not OCRe.msnFlag == MsnFlag.none:
             return
-        suf = Config.get("imageSuffix")  # 许可后缀
+        suf = Config.get('imageSuffix')  # 许可后缀
         paths = tk.filedialog.askopenfilenames(
             title='选择图片', filetypes=[('图片', suf)])
         self.addImagesList(paths)
 
     def addImagesList(self, paths):  # 添加一批图片列表
-        suf = Config.get("imageSuffix").split()  # 许可后缀列表
+        suf = Config.get('imageSuffix').split()  # 许可后缀列表
 
         def addImage(path):  # 添加一张图片。传入路径，许可后缀。
             path = path.replace("/", "\\")  # 浏览是左斜杠，拖入是右斜杠；需要统一
@@ -882,7 +893,7 @@ class MainWin:
         self.canvas.delete(tk.ALL)  # 清除画布
         scale = self.canvasHeight / area['size'][1]  # 显示缩放比例
         width = int(self.canvasHeight * (area['size'][0] / area['size'][1]))
-        self.canvas["width"] = width
+        self.canvas['width'] = width
         areaColor = ["red", "green", "darkorange"]
         for i in range(3):  # 绘制新图
             for a in area['area'][i]:
@@ -900,7 +911,7 @@ class MainWin:
         self.updateFrameHeight()  # 刷新框架
         Config.set("ignoreArea", None)
         self.canvas.delete(tk.ALL)  # 清除画布
-        self.canvas["width"] = int(self.canvasHeight * (16/9))
+        self.canvas['width'] = int(self.canvasHeight * (16/9))
 
     # 表格操作 ===============================================
 
@@ -1060,7 +1071,7 @@ class MainWin:
         # 剪贴板中是文件列表（文件管理器中对着文件ctrl+c得到句柄）
         elif isinstance(clipData, tuple):
             # 检验文件列表中是否存在合法文件类型
-            suf = Config.get("imageSuffix").split()  # 许可后缀列表
+            suf = Config.get('imageSuffix').split()  # 许可后缀列表
             flag = False
             for path in clipData:  # 检验文件列表中是否存在许可后缀
                 if suf and os.path.splitext(path)[1].lower() in suf:

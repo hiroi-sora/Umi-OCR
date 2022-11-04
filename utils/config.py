@@ -58,6 +58,11 @@ _ConfigDict = {
         'isSave': True,
         'isTK': True,
     },
+    'isAdvanced': {  # T时高级模式，显示额外的设置项
+        'default': False,
+        'isSave': True,
+        'isTK': True,
+    },
     'isTray': {  # T时展示托盘图标
         'default': True,
         'isSave': True,
@@ -395,7 +400,7 @@ _ConfigDict = {
         'isTK': True,
     },
     'tipsTop2': {  # 主窗口顶部进度条上方的label，右侧
-        'default': '拖入图片或立即截图',
+        'default': '拖入图片或快捷截图',
         'isTK': True,
     },
 }
