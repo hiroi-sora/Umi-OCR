@@ -81,12 +81,22 @@ Github下载：[Release v1.3.1](https://github.com/hiroi-sora/Umi-OCR/releases/t
 ## 兼容性
 
 - 系统支持 Win10 x64 及以上版本。
-- CPU必须具有AVX指令集。常见的家用CPU一般都满足该条件。（出现初始化引擎失败等问题时请检查CPU是否兼容。参考 [issue #11](https://github.com/hiroi-sora/Umi-OCR/issues/11) ）
+- CPU必须具有AVX指令集。
+<details>
+<summary>出现初始化引擎失败等问题时请参考这里</summary>
 
-    | AVX   | 支持的产品系列                                         | 不支持                | 存疑                     |
-    | ----- | ------------------------------------------------------ | --------------------- | ------------------------ |
-    | Intel | 酷睿Core，至强Xeon                                     | 凌动Atom，安腾Itanium | 赛扬Celeron，奔腾Pentium |
-    | AMD   | 推土机架构及之后的产品，如锐龙Ryzen、速龙Athlon、FX 等 | K10架构及之前的产品   |                          |
+![CPUAVX.png](https://tupian.li/images/2022/11/04/63651e9eed1df.png)
+
+常见的家用CPU一般都支持AVX指令集，如下：
+
+| AVX   | 支持的产品系列                                         | 不支持                | 存疑                     |
+| ----- | ------------------------------------------------------ | --------------------- | ------------------------ |
+| Intel | 酷睿Core，至强Xeon                                     | 凌动Atom，安腾Itanium | 赛扬Celeron，奔腾Pentium |
+| AMD   | 推土机架构及之后的产品，如锐龙Ryzen、速龙Athlon、FX 等 | K10架构及之前的产品   |                          |
+
+若不确定是否支持，可通过CPU-Z软件查看。
+
+</details>
 
 ## 前言
 
