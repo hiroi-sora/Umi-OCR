@@ -47,6 +47,14 @@ class ClickTrayModeFlag(Enum):
     clipboard = 2  # 粘贴图片
 
 
+class WindowTopModeFlag():
+    '''窗口置顶模式标志'''
+    # 不继承枚举
+    never = 0  # 永不
+    finish = 1  # 任务完成时置顶
+    eternity = 2  # 永远保持置顶
+
+
 # 配置文件路径
 ConfigJsonFile = 'Umi-OCR_config.json'
 
@@ -104,6 +112,11 @@ _ConfigDict = {
     },
     'isWindowTop': {  # T时窗口置顶
         'default': False,
+        'isSave': False,  # 不保存，仅作为标记
+        'isTK': True,
+    },
+    'WindowTopMode': {  # 窗口置顶模式
+        'default': WindowTopModeFlag.finish,
         'isSave': True,
         'isTK': True,
     },
