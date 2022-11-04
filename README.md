@@ -58,14 +58,12 @@
 
 ## 下载
 
-> Umi-OCR 软件本体含 **简体中文&英文** 识别库。  
-> 配套 **多国语言识别扩展包** 可导入 `繁中,日,韩,俄,德,法` 识别库，请按需下载。
+> Umi-OCR 软件本体含 **简体中文&英文** 通用识别库。  
+> 配套 **多国语言识别扩展包** 可导入 `繁中,英,日,韩,俄,德,法` 识别库，请按需下载。
 
-Github下载：[Umi-OCR 批量图片转文字 v1.3.0](https://github.com/hiroi-sora/Umi-OCR/releases/tag/v1.3.0)
+Github下载：[Release v1.3.1](https://github.com/hiroi-sora/Umi-OCR/releases/tag/v1.3.1)
 
-蓝奏云下载：（密码 `1111` 。请留意发布日期和版本号）
-
-[https://wwn.lanzoul.com/b036wwa4d](https://wwn.lanzoul.com/b036wwa4d)
+蓝奏云下载：[https://hiroi-sora.lanzoul.com/s/umi-ocr](https://hiroi-sora.lanzoul.com/s/umi-ocr)
 
 <details>
 <summary>使用源代码：</summary>
@@ -261,7 +259,7 @@ OCR识别出的文本是按“块”划分的，通常一行文字分为一块�
 
 [点此跳转下载位置](#下载)
 
-扩展包内置语言：`繁中,日,韩,俄,德,法`
+扩展包内置语言：`繁中,英,日,韩,俄,德,法`
 
 ##### 方法二：手动下载添加 PP-OCR 模型库
 
@@ -279,23 +277,6 @@ OCR识别出的文本是按“块”划分的，通常一行文字分为一块�
 </details>
 
 <details>
-<summary>添加到开始菜单</summary>
-
-1. 软件创建一个快捷方式
-2. 打开系统目录 `C:\ProgramData\Microsoft\Windows\Start Menu\Programs` ，将快捷方式扔进去。
-
-</details>
-
-
-<details>
-<summary>添加到开机自启</summary>
-
-1. 软件创建一个快捷方式
-2. 打开系统目录 `C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp` ，将快捷方式扔进去。
-
-</details>
-
-<details>
 <summary>添加到运行（Win+R）</summary>
 
 1. 在任何地方创建一个文件夹，名字随意，将该文件夹的路径[加入系统环境变量](https://www.bing.com/search?q=win10+%E6%B7%BB%E5%8A%A0%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F)。
@@ -305,6 +286,8 @@ OCR识别出的文本是按“块”划分的，通常一行文字分为一块�
 - 提示：请不要起名为`ocr`，因为系统可能存在同名的注册路径，无法用此指令唤起第三方软件。
 
 </details>
+
+（`v1.3.1`起，软件内已支持添加到开机自启、添加桌面快捷方式、添加到开始菜单。）
 
 
 ## 效率测试
@@ -339,8 +322,8 @@ OCR识别出的文本是按“块”划分的，通常一行文字分为一块�
 
 结论：
 
-- 在启用mkldnn情况下，新版本 `v1.2.6` 比前代的效率具有显著优势。新版调教倾向于榨干硬件的性能，内存占用高于旧版。
-- 不启用mkldnn时，新版本效率不如前代。故您的CPU若不支持mkldnn（如早期AMD型号），建议使用 `v1.2.5` 的旧版本Umi-OCR。
+- 在启用mkldnn情况下，`v1.2.6` 及之后的版本，比前代的效率具有显著优势。新版调教倾向于榨干硬件的性能，内存占用高于旧版。
+- 不启用mkldnn时，新版本效率不如前代。故您的CPU若不支持mkldnn（极早期AMD型号），可尝试使用 `v1.2.5` 的旧版本Umi-OCR。
 - 虽然Paddle官方文档中说经过压缩剪枝蒸馏量化的slim版模型的性能指标会超过传统算法，但实测 v3 slim 模型的性能远不如原始版本，还可能伴随着内存泄漏的问题。也许是 PP-OCR C++ 引擎不适配。在该问题解决之前，Umi-OCR发行版提供原始版本模型。
 
 </details>
@@ -394,16 +377,13 @@ OCR识别出的文本是按“块”划分的，通常一行文字分为一块�
 - 优化引擎参数设置。
 - 排版后处理：匹配/合并同段落文本，支持横/竖排。
 - 可设置窗口弹出模式（锁定置顶）。
+- 重新快捷键模块，解决失效和录制不正确的Bug。
+- 设置开机自启。
+- 创建快捷方式到开始菜单、桌面。
+- 多开提示。
+- 截图时隐藏窗口。
 
 </details>
-
-▼ 开发中
-
-- [x] 重新快捷键模块，解决失效和录制不正确的Bug
-- [x] 设置开机自启
-- [x] 创建快捷方式到开始菜单、桌面
-- [x] 多开提示
-- [x] 截图时隐藏窗口
 
 <details>
 <summary>画饼（有生之年）</summary>
@@ -423,13 +403,13 @@ OCR识别出的文本是按“块”划分的，通常一行文字分为一块�
 
 点击版本号链接可前往对应备份分支。
 
-##### v1.3.1 `测试中` [测试页地址](https://github.com/hiroi-sora/Umi-OCR/issues/43)
-<!-- 2k★撒花~ -->
-- 修Bug：快捷键模块基于pynput库重写，舍弃keyboard库，避免keyboard库的诸多Bug。
+##### [v1.3.1](https://github.com/hiroi-sora/Umi-OCR/tree/release/1.3.1) `2022.11.4`
+<!-- 2k★ 撒花~ -->
+- 修Bug：快捷键模块重写，引入pynput库，舍弃keyboard库，解决几率失效、录制不正确等Bug。
 - 新功能：添加开机自启，桌面快捷方式，开始菜单快捷方式。
 - 新功能：多开软件时提示。
 - 新功能：截图时隐藏窗口。
-- 调整UI：小改动。
+- 调整UI：使用频率极低的设置项设为隐藏的高级选项。
 - 优化：检查引擎组件是否存在。
 - 优化：`横排-合并多行-自然段` 优化逻辑，支持0~2全角空格首行缩进。
 
@@ -495,12 +475,6 @@ OCR识别出的文本是按“块”划分的，通常一行文字分为一块�
 
 ##### [moses-palmer/pynput](https://github.com/moses-palmer/pynput)
 > This library allows you to control and monitor input devices.
-
-##### [boppreh/keyboard](https://github.com/boppreh/keyboard)
-> Hook and simulate global keyboard events on Windows and Linux.
-
-##### [boppreh/mouse](https://github.com/boppreh/mouse)
-> Hook and simulate global mouse events in pure Python.
 
 ##### [Infinidat/infi.systray](https://github.com/Infinidat/infi.systray)
 > A Windows system tray icon with a right-click context menu.
