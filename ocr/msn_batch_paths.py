@@ -6,6 +6,7 @@ from ocr.msn import Msn
 # 输出器
 from ocr.output_panel import OutputPanel
 from ocr.output_txt import OutputTxt
+from ocr.output_separate_txt import OutputSeparateTxt
 from ocr.output_md import OutputMD
 from ocr.output_jsonl import OutputJsonl
 # 文块处理器
@@ -45,6 +46,8 @@ class MsnBatch(Msn):
             self.outputList.append(OutputMD())
         if Config.get("isOutputJsonl"):  # 输出到jsonl
             self.outputList.append(OutputJsonl())
+        if Config.get("isOutputSeparateTxt"):  # 输出到单独txt
+            self.outputList.append(OutputSeparateTxt())
         # 初始化文块处理器
         self.procList = []
         if Config.get("ignoreArea"):  # 忽略区域

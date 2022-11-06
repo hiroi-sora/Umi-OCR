@@ -79,7 +79,9 @@ class OcrEngine:
             try:
                 func(*e)
             except Exception as e:
-                Log.error(f'调用函数 {str(func)} 异常： {e}')
+                errMsg = f'调用函数 {str(func)} 异常： {e}'
+                Log.error(errMsg)
+                Config.main.panelOutput(errMsg+'\n')
 
     def start(self):
         '''启动引擎。若引擎已启动，且参数有更新，则重启。'''

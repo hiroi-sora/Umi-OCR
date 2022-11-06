@@ -566,33 +566,41 @@ class MainWin:
                 fr1.pack(side='top', fill='x', pady=2, padx=5)
 
                 wid = ttk.Checkbutton(
-                    fr1, variable=Config.getTK('isOutputTxt'), text='纯文本.txt文件')
+                    fr1, variable=Config.getTK('isOutputTxt'), text='合并.txt文件')
+                self.balloon.bind(wid, f'所有识别文本输出到同一个txt文件')
                 wid.grid(column=0, row=0,  sticky='w')
                 self.lockWidget.append(wid)
                 wid = ttk.Checkbutton(
-                    fr1, variable=Config.getTK('isOutputMD'), text='图文链接.md文件')
+                    fr1, variable=Config.getTK('isOutputSeparateTxt'), text='独立.txt文件')
+                self.balloon.bind(wid, f'每张图片的文本输出到同名的单独txt文件')
                 wid.grid(column=2, row=0,  sticky='w')
                 self.lockWidget.append(wid)
                 wid = ttk.Checkbutton(
-                    fr1, variable=Config.getTK('isOutputJsonl'), text='原始信息.jsonl文件')
+                    fr1, variable=Config.getTK('isOutputMD'), text='图文链接.md文件')
+                self.balloon.bind(wid, f'使用Markdown阅读器打开，可同时展示图片和文本')
                 wid.grid(column=0, row=1,  sticky='w')
+                self.lockWidget.append(wid)
+                wid = ttk.Checkbutton(
+                    fr1, variable=Config.getTK('isOutputJsonl'), text='原始信息.jsonl文件')
+                self.balloon.bind(wid, f'含所有文件路径和OCR信息，可导入别的程序进一步操作')
+                wid.grid(column=2, row=1,  sticky='w')
                 self.lockWidget.append(wid)
                 tk.Label(fr1, text=' ').grid(column=1, row=0)
 
                 def offAllOutput(e):  # 关闭全部输出
                     if OCRe.msnFlag == MsnFlag.none:
                         Config.set('isOutputTxt', False)
+                        Config.set('isOutputSeparateTxt', False)
                         Config.set('isOutputMD', False)
                         Config.set('isOutputJsonl', False)
                 labelOff = tk.Label(fr1, text='　 关闭全部输出',
                                     cursor='hand2', fg='blue')
-                labelOff.grid(column=2, row=1, sticky='w')
+                labelOff.grid(column=0, row=2, sticky='w')
                 labelOff.bind('<Button-1>', offAllOutput)  # 绑定关闭全部输出
 
                 wid = ttk.Checkbutton(fr1, text='图片中不含文字时，不输出信息',
                                       variable=Config.getTK('isIgnoreNoText'),)
-                wid.grid(column=0, row=2, columnspan=9, sticky='w')
-                self.lockWidget.append(wid)
+                wid.grid(column=0, row=10, columnspan=9, sticky='w')
 
                 tk.Label(fOutput, fg='gray',
                          text="下面两项为空时，默认输出到第一张图片所在的文件夹"

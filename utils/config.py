@@ -252,6 +252,11 @@ _ConfigDict = {
         'isSave': True,
         'isTK': True,
     },
+    'isOutputSeparateTxt': {  # T时输出内容写入每个图片同名的单独txt文件
+        'default': False,
+        'isSave': True,
+        'isTK': True,
+    },
     'isOutputMD': {  # T时输出内容写入md文件
         'default': False,
         'isSave': True,
