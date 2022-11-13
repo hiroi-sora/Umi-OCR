@@ -119,4 +119,3 @@ class OcrAPI:
     def __del__(self):
         self.stop()
         atexit.unregister(self.stop)  # 移除退出处理
-        print('OCR API 析构！')

@@ -209,6 +209,11 @@ _ConfigDict = {
         'isSave': True,
         'isTK': True,
     },
+    'isNeedClear': {  # T时输出前清空面板
+        'default': False,
+        'isSave': True,
+        'isTK': True,
+    },
     # 计划任务设置
     'isOpenExplorer': {   # T时任务完成后打开资源管理器到输出目录
         'default': False,

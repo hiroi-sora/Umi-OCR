@@ -199,9 +199,8 @@ class MainWin:
 
             # 右
             btn = ttk.Button(fr1, image=Asset.getImgTK('clear24'),  # 清空按钮
-                             command=lambda: self.textOutput.delete(
-                '1.0', tk.END),
-                style='icon.TButton',  takefocus=0,)
+                             command=self.panelClear,
+                             style='icon.TButton',  takefocus=0,)
             self.balloon.bind(btn, '清空输出面板')
             btn.pack(side='right')
 
@@ -459,15 +458,20 @@ class MainWin:
 
                 fr2 = tk.Frame(fQuick)
                 fr2.pack(side='top', fill='x', pady=2, padx=5)
-                wid = ttk.Checkbutton(fr2, variable=Config.getTK('isNeedCopy'),
-                                      text='复制识别出的文字')
-                wid.pack(side='left')
-                self.balloon.bind(wid, '截图或粘贴图片OCR完成后，将得到的文本复制到剪贴板')
+                fr2.grid_columnconfigure(1, minsize=20)
                 wid = ttk.Checkbutton(fr2, variable=Config.getTK('isScreenshotHideWindow'),
-                                      text='截图时隐藏窗口')
-                wid.pack(side='left', padx=40)
+                                      text='截图隐藏窗口')
+                wid.grid(column=0, row=0)
                 self.balloon.bind(
-                    wid, f'启用后，截图会延迟{Config.get("screenshotHideWindowWaitTime")}毫秒以等待窗口动画')
+                    wid, f'截图前隐藏主窗口\n会延迟{Config.get("screenshotHideWindowWaitTime")}毫秒以等待窗口动画')
+                wid = ttk.Checkbutton(fr2, variable=Config.getTK('isNeedCopy'),
+                                      text='自动复制结果')
+                wid.grid(column=0, row=1)
+                self.balloon.bind(wid, '快捷识图完成后，将得到的文本复制到剪贴板')
+                wid = ttk.Checkbutton(fr2, variable=Config.getTK('isNeedClear'),
+                                      text='自动清空面板')
+                wid.grid(column=2, row=1)
+                self.balloon.bind(wid, f'每次快捷识图将清空识别内容面板')
 
                 # 切换截图模式
                 def onModeChange():
@@ -988,6 +992,7 @@ class MainWin:
     # 写字板操作 =============================================
 
     def panelOutput(self, text, position=tk.END, highlight=''):
+        '''输出面板写入文字'''
         self.textOutput.insert(position, text)
         if highlight:  # 需要高亮
             if position == tk.END:  # 暂时只允许尾部插入
@@ -995,6 +1000,10 @@ class MainWin:
                     highlight, f'end -1lines linestart', f'end -1lines lineend')
         if self.isAutoRoll.get():  # 需要自动滚动
             self.textOutput.see(position)
+
+    def panelClear(self):
+        '''清空输出面板'''
+        self.textOutput.delete('1.0', tk.END)
 
     # 窗口操作 =============================================
 
@@ -1195,7 +1204,7 @@ class MainWin:
         if outputNow and not outputNow == "\n":  # 输出面板内容存在，且不是单换行（初始状态）
             if not tkinter.messagebox.askokcancel('提示', '将清空输出面板。要继续吗？'):
                 return
-            self.textOutput.delete('1.0', tk.END)
+            self.panelClear()
         self.textOutput.insert(tk.END, tipsText)
 
 # 全角空格：【　】
