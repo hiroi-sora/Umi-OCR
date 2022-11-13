@@ -17,6 +17,7 @@ class IgnoreAreaWin:
         self.balloon = Config.main.balloon  # 气泡框
         self.cW = 960  # 画板尺寸
         self.cH = 540
+        self.tran = 2  # 绘制偏移量
         self.areaColor = ["red", "green",  # 各个矩形区域的标志颜色
                           "darkorange", "white"]
 
@@ -193,12 +194,13 @@ class IgnoreAreaWin:
             self.imgSize = img.size
             # 计算 按宽和高 分别缩放的比例
             sw, sh = self.cW/img.size[0], self.cH/img.size[1]
-            if sw > sh:  # 测试，按宽、还是高缩放，刚好填满画布
+            # 测试，按宽、还是高缩放，刚好填满画布
+            if sw > sh:  # 按高
                 self.imgReSize = (round(img.size[0]*sh), self.cH)
-            else:
+                self.imgScale = sh
+            else:  # 按宽
                 self.imgReSize = (self.cW, round(img.size[1]*sw))
-            # 记录缩放系数，原分辨率*系数=绘制分辨率
-            self.imgScale = self.imgReSize[0]/self.imgSize[0]
+                self.imgScale = sw
             self.imgSizeText.set(f'{self.imgSize[0]}x{self.imgSize[1]}')
         elif not self.imgSize == img.size:  # 尺寸不符合
             tk.messagebox.showwarning("图片尺寸错误！",
@@ -233,10 +235,10 @@ class IgnoreAreaWin:
                         data['data'], s = tbpu.run(data['data'], imgInfo)
                 for o in data["data"]:  # 绘制矩形框
                     # 提取左上角、右下角的坐标
-                    p1x = round(o['box'][0][0]*self.imgScale)
-                    p1y = round(o['box'][0][1]*self.imgScale)
-                    p2x = round(o['box'][2][0]*self.imgScale)
-                    p2y = round(o['box'][2][1]*self.imgScale)
+                    p1x = round(o['box'][0][0]*self.imgScale)+self.tran
+                    p1y = round(o['box'][0][1]*self.imgScale)+self.tran
+                    p2x = round(o['box'][2][0]*self.imgScale)+self.tran
+                    p2y = round(o['box'][2][1]*self.imgScale)+self.tran
                     r1 = self.canvas.create_rectangle(
                         p1x, p1y, p2x, p2y, outline='white', width=2)  # 绘制白实线基底
                     r2 = self.canvas.create_rectangle(
@@ -319,8 +321,8 @@ class IgnoreAreaWin:
         elif y < 0:
             y = 0
         c = self.areaColor[self.areaType]
-        id = self.canvas.create_rectangle(
-            x, y, x, y,  width=2, activefill=c, outline=c)  # 绘制新图
+        id = self.canvas.create_rectangle(  # 绘制新图
+            x+self.tran, y+self.tran, x+self.tran, y+self.tran,  width=2, activefill=c, outline=c)
         self.area[self.areaType].append([(x, y), (x, y)])  # 向对应列表中增加1个矩形
         self.areaHistory.append({"id": id, "type": self.areaType})  # 载入历史记录
 
@@ -338,5 +340,6 @@ class IgnoreAreaWin:
             y = 0
         x0, y0 = self.area[self.areaType][-1][0][0], self.area[self.areaType][-1][0][1]
         # 刷新历史记录中最后的图形的坐标
-        self.canvas.coords(self.areaHistory[-1]["id"], x0, y0, x, y)
+        self.canvas.coords(
+            self.areaHistory[-1]["id"], x0+self.tran, y0+self.tran, x+self.tran, y+self.tran)
         self.area[self.areaType][-1][1] = (x, y)  # 刷新右下角点

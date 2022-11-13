@@ -605,6 +605,7 @@ class MainWin:
                 wid = ttk.Checkbutton(fr1, text='图片中不含文字时，不输出信息',
                                       variable=Config.getTK('isIgnoreNoText'),)
                 wid.grid(column=0, row=10, columnspan=9, sticky='w')
+                self.lockWidget.append(wid)
 
                 tk.Label(fOutput, fg='gray',
                          text="下面两项为空时，默认输出到第一张图片所在的文件夹"
@@ -933,13 +934,14 @@ class MainWin:
         self.ignoreLabel["text"] = f"生效分辨率：\n宽 {area['size'][0]}\n高 {area['size'][1]}"
         self.canvas.delete(tk.ALL)  # 清除画布
         scale = self.canvasHeight / area['size'][1]  # 显示缩放比例
-        width = int(self.canvasHeight * (area['size'][0] / area['size'][1]))
+        width = round(self.canvasHeight * (area['size'][0] / area['size'][1]))
         self.canvas['width'] = width
         areaColor = ["red", "green", "darkorange"]
+        tran = 2  # 绘制偏移量
         for i in range(3):  # 绘制新图
             for a in area['area'][i]:
-                x0, y0 = a[0][0]*scale, a[0][1]*scale,
-                x1, y1 = a[1][0]*scale, a[1][1]*scale,
+                x0, y0 = a[0][0]*scale+tran, a[0][1]*scale+tran,
+                x1, y1 = a[1][0]*scale+tran, a[1][1]*scale+tran,
                 self.canvas.create_rectangle(
                     x0, y0, x1, y1,  fill=areaColor[i])
         self.ignoreBtn.pack_forget()  # 隐藏按钮
