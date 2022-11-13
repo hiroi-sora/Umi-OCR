@@ -106,6 +106,7 @@ class MsnBatch(Msn):
         textDebug = ''  # 调试信息
         textScore = ''  # 置信度信息
         imgInfo = self.batList.get(index=numData['index'])  # 获取图片信息
+        flagNoOut = False
         if ocrData['code'] == 100:  # 成功
             textBlockList = ocrData['data']  # 获取文块
             # 将文块组导入每一个文块处理器，获取输出文块组
@@ -113,19 +114,25 @@ class MsnBatch(Msn):
                 textBlockList, textD = proc.run(textBlockList, imgInfo)
                 if textD:
                     textDebug += f'{textD}\n'
-            # 计算置信度
-            score = 0
-            scoreNum = 0
-            for tb in textBlockList:
-                score += tb['score']
-                scoreNum += 1
-            if scoreNum > 0:
-                score /= scoreNum
-            textScore = str(score)
-            textDebug += f'总耗时：{numData["timeNow"]}s  置信度：{textScore}\n'
+            if textBlockList:  # 结果有文字
+                # 计算置信度
+                score = 0
+                scoreNum = 0
+                for tb in textBlockList:
+                    score += tb['score']
+                    scoreNum += 1
+                if scoreNum > 0:
+                    score /= scoreNum
+                textScore = str(score)
+                textDebug += f'总耗时：{numData["timeNow"]}s  置信度：{textScore}\n'
+            else:
+                textScore = '无文字'
+                textDebug += f'总耗时：{numData["timeNow"]}s  全部文字已忽略\n'
+                flagNoOut = True
         elif ocrData['code'] == 101:  # 无文字
             textScore = '无文字'
             textDebug += f'总耗时：{numData["timeNow"]}s  图中未发现文字\n'
+            flagNoOut = True
         else:  # 识别失败
             # 将错误信息写入第一个文块
             textBlockList = [{'box': [0, 0, 0, 0, 0, 0, 0, 0], 'score': 0,
@@ -133,7 +140,7 @@ class MsnBatch(Msn):
             textDebug += f'总耗时：{numData["timeNow"]}s  识别失败\n'
             textScore = '错误'
         # ==================== 输出 ====================
-        if self.isIgnoreNoText and ocrData['code'] == 101:
+        if self.isIgnoreNoText and flagNoOut:
             pass  # 设置了不输出无文字的图片
         else:
             Log.info(textDebug)
