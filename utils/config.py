@@ -387,7 +387,17 @@ _ConfigDict = {
         'isSave': True,
         'isTK': True,
     },
-
+    # 更改语言窗口
+    'isLanguageWinAutoExit': {  # T时语言窗口自动关闭
+        'default': False,
+        'isSave': True,
+        'isTK': True,
+    },
+    'isLanguageWinAutoOcr': {  # T时语言窗口修改后重复任务
+        'default': False,
+        'isSave': True,
+        'isTK': True,
+    },
     # 防止多开相关
     'processID':  {  # 正在运行的进程的PID
         'default': -1,

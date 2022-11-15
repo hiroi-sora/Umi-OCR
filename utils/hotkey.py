@@ -63,6 +63,11 @@ class Hotkey():  # 热键
         '''移除鼠标监听'''
         hotkeyApi.removeMouse()
 
+    @staticmethod
+    def getMousePos():
+        '''获取鼠标当前位置'''
+        return hotkeyApi.getMousePos()
+
 
 """
 # 旧版热键类。依赖 keyboard 库，这个库年久失修Bug多，弃之。

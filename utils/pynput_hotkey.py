@@ -135,6 +135,7 @@ class Hotkey_Api():  # 热键API，封装 keyboard.Listener
         self.isMouseListener = False  # 记录鼠标监听器是否在运行
         self.mouseCallback = {'up': None, 'down': None}  # 鼠标回调
         # self.mouseListener.start()
+        self.mouseController = mouse.Controller()  # 鼠标操控器
 
     def join(self):
         '''调试用，键盘监听器运行期间阻塞线程'''
@@ -286,6 +287,9 @@ class Hotkey_Api():  # 热键API，封装 keyboard.Listener
             self.mouseListener.stop()
             self.isMouseListener = False
             self.mouseCallback = {'up': None, 'down': None}
+
+    def getMousePos(self):
+        return self.mouseController.position
 
 
 hotkeyApi = Hotkey_Api()

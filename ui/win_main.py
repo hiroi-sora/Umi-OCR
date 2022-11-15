@@ -7,6 +7,7 @@ from utils.startup import Startup  # 启动方式
 from utils.hotkey import Hotkey  # 快捷键
 from ui.win_screenshot import ScreenshotCopy  # 截屏
 from ui.win_select_area import IgnoreAreaWin  # 子窗口
+from ui.win_ocr_language import ChangeOcrLanguage  # 更改语言
 from ui.widget import Widget  # 控件
 from ui.pmw.PmwBalloon import Balloon  # 气泡提示
 from ui.tray import SysTray
@@ -207,12 +208,16 @@ class MainWin:
             btn.pack(side='right')
 
             ttk.Checkbutton(fr1, variable=self.isAutoRoll, text="自动滚动",
-                            takefocus=0,).pack(side='right', padx=20)
+                            takefocus=0,).pack(side='right')
             tf = tk.Label(fr1, text='字体', fg='gray', cursor='hand2')
-            tf.pack(side='right')
+            tf.pack(side='right', padx=15)
             tf.bind(
                 '<Button-1>', lambda *e: self.notebook.select(self.notebookTab[2]))  # 转到设置卡
             self.balloon.bind(tf, '在【设置】选项卡更改输出面板的字体')
+            lan = tk.Label(fr1, text='语言', fg='blue', cursor='hand2')
+            lan.pack(side='right')
+            lan.bind('<Button-1>', lambda *e: ChangeOcrLanguage())  # 更改OCR语言
+            self.balloon.bind(lan, '更改OCR语言')
 
             fr2 = tk.Frame(tabFrameOutput)
             fr2.pack(side='top', fill='both')
@@ -678,7 +683,7 @@ class MainWin:
                 wid.grid(column=0, row=0, sticky='ew')
                 self.balloon.bind(wid, '将OCR划分的单行文本合并成整段文字\n点击右侧按钮，浏览方案说明')
                 labelUse = tk.Label(fpro, text='说明', width=5,
-                                    fg='gray', cursor='question_arrow')
+                                    fg='deeppink', cursor='question_arrow')
                 labelUse.grid(column=1, row=0)
                 labelUse.bind(
                     '<Button-1>', lambda *e: self.showTips(GetTbpuHelp(Umi.website)))  # 绑定鼠标左键点击
