@@ -70,8 +70,8 @@ Github下载：[Release v1.3.1](https://github.com/hiroi-sora/Umi-OCR/releases/t
 
 - main分支可能含有开发中的新功能。若您想使用稳定版本，建议切换到[最新的Release分支](https://github.com/hiroi-sora/Umi-OCR/branches)。
 - 安装依赖库：`pip install -r requirements.txt`
-- 可直接运行 `main.py` 启动程序，或自己打包为exe。
-- 项目使用`pyinstaller`打包。运行 `to_exe.py` 一键打包。
+- 打包还需要：`pip install pyinstaller`
+- 运行 `main.py` 启动程序。测试无异常后，运行 `to_exe.py` 一键打包。
 - 打包后，请将引擎组件 [PaddleOCR-json 整个文件夹](PaddleOCR-json) 放置于exe同目录下！
 - 打包后，请将引擎组件 [PaddleOCR-json 整个文件夹](PaddleOCR-json) 放置于exe同目录下！！
 - 打包后，请将引擎组件 [PaddleOCR-json 整个文件夹](PaddleOCR-json) 放置于exe同目录下！！！
@@ -82,21 +82,7 @@ Github下载：[Release v1.3.1](https://github.com/hiroi-sora/Umi-OCR/releases/t
 
 - 系统支持 Win10 x64 及以上版本。
 - CPU必须具有AVX指令集。
-<details>
-<summary>出现初始化引擎失败等问题时请参考这里</summary>
-
-![CPUAVX.png](https://tupian.li/images/2022/11/04/63651e9eed1df.png)
-
-常见的家用CPU一般都支持AVX指令集，如下：
-
-| AVX   | 支持的产品系列                                         | 不支持                | 存疑                     |
-| ----- | ------------------------------------------------------ | --------------------- | ------------------------ |
-| Intel | 酷睿Core，至强Xeon                                     | 凌动Atom，安腾Itanium | 赛扬Celeron，奔腾Pentium |
-| AMD   | 推土机架构及之后的产品，如锐龙Ryzen、速龙Athlon、FX 等 | K10架构及之前的产品   |                          |
-
-若不确定是否支持，可通过CPU-Z软件查看。
-
-</details>
+- 出现初始化引擎失败等问题时请参考 [问题排除](#问题排除) 。
 
 ## 前言
 
@@ -120,21 +106,6 @@ Github下载：[Release v1.3.1](https://github.com/hiroi-sora/Umi-OCR/releases/t
 点击截图按钮或自定义快捷键，唤起截图识别。
 
 ![](https://tupian.li/images/2022/09/29/1-w-.png)
-
-<details>
-<summary>多屏幕用户请注意</summary>
-
-> 由于windows缩放对屏幕坐标系带来的影响，若外接多块屏幕，且缩放比例不一致时，可能导致Umi-OCR内置截图模块异常，如画面不完整、窗口变形、识别不出文字等。
-> 
-> **若出现这种情况**，请在系统设置里的【更改文本、应用等项目的大小】将所有屏幕调到相同数值。
-> 
-> 若不想修改系统设置，软件还附带了第二套截图方案：调用windows内置的“截图和草图”来完成截图并唤起OCR。可在软件设置里切换。
-> 
-> 若系统截图后不能唤起OCR，请确保系统能通过 `win+shift+S` 触发截图，且`自动复制到剪贴板` 的开关不能关闭（默认是打开的）。
-
-![](https://tupian.li/images/2022/09/29/1-1-w--.png)
-
-</details>
 
 #### 粘贴图片到软件
 
@@ -299,6 +270,49 @@ OCR识别出的文本是按“块”划分的，通常一行文字分为一块�
 
 （`v1.3.1`起，软件内已支持添加到开机自启、添加桌面快捷方式、添加到开始菜单。）
 
+## 问题排除
+
+<details>
+<summary>多屏幕截图不正常</summary>
+
+> 由于windows缩放对屏幕坐标系带来的影响，若外接多块屏幕，且缩放比例不一致时，可能导致Umi-OCR内置截图模块异常，如画面不完整、窗口变形、识别不出文字等。
+> 
+> **若出现这种情况**，请在系统设置里的【更改文本、应用等项目的大小】将所有屏幕调到相同数值。
+> 
+> 若不想修改系统设置，软件还附带了第二套截图方案：调用windows内置的“截图和草图”来完成截图并唤起OCR。可在软件设置里切换。
+> 
+> 若系统截图后不能唤起OCR，请确保系统能通过 `win+shift+S` 触发截图，且`自动复制到剪贴板` 的开关不能关闭（默认是打开的）。
+
+![](https://tupian.li/images/2022/09/29/1-1-w--.png)
+
+</details>
+
+<details>
+<summary>未找到引擎组件</summary>
+
+请将引擎组件 `PaddleOCR-json 文件夹` 放置于程序入口（main.py或exe）同目录下。
+
+</details>
+
+<details>
+<summary>初始化引擎失败</summary>
+
+> 本项目离线引擎暂不支持在没有AVX指令集的CPU上运行，下图指示如何判断是否由此原因引起。
+
+![CPUAVX.png](https://tupian.li/images/2022/11/04/63651e9eed1df.png)
+
+> 常见的家用CPU一般都支持AVX指令集，如下：
+
+| AVX   | 支持的产品系列                                         | 不支持                | 存疑                     |
+| ----- | ------------------------------------------------------ | --------------------- | ------------------------ |
+| Intel | 酷睿Core，至强Xeon                                     | 凌动Atom，安腾Itanium | 赛扬Celeron，奔腾Pentium |
+| AMD   | 推土机架构及之后的产品，如锐龙Ryzen、速龙Athlon、FX 等 | K10架构及之前的产品   |                          |
+
+> 可通过 [CPU-Z](https://www.cpuid.com/downloads/cpu-z/cpu-z_2.03-cn.zip) 软件查看自己CPU的指令集信息。
+> 
+> 若具有AVX指令集，仍引发了初始化引擎失败的报错，请提issue。
+
+</details>
 
 ## 效率测试
 
@@ -392,8 +406,15 @@ OCR识别出的文本是按“块”划分的，通常一行文字分为一块�
 - 创建快捷方式到开始菜单、桌面。
 - 多开提示。
 - 截图时隐藏窗口。
+- 结构输出到每个图片同名的单独txt文件
 
 </details>
+
+▼ 开发中
+
+- [x] 开机启动，可选不显示主窗口
+- [x] 快捷识图，可选自动清屏
+- [ ] 合并自然段-英文模式：补充半角符号后缺失的空格
 
 <details>
 <summary>画饼（有生之年）</summary>
