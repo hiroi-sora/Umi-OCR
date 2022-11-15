@@ -12,15 +12,23 @@ Log = GetLog()
 
 class ShortcutApi:
     '''操作快捷方式'''
+    @staticmethod  # 询问是否静默启动。返回T为静默启动，F为正常显示窗口
+    def askStartupNoWin(action):
+        flag = not tk.messagebox.askyesno(
+            '询问', f'通过{action}打开软件时，是否显示主窗口？\n\n是：正常显示主窗口\n否：静默启动，收纳到托盘区')
+        if flag and not Config.get('isTray'):  # 当前配置不显示托盘，则自动启用托盘
+            Config.set('isTray', True)
+        return flag
 
     @staticmethod  # 添加
-    def add(path, name):
+    def add(path, name, arguments=''):
         '''创建快捷方式'''
         winshell.CreateShortcut(
             Path=f'{path}\\{name}.lnk',
             Target=Umi.path,
             Description=name,
-            Icon=(os.path.realpath(Asset.getPath('umiocrico')), 0)
+            Icon=(os.path.realpath(Asset.getPath('umiocrico')), 0),
+            Arguments=arguments
         )
 
     @staticmethod  # 删除
@@ -42,7 +50,10 @@ class ShortcutApi:
             name = Umi.name
             Log.info(f'准备添加快捷方式。名称【{name}】，目标路径【{path}】')
             try:
-                ShortcutApi.add(path, name)
+                arguments = ''
+                if ShortcutApi.askStartupNoWin(action):
+                    arguments = '--no_win 1'
+                ShortcutApi.add(path, name, arguments)
                 tk.messagebox.showinfo('成功', f'{name} 已添加到{action}')
             except Exception as e:
                 Config.set(configItem, False)

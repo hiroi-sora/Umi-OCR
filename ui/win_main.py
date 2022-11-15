@@ -25,6 +25,7 @@ import tkinter.colorchooser
 from tkinter import ttk
 from windnd import hook_dropfiles  # 文件拖拽
 from webbrowser import open as webOpen  # “关于”面板打开项目网址
+from argparse import ArgumentParser  # 启动参数
 
 Log = GetLog()
 
@@ -37,6 +38,7 @@ class MainWin:
 
         # 1.初始化主窗口
         self.win = tk.Tk()
+        self.win.withdraw()  # 隐藏窗口，等初始化完毕再考虑是否显示
         self.balloon = Balloon(self.win)  # 气泡框
 
         def initStyle():  # 初始化样式
@@ -369,6 +371,8 @@ class MainWin:
                 # 启动方式设置
                 fr4 = tk.Frame(fSoft)
                 fr4.pack(side='top', fill='x', pady=2, padx=5)
+                self.balloon.bind(
+                    fr4, '可设置静默启动，收纳到系统托盘，不显示主窗口')
                 ttk.Checkbutton(fr4, variable=Config.getTK('isAutoStartup'),
                                 text='开机自启', command=Startup.switchAutoStartup).pack(side='left')
                 ttk.Checkbutton(fr4, variable=Config.getTK('isStartMenu'),
@@ -835,14 +839,31 @@ class MainWin:
                 # 为所有复选框解绑默认滚轮事件，防止误触
                 self.win.unbind_class('TCombobox', '<MouseWheel>')
             initOptFrameWH()
-
         initTab3()
 
-        if Config.get('isTray'):
-            SysTray.start()  # 启动托盘
+        # 解析启动参数
+        def getArgs():
+            try:
+                parser = ArgumentParser()
+                parser.add_argument('--no_win', dest='isNoWin', type=bool)
+                return parser.parse_args()
+            except Exception as e:
+                tk.messagebox.showerror(
+                    '遇到了一点小问题', f'程序启动参数解析失败。已切换为默认参数。\n{e}')
+
+                class aaa:
+                    isNoWin = False
+                return aaa()
+        args = getArgs()
+
+        if Config.get('isTray'):  # 启动托盘
+            SysTray.start()
             self.win.wm_protocol(  # 注册窗口关闭事件
                 'WM_DELETE_WINDOW', self.onCloseWin)
-        self.gotoTop()
+            if not args.isNoWin:  # 非静默模式
+                self.gotoTop()  # 恢复主窗显示
+        else:  # 无托盘，强制显示主窗
+            self.gotoTop()
         self.win.mainloop()
 
     # 加载图片 ===============================================
