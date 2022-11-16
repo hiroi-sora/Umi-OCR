@@ -3,9 +3,12 @@ from utils.config import Config
 from utils.asset import Asset  # 资源
 from utils.data_structure import KeyList
 from utils.hotkey import Hotkey
+from utils.logger import GetLog
 
 import tkinter as tk
 from tkinter import ttk
+
+Log = GetLog()
 
 
 class OcrLanguageWin:
@@ -17,10 +20,12 @@ class OcrLanguageWin:
         # 主窗口
         self.win = tk.Toplevel()
         self.win.iconphoto(False, Asset.getImgTK('umiocr24'))  # 设置窗口图标
-        self.win.minsize(250, 300)  # 最小大小
-        self.win.geometry(f"{250}x{300}")
+        self.win.minsize(250, 320)  # 最小大小
+        self.win.geometry(f"{250}x{320}")
         self.win.unbind('<MouseWheel>')
         self.win.title('更改语言')
+        self.win.wm_protocol(  # 注册窗口关闭事件
+            'WM_DELETE_WINDOW', self.exit)
         fmain = tk.Frame(self.win, padx=4, pady=4)
         fmain.pack(fill='both', expand=True)
 
@@ -33,7 +38,14 @@ class OcrLanguageWin:
         wid = tk.Label(ftop, text='提示', fg='deeppink', cursor='question_arrow')
         wid.pack(side='right')
         Config.main.balloon.bind(
-            wid, '1. 正常时，切换语言立即生效\n2. 若在任务进行中切换语言，将在下次任务时生效')
+            wid, '''窗口操作：
+1. 正常时，切换语言立即生效
+2. 若在任务进行中切换语言，将在下次任务时生效
+3. 主窗口启用/取消置顶后，需重新打开本窗口，才能使本窗口设为相应的置顶状态
+
+更多语言：
+本软件有配套的多国语言扩展包，可导入更多语言模型库。也可以
+手动导入PaddleOCR兼容的模型库，详情请浏览项目Github主页。''')
 
         # 中部控制
         fmiddle = tk.Frame(fmain, pady=8)
@@ -86,7 +98,11 @@ class OcrLanguageWin:
         else:
             self._initWin()  # 初始化窗口
         self.win.attributes('-topmost', 1)  # 设置层级最前
-        self.win.attributes('-topmost', 0)  # 解除
+        if Config.get('isWindowTop'):
+            self.win.title('更改语言(置顶)')
+        else:
+            self.win.title('更改语言')
+            self.win.attributes('-topmost', 0)  # 解除
         # 窗口移动到鼠标附近
         (x, y) = Hotkey.getMousePos()
         w = self.win.winfo_width()
@@ -94,7 +110,7 @@ class OcrLanguageWin:
         if w < 2:
             w = 250
         if h < 2:
-            h = 300
+            h = 320
         w1 = self.win.winfo_screenwidth()
         h1 = self.win.winfo_screenheight()
         x -= round(w/2)

@@ -52,6 +52,12 @@ _ImageDict = {
         'isSave': False,
         'base64': r'iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAQBJREFUSEvtlcsNwjAQRF/6oAYoAVIARyiCGzQANAA3ioAjBQAlQA30ARopi4yJ7SQCBSRWihQ7m5md/dgZaVsB04DbGpjFILIEfhc4A8eA3wDoAZcQTopAAAdgCSw8kHmxl0cCQAQC0XMLRCFgEfgm/7JvLs7JCBTlJyw3AgPvO7KbEFo6HzXza1Apr5GCv9QrRaDamCkqW7vv+m7rRgTuT1YrdY6vtrTjqihojUAtKhU2B29X8PsEjYqckl2li56OD7+L/gRK4felSN1yKiLzi6zh0l3hnkW1FNQ5sm2S2yUYAdvYHZuQJBVjYGd+/hx0gA0wrJMbx3cPTICr7d0BtpOY2Yca2/wAAAAASUVORK5CYII='
     },
+    'language24': {  # 语言
+        'path': 'asset/icon/language24.png',
+        'isTK': True,
+        'isSave': False,
+        'base64': r'iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAATVJREFUSEvFlD1SwzAUhPe5cRlKzmBLlQfSQpWcgStQ5AiBC9BRchAqKJNhXEn2OUjpwiPGmVgjyZajcaLBtd9+2n0/hMgfRdbH/wDyPM+I6A3Aao5DItq3bbup63o/cJBl2TJJkt0cYbdGKZUPAJzznVJqCeBRSvk9B8QYewDwBeBzAGCMqU5USnlRf3qdo8g1M+8da8C1M6+qqu4gGhCSOef8uSsSQryP9cTMXEq5tgDnMi+KYtE0zW9XlKbpTVmWBw/E6p124AMwxj4A3AL4AbA9ib4AuCeigxDiyQS5OpMA89W+MXXdmABrTCccaMtO8egY9/+YDzouWgyAdSrOAXwRuYvo05lyMNbkVwB3IU3uH+YFTE1IyJhqQKxF04BYp0IDYh07CzDn5ofWXHTzQyDRAX96A+75hKkLHAAAAABJRU5ErkJggg=='
+    },
     'umiocrico': {  # 主图标 256-16像素 ico格式
         'path': 'asset/icon/umiocr.ico',
         'isTK': False,

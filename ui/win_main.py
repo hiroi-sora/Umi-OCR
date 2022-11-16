@@ -134,7 +134,12 @@ class MainWin:
             self.balloon.bind(btn, '粘贴图片')
             btn.pack(side='left')
             self.lockWidget.append(btn)
-            # tk.Label(fr1, text="或直接拖入").pack(side='left')
+            btn = ttk.Button(fr1, image=Asset.getImgTK('language24'),  # 语言按钮
+                             command=ChangeOcrLanguage,
+                             style='icon.TButton',  takefocus=0)
+            self.balloon.bind(btn, '更改OCR语言')
+            btn.pack(side='left')
+            self.lockWidget.append(btn)
             # 右
             btn = ttk.Button(fr1, image=Asset.getImgTK('clear24'),  # 清空按钮
                              command=self.clearTable,
@@ -152,7 +157,7 @@ class MainWin:
                              command=self.openFileWin,
                              style='icon.TButton',  takefocus=0,)
             self.balloon.bind(btn, '浏览文件')
-            btn.pack(side='right', padx=5)
+            btn.pack(side='right')
             self.lockWidget.append(btn)
             # 表格主体
             fr2 = tk.Frame(tabFrameTable)
@@ -199,25 +204,27 @@ class MainWin:
             self.balloon.bind(btn, '粘贴图片')
             btn.pack(side='left')
             self.lockWidget.append(btn)
+            btn = ttk.Button(fr1, image=Asset.getImgTK('language24'),  # 语言按钮
+                             command=ChangeOcrLanguage,
+                             style='icon.TButton',  takefocus=0)
+            self.balloon.bind(btn, '更改OCR语言')
+            btn.pack(side='left')
+            self.lockWidget.append(btn)
 
             # 右
             btn = ttk.Button(fr1, image=Asset.getImgTK('clear24'),  # 清空按钮
                              command=self.panelClear,
                              style='icon.TButton',  takefocus=0,)
-            self.balloon.bind(btn, '清空输出面板')
+            self.balloon.bind(btn, '清空输出面板\n在【设置】选项卡可选自动清空面板')
             btn.pack(side='right')
 
             ttk.Checkbutton(fr1, variable=self.isAutoRoll, text="自动滚动",
                             takefocus=0,).pack(side='right')
             tf = tk.Label(fr1, text='字体', fg='gray', cursor='hand2')
-            tf.pack(side='right', padx=15)
+            tf.pack(side='right', padx=10)
             tf.bind(
                 '<Button-1>', lambda *e: self.notebook.select(self.notebookTab[2]))  # 转到设置卡
             self.balloon.bind(tf, '在【设置】选项卡更改输出面板的字体')
-            lan = tk.Label(fr1, text='语言', fg='blue', cursor='hand2')
-            lan.pack(side='right')
-            lan.bind('<Button-1>', lambda *e: ChangeOcrLanguage())  # 更改OCR语言
-            self.balloon.bind(lan, '更改OCR语言')
 
             fr2 = tk.Frame(tabFrameOutput)
             fr2.pack(side='top', fill='both')
@@ -480,7 +487,7 @@ class MainWin:
                 wid = ttk.Checkbutton(fr2, variable=Config.getTK('isNeedClear'),
                                       text='自动清空面板')
                 wid.grid(column=2, row=1)
-                self.balloon.bind(wid, f'每次快捷识图将清空识别内容面板')
+                self.balloon.bind(wid, f'每次快捷识图将清空识别内容面板，同时省略时间信息')
 
                 # 切换截图模式
                 def onModeChange():
