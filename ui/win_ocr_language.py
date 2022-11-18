@@ -1,4 +1,5 @@
 # 更改OCR语言
+from ui.widget import Widget  # 控件
 from utils.config import Config
 from utils.asset import Asset  # 资源
 from utils.data_structure import KeyList
@@ -20,8 +21,8 @@ class OcrLanguageWin:
         # 主窗口
         self.win = tk.Toplevel()
         self.win.iconphoto(False, Asset.getImgTK('umiocr24'))  # 设置窗口图标
-        self.win.minsize(250, 320)  # 最小大小
-        self.win.geometry(f"{250}x{320}")
+        self.win.minsize(250, 340)  # 最小大小
+        self.win.geometry(f"{250}x{340}")
         self.win.unbind('<MouseWheel>')
         self.win.title('更改语言')
         self.win.wm_protocol(  # 注册窗口关闭事件
@@ -48,7 +49,7 @@ class OcrLanguageWin:
 手动导入PaddleOCR兼容的模型库，详情请浏览项目Github主页。''')
 
         # 中部控制
-        fmiddle = tk.Frame(fmain, pady=8)
+        fmiddle = tk.Frame(fmain, pady=4)
         fmiddle.pack(side='top', expand=True, fill='both')
         fmiddle.grid_columnconfigure(0, weight=1)
 
@@ -78,6 +79,8 @@ class OcrLanguageWin:
         # 底部控制
         fbottom = tk.Frame(fmain)
         fbottom.pack(side='top', fill='x')
+        Widget.comboboxFrame(fbottom, '合并段落：', 'tbpu').pack(
+            side='top', fill='x', pady=3)
         wid = ttk.Checkbutton(fbottom, variable=Config.getTK('isLanguageWinAutoOcr'),
                               text='立即识图')
         wid.pack(side='left')
@@ -110,7 +113,7 @@ class OcrLanguageWin:
         if w < 2:
             w = 250
         if h < 2:
-            h = 320
+            h = 340
         w1 = self.win.winfo_screenwidth()
         h1 = self.win.winfo_screenheight()
         x -= round(w/2)

@@ -16,7 +16,8 @@ class TbpuLineHMultiParagraph(TbpuLineHMultiLeft):
         if self.mergeNum == 1:
             # 第二行x额外允许的范围
             xMax = box1[3][0] + self.limitX  # 上界：第一行x
-            xMin = box1[3][0] - self.rowHeight*2 - self.limitX  # 下界：第一行x提前2个行高
+            xMin = box1[3][0] - self.rowHeight * \
+                2.5 - self.limitX  # 下界：第一行x提前几个行高
             return xMin <= box2[0][0] <= xMax
         # 1的左下角与2的左上角接壤时OK
         return abs(box2[0][0]-box1[3][0]) <= self.limitX
