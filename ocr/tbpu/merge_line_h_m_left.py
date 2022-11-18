@@ -39,6 +39,10 @@ class TbpuLineHMultiLeft(TbpuLineH):
         # 1与2互相包含时OK
         return self.isBoxInX(box1, box2)
 
+    def merge2text(self, text1, text2):
+        '''合并两段文字的规则'''
+        return text1 + text2
+
     def run(self, textBlocks, imgInfo):
         '''传入 文块组、图片信息。返回文块组、debug信息字符串。'''
         timeIn = time()
@@ -79,7 +83,9 @@ class TbpuLineHMultiLeft(TbpuLineH):
                             box2[2][1], box2[3][1])
                         # 合并内容
                         tb['score'] += tb2['score']  # 合并置信度
-                        tb['text'] += tb2['text']  # 合并文本
+                        # tb['text'] += tb2['text']  # 合并文本
+                        tb['text'] = self.merge2text(  # 合并文本
+                            tb['text'], tb2['text'])
                         hList[i] = None  # 置为空，标记删除
                     # 否则，若符合新段规则，则跳出对1的继续匹配
                     elif self.isRuleNew(box, box2):
