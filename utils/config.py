@@ -538,7 +538,10 @@ class ConfigModule:
             '''主进程多开时返回T'''
             def getProcessKey(pid):
                 # 区分不同时间和空间上同一个进程的识别信息
-                return str(psutil.Process(pid).create_time())
+                try:
+                    return str(psutil.Process(pid).create_time())
+                except psutil.NoSuchProcess as e:  # 虽然psutil.pid_exists验证pid存在，但 Process 无法生成对象
+                    return ''
             # 检查上次记录的pid和key是否还在运行
             lastPID = self.get('processID')
             lastKey = self.get('processKey')
