@@ -215,7 +215,7 @@ class MainWin:
             btn = ttk.Button(fr1, image=Asset.getImgTK('clear24'),  # 清空按钮
                              command=self.panelClear,
                              style='icon.TButton',  takefocus=0,)
-            self.balloon.bind(btn, '清空输出面板\n在【设置】选项卡可选自动清空面板')
+            self.balloon.bind(btn, '清空输出面板\n在【设置→快捷识图】可启用自动清空面板')
             btn.pack(side='right')
 
             ttk.Checkbutton(fr1, variable=self.isAutoRoll, text="自动滚动",
@@ -487,7 +487,7 @@ class MainWin:
                 wid = ttk.Checkbutton(fr2, variable=Config.getTK('isNeedClear'),
                                       text='自动清空面板')
                 wid.grid(column=2, row=1)
-                self.balloon.bind(wid, f'每次快捷识图将清空识别内容面板，同时省略时间信息')
+                self.balloon.bind(wid, f'每次快捷识图将清空识别内容面板，同时省略时间等信息')
 
                 # 切换截图模式
                 def onModeChange():
@@ -705,7 +705,7 @@ class MainWin:
                     frameOCR, '识别语言：　', 'ocrConfig', self.lockWidget)
                 wid.pack(side='top', fill='x', pady=2, padx=5)
                 self.balloon.bind(
-                    wid, '本软件有配套的多国语言扩展包，可导入更多语言模型库，\n也可以手动导入PaddleOCR兼容的模型库，\n详情请浏览项目Github主页\n\n竖排模型库（识别语言）建议与竖排合并段落搭配使用')
+                    wid, '本软件有整理好的多国语言扩展包，可导入更多语言模型库，\n也可以手动导入PaddleOCR兼容的模型库，\n详情请浏览项目Github主页\n\n竖排模型库（识别语言）建议与竖排合并段落搭配使用')
                 # 压缩
                 fLim = tk.Frame(frameOCR)
                 fLim.pack(side='top', fill='x', pady=2, padx=5)
