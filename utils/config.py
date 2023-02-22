@@ -382,6 +382,16 @@ _ConfigDict = {
         'isSave': True,
         'isTK': True,
     },
+    'ocrRamMaxFootprint': {  # 内存占用容量上限
+        'default': 0,
+        'isSave': True,
+        'isTK': True,
+    },
+    'ocrRamMaxTime': {  # 内存占用时间上限
+        'default': 0,
+        'isSave': True,
+        'isTK': True,
+    },
     'imageSuffix': {  # 图片后缀
         'default': '.jpg .jpe .jpeg .jfif .png .webp .bmp .tif .tiff',
         'isSave': True,

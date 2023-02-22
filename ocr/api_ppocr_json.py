@@ -109,12 +109,12 @@ class OcrAPI:
         self.ret.kill()  # 关闭子进程。误重复调用似乎不会有坏的影响
 
     def getRam(self):
-        """返回内存占用，字符串"""
+        """返回内存占用，数字，单位为MB"""
         try:
-            return f'{int(self.psutilProcess.memory_info().rss/1048576)}MB'
+            return int(self.psutilProcess.memory_info().rss/1048576)
         except Exception as e:
             print(f'获取子进程内存失败：{e}')
-            return '无法获取'
+            return -1
 
     def __del__(self):
         self.stop()

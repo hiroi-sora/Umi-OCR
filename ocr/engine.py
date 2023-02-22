@@ -1,6 +1,7 @@
 from utils.logger import GetLog
 from utils.config import Config, RunModeFlag
 from ocr.api_ppocr_json import OcrAPI
+from ocr.engine_ram_optimization import OcrEngRam
 
 import os
 import time
@@ -40,6 +41,7 @@ class OcrEngine:
         self.winSetRunning = None
         self.engFlag = EngFlag.none
         self.msnFlag = MsnFlag.none
+        OcrEngRam.init(self.restart, self.getEngFlag, EngFlag)  # 内存优化·初始化，传入接口
 
     def __initVar(self):
         self.__ocrInfo = ()  # 记录之前的OCR参数
@@ -52,7 +54,7 @@ class OcrEngine:
         self.engFlag = engFlag
         if self.ocr and Config.get('isDebug'):
             if engFlag == EngFlag.waiting:  # 刷新内存占用
-                self.__ramTips = f'（内存：{self.ocr.getRam()}）'
+                self.__ramTips = f'（内存：{self.ocr.getRam()}MB）'
         msg = {
             EngFlag.none:  '已关闭',
             EngFlag.initing:  '正在启动',
@@ -64,6 +66,9 @@ class OcrEngine:
             isTkUpdate = True
         Config.set('ocrProcessStatus', msg, isTkUpdate)  # 设置
         # Log.info(f'引擎 ⇒ {engFlag}')
+
+    def getEngFlag(self):
+        return self.engFlag
 
     def __setMsnFlag(self, msnFlag):
         '''更新任务状态并向主窗口通知'''
@@ -153,11 +158,17 @@ class OcrEngine:
             if mode == RunModeFlag.short:  # 按需关闭
                 self.stop()
 
+    def restart(self):
+        '''重启引擎，释放内存'''
+        self.stop(True)
+        self.start()
+
     def run(self, path):
         '''执行单张图片识别，输入路径，返回字典'''
         if not self.ocr:
             self.__setEngFlag(EngFlag.none)  # 通知关闭
             return {'code': 404, 'data': f'引擎未在运行'}
+        OcrEngRam.runBefore(ram=self.ocr.getRam())  # 内存优化·前段
         self.__setEngFlag(EngFlag.running)  # 通知工作
         data = self.ocr.run(path)
         # 有可能因为提早停止任务或关闭软件，引擎被关闭，OCR.run提前出结果
@@ -165,6 +176,7 @@ class OcrEngine:
         # 所以检测一下是否还是正常的状态 running ，没问题才通知待命
         if self.engFlag == EngFlag.running:
             self.__setEngFlag(EngFlag.waiting)  # 通知待命
+        OcrEngRam.runAfter()  # 内存优化·后段
         return data
 
     def runMission(self, paths, msn):
