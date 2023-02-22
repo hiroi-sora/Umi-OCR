@@ -759,9 +759,26 @@ class MainWin:
                     # 隐藏高级选项：引擎管理策略
                     Widget.comboboxFrame(fr1, '引擎管理策略：', 'ocrRunMode', self.lockWidget
                                          ).grid(column=0, row=6, columnspan=2, sticky='we')
+                    # 隐藏高级选项：自动清理内存
+                    fRam = tk.Frame(fr1)
+                    fRam.grid(column=0, row=7, columnspan=2,
+                              sticky='we', pady=2)
+                    tk.Label(fRam, text='自动清理内存： 占用超过').pack(side='left')
+                    wid = tk.Entry(
+                        fRam, width=5, textvariable=Config.getTK('ocrRamMaxFootprint'))
+                    wid.pack(side='left')
+                    self.lockWidget.append(wid)
+                    tk.Label(fRam, text='MB 或 空闲').pack(side='left')
+                    wid = tk.Entry(
+                        fRam, width=5, textvariable=Config.getTK('ocrRamMaxTime'))
+                    wid.pack(side='left')
+                    self.lockWidget.append(wid)
+                    tk.Label(fRam, text='秒').pack(side='left')
+                    self.balloon.bind(
+                        fRam, '引擎策略为“后台常驻”时生效\n占用内存超过指定值，或指定时间内未有任务执行，则清理一次内存\n非必要无需设置，频繁清理内存会导致卡顿，影响使用体验\n若需设置，建议占用不少于 1500 MB，空闲不少于 10 秒\n两个条件独立生效。填0时忽略该条件')
 
                 frState = tk.Frame(fr1)
-                frState.grid(column=0, row=7, columnspan=2, sticky='nsew')
+                frState.grid(column=0, row=10, columnspan=2, sticky='nsew')
                 tk.Label(frState, text='引擎当前状态：').pack(
                     side='left')
                 tk.Label(frState, textvariable=Config.getTK('ocrProcessStatus')).pack(
