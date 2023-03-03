@@ -456,6 +456,8 @@ class ConfigModule:
 
     __tkSaveTime = 200  # tk变量改变多长时间后写入本地。毫秒
 
+    _initFlag = False  # 标记程序初始化完成，可以正常接客
+
     # ==================== 初始化 ====================
 
     def __init__(self):
@@ -474,6 +476,13 @@ class ConfigModule:
                 self.__saveList.append(key)
             if value.get('isTK', False):
                 self.__tkDict[key] = None
+
+    def isInit(self):
+        '''查询程序是否初始化完成'''
+        return self._initFlag
+
+    def initOK(self):
+        self._initFlag = True
 
     def initTK(self, main):
         '''初始化tk变量'''

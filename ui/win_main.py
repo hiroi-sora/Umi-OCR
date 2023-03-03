@@ -5,6 +5,7 @@ from utils.data_structure import KeyList
 from utils.tool import Tool
 from utils.startup import Startup  # 启动方式
 from utils.hotkey import Hotkey  # 快捷键
+from utils.command_arg import Parse, Mission  # 启动参数分析
 from ui.win_screenshot import ScreenshotCopy  # 截屏
 from ui.win_select_area import IgnoreAreaWin  # 子窗口
 from ui.win_ocr_language import ChangeOcrLanguage  # 更改语言
@@ -18,6 +19,7 @@ from ocr.msn_quick import MsnQuick
 
 import os
 import ctypes
+from sys import argv
 from PIL import Image  # 图像
 import tkinter as tk
 import tkinter.font
@@ -871,34 +873,28 @@ class MainWin:
         initTab3()
 
         # 解析启动参数
-        def getArgs():
-            try:
-                parser = ArgumentParser()
-                parser.add_argument('--no_win', dest='isNoWin', type=bool)
-                return parser.parse_args()
-            except Exception as e:
-                tk.messagebox.showerror(
-                    '遇到了一点小问题', f'程序启动参数解析失败。已切换为默认参数。\n{e}')
-
-                class aaa:
-                    isNoWin = False
-                return aaa()
-        args = getArgs()
-
-        if Config.get('isTray'):  # 启动托盘
+        flags = Parse(argv)
+        if 'error' in flags:
+            tk.messagebox.showerror(
+                '遇到了一点小问题', flags['error'])
+        # 启动托盘
+        if Config.get('isTray'):
             SysTray.start()
             self.win.wm_protocol(  # 注册窗口关闭事件
                 'WM_DELETE_WINDOW', self.onCloseWin)
-            if not args.isNoWin:  # 非静默模式
+            if not flags['no_win']:  # 非静默模式
                 self.gotoTop()  # 恢复主窗显示
         else:  # 无托盘，强制显示主窗
             self.gotoTop()
+        self.win.after(1, Config.initOK)  # 标记初始化完成
+        if flags['img'] or flags['clipboard'] or flags['screenshot']:  # 有初始任务
+            self.win.after(10, Mission(flags))
         self.win.mainloop()
 
     # 加载图片 ===============================================
 
     def draggedImages(self, paths):  # 拖入图片
-        if not OCRe.msnFlag == MsnFlag.none:
+        if not self.isMsnReady():
             tk.messagebox.showwarning(
                 '任务进行中', '请停止任务后，再拖入图片')
             return
@@ -910,7 +906,7 @@ class MainWin:
         self.addImagesList(pathList)
 
     def openFileWin(self):  # 打开选择文件窗
-        if not OCRe.msnFlag == MsnFlag.none:
+        if not self.isMsnReady():
             return
         suf = Config.get('imageSuffix')  # 许可后缀
         paths = tk.filedialog.askopenfilenames(
@@ -918,6 +914,10 @@ class MainWin:
         self.addImagesList(paths)
 
     def addImagesList(self, paths):  # 添加一批图片列表
+        if not self.isMsnReady():
+            tk.messagebox.showwarning(
+                '任务进行中', '请停止任务后，再添加图片')
+            return
         suf = Config.get('imageSuffix').split()  # 许可后缀列表
 
         def addImage(path):  # 添加一张图片。传入路径，许可后缀。
@@ -965,7 +965,7 @@ class MainWin:
     # 忽略区域 ===============================================
 
     def openSelectArea(self):  # 打开选择区域
-        if not OCRe.msnFlag == MsnFlag.none or not self.win.attributes('-disabled') == 0:
+        if not self.isMsnReady() or not self.win.attributes('-disabled') == 0:
             return
         defaultPath = ""
         if not self.batList.isEmpty():
@@ -1009,7 +1009,7 @@ class MainWin:
     # 表格操作 ===============================================
 
     def clearTable(self):  # 清空表格
-        if not OCRe.msnFlag == MsnFlag.none:
+        if not self.isMsnReady():
             return
         self.progressbar["value"] = 0
         Config.set('tipsTop1', '')
@@ -1022,7 +1022,7 @@ class MainWin:
             self.table.delete(i)  # 表格组件移除
 
     def delImgList(self):  # 图片列表中删除选中
-        if not OCRe.msnFlag == MsnFlag.none:
+        if not self.isMsnReady():
             return
         chi = self.table.selection()
         for i in chi:
@@ -1085,6 +1085,10 @@ class MainWin:
 
     # 进行任务 ===============================================
 
+    def isMsnReady(self):
+        '''可以操作下一次任务时返回T'''
+        return OCRe.msnFlag == MsnFlag.none
+
     def setRunning(self, batFlag):  # 设置运行状态。
 
         def setNone():
@@ -1134,7 +1138,7 @@ class MainWin:
         self.win.update()
 
     def run(self):  # 运行按钮触发
-        if OCRe.msnFlag == MsnFlag.none:  # 未在运行
+        if self.isMsnReady():  # 未在运行
             if self.batList.isEmpty():
                 return
             # 初始化文本处理器
@@ -1162,7 +1166,7 @@ class MainWin:
         self.gotoTop()  # 主窗置顶
 
     def runClipboard(self, e=None):  # 识别剪贴板
-        if not OCRe.msnFlag == MsnFlag.none:  # 正在运行，不执行
+        if not self.isMsnReady():  # 正在运行，不执行
             return
         clipData = Tool.getClipboardFormat()  # 读取剪贴板
 
@@ -1200,7 +1204,7 @@ class MainWin:
             self.notebook.select(self.notebookTab[1])  # 转到输出卡
 
     def openScreenshot(self, e=None):  # 打开截图窗口
-        if not OCRe.msnFlag == MsnFlag.none or not self.win.attributes('-disabled') == 0:
+        if not self.isMsnReady() or not self.win.attributes('-disabled') == 0:
             return
         self.win.attributes("-disabled", 1)  # 禁用主窗口
         if Config.get('isScreenshotHideWindow'):  # 截图时隐藏主窗口
@@ -1247,7 +1251,7 @@ class MainWin:
         self.win.after(100, lambda: os._exit(0))
 
     def showTips(self, tipsText):  # 显示提示
-        if not OCRe.msnFlag == MsnFlag.none:
+        if not self.isMsnReady():
             tk.messagebox.showwarning(
                 '任务进行中', '请停止任务后，再打开软件说明')
             return

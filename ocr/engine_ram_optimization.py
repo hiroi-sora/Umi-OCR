@@ -32,10 +32,7 @@ class OcrEngineRam:
     def runTimer(self, t):
         '''最后一次运行后，定时器生效'''
         if self.lastTimer == t and self.getEngFlag() == self.EngFlag.waiting:
-            print('有效的定时器！！！！！！！！！！')
             self.restart()
-        else:
-            print('×××××××××××')
 
 
 OcrEngRam = OcrEngineRam()
