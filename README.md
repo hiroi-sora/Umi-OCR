@@ -524,6 +524,9 @@ OCR识别出的文本是按“块”划分的，通常一行文字分为一块�
 
 ##### 本项目中所使用的库：
 
+##### [google/python-gflags](https://github.com/google/python-gflags)
+> Python implementation of the Google commandline flags module.
+
 ##### [moses-palmer/pynput](https://github.com/moses-palmer/pynput)
 > This library allows you to control and monitor input devices.
 
