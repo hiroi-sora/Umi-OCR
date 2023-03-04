@@ -136,11 +136,13 @@ class Listener:
                 while True:
                     try:
                         # 读取命名管道数据
-                        data = win32file.ReadFile(
-                            pipe, pipeBufferSize)[1].decode()
+                        indata = win32file.ReadFile(
+                            pipe, pipeBufferSize)
+                        print(f"==============读取数据：\n{indata}")
+                        data = indata[1].decode()
                         ParseStr(data)  # 分析并执行
                     except Exception as e:
-                        # print(f"读取数据出错：{e}")
+                        print(f"读取数据出错：{e}")
                         break
             finally:  # 某个客户端断开连接
                 try:

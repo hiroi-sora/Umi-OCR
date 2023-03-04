@@ -17,7 +17,6 @@ class OcrEngineRam:
         ramMax = Config.get('ocrRamMaxFootprint')
         if ramMax > 0:
             if ram > ramMax:
-                print(f'内存占用超标！！！')
                 self.restart()
 
     def runAfter(self):

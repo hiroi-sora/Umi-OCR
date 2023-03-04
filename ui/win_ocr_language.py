@@ -22,7 +22,7 @@ class OcrLanguageWin:
         self.win = tk.Toplevel()
         self.win.iconphoto(False, Asset.getImgTK('umiocr24'))  # 设置窗口图标
         self.win.minsize(250, 340)  # 最小大小
-        self.win.geometry(f"{250}x{340}")
+        self.win.geometry(f'{250}x{340}')
         self.win.unbind('<MouseWheel>')
         self.win.title('更改语言')
         self.win.wm_protocol(  # 注册窗口关闭事件

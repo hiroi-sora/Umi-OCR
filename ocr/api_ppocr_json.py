@@ -52,11 +52,9 @@ class OcrAPI:
 
         # 子线程检查超时
         def cancelTimeout():
-            # print('进程启动计时器取消')
             checkTimer.cancel()
 
         def checkTimeout():
-            # print('进程启动计时器触发')
             self.initErrorMsg = f'OCR init timeout: {InitTimeout}s.\n{exePath}'
             self.ret.kill()  # 关闭子进程
         checkTimer = threading.Timer(InitTimeout, checkTimeout)
@@ -72,7 +70,6 @@ class OcrAPI:
             if 'OCR init completed.' in initStr:  # 初始化成功
                 break
         cancelTimeout()
-        # print(f'初始化OCR成功，进程号为{self.ret.pid}')
 
     def run(self, imgPath):
         """对一张图片文字识别。\n
@@ -113,7 +110,6 @@ class OcrAPI:
         try:
             return int(self.psutilProcess.memory_info().rss/1048576)
         except Exception as e:
-            print(f'获取子进程内存失败：{e}')
             return -1
 
     def __del__(self):

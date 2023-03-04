@@ -29,7 +29,6 @@ class KeyTranslator_Api:  # 封装 keyTranslator ，负责key、char、vk的转�
                 char = self._normalLayout[scan][0]  # 扫描码转char
                 return char.lower()
         except Exception as e:  # 特殊键（如Fn）没有对应字符，会跳到这里
-            # print(f'翻译错误：{e} 事件对象：{key}')
             if key and hasattr(key, 'vk'):
                 return f'<{key.vk}>'  # 未知键值，无对应字符，返回键值本身
             else:
