@@ -4,6 +4,7 @@ from utils.config import Config
 from ocr.engine import MsnFlag
 from ocr.msn import Msn
 from ocr.output_panel import OutputPanel  # 输出器
+from ui.win_notify import Notify  # 通知弹窗
 
 import tkinter as tk
 import time
@@ -54,10 +55,12 @@ class MsnQuick(Msn):
             tbLen = len(tbList)
             if tbLen == 0:
                 self.outputPanel.print('不存在有效文字\n')
+                Notify('未发现文字', '')
                 return
             tbTexts = [tb['text'] for tb in tbList]  # 提取文字
             tbStr = '\n'.join(tbTexts)
             self.outputPanel.print(tbStr)  # 输出到面板
+            Notify('识别完成', tbStr)
             if Config.get('isNeedCopy'):  # 需要复制
                 pyperclipCopy(tbStr)  # 复制到剪贴板
             # 计算置信度
@@ -67,10 +70,13 @@ class MsnQuick(Msn):
         elif ocrData['code'] == 101:  # 无文字
             Config.set('tipsTop1', f'耗时：{round(numData["time"], 2)}s  无文字')
             self.outputPanel.print('未发现文字\n')
+            Notify('未发现文字', '')
         else:  # 识别失败
             Config.set('tipsTop1', f'耗时：{round(numData["time"], 2)}s  识别失败')
             self.outputPanel.print(
                 f'识别失败，错误码：{ocrData["code"]}\n错误信息：{str(ocrData["data"])}\n')
+            Notify(
+                '识别失败', f'错误码：{ocrData["code"]}\n错误信息：{str(ocrData["data"])}\n')
 
     def onStop(self, num):
         Config.main.setRunning(MsnFlag.none)

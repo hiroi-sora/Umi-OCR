@@ -1,6 +1,7 @@
 # 批量路径 任务处理器
 
 from utils.config import Config
+from ui.win_notify import Notify  # 通知弹窗
 from ocr.engine import MsnFlag
 from ocr.msn import Msn
 # 输出器
@@ -165,6 +166,12 @@ class MsnBatch(Msn):
             l = len(self.outputList)
             for i in range(1, l):
                 self.outputList[i].openOutputFile()
+        if Config.get('isNotify'):  # 通知弹窗
+            title = f'识别完成，共{num["all"]}张图片'
+            msg = '结果未保存到本地文件，请在软件面板查看'
+            if Config.get('isOutputTxt') or Config.get('isOutputSeparateTxt') or Config.get('isOutputMD') or Config.get('isOutputJsonl'):
+                msg = f'结果保存到：{Config.get("outputFilePath")}'
+            Notify(title, msg)
         if Config.get("isOkMission"):  # 计划任务
             Config.set("isOkMission", False)  # 一次性，设回false
             omName = Config.get('okMissionName')

@@ -120,6 +120,11 @@ _ConfigDict = {
         'isSave': True,
         'isTK': True,
     },
+    'isNotify': {  # T时启用消息弹窗
+        'default': False,
+        'isSave': True,
+        'isTK': True,
+    },
     'isAutoStartup': {  # T时已添加开机自启
         'default': False,
         'isSave': True,

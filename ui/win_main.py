@@ -6,6 +6,7 @@ from utils.tool import Tool
 from utils.startup import Startup  # 启动方式
 from utils.hotkey import Hotkey  # 快捷键
 from utils.command_arg import Parse, Mission  # 启动参数分析
+from ui.win_notify import Notify  # 通知弹窗
 from ui.win_screenshot import ScreenshotCopy  # 截屏
 from ui.win_select_area import IgnoreAreaWin  # 子窗口
 from ui.win_ocr_language import ChangeOcrLanguage  # 更改语言
@@ -382,16 +383,29 @@ class MainWin:
                 self.balloon.bind(
                     wid, '不会主动弹出窗口')
 
-                # 启动方式设置
+                # 消息弹窗设置
+
+                def changeNotify():
+                    if Config.get('isNotify'):
+                        Notify('欢迎使用 Umi-OCR', '通知弹窗已开启')
                 fr4 = tk.Frame(fSoft)
                 fr4.pack(side='top', fill='x', pady=2, padx=5)
                 self.balloon.bind(
-                    fr4, '可设置静默启动，收纳到系统托盘，不显示主窗口')
-                ttk.Checkbutton(fr4, variable=Config.getTK('isAutoStartup'),
+                    fr4, '识图完成后弹出通知\n建议与窗口置顶的“不要弹出”模式搭配使用')
+                ttk.Checkbutton(
+                    fr4, variable=Config.getTK('isNotify'), text='启用通知弹窗').pack(side='left')
+                Config.addTrace('isNotify', changeNotify)
+
+                # 启动方式设置
+                fr5 = tk.Frame(fSoft)
+                fr5.pack(side='top', fill='x', pady=2, padx=5)
+                self.balloon.bind(
+                    fr5, '可设置静默启动，收纳到系统托盘，不显示主窗口')
+                ttk.Checkbutton(fr5, variable=Config.getTK('isAutoStartup'),
                                 text='开机自启', command=Startup.switchAutoStartup).pack(side='left')
-                ttk.Checkbutton(fr4, variable=Config.getTK('isStartMenu'),
+                ttk.Checkbutton(fr5, variable=Config.getTK('isStartMenu'),
                                 text='开始菜单项', command=Startup.switchStartMenu).pack(side='left', padx=20)
-                ttk.Checkbutton(fr4, variable=Config.getTK('isDesktop'),
+                ttk.Checkbutton(fr5, variable=Config.getTK('isDesktop'),
                                 text='桌面快捷方式', command=Startup.switchDesktop).pack(side='left')
             initSoftwareFrame()
 
@@ -889,6 +903,7 @@ class MainWin:
         self.win.after(1, Config.initOK)  # 标记初始化完成
         if flags['img'] or flags['clipboard'] or flags['screenshot']:  # 有初始任务
             self.win.after(10, Mission(flags))
+        Notify('欢迎使用 Umi-OCR', '通知弹窗已开启')
         self.win.mainloop()
 
     # 加载图片 ===============================================
