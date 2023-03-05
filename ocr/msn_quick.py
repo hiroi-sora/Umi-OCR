@@ -60,9 +60,11 @@ class MsnQuick(Msn):
             tbTexts = [tb['text'] for tb in tbList]  # 提取文字
             tbStr = '\n'.join(tbTexts)
             self.outputPanel.print(tbStr)  # 输出到面板
-            Notify('识别完成', tbStr)
             if Config.get('isNeedCopy'):  # 需要复制
                 pyperclipCopy(tbStr)  # 复制到剪贴板
+                Notify('已复制文字', tbStr)
+            else:
+                Notify('识别完成', tbStr)
             # 计算置信度
             tbScore = sum([tb['score'] for tb in tbList])
             Config.set(
