@@ -3,9 +3,16 @@ run_name := "Umi-OCR 文字识别.exe" ; 启动程序名称
 
 ; 将启动参数数组 转为字符串，每组参数用双引号括起来。
 args := ""
-for index, value in A_Args
+if A_Args.Length() = 0 ; 空参数，则显示主窗
 {
-    args .= """" . value . """ "
+    args = "-show"
+}
+else
+{
+    for index, value in A_Args
+    {
+        args .= """" . value . """ "
+    }
 }
 
 ; 检查命名管道，若存在则通过管道传指令

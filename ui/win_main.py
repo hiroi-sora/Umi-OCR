@@ -1214,6 +1214,7 @@ class MainWin:
 
         if failFlag:
             self.panelOutput('剪贴板中未查询到图片信息\n')
+            Notify('剪贴板中未查询到图片信息', '')
             # 失败也置顶
             self.gotoTop()  # 主窗置顶
             self.notebook.select(self.notebookTab[1])  # 转到输出卡
