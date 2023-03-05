@@ -2,6 +2,7 @@ from utils.logger import GetLog
 from utils.config import Config, ScsModeFlag
 from utils.tool import Tool
 from utils.hotkey import Hotkey  # 快捷键
+from ui.win_notify import NotifyClose  # 关闭通知弹窗
 
 # 获取显示器信息
 from win32api import EnumDisplayMonitors, GetMonitorInfo
@@ -36,6 +37,7 @@ def _ScreenshotClose(flag, errMsg=None):
 
 def ScreenshotCopy():
     '''截屏，保存到剪贴板，然后调用主窗的closeScreenshot接口'''
+    NotifyClose()  # 关闭通知弹窗
     scsMode = Config.get('scsMode').get(Config.get(
         'scsModeName'), ScsModeFlag.multi)  # 当前截屏模式
     if scsMode == ScsModeFlag.multi:  # 内置截图模式
@@ -52,7 +54,7 @@ class ScreenshotSys():  # 系统截图模式
         self.isInitKey = False
         self.isWorking = False
         self.checkTimeMax = 10  # 最大检查次数
-        self.checkTimeRate = 10  # 检查间隔频率，毫秒
+        self.checkTimeRate = 20  # 检查间隔频率，毫秒
         self.checkTime = 0  # 当前剩余检查次数
         self.position = (0, 0)
 
@@ -88,7 +90,7 @@ class ScreenshotSys():  # 系统截图模式
 
     def __checkClipboard(self):  # 检查剪贴板中是否已存在截图
         if self.checkTime >= self.checkTimeMax:
-            self.__close(False)  # 检查次数超限，截图失败
+            self.__close(False, '读取剪贴板失败')  # 检查次数超限，截图失败
             return
         clipData = Tool.getClipboardFormat()  # 读取剪贴板
         if clipData == 2:  # 系统截图已保存到剪贴板内存，截图成功
@@ -100,12 +102,12 @@ class ScreenshotSys():  # 系统截图模式
         # 定时器指定下一轮查询
         Config.main.win.after(self.checkTimeRate, self.__checkClipboard)
 
-    def __close(self, flag=False):  # 退出
+    def __close(self, flag=False, errMsg=None):  # 退出
         if self.isWorking:
             Hotkey.removeMouse()  # 注销监听鼠标
             self.isInitKey = False
             self.isWorking = False
-            _ScreenshotClose(flag)
+            _ScreenshotClose(flag, errMsg)
 
 
 SSSys = ScreenshotSys()

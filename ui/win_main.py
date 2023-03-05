@@ -1232,6 +1232,9 @@ class MainWin:
     def closeScreenshot(self, flag, errMsg=None):  # 关闭截图窗口，返回T表示已复制到剪贴板
         self.win.attributes("-disabled", 0)  # 启用父窗口
         if errMsg:
+            Notify('截图失败', errMsg)
+            if not errMsg[-1] == '\n':
+                errMsg += '\n'
             self.panelOutput(f'截图失败，{errMsg}')
         if not flag and self.win.state() == 'normal':  # 截图不成功，但窗口非最小化
             self.gotoTop()  # 主窗置顶
