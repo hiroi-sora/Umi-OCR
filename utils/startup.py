@@ -52,7 +52,7 @@ class ShortcutApi:
             try:
                 arguments = ''
                 if ShortcutApi.askStartupNoWin(action):
-                    arguments = '--no_win=1'
+                    arguments = '-hide'
                 ShortcutApi.add(path, name, arguments)
                 tk.messagebox.showinfo('成功', f'{name} 已添加到{action}')
             except Exception as e:

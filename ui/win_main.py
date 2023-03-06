@@ -896,7 +896,7 @@ class MainWin:
             SysTray.start()
             self.win.wm_protocol(  # 注册窗口关闭事件
                 'WM_DELETE_WINDOW', self.onCloseWin)
-            if not flags['no_win']:  # 非静默模式
+            if not flags['hide']:  # 非静默模式
                 self.gotoTop()  # 恢复主窗显示
         else:  # 无托盘，强制显示主窗
             self.gotoTop()
@@ -1084,7 +1084,8 @@ class MainWin:
 
     def gotoTop(self, isForce=False):  # 主窗置顶
         flag = Config.get('WindowTopMode')
-        if flag == WindowTopModeFlag.never and not isForce:  # 模式：从不置顶
+        # 模式：从不置顶
+        if flag == WindowTopModeFlag.never and not isForce and Config.get('isTray'):
             self.win.attributes('-topmost', 0)
             return
         if self.win.state() == 'iconic':  # 窗口最小化状态下
