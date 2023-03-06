@@ -42,7 +42,7 @@ def Parse(args):  # 解析参数。传入参数列表，返回解析后的字典
             f['hide'] = True
         return f
     except Exception as e:
-        return {'error': f'参数解析失败。\n参数：{args}\n错误：{e}', **DictDefault}
+        return {'error': f'命令行参数解析异常。\n参数：{args}\n错误：{e}', **DictDefault}
 
 
 def Mission(flags):
@@ -88,8 +88,12 @@ def ParseStr(strin):  # 解析参数。传入参数字符串，直接执行。
         result = [
             x.replace(f'__QUOTE_MARK_{i}__', match[1:-1]) for x in result]
     args = ['', *result]  # 第一位为空
-    args = Parse(args)
-    Mission(args)
+    flags = Parse(args)
+    if 'error' in flags:
+        tk.messagebox.showerror(
+            '遇到了一点小问题', flags['error'])
+        return
+    Mission(flags)
 
 # ======================= 监听指令 ===================================
 
