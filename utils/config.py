@@ -50,9 +50,8 @@ class ClickTrayModeFlag(Enum):
 class WindowTopModeFlag():
     '''窗口置顶模式标志'''
     # 不继承枚举
-    never = 0  # 永不
+    never = 0  # 永不，静默模式
     finish = 1  # 任务完成时置顶
-    eternity = 2  # 永远保持置顶
 
 
 # 配置文件路径
@@ -112,7 +111,7 @@ _ConfigDict = {
     },
     'isWindowTop': {  # T时窗口置顶
         'default': False,
-        'isSave': False,  # 不保存，仅作为标记
+        'isSave': True,
         'isTK': True,
     },
     'WindowTopMode': {  # 窗口置顶模式
