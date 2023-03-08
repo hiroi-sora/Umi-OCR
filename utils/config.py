@@ -591,8 +591,13 @@ class ConfigModule:
         saveDict = {}  # 提取需要保存的项
         for key in self.__saveList:
             saveDict[key] = self.__optDict[key]
-        with open(ConfigJsonFile, 'w', encoding='utf8')as fp:
-            fp.write(json.dumps(saveDict, indent=4, ensure_ascii=False))
+        try:
+            with open(ConfigJsonFile, 'w', encoding='utf8')as fp:
+                fp.write(json.dumps(saveDict, indent=4, ensure_ascii=False))
+        except Exception as e:
+            tk.messagebox.showerror(
+                '警告',
+                f'无法保存配置文件，请检查是否有足够的权限。\n{e}')
 
     # ==================== 操作变量 ====================
 
