@@ -76,7 +76,7 @@ _ConfigDict = {
         'isTK': True,
     },
     'isBackground': {  # T时点关闭进入后台运行
-        'default': False,
+        'default': True,
         'isSave': True,
         'isTK': True,
     },
@@ -120,7 +120,7 @@ _ConfigDict = {
         'isTK': True,
     },
     'isNotify': {  # T时启用消息弹窗
-        'default': False,
+        'default': True,
         'isSave': True,
         'isTK': True,
     },
