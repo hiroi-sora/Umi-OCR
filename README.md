@@ -415,13 +415,9 @@ OCR识别出的文本是按“块”划分的，通常一行文字分为一块�
 
 </details>
 
-▼ 已完成，未发布
+▼ 测试中 （[测试版](https://github.com/hiroi-sora/Umi-OCR/issues/96) 已开放下载。）
 - 定时或超过限度时自动清理引擎内存占用。
-
-▼ 开发中
-- 通过命令行或Python、AHK等外部程序控制Umi-OCR。
-
-▼ 计划中
+- 通过命令行控制Umi-OCR。
 - 弹出悬浮的识别成功与否的提示。
 
 <details>
