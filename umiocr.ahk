@@ -30,10 +30,15 @@ if FileExist(pipe_name)
 ; 若不存在则启动Umi-OCR软件，通过启动参数传指令
 else
 {
-    if !FileExist(run_name)
+    if !FileExist(run_name) ; 检查同级路径
     {
-        MsgBox 程序%run_name%不存在。请将该命令行入口放在Umi-OCR文件夹下。
-        return
+        run_name_p := "..\" . run_name ; 检查父路径
+        if !FileExist(run_name_p)
+        {
+            MsgBox 未找到主程序【%run_name%】。请将命令行入口放在主程序相同或子文件夹中。
+            return 
+        }
+        run_name = %run_name_p%
     }
     Run, %run_name% %args%
 }

@@ -55,9 +55,11 @@ def Mission(flags):
     if flags['show']:  # 显示主窗
         Config.main.gotoTop(isForce=True)
     elif flags['hide']:  # 隐藏主窗
-        if not Config.get('isBackground'):  # 非后台模式
-            Config.set('isBackground', True)  # 开启后台模式
-        Config.main.onCloseWin()  # 关闭窗口
+        # 若有托盘且启用了最小化到托盘
+        if Config.get('isTray') and Config.get('isBackground'):
+            Config.main.onCloseWin()  # 关闭窗口
+        else:  # 若没有，则
+            Config.main.win.iconify()  # 最小化
 
     # 任务
     if not Config.main.isMsnReady():
