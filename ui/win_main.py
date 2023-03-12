@@ -236,8 +236,10 @@ class MainWin:
             vbar.pack(side="right", fill='y')
             self.textOutput = tk.Text(fr2, height=500, width=500)
             self.textOutput.pack(fill='both', side="left")
-            self.textOutput.tag_config(  # 添加标签
+            self.textOutput.tag_config(  # 添加高亮标签
                 'blue', foreground='blue')
+            self.textOutput.tag_config(  # 添加高亮标签
+                'red', foreground='red')
             vbar["command"] = self.textOutput.yview
             self.textOutput["yscrollcommand"] = vbar.set
         initTab2()
@@ -1053,6 +1055,16 @@ class MainWin:
         if self.isAutoRoll.get():  # 需要自动滚动
             self.textOutput.see(position)
 
+    def errorOutput(self, title, msg='', highlight='red'):
+        '''输出错误提示'''
+        Notify(title, msg)
+        if not self.textOutput.get('end-2c') == '\n':  # 当前面板尾部没有换行，则加换行
+            self.panelOutput('\n')
+        self.panelOutput(title, highlight=highlight)  # 输出红色提示
+        if msg:
+            self.panelOutput('\n'+msg)
+        self.panelOutput('\n')
+
     def panelClear(self):
         '''清空输出面板'''
         self.textOutput.delete('1.0', tk.END)
@@ -1199,8 +1211,7 @@ class MainWin:
             failFlag = True
 
         if failFlag:
-            self.panelOutput('剪贴板中未查询到图片信息\n')
-            Notify('剪贴板中未查询到图片信息', '')
+            self.errorOutput('剪贴板中未查询到图片信息')
             # 失败也置顶
             self.gotoTop()  # 主窗置顶
             self.notebook.select(self.notebookTab[1])  # 转到输出卡
@@ -1219,10 +1230,7 @@ class MainWin:
     def closeScreenshot(self, flag, errMsg=None):  # 关闭截图窗口，返回T表示已复制到剪贴板
         self.win.attributes("-disabled", 0)  # 启用父窗口
         if errMsg:
-            Notify('截图失败', errMsg)
-            if not errMsg[-1] == '\n':
-                errMsg += '\n'
-            self.panelOutput(f'截图失败，{errMsg}')
+            self.errorOutput('截图失败', errMsg)
         if not flag and self.win.state() == 'normal':  # 截图不成功，但窗口非最小化
             self.gotoTop()  # 主窗置顶
         elif flag:  # 成功
