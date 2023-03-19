@@ -71,7 +71,7 @@
 > Umi-OCR 软件本体含 **简体中文&英文** 通用识别库。  
 > 配套 **多国语言识别扩展包** 可导入 `繁中,英,日,韩,俄,德,法` 识别库，请按需下载。
 
-Github下载：[Release v1.3.2](https://github.com/hiroi-sora/Umi-OCR/releases/tag/v1.3.2)
+Github下载：[Release v1.3.3](https://github.com/hiroi-sora/Umi-OCR/releases/tag/v1.3.3)
 
 蓝奏云下载：[https://hiroi-sora.lanzoul.com/s/umi-ocr](https://hiroi-sora.lanzoul.com/s/umi-ocr)
 
