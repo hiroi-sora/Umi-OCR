@@ -1154,7 +1154,7 @@ class MainWin:
         if self.isMsnReady():  # 未在运行
             if self.batList.isEmpty():
                 return
-            # 初始化文本处理器
+            # 初始化批量识图任务处理器
             try:
                 msnBat = MsnBatch()
             except Exception as err:
