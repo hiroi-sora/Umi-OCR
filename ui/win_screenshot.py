@@ -3,6 +3,7 @@ from utils.config import Config, ScsModeFlag
 from utils.tool import Tool
 from utils.hotkey import Hotkey  # 快捷键
 from ui.win_notify import NotifyClose  # 关闭通知弹窗
+from ui.win_show_image import ShowImage  # 显示图片窗口
 
 # 获取显示器信息
 from win32api import EnumDisplayMonitors, GetMonitorInfo
@@ -95,7 +96,11 @@ class ScreenshotSys():  # 系统截图模式
         clipData = Tool.getClipboardFormat()  # 读取剪贴板
         if clipData == 2:  # 系统截图已保存到剪贴板内存，截图成功
             Log.info(f'  第{self.checkTime}次检查成功')
-            self.__close(True)
+            if Config.get('isShowImage'):  # 显示图片展示窗
+                ShowImage(imgPIL=ImageGrab.grabclipboard())
+                self.__close(False)
+            else:
+                self.__close(True)
             return
         Log.info(f'  第{self.checkTime}次检查')
         self.checkTime += 1
@@ -433,21 +438,24 @@ class ScreenshotWin():  # 内置截图模式
         self.imageResult.save(output, 'BMP')  # 以位图保存
         imgData = output.getvalue()[14:]  # 去除header
         output.close()
-        # 写入剪贴板
-        try:
-            OpenClipboard()  # 打开剪贴板
-            EmptyClipboard()  # 清空剪贴板
-            SetClipboardData(CF_DIB, imgData)  # 写入
-        except Exception as err:
-            self.errMsg = f'位图无法写入剪贴板，请检测是否有其他程序正在占用。\n{err}'
+        if Config.get('isShowImage'):  # 显示图片展示窗
+            ShowImage(imgPIL=self.imageResult, imgData=imgData)
             return False
-        finally:
+        else:  # 直接识别
             try:
-                CloseClipboard()  # 关闭
+                OpenClipboard()  # 打开剪贴板
+                EmptyClipboard()  # 清空剪贴板
+                SetClipboardData(CF_DIB, imgData)  # 写入
             except Exception as err:
-                self.errMsg = f'无法关闭剪贴板。\n{err}'
+                self.errMsg = f'位图无法写入剪贴板，请检测是否有其他程序正在占用。\n{err}'
                 return False
-        return True
+            finally:
+                try:
+                    CloseClipboard()  # 关闭
+                except Exception as err:
+                    self.errMsg = f'无法关闭剪贴板。\n{err}'
+                    return False
+            return True
 
 
 SSWin = ScreenshotWin()

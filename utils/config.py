@@ -218,6 +218,11 @@ _ConfigDict = {
         'isSave': True,
         'isTK': True,
     },
+    'isShowImage': {  # T时截图后展示窗口，F时直接识别
+        'default': False,
+        'isSave': True,
+        'isTK': True,
+    },
     # 计划任务设置
     'isOpenExplorer': {   # T时任务完成后打开资源管理器到输出目录
         'default': False,

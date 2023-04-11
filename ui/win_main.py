@@ -478,10 +478,15 @@ class MainWin:
                 fr2.pack(side='top', fill='x', pady=2, padx=5)
                 fr2.grid_columnconfigure(1, minsize=20)
                 wid = ttk.Checkbutton(fr2, variable=Config.getTK('isScreenshotHideWindow'),
-                                      text='截图隐藏窗口')
-                wid.grid(column=0, row=0)
+                                      text='隐藏主窗口')
+                wid.grid(column=0, row=0, sticky='w')
                 self.balloon.bind(
                     wid, f'截图前隐藏主窗口\n会延迟{Config.get("screenshotHideWindowWaitTime")}毫秒以等待窗口动画')
+                wid = ttk.Checkbutton(fr2, variable=Config.getTK('isShowImage'),
+                                      text='截图展示窗口')
+                wid.grid(column=2, row=0)
+                self.balloon.bind(
+                    wid, f'不勾选：截图后立刻OCR识图\n勾选：截图后展示图片，可稍后识别或保存图片')
                 wid = ttk.Checkbutton(fr2, variable=Config.getTK('isNeedCopy'),
                                       text='自动复制结果')
                 wid.grid(column=0, row=1)
