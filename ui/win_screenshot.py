@@ -150,7 +150,8 @@ class ScreenshotWin():  # 内置截图模式
         # 计算缩放比例，若不一致，则发送提示弹窗
         # 条件：需要提示 | 大于一块屏幕时 | 本次信息与上次不同 | 设置需要提示
         scInfosLen = len(scInfos)
-        if self.promptSss and scInfosLen > 1 and not self.lastScInfos == scInfos and Config.get('promptScreenshotScale'):
+        if self.promptSss and scInfosLen > 1 and not self.lastScInfos == scInfos and Config.get(
+                'promptScreenshotScale'):
             scList = []
             self.lastScInfos = scInfos  # 屏幕信息与上次一样时跳过检测，减少耗时
             # 提取所有屏幕缩放比例
@@ -164,7 +165,7 @@ class ScreenshotWin():  # 内置截图模式
                 w = GetDeviceCaps(hDC, 118)  # 常量 win32con.DESKTOPHORZRES
                 # h = GetDeviceCaps(hDC, 117)  # 常量 win32con.DESKTOPVERTRES
                 # 得到缩放比，即windows的“更改文本、应用等项目的大小”
-                s = w / (sc[2][2]-sc[2][0])
+                s = w / (sc[2][2] - sc[2][0])
                 scList.append(s)
             # 检查缩放比例是否一致
             isEQ = True
@@ -200,7 +201,7 @@ class ScreenshotWin():  # 内置截图模式
                 scRight = s[2]
             if s[3] > scDown:  # 下边缘
                 scDown = s[3]
-            # 计算虚拟屏幕的宽和高
+            # 计算虚拟屏幕的宽和高,请确保屏幕对齐
             scWidth, scHeight = scRight - scLeft, scDown - scUp
         # 多显示器处理完毕
         self.scBoxVirtual = (scLeft, scUp, scRight, scDown,
@@ -208,12 +209,12 @@ class ScreenshotWin():  # 内置截图模式
         self.allScale = self.image.size[0] / scWidth  # 整个虚拟屏幕的缩放比例
         # 主窗口设置为铺满虚拟屏幕
         bd, bdp = 2, 1  # 边缘要额外拓展1像素，以免无法接收到鼠标在边缘的点击
-        scStr = f'{scWidth+bd}x{scHeight+bd}+{scLeft-bdp}+{scUp-bdp}'
+        scStr = f'{scWidth + bd}x{scHeight + bd}+{scLeft - bdp}+{scUp - bdp}'
         # print(f'缩放比：{self.allScale}')
         # self.topwin.tk.call('tk', 'scaling', self.allScale/75)
         self.topwin.geometry(scStr)
-        self.canvas['width'] = scWidth+bd
-        self.canvas['height'] = scHeight+bd
+        self.canvas['width'] = scWidth + bd
+        self.canvas['height'] = scHeight + bd
         # 原图改物理为虚拟屏幕分辨率，转成tk格式，导入画布
         self.imageTK = ImageTk.PhotoImage(
             self.image.resize((scWidth, scHeight)))
@@ -313,13 +314,13 @@ class ScreenshotWin():  # 内置截图模式
                 self.canvas.coords(self.sightBox[i],
                                    self.sightBoxXY[0], self.sightBoxXY[1], event.x, event.y)
         if self.debugList:
-            self.canvas.coords(self.debugXYText, event.x+6, event.y+3)
-            self.canvas.coords(self.debugXYBox, event.x+3,
-                               event.y+3, event.x+130, event.y+28)
+            self.canvas.coords(self.debugXYText, event.x + 6, event.y + 3)
+            self.canvas.coords(self.debugXYBox, event.x + 3,
+                               event.y + 3, event.x + 130, event.y + 28)
             # self.canvas.itemconfig(self.debugXYText, {'text':
             #                                           f'{event.x} , {event.y}'})
             self.canvas.itemconfig(self.debugXYText, {'text':
-                                                      f'{event.x_root} , {event.y_root}'})
+                                                          f'{event.x_root} , {event.y_root}'})
 
     def __repaint(self, event):  # 重绘
         Log.info('重绘')
@@ -348,6 +349,7 @@ class ScreenshotWin():  # 内置截图模式
                 box[1], box[3] = box[3], box[1]
             for i in range(4):
                 box[i] *= self.allScale  # 乘上缩放比例
+            self.imgXY = box  # 传值给截图显示
             self.imageResult = self.image.crop(box)
 
     def __onClose(self, event=None):  # 关闭窗口
@@ -375,6 +377,7 @@ class ScreenshotWin():  # 内置截图模式
             for i in self.flashList:
                 self.canvas.delete(i)
             self.flashList = []
+
         for box in self.scBoxList:
             p1x, p1y, p2x, p2y = box
             p1x -= self.scBoxVirtual[0]
@@ -416,13 +419,13 @@ class ScreenshotWin():  # 内置截图模式
                 self.debugList.append(e)
                 # 文字提示框
                 e = self.canvas.create_rectangle(
-                    p1x+10, p1y+10, p1x+440, p1y+60, fill='white', width=0)
+                    p1x + 10, p1y + 10, p1x + 440, p1y + 60, fill='white', width=0)
                 self.debugList.append(e)
-                e = self.canvas.create_text(p1x+15, p1y+15,
+                e = self.canvas.create_text(p1x + 15, p1y + 15,
                                             font=('', 15, 'bold'), fill=color, anchor='nw',
-                                            text=f'屏幕{index+1}: {box} | {box[2]-box[0]},{box[3]-box[1]}')
+                                            text=f'屏幕{index + 1}: {box} | {box[2] - box[0]},{box[3] - box[1]}')
                 self.debugList.append(e)
-                e = self.canvas.create_text(p1x+15, p1y+43,
+                e = self.canvas.create_text(p1x + 15, p1y + 43,
                                             font=('', 10, ''), fill=color, anchor='nw',
                                             text=f'按 Ctrl+Shift+Alt+D 退出调试模式')
                 self.debugList.append(e)
@@ -439,7 +442,7 @@ class ScreenshotWin():  # 内置截图模式
         imgData = output.getvalue()[14:]  # 去除header
         output.close()
         if Config.get('isShowImage'):  # 显示图片展示窗
-            ShowImage(imgPIL=self.imageResult, imgData=imgData)
+            ShowImage(imgPIL=self.imageResult, imgData=imgData, imgXY=self.imgXY)
             return False
         else:  # 直接识别
             try:
