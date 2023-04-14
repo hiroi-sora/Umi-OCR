@@ -88,13 +88,12 @@ class ShowImage:
         self.sum_y = 0
         self.draggable = False  # 设置为可拖拽
         self.resize_mode = 0  # 总共8个位置按先天八卦顺序，默认不可调整为0
-        # 窗口属性，默认置顶
+        # 窗口属性
         self.isWindowTop = True
         if Config.get('isWindowTop'):  # 初始置顶
             self._gotoTop()
-        # self.win.after(200, lambda: self.win.focus())  # 窗口获得焦点
-        self.win.geometry(
-            f"{self.new_width}x{self.new_height}+{self.w_new_x}+{self.w_new_y-self.hPlus}")
+        self.win.after(0, self._update_windows, self.new_width, self.new_height, self.w_new_x,
+                       self.w_new_y - self.hPlus)
 
     def _on_mouse_press(self, event):
         """鼠标左键按下事件，捕捉更新坐标"""
@@ -120,7 +119,6 @@ class ShowImage:
             self.win.config(cursor="")
             self.w_new_x = w_angle_1[0] + self.sum_x
             self.w_new_y = w_angle_1[1] + self.sum_y
-            self.win.geometry(f"{self.new_width}x{self.new_height}+{self.w_new_x}+{self.w_new_y}")
         elif 0 < self.resize_mode < 9:
             win32api.SetCursor(win32api.LoadCursor(0, self.cursor_dict[self.resize_mode if self.resize_mode else 0]))
             if self.resize_mode == 1 or self.resize_mode == 5:
@@ -160,12 +158,17 @@ class ShowImage:
                 self.new_height = int(self.new_width / self.ratio)
             self.win.geometry(f"{self.new_width}x{self.new_height}+{self.w_new_x}+{self.w_new_y}")
         else:
-            print("不调整大小")
+            print("无操作")
+        self.win.after(0, self._update_windows, self.new_width, self.new_height, self.w_new_x, self.w_new_y)
+
+    def _update_windows(self, new_width, new_height, w_new_x, w_new_y):
         resized_img = self.img.resize(
-            (self.new_width, self.new_height), Image.LANCZOS)
+            (self.new_width, self.new_height), Image.BICUBIC)
         # 将PIL Image对象转换为Tkinter PhotoImage对象，并更新Canvas上的图像
         self.photo = ImageTk.PhotoImage(resized_img)
         self.canvas.itemconfigure(self.canvas_image, image=self.photo)
+        self.win.geometry(f"{new_width}x{new_height}+{w_new_x}+{w_new_y}")
+
 
     def _on_mouse_motion(self, event):
         x = event.x
@@ -173,9 +176,9 @@ class ShowImage:
         x1, y1, x2, y2 = 0, 0, self.win.winfo_width(), self.win.winfo_height()
         # print('当前坐标','x1:', x1, 'y1:', y1, 'x2:', x2, 'y2:', y2)
         m_area = 10
-        self.cursor_dict, self.resize_mode, self.draggable = self.show_cursor(x, y, x1, y1, x2, y2, m_area)
+        self.cursor_dict, self.resize_mode, self.draggable = self._show_cursor(x, y, x1, y1, x2, y2, m_area)
 
-    def show_cursor(self, x, y, x1, y1, x2, y2, m_area):
+    def _show_cursor(self, x, y, x1, y1, x2, y2, m_area):
         """根据鼠标位置在窗口边缘显示不同的光标"""
         # 默认无操作
         resize_mode = 0
