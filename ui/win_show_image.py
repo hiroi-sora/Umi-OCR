@@ -32,9 +32,11 @@ class ShowImage:
         self.win = tk.Toplevel()
         self.win.iconphoto(False, Asset.getImgTK('umiocr24'))  # 设置窗口图标
         self.win.overrideredirect(True)
+        self.win.config(borderwidth=0)  # 隐藏边缘
         # 创建Canvas对象并将其填充为整个窗口
-        self.canvas = tk.Canvas(self.win, width=self.img.width, height=self.img.height, borderwidth=1)
+        self.canvas = tk.Canvas(self.win, width=self.img.width, height=self.img.height)
         self.canvas.pack(fill='both', expand=True)
+        self.canvas.config(borderwidth=0, highlightthickness=0)
         # 在Canvas上创建图像
         self.canvas_image = self.canvas.create_image(0, 0, anchor='nw', image=self.photo)
         # canvas坐标系canvas_cs左上(0,0),右下尺寸
@@ -53,10 +55,10 @@ class ShowImage:
         print(imgXY, self.w, self.h)
         self.new_width, self.new_height = self.w, self.h
         if imgXY is None:
-            self.w_new_x, self.w_new_y = self.win.winfo_x(), self.win.winfo_y() + self.hPlus
+            self.w_new_x, self.w_new_y = self.win.winfo_x(), self.win.winfo_y()
         else:
-            self.w_new_x, self.w_new_y = int(min(imgXY[0], imgXY[2])), int(min(imgXY[1], imgXY[3])) + self.hPlus
-        self.win.geometry(f"{self.new_width}x{self.new_height + self.hPlus}+{self.w_new_x}+{self.w_new_y}")
+            self.w_new_x, self.w_new_y = int(imgXY[0]), int(imgXY[1])
+        print("初始位置", self.w_new_x, self.w_new_y)
         self.win_cs = self.w_new_x, self.w_new_y, self.w_new_x + self.new_width, self.w_new_y + self.new_height
         # 菜单栏
         self.menubar = tk.Menu(self.win)
@@ -90,13 +92,15 @@ class ShowImage:
         self.isWindowTop = False
         if Config.get('isWindowTop'):  # 初始置顶
             self._gotoTop()
-        self.win.after(200, lambda: self.win.focus())  # 窗口获得焦点
+        # self.win.after(200, lambda: self.win.focus())  # 窗口获得焦点
+        self.win.geometry(
+            f"{self.new_width}x{self.new_height}+{self.w_new_x}+{self.w_new_y-self.hPlus}")
 
     def _on_mouse_press(self, event):
         """鼠标左键按下事件，捕捉更新坐标"""
         self.c_new_x = event.x
         self.c_new_y = event.y
-        print("初始位置", self.w_new_x, self.w_new_y)
+        print("位置", self.w_new_x, self.w_new_y)
         self.win_cs = self.w_new_x, self.w_new_y, self.w_new_x + self.new_width, self.w_new_y + self.new_height
         self.sum_x = 0
         self.sum_y = 0
@@ -148,7 +152,6 @@ class ShowImage:
                 self.w_new_y = w_angle_1[1]
                 self.new_height = abs(event.y - self.c_new_y + w_angle_4[1] - w_angle_1[1])
                 self.new_width = int(self.new_height * self.ratio)
-                self.win.geometry(f"{self.new_width}x{self.new_height}+{self.w_new_x}+{self.w_new_y}")
             elif self.resize_mode == 6 or self.resize_mode == 7:
                 # 左上角不变
                 self.w_new_x = w_angle_1[0]
