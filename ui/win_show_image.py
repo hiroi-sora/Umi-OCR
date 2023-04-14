@@ -88,8 +88,8 @@ class ShowImage:
         self.sum_y = 0
         self.draggable = False  # 设置为可拖拽
         self.resize_mode = 0  # 总共8个位置按先天八卦顺序，默认不可调整为0
-        # 窗口属性
-        self.isWindowTop = False
+        # 窗口属性，默认置顶
+        self.isWindowTop = True
         if Config.get('isWindowTop'):  # 初始置顶
             self._gotoTop()
         # self.win.after(200, lambda: self.win.focus())  # 窗口获得焦点
