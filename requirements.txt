@@ -5,3 +5,5 @@ pywin32==304
 pywin32_ctypes==0.2.0
 windnd==1.0.7
 winshell==0.6
+pillow==9.5
+pyinstaller==5.10
