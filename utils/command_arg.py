@@ -19,7 +19,7 @@ Flags = gflags.FLAGS
 gflags.DEFINE_bool('no_win', False, '（已过时，请用-hide）true时隐藏窗口，最小化到托盘')  # 兼容旧版
 gflags.DEFINE_bool('hide', False, 'true时隐藏窗口，最小化到托盘')  # 兼容旧版
 gflags.DEFINE_bool('show', False, 'true时将主窗口显示到最前（不锁定）。')
-gflags.DEFINE_bool('exit', False, 'true时进行一次截屏识图。')
+gflags.DEFINE_bool('exit', False, 'true时退出Umi-OCR。')
 gflags.DEFINE_bool('clipboard', False, 'true时读取一次剪贴板进行识图。')
 gflags.DEFINE_bool('screenshot', False, 'true时进行一次截屏识图。')
 gflags.DEFINE_string('img', '', '传入本地图片路径。含空格的路径用引号""括起来。多个路径可用逗号,连接。')
