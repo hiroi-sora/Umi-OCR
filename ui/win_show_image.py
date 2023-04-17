@@ -75,6 +75,8 @@ class ShowImage:
         submenu.add_command(label='关闭窗口：Esc', command=self._onClose)
         self.menubar.add_cascade(label='更多', menu=submenu)
         # 事件绑定
+        self.canvas.bind("<Enter>", self._on_enter)  # 鼠标进入画布
+        self.canvas.bind("<Leave>", self._on_leave) # 鼠标离开画布
         self.canvas.bind('<Motion>', self._on_mouse_motion)  # 绑定鼠标划过事件
         self.canvas.bind("<ButtonPress-1>", self._on_mouse_press)  # 绑定鼠标左键点击事件
         self.canvas.bind("<B1-Motion>", self._on_mouse_drag)  # 绑定鼠标左键拖拽事件
@@ -94,6 +96,12 @@ class ShowImage:
             self._gotoTop()
         self.win.after(0, self._update_windows, self.new_width, self.new_height, self.w_new_x,
                        self.w_new_y - self.hPlus)
+
+    def _on_enter(self, event):
+        self.canvas.config(borderwidth=0, highlightthickness=1)
+
+    def _on_leave(self, event):
+        self.canvas.config(borderwidth=0, highlightthickness=0)
 
     def _on_mouse_press(self, event):
         """鼠标左键按下事件，捕捉更新坐标"""
@@ -168,7 +176,6 @@ class ShowImage:
         self.photo = ImageTk.PhotoImage(resized_img)
         self.canvas.itemconfigure(self.canvas_image, image=self.photo)
         self.win.geometry(f"{new_width}x{new_height}+{w_new_x}+{w_new_y}")
-
 
     def _on_mouse_motion(self, event):
         x = event.x
