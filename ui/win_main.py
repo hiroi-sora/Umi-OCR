@@ -74,7 +74,11 @@ class MainWin:
             self.win.geometry(f"{w}x{h}+{x}+{y}")  # 初始大小与位置
             self.win.protocol("WM_DELETE_WINDOW", self.onClose)  # 窗口关闭
             # 注册文件拖入，整个主窗口内有效
-            hook_dropfiles(self.win, func=self.draggedImages)
+            # 改成延迟一段时间后生效，减少产生异常的概率
+            # Fatal Python error: PyEval_RestoreThread: NULL tstate
+            # hook_dropfiles(self.win, func=self.draggedImages)
+            hook_dropfiles(self.win, func=lambda e: self.win.after(
+                80, lambda: self.draggedImages(e)))
             # 图标
             Asset.initRelease()  # 释放base64资源到本地
             Asset.initTK()  # 初始化tk图片
@@ -172,7 +176,6 @@ class MainWin:
                 columns=['name', 'time', 'score'],  # 显示的列
                 show='headings',  # 隐藏首列
             )
-            # hook_dropfiles(self.table, func=self.draggedImages)  # 注册文件拖入
             self.table.pack(expand=True, side="left", fill='both')
             self.table.heading('name', text='文件名称')
             self.table.heading('time', text='耗时')
