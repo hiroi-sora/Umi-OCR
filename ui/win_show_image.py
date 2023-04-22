@@ -55,13 +55,15 @@ class ShowImage:
         submenu.add_command(label='保存图片到本地：Ctrl+S', command=self.__saveImage)
         submenu.add_command(label='复制图片到剪贴板：Ctrl+C', command=self.__copyImage)
         submenu.add_command(label='关闭窗口：Esc', command=self.__onClose)
-        submenu.add_command(label='缩放窗口：左键拖拽右下角箭头图标')
-        submenu.add_command(label='移动窗口：左键拖拽任意位置')
+        submenu.add_command(label='移动窗口：拖拽任意位置')
+        submenu.add_command(label='缩放窗口：拖拽右下角箭头图标')
+        submenu.add_command(label='缩放窗口：鼠标滚轮')
+        submenu.add_command(label='调整透明度：Ctrl+滚轮')
         self.menubar.add_cascade(label='更多', menu=submenu)
 
         # 创建Canvas对象并将其填充为整个窗口
         self.canvas = tk.Canvas(
-            self.win, width=self.imgPIL.width, height=self.imgPIL.height)
+            self.win, width=self.imgPIL.width, height=self.imgPIL.height, relief='solid')
         self.canvas.pack(fill='both', expand=True)
         self.canvas.config(borderwidth=0, highlightthickness=0)  # 隐藏Canvas的边框
         # 在Canvas上创建图像
@@ -98,6 +100,7 @@ class ShowImage:
         self.canvas.bind('<ButtonPress-1>', self.__onCanvasPress)  # 按下画布
         self.canvas.bind('<ButtonRelease-1>', self.__onCanvasRelease)  # 松开画布
         self.canvas.bind('<B1-Motion>', self.__onCanvasMotion)  # 拖拽画布
+        self.canvas.bind('<MouseWheel>', self.__onMouseWheel)  # 滚轮缩放或透明度调整
         # 鼠标进入和离开缩放按钮
         self.canvas.tag_bind(self.zoomArrow1, '<Enter>', self.__onZoomEnter)
         self.canvas.tag_bind(self.zoomArrow1, '<Leave>', self.__onZoomLeave)
@@ -126,41 +129,6 @@ class ShowImage:
         self.__resize(w, h)  # 设定初始大小
         mouseXY = Hotkey.getMousePos()  # 获取鼠标位置
         self.win.geometry(f'+{mouseXY[0]-w//2}+{mouseXY[1]-h//2}')  # 设定初始位置
-
-    def __resize(self, w, h):  # 缩放图片。应用w或h中按图片比例更大的一个值。
-        if h <= 0:  # 防止除零
-            h = 1
-        # 适应w或h中比例更大的一个
-        if w/h > self.ratio:
-            h = int(w/self.ratio)  # w更大，则应用w，改变h
-        else:
-            w = int(h*self.ratio)  # h更大，则应用h，改变w
-        # 防止窗口大小超出屏幕
-        if w > self.win.winfo_screenwidth()-maxSizeMargin:
-            w = self.win.winfo_screenwidth()-maxSizeMargin
-            h = int(w/self.ratio)
-        if h > self.win.winfo_screenheight()-maxSizeMargin:
-            h = self.win.winfo_screenheight()-maxSizeMargin
-            w = int(h*self.ratio)
-        # 最小大小
-        if w < minSize and h < minSize:
-            if w/h > self.ratio:
-                w = minSize
-                h = int(w/self.ratio)
-            else:
-                h = minSize
-                w = int(h*self.ratio)
-
-        self.wh = (w, h)
-        # 生成并设定缩放后的图片
-        resizedImg = self.imgPIL.resize((w, h), Image.ANTIALIAS)
-        self.imgTK = ImageTk.PhotoImage(resizedImg)
-        self.canvas.itemconfigure(self.imgCanvas, image=self.imgTK)
-        self.win.geometry(f'{w}x{h}')  # 缩放窗口
-        # 移动缩放按钮
-        ax, ay = w-self.zoomSize[0], h-self.zoomSize[1]
-        self.canvas.coords(self.zoomArrow1, ax, ay)
-        self.canvas.coords(self.zoomArrow2, ax, ay)
 
     # ============================== 事件 ==============================
 
@@ -252,7 +220,61 @@ class ShowImage:
     def __onClickUnlock(self, e=None):  # 单击解锁
         self.__switchLock(-1)
 
+    def __onMouseWheel(self, e=None):  # 滚轮
+        if self.isLock:
+            return
+        if e.state == 4:  # Ctrl按下，调整透明度
+            step = 0.1
+            s = step if e.delta > 0 else -step
+            alpha = self.win.attributes('-alpha')
+            a = alpha+s
+            if a < 0.3:
+                a = 0.3
+            if a > 1:
+                a = 1
+            self.win.attributes('-alpha', a)
+        else:  # 否则，缩放
+            step = 30
+            s = step if e.delta > 0 else -step
+            w = self.wh[0]+s
+            self.__resize(w, 0)
+
     # ============================== 功能 ==============================
+
+    def __resize(self, w, h):  # 重设图片和窗口大小。应用w或h中按图片比例更大的一个值。
+        if h <= 0:  # 防止除零
+            h = 1
+        # 适应w或h中比例更大的一个
+        if w/h > self.ratio:
+            h = int(w/self.ratio)  # w更大，则应用w，改变h
+        else:
+            w = int(h*self.ratio)  # h更大，则应用h，改变w
+        # 防止窗口大小超出屏幕
+        if w > self.win.winfo_screenwidth()-maxSizeMargin:
+            w = self.win.winfo_screenwidth()-maxSizeMargin
+            h = int(w/self.ratio)
+        if h > self.win.winfo_screenheight()-maxSizeMargin:
+            h = self.win.winfo_screenheight()-maxSizeMargin
+            w = int(h*self.ratio)
+        # 最小大小
+        if w < minSize and h < minSize:
+            if w/h > self.ratio:
+                w = minSize
+                h = int(w/self.ratio)
+            else:
+                h = minSize
+                w = int(h*self.ratio)
+
+        self.wh = (w, h)
+        # 生成并设定缩放后的图片
+        resizedImg = self.imgPIL.resize((w, h), Image.ANTIALIAS)
+        self.imgTK = ImageTk.PhotoImage(resizedImg)
+        self.canvas.itemconfigure(self.imgCanvas, image=self.imgTK)
+        self.win.geometry(f'{w}x{h}')  # 缩放窗口
+        # 移动缩放按钮
+        ax, ay = w-self.zoomSize[0], h-self.zoomSize[1]
+        self.canvas.coords(self.zoomArrow1, ax, ay)
+        self.canvas.coords(self.zoomArrow2, ax, ay)
 
     def __switchLock(self, flag=0):  # 切换：锁定/解锁。
         # flag=0：切换。>0：锁定。<0：解锁。
@@ -270,6 +292,7 @@ class ShowImage:
             self.win.attributes('-topmost', 1)  # 窗口置顶
             self.win.config(menu='')  # 移除菜单栏
             self.win.overrideredirect(True)  # 将窗口设置为无边框模式
+            self.canvas.config(borderwidth=1)  # 添加画布边框
             self.win.update()  # 刷新一下
             # 移动窗口，补偿菜单和边框消失的偏移
             self.lockX, self.lockY = self.win.winfo_rootx()-rootx, self.win.winfo_rooty()-rooty
@@ -279,6 +302,7 @@ class ShowImage:
             self.win.attributes('-topmost', 0)  # 取消置顶
             self.win.config(menu=self.menubar)  # 恢复菜单栏
             self.win.overrideredirect(False)  # 取消无边框模式
+            self.canvas.config(borderwidth=0)  # 取消画布边框
             self.win.update()  # 刷新一下
             # 移动窗口，补偿菜单和边框恢复的偏移
             self.win.geometry(f'+{winx+self.lockX}+{winy+self.lockY}')
