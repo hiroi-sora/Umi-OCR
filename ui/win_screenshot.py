@@ -200,7 +200,7 @@ class ScreenshotWin():  # 内置截图模式
                 scRight = s[2]
             if s[3] > scDown:  # 下边缘
                 scDown = s[3]
-            # 计算虚拟屏幕的宽和高
+            # 计算虚拟屏幕的宽和高，请确保屏幕对齐
             scWidth, scHeight = scRight - scLeft, scDown - scUp
         # 多显示器处理完毕
         self.scBoxVirtual = (scLeft, scUp, scRight, scDown,
@@ -348,7 +348,7 @@ class ScreenshotWin():  # 内置截图模式
                 box[1], box[3] = box[3], box[1]
             for i in range(4):
                 box[i] *= self.allScale  # 乘上缩放比例
-            self.imageResult = self.image.crop(box)
+            self.imageResult = self.image.crop(box)  # 裁切，产生最终截图数据
 
     def __onClose(self, event=None):  # 关闭窗口
         if not self.isInitGrab:
@@ -375,6 +375,7 @@ class ScreenshotWin():  # 内置截图模式
             for i in self.flashList:
                 self.canvas.delete(i)
             self.flashList = []
+
         for box in self.scBoxList:
             p1x, p1y, p2x, p2y = box
             p1x -= self.scBoxVirtual[0]
