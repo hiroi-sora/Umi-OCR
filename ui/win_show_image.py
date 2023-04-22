@@ -2,6 +2,7 @@
 from utils.config import Config
 from utils.asset import Asset  # 资源
 from ui.win_notify import Notify
+from utils.hotkey import Hotkey
 
 import time
 import tkinter as tk
@@ -10,12 +11,12 @@ from win32clipboard import OpenClipboard, EmptyClipboard, SetClipboardData, Clos
 from io import BytesIO
 
 minSize = 140  # 最小大小
+maxSizeMargin = 80  # 最大大小时，距离屏幕边缘的空隙
 
 
 class ShowImage:
-    def __init__(self, imgPIL=None, imgData=None, imgInfo=None):
+    def __init__(self, imgPIL=None, imgData=None, title=''):
         # imgPIL：PIL对象，imgData：位图数据。传入一个即可
-        # imgInfo：图片信息，截图位置等。
 
         # 初始化图片数据
         self.imgPIL, self.imgData = imgPIL, imgData
@@ -36,8 +37,9 @@ class ShowImage:
         self.win = tk.Toplevel()
         self.win.iconphoto(False, Asset.getImgTK('umiocr24'))  # 设置窗口图标
         self.win.resizable(False, False)  # 禁止原生缩放窗口
-        self.win.title(
-            f'预览 {time.strftime("%H:%M")} （{self.wh[0]}x{self.wh[1]}）')
+        if not title:  # 创建标题
+            title = f'预览 {time.strftime("%H:%M")} （{self.wh[0]}x{self.wh[1]}）'
+        self.win.title(title)
 
         # 菜单栏
         self.menubar = tk.Menu(self.win)
@@ -119,28 +121,35 @@ class ShowImage:
                 self.win.attributes('-topmost', 0)  # 取消锁定置顶
             self.win.focus()  # 窗口获得焦点
         self.win.after(200, start)
-        self.__resize(self.imgPIL.width, self.imgPIL.height)  # 设定初始大小
+        # 设定初始大小和位置
+        w, h = self.wh[0], self.wh[1]
+        self.__resize(w, h)  # 设定初始大小
+        mouseXY = Hotkey.getMousePos()  # 获取鼠标位置
+        self.win.geometry(f'+{mouseXY[0]-w//2}+{mouseXY[1]-h//2}')  # 设定初始位置
 
     def __resize(self, w, h):  # 缩放图片。应用w或h中按图片比例更大的一个值。
+        if h <= 0:  # 防止除零
+            h = 1
         # 适应w或h中比例更大的一个
         if w/h > self.ratio:
             h = int(w/self.ratio)  # w更大，则应用w，改变h
         else:
             w = int(h*self.ratio)  # h更大，则应用h，改变w
         # 防止窗口大小超出屏幕
-        if w > self.win.winfo_screenwidth():
-            w = self.win.winfo_screenwidth()
+        if w > self.win.winfo_screenwidth()-maxSizeMargin:
+            w = self.win.winfo_screenwidth()-maxSizeMargin
             h = int(w/self.ratio)
-        if h > self.win.winfo_screenheight():
-            h = self.win.winfo_screenheight()
+        if h > self.win.winfo_screenheight()-maxSizeMargin:
+            h = self.win.winfo_screenheight()-maxSizeMargin
             w = int(h*self.ratio)
         # 最小大小
-        if w < minSize:
-            w = minSize
-            h = int(w/self.ratio)
-        if h < minSize:
-            h = minSize
-            w = int(h*self.ratio)
+        if w < minSize and h < minSize:
+            if w/h > self.ratio:
+                w = minSize
+                h = int(w/self.ratio)
+            else:
+                h = minSize
+                w = int(h*self.ratio)
 
         self.wh = (w, h)
         # 生成并设定缩放后的图片
@@ -230,13 +239,13 @@ class ShowImage:
         nx, ny = self.moveOriginXY[0]+dx, self.moveOriginXY[1]+dy  # 计算位置设定
         self.win.geometry(f'+{nx}+{ny}')  # 移动窗口
 
-    def __onLockEnter(self, e=None):
+    def __onLockEnter(self, e=None):  # 进入解锁按钮
         if not self.isLock:
             return
         self.canvas.itemconfig(self.lockBtn2, state=tk.NORMAL)  # 显示2层图标
         self.canvas.config(cursor='hand2')  # 改变光标为手指
 
-    def __onLockLeave(self, e=None):
+    def __onLockLeave(self, e=None):  # 离开解锁按钮
         self.canvas.itemconfig(self.lockBtn2, state=tk.HIDDEN)
         self.canvas.config(cursor='')  # 改变光标为正常
 
