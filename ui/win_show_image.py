@@ -10,8 +10,9 @@ from PIL import Image, ImageTk
 from win32clipboard import OpenClipboard, EmptyClipboard, SetClipboardData, CloseClipboard, CF_DIB
 from io import BytesIO
 
-minSize = 140  # 最小大小
-maxSizeMargin = 80  # 最大大小时，距离屏幕边缘的空隙
+MinSize = 140  # 最小大小
+MaxSizeMargin = 80  # 最大大小时，距离屏幕边缘的空隙
+RatioThreshold = 3  # 当图片长宽比例大于该阈值时，缩放操作只读取鼠标的纵/横向移动，以避免短边缩放过快。
 
 
 class ShowImage:
@@ -196,6 +197,10 @@ class ShowImage:
         dx = e.x_root-self.mouseOriginXY[0]  # 离原点的移动量
         dy = e.y_root-self.mouseOriginXY[1]
         nw, nh = self.zoomOriginWH[0]+dx, self.zoomOriginWH[1]+dy  # 计算大小设定
+        if self.ratio > RatioThreshold:  # 图像 w 过大，忽视鼠标竖向移动
+            nh = 0
+        elif self.ratio < 1/RatioThreshold:  # 图像 h 过大，忽视鼠标横向移动
+            nw = 0
         self.__resize(nw, nh)  # 重置图片大小
 
     def __onMovePress(self, e=None):  # 按下移动区域
@@ -257,19 +262,19 @@ class ShowImage:
         else:
             w = int(h*self.ratio)  # h更大，则应用h，改变w
         # 防止窗口大小超出屏幕
-        if w > self.win.winfo_screenwidth()-maxSizeMargin:
-            w = self.win.winfo_screenwidth()-maxSizeMargin
+        if w > self.win.winfo_screenwidth()-MaxSizeMargin:
+            w = self.win.winfo_screenwidth()-MaxSizeMargin
             h = int(w/self.ratio)
-        if h > self.win.winfo_screenheight()-maxSizeMargin:
-            h = self.win.winfo_screenheight()-maxSizeMargin
+        if h > self.win.winfo_screenheight()-MaxSizeMargin:
+            h = self.win.winfo_screenheight()-MaxSizeMargin
             w = int(h*self.ratio)
         # 最小大小
-        if w < minSize and h < minSize:
-            if w/h > self.ratio:
-                w = minSize
+        if w < MinSize and h < MinSize:
+            if self.ratio > 1:  # 图像宽更大，则防止窗口宽度过小
+                w = MinSize
                 h = int(w/self.ratio)
-            else:
-                h = minSize
+            else:  # 高同理
+                h = MinSize
                 w = int(h*self.ratio)
 
         self.wh = (w, h)
