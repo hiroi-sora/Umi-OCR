@@ -15,8 +15,10 @@ maxSizeMargin = 80  # 最大大小时，距离屏幕边缘的空隙
 
 
 class ShowImage:
-    def __init__(self, imgPIL=None, imgData=None, title=''):
-        # imgPIL：PIL对象，imgData：位图数据。传入一个即可
+    def __init__(self, imgPIL=None, imgData=None, title='', initPos=None):
+        # imgPIL：PIL对象，imgData：位图数据。必须传入任意一个或两个。
+        # title：窗口标题（可选）
+        # initPos：窗口初始位置（可选），4位列表：[左上x，左上y，宽w，高h]
 
         # 初始化图片数据
         self.imgPIL, self.imgData = imgPIL, imgData
@@ -125,10 +127,15 @@ class ShowImage:
             self.win.focus()  # 窗口获得焦点
         self.win.after(200, start)
         # 设定初始大小和位置
-        w, h = self.wh[0], self.wh[1]
+        if initPos:  # 已设定初始值
+            x, y, w, h = initPos  # 解包元组
+        else:  # 未设定初始值，则由鼠标位置决定
+            x, y = Hotkey.getMousePos()  # 获取鼠标位置
+            w, h = self.wh[0], self.wh[1]  # 窗口大小=图像长宽
+            x, y = x-w//2, y-h//2  # 窗口中心移到鼠标位置
+        self.win.geometry(f'+{x}+{y}')  # 设定初始位置
+        self.win.update()  # 必须先update一下再设定大小，否则菜单栏的高度会被吃掉
         self.__resize(w, h)  # 设定初始大小
-        mouseXY = Hotkey.getMousePos()  # 获取鼠标位置
-        self.win.geometry(f'+{mouseXY[0]-w//2}+{mouseXY[1]-h//2}')  # 设定初始位置
 
     # ============================== 事件 ==============================
 
@@ -267,7 +274,7 @@ class ShowImage:
 
         self.wh = (w, h)
         # 生成并设定缩放后的图片
-        resizedImg = self.imgPIL.resize((w, h), Image.ANTIALIAS)
+        resizedImg = self.imgPIL.resize((w, h), Image.BILINEAR)
         self.imgTK = ImageTk.PhotoImage(resizedImg)
         self.canvas.itemconfigure(self.imgCanvas, image=self.imgTK)
         self.win.geometry(f'{w}x{h}')  # 缩放窗口

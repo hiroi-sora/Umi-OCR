@@ -143,6 +143,7 @@ class ScreenshotWin():  # 内置截图模式
             self.__initWin()
 
         self.imageResult = None  # 结果图片
+        self.sourceBox = None  # 截图包围盒原始信息
         self.drawMode = _DrawMode.ready  # 准备模式
         # 获取所有屏幕的信息，提取其中的坐标信息(虚拟，非物理分辨率)
         scInfos = EnumDisplayMonitors()  # 所有屏幕的信息
@@ -346,6 +347,7 @@ class ScreenshotWin():  # 内置截图模式
                 box[0], box[2] = box[2], box[0]
             if box[1] > box[3]:
                 box[1], box[3] = box[3], box[1]
+            self.sourceBox = tuple(box)  # 记录缩放比例之前的原始box值
             for i in range(4):
                 box[i] *= self.allScale  # 乘上缩放比例
             self.imageResult = self.image.crop(box)  # 裁切，产生最终截图数据
@@ -440,7 +442,9 @@ class ScreenshotWin():  # 内置截图模式
         imgData = output.getvalue()[14:]  # 去除header
         output.close()
         if Config.get('isShowImage'):  # 显示图片展示窗
-            ShowImage(imgPIL=self.imageResult, imgData=imgData)
+            b = self.sourceBox
+            p = (b[0], b[1], b[2]-b[0], b[3]-b[1])
+            ShowImage(imgPIL=self.imageResult, imgData=imgData, initPos=p)
             return False
         else:  # 直接识别
             try:
