@@ -67,3 +67,8 @@ class Hotkey():  # 热键
     def getMousePos():
         '''获取鼠标当前位置'''
         return hotkeyApi.getMousePos()
+
+    @staticmethod
+    def setMousePos(pos):
+        '''设置鼠标当前位置'''
+        return hotkeyApi.setMousePos(pos)
