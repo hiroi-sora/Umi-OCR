@@ -235,7 +235,6 @@ class ShowImage:
     def __onMouseWheel(self, e=None):  # 滚轮
         if self.isLock:
             return
-        print(e.state)
         if e.state == 0:  # 什么都不按，缩放
             step = 30
             s = step if e.delta > 0 else -step

@@ -486,7 +486,7 @@ class MainWin:
                 self.balloon.bind(
                     wid, f'截图前隐藏主窗口\n会延迟{Config.get("screenshotHideWindowWaitTime")}毫秒以等待窗口动画')
                 wid = ttk.Checkbutton(fr2, variable=Config.getTK('isShowImage'),
-                                      text='截图展示窗口')
+                                      text='截图预览窗口')
                 wid.grid(column=2, row=0)
                 self.balloon.bind(
                     wid, f'不勾选：截图后立刻OCR识图\n勾选：截图后展示图片，可稍后识别或保存图片')
