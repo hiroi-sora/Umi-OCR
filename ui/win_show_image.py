@@ -235,7 +235,13 @@ class ShowImage:
     def __onMouseWheel(self, e=None):  # 滚轮
         if self.isLock:
             return
-        if e.state == 4:  # Ctrl按下，调整透明度
+        print(e.state)
+        if e.state == 0:  # 什么都不按，缩放
+            step = 30
+            s = step if e.delta > 0 else -step
+            w = self.wh[0]+s
+            self.__resize(w, 0)
+        else:  # 按下任何修饰键（Ctrl、Shift等），调整透明度
             step = 0.1
             s = step if e.delta > 0 else -step
             alpha = self.win.attributes('-alpha')
@@ -245,11 +251,6 @@ class ShowImage:
             if a > 1:
                 a = 1
             self.win.attributes('-alpha', a)
-        else:  # 否则，缩放
-            step = 30
-            s = step if e.delta > 0 else -step
-            w = self.wh[0]+s
-            self.__resize(w, 0)
 
     # ============================== 功能 ==============================
 
