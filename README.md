@@ -10,14 +10,18 @@
   <a href="https://github.com/hiroi-sora/Umi-OCR/releases/latest">
     <img src="https://img.shields.io/github/v/release/hiroi-sora/Umi-OCR?style=flat-square" alt="Umi-OCR">
   </a>
-  <a href="LICENSE">
+  <a href="License">
     <img src="https://img.shields.io/github/license/hiroi-sora/Umi-OCR?style=flat-square" alt="LICENSE">
   </a>
   <a href="#下载">
     <img src="https://img.shields.io/github/downloads/hiroi-sora/Umi-OCR/total?style=flat-square" alt="forks">
   </a>
-  <img src="https://img.shields.io/github/stars/hiroi-sora/Umi-OCR?style=flat-square" alt="stars">
-  <img src="https://img.shields.io/github/forks/hiroi-sora/Umi-OCR?style=flat-square" alt="forks">
+  <a href="https://star-history.com/#hiroi-sora/Umi-OCR">
+    <img src="https://img.shields.io/github/stars/hiroi-sora/Umi-OCR?style=flat-square" alt="stars">
+  </a>
+  <a href="https://github.com/hiroi-sora/Umi-OCR/forks">
+    <img src="https://img.shields.io/github/forks/hiroi-sora/Umi-OCR?style=flat-square" alt="forks">
+  </a>
 </p>
 
 <div align="center">
@@ -52,7 +56,7 @@
 - **高效**：采用 PaddleOCR-json C++ 识别引擎。只要电脑性能足够，通常比在线OCR服务更快。
 - **精准**：默认使用PPOCR-v3模型库。除了能准确辨认常规文字，对手写、方向不正、杂乱背景等情景也有不错的识别率。可设置**忽略区域**排除水印、设置**文块后处理**合并排版段落，得到规整的文本。
 
-![](https://tupian.li/images/2022/09/29/1.3-e46104c4fc60cabd.png)
+![](https://tupian.li/images/2023/04/26/6447fe3273efd.png)
 
 ![](https://tupian.li/images/2022/09/29/1.3-.png)
 
@@ -71,7 +75,7 @@
 > Umi-OCR 软件本体含 **简体中文&英文** 通用识别库。  
 > 配套 **多国语言识别扩展包** 可导入 `繁中,英,日,韩,俄,德,法` 识别库，请按需下载。
 
-Github下载：[Release v1.3.3](https://github.com/hiroi-sora/Umi-OCR/releases/tag/v1.3.3)
+Github下载：[Release v1.3.4](https://github.com/hiroi-sora/Umi-OCR/releases/tag/v1.3.4)
 
 蓝奏云下载：[https://hiroi-sora.lanzoul.com/s/umi-ocr](https://hiroi-sora.lanzoul.com/s/umi-ocr)
 
@@ -80,7 +84,6 @@ Github下载：[Release v1.3.3](https://github.com/hiroi-sora/Umi-OCR/releases/t
 
 - main分支可能含有开发中的新功能。若您想使用稳定版本，建议切换到[最新的Release分支](https://github.com/hiroi-sora/Umi-OCR/branches)。
 - 安装依赖库：`pip install -r requirements.txt`
-- 打包还需要：`pip install pyinstaller`
 - 运行 `main.py` 启动程序。测试无异常后，运行 `to_exe.py` 一键打包。
 - 打包后，请将引擎组件 [PaddleOCR-json 整个文件夹](PaddleOCR-json) 放置于exe同目录下！
 - 打包后，请将引擎组件 [PaddleOCR-json 整个文件夹](PaddleOCR-json) 放置于exe同目录下！！
@@ -117,9 +120,11 @@ Github下载：[Release v1.3.3](https://github.com/hiroi-sora/Umi-OCR/releases/t
 
 ![](https://tupian.li/images/2022/09/29/1-w-.png)
 
+`v1.3.4` 还可以设置截图后生成一个预览窗口。预览窗口可以被钉在屏幕顶层，或调为半透明，方便对比查看。
+
 #### 粘贴图片到软件
 
-在任何地方（如文件管理器，网页，微信）复制图片，软件上点击粘贴按钮，自动识别。
+在任何地方（如文件管理器，网页，微信）复制图片，软件上点击粘贴按钮或快捷键，自动识别。
 
 ![](https://tupian.li/images/2022/09/29/2-w-.png)
 
@@ -306,6 +311,8 @@ OCR识别出的文本是按“块”划分的，通常一行文字分为一块�
 支持图片/文件夹；多个路径以逗号,分隔；含空格的路径加双引号""。如：
 
 `umiocr.exe -img="D:/图库,E:/my img/图片.png"`
+
+若路径含中文，请务必加双引号。
 
 ##### 指令5：剪贴板识图
 
@@ -536,6 +543,13 @@ OCR识别出的文本是按“块”划分的，通常一行文字分为一块�
 ## 更新日志
 
 点击版本号链接可前往对应备份分支。
+
+##### [v1.3.4](https://github.com/hiroi-sora/Umi-OCR/tree/release/1.3.3) `2023.4.26`
+<!-- 一周年纪念！ -->
+- 新功能：截图预览窗口。
+- 新功能：可用方向键微调截图框位置。
+- 修Bug：拖入图片时有几率卡退主窗口 [issue #126](https://github.com/hiroi-sora/Umi-OCR/issues/126) 。
+- 优化了一些处理流程。
 
 ##### [v1.3.3](https://github.com/hiroi-sora/Umi-OCR/tree/release/1.3.3) `2023.3.19`
 <!-- 4.5k★ 撒花~ -->
