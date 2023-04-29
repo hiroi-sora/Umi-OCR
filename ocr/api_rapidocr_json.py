@@ -29,10 +29,8 @@ class OcrAPI:
         args = ' '
         if argsStr:  # 添加用户指定的启动参数
             args += f' {argsStr}'
-        if configPath and 'config_path' not in args:  # 指定配置文件
-            args += f' --config_path="{configPath}"'
-        if 'use_debug' not in args:  # 关闭debug模式
-            args += ' --use_debug=0'
+        # if configPath and 'config_path' not in args:  # 指定配置文件
+        #     args += f' --config_path="{configPath}"'
         # 设置子进程启用静默模式，不显示控制台窗口
         startupinfo = None
         if 'win32' in str(sysPlatform).lower():
@@ -78,7 +76,7 @@ class OcrAPI:
         if not self.ret.poll() == None:
             return {'code': 400, 'data': f'子进程已结束。'}
         # wirteStr = imgPath if imgPath[-1] == '\n' else imgPath + '\n'
-        writeDict = {'image_dir': imgPath}
+        writeDict = {'imagePath': imgPath}
         try:  # 输入地址转为ascii转义的json字符串，规避编码问题
             wirteStr = jsonDumps(
                 writeDict, ensure_ascii=True, indent=None)+"\n"

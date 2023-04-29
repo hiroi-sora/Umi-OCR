@@ -4,11 +4,11 @@
 from utils.config import Umi
 from ui.win_main import MainWin
 
-Umi.ver = '1.3.4'
-Umi.pname = 'Umi-OCR'
+Umi.ver = '1.3.4-alpha.1'
+Umi.pname = 'Umi-OCR.Rapid'
 Umi.name = f'{Umi.pname} v{Umi.ver}'
 Umi.website = 'https://github.com/hiroi-sora/Umi-OCR'
-Umi.about = '免费、开源的离线OCR软件'
+Umi.about = '测试版本。识别引擎采用RapidAI/RapidOcrOnnx。'
 
 
 def main():

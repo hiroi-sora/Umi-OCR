@@ -1,6 +1,6 @@
 from utils.logger import GetLog
 from utils.config import Config, RunModeFlag
-from ocr.api_ppocr_json import OcrAPI
+from ocr.api_rapidocr_json import OcrAPI
 from ocr.engine_ram_optimization import OcrEngRam
 
 import os
@@ -98,21 +98,25 @@ class OcrEngine:
             raise Exception(
                 f'未在以下路径找到引擎组件\n【{ocrToolPath}】\n\n请将引擎组件【PaddleOCR-json】文件夹放置于指定路径！')
         # 获取静态参数
-        ang = ' -cls=1 -use_angle_cls=1' if Config.get('isOcrAngle') else ''
-        limit = f" -limit_type={Config.get('ocrLimitMode').get(Config.get('ocrLimitModeName'),'min')} -limit_side_len={Config.get('ocrLimitSize')}"
+        ang = ' -doAngle=1 -mostAngle=1' if Config.get(
+            'isOcrAngle') else ' -doAngle=0 -mostAngle=0'
+        limit = f" -maxSideLen={Config.get('ocrLimitSize')}"
+        th = Config.get('ocrCpuThreads')
+        if th <= 0:
+            th = os.cpu_count()
+            print(f'自动设置线程：{th}')
         staticArgs = f"{ang}{limit}\
- -cpu_threads={Config.get('ocrCpuThreads')}\
- -enable_mkldnn={Config.get('isOcrMkldnn')}\
+ -cpu_threads={th}\
  {Config.get('argsStr')}"  # 静态启动参数字符串。注意每个参数前面的空格
         # 整合最新OCR参数
         info = (
             ocrToolPath,  # 识别器路径
-            Config.get('ocrConfig')[Config.get(
-                'ocrConfigName')]['path'],  # 配置文件路径
+            # Config.get('ocrConfig')[Config.get(
+            #     'ocrConfigName')]['path'],  # 配置文件路径
             staticArgs,  # 启动参数
         )
+        print('参数整理完毕')
         isUpdate = not eq(info, self.__ocrInfo)  # 检查是否有变化
-
         if self.ocr:  # OCR进程已启动
             if not isUpdate:  # 无变化则放假
                 return
@@ -151,12 +155,6 @@ class OcrEngine:
         if self.msnFlag == MsnFlag.initing or self.msnFlag == MsnFlag.running\
                 and not self.engFlag == EngFlag.none:
             self.__setMsnFlag(MsnFlag.stopping)  # 设任务需要停止
-        n = Config.get('ocrRunModeName')
-        modeDict = Config.get('ocrRunMode')
-        if n in modeDict.keys():
-            mode = modeDict[n]
-            if mode == RunModeFlag.short:  # 按需关闭
-                self.stop()
 
     def restart(self):
         '''重启引擎，释放内存'''

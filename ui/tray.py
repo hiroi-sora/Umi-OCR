@@ -3,7 +3,7 @@ from ui.systray.traybar import SysTrayIcon
 from utils.asset import Asset
 from utils.config import Umi
 from utils.config import Config, ClickTrayModeFlag
-from ui.win_ocr_language import ChangeOcrLanguage  # 更改语言
+# from ui.win_ocr_language import ChangeOcrLanguage  # 更改语言
 
 import atexit  # 退出处理
 
@@ -17,17 +17,20 @@ class Tray:
         aa = ('显示面板', Asset.getPath('app24ico'), self.showWin)
         bb = ('屏幕截图', Asset.getPath('screenshot24ico'), self.screenshot)
         cc = ('粘贴图片', Asset.getPath('paste24ico'), self.clipboard)
-        dd = ('更改语言', Asset.getPath('language24ico'),
-              lambda *e: ChangeOcrLanguage())
+        # dd = ('更改语言', Asset.getPath('language24ico'),
+        #       lambda *e: ChangeOcrLanguage())
         clickTrayMode = Config.get('clickTrayMode').get(
             Config.get('clickTrayModeName'), ClickTrayModeFlag.show)
         menuOptions = ()
         if clickTrayMode == ClickTrayModeFlag.show:
-            menuOptions = (aa, bb, cc, dd)
+            # menuOptions = (aa, bb, cc, dd)
+            menuOptions = (aa, bb, cc)
         elif clickTrayMode == ClickTrayModeFlag.screenshot:
-            menuOptions = (bb, cc, aa, dd)
+            # menuOptions = (bb, cc, aa, dd)
+            menuOptions = (bb, cc, aa)
         elif clickTrayMode == ClickTrayModeFlag.clipboard:
-            menuOptions = (cc, bb, aa, dd)
+            # menuOptions = (cc, bb, aa, dd)
+            menuOptions = (cc, bb, aa)
         self.tray = SysTrayIcon(
             Asset.getPath('umiocrico'),
             Umi.name, menuOptions,

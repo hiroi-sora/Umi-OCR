@@ -9,7 +9,7 @@ from utils.command_arg import Parse, Mission  # 启动参数分析
 from ui.win_notify import Notify  # 通知弹窗
 from ui.win_screenshot import ScreenshotCopy  # 截屏
 from ui.win_select_area import IgnoreAreaWin  # 子窗口
-from ui.win_ocr_language import ChangeOcrLanguage  # 更改语言
+# from ui.win_ocr_language import ChangeOcrLanguage  # 更改语言
 from ui.widget import Widget  # 控件
 from ui.pmw.PmwBalloon import Balloon  # 气泡提示
 from ui.tray import SysTray
@@ -142,12 +142,12 @@ class MainWin:
             self.balloon.bind(btn, '粘贴图片')
             btn.pack(side='left')
             self.lockWidget.append(btn)
-            btn = ttk.Button(fr1, image=Asset.getImgTK('language24'),  # 语言按钮
-                             command=ChangeOcrLanguage,
-                             style='icon.TButton',  takefocus=0)
-            self.balloon.bind(btn, '更改OCR语言')
-            btn.pack(side='left')
-            self.lockWidget.append(btn)
+            # btn = ttk.Button(fr1, image=Asset.getImgTK('language24'),  # 语言按钮
+            #                  command=ChangeOcrLanguage,
+            #                  style='icon.TButton',  takefocus=0)
+            # self.balloon.bind(btn, '更改OCR语言')
+            # btn.pack(side='left')
+            # self.lockWidget.append(btn)
             # 右
             btn = ttk.Button(fr1, image=Asset.getImgTK('clear24'),  # 清空按钮
                              command=self.clearTable,
@@ -211,12 +211,12 @@ class MainWin:
             self.balloon.bind(btn, '粘贴图片')
             btn.pack(side='left')
             self.lockWidget.append(btn)
-            btn = ttk.Button(fr1, image=Asset.getImgTK('language24'),  # 语言按钮
-                             command=ChangeOcrLanguage,
-                             style='icon.TButton',  takefocus=0)
-            self.balloon.bind(btn, '更改OCR语言')
-            btn.pack(side='left')
-            self.lockWidget.append(btn)
+            # btn = ttk.Button(fr1, image=Asset.getImgTK('language24'),  # 语言按钮
+            #                  command=ChangeOcrLanguage,
+            #                  style='icon.TButton',  takefocus=0)
+            # self.balloon.bind(btn, '更改OCR语言')
+            # btn.pack(side='left')
+            # self.lockWidget.append(btn)
 
             # 右
             btn = ttk.Button(fr1, image=Asset.getImgTK('clear24'),  # 清空按钮
@@ -708,49 +708,44 @@ class MainWin:
 
             def initOcrUI():  # OCR引擎设置
                 frameOCR = tk.LabelFrame(
-                    self.optFrame, text="OCR识别引擎设置")
+                    self.optFrame, text="RapidOCR识别引擎设置")
                 frameOCR.pack(side='top', fill='x', ipady=2,
                               pady=LabelFramePadY, padx=4)
-                wid = Widget.comboboxFrame(
-                    frameOCR, '识别语言：　', 'ocrConfig', self.lockWidget)
-                wid.pack(side='top', fill='x', pady=2, padx=5)
-                self.balloon.bind(
-                    wid, '本软件有整理好的多国语言扩展包，可导入更多语言模型库，\n也可以手动导入PaddleOCR兼容的模型库，\n详情请浏览项目Github主页\n\n竖排模型库（识别语言）建议与竖排合并段落搭配使用')
+                # wid = Widget.comboboxFrame(
+                #     frameOCR, '识别语言：　', 'ocrConfig', self.lockWidget)
+                # wid.pack(side='top', fill='x', pady=2, padx=5)
+                # self.balloon.bind(
+                #     wid, '本软件有整理好的多国语言扩展包，可导入更多语言模型库，\n也可以手动导入PaddleOCR兼容的模型库，\n详情请浏览项目Github主页\n\n竖排模型库（识别语言）建议与竖排合并段落搭配使用')
                 # 压缩
-                fLim = tk.Frame(frameOCR)
-                fLim.pack(side='top', fill='x', pady=2, padx=5)
+                fLimCpu = tk.Frame(frameOCR)
+                fLimCpu.pack(side='top', fill='x', pady=2, padx=5)
+                fLim = tk.Frame(fLimCpu)
+                fLim.pack(side='left', fill='x', pady=2, padx=5)
                 self.balloon.bind(
-                    fLim, '长边压缩模式可以大幅加快识别速度，但可能降低大分辨率图片的识别准确率\n大于4000像素的图片，可将数值改为最大边长的一半。必须为大于零的整数\n默认值： 960\n\n短边扩大模式可能提高小分辨率图片的准确度。一般用不着')
-                Widget.comboboxFrame(
-                    fLim, '缩放预处理：', 'ocrLimitMode', self.lockWidget, 14).pack(side='left')
-                tk.Label(fLim, text='至').pack(side='left')
+                    fLim, '压缩图片尺寸可以大幅加快识别速度，但可能降低大分辨率图片的识别准确率\n大于4000像素的图片，可将数值改为最大边长的一半。必须为大于零的整数\n默认值： 960')
+                tk.Label(fLim, text='缩放预处理：').pack(side='left')
                 wid = tk.Entry(
                     fLim, width=9, textvariable=Config.getTK('ocrLimitSize'))
                 wid.pack(side='left')
                 self.lockWidget.append(wid)
                 tk.Label(fLim, text='像素').pack(side='left')
-                # 方向
-                wid = ttk.Checkbutton(frameOCR, text='启用方向分类器（文字偏转90度/180度方向矫正）',
-                                      variable=Config.getTK('isOcrAngle'))
-                wid.pack(side='top', fill='x', pady=2, padx=5)
-                self.balloon.bind(
-                    wid, '当图片中的文字偏转90度或180度时，请打开该选项\n可能略微降低识别速度\n小角度偏转无需启用该选项')
-                self.lockWidget.append(wid)
                 # CPU
-                fCpu = tk.Frame(frameOCR, padx=5)
-                fCpu.pack(side='top', fill='x')
+                fCpu = tk.Frame(fLimCpu, padx=5)
+                fCpu.pack(side='right')
                 tk.Label(fCpu, text='线程数：').pack(side='left')
                 wid = tk.Entry(
                     fCpu, width=6, textvariable=Config.getTK('ocrCpuThreads'))
                 wid.pack(side='left')
                 self.lockWidget.append(wid)
                 self.balloon.bind(
-                    wid, '最好等于CPU的线程数目。必须为大于零的整数')
-                wid = ttk.Checkbutton(fCpu, text='启用MKLDNN加速',
-                                      variable=Config.getTK('isOcrMkldnn'))
-                wid.pack(side='left', padx=40)
+                    wid, '若填-1，则为自动设置合适的线程数')
+                self.lockWidget.append(wid)
+                # 方向
+                wid = ttk.Checkbutton(frameOCR, text='启用方向分类器（文字偏转90度/180度方向矫正）',
+                                      variable=Config.getTK('isOcrAngle'))
+                wid.pack(side='top', fill='x', pady=2, padx=5)
                 self.balloon.bind(
-                    wid, '大幅加快识别速度。内存占用也会增加')
+                    wid, '当图片中的文字偏转90度或180度时，请打开该选项\n可能略微降低识别速度\n小角度偏转无需启用该选项')
                 self.lockWidget.append(wid)
 
                 # grid
@@ -1166,7 +1161,7 @@ class MainWin:
             try:
                 msnBat = MsnBatch()
             except Exception as err:
-                tk.messagebox.showwarning('遇到了亿点小问题', f'{err}')
+                tk.messagebox.showwarning('遇到了亿点小问题', f'初始化批量任务：\n{err}')
                 return  # 未开始运行，终止本次运行
             # 开始运行
             paths = self.batList.getItemValueList('path')

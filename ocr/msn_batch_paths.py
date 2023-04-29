@@ -35,8 +35,8 @@ class MsnBatch(Msn):
         self.isIgnoreNoText = Config.get("isIgnoreNoText")  # 是否忽略无字图片
         self.areaInfo = Config.get("ignoreArea")  # 忽略区域
         self.ocrToolPath = Config.get("ocrToolPath")  # 识别器路径
-        self.configPath = Config.get("ocrConfig")[Config.get(  # 配置文件路径
-            "ocrConfigName")]['path']
+        # self.configPath = Config.get("ocrConfig")[Config.get(  # 配置文件路径
+        #     "ocrConfigName")]['path']
         self.argsStr = Config.get("argsStr")  # 启动参数
         # 初始化输出器
         outputPanel = OutputPanel()  # 输出到面板
@@ -91,7 +91,8 @@ class MsnBatch(Msn):
         self.__output('text', startStr)
         # 输出各个文块处理器的debug信息
         if self.isDebug:
-            debugStr = f'已启用输出调试信息。\n引擎路径：[{self.ocrToolPath}]\n配置文件路径：[{self.configPath}]\n启动参数：[{self.argsStr}]\n'
+            # debugStr = f'已启用输出调试信息。\n引擎路径：[{self.ocrToolPath}]\n配置文件路径：[{self.configPath}]\n启动参数：[{self.argsStr}]\n'
+            debugStr = f'已启用输出调试信息。\n引擎路径：[{self.ocrToolPath}]\n启动参数：[{self.argsStr}]\n'
             if self.procList:
                 for proc in self.procList:
                     debugStr += proc.getInitInfo()

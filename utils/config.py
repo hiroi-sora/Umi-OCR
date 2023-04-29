@@ -317,21 +317,8 @@ _ConfigDict = {
     },
     # 引擎设置
     'ocrToolPath': {  # 引擎路径
-        'default': 'PaddleOCR-json/PaddleOCR_json.exe',
+        'default': 'RapidOCR-json/RapidOCR_json.exe',
         'isSave': True,
-        'isTK': False,
-    },
-    'ocrRunModeName': {  # 当前选择的进程管理策略
-        'default': '',
-        'isSave': True,
-        'isTK': True,
-    },
-    'ocrRunMode': {  # 进程管理策略
-        'default': {
-            '后台常驻（大幅加快任务启动速度）': RunModeFlag.long,
-            '按需关闭（减少空闲时内存占用）': RunModeFlag.short,
-        },
-        'isSave': False,
         'isTK': False,
     },
     'ocrProcessStatus': {  # 进程运行状态字符串，由引擎单例传到tk窗口
@@ -359,32 +346,14 @@ _ConfigDict = {
         'isTK': True,
     },
     'isOcrAngle': {  # T时启用cls
-        'default': False,
-        'isSave': True,
-        'isTK': True,
-    },
-    'ocrCpuThreads': {  # CPU线程数
-        'default': 10,
-        'isSave': True,
-        'isTK': True,
-    },
-    'isOcrMkldnn': {  # 启用mkldnn加速
         'default': True,
         'isSave': True,
         'isTK': True,
     },
-    'ocrLimitModeName': {  # 当前选择的压缩限制模式的name
-        'default': '',
+    'ocrCpuThreads': {  # CPU线程数
+        'default': -1,
         'isSave': True,
         'isTK': True,
-    },
-    'ocrLimitMode': {  # 压缩限制模式
-        'default': {
-            '长边压缩模式': 'max',
-            '短边扩大模式': 'min',
-        },
-        'isSave': False,
-        'isTK': False,
     },
     'ocrLimitSize': {  # 压缩阈值
         'default': 960,
