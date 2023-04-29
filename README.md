@@ -14,15 +14,15 @@
 
 <br>
 
-![](https://tupian.li/images/2023/04/26/6447fe3273efd.png)
+![](https://tupian.li/images/2023/04/29/644c8e1bb01d0.png)
 
 ## 版本说明
 
-从诞生之初，**Umi-OCR** 就采用基于 [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR) 的离线识别引擎。它在同类项目中具有较好的速度和准确性，但也存在一些祖传的缺陷，如`低版本Windows兼容性欠佳`、`内存占用过大`、`打包体积偏大`等。
+从诞生之初，**Umi-OCR** 就采用基于 [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR) 的离线识别引擎`PaddleOCR-json`。它在同类项目中具有较好的速度和准确性，但也存在一些祖传的缺陷，如`低版本Windows兼容性欠佳`、`内存占用过大`、`打包体积偏大`等。
 
-现在， **Umi-OCR.Rapid** 正努力适配一个基于 [RapidOCR](https://github.com/RapidAI/RapidOCR) 的全新识别引擎。Rapid能有效的解决上述陈年旧疾。
+现在， **Umi-OCR.Rapid** 正努力适配一个基于 [RapidOCR](https://github.com/RapidAI/RapidOCR) 的全新识别引擎`RapidOCR-json`。Rapid能有效的解决上述陈年旧疾。
 
-> RapidOCR是一个开源项目，它**实际上是PaddleOCR的一个第三方改进版本**。本项目采用其中的 C++ [RapidOcrOnnx](https://github.com/RapidAI/RapidOcrOnnx) 库。
+> RapidOCR是一个开源项目，它**实际上是PaddleOCR的一个第三方改进版本**。本项目采用其中的 C++ [RapidOcrOnnx](https://github.com/RapidAI/RapidOcrOnnx) 库，封装成 [RapidOCR-json](https://github.com/hiroi-sora/RapidOCR-json) 。
 
 ##### Rapid的优势：
 
@@ -39,10 +39,16 @@
 ##### Umi-OCR.Rapid版暂未适配的功能：
 
 - 暂不支持切换多国语言，仅支持默认的`简体中文&英文`识别库。以后将慢慢适配。  
-  请不要导入多国语言扩展包，或者载入主版本的`Umi-OCR_config.json`配置文件，否则可能引发异常。
+  （请不要导入多国语言扩展包，或者载入主版本的`Umi-OCR_config.json`配置文件，否则可能引发异常。）
 
 ##### 其他绝大部分功能与 Umi-OCR 主版本保持一致：
 - 使用方法请参考 [主版本Readme的说明](https://github.com/hiroi-sora/Umi-OCR/tree/release/1.3.4) 。
+
+## 下载
+
+Github下载：[Rapid v1.3.4.alpha](https://github.com/hiroi-sora/Umi-OCR/releases/tag/v1.3.4)
+
+蓝奏云下载：[https://hiroi-sora.lanzoul.com/s/umi-ocr-test](https://hiroi-sora.lanzoul.com/s/umi-ocr-test)
 
 ## Windows 兼容性
 
@@ -53,13 +59,12 @@
 ```
 无法启动此程序，因为计算机中丢失api-ms-win-crt-runtime-l1-1-0.dll。尝试重新安装程序以解决此问题。
 ```
-请下载并安装VC++（2015或以上版本）64位运行库 `	
-vc_redist.x64.exe` 。可在本项目Release中下载，或前往[微软官网链接](https://www.microsoft.com/zh-CN/download/details.aspx?id=48145)。 
+请下载并安装VC++（2015或以上版本）64位运行库 `vc_redist.x64.exe` 。[微软官网链接](https://www.microsoft.com/zh-CN/download/details.aspx?id=48145) 
 
 ## 更新日志
 
 ##### v1.3.4-alpha.1 `2023.4.26`
-- 适配`RapidOCR-json`引擎。
+- 适配 [RapidOCR-json](https://github.com/hiroi-sora/RapidOCR-json) 引擎。
 
 
 ## 感谢
