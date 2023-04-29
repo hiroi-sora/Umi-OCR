@@ -1,8 +1,4 @@
-<p align="center">
-  <a href="https://github.com/hiroi-sora/Umi-OCR">
-    <img width="680" height="171" src="https://tupian.li/images/2023/04/29/644c8b24ec91c.png" alt="Umi-OCR">
-  </a>
-</p>
+![](https://tupian.li/images/2023/04/29/644c8c105339b.png)
 
 <h1 align="center">Umi-OCR.Rapid 文字识别工具</h1>
 
