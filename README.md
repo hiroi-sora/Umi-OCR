@@ -26,7 +26,7 @@
 
 <div align="center">
   <strong>免费，开源，可批量的离线OCR软件</strong><br>
-  <sub>适用于 Windows10,11 平台</sub>
+  <sub>适用于 Windows7 x64 及以上</sub>
 </div>
 
 <div align="center">
@@ -72,15 +72,17 @@
 
 ## 下载
 
-> Umi-OCR 软件本体含 **简体中文&英文** 通用识别库。  
-> 配套 **多国语言识别扩展包** 可导入 `繁中,英,日,韩,俄,德,法` 识别库，请按需下载。
+#### Win10/11 用户：
 
 Github下载：[Release v1.3.4](https://github.com/hiroi-sora/Umi-OCR/releases/tag/v1.3.4)
 
 蓝奏云下载：[https://hiroi-sora.lanzoul.com/s/umi-ocr](https://hiroi-sora.lanzoul.com/s/umi-ocr)
 
+> Umi-OCR 软件本体含 **简体中文&英文** 通用识别库。  
+> 配套 **多国语言识别扩展包** 可导入 `繁中,英,日,韩,俄,德,法` 识别库，请按需下载。
+
 <details>
-<summary>使用源代码：</summary>
+<summary>使用源代码</summary>
 
 - main分支可能含有开发中的新功能。若您想使用稳定版本，建议切换到[最新的Release分支](https://github.com/hiroi-sora/Umi-OCR/branches)。
 - 安装依赖库：`pip install -r requirements.txt`
@@ -90,6 +92,10 @@ Github下载：[Release v1.3.4](https://github.com/hiroi-sora/Umi-OCR/releases/t
 - 打包后，请将引擎组件 [PaddleOCR-json 整个文件夹](PaddleOCR-json) 放置于exe同目录下！！！
 
 </details>
+
+#### Win7/8 用户：
+
+兼容低版本Windows的新引擎正在测试，[详情见这儿](https://github.com/hiroi-sora/Umi-OCR/tree/dev/rapid/1.3.4) 。
 
 ## 兼容性
 
