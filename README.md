@@ -46,7 +46,7 @@
 
 ## 下载
 
-Github下载：[Rapid v1.3.4.alpha](https://github.com/hiroi-sora/Umi-OCR/releases/tag/v1.3.4)
+Github下载：[Rapid v1.3.4.alpha](https://github.com/hiroi-sora/Umi-OCR/releases/tag/v1.3.4-rapid-alpha)
 
 蓝奏云下载：[https://hiroi-sora.lanzoul.com/s/umi-ocr-test](https://hiroi-sora.lanzoul.com/s/umi-ocr-test)
 
