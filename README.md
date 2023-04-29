@@ -1,17 +1,19 @@
 <p align="center">
   <a href="https://github.com/hiroi-sora/Umi-OCR">
-    <img width="200" height="128" src="https://tupian.li/images/2022/10/27/icon---256.png" alt="Umi-OCR">
+    <img width="680" height="171" src="https://tupian.li/images/2023/04/29/644c8b24ec91c.png" alt="Umi-OCR">
   </a>
 </p>
 
 <h1 align="center">Umi-OCR.Rapid 文字识别工具</h1>
-<h2 align="center">采用全新RapidOCR引擎</h2>
 
 
 <div align="center">
-  <strong>适用于 Windows7 x64 及以上平台</strong>
+<strong>
+采用全新RapidOCR引擎，</br>
+适用于 Windows7 x64 及以上平台
+</strong>
   <br><br>
-  <sub>当前为测试阶段</sub>
+  <sub>（当前为测试阶段）</sub>
 </div>
 
 <br>
