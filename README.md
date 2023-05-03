@@ -72,6 +72,10 @@
 
 ## 下载
 
+#### Win7/8 用户 及 凌动、赛扬、奔腾处理器用户：
+
+兼容`低版本Windows`和`无AVX指令集的CPU`的新识别引擎正在测试阶段，[详情见这儿](https://github.com/hiroi-sora/Umi-OCR/tree/dev/rapid/1.3.4) 。
+
 #### Win10/11 用户：
 
 Github下载：[Release v1.3.4](https://github.com/hiroi-sora/Umi-OCR/releases/tag/v1.3.4)
@@ -81,8 +85,10 @@ Github下载：[Release v1.3.4](https://github.com/hiroi-sora/Umi-OCR/releases/t
 > Umi-OCR 软件本体含 **简体中文&英文** 通用识别库。  
 > 配套 **多国语言识别扩展包** 可导入 `繁中,英,日,韩,俄,德,法` 识别库，请按需下载。
 
+#### 使用源代码
+
 <details>
-<summary>使用源代码</summary>
+<summary>展开</summary>
 
 - main分支可能含有开发中的新功能。若您想使用稳定版本，建议切换到[最新的Release分支](https://github.com/hiroi-sora/Umi-OCR/branches)。
 - 安装依赖库：`pip install -r requirements.txt`
@@ -93,15 +99,11 @@ Github下载：[Release v1.3.4](https://github.com/hiroi-sora/Umi-OCR/releases/t
 
 </details>
 
-#### Win7/8 用户：
+## 兼容性（Paddle引擎版本）
 
-兼容低版本Windows的新引擎正在测试，[详情见这儿](https://github.com/hiroi-sora/Umi-OCR/tree/dev/rapid/1.3.4) 。
-
-## 兼容性
-
-- 系统支持 Win10 x64 及以上版本。
-- CPU必须具有AVX指令集。
-- 出现初始化引擎失败等问题时请参考 [问题排除](#问题排除) 。
+- 系统仅支持 Win10 x64 及以上版本。
+- CPU必须具有AVX指令集。（凌动、安腾、赛扬和奔腾处理器可能不兼容）
+- 若您的软硬件不符合以上条件，可使用 [Rapid引擎版本](https://github.com/hiroi-sora/Umi-OCR/tree/dev/rapid/1.3.4) 。
 
 ## 前言
 
@@ -384,7 +386,9 @@ OCR识别出的文本是按“块”划分的，通常一行文字分为一块�
 <details>
 <summary>展开</summary><BR>
 
-> 本项目离线引擎暂不支持在没有AVX指令集的CPU上运行，下图指示如何判断是否由此原因引起。
+> PaddleOCR引擎暂不支持在没有AVX指令集的CPU上运行，遇到该问题可尝试换用RapidOCR引擎。
+
+> 下图指示如何判断该问题是否由缺失AVX引起。
 
 ![CPUAVX.png](https://tupian.li/images/2022/11/04/63651e9eed1df.png)
 
@@ -396,8 +400,6 @@ OCR识别出的文本是按“块”划分的，通常一行文字分为一块�
 | AMD   | 推土机架构及之后的产品，如锐龙Ryzen、速龙Athlon、FX 等   | K10架构及之前的产品                                         |
 
 > 可通过 [CPU-Z](https://www.cpuid.com/downloads/cpu-z/cpu-z_2.03-cn.zip) 软件查看自己CPU的指令集信息。
-> 
-> 若具有AVX指令集，仍引发了初始化引擎失败的报错，请提issue。
 
 </details>
 
