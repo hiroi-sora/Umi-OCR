@@ -143,6 +143,7 @@ class ScreenshotWin():  # 内置截图模式
             self.__initWin()
 
         self.imageResult = None  # 结果图片
+        self.sourceBox = None  # 截图包围盒原始信息
         self.drawMode = _DrawMode.ready  # 准备模式
         # 获取所有屏幕的信息，提取其中的坐标信息(虚拟，非物理分辨率)
         scInfos = EnumDisplayMonitors()  # 所有屏幕的信息
@@ -268,10 +269,15 @@ class ScreenshotWin():  # 内置截图模式
         # 绑定全局事件
         Hotkey.add('esc', self.__onClose)  # 绑定Esc退出
         Hotkey.add('ctrl+shift+alt+d', self.__switchDebug)  # 切换调试信息
+        # 方向键控制鼠标移动
+        Hotkey.add('up', lambda: self.__keyMotion(0, -1))
+        Hotkey.add('down', lambda: self.__keyMotion(0, 1))
+        Hotkey.add('left', lambda: self.__keyMotion(-1, 0))
+        Hotkey.add('right', lambda: self.__keyMotion(1, 0))
         # 绑定画布事件
-        self.canvas.bind(f'<Button-1>', self.__onDown)  # 左键按下
-        self.canvas.bind(f'<Button-3>', self.__repaint)  # 右键按下
-        self.canvas.bind(f'<ButtonRelease-1>', self.__onUp)  # 左键松开
+        self.canvas.bind('<Button-1>', self.__onDown)  # 左键按下
+        self.canvas.bind('<Button-3>', self.__repaint)  # 右键按下
+        self.canvas.bind('<ButtonRelease-1>', self.__onUp)  # 左键松开
         self.canvas.bind('<Motion>', self.__onMotion)  # 鼠标移动
         self.canvas.bind('<Enter>', self.__onMotion)  # 鼠标进入，用于初始化瞄准线
         Log.info('Umi截图启动')
@@ -321,6 +327,13 @@ class ScreenshotWin():  # 内置截图模式
             self.canvas.itemconfig(self.debugXYText, {'text':
                                                       f'{event.x_root} , {event.y_root}'})
 
+    def __keyMotion(self, x, y):  # 键盘控制鼠标移动
+        if not self.isInitGrab:
+            return
+        pos = Hotkey.getMousePos()
+        pos = (pos[0]+x, pos[1]+y)
+        Hotkey.setMousePos(pos)
+
     def __repaint(self, event):  # 重绘
         Log.info('重绘')
         if self.drawMode == _DrawMode.drag:  # 已在拖拽中
@@ -346,6 +359,7 @@ class ScreenshotWin():  # 内置截图模式
                 box[0], box[2] = box[2], box[0]
             if box[1] > box[3]:
                 box[1], box[3] = box[3], box[1]
+            self.sourceBox = tuple(box)  # 记录缩放比例之前的原始box值
             for i in range(4):
                 box[i] *= self.allScale  # 乘上缩放比例
             self.imageResult = self.image.crop(box)  # 裁切，产生最终截图数据
@@ -440,7 +454,9 @@ class ScreenshotWin():  # 内置截图模式
         imgData = output.getvalue()[14:]  # 去除header
         output.close()
         if Config.get('isShowImage'):  # 显示图片展示窗
-            ShowImage(imgPIL=self.imageResult, imgData=imgData)
+            b = self.sourceBox
+            p = (b[0], b[1], b[2]-b[0], b[3]-b[1])
+            ShowImage(imgPIL=self.imageResult, imgData=imgData, initPos=p)
             return False
         else:  # 直接识别
             try:

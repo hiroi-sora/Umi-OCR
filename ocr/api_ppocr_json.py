@@ -11,7 +11,7 @@ from psutil import Process as psutilProcess  # 内存监控
 from sys import platform as sysPlatform  # popen静默模式
 from json import loads as jsonLoads, dumps as jsonDumps
 
-InitTimeout = 5  # 初始化超时时间，秒
+InitTimeout = 15  # 初始化超时时间，秒
 
 
 class OcrAPI:

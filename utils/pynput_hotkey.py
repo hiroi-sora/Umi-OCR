@@ -290,5 +290,9 @@ class Hotkey_Api():  # 热键API，封装 keyboard.Listener
     def getMousePos(self):
         return self.mouseController.position
 
+    def setMousePos(self, pos):
+        '''设置鼠标位置'''
+        self.mouseController.position = pos
+
 
 hotkeyApi = Hotkey_Api()
