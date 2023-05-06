@@ -1,0 +1,1 @@
+{"script_path": "E:/Code/MyGit/Umi-OCR/main.py", "python_exe": "python", "env_file": "requirements.txt", "user_arg": ["--standalone", "--windows-disable-console", "--include-data-dir=PaddleOCR-json=PaddleOCR-json", "--include-data-files=PaddleOCR-json/*dll=PaddleOCR-json/", "--plugin-enable=tk-inter"]}

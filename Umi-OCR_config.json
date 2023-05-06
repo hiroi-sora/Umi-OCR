@@ -1,0 +1,73 @@
+{
+    "isDebug": false,
+    "isAdvanced": false,
+    "isTray": true,
+    "isBackground": true,
+    "clickTrayModeName": "显示面板",
+    "textpanelFontFamily": "Microsoft YaHei UI",
+    "textpanelFontSize": 14,
+    "isTextpanelFontBold": false,
+    "isWindowTop": false,
+    "WindowTopMode": 1,
+    "isNotify": true,
+    "isAutoStartup": false,
+    "isStartMenu": false,
+    "isDesktop": false,
+    "isHotkeyClipboard": true,
+    "hotkeyClipboard": "win+alt+v",
+    "isHotkeyScreenshot": true,
+    "isScreenshotHideWindow": false,
+    "screenshotHideWindowWaitTime": 200,
+    "hotkeyScreenshot": "win+alt+c",
+    "hotkeyMaxTtl": 2.0,
+    "isHotkeyStrict": false,
+    "scsModeName": "Umi-OCR 软件截图",
+    "scsColorLine": "#3366ff",
+    "scsColorBoxUp": "#000000",
+    "scsColorBoxDown": "#ffffff",
+    "isNeedCopy": false,
+    "isNeedClear": false,
+    "isShowImage": false,
+    "isOpenExplorer": false,
+    "isOpenOutputFile": false,
+    "okMissionName": "关机",
+    "okMission": {
+        "关机": {
+            "code": "msg %username% /time:25 \"Umi-OCR任务完成，将在30s后关机\" & echo 关闭本窗口可取消关机 & choice /t 30 /d y /n >nul & shutdown /f /s /t 0"
+        },
+        "休眠": {
+            "code": "msg %username% /time:25 \"Umi-OCR任务完成，将在30s后休眠\" & echo 关闭本窗口可取消休眠 & choice /t 30 /d y /n >nul & shutdown /f /h"
+        }
+    },
+    "isRecursiveSearch": false,
+    "isOutputTxt": true,
+    "isOutputSeparateTxt": false,
+    "isOutputMD": false,
+    "isOutputJsonl": false,
+    "isIgnoreNoText": true,
+    "tbpuName": "优化单行",
+    "isAreaWinAutoTbpu": false,
+    "ocrToolPath": "PaddleOCR-json/PaddleOCR_json.exe",
+    "ocrRunModeName": "",
+    "ocrConfigName": "简体中文",
+    "ocrConfig": {
+        "简体中文": {
+            "path": "PaddleOCR_json_config_ch.txt"
+        }
+    },
+    "argsStr": "",
+    "isOcrAngle": false,
+    "ocrCpuThreads": 10,
+    "isOcrMkldnn": true,
+    "ocrLimitModeName": "长边压缩模式",
+    "ocrLimitSize": 960,
+    "ocrRamMaxFootprint": 0,
+    "ocrRamMaxTime": 0,
+    "imageSuffix": ".jpg .jpe .jpeg .jfif .png .webp .bmp .tif .tiff",
+    "isLanguageWinAutoExit": false,
+    "isLanguageWinAutoOcr": false,
+    "processID": 14392,
+    "processKey": "1683340480.0094545",
+    "promptScreenshotScale": true,
+    "promptMultiOpen": true
+}
