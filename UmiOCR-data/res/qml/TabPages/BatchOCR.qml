@@ -58,7 +58,7 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.rightMargin: theme.spacing * 0.5
                         
-                        text: "25s  30/100  30%"
+                        text: "25s  33/100  33%"
                         color: theme.subTextColor
                     }
                 }
@@ -174,7 +174,7 @@ Item {
                                         "fileName": `测试文件${index++}.png`,
                                         "status": "已完成",
                                         "timeCost": (Math.random()* 1.4 + 0.6).toFixed(2),
-                                        "score": "0.91",
+                                        "score": (Math.random()* 0.5 + 0.5).toFixed(2),
                                     })
                                 }
                                 model.appendRow({
