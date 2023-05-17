@@ -1,0 +1,36 @@
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "主程序",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/UmiOCR-data/main.py", // 启动主程序
+            "cwd": "${workspaceFolder}", // 工作目录，与启动器exe一致
+            "console": "integratedTerminal", // 输出到 VS Code 的集成终端
+            "justMyCode": true,
+            "env": {
+                "PYDEVD_DISABLE_FILE_VALIDATION": "1", // 禁用验证
+            },
+            "python": "${workspaceFolder}/UmiOCR-data/.runtime/python.exe", // 解释器路径
+            "args": []
+        },
+        {
+            "name": "当前文件",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}", // 启动当前文件
+            "cwd": "${fileDirname}", // 工作目录，与当前文件一致
+            "console": "integratedTerminal", // 输出到 VS Code 的集成终端
+            "justMyCode": true,
+            "env": {
+                "PYDEVD_DISABLE_FILE_VALIDATION": "1", // 禁用验证
+            },
+            "python": "${workspaceFolder}/UmiOCR-data/.runtime/python.exe", // 解释器路径
+            "args": []
+        }
+    ]
+}

@@ -1,0 +1,22 @@
+{
+    // 指定第三方库的代码提示和自动补全
+    "python.autoComplete.extraPaths": [
+        "./UmiOCR-data/.site-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "./UmiOCR-data/.site-packages"
+    ],
+    "editor.suggest.showWords": true,
+    "cmake.configureOnOpen": false,
+    // 隐藏文件和目录 
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/.runtime": true,
+        // "**/**.exe": true
+    },
+    // 指定文件类型
+    "files.associations": {
+        "*.ts": "xml"
+    },
+    "svg.preview.background": "transparent"
+}
