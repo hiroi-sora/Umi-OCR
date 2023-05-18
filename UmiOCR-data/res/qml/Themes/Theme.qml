@@ -56,7 +56,7 @@ QtObject {
     // 按钮圆角
     property real btnRadius: baseRadius
     // 面板圆角
-    property real panelRadius: baseRadius * 2
+    property real panelRadius: baseRadius * 1.7
     
     // 水平标签栏高度
     property real hTabBarHeight: textSize * 1.8

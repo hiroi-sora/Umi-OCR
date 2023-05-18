@@ -79,7 +79,7 @@ Item {
             // 下方文件表格
             FilesTablePanel{
                 anchors.top: ctrlPanel.bottom
-                anchors.topMargin: theme.spacing
+                anchors.topMargin: theme.smallSpacing
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom

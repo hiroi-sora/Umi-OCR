@@ -3,6 +3,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import Qt.labs.qmlmodels 1.0 // 表格
+import QtGraphicalEffects 1.15 // 子元素圆角
 import "../../Widgets"
 
 Panel{
@@ -62,75 +63,91 @@ Panel{
     // 表格区域
     Rectangle {
         anchors.fill: parent
-        anchors.margins: theme.spacing
+        anchors.margins: theme.smallSpacing
         color: theme.bgColor
-        clip: true
+        // clip: true
 
-        // 表头
-        HorizontalHeaderView {
-            id: tableViewHeader
-            syncView: tableView
-            anchors.top: parent.top
-            anchors.left: parent.left
-            anchors.right: parent.right
-            height: theme.textSize * 2
-            model: headerModel // 模型
-
-            // 元素
-            delegate: Rectangle {
-                implicitWidth: 0
-                implicitHeight: tableViewHeader.height
-                border.width: 1
-                color: "#00000000"
-                border.color: theme.coverColor1
-                clip: true
-                Text_ {
-                    text: display
-                    anchors.centerIn: parent
-                }
-            }
-        }
-
-        // 表格本体
         Item {
-            anchors.top: tableViewHeader.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
-            clip: true
+            id: tableContainer
+            anchors.fill: parent
 
-            TableView {
-                id: tableView
-                anchors.fill: parent
-                contentWidth: parent.width // 内容宽度
-                model: tableModel // 模型
+            // 表头
+            HorizontalHeaderView {
+                id: tableViewHeader
+                syncView: tableView
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: theme.textSize * 2
+                model: headerModel // 模型
 
-                // 宽度设定函数
-                columnWidthProvider: (column)=>{
-                    if(column == 0){ // 第一列宽度，变化值
-                        let w = parent.width - filesTablePanel.othersWidth // 计算宽度
-                        return Math.max(w, columnsWidth[0]) // 宽度不得小于最小值
-                    }
-                    else{ return columnsWidth[column] }
-                }
-                onWidthChanged: forceLayout()  // 组件宽度变化时重设列宽
-                
                 // 元素
                 delegate: Rectangle {
                     implicitWidth: 0
-                    implicitHeight: theme.textSize * 1.5
+                    implicitHeight: tableViewHeader.height
                     border.width: 1
                     color: "#00000000"
                     border.color: theme.coverColor1
                     clip: true
-
                     Text_ {
                         text: display
-                        color: theme.subTextColor
-                        anchors.left: parent.left
-                        anchors.leftMargin: theme.textSize * 0.5
+                        anchors.centerIn: parent
                     }
                 }
+            }
+
+            // 表格本体
+            Item {
+                anchors.top: tableViewHeader.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                clip: true
+
+                TableView {
+                    id: tableView
+                    anchors.fill: parent
+                    contentWidth: parent.width // 内容宽度
+                    model: tableModel // 模型
+
+                    // 宽度设定函数
+                    columnWidthProvider: (column)=>{
+                        if(column == 0){ // 第一列宽度，变化值
+                            let w = parent.width - filesTablePanel.othersWidth // 计算宽度
+                            return Math.max(w, columnsWidth[0]) // 宽度不得小于最小值
+                        }
+                        else{ return columnsWidth[column] }
+                    }
+                    onWidthChanged: forceLayout()  // 组件宽度变化时重设列宽
+                    
+                    // 元素
+                    delegate: Rectangle {
+                        implicitWidth: 0
+                        implicitHeight: theme.textSize * 1.5
+                        border.width: 1
+                        color: "#00000000"
+                        border.color: theme.coverColor1
+                        clip: true
+
+                        Text_ {
+                            text: display
+                            color: theme.subTextColor
+                            anchors.left: parent.left
+                            anchors.leftMargin: theme.textSize * 0.5
+                        }
+                    }
+                }
+            }
+
+        }
+
+        // 内圆角
+        layer.enabled: true
+        layer.effect: OpacityMask {
+            maskSource: Rectangle {
+                width: tableContainer.width
+                height: tableContainer.height
+                radius: theme.btnRadius
             }
         }
     }
