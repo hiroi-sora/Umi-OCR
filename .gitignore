@@ -4,6 +4,7 @@ PyStand_for_UmiOCR
 开发工具
 命名规范.md
 Umi-OCR.exe
+Temp
 
 UmiOCR-data/*
 !UmiOCR-data/*.py
