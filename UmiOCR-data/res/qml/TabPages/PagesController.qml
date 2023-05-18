@@ -31,21 +31,12 @@ Item {
 也支持通过剪贴板传入图片。")
         },
         {
-            url: "BatchOCR.qml",
+            // url: "BatchOCR/BatchOCR.qml",
+            url: "BatchOCR/BatchOCR.qml",
             title: qsTr("批量OCR"),
             intro: qsTr("# 批量OCR\n\
 　  \n\
 导入本地图片或文件夹，批量转换文字。")
-        },
-        {
-            url: "BatchOCR.qml",
-            title: "PDF转换",
-            intro: ""
-        },
-        {
-            url: "BatchOCR.qml",
-            title: "固定截图",
-            intro: ""
         },
         {
             url: "GlobalSettings.qml",
