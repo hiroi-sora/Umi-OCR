@@ -34,8 +34,10 @@ QtObject {
 
     // ========================= 【字体】 =========================
 
-    // 主要文字字体
+    // 主要UI文字字体，内容可控，可以用裁切的ttf
     property string fontFamily: "Microsoft YaHei"
+    // 数据显示文字字体，内容不可控，用兼容性好的系统字体
+    property string dataFontFamily: "Microsoft YaHei"
 
     // ========================= 【尺寸】 =========================
 
@@ -43,7 +45,9 @@ QtObject {
     property real scale: 1
 
     // 主要文字大小
-    property int textSize: 25 *scale
+    property int textSize: 24 *scale
+    // 较小的文字大小
+    property int smallTextSize: 20 *scale
 
     // 窗口圆角
     property real windowRadius: 0
@@ -63,6 +67,8 @@ QtObject {
 
     // 元素之间的常用间距
     property real spacing: 20
+    // 小间距
+    property real smallSpacing: spacing * 0.5
 
 
     // ========================= 【特效】 =========================
