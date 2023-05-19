@@ -29,6 +29,7 @@ Item {
         property alias hideWidth: doubleColumnCon.hideWidth
         property bool isHideWidth: false // hideWidth触发时为true
         property alias splitterX: splitter.x // 分割线当前位置
+        property alias splitterWidth: splitter.width // 分割线宽度
         Component.onCompleted: { // 分割线初始时设为一半
             if(parent.initSplitterX <= 0)
                 parent.initSplitterX = 0.5 // 默认值0.5
@@ -41,7 +42,7 @@ Item {
 
         // 检查左右隐藏
         function toHide(){
-            if(splitterX > (width - hideWidth)){ // 隐藏右边
+            if(splitterX+splitterWidth > (width - hideWidth)){ // 隐藏右边
                 leftContainer.visible = true
                 rightContainer.visible = false
                 isHideWidth = true
@@ -79,7 +80,7 @@ Item {
             anchors.topMargin: theme.spacing
             anchors.bottomMargin: theme.spacing
             width: theme.spacing
-            x: doubleColumn.splitterX // 位置可变换
+            x: 0 // 位置可变换
             property bool isHover: false // 是否鼠标悬停
 
             // 拖拽、悬停
