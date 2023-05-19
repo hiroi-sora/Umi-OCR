@@ -1,7 +1,7 @@
 import os
 import sys
 
-from PySide2.QtGui import QGuiApplication
+from PySide2.QtGui import QGuiApplication, QOpenGLContext
 from PySide2.QtQml import QQmlApplicationEngine
 from PySide2.QtCore import Qt, QCoreApplication, QObject, QTranslator  # 翻译
 
@@ -10,19 +10,22 @@ def main():
 
     # 启用 OpenGL 上下文之间的资源共享
     QGuiApplication.setAttribute(Qt.AA_ShareOpenGLContexts, True)
-    # 【减少窗口调整大小时内容的抖动】
-    # 方式一：启用OpenGL软件渲染，减少窗口闪烁（CPU占用率大幅提高！慎用）
-    # QGuiApplication.setAttribute(Qt.AA_UseSoftwareOpenGL, True)
-    # 方式二：使用 OpenGL ES 2.0 或更高版本，用d3d接口抽象成Opengl。性能好，效果好，ColorOverlay必须开启cache否则无法渲染透明层。
+    # 启用OpenGLES以避免组件抖动问题
     QGuiApplication.setAttribute(Qt.AA_UseOpenGLES, True)
-    # 方式三：使用 桌面 OpenGL（例如 opengl32.dll 或 libGL.so）。性能最好，效果较差。
-    # QGuiApplication.setAttribute(Qt.AA_UseDesktopOpenGL, True)
 
     # 启动qt
     app = QGuiApplication(sys.argv)
     app.setApplicationName("Umi-OCR")
     app.setOrganizationName("hiroi-sora")
     app.setOrganizationDomain("hiroi-sora.com")
+
+    # OpenGlES 兼容性检查
+    if not QOpenGLContext.openGLModuleType() == QOpenGLContext.LibGLES:
+        QGuiApplication.setAttribute(Qt.AA_UseOpenGLES, False)
+        # TODO：记录本次结果，下次默认False
+        msg = "检测到系统不支持OpenGLES，已设为禁用，将在下次启动生效。\n若本次运行中程序崩溃或报错，重新启动程序可能可以解决问题。\n\n"
+        msg += "Detected that the system does not support OpenGLES and has been set to disabled. It will take effect on the next startup. \nIf the program crashes or reports an error during this run, restarting app may solve the problem."
+        os.MessageBox(msg, info="Umi-OCR Warning")
 
     # 启动翻译
     # trans = QTranslator()
@@ -40,3 +43,18 @@ def main():
     if not engine.rootObjects():
         sys.exit(0)
     sys.exit(app.exec_())
+
+
+# OpenGL渲染模式
+# 启用 OpenGL 上下文之间的资源共享
+# QGuiApplication.setAttribute(Qt.AA_ShareOpenGLContexts, True)
+# 渲染模式，【减少窗口调整大小时内容的抖动】
+# 方式一：启用OpenGL软件渲染。性能最差，CPU占用率大幅提升，效果最好。
+# QGuiApplication.setAttribute(Qt.AA_UseSoftwareOpenGL, True)
+# 方式二：使用 桌面 OpenGL（例如 opengl32.dll 或 libGL.so）。性能最好，效果较差。
+# QGuiApplication.setAttribute(Qt.AA_UseDesktopOpenGL, True)
+# 方式三：使用 OpenGL ES 2.0 或更高版本，用d3d接口抽象成Opengl。性能和效果都很好。但兼容性很差：
+# 1. ColorOverlay必须开启cache，否则无法渲染透明层。
+# 2. 需要系统安装dx9和OpenGL3。虚拟机中可能无法使用。需要检查兼容性！！！
+# 必须做兼容性判定，兼容时才启用AA_UseOpenGLES。
+# QGuiApplication.setAttribute(Qt.AA_UseOpenGLES, True)
