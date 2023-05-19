@@ -8,8 +8,15 @@ from PySide2.QtCore import Qt, QCoreApplication, QObject, QTranslator  # 翻译
 
 def main():
 
-    # 启用OpenGL渲染，减少窗口闪烁
-    QGuiApplication.setAttribute(Qt.AA_UseSoftwareOpenGL, True)
+    # 启用 OpenGL 上下文之间的资源共享
+    QGuiApplication.setAttribute(Qt.AA_ShareOpenGLContexts, True)
+    # 【减少窗口调整大小时内容的抖动】
+    # 方式一：启用OpenGL软件渲染，减少窗口闪烁（CPU占用率大幅提高！慎用）
+    # QGuiApplication.setAttribute(Qt.AA_UseSoftwareOpenGL, True)
+    # 方式二：使用 OpenGL ES 2.0 或更高版本，用d3d接口抽象成Opengl。性能好，效果好，ColorOverlay必须开启cache否则无法渲染透明层。
+    QGuiApplication.setAttribute(Qt.AA_UseOpenGLES, True)
+    # 方式三：使用 桌面 OpenGL（例如 opengl32.dll 或 libGL.so）。性能最好，效果较差。
+    # QGuiApplication.setAttribute(Qt.AA_UseDesktopOpenGL, True)
 
     # 启动qt
     app = QGuiApplication(sys.argv)

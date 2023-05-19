@@ -20,5 +20,6 @@ Image {
         anchors.fill: parent
         source: parent
         color: parent.color
+        cached: true
     }
 }
