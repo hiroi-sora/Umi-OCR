@@ -8,7 +8,7 @@ import QtQuick.Dialogs 1.3 // 文件对话框
 
 import "../../Widgets"
 
-Panel{
+Item{
     id: filesTablePanel
 
     // ========================= 【逻辑】 =========================
@@ -80,7 +80,6 @@ Panel{
     // 表格区域
     Rectangle {
         anchors.fill: parent
-        anchors.margins: theme.smallSpacing
         color: theme.bgColor
 
         Item {
@@ -97,6 +96,7 @@ Panel{
 
                 // 左打开图片按钮
                 IconTextButton {
+                    visible: parent.width > width*1.6 // 容器宽度过小时隐藏
                     anchors.left: parent.left
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
