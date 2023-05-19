@@ -95,29 +95,7 @@ Item {
                 anchors.margins: theme.spacing
                 color: theme.bgColor
 
-                property string testStr: `
- 
-测试文本测试文本测试文本  
--  
-reuseltems : bool  
-This property holds whether or not items instantiated from the delegate should be reused. If set to  
-false, any currently pooled items are destroyed.  
-此属性保存是否应重用从delegate实例化的项。如果设置为false，则会销毁任何当前合并的项  
-目。  
-See also Reusing items, TableView:pooled, and TableView:reused.  
-另请参阅 Reusing items、TableView:pooled 和 TableView:reused 。 
-rowHeightProvider : var  
-This property can hold a function that returns the row height for each row in the model. It is called  
-whenever TableView needs to know the height of a specific row. The function takes one argument, row,  
-for which the TableView needs to know the height.  
-此属性可以保存一个函数，该函数返回模型中每一行的行高。每当TableView需要知道特定行的高度  
-时，就会调用它。该函数接受一个参数row，TableView需要知道该参数的高度。  
-Since Qt 5.13, if you want to hide a specific row, you can return O height for that row. If you return a  
-negative number, TableView calculates the height based on the delegate items.  
-从Qt5.13开始，如果要隐藏特定行，可以返回该行的0高度。如果返回负数，TableView将根据委托  
-项计算高度。  
-See also columnWidthProvider and Row heights and column widths  
-                `
+                property string testStr: `测试文本测试文本测试文本`
                     
                 ScrollView {
                     id: textScroll
@@ -138,6 +116,45 @@ See also columnWidthProvider and Row heights and column widths
                         font.pixelSize: theme.textSize
                         font.family: theme.fontFamily
                     }
+                }
+            }
+        }
+    }
+
+    // 鼠标拖入图片
+    DropArea {
+        id: imgDropArea
+        anchors.fill: parent;
+        onDropped: {
+            if(drop.hasUrls){
+                let fileList = []
+                for(let i in drop.urls){
+                    let s = drop.urls[i]
+                    if(s.startsWith("file:///"))
+                        fileList.push(s.substring(8))
+                }
+                // TODO
+                console.log("拖入文件：",fileList)
+            }
+        }
+
+        // 背景
+        Rectangle {
+            id: dropAreaBg
+            visible: imgDropArea.containsDrag 
+            anchors.fill: parent
+            color: theme.coverColor4
+
+            Panel {
+                color: theme.bgColor
+                anchors.centerIn: parent
+                implicitWidth: dragText.width*2
+                implicitHeight: dragText.height*2
+                
+                Text_ {
+                    id: dragText
+                    anchors.centerIn: parent
+                    text: qsTr("松手放入图片")
                 }
             }
         }

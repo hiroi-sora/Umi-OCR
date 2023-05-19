@@ -70,13 +70,9 @@ Panel{
         nameFilters: [qsTr("图片")+" (*.jpg *.jpe *.jpeg *.jfif *.png *.webp *.bmp *.tif *.tiff)"]
         folder: shortcuts.pictures
         selectMultiple: true // 多选
-        onAccepted: {
-            console.log("You chose: " + fileDialog.fileUrls)
+        onAccepted: { // TODO
+            console.log("选择图片: " + fileDialog.fileUrls)
         }
-        onRejected: {
-            console.log("Canceled")
-        }
-        // Component.onCompleted: visible = true
     }
 
     // ========================= 【布局】 =========================
