@@ -6,7 +6,7 @@ import QtQuick 2.15
 
 Button_ {
     property string icon_: ""
-    property color color: theme.textColor
+    property color color: theme.subTextColor
 
     contentItem: Icon_ {
         anchors.fill: parent

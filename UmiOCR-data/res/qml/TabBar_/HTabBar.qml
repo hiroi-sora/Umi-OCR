@@ -28,7 +28,6 @@ RowLayout  {
                 icon: "pin"
                 anchors.fill: parent
                 anchors.margins: parent.height * 0.1
-                color: theme.subTextColor
             }
 
             background: Rectangle {
@@ -228,7 +227,6 @@ RowLayout  {
                 icon: "lock"
                 anchors.fill: parent
                 anchors.margins: parent.height * 0.1
-                color: theme.subTextColor
             }
 
             background: Rectangle {

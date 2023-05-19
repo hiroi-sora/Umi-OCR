@@ -6,7 +6,7 @@ Image {
     // ========================= 【设定值】 =========================
 
     property string icon: ""
-    property color color: theme.textColor
+    property color color: theme.subTextColor
 
 
     // =============================================================

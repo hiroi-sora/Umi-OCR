@@ -4,6 +4,8 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import Qt.labs.qmlmodels 1.0 // 表格
 import QtGraphicalEffects 1.15 // 子元素圆角
+import QtQuick.Dialogs 1.3 // 文件对话框
+
 import "../../Widgets"
 
 Panel{
@@ -58,6 +60,25 @@ Panel{
         console.log("初始化完毕！: ")
     }
 
+    // 文件选择对话框
+    // QT-5.15.2 会报错：“Model size of -225 is less than 0”，不影响使用。
+    // QT-5.15.5 修复了这个Bug，但是PySide2尚未更新到这个版本号。只能先忍忍了
+    // https://bugreports.qt.io/browse/QTBUG-92444
+    FileDialog {
+        id: fileDialog
+        title: qsTr("请选择图片")
+        nameFilters: [qsTr("图片")+" (*.jpg *.jpe *.jpeg *.jfif *.png *.webp *.bmp *.tif *.tiff)"]
+        folder: shortcuts.pictures
+        selectMultiple: true // 多选
+        onAccepted: {
+            console.log("You chose: " + fileDialog.fileUrls)
+        }
+        onRejected: {
+            console.log("Canceled")
+        }
+        // Component.onCompleted: visible = true
+    }
+
     // ========================= 【布局】 =========================
 
     // 表格区域
@@ -65,17 +86,54 @@ Panel{
         anchors.fill: parent
         anchors.margins: theme.smallSpacing
         color: theme.bgColor
-        // clip: true
 
         Item {
             id: tableContainer
             anchors.fill: parent
 
+            // 上方操控版
+            Item {
+                id: tableTopPanel
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: theme.textSize * 2
+
+                // 左打开图片按钮
+                IconTextButton {
+                    anchors.left: parent.left
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    anchors.margins: theme.smallSpacing * 0.5
+                    icon_: "folder"
+                    text_: qsTr("选择图片")
+
+                    onClicked: {
+                        fileDialog.open()
+                    }
+                    
+                }
+
+                // 右清空按钮
+                IconTextButton {
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    anchors.margins: theme.smallSpacing * 0.5
+                    icon_: "clear"
+                    text_: qsTr("清空")
+
+                    onClicked: {
+                        console.log("清空！")
+                    }
+                }
+            }
+
             // 表头
             HorizontalHeaderView {
                 id: tableViewHeader
                 syncView: tableView
-                anchors.top: parent.top
+                anchors.top: tableTopPanel.bottom
                 anchors.left: parent.left
                 anchors.right: parent.right
                 height: theme.textSize * 2
@@ -138,10 +196,9 @@ Panel{
                     }
                 }
             }
-
         }
 
-        // 内圆角
+        // 内圆角裁切
         layer.enabled: true
         layer.effect: OpacityMask {
             maskSource: Rectangle {

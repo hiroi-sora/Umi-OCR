@@ -17,7 +17,6 @@ Button {
     property color bgHoverColor_: theme.coverColor2
 
     contentItem: Text_ {
-        visible: text_
         text: btn.text_
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
