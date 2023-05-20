@@ -5,10 +5,11 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import ".."
 import "../../Widgets"
 
-Item {
-    anchors.fill: parent
+TabPage {
+    id: tabPage
 
     // 主区域：左右双栏面板。
     DoubleColumnLayout {
@@ -140,7 +141,11 @@ Item {
                         fileList.push(s.substring(8))
                 }
                 // TODO
-                console.log("拖入文件：",fileList)
+                if(fileList.length > 0){
+                    let res = tabPage.ctrl("hello", "abc", "参数", {abc: "test"})
+                    console.log("调用完成。",res)
+                }
+                // console.log("拖入文件：",fileList)
             }
         }
 

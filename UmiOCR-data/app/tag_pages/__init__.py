@@ -38,7 +38,7 @@ class TagPageController(QObject):
         for i in PageClass:
             self.pageClass[i.__name__] = i
         # 属性
-        self.page = {}  # 当前已实例化的控制器。
+        self.page = {}  # 当前已实例化的控制器。每一项为：{obj:对象, funcCache:{方法缓存字典}}
         self.keyIndex = 0  # 用于生成标识符
 
     # ========================= 【增删改查】 =========================
@@ -51,7 +51,7 @@ class TagPageController(QObject):
         self.keyIndex += 1
         objKey = f"{self.pageClass[key].__name__}_{self.keyIndex}"
         obj = self.pageClass[key](objKey)  # 实例化 页控制器对象
-        self.page[objKey] = obj
+        self.page[objKey] = {"obj": obj, "funcCache": {}}
         return objKey
 
     # 删： 删除标识符为objKey的控制器。成功返回true
@@ -62,18 +62,23 @@ class TagPageController(QObject):
         del self.page[objKey]
         return True
 
-    @Slot(int, int, result=int)
-    def hello(self, a=1, b=2):
-        print("调用了hello")
-        return 3
+    # ========================= 【与qml的通信】 =========================
 
-    @Slot(list, result=list)
-    def helloList(self, a):
-        print("传入列表", a)
-        return ["666", "返回列表"]
-
-    @Slot("QVariant", result="QVariant")
-    def helloDict(self, a):
-        print("传入属性", dir(a))
-        print("解析", a.toVariant())
-        return {"aaa": "字典", "bbb": "第二个参数"}
+    # qml调用Python方法：
+    # qml调用objKey的方法funcName，入参为列表（对应参数顺序），返回值为可变类型。
+    @Slot(str, str, list, result="QVariant")
+    def call(self, objKey, funcName, args):
+        page = self.page[objKey]
+        # 获取方法的引用
+        method = None
+        if funcName in page["funcCache"]:  # 缓存中存在，直接取缓存
+            method = page["funcCache"][funcName]
+        else:  # 否则，搜索该方法，并写入缓存
+            method = getattr(page["obj"], funcName, None)
+            page["funcCache"][funcName] = method
+        # 查询失败
+        if not method:
+            print(f"【Error】调用了{objKey}的不存在的方法{funcName}！")
+            return None
+        # 调用方法，参数不对的话让系统抛出错误
+        return method(*args)

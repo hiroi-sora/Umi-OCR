@@ -6,15 +6,15 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 
+import ".."
 import "../.."
 import "../../Widgets"
 
-Item {
+TabPage {
 
     // =============== 逻辑 ===============
 
     id: naviPage
-    anchors.fill: parent
     
     ListModel { // 所有页面的标题
         id: pageModel

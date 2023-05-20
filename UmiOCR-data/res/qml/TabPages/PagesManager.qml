@@ -84,14 +84,19 @@ Item {
                 return null
             }
         }
-        // 实例化页面，挂到巢下
+        // 检查组件
         const comp = info.comp
         if(!comp){
-            console.error("【Error】添加页面失败：下标"+index+"的组件["+info.key+"]的comp不存在！")
+            console.error("【Error】添加页面失败：组件["+info.key+"]的comp不存在！")
             return null
         }
-        const obj = comp.createObject(pagesNest, {z: -1, visible: false})
-
+        // 实例化页面，挂到巢下，写入自身参数
+        const obj = comp.createObject(pagesNest, {
+            z: -1, visible: false,
+            ctrlKey: ctrlKey, // Python控制器key
+            controller: controller, // Python控制器对象
+        })
+        // 收集并返回页面对象信息
         const dic = {
             obj: obj,
             info: info,
