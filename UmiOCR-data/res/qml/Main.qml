@@ -9,6 +9,7 @@ import QtGraphicalEffects 1.15
 import Qt.labs.settings 1.1
 
 import "Themes"
+import "TabView_"
 
 Window {
 // ApplicationWindow {
@@ -33,8 +34,8 @@ Window {
     Item {
         id: app
 
-        // 标签页逻辑控制器
-        TabViewController { id: tab_ }
+        // 标签页逻辑管理器
+        TabViewManager { id: tab_ }
         property var tab: tab_ // 通过 app.tab 来访问
 
         // 持久化存储

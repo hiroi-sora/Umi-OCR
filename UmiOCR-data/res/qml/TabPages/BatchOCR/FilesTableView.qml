@@ -57,7 +57,6 @@ Item{
             })
         }
         tableView.forceLayout()
-        console.log("初始化完毕！: ")
     }
 
     // 文件选择对话框

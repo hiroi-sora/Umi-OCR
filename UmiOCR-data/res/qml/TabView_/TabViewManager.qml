@@ -4,14 +4,14 @@
 
 
 import QtQuick 2.15
-import "TabPages"
+import "../TabPages"
 
 
 Item {
 
     // ========================= 【子控制器】 =========================
 
-    PagesController{ id: page_ } // 页控制器
+    PagesManager{ id: page_ } // 页管理器
     property var page: page_
     property var bar: undefined // 栏控制器
     // 连接别名

@@ -75,7 +75,7 @@ Item {
 
                     HProgressBar {
                         anchors.fill: parent
-                        // anchors.margins: theme.smallSpacing
+                        color: theme.bgColor
                         percent: 0.3
                     }
                 }

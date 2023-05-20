@@ -21,29 +21,21 @@ Item {
             title: qsTr("新标签页"),
             intro: ""
         },
+//         {
+//             url: "ScreenshotOCR.qml",
+//             title: qsTr("截屏OCR"),
+//             intro: qsTr("# 截屏OCR\n\
+// 　  \n\
+// 用快捷键唤起，即时截取屏幕，转换为文字。  \n\
+// 也支持通过剪贴板传入图片。")
+//         },
         {
-            url: "ScreenshotOCR.qml",
-            title: qsTr("截屏OCR"),
-            intro: qsTr("# 截屏OCR\n\
-　  \n\
-用快捷键唤起，即时截取屏幕，转换为文字。  \n\
-也支持通过剪贴板传入图片。")
-        },
-        {
-            // url: "BatchOCR/BatchOCR.qml",
             url: "BatchOCR/BatchOCR.qml",
             title: qsTr("批量OCR"),
             intro: qsTr("# 批量OCR\n\
 　  \n\
 导入本地图片或文件夹，批量转换文字。")
         },
-        {
-            url: "GlobalSettings.qml",
-            title: qsTr("全局设置"),
-            intro: qsTr("# 全局设置\n\
-　  \n\
-调整首选项和软件外观。"),
-        }
     ]
 
     /* 存放当前已打开的页面

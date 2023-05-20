@@ -53,7 +53,7 @@ RowLayout  {
         function resetTabBtnWidth() {
             let w = hTabBarMain.width
             if(!app.tab.barIsLock) w -= tabBarControl.width // 无锁定时，减去+按钮宽度
-            w = w / barController.model.count
+            w = w / barManager.model.count
             tabWidth = Math.min(w, theme.hTabMaxWidth)
         }
         onWidthChanged: resetTabBtnWidth()  // 监听标签栏总宽度变化
@@ -99,8 +99,8 @@ RowLayout  {
             spacing: -1 // 给负的间隔，是为了让选中标签能覆盖左右两边标签的竖线
 
             // ===== 标签按钮组 =====
-            BarController {
-                id: barController
+            BarManager {
+                id: barManager
                 // 标签元素模板
                 delegate: TabButton_ {
                     title: title_ // 标题
