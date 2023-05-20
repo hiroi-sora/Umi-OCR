@@ -17,20 +17,13 @@ Item {
     */
     property var infoList: [
         {
-            url: "Navigation.qml",
-            title: qsTr("新标签页"),
-            intro: ""
+            key: "Navigation",         // 页面的唯一标识符。同时也是对应Python模块的名称。
+            url: "",                   // 页面的qml文件路径。留空时，初始化为  key/key.qml
+            title: qsTr("新标签页"),    // 页面的显示名称。
+            intro: ""                  // 页面的简介。
         },
-//         {
-//             url: "ScreenshotOCR.qml",
-//             title: qsTr("截屏OCR"),
-//             intro: qsTr("# 截屏OCR\n\
-// 　  \n\
-// 用快捷键唤起，即时截取屏幕，转换为文字。  \n\
-// 也支持通过剪贴板传入图片。")
-//         },
         {
-            url: "BatchOCR/BatchOCR.qml",
+            key: "BatchOCR",
             title: qsTr("批量OCR"),
             intro: qsTr("# 批量OCR\n\
 　  \n\
@@ -50,20 +43,24 @@ Item {
     // 初始化： 将 infoList 的 url 转换为可实例化的组件类 comp
     function initListUrl() {
         for(let i=infoList.length-1; i>=0; i--){
-            const comp = Qt.createComponent(infoList[i].url)
+            const info = infoList[i]
+            if(!info.url) {
+                info.url = `${info.key}/${info.key}.qml`
+            }
+            const comp = Qt.createComponent(info.url)
             if (comp.status === Component.Ready) { // 加载成功
-                infoList[i].comp = comp
+                info.comp = comp
             } else{ // 加载失败
-                infoList[i].comp = undefined
+                info.comp = undefined
                 if (comp.status === Component.Error) {  // 加载失败，提取错误信息
                     let str = comp.errorString()
                     const last = str.lastIndexOf(":")
                     if(last < 0) last = -1
                     str = str.substring(last+1).replace("\n","")
-                    console.error(`【Error】加载页面文件失败：【${infoList[i].url}】${str}`)
+                    console.error(`【Error】加载页面文件失败：【${info.url}】${str}`)
                 }
                 else{
-                    console.error(`【Error】加载页面文件异常：【${infoList[i].url}】`)
+                    console.error(`【Error】加载页面文件异常：【${info.url}】`)
                 }
             }
         }
