@@ -72,8 +72,8 @@ Item {
         }
     }
 
-    // 增： 在 pageList 的 index 处，插入一个 infoList[infoIndex] 页面。
-    function addPage(index, infoIndex){ // index=-1 代表尾部插入
+    // 创建并返回一个 infoList[infoIndex] 页面。
+    function newPage(infoIndex){
         const info = infoList[infoIndex]
         // 实例化逻辑控制器
         let ctrlKey = ""
@@ -81,25 +81,51 @@ Item {
             ctrlKey = controller.addPage(info.key)
             if(!ctrlKey){
                 console.error("【Error】添加页面失败：组件["+info.key+"]创建控制器失败！")
-                return false
+                return null
             }
         }
         // 实例化页面，挂到巢下
         const comp = info.comp
         if(!comp){
             console.error("【Error】添加页面失败：下标"+index+"的组件["+info.key+"]的comp不存在！")
-            return false
+            return null
         }
         const obj = comp.createObject(pagesNest, {z: -1, visible: false})
 
-        // 列表添加
         const dic = {
             obj: obj,
             info: info,
             infoIndex: infoIndex,
             ctrlKey: ctrlKey
         }
+        return dic
+    }
+
+    // 增： 在 pageList 的 index 处，插入一个 infoList[infoIndex] 页面。
+    function addPage(index, infoIndex){ // index=-1 代表尾部插入
+        // 列表添加
+        const dic = newPage(infoIndex)
+        if(dic == null){
+            return false
+        }
         pageList.splice(index, 0, dic) // 列表添加
+        return true
+    }
+
+    // 增改： 在 pageList 的 index 处，删除该页面，改为 infoIndex 页。
+    // TODO: 当前仅允许没有控制器的页面更换为别的页面，因为没有安全删除控制器的机制。
+    function changePage(index, infoIndex){
+        const page = pageList[index]
+        if(page.ctrlKey){ 
+            console.error("【Warning】不允许有控制器["+page.ctrlKey+"]的页面更换！")
+            return false
+        }
+        const dic = newPage(infoIndex)
+        if(dic == null){
+            return false
+        }
+        page.obj.destroy()  // 旧页对象删除
+        pageList[index] = dic  // 替换新页
         return true
     }
 
@@ -116,37 +142,6 @@ Item {
         }
         page.obj.destroy()  // 页对象删除
         pageList.splice(index, 1)  // 列表删除
-        return true
-    }
-
-    // 改： 在 pageList 的 index 处，删除该页面，改为 infoIndex 页。
-    function changePage(index, infoIndex){
-        const info = infoList[infoIndex]
-        // 实例化新逻辑控制器
-        let ctrlKey = ""
-        if(info.needController){
-            ctrlKey = controller.addPage(info.key)
-            if(!ctrlKey){
-                console.error("【Error】更改页面失败：组件["+info.key+"]创建控制器失败！")
-                return false
-            }
-        }
-        // 实例化页面，挂到巢下
-        const comp = info.comp
-        if(!comp){
-            console.error("【Error】更改页面失败：下标"+index+"的组件["+info.key+"]的comp不存在！")
-            return false
-        }
-        const obj = comp.createObject(pagesNest, {z: -1, visible: false})
-        // 列表替换
-        const dic = {
-            obj: obj,
-            info: info,
-            infoIndex: infoIndex,
-            ctrlKey: ctrlKey
-        }
-        pageList[index].obj.destroy()  // 旧页对象删除
-        pageList[index] = dic  // 替换新页
         return true
     }
 
