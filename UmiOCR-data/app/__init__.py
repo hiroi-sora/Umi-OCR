@@ -1,25 +1,29 @@
 import os
 import sys
 
+from PySide2.QtCore import Qt, QTranslator
 from PySide2.QtGui import QGuiApplication, QOpenGLContext
-from PySide2.QtQml import QQmlApplicationEngine
-from PySide2.QtCore import Qt, QCoreApplication, QObject, QTranslator  # 翻译
+from PySide2.QtQml import QQmlApplicationEngine, qmlRegisterType
+
+from app.tag_pages import TagPageController
 
 
+# 启动主qml
 def main():
 
+    # 1. 全局参数设置
     # 启用 OpenGL 上下文之间的资源共享
     QGuiApplication.setAttribute(Qt.AA_ShareOpenGLContexts, True)
     # 启用OpenGLES以避免组件抖动问题
     QGuiApplication.setAttribute(Qt.AA_UseOpenGLES, True)
 
-    # 启动qt
+    # 2. 启动qt
     app = QGuiApplication(sys.argv)
     app.setApplicationName("Umi-OCR")
     app.setOrganizationName("hiroi-sora")
     app.setOrganizationDomain("hiroi-sora.com")
 
-    # OpenGlES 兼容性检查
+    # 3. OpenGlES 兼容性检查
     if not QOpenGLContext.openGLModuleType() == QOpenGLContext.LibGLES:
         QGuiApplication.setAttribute(Qt.AA_UseOpenGLES, False)
         # TODO：记录本次结果，下次默认False
@@ -27,19 +31,23 @@ def main():
         msg += "Detected that the system does not support OpenGLES and has been set to disabled. It will take effect on the next startup. \nIf the program crashes or reports an error during this run, restarting app may solve the problem."
         os.MessageBox(msg, info="Umi-OCR Warning")
 
-    # 启动翻译
+    # 4. 注册Python类
+    # 页面控制器
+    qmlRegisterType(TagPageController,
+                    "TagPageController", 1, 0, "TagPageController")
+
+    # 5. 启动翻译
     # trans = QTranslator()
     # if trans.load(r"翻译文1件.qm"):
     #     app.installTranslator(trans)  # 安装翻译器
     # else:
     #     print("翻译文件安装失败！")
 
-    # 启动qml引擎
+    # 6. 启动qml引擎
     engine = QQmlApplicationEngine()
     engine.addImportPath("./.site-packages/PySide2/qml")  # 相对路径重新导入包
     engine.load(f"res/qml/Main.qml")  # 通过本地文件启动
     # engine.load(f"qrc:/qml/Main.qml")  # 通过qrc启动
-
     if not engine.rootObjects():
         sys.exit(0)
     sys.exit(app.exec_())

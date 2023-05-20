@@ -4,6 +4,7 @@
 
 
 import QtQuick 2.15
+import TagPageController 1.0 // Python页面控制器
 
 Item {
 
@@ -19,11 +20,13 @@ Item {
         {
             key: "Navigation",         // 页面的唯一标识符。同时也是对应Python模块的名称。
             url: "",                   // 页面的qml文件路径。留空时，初始化为  key/key.qml
+            needController: false,      // 为true时才需要加载对应Python模块，不需要可留空
             title: qsTr("新标签页"),    // 页面的显示名称。
             intro: ""                  // 页面的简介。
         },
         {
             key: "BatchOCR",
+            needController: true,
             title: qsTr("批量OCR"),
             intro: qsTr("# 批量OCR\n\
 　  \n\
@@ -38,6 +41,9 @@ Item {
     */
     property var pageList: []
 
+    // Python的页面控制器，手动维护单例状态
+    TagPageController { id: controller }
+    
     // ========================= 【增删改查】 =========================
 
     // 初始化： 将 infoList 的 url 转换为可实例化的组件类 comp
@@ -68,42 +74,80 @@ Item {
 
     // 增： 在 pageList 的 index 处，插入一个 infoList[infoIndex] 页面。
     function addPage(index, infoIndex){ // index=-1 代表尾部插入
+        const info = infoList[infoIndex]
+        // 实例化逻辑控制器
+        let ctrlKey = ""
+        if(info.needController){
+            ctrlKey = controller.addPage(info.key)
+            if(!ctrlKey){
+                console.error("【Error】添加页面失败：组件["+info.key+"]创建控制器失败！")
+                return false
+            }
+        }
         // 实例化页面，挂到巢下
-        const comp = infoList[infoIndex].comp
+        const comp = info.comp
         if(!comp){
-            console.error("【Error】添加页面失败：下标"+index+"的组件["+infoList[infoIndex].title+"]的comp不存在！")
-            return
+            console.error("【Error】添加页面失败：下标"+index+"的组件["+info.key+"]的comp不存在！")
+            return false
         }
         const obj = comp.createObject(pagesNest, {z: -1, visible: false})
 
         // 列表添加
         const dic = {
             obj: obj,
-            info: infoList[infoIndex],
-            infoIndex: infoIndex
+            info: info,
+            infoIndex: infoIndex,
+            ctrlKey: ctrlKey
         }
         pageList.splice(index, 0, dic) // 列表添加
+        return true
     }
 
     // 删： 在 pageList 的 index 处，删除该页面。
     function delPage(index){
-        pageList[index].obj.destroy()  // 页对象删除
+        const page = pageList[index]
+        // 删除逻辑控制器
+        if(page.ctrlKey){ 
+            const flag = controller.delPage(page.ctrlKey)
+            if(!flag){
+                console.error("【Warning】删除页面失败：控制器["+page.ctrlKey+"]删除失败！")
+                // return false // 暂时不管控制器删除失败
+            }
+        }
+        page.obj.destroy()  // 页对象删除
         pageList.splice(index, 1)  // 列表删除
+        return true
     }
 
     // 改： 在 pageList 的 index 处，删除该页面，改为 infoIndex 页。
     function changePage(index, infoIndex){
+        const info = infoList[infoIndex]
+        // 实例化新逻辑控制器
+        let ctrlKey = ""
+        if(info.needController){
+            ctrlKey = controller.addPage(info.key)
+            if(!ctrlKey){
+                console.error("【Error】更改页面失败：组件["+info.key+"]创建控制器失败！")
+                return false
+            }
+        }
         // 实例化页面，挂到巢下
-        const comp = infoList[infoIndex].comp
+        const comp = info.comp
+        if(!comp){
+            console.error("【Error】更改页面失败：下标"+index+"的组件["+info.key+"]的comp不存在！")
+            return false
+        }
         const obj = comp.createObject(pagesNest, {z: -1, visible: false})
         // 列表替换
         const dic = {
             obj: obj,
-            info: infoList[infoIndex],
-            infoIndex: infoIndex
+            info: info,
+            infoIndex: infoIndex,
+            ctrlKey: ctrlKey
         }
         pageList[index].obj.destroy()  // 旧页对象删除
         pageList[index] = dic  // 替换新页
+        return true
     }
 
     // 改： 展示 index 页。

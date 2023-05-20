@@ -76,7 +76,7 @@ Item {
         }
         if(!isIndex(infoIndex, infoList, "【Error】添加标签页失败：信息"))
             return
-        page.addPage(index, infoIndex)
+        if(!page.addPage(index, infoIndex)) return
         bar.addTab(index, infoList[infoIndex].title)
         openPageList.splice(index, 0, infoList[infoIndex].url)
         if(showPageIndex >= index) { // 若选中页在被添加页之前
@@ -117,7 +117,7 @@ Item {
             return
         if(!isIndex(infoIndex, infoList, "【Error】更改标签页失败：信息"))
             return
-        page.changePage(index, infoIndex)
+        if(!page.changePage(index, infoIndex)) return
         bar.changeTab(index, infoList[infoIndex].title)
         openPageList[index] = infoList[infoIndex].url
         settings.save() // 改动列表项，需要手动触发保存
