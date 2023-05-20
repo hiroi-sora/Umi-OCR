@@ -11,6 +11,16 @@ import "../../Widgets"
 TabPage {
     id: tabPage
 
+    // 从paths中，搜索有效的图片，并添加到文件表格中
+    function addImages(paths){
+        // 通过python搜索
+        const res = tabPage.ctrl("findImages", paths)
+        console.log("搜索图片完成。")
+        for(let i in res)
+            console.log(res[i])
+        
+    }
+
     // 主区域：左右双栏面板。
     DoubleColumnLayout {
         anchors.fill: parent
@@ -140,12 +150,9 @@ TabPage {
                     if(s.startsWith("file:///"))
                         fileList.push(s.substring(8))
                 }
-                // TODO
                 if(fileList.length > 0){
-                    let res = tabPage.ctrl("hello", "abc", "参数", {abc: "test"})
-                    console.log("调用完成。",res)
+                    addImages(fileList)
                 }
-                // console.log("拖入文件：",fileList)
             }
         }
 

@@ -12,7 +12,6 @@ Item {
 
     // 调用Python控制器的func方法名，传入任意个数的args作为参数
     function ctrl(func, ...args) {
-        console.log("即将调用函数，参数为", args)
         return controller.call(ctrlKey, func, args)
     }
     
