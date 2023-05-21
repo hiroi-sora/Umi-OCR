@@ -169,11 +169,13 @@ Item{
                 anchors.bottom: parent.bottom
                 clip: true
 
+                // 左边表格
                 TableView {
                     id: tableView
                     anchors.fill: parent
                     contentWidth: parent.width // 内容宽度
                     model: tableModel // 模型
+                    flickableDirection: Flickable.VerticalFlick // 只允许垂直滚动
 
                     // 宽度设定函数
                     columnWidthProvider: (column)=>{
@@ -201,6 +203,17 @@ Item{
                             anchors.rightMargin: theme.textSize * 0.5
                         }
                     }
+                }
+
+                // 右边滚动条
+                Rectangle {
+                    id: scrollbar
+                    visible: tableView.visibleArea.heightRatio < 1
+                    anchors.right: parent.right
+                    y: tableView.visibleArea.yPosition * parent.height
+                    height: tableView.visibleArea.heightRatio * parent.height
+                    width: theme.smallSpacing
+                    color: theme.coverColor1
                 }
             }
         }

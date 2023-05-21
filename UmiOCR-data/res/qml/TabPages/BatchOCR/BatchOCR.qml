@@ -151,7 +151,12 @@ TabPage {
                 anchors.margins: theme.spacing
                 color: theme.bgColor
 
-                property string testStr: `测试文本测试文本测试文本`
+                property string testStr: ""
+                
+                Component.onCompleted: {
+                    for(let i =0;i<100;i++) testStr += "测试文本"
+                }
+                
                     
                 ScrollView {
                     id: textScroll
