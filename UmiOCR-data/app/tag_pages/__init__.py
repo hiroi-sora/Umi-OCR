@@ -7,7 +7,7 @@
 前端页面访问各种后端功能，必须靠这个控制器作为中转。
 """
 
-from PySide2.QtCore import QObject, Slot, Property
+from PySide2.QtCore import QObject, Slot
 
 # 导入本模块内定义的控制器类
 from .BatchOCR import BatchOCR
@@ -38,7 +38,9 @@ class TagPageController(QObject):
         for i in PageClass:
             self.pageClass[i.__name__] = i
         # 属性
-        self.page = {}  # 当前已实例化的控制器。每一项为：{obj:对象, funcCache:{方法缓存字典}}
+        # 当前已实例化的控制器。每一项为：
+        # {pyObj: python对象, qmlObj: qml对象, funcCache:{python方法缓存字典}}
+        self.page = {}  
         self.keyIndex = 0  # 用于生成标识符
 
     # ========================= 【增删改查】 =========================
@@ -49,36 +51,43 @@ class TagPageController(QObject):
         if key not in self.pageClass:
             return ""
         self.keyIndex += 1
-        objKey = f"{self.pageClass[key].__name__}_{self.keyIndex}"
-        obj = self.pageClass[key](objKey)  # 实例化 页控制器对象
-        self.page[objKey] = {"obj": obj, "funcCache": {}}
-        return objKey
+        ctrlKey = f"{self.pageClass[key].__name__}_{self.keyIndex}"
+        obj = self.pageClass[key](ctrlKey)  # 实例化 页控制器对象
+        self.page[ctrlKey] = {"pyObj": obj, "qmlObj": None, "funcCache": {}}
+        return ctrlKey
 
-    # 删： 删除标识符为objKey的控制器。成功返回true
-    @Slot(str, result=bool)
-    def delPage(self, objKey):
-        if objKey not in self.page:
+    # 增2： qml回调，设置标识符为ctrlKey的控制器，对应的qml页面对象
+    @Slot(str, "QVariant")
+    def setPageQmlObj(self, ctrlKey, qmlObj):
+        if ctrlKey not in self.page:
             return False
-        del self.page[objKey]
+        self.page[ctrlKey]["qmlObj"] = qmlObj
+
+    # 删： 删除标识符为ctrlKey的控制器。成功返回true
+    @Slot(str, result=bool)
+    def delPage(self, ctrlKey):
+        if ctrlKey not in self.page:
+            return False
+        del self.page[ctrlKey]
         return True
 
     # ========================= 【与qml的通信】 =========================
 
-    # qml调用Python方法：
-    # qml调用objKey的方法funcName，入参为列表（对应参数顺序），返回值为可变类型。
+    # qml调用Python的方法（同步）
+    # qml调用ctrlKey的方法funcName，入参为列表（对应参数顺序），返回值为可变类型。
     @Slot(str, str, list, result="QVariant")
-    def call(self, objKey, funcName, args):
-        page = self.page[objKey]
+    def callPy(self, ctrlKey, funcName, args):
+        page = self.page[ctrlKey]
         # 获取方法的引用
         method = None
         if funcName in page["funcCache"]:  # 缓存中存在，直接取缓存
             method = page["funcCache"][funcName]
         else:  # 否则，搜索该方法，并写入缓存
-            method = getattr(page["obj"], funcName, None)
+            method = getattr(page["pyObj"], funcName, None)
             page["funcCache"][funcName] = method
         # 查询失败
         if not method:
-            print(f"【Error】调用了{objKey}的不存在的方法{funcName}！")
+            print(f"【Error】调用了{ctrlKey}的不存在的方法{funcName}！")
             return None
         # 调用方法，参数不对的话让系统抛出错误
         return method(*args)

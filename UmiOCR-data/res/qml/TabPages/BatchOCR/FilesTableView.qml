@@ -13,51 +13,50 @@ Item{
 
     // ========================= 【逻辑】 =========================
 
+    property string herderEleFile: qsTr("文件")
     // 表头模型
     ListModel {
         id: headerModel
-        ListElement { display: qsTr("文件名称") }
+        ListElement { display: "" } // 动态变化
         ListElement { display: qsTr("耗时") }
-        ListElement { display: qsTr("置信度") }
+        ListElement { display: qsTr("状态") }
     }
     // 表格模型
     TableModel {
         id: tableModel
-        TableModelColumn { display: "fileName" }
+        TableModelColumn { display: "filePath" }
         TableModelColumn { display: "timeCost" }
         TableModelColumn { display: "score" }
         rows: [] // 初始为空行
+        onRowCountChanged: {
+            if(rowCount>0)
+                headerModel.set(0, {display: `${herderEleFile} (${rowCount})`})
+            else
+                headerModel.set(0, {display: herderEleFile})
+        }
     }
+    // 记录文件路径到tableModel对应项的字典， [filePath]{index: tableModel序号}
+    property var tableDict: {}
+    property QtObject tableModel_: tableModel
     // 列宽。第一列随总体宽度自动变化（[0]表示最小值），剩余列为固定值。
     property var columnsWidth: [theme.textSize*6, theme.textSize*4,theme.textSize*4]
-
     property int othersWidth: 0 // 除第一列以外的列宽，初始时固定下来。
-    Component.onCompleted: { // 计算剩余列的固定值。
+    Component.onCompleted: {
+        // 计算剩余列的固定值。
         for(let i = 1;i < columnsWidth.length; i++)
             othersWidth += columnsWidth[i]
-
-        let index = 1
-        for(let i=0; i<33; i++){
-            tableModel.appendRow({
-                "fileName": `测试文件${index++}.png`,
-                "timeCost": (Math.random()* 1.4 + 0.6).toFixed(2),
-                "score": (Math.random()* 0.5 + 0.5).toFixed(2),
-            })
-        }
-        tableModel.appendRow({
-            "fileName": `测试文件${index++}.png`,
-            "timeCost": "进行中",
-            "score": "",
-        })
-        for(let i=0; i<27; i++){
-            tableModel.appendRow({
-                "fileName": `测试文件${index++}.png`,
-                "timeCost": "排队中",
-                "score": "",
-            })
-        }
-        tableView.forceLayout()
     }
+
+    // 清空表格
+    function clearTable() {
+        tableModel.clear()
+        tableDict = {}
+    }
+
+    // 定义信号
+    signal addImages(var paths) // 添加图片的信号
+
+    // ========================= 【布局】 =========================
 
     // 文件选择对话框
     // QT-5.15.2 会报错：“Model size of -225 is less than 0”，不影响使用。
@@ -69,15 +68,14 @@ Item{
         nameFilters: [qsTr("图片")+" (*.jpg *.jpe *.jpeg *.jfif *.png *.webp *.bmp *.tif *.tiff)"]
         folder: shortcuts.pictures
         selectMultiple: true // 多选
-        onAccepted: { // TODO
-            console.log("选择图片: " + fileDialog.fileUrls)
+        onAccepted: {
+            addImages(fileDialog.fileUrls) // 发送信号
         }
     }
 
-    // ========================= 【布局】 =========================
-
     // 表格区域
     Rectangle {
+        id: tableArea
         anchors.fill: parent
         color: theme.bgColor
 
@@ -119,8 +117,22 @@ Item{
                     text_: qsTr("清空")
 
                     onClicked: {
-                        console.log("清空！")
+                        clearTable()
                     }
+                }
+            }
+
+            // 提示
+            Rectangle {
+                visible: tableModel.rowCount == 0
+                anchors.top: tableTopPanel.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                color: tableArea.color
+                Text_ {
+                    anchors.centerIn: parent
+                    text: qsTr("请拖入或选择图片")
                 }
             }
 
@@ -185,8 +197,8 @@ Item{
                         Text_ {
                             text: display
                             color: theme.subTextColor
-                            anchors.left: parent.left
-                            anchors.leftMargin: theme.textSize * 0.5
+                            anchors.right: parent.right
+                            anchors.rightMargin: theme.textSize * 0.5
                         }
                     }
                 }

@@ -103,6 +103,10 @@ Item {
             infoIndex: infoIndex,
             ctrlKey: ctrlKey
         }
+        // 向控制器传入页面对象
+        if(ctrlKey) {
+            controller.setPageQmlObj(ctrlKey, obj)
+        }
         return dic
     }
 

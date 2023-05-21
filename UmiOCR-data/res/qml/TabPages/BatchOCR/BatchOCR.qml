@@ -11,15 +11,49 @@ import "../../Widgets"
 TabPage {
     id: tabPage
 
-    // 从paths中，搜索有效的图片，并添加到文件表格中
-    function addImages(paths){
-        // 通过python搜索
-        const res = tabPage.ctrl("findImages", paths)
-        console.log("搜索图片完成。")
-        for(let i in res)
-            console.log(res[i])
-        
+    // ========================= 【逻辑】 =========================
+
+    // 文件表格模型
+    property alias tableModel: filesTableView.tableModel_
+    property alias tableDict: filesTableView.tableDict
+
+    // 将需要查询的图片路径列表paths发送给python。传入值是qt url，file:/// 开头。
+    function addImages(paths) {
+        // qt url 转为字符串
+        let fileList = []
+        for(let i in paths){
+            let s = paths[i]
+            if(s.startsWith("file:///"))
+                fileList.push(s.substring(8))
+        }
+        if(fileList.length == 0){
+            return
+        }
+        // 调用Python方法
+        const res = tabPage.callPy("findImages", fileList)
+        // 初始化
+        if(tableDict == undefined)
+            tableDict = {}
+        // 结果写入数据
+        for(let i in res){
+            // 检查重复
+            if(tableDict.hasOwnProperty(res[i])){
+                continue
+            }
+            // 添加到字典中
+            tableDict[res[i]] = {
+                index: tableModel.rowCount
+            }
+            // 添加到表格中
+            tableModel.appendRow({
+                "filePath": res[i],
+                "timeCost": "",
+                "score": "",
+            })
+        }
     }
+
+    // ========================= 【布局】 =========================
 
     // 主区域：左右双栏面板。
     DoubleColumnLayout {
@@ -94,12 +128,17 @@ TabPage {
 
             // 下方文件表格
             FilesTableView{
+                id: filesTableView
                 anchors.top: ctrlPanel.bottom
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
                 anchors.margins: theme.spacing
                 anchors.topMargin: theme.smallSpacing
+
+                onAddImages: {
+                    tabPage.addImages(paths)
+                }
             }
         }
         // 右面板：文字输出 & 设置
@@ -144,15 +183,7 @@ TabPage {
         anchors.fill: parent;
         onDropped: {
             if(drop.hasUrls){
-                let fileList = []
-                for(let i in drop.urls){
-                    let s = drop.urls[i]
-                    if(s.startsWith("file:///"))
-                        fileList.push(s.substring(8))
-                }
-                if(fileList.length > 0){
-                    addImages(fileList)
-                }
+                addImages(drop.urls)
             }
         }
 

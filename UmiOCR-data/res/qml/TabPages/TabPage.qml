@@ -11,8 +11,8 @@ Item {
     property var controller // Python控制器的引用
 
     // 调用Python控制器的func方法名，传入任意个数的args作为参数
-    function ctrl(func, ...args) {
-        return controller.call(ctrlKey, func, args)
+    function callPy(func, ...args) {
+        return controller.callPy(ctrlKey, func, args)
     }
     
 }
