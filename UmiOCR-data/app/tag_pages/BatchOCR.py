@@ -4,9 +4,15 @@
 
 import os
 from .page import Page
+from ..ocr import ocr
 
 
 class BatchOCR(Page):
+
+    def __init__(self, *args):
+        super().__init__(*args)
+        self.ocr = None  # 页面自身的OCR模块对象
+        self.ocr = ocr.OCR() # TODO: 测试
 
     def findImages(self, paths):  # 接收路径列表，在路径中搜索图片
         suf = [".jpg", ".jpe", ".jpeg", ".jfif",
