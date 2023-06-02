@@ -4,7 +4,7 @@
 
 import os
 from .page import Page
-from ..ocr import ocr
+from ..ocr.mission_controller import Mission
 
 from PySide2.QtCore import Slot
 
@@ -14,8 +14,9 @@ import threading  # TODO: 测试
 class BatchOCR(Page):
     def __init__(self, *args):
         super().__init__(*args)
-        self.ocr = None  # 页面自身的OCR模块对象
-        self.ocr = ocr.OCR()  # TODO: 测试
+        self.mission = Mission(self.__setMsnState)  # 页面自身的任务控制器对象
+
+    # ========================= 【qml调用python】 =========================
 
     def findImages(self, paths):  # 接收路径列表，在路径中搜索图片
         suf = [
@@ -50,13 +51,22 @@ class BatchOCR(Page):
             imgPaths[i] = p.replace("\\", "/")
         return imgPaths
 
-    def ocrImages(self, paths):  # 接收路径列表，开始OCR任务
+    def msnPaths(self, paths):  # 接收路径列表，开始OCR任务
         missions = []
         for p in paths:
-            missions.append({"path": p, "callback": self.__ocrCallback})
-        self.ocr.add(missions)
+            missions.append({"path": p, "callback": self.__onGet})
+        self.mission.add(missions)  # 添加到OCR任务列表
         print(f"在线程{threading.current_thread().ident}添加{len(missions)}个任务")
 
+    # ========================= 【任务控制器的异步回调】 =========================
+
+    # 单个OCR任务完成
     @Slot("QVariant", "QVariant")
-    def __ocrCallback(self, res, msn):  #  单个OCR任务完成的回调，在主线程被调用
+    def __onGet(self, res, msn):
         print(f"在线程{threading.current_thread().ident}执行回调，路径{msn['path']}")
+
+    # 设置任务状态
+    @Slot(str)
+    def __setMsnState(self, flag):
+        print(f"在线程{threading.current_thread().ident}设置工作状态")
+        self.callQml("setMsnState", flag)
