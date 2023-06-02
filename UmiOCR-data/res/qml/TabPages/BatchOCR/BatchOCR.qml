@@ -17,6 +17,10 @@ TabPage {
     property alias tableModel: filesTableView.tableModel_
     property alias tableDict: filesTableView.tableDict
 
+    Component.onCompleted: {
+        setMsnState("none")
+    }
+
     // 将需要查询的图片路径列表paths发送给python。传入值是qt url，file:/// 开头。
     function addImages(paths) {
         // qt url 转为字符串
@@ -52,7 +56,37 @@ TabPage {
 
     // 运行OCR
     function ocrImages() {
-        tabPage.callPy("ocrImages", Object.keys(tableDict))
+        tabPage.callPy("msnPaths", Object.keys(tableDict))
+    }
+
+    // ========================= 【python调用qml】 =========================
+
+    /*  设置任务状态，flag为字符串：
+    none  不在运行
+    init  正在启动
+    run   工作中
+    stop  停止中
+    */
+    function setMsnState(flag) {
+        switch(flag) {
+            case "none": // 不在运行
+                runBtn.text_ = qsTr("开始任务")
+                runBtn.enabled = true
+                break;
+            case "init": // 正在启动
+                runBtn.text_ = qsTr("启动中…")
+                runBtn.enabled = false
+                break;
+            case "run":  // 工作中
+                runBtn.text_ = qsTr("暂停任务")
+                runBtn.enabled = true
+                break;
+            case "stop": // 停止中
+                runBtn.text_ = qsTr("停止中…")
+                runBtn.enabled = false
+                break;
+        }
+        console.log("设置任务状态：", flag)
     }
 
     // ========================= 【布局】 =========================
@@ -87,7 +121,7 @@ TabPage {
 
                     bgColor_: theme.coverColor1
                     bgHoverColor_: theme.coverColor2
-                    text_: "开始任务" // TODO
+                    text_: "" // 动态变化
                     onClicked: tabPage.ocrImages()
                 }
 
