@@ -6,6 +6,10 @@ import os
 from .page import Page
 from ..ocr import ocr
 
+from PySide2.QtCore import Slot
+
+import threading  # TODO: 测试
+
 
 class BatchOCR(Page):
     def __init__(self, *args):
@@ -45,3 +49,14 @@ class BatchOCR(Page):
         for i, p in enumerate(imgPaths):  # 规范化正斜杠
             imgPaths[i] = p.replace("\\", "/")
         return imgPaths
+
+    def ocrImages(self, paths):  # 接收路径列表，开始OCR任务
+        missions = []
+        for p in paths:
+            missions.append({"path": p, "callback": self.__ocrCallback})
+        self.ocr.add(missions)
+        print(f"在线程{threading.current_thread().ident}添加{len(missions)}个任务")
+
+    @Slot("QVariant", "QVariant")
+    def __ocrCallback(self, res, msn):  #  单个OCR任务完成的回调，在主线程被调用
+        print(f"在线程{threading.current_thread().ident}执行回调，路径{msn['path']}")
