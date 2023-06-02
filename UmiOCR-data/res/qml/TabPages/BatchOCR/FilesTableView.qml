@@ -42,6 +42,7 @@ Item{
     property var columnsWidth: [theme.textSize*6, theme.textSize*4,theme.textSize*4]
     property int othersWidth: 0 // 除第一列以外的列宽，初始时固定下来。
     Component.onCompleted: {
+        tableDict = {}
         // 计算剩余列的固定值。
         for(let i = 1;i < columnsWidth.length; i++)
             othersWidth += columnsWidth[i]

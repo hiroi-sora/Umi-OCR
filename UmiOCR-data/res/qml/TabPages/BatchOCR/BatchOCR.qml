@@ -31,9 +31,6 @@ TabPage {
         }
         // 调用Python方法
         const res = tabPage.callPy("findImages", fileList)
-        // 初始化
-        if(tableDict == undefined)
-            tableDict = {}
         // 结果写入数据
         for(let i in res){
             // 检查重复
@@ -51,6 +48,11 @@ TabPage {
                 "score": "",
             })
         }
+    }
+
+    // 运行OCR
+    function ocrImages() {
+        tabPage.callPy("ocrImages", Object.keys(tableDict))
     }
 
     // ========================= 【布局】 =========================
@@ -86,6 +88,7 @@ TabPage {
                     bgColor_: theme.coverColor1
                     bgHoverColor_: theme.coverColor2
                     text_: "开始任务" // TODO
+                    onClicked: tabPage.ocrImages()
                 }
 
                 // 左上信息
