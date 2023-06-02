@@ -6,10 +6,14 @@ from PySide2.QtCore import QObject
 
 
 class Page(QObject):
-    def __init__(self, objKey):
+    def __init__(self, ctrlKey, controller):
         super().__init__()
-        self.objKey = objKey
-        print(f"py控制器 {self.objKey} 实例化！")
+        self.ctrlKey = ctrlKey
+        self.controller = controller
+        print(f"py控制器 {self.ctrlKey} 实例化！")
 
     def __del__(self):
-        print(f"py控制器 {self.objKey} 销毁！")
+        print(f"py控制器 {self.ctrlKey} 销毁！")
+
+    def callQml(self, funcName, *args):  # python调用qml函数
+        self.controller.callQml(self.ctrlKey, funcName, *args)

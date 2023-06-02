@@ -35,8 +35,7 @@ class TagPageController(QObject):
         for i in PageClass:
             self.pageClass[i.__name__] = i
         # 属性
-        # 当前已实例化的控制器。每一项为：
-        # {pyObj: python对象, qmlObj: qml对象, funcCache:{python方法缓存字典}}
+        # 当前已实例化的控制器
         self.page = {}
         self.keyIndex = 0  # 用于生成标识符
 
@@ -49,8 +48,13 @@ class TagPageController(QObject):
             return ""
         self.keyIndex += 1
         ctrlKey = f"{self.pageClass[key].__name__}_{self.keyIndex}"
-        obj = self.pageClass[key](ctrlKey)  # 实例化 页控制器对象
-        self.page[ctrlKey] = {"pyObj": obj, "qmlObj": None, "funcCache": {}}
+        obj = self.pageClass[key](ctrlKey, self)  # 实例化 页控制器对象
+        self.page[ctrlKey] = {  # key为控制器id
+            "pyObj": obj,  # py对象
+            "qmlObj": None,  # qml对象
+            "pyCache": {},  # py方法缓存
+            "qmlCache": {},  # qml方法缓存
+        }
         return ctrlKey
 
     # 增2： qml回调，设置标识符为ctrlKey的控制器，对应的qml页面对象
@@ -77,14 +81,31 @@ class TagPageController(QObject):
         page = self.page[ctrlKey]
         # 获取方法的引用
         method = None
-        if funcName in page["funcCache"]:  # 缓存中存在，直接取缓存
-            method = page["funcCache"][funcName]
+        if funcName in page["pyCache"]:  # 缓存中存在，直接取缓存
+            method = page["pyCache"][funcName]
         else:  # 否则，搜索该方法，并写入缓存
             method = getattr(page["pyObj"], funcName, None)
-            page["funcCache"][funcName] = method
+            page["pyCache"][funcName] = method
         # 查询失败
         if not method:
-            print(f"【Error】调用了{ctrlKey}的不存在的方法{funcName}！")
+            print(f"【Error】调用了{ctrlKey}的不存在的py方法{funcName}！")
+            return None
+        # 调用方法，参数不对的话让系统抛出错误
+        return method(*args)
+
+    # python调用qml的函数（同步）
+    def callQml(self, ctrlKey, funcName, *args):
+        page = self.page[ctrlKey]
+        # 获取方法的引用
+        method = None
+        if funcName in page["qmlCache"]:  # 缓存中存在，直接取缓存
+            method = page["qmlCache"][funcName]
+        else:  # 否则，搜索该方法，并写入缓存
+            method = getattr(page["qmlObj"], funcName, None)
+            page["qmlCache"][funcName] = method
+        # 查询失败
+        if not method:
+            print(f"【Error】调用了{ctrlKey}的不存在的qml方法{funcName}！")
             return None
         # 调用方法，参数不对的话让系统抛出错误
         return method(*args)
