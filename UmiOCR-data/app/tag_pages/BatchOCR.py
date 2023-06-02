@@ -8,15 +8,23 @@ from ..ocr import ocr
 
 
 class BatchOCR(Page):
-
     def __init__(self, *args):
         super().__init__(*args)
         self.ocr = None  # 页面自身的OCR模块对象
-        self.ocr = ocr.OCR() # TODO: 测试
+        self.ocr = ocr.OCR()  # TODO: 测试
 
     def findImages(self, paths):  # 接收路径列表，在路径中搜索图片
-        suf = [".jpg", ".jpe", ".jpeg", ".jfif",
-               ".png", ".webp", ".bmp", ".tif", ".tiff"]
+        suf = [
+            ".jpg",
+            ".jpe",
+            ".jpeg",
+            ".jfif",
+            ".png",
+            ".webp",
+            ".bmp",
+            ".tif",
+            ".tiff",
+        ]
 
         def isImg(path):  # 路径是图片返回true
             return os.path.splitext(path)[-1].lower() in suf
@@ -29,8 +37,9 @@ class BatchOCR(Page):
                 for root, dirs, files in os.walk(p):
                     for file in files:
                         if isImg(file):  # 收集子文件
-                            imgPaths.append(os.path.abspath(
-                                os.path.join(root, file)))  # 将路径转换为绝对路径
+                            imgPaths.append(
+                                os.path.abspath(os.path.join(root, file))
+                            )  # 将路径转换为绝对路径
                     for dir in dirs:  # 继续搜索子目录
                         paths.append(os.path.join(root, dir))
         for i, p in enumerate(imgPaths):  # 规范化正斜杠

@@ -13,9 +13,7 @@ from PySide2.QtCore import QObject, Slot
 from .BatchOCR import BatchOCR
 
 # 控制器类列表
-PageClass = [
-    BatchOCR
-]
+PageClass = [BatchOCR]
 
 
 SingObj = None  # 记录实例
@@ -25,7 +23,6 @@ SingObj = None  # 记录实例
 
 # 页面控制器类（手动单例）
 class TagPageController(QObject):
-
     def __init__(self):
         global SingObj
         # 1. 检查是否单例
@@ -40,7 +37,7 @@ class TagPageController(QObject):
         # 属性
         # 当前已实例化的控制器。每一项为：
         # {pyObj: python对象, qmlObj: qml对象, funcCache:{python方法缓存字典}}
-        self.page = {}  
+        self.page = {}
         self.keyIndex = 0  # 用于生成标识符
 
     # ========================= 【增删改查】 =========================

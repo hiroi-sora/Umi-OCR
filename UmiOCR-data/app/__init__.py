@@ -10,7 +10,6 @@ from app.tag_pages import TagPageController
 
 # 启动主qml
 def main():
-
     # 1. 全局参数设置
     # 启用 OpenGL 上下文之间的资源共享
     QGuiApplication.setAttribute(Qt.AA_ShareOpenGLContexts, True)
@@ -33,8 +32,7 @@ def main():
 
     # 4. 注册Python类
     # 页面控制器
-    qmlRegisterType(TagPageController,
-                    "TagPageController", 1, 0, "TagPageController")
+    qmlRegisterType(TagPageController, "TagPageController", 1, 0, "TagPageController")
 
     # 5. 启动翻译
     # trans = QTranslator()

@@ -2,8 +2,8 @@
 # =============== 页面控制器基类 ===============
 # =============================================
 
-class Page():
 
+class Page:
     def __init__(self, objKey):
         self.objKey = objKey
         print(f"py控制器 {self.objKey} 实例化！")
