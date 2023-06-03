@@ -25,8 +25,8 @@ Item{
     TableModel {
         id: tableModel
         TableModelColumn { display: "filePath" }
-        TableModelColumn { display: "timeCost" }
-        TableModelColumn { display: "score" }
+        TableModelColumn { display: "time" }
+        TableModelColumn { display: "state" }
         rows: [] // 初始为空行
         onRowCountChanged: {
             if(rowCount>0)
@@ -215,8 +215,8 @@ Item{
                     anchors.right: parent.right
                     y: tableView.visibleArea.yPosition * parent.height
                     height: tableView.visibleArea.heightRatio * parent.height
-                    width: theme.smallSpacing
-                    color: theme.coverColor1
+                    width: theme.smallSpacing * 0.5
+                    color: theme.coverColor2
                 }
             }
         }

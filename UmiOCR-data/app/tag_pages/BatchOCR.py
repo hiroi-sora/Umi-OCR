@@ -69,6 +69,17 @@ class BatchOCR(Page):
     @Slot("QVariant", "QVariant")
     def __onGet(self, res, msn):
         print(f"在线程{threading.current_thread().ident}执行回调，返回值\n    {res}")
+        # 计算平均置信度
+        score = 0
+        num = 0
+        if res["code"] == 100:
+            for r in res["data"]:
+                score += r["score"]
+                num += 1
+            if num > 0:
+                score /= num
+        res["score"] = score
+        self.callQml("setOcrRes", msn["path"], res)
 
     # 设置任务状态
     @Slot(str)

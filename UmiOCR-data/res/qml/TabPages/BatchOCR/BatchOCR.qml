@@ -21,14 +21,13 @@ TabPage {
         setMsnState("none")
         addImages(
             [
+                "file:///D:/Pictures/Screenshots/屏幕截图 2023-06-03 120958.png",
                 "file:///D:/Pictures/Screenshots/屏幕截图 2021-04-27 171637.png",
                 "file:///D:/Pictures/Screenshots/屏幕截图 2021-04-27 171639.png",
                 "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-24 235542.png",
-                "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-22 212141.png",
                 "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-22 212147.png",
                 "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-22 212204.png",
                 "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-22 212207.png",
-                "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-22 212231.png",
                 "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-22 212310.png",
                 "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-22 212813.png",
                 "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-22 212854.png",
@@ -70,8 +69,8 @@ TabPage {
             // 添加到表格中
             tableModel.appendRow({
                 "filePath": res[i],
-                "timeCost": "",
-                "score": "",
+                "time": "",
+                "state": "",
             })
         }
     }
@@ -79,6 +78,13 @@ TabPage {
     // 运行OCR
     function ocrImages() {
         tabPage.callPy("msnPaths", Object.keys(tableDict))
+        for(let path in tableDict){
+            tableModel.setRow(tableDict[path].index, {
+                    "filePath": path,
+                    "time": "",
+                    "state": qsTr("排队中"),
+                })
+        }
     }
 
     // ========================= 【python调用qml】 =========================
@@ -109,6 +115,31 @@ TabPage {
                 break;
         }
         console.log("set mission state:  ", flag)
+    }
+
+    // 设置一个OCR的返回值
+    function setOcrRes(path, res) {
+        if(!tableDict.hasOwnProperty(path)){
+            console.error("【Error】OCR结果不存在qml队列！", path)
+            return
+        }
+        let index = tableDict[path].index
+        let time = res.time.toFixed(2)
+        let state = ""
+        switch(res.code){
+            case 100:
+                state = "√ "+res.score.toFixed(2);break
+            case 101:
+                state = "√ ---- ";break
+            default:
+                state = "× "+res.code;break
+        }
+        console.log("OCR结果序号：", index, "耗时" , res.time)
+        tableModel.setRow(index, {
+                "filePath": path,
+                "time": time,
+                "state": state,
+            })
     }
 
     // ========================= 【布局】 =========================

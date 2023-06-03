@@ -5,6 +5,7 @@
 from .api_paddleocr import ApiPaddleOCR
 
 from enum import Enum
+import time
 from PySide2.QtCore import QMutex, QThreadPool, QObject, QRunnable, Signal, Slot
 
 # 设置任务状态 setMsnState ：
@@ -147,18 +148,21 @@ class Mission(QObject):
                 self.__startApi(msn["api"], msn["args"])
             elif "args" in keys:
                 self.__setArgs(msn["args"])
-            # 3. 检查引擎
+            # 3.1. 检查引擎
+            ocrTime1 = time.time()
             if not self.__api or not self.__api.check():
-                res = {"code": 900, "data": "Ocr api not init."}
-            # 3. 执行OCR任务
+                res = {"code": 801, "data": "Ocr api not init."}
+            # 3.2. 执行OCR任务
             elif "path" in keys:
                 res = self.__api.runPath(msn["path"])
             elif "bytes" in keys:
                 res = self.__api.runBytes(msn["bytes"])
             elif "clipboard" in keys:
                 res = self.__api.runClipboard()
+            ocrTime2 = time.time()
             # 4. 执行回调
             if "callback" in keys:
+                res["time"] = ocrTime2 - ocrTime1
                 self.__msnCallback.connect(msn["callback"])
                 self.__msnCallback.emit(res, msn)
                 self.__msnCallback.disconnect(msn["callback"])
