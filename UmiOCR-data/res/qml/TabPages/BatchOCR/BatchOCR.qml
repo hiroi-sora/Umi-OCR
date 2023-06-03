@@ -19,6 +19,25 @@ TabPage {
 
     Component.onCompleted: {
         setMsnState("none")
+        addImages(
+            [
+                "file:///D:/Pictures/Screenshots/屏幕截图 2021-04-27 171637.png",
+                "file:///D:/Pictures/Screenshots/屏幕截图 2021-04-27 171639.png",
+                "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-24 235542.png",
+                "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-22 212141.png",
+                "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-22 212147.png",
+                "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-22 212204.png",
+                "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-22 212207.png",
+                "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-22 212231.png",
+                "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-22 212310.png",
+                "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-22 212813.png",
+                "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-22 212854.png",
+                "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-23 140303.png",
+                "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-23 140829.png",
+                "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-23 191053.png",
+            ]
+        )
+        ocrImages()
     }
 
     // 将需要查询的图片路径列表paths发送给python。传入值是qt url，file:/// 开头。
@@ -36,6 +55,9 @@ TabPage {
         // 调用Python方法
         const res = tabPage.callPy("findImages", fileList)
         // 结果写入数据
+        if(tableDict==undefined){
+            tableDict = {}
+        }
         for(let i in res){
             // 检查重复
             if(tableDict.hasOwnProperty(res[i])){
@@ -86,7 +108,7 @@ TabPage {
                 runBtn.enabled = false
                 break;
         }
-        console.log("设置任务状态：", flag)
+        console.log("set mission state:  ", flag)
     }
 
     // ========================= 【布局】 =========================
