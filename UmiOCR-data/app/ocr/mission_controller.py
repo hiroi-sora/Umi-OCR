@@ -17,7 +17,7 @@ from PySide2.QtCore import QMutex, QThreadPool, QObject, QRunnable, Signal, Slot
 
 class Mission(QObject):
     __msnCallback = Signal("QVariant", "QVariant")  # 给任务调用方回调的信号
-    __setMsnState = Signal(str)  # 设置任务状态的信号
+    __setMsnStateSign = Signal(str)  # 设置任务状态的信号
 
     def __init__(self, setMsnState):
         super().__init__()
@@ -25,21 +25,14 @@ class Mission(QObject):
         self.__msnMutex = QMutex()  # 任务列表的锁
         self.__msnTask = None  # 异步任务对象
         self.__threadPool = QThreadPool.globalInstance()  # 全局线程池
-        self.__setMsnState.connect(setMsnState)  # 设置任务状态的回调
+        self.__setMsnStateSign.connect(setMsnState)  # 设置任务状态的回调
+        self.__msnState = "none"  # 任务状态
         self.__api = None  # 当前引擎api对象
         self.__args = {}  # 记录当前参数
 
-    # ========================= 【任务列表前后处理】 =========================
-
-    def __runStart(self):  # 开始
-        self.__setMsnState.emit("init")
-        # TODO: 初始化步骤
-        self.__setMsnState.emit("run")
-
-    def __runEnd(self):  # 结束
-        self.__setMsnState.emit("stop")
-        # TODO: 结束清理步骤
-        self.__setMsnState.emit("none")
+    def __setMsnState(self, flag):  # 设置状态
+        self.__msnState = flag
+        self.__setMsnStateSign.emit(flag)
 
     # ========================= 【运行单个任务，返回结果】 =========================
 
@@ -101,6 +94,7 @@ class Mission(QObject):
         self.__msnMutex.lock()  # 上锁
         self.__missions.extend(mission)  # 添加任务
         self.__msnMutex.unlock()  # 解锁
+        self.__setMsnState("run")  # 设置允许运行
         # 如果当前没有在运行的工作线程，则创建工作线程
         if self.__msnTask == None:
             self.__msnTask = self.__Task(self.__runMissions)
@@ -108,7 +102,7 @@ class Mission(QObject):
             self.__threadPool.start(self.__msnTask)
 
     def stop(self):  # 暂停当前任务列表
-        pass
+        self.__setMsnState("stop")
 
     def clear(self):  # 清空当前任务列表
         pass
@@ -132,9 +126,11 @@ class Mission(QObject):
             self.worker.finished.emit()  # 发送完成信号
 
     def __runMissions(self):  # 运行OCR任务列表
-        self.__runStart()
         # 循环，直到任务列表为空
         while True:
+            # 0. 检查当前状态，是否退出
+            if not self.__msnState == "run":
+                break
             # 1. 从任务列表中取一个任务
             self.__msnMutex.lock()  # 上锁
             if len(self.__missions) == 0:  # 任务列表已空
@@ -166,7 +162,7 @@ class Mission(QObject):
                 self.__msnCallback.connect(msn["callback"])
                 self.__msnCallback.emit(res, msn)
                 self.__msnCallback.disconnect(msn["callback"])
-        self.__runEnd()
+        self.__setMsnState("none")  # 设置：任务结束
 
     @Slot()
     def __onFinished(self):  # 完成全部任务列表的事件

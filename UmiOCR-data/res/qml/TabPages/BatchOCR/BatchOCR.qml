@@ -16,6 +16,7 @@ TabPage {
     // 文件表格模型
     property alias tableModel: filesTableView.tableModel_
     property alias tableDict: filesTableView.tableDict
+    property string msnState: "" // OCR任务状态
 
     Component.onCompleted: {
         setMsnState("none")
@@ -36,7 +37,7 @@ TabPage {
                 "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-23 191053.png",
             ]
         )
-        ocrImages()
+        // ocrImages()
     }
 
     // 将需要查询的图片路径列表paths发送给python。传入值是qt url，file:/// 开头。
@@ -75,6 +76,18 @@ TabPage {
         }
     }
 
+    // 运行按钮按下
+    function runBtnClick() {
+        switch(msnState) {
+            case "none": // 不在运行
+                ocrImages()
+                break
+            case "run":  // 工作中
+                tabPage.callPy("msnStop")
+                break
+        }
+    }
+
     // 运行OCR
     function ocrImages() {
         tabPage.callPy("msnPaths", Object.keys(tableDict))
@@ -96,6 +109,7 @@ TabPage {
     stop  停止中
     */
     function setMsnState(flag) {
+        msnState = flag
         switch(flag) {
             case "none": // 不在运行
                 runBtn.text_ = qsTr("开始任务")
@@ -175,7 +189,7 @@ TabPage {
                     bgColor_: theme.coverColor1
                     bgHoverColor_: theme.coverColor2
                     text_: "" // 动态变化
-                    onClicked: tabPage.ocrImages()
+                    onClicked: tabPage.runBtnClick()
                 }
 
                 // 左上信息

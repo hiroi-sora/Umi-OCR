@@ -63,12 +63,15 @@ class BatchOCR(Page):
         self.mission.add(missions)  # 添加到OCR任务列表
         print(f"在线程{threading.current_thread().ident}添加{len(missions)}个任务")
 
+    def msnStop(self):  # 任务暂停
+        self.mission.stop()
+
     # ========================= 【任务控制器的异步回调】 =========================
 
     # 单个OCR任务完成
     @Slot("QVariant", "QVariant")
     def __onGet(self, res, msn):
-        print(f"在线程{threading.current_thread().ident}执行回调，返回值\n    {res}")
+        # print(f"在线程{threading.current_thread().ident}执行回调，返回值\n    {res}")
         # 计算平均置信度
         score = 0
         num = 0
@@ -84,5 +87,5 @@ class BatchOCR(Page):
     # 设置任务状态
     @Slot(str)
     def __setMsnState(self, flag):
-        print(f"在线程{threading.current_thread().ident}设置工作状态")
+        print(f"在线程{threading.current_thread().ident}设置工作状态{flag}")
         self.callQml("setMsnState", flag)
