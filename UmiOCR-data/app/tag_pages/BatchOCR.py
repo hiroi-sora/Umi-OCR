@@ -52,7 +52,12 @@ class BatchOCR(Page):
         return imgPaths
 
     def msnPaths(self, paths):  # 接收路径列表，开始OCR任务
-        missions = []
+        missions = [
+            {
+                "api": "",
+                "args": {"exePath": "./lib/PaddleOCR-json/PaddleOCR-json.exe"},
+            }
+        ]
         for p in paths:
             missions.append({"path": p, "callback": self.__onGet})
         self.mission.add(missions)  # 添加到OCR任务列表
@@ -63,7 +68,7 @@ class BatchOCR(Page):
     # 单个OCR任务完成
     @Slot("QVariant", "QVariant")
     def __onGet(self, res, msn):
-        print(f"在线程{threading.current_thread().ident}执行回调，路径{msn['path']}")
+        print(f"在线程{threading.current_thread().ident}执行回调，返回值\n    {res}")
 
     # 设置任务状态
     @Slot(str)
