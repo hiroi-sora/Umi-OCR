@@ -34,20 +34,6 @@ class Mission(QObject):
         self.__msnState = flag
         self.__setMsnStateSign.emit(flag)
 
-    # ========================= 【运行单个任务，返回结果】 =========================
-
-    def __runPath(self, path):  # 图片路径任务
-        import time
-
-        time.sleep(1)
-        return {"code": 100, "data": []}
-
-    def __runBytes(self, bytes):  # 图片字节流任务
-        print(f"字节流识图{bytes}")
-
-    def __runClipboard(self):  # 剪贴板任务
-        print(f"剪贴板识图")
-
     # ========================= 【调用接口】 =========================
 
     def add(self, mission):  # 添加任务，并开始执行
@@ -105,7 +91,9 @@ class Mission(QObject):
         self.__setMsnState("stop")
 
     def clear(self):  # 清空当前任务列表
-        pass
+        self.__msnMutex.lock()  # 上锁
+        self.__missions = []  # 清空任务列表
+        self.__msnMutex.unlock()  # 解锁
 
     def exit(self):  # 关闭任务控制器
         pass
@@ -131,6 +119,7 @@ class Mission(QObject):
             # 0. 检查当前状态，是否退出
             if not self.__msnState == "run":
                 break
+
             # 1. 从任务列表中取一个任务
             self.__msnMutex.lock()  # 上锁
             if len(self.__missions) == 0:  # 任务列表已空
@@ -144,11 +133,13 @@ class Mission(QObject):
                 self.__startApi(msn["api"], msn["args"])
             elif "args" in keys:
                 self.__setArgs(msn["args"])
-            # 3.1. 检查引擎
+
+            # 3. 执行前，检查引擎
             ocrTime1 = time.time()
+            res = {"code": 801, "data": "No mission."}
             if not self.__api or not self.__api.check():
-                res = {"code": 801, "data": "Ocr api not init."}
-            # 3.2. 执行OCR任务
+                res = {"code": 802, "data": "Ocr api not init."}
+            # 4. 执行OCR任务
             elif "path" in keys:
                 res = self.__api.runPath(msn["path"])
             elif "bytes" in keys:
@@ -156,9 +147,21 @@ class Mission(QObject):
             elif "clipboard" in keys:
                 res = self.__api.runClipboard()
             ocrTime2 = time.time()
-            # 4. 执行回调
+
+            # 4. 整理数据
+            res["time"] = ocrTime2 - ocrTime1  # 任务耗时
+            score = 0  # 平均置信度
+            num = 0
+            if res["code"] == 100:
+                for r in res["data"]:
+                    score += r["score"]
+                    num += 1
+                if num > 0:
+                    score /= num
+            res["score"] = score
+
+            # 5. 执行回调
             if "callback" in keys:
-                res["time"] = ocrTime2 - ocrTime1
                 self.__msnCallback.connect(msn["callback"])
                 self.__msnCallback.emit(res, msn)
                 self.__msnCallback.disconnect(msn["callback"])

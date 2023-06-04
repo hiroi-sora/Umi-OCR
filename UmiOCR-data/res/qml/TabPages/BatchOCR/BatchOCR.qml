@@ -17,27 +17,36 @@ TabPage {
     property alias tableModel: filesTableView.tableModel_
     property alias tableDict: filesTableView.tableDict
     property string msnState: "" // OCR任务状态
+    property var missionInfo: {} // 当前任务信息，耗时等
+    property string missionShow: "" // 当前任务信息展示字符串
 
     Component.onCompleted: {
         setMsnState("none")
-        addImages(
-            [
-                "file:///D:/Pictures/Screenshots/屏幕截图 2023-06-03 120958.png",
-                "file:///D:/Pictures/Screenshots/屏幕截图 2021-04-27 171637.png",
-                "file:///D:/Pictures/Screenshots/屏幕截图 2021-04-27 171639.png",
-                "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-24 235542.png",
-                "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-22 212147.png",
-                "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-22 212204.png",
-                "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-22 212207.png",
-                "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-22 212310.png",
-                "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-22 212813.png",
-                "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-22 212854.png",
-                "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-23 140303.png",
-                "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-23 140829.png",
-                "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-23 191053.png",
-            ]
-        )
-        // ocrImages()
+    }
+    // TODO: 测试用
+    Timer {
+        interval: 1000
+        running: true
+        onTriggered: {
+            addImages(
+                [
+                    "file:///D:/Pictures/Screenshots/屏幕截图 2023-06-03 120958.png",
+                    "file:///D:/Pictures/Screenshots/屏幕截图 2021-04-27 171637.png",
+                    "file:///D:/Pictures/Screenshots/屏幕截图 2021-04-27 171639.png",
+                    "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-24 235542.png",
+                    "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-22 212147.png",
+                    "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-22 212204.png",
+                    "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-22 212207.png",
+                    "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-22 212310.png",
+                    "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-22 212813.png",
+                    "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-22 212854.png",
+                    "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-23 140303.png",
+                    "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-23 140829.png",
+                    "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-23 191053.png",
+                ]
+            )
+            ocrImages()
+        }
     }
 
     // 将需要查询的图片路径列表paths发送给python。传入值是qt url，file:/// 开头。
@@ -90,7 +99,10 @@ TabPage {
 
     // 运行OCR
     function ocrImages() {
-        tabPage.callPy("msnPaths", Object.keys(tableDict))
+        let msnLength = Object.keys(tableDict).length
+        if(msnLength <= 0)
+            return
+        // 刷新表格
         for(let path in tableDict){
             tableModel.setRow(tableDict[path].index, {
                     "filePath": path,
@@ -98,6 +110,17 @@ TabPage {
                     "state": qsTr("排队中"),
                 })
         }
+        // 刷新计数
+        missionInfo = {
+            startTime: new Date().getTime(), // 开始时间
+            allNum: msnLength, // 总长度
+            costTime: 0, // 当前耗时
+            nowNum: 0, // 当前执行长度
+        }
+        missionProgress.percent = 0 // 进度条显示
+        missionShow = `0s  0/${msnLength}  0%` // 信息显示
+        // 开始运行
+        tabPage.callPy("msnPaths", Object.keys(tableDict))
     }
 
     // ========================= 【python调用qml】 =========================
@@ -137,6 +160,16 @@ TabPage {
             console.error("【Error】OCR结果不存在qml队列！", path)
             return
         }
+        // 刷新耗时显示
+        let currentTime = new Date().getTime()
+        missionInfo.costTime = currentTime - missionInfo.startTime
+        missionInfo.nowNum = missionInfo.nowNum + 1
+        let costTime = (missionInfo.costTime/1000).toFixed(1)
+        let nowNum = missionInfo.nowNum
+        let percent = Math.floor(((nowNum/missionInfo.allNum)*100))
+        missionProgress.percent = nowNum/missionInfo.allNum // 进度条显示
+        missionShow = `${costTime}s  ${nowNum}/${missionInfo.allNum}  ${percent}%` // 信息显示
+        // 刷新表格显示
         let index = tableDict[path].index
         let time = res.time.toFixed(2)
         let state = ""
@@ -148,7 +181,6 @@ TabPage {
             default:
                 state = "× "+res.code;break
         }
-        console.log("OCR结果序号：", index, "耗时" , res.time)
         tableModel.setRow(index, {
                 "filePath": path,
                 "time": time,
@@ -207,7 +239,7 @@ TabPage {
                         anchors.bottom: parent.bottom
                         // anchors.rightMargin: theme.smallSpacing
                         
-                        text: "25s  33/100  33%"
+                        text: missionShow
                         color: theme.subTextColor
                     }
                 }
@@ -223,9 +255,10 @@ TabPage {
                     anchors.topMargin: theme.smallSpacing
 
                     HProgressBar {
+                        id: missionProgress
                         anchors.fill: parent
                         color: theme.bgColor
-                        percent: 0.3
+                        percent: 0
                     }
                 }
             }

@@ -63,8 +63,9 @@ class BatchOCR(Page):
         self.mission.add(missions)  # 添加到OCR任务列表
         print(f"在线程{threading.current_thread().ident}添加{len(missions)}个任务")
 
-    def msnStop(self):  # 任务暂停
+    def msnStop(self):  # 任务停止，并清理任务列表
         self.mission.stop()
+        self.mission.clear()
 
     # ========================= 【任务控制器的异步回调】 =========================
 
