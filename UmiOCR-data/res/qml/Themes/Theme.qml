@@ -45,7 +45,7 @@ QtObject {
     property real scale: 1
 
     // 主要文字大小
-    property int textSize: 24 *scale
+    property int textSize: 23 *scale
     // 较小的文字大小
     property int smallTextSize: 20 *scale
 

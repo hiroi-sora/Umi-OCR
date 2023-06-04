@@ -39,7 +39,7 @@ Item{
     property var tableDict: {}
     property QtObject tableModel_: tableModel
     // 列宽。第一列随总体宽度自动变化（[0]表示最小值），剩余列为固定值。
-    property var columnsWidth: [theme.textSize*6, theme.textSize*4,theme.textSize*4]
+    property var columnsWidth: [theme.smallTextSize*6, theme.smallTextSize*4, theme.smallTextSize*4]
     property int othersWidth: 0 // 除第一列以外的列宽，初始时固定下来。
     Component.onCompleted: {
         if(tableDict==undefined){
@@ -146,13 +146,13 @@ Item{
                 anchors.top: tableTopPanel.bottom
                 anchors.left: parent.left
                 anchors.right: parent.right
-                height: theme.textSize * 2
+                height: theme.smallTextSize * 2
                 model: headerModel // 模型
 
                 // 元素
                 delegate: Rectangle {
                     implicitWidth: 0
-                    implicitHeight: tableViewHeader.height
+                    implicitHeight: theme.smallTextSize * 2
                     border.width: 1
                     color: "#00000000"
                     border.color: theme.coverColor1
@@ -160,6 +160,7 @@ Item{
                     Text_ {
                         text: display
                         anchors.centerIn: parent
+                        font.pixelSize: theme.smallTextSize
                     }
                 }
             }
@@ -193,7 +194,7 @@ Item{
                     // 元素
                     delegate: Rectangle {
                         implicitWidth: 0
-                        implicitHeight: theme.textSize * 1.5
+                        implicitHeight: theme.smallTextSize * 1.5
                         border.width: 1
                         color: "#00000000"
                         border.color: theme.coverColor1
@@ -203,7 +204,9 @@ Item{
                             text: display
                             color: theme.subTextColor
                             anchors.right: parent.right
-                            anchors.rightMargin: theme.textSize * 0.5
+                            anchors.rightMargin: theme.smallTextSize * 0.5
+                            font.pixelSize: theme.smallTextSize
+                            font.family: theme.dataFontFamily
                         }
                     }
                 }
