@@ -7,6 +7,7 @@ import QtQuick.Controls 2.15
 
 import ".."
 import "../../Widgets"
+import "../../Widgets/ResultLayout"
 
 TabPage {
     id: tabPage
@@ -45,7 +46,7 @@ TabPage {
                     "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-23 191053.png",
                 ]
             )
-            ocrImages()
+            // ocrImages()
         }
     }
 
@@ -107,7 +108,7 @@ TabPage {
             tableModel.setRow(tableDict[path].index, {
                     "filePath": path,
                     "time": "",
-                    "state": qsTr("排队中"),
+                    "state": "",
                 })
         }
         // 刷新计数
@@ -125,12 +126,13 @@ TabPage {
 
     // ========================= 【python调用qml】 =========================
 
-    /*  设置任务状态，flag为字符串：
+    /* 
     none  不在运行
     init  正在启动
     run   工作中
     stop  停止中
     */
+    // 设置任务状态
     function setMsnState(flag) {
         msnState = flag
         switch(flag) {
@@ -193,21 +195,21 @@ TabPage {
     // 主区域：左右双栏面板。
     DoubleColumnLayout {
         anchors.fill: parent
-        initSplitterX: 500
+        initSplitterX: 0.5
         hideWidth: 50
 
         // 左面板：控制板+文件表格
-        leftItem: Panel{
+        leftItem: Panel {
             anchors.fill: parent
 
             // 上方控制板
-            Item{
+            Item {
                 id: ctrlPanel
                 anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.margins: theme.spacing
-                height: theme.textSize * 3
+                height: theme.textSize * 2.6
                 clip: true
 
                 // 右边按钮
@@ -252,7 +254,7 @@ TabPage {
                     anchors.bottom: parent.bottom
                     anchors.right: runBtn.left
                     anchors.rightMargin: theme.smallSpacing
-                    anchors.topMargin: theme.smallSpacing
+                    anchors.topMargin: theme.smallSpacing * 0.5
 
                     HProgressBar {
                         id: missionProgress
@@ -282,40 +284,44 @@ TabPage {
         rightItem: Panel{
             anchors.fill: parent
 
-            Rectangle {
-                id: testContainer
+            ResultLayout {
                 anchors.fill: parent
                 anchors.margins: theme.spacing
-                color: theme.bgColor
+            }
+            // Rectangle {
+            //     id: testContainer
+            //     anchors.fill: parent
+            //     anchors.margins: theme.spacing
+            //     color: theme.bgColor
 
-                property string testStr: ""
+            //     property string testStr: ""
                 
-                Component.onCompleted: {
-                    for(let i =0;i<100;i++) testStr += "测试文本"
-                }
+            //     Component.onCompleted: {
+            //         for(let i =0;i<100;i++) testStr += "测试文本"
+            //     }
                 
                     
-                ScrollView {
-                    id: textScroll
-                    anchors.fill: parent
-                    anchors.margins: theme.spacing
-                    contentWidth: width // 内容宽度
-                    clip: true // 溢出隐藏
+            //     ScrollView {
+            //         id: textScroll
+            //         anchors.fill: parent
+            //         anchors.margins: theme.spacing
+            //         contentWidth: width // 内容宽度
+            //         clip: true // 溢出隐藏
 
-                        TextEdit {
-                        text: testContainer.testStr
-                        width: textScroll.width // 与内容宽度相同
-                        textFormat: TextEdit.MarkdownText // md格式
-                        wrapMode: TextEdit.Wrap // 尽量在单词边界处换行
-                        readOnly: true // 只读
-                        selectByMouse: true // 允许鼠标选择文本
-                        selectByKeyboard: true // 允许键盘选择文本
-                        color: theme.textColor
-                        font.pixelSize: theme.textSize
-                        font.family: theme.fontFamily
-                    }
-                }
-            }
+            //             TextEdit {
+            //             text: testContainer.testStr
+            //             width: textScroll.width // 与内容宽度相同
+            //             textFormat: TextEdit.MarkdownText // md格式
+            //             wrapMode: TextEdit.Wrap // 尽量在单词边界处换行
+            //             readOnly: true // 只读
+            //             selectByMouse: true // 允许鼠标选择文本
+            //             selectByKeyboard: true // 允许键盘选择文本
+            //             color: theme.textColor
+            //             font.pixelSize: theme.textSize
+            //             font.family: theme.fontFamily
+            //         }
+            //     }
+            // }
         }
     }
 
