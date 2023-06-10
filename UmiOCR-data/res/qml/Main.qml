@@ -17,8 +17,8 @@ Window {
     visible: true
     // flags: Qt.Window | Qt.FramelessWindowHint // 无边框窗口，保留任务栏图标
 
-    width: 1280
-    height: 720
+    width: 800
+    height: 500
     minimumWidth: 500
     minimumHeight: 600
 
