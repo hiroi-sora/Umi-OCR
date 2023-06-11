@@ -4,39 +4,66 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 import "../"
 
-
 Item {
-    anchors.left: parent.left
-    anchors.right: parent.right
-    // width: 100
-    height: theme.smallTextSize + textPanel.height
-    
-    Text_ {
-        id: top
+    id: resultRoot
+
+    property alias textLeft: textLeft.text
+    property alias textRight: textRight.text
+    property alias textMain: textMain.text
+
+    Layout.fillWidth: true
+    Layout.preferredHeight: resultTop.height + resultBottom.height + theme.smallSpacing
+
+    Item {
+        id: resultTop
         anchors.top: parent.top
-        color: theme.subTextColor
-        font.pixelSize: theme.smallTextSize
-        text: "title!!!"
-    }
-    Rectangle {
-        id: textPanel
-        color: theme.bgColor
-        anchors.top: top.bottom
         anchors.left: parent.left
         anchors.right: parent.right
-        // anchors.bottom: parent.bottom
-        radius: theme.baseRadius
-        height: textEdit.height
+        anchors.leftMargin: theme.smallSpacing
+        anchors.rightMargin: theme.smallSpacing
+        height: theme.smallTextSize
 
-            
+        // 图片名称
+        Text_ {
+            id: textLeft
+            anchors.left: parent.left
+            anchors.right: textRight.left
+            anchors.rightMargin: theme.spacing
+            color: theme.subTextColor
+            font.pixelSize: theme.smallTextSize
+            clip: true
+            elide: Text.ElideLeft
+        }
+        // 备用，显示状态
+        Text_ {
+            id: textRight
+            anchors.right: parent.right
+            color: theme.subTextColor
+            font.pixelSize: theme.smallTextSize
+        }
+    }
+
+    // 主要文字内容
+    Rectangle {
+        id: resultBottom
+        color: theme.bgColor
+        anchors.top: resultTop.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.topMargin: theme.smallSpacing
+        radius: theme.baseRadius
+        height: textMain.height
+
         TextEdit {
-            id: textEdit
-            text: "11223333"
+            id: textMain
             
             anchors.left: parent.left
             anchors.right: parent.right
+            anchors.leftMargin: theme.smallSpacing
+            anchors.rightMargin: theme.smallSpacing
             wrapMode: TextEdit.Wrap // 尽量在单词边界处换行
             readOnly: true // 只读
             selectByMouse: true // 允许鼠标选择文本

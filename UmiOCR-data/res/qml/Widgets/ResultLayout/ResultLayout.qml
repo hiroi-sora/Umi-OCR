@@ -21,7 +21,11 @@ Rectangle {
             anchors.fill: parent
             spacing: theme.spacing
 
-            ResultTextContainer {}
+            ResultTextContainer {
+                textLeft: "textLeft.text"
+                textRight: "textRight.text"
+                textMain: "textMain.text"
+            }
             ResultTextContainer {}
             ResultTextContainer {}
             ResultTextContainer {}
