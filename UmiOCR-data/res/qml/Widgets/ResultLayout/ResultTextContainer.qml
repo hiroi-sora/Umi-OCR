@@ -14,7 +14,7 @@ Item {
     property alias textRight: textRight.text
     property alias textMain: textMain.text
 
-    implicitHeight: resultTop.height + resultBottom.height + theme.smallSpacing*2
+    implicitHeight: resultTop.height+resultBottom.height+theme.smallSpacing+theme.spacing
 
     Item {
         id: resultTop

@@ -19,8 +19,8 @@ Window {
 
     width: 800
     height: 500
-    minimumWidth: 500
-    minimumHeight: 600
+    minimumWidth: 600
+    minimumHeight: 400
 
     color: "#00000000"
 
