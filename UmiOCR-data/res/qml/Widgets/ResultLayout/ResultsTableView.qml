@@ -17,6 +17,7 @@ Item {
         id: tableView
         anchors.fill: parent
         anchors.rightMargin: theme.smallSpacing
+        rowSpacing: theme.spacing // 行间隔
         contentWidth: parent.width // 内容宽度
         model: resultsModel // 模型
         flickableDirection: Flickable.VerticalFlick // 只允许垂直滚动
@@ -27,6 +28,12 @@ Item {
                 return tableView.width
             }
         }
+        // 高度设定函数
+        // rowHeightProvider: (row)=>{
+        //     if(column == 0){ // 第一列宽度，变化值
+        //         return tableView.width
+        //     }
+        // }
         onWidthChanged: forceLayout()  // 组件宽度变化时重设列宽
         // 元素
         delegate: ResultTextContainer {

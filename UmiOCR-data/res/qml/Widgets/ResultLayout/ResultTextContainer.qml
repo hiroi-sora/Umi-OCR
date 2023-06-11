@@ -14,7 +14,7 @@ Item {
     property alias textRight: textRight.text
     property alias textMain: textMain.text
 
-    implicitHeight: resultTop.height+resultBottom.height+theme.smallSpacing+theme.spacing
+    implicitHeight: resultTop.height+resultBottom.height+theme.smallSpacing
 
     Item {
         id: resultTop
@@ -64,7 +64,7 @@ Item {
             anchors.leftMargin: theme.smallSpacing
             anchors.rightMargin: theme.smallSpacing
             wrapMode: TextEdit.Wrap // 尽量在单词边界处换行
-            readOnly: true // 只读
+            readOnly: false // 可编辑
             selectByMouse: true // 允许鼠标选择文本
             selectByKeyboard: true // 允许键盘选择文本
             color: theme.textColor

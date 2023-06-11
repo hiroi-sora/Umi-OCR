@@ -6,8 +6,8 @@
 
 ## 预计效果预览：
 
-![](docs/Preview1.png)
+![](docs/Preview2.png)
 
-当前进度：完成 [引擎组件PaddleOCR-json](https://github.com/hiroi-sora/PaddleOCR-json) v1.3的重构工作。
+当前进度：初步实现批量OCR的前后端处理。
 
 本仓库仅作前中期开发过程记录使用。v2.0初步开发完成后，将会同步到 Umi-OCR 主仓库，封存本仓库。
