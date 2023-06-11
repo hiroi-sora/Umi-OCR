@@ -7,74 +7,64 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import "../"
 
-// 背景
 Rectangle {
     color: "#00000000"
 
-    ScrollView {
-        id: textScroll
+    
+    ListModel { // 所有页面的标题
+        id: resultModel
+    }
+    
+    Component.onCompleted: {
+        
+        resultModel.clear()
+        for(let i=1,c=40; i<c; i++){
+            resultModel.append({
+                "textLeft_": "textLeft.text",
+                "textRight_": "textRight.text",
+                "textMain_": "textMain.text"
+            })
+        }
+    }
+    
+    Item {
         anchors.fill: parent
-        contentWidth: width // 内容宽度
         clip: true // 溢出隐藏
 
-        ColumnLayout{
+        // 左边表格
+        TableView {
+            id: tableView
             anchors.fill: parent
-            spacing: theme.spacing
+            anchors.rightMargin: theme.smallSpacing
+            contentWidth: parent.width // 内容宽度
+            model: resultModel // 模型
+            flickableDirection: Flickable.VerticalFlick // 只允许垂直滚动
 
-            ResultTextContainer {
-                textLeft: "textLeft.text"
-                textRight: "textRight.text"
-                textMain: "textMain.text"
+            // 宽度设定函数
+            columnWidthProvider: (column)=>{
+                if(column == 0){ // 第一列宽度，变化值
+                    return tableView.width
+                }
             }
-            ResultTextContainer {}
-            ResultTextContainer {}
-            ResultTextContainer {}
-            ResultTextContainer {}
-            ResultTextContainer {}
-            ResultTextContainer {}
-            ResultTextContainer {}
-            ResultTextContainer {}
-            ResultTextContainer {}
-            ResultTextContainer {}
-
-            Item{height: 1} // 末尾，填充高度
+            onWidthChanged: forceLayout()  // 组件宽度变化时重设列宽
+            // 元素
+            delegate: ResultTextContainer {
+                textLeft: textLeft_
+                textRight: textRight_
+                textMain: textMain_
+            } 
+        }
+        // 右边滚动条
+        Rectangle {
+            id: scrollbar
+            visible: tableView.visibleArea.heightRatio < 1
+            anchors.right: parent.right
+            y: tableView.visibleArea.yPosition * parent.height
+            height: tableView.visibleArea.heightRatio * parent.height
+            width: theme.smallSpacing * 0.5
+            color: theme.coverColor2
         }
 
-        // Item {
-        //     anchors.left: parent.left
-        //     anchors.right: parent.right
-        //     height: theme.smallTextSize + textPanel.height
-            
-        //     Text_ {
-        //         id: top
-        //         anchors.top: parent.top
-        //         color: theme.subTextColor
-        //         font.pixelSize: theme.smallTextSize
-        //         text: "title!!!"
-        //     }
-        //     Rectangle {
-        //         id: textPanel
-        //         color: theme.bgColor
-        //         anchors.top: top.bottom
-        //         anchors.left: parent.left
-        //         anchors.right: parent.right
-        //         // anchors.bottom: parent.bottom
-        //         radius: theme.baseRadius
-        //         height: 50
-        //     }
-        // }
-
-        // TextEdit {
-        //     text: "11223333"
-        //     width: textScroll.width // 与内容宽度相同
-        //     textFormat: TextEdit.MarkdownText // md格式
-        //     wrapMode: TextEdit.Wrap // 尽量在单词边界处换行
-        //     readOnly: true // 只读
-        //     selectByMouse: true // 允许鼠标选择文本
-        //     selectByKeyboard: true // 允许键盘选择文本
-        //     color: theme.textColor
-        //     font.pixelSize: theme.textSize
-        //     font.family: theme.fontFamily
-        // }
     }
+
 }

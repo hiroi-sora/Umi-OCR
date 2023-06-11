@@ -14,8 +14,7 @@ Item {
     property alias textRight: textRight.text
     property alias textMain: textMain.text
 
-    Layout.fillWidth: true
-    Layout.preferredHeight: resultTop.height + resultBottom.height + theme.smallSpacing
+    implicitHeight: resultTop.height + resultBottom.height + theme.smallSpacing*2
 
     Item {
         id: resultTop
