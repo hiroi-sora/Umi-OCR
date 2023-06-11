@@ -36,14 +36,14 @@ Item{
         }
     }
     // 记录文件路径到tableModel对应项的字典， [filePath]{index: tableModel序号}
-    property var tableDict: {}
-    property QtObject tableModel_: tableModel
+    property var filesDict: {}
+    property alias filesModel: tableModel
     // 列宽。第一列随总体宽度自动变化（[0]表示最小值），剩余列为固定值。
     property var columnsWidth: [theme.smallTextSize*6, theme.smallTextSize*4, theme.smallTextSize*4]
     property int othersWidth: 0 // 除第一列以外的列宽，初始时固定下来。
     Component.onCompleted: {
-        if(tableDict==undefined){
-            tableDict = {}
+        if(filesDict==undefined){
+            filesDict = {}
         }
         // 计算剩余列的固定值。
         for(let i = 1;i < columnsWidth.length; i++)
@@ -53,7 +53,7 @@ Item{
     // 清空表格
     function clearTable() {
         tableModel.clear()
-        tableDict = {}
+        filesDict = {}
     }
 
     // 定义信号

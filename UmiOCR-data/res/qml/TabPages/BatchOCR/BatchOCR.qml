@@ -15,18 +15,21 @@ TabPage {
     // ========================= 【逻辑】 =========================
 
     // 文件表格模型
-    property alias tableModel: filesTableView.tableModel_
-    property alias tableDict: filesTableView.tableDict
+    property alias filesModel: filesTableView.filesModel
+    property alias filesDict: filesTableView.filesDict
     property string msnState: "" // OCR任务状态
     property var missionInfo: {} // 当前任务信息，耗时等
     property string missionShow: "" // 当前任务信息展示字符串
+
+    // 输出表格模型
+    property alias resultsModel: resultsTableView.resultsModel
 
     Component.onCompleted: {
         setMsnState("none")
     }
     // TODO: 测试用
     Timer {
-        interval: 1000
+        interval: 200
         running: true
         onTriggered: {
             addImages(
@@ -46,7 +49,7 @@ TabPage {
                     "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-23 191053.png",
                 ]
             )
-            // ocrImages()
+            ocrImages()
         }
     }
 
@@ -65,20 +68,20 @@ TabPage {
         // 调用Python方法
         const res = tabPage.callPy("findImages", fileList)
         // 结果写入数据
-        if(tableDict==undefined){
-            tableDict = {}
+        if(filesDict==undefined){
+            filesDict = {}
         }
         for(let i in res){
             // 检查重复
-            if(tableDict.hasOwnProperty(res[i])){
+            if(filesDict.hasOwnProperty(res[i])){
                 continue
             }
             // 添加到字典中
-            tableDict[res[i]] = {
-                index: tableModel.rowCount
+            filesDict[res[i]] = {
+                index: filesModel.rowCount
             }
             // 添加到表格中
-            tableModel.appendRow({
+            filesModel.appendRow({
                 "filePath": res[i],
                 "time": "",
                 "state": "",
@@ -100,12 +103,12 @@ TabPage {
 
     // 运行OCR
     function ocrImages() {
-        let msnLength = Object.keys(tableDict).length
+        let msnLength = Object.keys(filesDict).length
         if(msnLength <= 0)
             return
         // 刷新表格
-        for(let path in tableDict){
-            tableModel.setRow(tableDict[path].index, {
+        for(let path in filesDict){
+            filesModel.setRow(filesDict[path].index, {
                     "filePath": path,
                     "time": "",
                     "state": "",
@@ -121,9 +124,17 @@ TabPage {
         missionProgress.percent = 0 // 进度条显示
         missionShow = `0s  0/${msnLength}  0%` // 信息显示
         // 开始运行
-        tabPage.callPy("msnPaths", Object.keys(tableDict))
+        tabPage.callPy("msnPaths", Object.keys(filesDict))
     }
 
+    // 添加一个结果
+    function addResult(path, date, text) {
+        resultsModel.append({
+            "textLeft_": path,
+            "textRight_": date,
+            "textMain_": text
+        })
+    }
     // ========================= 【python调用qml】 =========================
 
     /* 
@@ -158,36 +169,46 @@ TabPage {
 
     // 设置一个OCR的返回值
     function setOcrRes(path, res) {
-        if(!tableDict.hasOwnProperty(path)){
+        if(!filesDict.hasOwnProperty(path)){
             console.error("【Error】OCR结果不存在qml队列！", path)
             return
         }
         // 刷新耗时显示
-        let currentTime = new Date().getTime()
+        const date = new Date();
+        const currentTime = date.getTime()
         missionInfo.costTime = currentTime - missionInfo.startTime
         missionInfo.nowNum = missionInfo.nowNum + 1
-        let costTime = (missionInfo.costTime/1000).toFixed(1)
-        let nowNum = missionInfo.nowNum
-        let percent = Math.floor(((nowNum/missionInfo.allNum)*100))
+        const costTime = (missionInfo.costTime/1000).toFixed(1)
+        const nowNum = missionInfo.nowNum
+        const percent = Math.floor(((nowNum/missionInfo.allNum)*100))
         missionProgress.percent = nowNum/missionInfo.allNum // 进度条显示
         missionShow = `${costTime}s  ${nowNum}/${missionInfo.allNum}  ${percent}%` // 信息显示
-        // 刷新表格显示
-        let index = tableDict[path].index
-        let time = res.time.toFixed(2)
+        const index = filesDict[path].index
+        const time = res.time.toFixed(2)
+        const filename = path.split('/').pop()
+        const formattedDate = `${date.getMonth()+1}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}`
         let state = ""
+        let ocrText = ""
         switch(res.code){
             case 100:
-                state = "√ "+res.score.toFixed(2);break
+                state = "√ "+res.score.toFixed(2)
+                // 合并文字
+                const textArray = res.data.map(item => item.text);
+                ocrText = textArray.join('\n');
+                break
             case 101:
                 state = "√ ---- ";break
             default:
                 state = "× "+res.code;break
         }
-        tableModel.setRow(index, {
-                "filePath": path,
-                "time": time,
-                "state": state,
-            })
+        // 刷新文件表格显示
+        filesModel.setRow(index, {
+            "filePath": path,
+            "time": time,
+            "state": state,
+        })
+        // 提取文字，添加到结果表格
+        addResult(filename, formattedDate, ocrText)
     }
 
     // ========================= 【布局】 =========================
@@ -281,47 +302,14 @@ TabPage {
             }
         }
         // 右面板：文字输出 & 设置
-        rightItem: Panel{
+        rightItem: Panel {
             anchors.fill: parent
 
-            ResultLayout {
+            ResultsTableView {
+                id: resultsTableView
                 anchors.fill: parent
                 anchors.margins: theme.spacing
             }
-            // Rectangle {
-            //     id: testContainer
-            //     anchors.fill: parent
-            //     anchors.margins: theme.spacing
-            //     color: theme.bgColor
-
-            //     property string testStr: ""
-                
-            //     Component.onCompleted: {
-            //         for(let i =0;i<100;i++) testStr += "测试文本"
-            //     }
-                
-                    
-            //     ScrollView {
-            //         id: textScroll
-            //         anchors.fill: parent
-            //         anchors.margins: theme.spacing
-            //         contentWidth: width // 内容宽度
-            //         clip: true // 溢出隐藏
-
-            //             TextEdit {
-            //             text: testContainer.testStr
-            //             width: textScroll.width // 与内容宽度相同
-            //             textFormat: TextEdit.MarkdownText // md格式
-            //             wrapMode: TextEdit.Wrap // 尽量在单词边界处换行
-            //             readOnly: true // 只读
-            //             selectByMouse: true // 允许鼠标选择文本
-            //             selectByKeyboard: true // 允许键盘选择文本
-            //             color: theme.textColor
-            //             font.pixelSize: theme.textSize
-            //             font.family: theme.fontFamily
-            //         }
-            //     }
-            // }
         }
     }
 
