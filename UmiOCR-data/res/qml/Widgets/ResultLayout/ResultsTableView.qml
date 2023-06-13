@@ -28,12 +28,6 @@ Item {
                 return tableView.width
             }
         }
-        // 高度设定函数
-        // rowHeightProvider: (row)=>{
-        //     if(column == 0){ // 第一列宽度，变化值
-        //         return tableView.width
-        //     }
-        // }
         onWidthChanged: forceLayout()  // 组件宽度变化时重设列宽
         // 元素
         delegate: ResultTextContainer {

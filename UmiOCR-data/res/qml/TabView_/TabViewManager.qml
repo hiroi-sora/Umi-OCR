@@ -117,6 +117,14 @@ Item {
             return
         if(!isIndex(infoIndex, infoList, "【Error】更改标签页失败：信息"))
             return
+        // 检查pageList中是否已有目标页面，有则展示该页
+        for(let i in pageList) {
+            if(pageList[i].infoIndex===infoIndex) {
+                showTabPage(i)
+                return
+            }
+        }
+        // 尚无目标页，则删除原页，新增目标页
         if(!page.changePage(index, infoIndex)) return
         bar.changeTab(index, infoList[infoIndex].title)
         openPageList[index] = infoList[infoIndex].url

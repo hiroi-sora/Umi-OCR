@@ -106,7 +106,7 @@ TabPage {
                 contentWidth: width // 内容宽度
                 clip: true // 溢出隐藏
 
-                    TextEdit {
+                TextEdit {
                     text: introText
                     width: introView.width // 与内容宽度相同
                     textFormat: TextEdit.MarkdownText // md格式
