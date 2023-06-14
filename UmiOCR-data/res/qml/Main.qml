@@ -39,20 +39,6 @@ Window {
         TabViewManager { id: tab_ }
         property var tab: tab_ // 通过 app.tab 来访问
 
-        // 持久化存储
-        Settings_ { 
-            id: settings
-            category: "TabPage" // 自定义类别名称
-
-            property alias openPageList: tab_.openPageList
-            property alias showPageIndex: tab_.showPageIndex
-            property alias barIsLock: tab_.barIsLock
-
-            property bool refresh: false // 用于刷新
-            function save(){ // 手动刷新
-                refresh=!refresh
-            }
-        }
     }
 
     // ========================= 【布局】 =========================

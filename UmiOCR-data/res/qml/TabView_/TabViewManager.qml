@@ -5,10 +5,10 @@
 
 import QtQuick 2.15
 import "../TabPages"
-
+import "../Configs"
 
 Item {
-
+    id: tabViewManager
     // ========================= 【子控制器】 =========================
 
     PagesManager{ id: page_ } // 页管理器
@@ -21,6 +21,21 @@ Item {
     property bool barIsLock: false // 栏是否已锁定
     property int showPageIndex: -1 // 当前展示的标签页序号
     property var openPageList: [] // 当前已打开的的标签页列表，存放URL，用于记录历史操作
+
+    // 持久化存储
+    Settings_ { 
+        id: settings
+        category: "TabPageManager" // 自定义类别名称
+
+        property alias openPageList: tabViewManager.openPageList
+        property alias showPageIndex: tabViewManager.showPageIndex
+        property alias barIsLock: tabViewManager.barIsLock
+
+        property bool refresh: false // 用于刷新
+        function save(){ // 手动刷新
+            refresh=!refresh
+        }
+    }
 
     // ========================= 【初始化】 =========================
 
@@ -100,7 +115,7 @@ Item {
         if(showPageIndex > index) { // 若选中页在被删除页之后
             showPageIndex-- // 选中页序号前移
         }
-        if(showPageIndex == index){ // 若选中页就是被删除页
+        else if(showPageIndex == index){ // 若选中页就是被删除页
             if(pageList.length == 0){ // 已经没页了，就补充一个导航页
                 addNavi()
             } else if (index == pageList.length){ // 原本在队尾，则展示当前队尾页
@@ -108,6 +123,9 @@ Item {
             } else { // 原本不在队尾，则展示原本的后一个页
                 showTabPage(index)
             }
+        }
+        else { // 删除不影响选中页，则手动刷新存储
+            settings.save()
         }
     }
 
