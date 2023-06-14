@@ -10,6 +10,7 @@ import Qt.labs.settings 1.1
 
 import "Themes"
 import "TabView_"
+import "Configs"
 
 Window {
 // ApplicationWindow {
@@ -39,11 +40,9 @@ Window {
         property var tab: tab_ // 通过 app.tab 来访问
 
         // 持久化存储
-        Settings { 
+        Settings_ { 
             id: settings
             category: "TabPage" // 自定义类别名称
-            fileName: "./.settings_ui.ini" // 配置文件名
-
 
             property alias openPageList: tab_.openPageList
             property alias showPageIndex: tab_.showPageIndex
