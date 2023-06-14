@@ -96,7 +96,7 @@ Button {
             acceptedButtons: Qt.LeftButton | Qt.MiddleButton
 
             // 拖拽
-            drag.target: app.tab.barIsLock ? null : parent.parent // 动态启用、禁用拖拽
+            drag.target: app.tab.barIsLock ? undefined : parent.parent // 动态启用、禁用拖拽
             drag.axis: Drag.XAxis // 只能沿X轴
             drag.threshold: 50 // 起始阈值
             property bool dragActive: drag.active // 动态记录拖拽状态

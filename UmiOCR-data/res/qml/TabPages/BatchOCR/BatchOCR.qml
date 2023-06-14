@@ -14,6 +14,9 @@ TabPage {
 
     // ========================= 【逻辑】 =========================
 
+    // 配置
+    BatchOCRConfigs {} 
+
     // 文件表格模型
     property alias filesModel: filesTableView.filesModel
     property alias filesDict: filesTableView.filesDict
@@ -49,7 +52,7 @@ TabPage {
                     "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-23 191053.png",
                 ]
             )
-            ocrImages()
+            // ocrImages()
         }
     }
 
