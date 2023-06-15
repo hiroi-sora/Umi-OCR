@@ -39,18 +39,46 @@ Item {
                     property string text_: modelData.title
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
+                    checkable: true
+                    width: contentText.contentWidth + theme.textSize*2
 
                     contentItem: Text_ {
+                        id: contentText
                         text: parent.text_
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
+                        font.bold: parent.checked
                     }
-
                     background: Rectangle {
                         anchors.fill: parent
-                        color: parent.pressed ? theme.coverColor4 : (
-                            parent.hovered ? theme.coverColor2 : theme.coverColor0
+                        color: parent.checked ? theme.coverColor4 : (
+                            parent.hovered ? theme.coverColor3 : theme.coverColor2
                         )
+                    }
+
+                    // 选中的动画
+                    property bool runAni: false
+                    onCheckedChanged: {
+                        runAni = checked
+                    }
+                    SequentialAnimation{ // 串行动画
+                        running: theme.enabledEffect && runAni
+                        // 动画1：放大
+                        NumberAnimation{
+                            target: contentText
+                            property: "scale"
+                            to: 1.2
+                            duration: 80
+                            easing.type: Easing.OutCubic
+                        }
+                        // 动画2：缩小
+                        NumberAnimation{
+                            target: contentText
+                            property: "scale"
+                            to: 1
+                            duration: 150
+                            easing.type: Easing.InCubic
+                        }
                     }
                 }
             }
@@ -74,28 +102,21 @@ Item {
         anchors.right: parent.right
         anchors.top: topContainer.bottom
         anchors.bottom: parent.bottom
-        anchors.topMargin: theme.spacing
+        anchors.topMargin: theme.smallSpacing
         currentIndex: bar.currentIndex
         interactive: false // 禁止直接滑动视图本身
+        Component.onCompleted:{
+            if(!theme.enabledEffect) // 关闭动画
+                contentItem.highlightMoveDuration = 0
+        }
         
         Repeater {
             model: tabsModel
 
             Item {
                 Component.onCompleted: {
-                    if(modelData.component) {
-                        modelData.component.parent = this
-                    }
-                    else {
-                        const newObject = Qt.createQmlObject(`
-                            import QtQuick 2.0
-                            Rectangle {
-                                color: "red"
-                                anchors.fill: parent
-                            }
-                            `,this
-                        );
-                    }
+                    modelData.component.parent = this
+                    modelData.component.visible = true
                 }
             }
         }

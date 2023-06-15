@@ -159,7 +159,7 @@ TabPage {
                 runBtn.enabled = false
                 break;
             case "run":  // 工作中
-                runBtn.text_ = qsTr("暂停任务")
+                runBtn.text_ = qsTr("停止任务")
                 runBtn.enabled = true
                 break;
             case "stop": // 停止中
@@ -233,7 +233,7 @@ TabPage {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.margins: theme.spacing
-                height: theme.textSize * 2.6
+                height: theme.textSize * 2
                 clip: true
 
                 // 右边按钮
@@ -313,6 +313,7 @@ TabPage {
             ResultsTableView {
                 id: resultsTableView
                 anchors.fill: parent
+                visible: false
             }
 
             // 配置项控制板
@@ -322,14 +323,31 @@ TabPage {
 
                 tabsModel: [
                     {
-                        "key": "ocrResult",
-                        "title": qsTr("信息"),
-                        "component": resultsTableView,
+                        "key": "configs",
+                        "title": qsTr("设置"),
+                        "component": Qt.createQmlObject(`
+                            import QtQuick 2.0
+                            Rectangle {
+                                color: "blue"
+                                anchors.fill: parent
+                            }
+                            `, this),
                     },
                     {
                         "key": "configs",
-                        "title": qsTr("设置"),
-                        "component": undefined,
+                        "title": qsTr("测试项111"),
+                        "component": Qt.createQmlObject(`
+                            import QtQuick 2.0
+                            Rectangle {
+                                color: "red"
+                                anchors.fill: parent
+                            }
+                            `, this),
+                    },
+                    {
+                        "key": "ocrResult",
+                        "title": qsTr("信息"),
+                        "component": resultsTableView,
                     },
                 ]
             }
