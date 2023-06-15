@@ -222,16 +222,7 @@ Item{
                     }
                 }
 
-                // 右边滚动条
-                Rectangle {
-                    id: scrollbar
-                    visible: tableView.visibleArea.heightRatio < 1
-                    anchors.right: parent.right
-                    y: tableView.visibleArea.yPosition * parent.height
-                    height: tableView.visibleArea.heightRatio * parent.height
-                    width: theme.smallSpacing * 0.5
-                    color: theme.coverColor2
-                }
+                TableViewScrollbar { tableView:tableView }
             }
         }
 
