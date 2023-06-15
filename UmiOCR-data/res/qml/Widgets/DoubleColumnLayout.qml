@@ -87,7 +87,7 @@ Item {
             MouseArea {
                 anchors.fill: parent
                 hoverEnabled: true // 鼠标悬停时，分割线颜色变深
-                onEntered: {parent.isHover = true}
+                onEntered: parent.isHover = true
                 onExited: parent.isHover = false
                 cursorShape: Qt.SizeHorCursor // 鼠标指针为双箭头
                 // 拖拽

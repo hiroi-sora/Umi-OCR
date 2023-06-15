@@ -180,6 +180,7 @@ Item{
                     contentWidth: parent.width // 内容宽度
                     model: tableModel // 模型
                     flickableDirection: Flickable.VerticalFlick // 只允许垂直滚动
+                    property int hoveredRow: -1 // 鼠标悬停的列表序号
 
                     // 宽度设定函数
                     columnWidthProvider: (column)=>{
@@ -202,11 +203,21 @@ Item{
 
                         Text_ {
                             text: display
-                            color: theme.subTextColor
+                            color: row===tableView.hoveredRow ? theme.textColor : theme.subTextColor
                             anchors.right: parent.right
                             anchors.rightMargin: theme.smallTextSize * 0.5
                             font.pixelSize: theme.smallTextSize
                             font.family: theme.dataFontFamily
+                        }
+
+                        MouseArea { // 鼠标悬停在一行上时，高亮一行
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            onEntered: tableView.hoveredRow = row
+                            onExited:  tableView.hoveredRow = -1
+                            onClicked: {
+                                console.log("点击图片：", tableModel.getRow(row).filePath)
+                            }
                         }
                     }
                 }

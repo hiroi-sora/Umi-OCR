@@ -30,7 +30,7 @@ import QtQuick 2.15
 Item {
     property string category_: "" // 配置名
     property var configDict: { } // 定义字典，静态参数
-    property var panelComponent: panelComponent // 自动生成组件
+    property alias panelComponent: panelComponent // 自动生成的组件
 
     property var originDict: { } // 键字典，键为展开形式，值指向configDict的项
     property var valueDict: { } // 值字典，动态变化
