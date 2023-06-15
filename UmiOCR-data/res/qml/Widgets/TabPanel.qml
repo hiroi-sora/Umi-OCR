@@ -47,7 +47,7 @@ Item {
                         text: parent.text_
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
-                        font.bold: parent.checked
+                        color: parent.checked ? theme.textColor : theme.subTextColor
                     }
                     background: Rectangle {
                         anchors.fill: parent
@@ -67,7 +67,7 @@ Item {
                         NumberAnimation{
                             target: contentText
                             property: "scale"
-                            to: 1.2
+                            to: 1.3
                             duration: 80
                             easing.type: Easing.OutCubic
                         }

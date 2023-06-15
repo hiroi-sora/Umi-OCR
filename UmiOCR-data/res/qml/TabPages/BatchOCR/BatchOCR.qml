@@ -243,6 +243,7 @@ TabPage {
                     anchors.bottom: parent.bottom
                     anchors.right: parent.right
                     width: theme.textSize * 6
+                    bold_: true
 
                     bgColor_: theme.coverColor1
                     bgHoverColor_: theme.coverColor2
@@ -329,17 +330,6 @@ TabPage {
                             import QtQuick 2.0
                             Rectangle {
                                 color: "blue"
-                                anchors.fill: parent
-                            }
-                            `, this),
-                    },
-                    {
-                        "key": "configs",
-                        "title": qsTr("测试项111"),
-                        "component": Qt.createQmlObject(`
-                            import QtQuick 2.0
-                            Rectangle {
-                                color: "red"
                                 anchors.fill: parent
                             }
                             `, this),

@@ -16,7 +16,7 @@ Theme {
     coverColor1: "#11000000" // 大部分需要突出的背景
     coverColor2: "#22000000" // 按钮悬停
     coverColor3: "#33000000" // 阴影
-    coverColor4: "#44000000" // 按钮按下
+    coverColor4: "#55000000" // 按钮按下
 
     // 标签栏颜色
     tabBarColor: "#F3F3F3"
