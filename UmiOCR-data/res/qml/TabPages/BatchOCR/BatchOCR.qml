@@ -15,7 +15,7 @@ TabPage {
     // ========================= 【逻辑】 =========================
 
     // 配置
-    BatchOCRConfigs {} 
+    BatchOCRConfigs { id: batchOCRConfigs } 
 
     // 文件表格模型
     property alias filesModel: filesTableView.filesModel
@@ -326,13 +326,7 @@ TabPage {
                     {
                         "key": "configs",
                         "title": qsTr("设置"),
-                        "component": Qt.createQmlObject(`
-                            import QtQuick 2.0
-                            Rectangle {
-                                color: "blue"
-                                anchors.fill: parent
-                            }
-                            `, this),
+                        "component": batchOCRConfigs.panelComponent,
                     },
                     {
                         "key": "ocrResult",
