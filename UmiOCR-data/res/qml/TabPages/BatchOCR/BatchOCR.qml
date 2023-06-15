@@ -306,12 +306,32 @@ TabPage {
         }
         // 右面板：文字输出 & 设置
         rightItem: Panel {
+            id: rightPanel
             anchors.fill: parent
 
+            // 结果面板
             ResultsTableView {
                 id: resultsTableView
                 anchors.fill: parent
+            }
+
+            // 配置项控制板
+            TabPanel {
+                anchors.fill: parent
                 anchors.margins: theme.spacing
+
+                tabsModel: [
+                    {
+                        "key": "ocrResult",
+                        "title": qsTr("信息"),
+                        "component": resultsTableView,
+                    },
+                    {
+                        "key": "configs",
+                        "title": qsTr("设置"),
+                        "component": undefined,
+                    },
+                ]
             }
         }
     }

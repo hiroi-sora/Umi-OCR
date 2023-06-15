@@ -67,10 +67,12 @@ Item {
         keyDict = {}
         valueDict = {}
         handleConfigGroup(configDict)
-        console.log(`配置${category_}: `,JSON.stringify(keyDict, null, 4))
-        console.log(`配置${category_}: `,JSON.stringify(valueDict, null, 4))
+        // console.log(`配置${category_}: `,JSON.stringify(keyDict, null, 4))
+        // console.log(`配置${category_}: `,JSON.stringify(valueDict, null, 4))
     }
 
+    // 生成控件
+    // function get
 
     // 存储
     Settings_ {
