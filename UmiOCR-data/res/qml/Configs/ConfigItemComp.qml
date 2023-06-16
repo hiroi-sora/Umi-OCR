@@ -26,11 +26,10 @@ Item {
     // 获取或设置值
     function value(v=undefined) {
         if(v===undefined) { // 获取
-            return configs.valueDict[key]
+            return configs.getValue(key)
         }
         else { // 设置
-            configs.valueDict[key] = v
-            configs.saveKey(key)
+            configs.setValue(key, v)
         }
     }
     

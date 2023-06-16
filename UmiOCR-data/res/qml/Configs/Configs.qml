@@ -57,7 +57,8 @@ Item {
             // 类型判断
             if (typeof config.default === "boolean") {
                 config.type = "boolean"
-                val = val=="true" // 字符串转布尔
+                if(typeof val === "string")
+                    val = val=="true" // 字符串转布尔
             }
             config.fullKey = key // 记录完整key
             valueDict[key] = val // 设当前值
@@ -88,9 +89,32 @@ Item {
         console.log(`配置${category_}: `,JSON.stringify(valueDict, null, 4))
     }
 
-    // 将valueDict[key]存储
-    function saveKey(key) {
-        settings.setValue(key, valueDict[key]) // 存储
+    // 获取值，设置值
+    function getValue(key) {
+        return valueDict[key]
+    }
+    function setValue(key, value) {
+        valueDict[key] = value
+        saveValue(key)
+    }
+    // 带缓存的存储值
+    property var cacheDict: {} // 缓存
+    property int cacheInterval: 500 // 缓存写入本地时间
+    function saveValue(key) {
+        cacheDict[key] = valueDict[key]
+        cacheTimer.restart()
+    }
+    // 保存计时器
+    Timer {
+        id: "cacheTimer"
+        running: false
+        interval: cacheInterval
+        onTriggered: {
+            for(let k in cacheDict) {
+                settings.setValue(k, cacheDict[k]) // 缓存写入本地
+            }
+            cacheDict = {} // 清空缓存
+        }
     }
 
     // 存储
@@ -100,6 +124,7 @@ Item {
     }
     // 初始化
     Component.onCompleted: { 
+        cacheDict = {}
         initConfigDict() 
         getCinfigsComponent()
     }
