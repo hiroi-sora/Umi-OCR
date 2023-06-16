@@ -32,6 +32,11 @@ QtObject {
     // 次要文字颜色
     property color subTextColor
 
+    // 表示允许、成功的颜色
+    property color yesColor: "green"
+    // 表示禁止、失败的颜色
+    property color noColor: "red"
+
     // ========================= 【字体】 =========================
 
     // 主要UI文字字体，内容可控，可以用裁切的ttf

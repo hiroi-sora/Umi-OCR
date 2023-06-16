@@ -240,7 +240,7 @@ Item {
                         anchors.fill: parent
                         anchors.margins: 4
                         icon: "close"
-                        color: "red"
+                        color: theme.noColor
                     }
                 }
 
@@ -248,7 +248,7 @@ Item {
                 Rectangle {
                     visible: checked
                     anchors.fill: parent
-                    color: "green"
+                    color: theme.yesColor
                     radius: theme.btnRadius
                     Icon_ {
                         anchors.fill: parent
