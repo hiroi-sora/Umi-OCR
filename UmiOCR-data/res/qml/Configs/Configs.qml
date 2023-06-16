@@ -88,6 +88,11 @@ Item {
         console.log(`配置${category_}: `,JSON.stringify(valueDict, null, 4))
     }
 
+    // 将valueDict[key]存储
+    function saveKey(key) {
+        settings.setValue(key, valueDict[key]) // 存储
+    }
+
     // 存储
     Settings_ {
         id: settings
@@ -224,13 +229,17 @@ Item {
             property bool checked: true
             cursorShape_: Qt.PointingHandCursor
 
-            onClicked: console.log("按下！")
-
             // 初始化
             Component.onCompleted: {
                 checked = value()
             }
-            
+
+            // 按下
+            onClicked: {
+                checked = !checked
+                value(checked)
+            }
+
             // 开关图标
             Item {
                 id: switchBtn
