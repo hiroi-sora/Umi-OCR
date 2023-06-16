@@ -220,9 +220,8 @@ Item{
                             }
                         }
                     }
+                    ScrollBar.vertical: ScrollBar { }
                 }
-
-                TableViewScrollbar { tableView:tableView }
             }
         }
 
