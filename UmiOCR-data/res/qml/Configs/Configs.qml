@@ -219,8 +219,11 @@ Item {
 
         ConfigItemComp {
             property bool checked: true
+            cursorShape_: Qt.PointingHandCursor
 
-            // 开关
+            onClicked: console.log("按下！")
+
+            // 开关图标
             Item {
                 id: switchBtn
                 anchors.right: parent.right
@@ -258,7 +261,6 @@ Item {
                 }
 
             }
-
         }
     }
 }
