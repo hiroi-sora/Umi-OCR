@@ -47,6 +47,10 @@ Item {
         valueDict = {}
         function handleConfigItem(config, key) { // 处理一个配置项
             originDict[key] = config // configDict项的引用绑定到originDict
+            // 类型判断
+            if (typeof config.default === "boolean") {
+                config.type = "boolean"
+            }
             // 从配置文件中取值
             let val = settings.value(key, undefined)
             if(val === undefined) {
@@ -62,14 +66,17 @@ Item {
                 if(typeof config !== "object"){
                     continue
                 }
-                if(!config.hasOwnProperty("title")) { // 补充空白标题
+                // 补充空白参数
+                if(!config.hasOwnProperty("title")) // 标题
                     config.title = ""
-                }
-                if(config.hasOwnProperty("group")) { // 若是配置项组，递归遍历
+                if(!config.hasOwnProperty("type")) // 类型
+                    config.type = ""
+                // 若是配置项组，递归遍历
+                if(config.type==="group") { 
+                    config.fullKey = prefix+key // 记录完整key
                     handleConfigGroup(config, prefix+key+".") // 前缀加深一层
                 }
                 else { // 若是配置项
-                    config.group = false
                     handleConfigItem(config, prefix+key)
                 }
             }
@@ -95,8 +102,11 @@ Item {
     // 初始化 自动生成组件
     function getCinfigsComponent() {
 
-        function handleConfigItem(config) { // 处理一个配置项
-            console.log("生成项", config.fullKey)
+        function handleConfigItem(config, parent) { // 处理一个配置项
+            // console.log("生成项", config.fullKey,"-", parent)
+            if (config.type === "boolean") {
+                compBoolean.createObject(parent, {"title":config.title})
+            }
         }
         function handleConfigGroup(group, parent=panelContainer) { // 处理一个配置组
             for(let key in group) {
@@ -104,17 +114,17 @@ Item {
                 if(typeof config !== "object"){
                     continue
                 }
-                if(config.group) { // 若是配置项组，递归遍历
-                    console.log("生成配置项组", key)
+                console.log("遍历", config.fullKey,"-", parent)
+                if(config.type === "group") { // 若是配置项组，递归遍历
+                    // console.log("生成配置项组", key)
                     // 若是外层，则生成外层group组件；若是内层则生成内层组件。
                     const c = parent===panelContainer ? compGroup : compGroupInner
                     const p = c.createObject(parent, {"title":config.title})
                     const par = p.container // 下一层的父级
-                    handleConfigGroup(config, parent=par) // 递归下一层
-                    console.log("结束配置项组", key)
+                    handleConfigGroup(config, par) // 递归下一层
                 }
                 else { // 若是配置项
-                    handleConfigItem(config)
+                    handleConfigItem(config, parent)
                 }
             }
         }
@@ -159,14 +169,19 @@ Item {
                 anchors.topMargin: theme.smallSpacing
                 color: theme.bgColor
                 radius: theme.panelRadius
-                height: childrenRect.height
+                height: childrenRect.height + theme.smallSpacing
                 
                 Column {
                     id: panelContainer
                     anchors.left: parent.left
                     anchors.right: parent.right
+                    anchors.top: parent.top
                     anchors.margins: theme.smallSpacing
-                    spacing: theme.smallSpacing
+                }
+
+                Item { // 底部占位
+                    anchors.top: panelContainer.bottom
+                    height: theme.smallSpacing
                 }
             }
         }
@@ -193,11 +208,30 @@ Item {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.top: groupText.bottom
-                anchors.topMargin: theme.smallSpacing
-                anchors.leftMargin: theme.textSize // 子项右偏移
-                spacing: theme.smallSpacing
+                anchors.leftMargin: theme.textSize*1.5 // 子项右偏移
             }
         }
     }
 
+    // 配置项：布尔值
+    Component {
+        id: compBoolean
+
+        ConfigItemComp {
+
+            // 开关图标
+            Rectangle {
+                anchors.right: parent.right
+                anchors.rightMargin: theme.smallSpacing
+                anchors.verticalCenter: parent.verticalCenter
+                height: theme.textSize
+                width: theme.textSize*2
+                color: theme.bgColor
+                radius: theme.btnRadius
+                border.width: 2
+                border.color: theme.coverColor4
+
+            }
+        }
+    }
 }

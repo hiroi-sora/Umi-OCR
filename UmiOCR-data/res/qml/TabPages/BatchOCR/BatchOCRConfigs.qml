@@ -12,7 +12,7 @@ Configs {
     configDict: {
         "output": {
             "title": qsTr("OCR结果保存"),
-            "group": true,
+            "type": "group",
 
             "directoryType": {
                 "title": qsTr("保存到"),
@@ -25,8 +25,9 @@ Configs {
             },
 
             "filesType": {
-                "title": qsTr("保存文件类型"),
-                "group": true,
+                "title": qsTr("保存文件类型："),
+                "type": "group",
+
                 "txt": {
                     "title": qsTr(".txt 标准格式"),
                     "default": true,
