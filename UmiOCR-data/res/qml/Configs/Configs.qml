@@ -30,6 +30,7 @@ import QtQuick.Controls 2.15
 import "../Widgets"
 
 Item {
+    id: configs
     property string category_: "" // 配置名
     property var configDict: { } // 定义字典，静态参数
     property alias panelComponent: panelComponent // 自动生成的组件
@@ -47,15 +48,16 @@ Item {
         valueDict = {}
         function handleConfigItem(config, key) { // 处理一个配置项
             originDict[key] = config // configDict项的引用绑定到originDict
-            // 类型判断
-            if (typeof config.default === "boolean") {
-                config.type = "boolean"
-            }
             // 从配置文件中取值
             let val = settings.value(key, undefined)
             if(val === undefined) {
                 val = config.default // 取默认值
                 settings.setValue(key, val) // 存储
+            }
+            // 类型判断
+            if (typeof config.default === "boolean") {
+                config.type = "boolean"
+                val = val=="true" // 字符串转布尔
             }
             config.fullKey = key // 记录完整key
             valueDict[key] = val // 设当前值
@@ -103,9 +105,12 @@ Item {
     function getCinfigsComponent() {
 
         function handleConfigItem(config, parent) { // 处理一个配置项
-            // console.log("生成项", config.fullKey,"-", parent)
+            let comp = undefined
             if (config.type === "boolean") {
-                compBoolean.createObject(parent, {"title":config.title})
+                comp = compBoolean
+            }
+            if(comp) {
+                comp.createObject(parent, {"key":config.fullKey, "configs": configs})
             }
         }
         function handleConfigGroup(group, parent=panelContainer) { // 处理一个配置组
@@ -114,9 +119,7 @@ Item {
                 if(typeof config !== "object"){
                     continue
                 }
-                console.log("遍历", config.fullKey,"-", parent)
                 if(config.type === "group") { // 若是配置项组，递归遍历
-                    // console.log("生成配置项组", key)
                     // 若是外层，则生成外层group组件；若是内层则生成内层组件。
                     const c = parent===panelContainer ? compGroup : compGroupInner
                     const p = c.createObject(parent, {"title":config.title})
@@ -223,6 +226,11 @@ Item {
 
             onClicked: console.log("按下！")
 
+            // 初始化
+            Component.onCompleted: {
+                checked = value()
+            }
+            
             // 开关图标
             Item {
                 id: switchBtn
