@@ -22,9 +22,11 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         width: theme.smallSpacing
         color: mouseArea.pressed ? theme.coverColor4 : theme.coverColor2
+        property real minHeight: width*2 // 最小高度
 
-        y: tableView.visibleArea.yPosition * parent.height
-        height: tableView.visibleArea.heightRatio * parent.height
+        property real originHeight: tableView.visibleArea.heightRatio * parent.height
+        y: tableView.visibleArea.yPosition * (parent.height-(originHeight<minHeight?(minHeight-originHeight):0))
+        height: Math.max(originHeight, minHeight)
         onYChanged: toShow()
         onHeightChanged: toShow()
     }
@@ -66,16 +68,16 @@ Item {
                 console.log("鼠标位置", relativeY)
             }
         }
-        onPositionChanged: {
-            if(pressed && height>0) {
-                let relativeMoveY = (mouse.y-dragStartY) / height
-                let realMoveY = relativeMoveY * tableView.contentHeight
-                let goY = dragStartContentY + realMoveY
-                goY = Math.max(0, Math.min(realMoveY, (tableView.contentHeight-height)));
-                tableView.contentY = goY
-                console.log("鼠标移动", goY)
-            }
-        }
+        // onPositionChanged: {
+        //     if(pressed && height>0) {
+        //         let relativeMoveY = (mouse.y-dragStartY) / height
+        //         let realMoveY = relativeMoveY * tableView.contentHeight
+        //         let goY = dragStartContentY + realMoveY
+        //         goY = Math.max(0, Math.min(realMoveY, (tableView.contentHeight-height)));
+        //         tableView.contentY = goY
+        //         console.log("鼠标移动", goY)
+        //     }
+        // }
     }
     Timer {
         id: timer
