@@ -218,20 +218,47 @@ Item {
         id: compBoolean
 
         ConfigItemComp {
+            property bool checked: true
 
-            // 开关图标
-            Rectangle {
+            // 开关
+            Item {
+                id: switchBtn
                 anchors.right: parent.right
                 anchors.rightMargin: theme.smallSpacing
                 anchors.verticalCenter: parent.verticalCenter
                 height: theme.textSize
                 width: theme.textSize*2
-                color: theme.bgColor
-                radius: theme.btnRadius
-                border.width: 2
-                border.color: theme.coverColor4
+
+                // 关闭：×
+                Rectangle {
+                    anchors.fill: parent
+                    radius: theme.btnRadius
+                    color: theme.bgColor
+                    border.width: 2
+                    border.color: theme.coverColor4
+                    Icon_ {
+                        anchors.fill: parent
+                        anchors.margins: 4
+                        icon: "close"
+                        color: "red"
+                    }
+                }
+
+                // 启用：√
+                Rectangle {
+                    visible: checked
+                    anchors.fill: parent
+                    color: "green"
+                    radius: theme.btnRadius
+                    Icon_ {
+                        anchors.fill: parent
+                        icon: "check"
+                        color: theme.bgColor
+                    }
+                }
 
             }
+
         }
     }
 }
