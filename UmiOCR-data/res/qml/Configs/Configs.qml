@@ -275,19 +275,7 @@ Item {
                 anchors.leftMargin: theme.smallSpacing
             }
             // 背景
-            MouseArea { // 鼠标悬停在一行上时，高亮一行
-                anchors.fill: parent
-                hoverEnabled: true
-                onEntered: bgRectangle.visible = true
-                onExited: bgRectangle.visible = false
-                Rectangle {
-                    id: bgRectangle
-                    visible: false
-                    anchors.fill: parent
-                    color: theme.coverColor1
-                    radius: theme.btnRadius
-                }
-            }
+            MouseAreaBackgroud { }
             // 内容
             Column {
                 id: panelContainer
@@ -368,11 +356,66 @@ Item {
         }
     }
     // 配置项：枚举
-    
     Component {
         id: compEnum
 
         ConfigItemComp {
+            ComboBox {
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.right: parent.right
+                anchors.margins: 4
+                anchors.rightMargin: theme.smallSpacing
+                width: parent.width*0.5
+
+                model: ["First", "Second", "Third"]
+
+                // 前景文字
+                contentItem: Text {
+                    text: parent.currentText
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: parent.left
+                    anchors.leftMargin: theme.smallSpacing
+                    verticalAlignment: Text.AlignVCenter
+                    font.pixelSize: theme.textSize
+                    font.family: theme.fontFamily
+                    color: theme.subTextColor
+                }
+                // 前景箭头
+                indicator: Icon_ {
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.right: parent.right
+                    anchors.margins: theme.smallSpacing
+                    height: theme.smallTextSize
+                    icon: "down"
+                    color: theme.subTextColor
+                }
+                // 背景
+                background: Rectangle {
+                    anchors.fill: parent
+                    color: theme.bgColor
+                    border.width: 1
+                    border.color: theme.coverColor4
+                    radius: theme.btnRadius
+                }
+                // 选项
+                delegate: ItemDelegate {
+                    width: parent.width
+                    height: theme.textSize + theme.smallSpacing
+                    Text {
+                        text: modelData
+                        anchors.left: parent.left
+                        anchors.leftMargin: theme.smallSpacing
+                        font.pixelSize: theme.textSize
+                        font.family: theme.fontFamily
+                        color: theme.subTextColor
+                    }
+                    MouseAreaBackgroud {
+                        radius_: 0
+                        onClicked: parent.clicked()
+                    }
+                }
+            }
         }
     }
 }

@@ -18,6 +18,7 @@ Item {
     anchors.left: parent.left
     anchors.right: parent.right
     height: theme.textSize + theme.spacing
+    clip: true
     // 初始化
     Component.onCompleted: {
         origin = configs.originDict[key]
@@ -41,20 +42,8 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
     }
     // 背景
-    MouseArea { // 鼠标悬停在一行上时，高亮一行
-        anchors.fill: parent
-        hoverEnabled: true
-        onEntered: bgRectangle.visible = true
-        onExited: bgRectangle.visible = false
+    MouseAreaBackgroud {
         cursorShape: cursorShape_
         onClicked: parent.clicked()
-        Rectangle {
-            id: bgRectangle
-            visible: false
-            anchors.fill: parent
-            color: theme.coverColor1
-            radius: theme.btnRadius
-        }
     }
-    
 }
