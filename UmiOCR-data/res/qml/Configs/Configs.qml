@@ -360,15 +360,42 @@ Item {
         id: compEnum
 
         ConfigItemComp {
+
+            property var optionsList: [] // 候选列表原型
+            // 初始化
+            Component.onCompleted: {
+                optionsList = origin.optionsList
+                let model = []
+                let index = 0
+                const v = value()
+                for(let i=0, l=optionsList.length; i<l; i++) {
+                    const opt = optionsList[i]
+                    model.push(opt[1]) // 显示标题
+                    if(v==opt[0]) {
+                        index = i
+                    }
+                }
+                comboBox.model = model
+                comboBox.currentIndex = index
+                console.log("数据", optionsList)
+            }
+            // 更新数值
+            function set() {
+                const curr = optionsList[comboBox.currentIndex][0]
+                if(value() != curr) {
+                    value(curr)
+                }
+            }
+
             ComboBox {
+                id: comboBox
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
                 anchors.right: parent.right
-                anchors.margins: 4
-                anchors.rightMargin: theme.smallSpacing
+                anchors.margins: 1
                 width: parent.width*0.5
-
-                model: ["First", "Second", "Third"]
+                model: []
+                onCurrentIndexChanged: set() // 数值刷新
 
                 // 前景文字
                 contentItem: Text {
@@ -393,10 +420,18 @@ Item {
                 // 背景
                 background: Rectangle {
                     anchors.fill: parent
-                    color: theme.bgColor
-                    border.width: 1
-                    border.color: theme.coverColor4
+                    color: "#00000000"
+                    border.width: 2
+                    border.color: theme.coverColor2
                     radius: theme.btnRadius
+                    
+                    // 背景
+                    MouseAreaBackgroud {
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: {
+                            comboBox.popup.opened ? comboBox.popup.close() : comboBox.popup.open()
+                        }
+                    }
                 }
                 // 选项
                 delegate: ItemDelegate {
