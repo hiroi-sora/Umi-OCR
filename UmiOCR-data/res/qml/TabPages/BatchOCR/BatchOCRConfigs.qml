@@ -16,8 +16,10 @@ Configs {
 
             "directoryType": {
                 "title": qsTr("保存到"),
-                "default": 0,
-                "optionsList": [qsTr("图片原目录"), qsTr("指定目录")],
+                "optionsList": [
+                    ["default", qsTr("图片原目录")],
+                    ["specify", qsTr("指定目录")],
+                ],
             },
             "directory": {
                 "title": qsTr("指定目录"),

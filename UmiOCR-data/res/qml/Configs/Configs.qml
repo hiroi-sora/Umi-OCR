@@ -9,13 +9,20 @@ configDict: {
 
     "配置项组": {
         "title": 显示名称，可选，填写时自动生成控件,
-        "group": true,
-        "配置项或配置项组": ……
+        "type": "group",
+        "配置项或配置项组"
     },
 
-    "常规配置项": {
-        "title": 显示名称，可选，填写时自动生成控件,
-        "default": 默认值，支持string，number，bool,
+    "布尔 boolean （开关）": {
+        "title": ,
+        "default": true / false,
+    },
+    "枚举 enum （下拉框）": {
+        "title": ,
+        "optionsList": [
+            ["键1", "名称1"],
+            ["键2", "名称2"],
+        ],
     },
 
 }
@@ -47,19 +54,44 @@ Item {
         originDict = {}
         valueDict = {}
         function handleConfigItem(config, key) { // 处理一个配置项
-            originDict[key] = config // configDict项的引用绑定到originDict
+            // 类型判断
+            if (typeof config.default === "boolean") { // 布尔
+                config.type = "boolean"
+            }
+            else if (config.hasOwnProperty("optionsList")) { // 枚举
+                config.type = "enum"
+                config.default = config.optionsList[0][0]
+            }
+            else {
+                console.error("【Error】未知类型的配置项："+key)
+                return
+            }
             // 从配置文件中取值
             let val = settings.value(key, undefined)
-            if(val === undefined) {
-                val = config.default // 取默认值
+            let flag = false
+            // 检查和格式化存储值类型
+            if(val !== undefined) { 
+                switch(config.type) {
+                    case "boolean": // 布尔，记录参数字符串转布尔值
+                        val = val=="true"
+                        flag = true
+                        break
+                    case "enum": // 枚举，检查记录参数是否在列表内
+                        for(let i in config.optionsList) {
+                            if(config.optionsList[i][0] == val) {
+                                flag = true
+                                break
+                            }
+                        }
+                        break
+                }
+            }
+            if(!flag) { // 未有存储项或类型检查不合格，则取默认值
+                val = config.default
                 settings.setValue(key, val) // 存储
+                console.log(`${key}  取默认值 ${val}`)
             }
-            // 类型判断
-            if (typeof config.default === "boolean") {
-                config.type = "boolean"
-                if(typeof val === "string")
-                    val = val=="true" // 字符串转布尔
-            }
+            originDict[key] = config // configDict项的引用绑定到originDict
             config.fullKey = key // 记录完整key
             valueDict[key] = val // 设当前值
         }
@@ -136,8 +168,13 @@ Item {
 
         function handleConfigItem(config, parent) { // 处理一个配置项
             let comp = undefined
-            if (config.type === "boolean") {
-                comp = compBoolean
+            switch(config.type) {
+                case "boolean": // 布尔
+                    comp = compBoolean
+                    break
+                case "enum": // 枚举
+                    comp = compEnum
+                    break
             }
             if(comp) {
                 comp.createObject(parent, {"key":config.fullKey, "configs": configs})
@@ -146,9 +183,10 @@ Item {
         function handleConfigGroup(group, parent=panelContainer) { // 处理一个配置组
             for(let key in group) {
                 const config = group[key]
-                if(typeof config !== "object"){
+                if(typeof config !== "object")
                     continue
-                }
+                if(!config.title) // 无标题，则表示不生成组件
+                    continue
                 if(config.type === "group") { // 若是配置项组，递归遍历
                     // 若是外层，则生成外层group组件；若是内层则生成内层组件。
                     const c = parent===panelContainer ? compGroup : compGroupInner
@@ -234,8 +272,23 @@ Item {
                 id: groupText
                 text: title
                 anchors.left: parent.left
+                anchors.leftMargin: theme.smallSpacing
             }
-            
+            // 背景
+            MouseArea { // 鼠标悬停在一行上时，高亮一行
+                anchors.fill: parent
+                hoverEnabled: true
+                onEntered: bgRectangle.visible = true
+                onExited: bgRectangle.visible = false
+                Rectangle {
+                    id: bgRectangle
+                    visible: false
+                    anchors.fill: parent
+                    color: theme.coverColor1
+                    radius: theme.btnRadius
+                }
+            }
+            // 内容
             Column {
                 id: panelContainer
                 anchors.left: parent.left
@@ -312,6 +365,14 @@ Item {
                 }
 
             }
+        }
+    }
+    // 配置项：枚举
+    
+    Component {
+        id: compEnum
+
+        ConfigItemComp {
         }
     }
 }
