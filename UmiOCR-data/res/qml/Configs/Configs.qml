@@ -253,10 +253,12 @@ Item {
         ConfigItemComp {
             property bool checked: true
             cursorShape_: Qt.PointingHandCursor
+            property bool isInit: false
 
             // 初始化
             Component.onCompleted: {
                 checked = value()
+                isInit = true // 初始化完毕，允许启用动画
             }
 
             // 按下
@@ -266,39 +268,46 @@ Item {
             }
 
             // 开关图标
-            Item {
+            Rectangle {
                 id: switchBtn
                 anchors.right: parent.right
                 anchors.rightMargin: theme.smallSpacing
                 anchors.verticalCenter: parent.verticalCenter
                 height: theme.textSize
                 width: theme.textSize*2
+                clip: true
+                color: theme.bgColor
+                radius: theme.btnRadius
+                border.width: 2
+                border.color: theme.coverColor4
 
                 // 关闭：×
-                Rectangle {
+                Icon_ {
                     anchors.fill: parent
-                    radius: theme.btnRadius
-                    color: theme.bgColor
-                    border.width: 2
-                    border.color: theme.coverColor4
-                    Icon_ {
-                        anchors.fill: parent
-                        anchors.margins: 4
-                        icon: "close"
-                        color: theme.noColor
-                    }
+                    anchors.margins: 4
+                    icon: "close"
+                    color: theme.noColor
                 }
 
                 // 启用：√
                 Rectangle {
-                    visible: checked
-                    anchors.fill: parent
+                    id: enableIcon
+                    x: checked ? 0 : width*-1.1
+                    height: parent.height
+                    width: parent.width
                     color: theme.yesColor
                     radius: theme.btnRadius
                     Icon_ {
                         anchors.fill: parent
                         icon: "check"
                         color: theme.bgColor
+                    }
+                    Behavior on x { // 位移动画
+                        enabled: theme.enabledEffect && isInit
+                        NumberAnimation {
+                            duration: 200
+                            easing.type: Easing.OutCirc
+                        }
                     }
                 }
 
