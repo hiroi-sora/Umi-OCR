@@ -10,32 +10,28 @@ Rectangle {
     
     anchors.fill: parent
     
+    // 标签栏容器
+    Rectangle {
+        id: topBar
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        height: theme.hTabBarHeight
+        color: theme.tabBarColor
 
-    // 上下布局，即标签栏在顶部
-    ColumnLayout{
-        anchors.fill: parent
-        spacing: 0
+        HTabBar { }
+    }
 
-        // 标签栏容器
-        Rectangle {
-            Layout.fillWidth: true
-            height: theme.hTabBarHeight
-            color: theme.tabBarColor
-
-            HTabBar { }
-        }
-
-        // 标签页容器
-        Rectangle {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            color: theme.bgColor
-
-            
-            Component.onCompleted: {
-                app.tab.page.pagesNest.parent = this
-            }
-            
+    // 标签页容器
+    Rectangle {
+        anchors.top: topBar.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        color: theme.bgColor
+        
+        Component.onCompleted: {
+            app.tab.page.pagesNest.parent = this
         }
     }
 }
