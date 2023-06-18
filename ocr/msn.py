@@ -10,7 +10,7 @@ Log = GetLog()
 
 class Msn:
 
-    '''任务器必须有四个公有方法：onStart onGet onStop onGet
+    '''任务器必须有四个公有方法：onStart onGet onStop onError
     每个方法必有一个传入值：num。定义如下：
         num = {
             'all': len(paths),  # 全部数量
