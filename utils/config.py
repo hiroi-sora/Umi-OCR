@@ -223,6 +223,26 @@ _ConfigDict = {
         'isSave': True,
         'isTK': True,
     },
+    'isHotkeyFinishSend': {  # T时启用复制文本后发送按键
+        'default': False,
+        'isSave': True,
+        'isTK': True,
+    },
+    'hotkeyFinishSend': {  # 复制文本后发送按键
+        'default': 'ctrl+c',
+        'isSave': True,
+        'isTK': True,
+    },
+    'hotkeyFinishSendNumber': {  # 发送按键的次数
+        'default': 2,
+        'isSave': True,
+        'isTK': True,
+    },
+    'hotkeyFinishSendBetween': {  # 重复发送按键的间隔时间，秒
+        'default': 0.2,
+        'isSave': True,
+        'isTK': True,
+    },
     # 计划任务设置
     'isOpenExplorer': {   # T时任务完成后打开资源管理器到输出目录
         'default': False,

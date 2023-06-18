@@ -438,7 +438,7 @@ class MainWin:
                 lab3.pack(side='left', padx=9)
                 lab3.bind(
                     '<Button-1>', lambda *e: changeColor('scsColorBoxDown', '截图矩形框 虚线底层颜色'))
-                wid = Widget.hotkeyFrame(fhkUmi, '截图识别 ', 'Screenshot',
+                wid = Widget.hotkeyFrame(fhkUmi, '截图识别　快捷键　', 'Screenshot',
                                          lambda *e: self.win.event_generate(
                                              '<<ScreenshotEvent>>'), isAutoBind=False)
                 wid.pack(side='top', fill='x')
@@ -446,14 +446,14 @@ class MainWin:
                     wid, '关闭快捷键后，仍能通过面板上的按钮或托盘小图标调用截图\n点击【修改】可设置自定义快捷键')
 
                 syssscom = 'win+shift+s'
-                fhkSys = Widget.hotkeyFrame(frss, '系统截图 ', 'Screenshot',
+                fhkSys = Widget.hotkeyFrame(frss, '系统截图　快捷键　', 'Screenshot',
                                             lambda *e: self.win.event_generate(
                                                 '<<ScreenshotEvent>>'), True, syssscom, isAutoBind=False)
                 self.balloon.bind(
                     fhkSys, '监听到系统截图后调用OCR\n\n若截图后软件没有反应，请确保windows系统自带的\n【截图和草图】中【自动复制到剪贴板】开关处于打开状态')
 
                 wid = Widget.hotkeyFrame(
-                    fQuick, '粘贴图片 ', 'Clipboard', self.runClipboard, isAutoBind=True)
+                    fQuick, '粘贴图片　快捷键　', 'Clipboard', self.runClipboard, isAutoBind=True)
                 wid.pack(side='top', fill='x', padx=4)
                 self.balloon.bind(wid, '尝试读取剪贴板，若存在图片则调用OCR\n点击【修改】可设置自定义快捷键')
                 if Config.get('isAdvanced'):  # 隐藏高级选项：组合键判定调节
@@ -498,6 +498,18 @@ class MainWin:
                                       text='自动清空面板')
                 wid.grid(column=2, row=1)
                 self.balloon.bind(wid, f'每次快捷识图将清空识别内容面板，同时省略时间等信息')
+
+                if Config.get('isAdvanced'):  # 隐藏高级选项：自动发送按键
+                    frSend = tk.Frame(fQuick)
+                    frSend.pack(side='top', fill='x', pady=2, padx=4)
+                    frSend.grid_columnconfigure(0, weight=1)
+                    self.balloon.bind(frSend, '执行OCR并将结果复制到剪贴板后，发送键盘按键\n可用于联动唤起翻译器或AHK等工具\n次：重复发送按键的次数，如2为双击')
+                    wid = Widget.hotkeyFrame(
+                        frSend, '自动复制后发送按键', 'FinishSend', isAutoBind=True)
+                    wid.grid(column=0, row=0, sticky="nsew")
+                    tk.Entry(frSend, width=2, textvariable=Config.getTK('hotkeyFinishSendNumber')
+                            ).grid(column=1, row=0)
+                    tk.Label(frSend, text='次').grid(column=2, row=0)
 
                 # 切换截图模式
                 def onModeChange():
@@ -852,7 +864,7 @@ class MainWin:
                 wid = tk.Checkbutton(fEX, text='高级选项', fg='gray',
                                      variable=Config.getTK('isAdvanced'))
                 self.balloon.bind(
-                    wid, '启用隐藏的高级选项，重启后生效：\n组合键判定规则 | 图片许可后缀 | 引擎启动参数 | 引擎管理策略')
+                    wid, '启用隐藏的高级选项，重启后生效')
                 wid.pack(side='right', padx=10)
                 # 若初始时非置顶，不显示提示，则尾部预留出空间
                 if not Config.get('isWindowTop'):

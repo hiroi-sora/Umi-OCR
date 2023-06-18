@@ -26,7 +26,7 @@ class Hotkey():  # 热键
     def remove(hotkey):
         '''移除一个快捷键组合监听'''
         hotkeyApi.remove(hotkey)  # 移除该快捷键
-        Log.info(f'注销监听 ×【{hotkey}】')
+        # Log.info(f'注销监听 ×【{hotkey}】')
 
     @staticmethod
     def read(callback):

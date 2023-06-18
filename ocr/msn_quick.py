@@ -5,6 +5,7 @@ from ocr.engine import MsnFlag
 from ocr.msn import Msn
 from ocr.output_panel import OutputPanel  # 输出器
 from ui.win_notify import Notify  # 通知弹窗
+from utils.hotkey import Hotkey  # 按键
 
 import tkinter as tk
 import time
@@ -62,7 +63,19 @@ class MsnQuick(Msn):
             self.outputPanel.print(tbStr)  # 输出到面板
             if Config.get('isNeedCopy'):  # 需要复制
                 pyperclipCopy(tbStr)  # 复制到剪贴板
-                Notify('已复制文字', tbStr)
+                if not Config.get('isHotkeyFinishSend'):
+                    Notify('已复制文字', tbStr)
+                else:  # 需要发送按键
+                    ks, kn = Config.get('hotkeyFinishSend'), Config.get('hotkeyFinishSendNumber')
+                    kt = Config.get('hotkeyFinishSendBetween')
+                    try:
+                        for i in range(kn):
+                            if i > 0:  # 间隔
+                                time.sleep(kt)
+                            Hotkey.send(ks) # 发送按键
+                        Notify(f"已发送按键 {ks}", tbStr)
+                    except Exception as e:
+                        Notify(f"发送按键 {ks} 失败", str(e))
             else:
                 Notify('识别完成', tbStr)
             # 计算置信度
