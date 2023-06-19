@@ -421,6 +421,11 @@ _ConfigDict = {
         'isSave': True,
         'isTK': True,
     },
+    'ocrInitTimeout': {  # 初始化超时时间，秒
+        'default': 20.0,
+        'isSave': True,
+        'isTK': True,
+    },
     'imageSuffix': {  # 图片后缀
         'default': '.jpg .jpe .jpeg .jfif .png .webp .bmp .tif .tiff',
         'isSave': True,

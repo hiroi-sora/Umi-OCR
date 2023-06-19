@@ -11,17 +11,15 @@ from psutil import Process as psutilProcess  # 内存监控
 from sys import platform as sysPlatform  # popen静默模式
 from json import loads as jsonLoads, dumps as jsonDumps
 
-InitTimeout = 15  # 初始化超时时间，秒
-
-
 class OcrAPI:
     """调用OCR"""
 
-    def __init__(self, exePath, configPath="", argsStr=""):
+    def __init__(self, exePath, configPath="", argsStr="", initTimeout=20):
         """初始化识别器。\n
         :exePath: 识别器`PaddleOCR_json.exe`的路径。\n
         :configPath: 配置文件`PaddleOCR_json_config_XXXX.txt`的路径。\n
         :argument: 启动参数，字符串。参数说明见\n
+        :initTimeout: 初始化超时时间，秒\n
         `https://github.com/hiroi-sora/PaddleOCR-json#5-%E9%85%8D%E7%BD%AE%E4%BF%A1%E6%81%AF%E8%AF%B4%E6%98%8E`\n
         """
         cwd = os.path.abspath(os.path.join(exePath, os.pardir))  # 获取exe父文件夹
@@ -55,9 +53,9 @@ class OcrAPI:
             checkTimer.cancel()
 
         def checkTimeout():
-            self.initErrorMsg = f'OCR init timeout: {InitTimeout}s.\n{exePath}'
+            self.initErrorMsg = f'OCR init timeout: {initTimeout}s.\n{exePath}'
             self.ret.kill()  # 关闭子进程
-        checkTimer = threading.Timer(InitTimeout, checkTimeout)
+        checkTimer = threading.Timer(initTimeout, checkTimeout)
         checkTimer.start()
 
         # 循环读取，检查成功标志

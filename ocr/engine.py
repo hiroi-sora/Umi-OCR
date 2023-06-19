@@ -122,7 +122,7 @@ class OcrEngine:
         try:
             Log.info(f'启动引擎，参数：{info}')
             self.__setEngFlag(EngFlag.initing)  # 通知启动中
-            self.ocr = OcrAPI(*self.__ocrInfo)  # 启动引擎
+            self.ocr = OcrAPI(*self.__ocrInfo, initTimeout=Config.get('ocrInitTimeout'))  # 启动引擎
             # 检查启动引擎这段时间里，引擎有没有被叫停
             if not self.engFlag == EngFlag.initing:  # 状态被改变过了
                 Log.info(f'初始化后，引擎被叫停！{self.engFlag}')

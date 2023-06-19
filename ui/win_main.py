@@ -781,9 +781,20 @@ class MainWin:
                     # 隐藏高级选项：引擎管理策略
                     Widget.comboboxFrame(fr1, '引擎管理策略：', 'ocrRunMode', self.lockWidget
                                          ).grid(column=0, row=6, columnspan=2, sticky='we')
+                    # 隐藏高级选项：引擎启动超时
+                    fInit = tk.Frame(fr1)
+                    fInit.grid(column=0, row=7, columnspan=2,
+                              sticky='we', pady=2)
+                    self.balloon.bind(
+                        fInit, '引擎启动时，超过该时限未完成初始化，判定为启动失败')
+                    tk.Label(fInit, text='初始化超时判定：').pack(side='left')
+                    tk.Entry(fInit, width=5, 
+                             textvariable=Config.getTK('ocrInitTimeout')).pack(side='left')
+                    tk.Label(fInit, text='秒').pack(side='left')
+                    
                     # 隐藏高级选项：自动清理内存
                     fRam = tk.Frame(fr1)
-                    fRam.grid(column=0, row=7, columnspan=2,
+                    fRam.grid(column=0, row=8, columnspan=2,
                               sticky='we', pady=2)
                     tk.Label(fRam, text='自动清理内存： 占用超过').pack(side='left')
                     wid = tk.Entry(
