@@ -417,7 +417,7 @@ _ConfigDict = {
         'isTK': True,
     },
     'ocrRamMaxTime': {  # 内存占用时间上限
-        'default': 0,
+        'default': 30,
         'isSave': True,
         'isTK': True,
     },

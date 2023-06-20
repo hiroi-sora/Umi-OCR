@@ -808,7 +808,7 @@ class MainWin:
                     self.lockWidget.append(wid)
                     tk.Label(fRam, text='秒').pack(side='left')
                     self.balloon.bind(
-                        fRam, '引擎策略为“后台常驻”时生效\n占用内存超过指定值，或指定时间内未有任务执行，则清理一次内存\n非必要无需设置，频繁清理内存会导致卡顿，影响使用体验\n若需设置，建议占用不少于 1500 MB，空闲不少于 10 秒\n两个条件独立生效。填0时忽略该条件')
+                        fRam, '引擎策略为“后台常驻”时生效\n占用内存超过指定值，或指定时间内未有任务执行，则清理一次内存\n频繁清理内存会导致卡顿，影响使用体验\n建议占用不少于 1500 MB，空闲不少于 10 秒\n两个条件独立生效。填0时忽略该条件')
 
                 frState = tk.Frame(fr1)
                 frState.grid(column=0, row=10, columnspan=2, sticky='nsew')
