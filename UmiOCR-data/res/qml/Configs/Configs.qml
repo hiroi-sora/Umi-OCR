@@ -24,6 +24,13 @@ configDict: {
             ["键2", "名称2"],
         ],
     },
+    "文件路径 file （文件选择框）": {
+        "title": ,
+        "type": "file",
+        "selectExisting": true 只能选择现有文件 / false 用于保存新创建的文件(夹),
+        "selectFolder": true 选择文件夹 / false 选择文件,
+        "selectMultiple": true 可选择多个文件 / false 选择单个文件,
+    },
 
 }
 
@@ -62,13 +69,18 @@ Item {
                 config.type = "enum"
                 config.default = config.optionsList[0][0]
             }
+            else if (config.hasOwnProperty("type")) {
+                if(config.type === "file") { // 文件选择
+                    config.default = ""
+                }
+            }
             else {
                 console.error("【Error】未知类型的配置项："+key)
                 return
             }
+            let flag = false
             // 从配置文件中取值
             let val = settings.value(key, undefined)
-            let flag = false
             // 检查和格式化存储值类型
             if(val !== undefined) { 
                 switch(config.type) {
@@ -84,11 +96,15 @@ Item {
                             }
                         }
                         break
+                    case "file": // 文件
+                        // 无需检查
+                        flag = true
+                        break
                 }
             }
             if(!flag) { // 未有存储项或类型检查不合格，则取默认值
                 val = config.default
-                settings.setValue(key, val) // 存储
+                setValue(key, val) // 存储
                 console.log(`${key}  取默认值 ${val}`)
             }
             originDict[key] = config // configDict项的引用绑定到originDict
@@ -167,16 +183,8 @@ Item {
     function getCinfigsComponent() {
 
         function handleConfigItem(config, parent) { // 处理一个配置项
-            let comp = undefined
-            switch(config.type) {
-                case "boolean": // 布尔
-                    comp = compBoolean
-                    break
-                case "enum": // 枚举
-                    comp = compEnum
-                    break
-            }
-            if(comp) {
+            if(componentDict.hasOwnProperty(config.type)) {
+                const comp = componentDict[config.type]
                 comp.createObject(parent, {"key":config.fullKey, "configs": configs})
             }
         }
@@ -286,7 +294,11 @@ Item {
             }
         }
     }
-
+    // ========== 生成组件字典 ========== 
+    property var componentDict: {
+        "boolean": compBoolean,
+        "enum": compEnum,
+    }
     // 配置项：布尔值
     Component {
         id: compBoolean
