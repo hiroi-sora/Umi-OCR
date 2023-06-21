@@ -15,6 +15,8 @@ def main():
     QGuiApplication.setAttribute(Qt.AA_ShareOpenGLContexts, True)
     # 启用OpenGLES以避免组件抖动问题
     QGuiApplication.setAttribute(Qt.AA_UseOpenGLES, True)
+    # 启用高分屏自动缩放
+    QGuiApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
 
     # 2. 启动qt
     app = QGuiApplication(sys.argv)
