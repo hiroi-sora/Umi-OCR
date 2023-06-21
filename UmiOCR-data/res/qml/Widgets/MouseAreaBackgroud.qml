@@ -10,8 +10,22 @@ MouseArea {
 
     anchors.fill: parent
     hoverEnabled: true
-    onEntered: bgRectangle.visible = true
-    onExited: bgRectangle.visible = false
+    onEntered: {
+        bgRectangle.visible = true
+    }
+    onExited: {
+        bgRectangle.visible = false
+    }
+    // 事件穿透
+    onClicked: {
+        mouse.accepted = false
+    }
+    onPressed: {
+        mouse.accepted = false
+    }
+    onReleased: {
+        mouse.accepted = false
+    }
     Rectangle {
         id: bgRectangle
         visible: false
