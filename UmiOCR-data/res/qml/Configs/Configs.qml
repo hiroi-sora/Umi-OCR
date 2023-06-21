@@ -256,6 +256,7 @@ Item {
                     anchors.right: parent.right
                     anchors.top: parent.top
                     anchors.margins: theme.smallSpacing
+                    spacing: theme.smallSpacing
                 }
 
                 Item { // 底部占位
@@ -298,6 +299,7 @@ Item {
     property var componentDict: {
         "boolean": compBoolean,
         "enum": compEnum,
+        "file": compFile,
     }
     // 配置项：布尔值
     Component {
@@ -305,7 +307,6 @@ Item {
 
         ConfigItemComp {
             property bool checked: true
-            cursorShape_: Qt.PointingHandCursor
             property bool isInit: false
 
             // 初始化
@@ -315,9 +316,13 @@ Item {
             }
 
             // 按下
-            onClicked: {
-                checked = !checked
-                value(checked)
+            MouseArea {
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                onClicked: {
+                    checked = !checked
+                    value(checked)
+                }
             }
 
             // 开关图标
@@ -440,9 +445,6 @@ Item {
                     // 背景
                     MouseAreaBackgroud {
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: {
-                            comboBox.popup.opened ? comboBox.popup.close() : comboBox.popup.open()
-                        }
                     }
                 }
                 // 选项
@@ -460,6 +462,33 @@ Item {
                     MouseAreaBackgroud {
                         radius_: 0
                         onClicked: parent.clicked()
+                    }
+                }
+            }
+        }
+    }
+    // 配置项：文件选择
+    Component {
+        id: compFile
+
+        ConfigItemComp {
+            Item {
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.right: parent.right
+                anchors.margins: 1
+                width: parent.width*0.5
+
+                Rectangle {
+                    anchors.fill: parent
+                    color: "#00000000"
+                    border.width: 2
+                    border.color: theme.coverColor2
+                    radius: theme.btnRadius
+                    clip: true
+
+                    TextInput_ {
+                        anchors.fill: parent
                     }
                 }
             }

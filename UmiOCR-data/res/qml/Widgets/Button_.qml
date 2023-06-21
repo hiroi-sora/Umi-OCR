@@ -23,7 +23,6 @@ Button {
         color: btn.textColor_
         font.bold: btn.bold_
     }
-    
 
     background: Rectangle {
         anchors.fill: parent
@@ -31,5 +30,17 @@ Button {
         color: parent.pressed ? parent.bgPressColor_ : (
             parent.hovered ? parent.bgHoverColor_ : parent.bgColor_
         )
+    }
+    MouseArea {
+        anchors.fill: parent
+        hoverEnabled: true
+        cursorShape: Qt.PointingHandCursor
+        // 穿透
+        onPressed: {
+            mouse.accepted = false
+        }
+        onReleased: {
+            mouse.accepted = false
+        }
     }
 }

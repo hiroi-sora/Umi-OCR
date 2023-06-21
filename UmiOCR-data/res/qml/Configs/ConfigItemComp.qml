@@ -13,7 +13,6 @@ Item {
 
     property string title: "" // 标题，可不填
     property var origin: undefined // 起源参数（静态）
-    signal clicked // 鼠标按下的信号
 
     anchors.left: parent.left
     anchors.right: parent.right
@@ -44,6 +43,5 @@ Item {
     // 背景
     MouseAreaBackgroud {
         cursorShape: cursorShape_
-        onClicked: parent.clicked()
     }
 }
