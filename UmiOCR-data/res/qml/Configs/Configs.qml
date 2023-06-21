@@ -472,6 +472,7 @@ Item {
         id: compFile
 
         ConfigItemComp {
+
             Item {
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
@@ -479,8 +480,24 @@ Item {
                 anchors.margins: 1
                 width: parent.width*0.5
 
+                // 选择按钮
+                IconButton {
+                    id: iconButton
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    anchors.right: parent.right
+                    // anchors.margins: 2
+                    width: height
+                    icon_: "folder"
+                }
+
+                // 文本输入框
                 Rectangle {
-                    anchors.fill: parent
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    anchors.left: parent.left
+                    anchors.right: iconButton.left
+                    anchors.rightMargin: 2
                     color: "#00000000"
                     border.width: 2
                     border.color: theme.coverColor2

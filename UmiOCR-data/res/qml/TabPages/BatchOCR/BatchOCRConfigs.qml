@@ -23,7 +23,9 @@ Configs {
             },
             "directory": {
                 "title": qsTr("指定目录"),
-                "default": "",
+                "type": "file",
+                "selectExisting": true, // 选择现有
+                "selectFolder": true, // 选择文件夹
             },
 
             "filesType": {
