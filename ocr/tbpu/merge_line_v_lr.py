@@ -6,6 +6,7 @@ from time import time
 
 class TbpuLineVlr(Tbpu):
     def __init__(self):
+        super().__init__()
         self.tbpuName = '竖排-从左到右-单行'
         self.rl = False  # T为从右到左，F为从左到右
 
