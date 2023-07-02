@@ -6,10 +6,16 @@ from time import time
 
 class TbpuLineH(Tbpu):
     def __init__(self):
+        super().__init__()
         self.tbpuName = '横排-单行'
+        self.isLimitX = True  # 为T时，考虑文块水平距离
 
     def getInitInfo(self):
         return f'文块后处理：[{self.tbpuName}]'
+
+    def merge2text(self, text1, text2):
+        '''合并两段文字的规则'''
+        return text1 + text2
 
     def run(self, textBlocks, imgInfo):
         '''传入 文块组、图片信息。返回文块组、debug信息字符串。'''
@@ -36,6 +42,8 @@ class TbpuLineH(Tbpu):
                 box2 = tb2['box']
                 b2x, b2y = box2[0][0], box2[0][1]  # 左上角xy
                 b2h = box2[3][1] - box2[0][1]  # 行高
+                if not self.isLimitX:  # 不考虑水平差距
+                    limitX = 999999
                 # 文块1的右上角与文块2的左上角接壤，且二者行高一致，则合并
                 if abs(b2x-bx) < limitX and abs(b2y-by) < limitY and abs(b2h-bh) < limitY:
                     num += 1
@@ -52,7 +60,9 @@ class TbpuLineH(Tbpu):
                     limitX, limitY = bh, round(bh/2)  # x、y 合并阈值，行高、行高一半
                     # 合并内容
                     tb['score'] += tb2['score']  # 合并置信度
-                    tb['text'] += tb2['text']  # 合并文本
+                    # tb['text'] += tb2['text']  # 合并文本
+                    tb['text'] = self.merge2text(  # 合并文本
+                        tb['text'], tb2['text'])
                     textBlocks[i] = None  # 置为空，标记删除
             if num > 1:
                 tb['score'] /= num  # 平均置信度
