@@ -331,13 +331,6 @@ OCR识别出的文本是按“块”划分的，通常一行文字分为一块�
 
 `umiocr.exe -screenshot`
 
-##### 指令7：切换识别语言
-
-`umiocr.exe -language=序号`
-
-“序号”为软件设置里各个语言的排序，从0开始。从上往下数，比如简中排第一，那么是`-language=0`。繁中排第二，那么是`-language=1`。英文排第四，`-language=3`。以此类推。
-
-
 </details>
 
 <a id="goto-3"></a>
