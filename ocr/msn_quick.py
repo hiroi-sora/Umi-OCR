@@ -61,21 +61,21 @@ class MsnQuick(Msn):
             tbTexts = [tb['text'] for tb in tbList]  # 提取文字
             tbStr = '\n'.join(tbTexts)
             self.outputPanel.print(tbStr)  # 输出到面板
-            if Config.get('isNeedCopy'):  # 需要复制
+            if Config.get('isFinishSend'):  # 联动截图
                 pyperclipCopy(tbStr)  # 复制到剪贴板
-                if not Config.get('isHotkeyFinishSend'):
-                    Notify('已复制文字', tbStr)
-                else:  # 需要发送按键
-                    ks, kn = Config.get('hotkeyFinishSend'), Config.get('hotkeyFinishSendNumber')
-                    kt = Config.get('hotkeyFinishSendBetween')
-                    try:
-                        for i in range(kn):
-                            if i > 0:  # 间隔
-                                time.sleep(kt)
-                            Hotkey.send(ks) # 发送按键
-                        Notify(f"已发送按键 {ks}", tbStr)
-                    except Exception as e:
-                        Notify(f"发送按键 {ks} 失败", str(e))
+                ks, kn = Config.get('hotkeyFinishSend2'), Config.get('hotkeyFinishSendNumber')
+                kt = Config.get('hotkeyFinishSendBetween')
+                try:
+                    for i in range(kn):
+                        if i > 0:  # 间隔
+                            time.sleep(kt)
+                        Hotkey.send(ks) # 发送按键
+                    Notify(f"已发送按键 {ks}", tbStr)
+                except Exception as e:
+                    Notify(f"发送按键 {ks} 失败", f"异常：{str(e)}")
+            elif Config.get('isNeedCopy'):  # 需要复制
+                pyperclipCopy(tbStr)  # 复制到剪贴板
+                Notify('已复制文字', tbStr)
             else:
                 Notify('识别完成', tbStr)
             # 计算置信度

@@ -42,10 +42,10 @@ class Widget:
             Log.info(f'快捷键【{hotkey}】移除错误：{err}')
 
     @staticmethod
-    def hotkeyFrame(master, name, configName, func=None, isFix=False, hotkeyCom=None, isAutoBind=False):
+    def hotkeyFrame(master, name, configName, func=None, isFix=False, hotkeyCom=None, isAutoBind=False, isCheckBtn=True):
         '''添加一个热键框架
         父框架 | 热键名称(描述) | 热键在Config中的名称 | 触发事件 | 
-        固定热键 | 固定热键名 | 是否创建完成后自动绑定'''
+        固定热键 | 固定热键名 | 是否创建完成后自动绑定 | 显示选中控件'''
 
         isHotkey = f'isHotkey{configName}'
         hotkeyName = f'hotkey{configName}'
@@ -114,8 +114,11 @@ class Widget:
         hFrame.grid_columnconfigure(2, weight=1)
 
         # 标题 | 快捷键Label | 修改
-        wid = ttk.Checkbutton(hFrame, variable=Config.getTK(isHotkey),
-                              text=name, command=onCheck)
+        if isCheckBtn:
+            wid = ttk.Checkbutton(hFrame, variable=Config.getTK(isHotkey),
+                                text=name, command=onCheck)
+        else:
+            wid = tk.Label(hFrame, text=name)
         wid.grid(column=0, row=0, sticky='w')
 
         if isFix:  # 固定组合，不给修改

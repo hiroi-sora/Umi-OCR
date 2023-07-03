@@ -499,17 +499,20 @@ class MainWin:
                 wid.grid(column=2, row=1)
                 self.balloon.bind(wid, f'每次快捷识图将清空识别内容面板，同时省略时间等信息')
 
-                if Config.get('isAdvanced'):  # 隐藏高级选项：自动发送按键
+                if Config.get('isAdvanced'):  # 隐藏高级选项：截图联动
                     frSend = tk.Frame(fQuick)
                     frSend.pack(side='top', fill='x', pady=2, padx=4)
                     frSend.grid_columnconfigure(0, weight=1)
-                    self.balloon.bind(frSend, '执行OCR并将结果复制到剪贴板后，发送键盘按键\n可用于联动唤起翻译器或AHK等工具\n次：重复发送按键的次数，如2为双击')
+                    self.balloon.bind(frSend, '截图联动：按下快捷键，执行截图OCR并将结果复制到剪贴板，\n然后发送指定键盘按键\n可用于联动唤起翻译器或AHK等工具\n次：重复发送按键的次数，如2为双击')
                     wid = Widget.hotkeyFrame(
-                        frSend, '自动复制后发送按键', 'FinishSend', isAutoBind=True)
+                        frSend, '截图联动　快捷键　', 'FinishSend', func=self.openLinkageScreenshot, isAutoBind=True)
                     wid.grid(column=0, row=0, sticky="nsew")
+                    wid = Widget.hotkeyFrame(
+                        frSend, '　 联动发送按键　', 'FinishSend2', isAutoBind=False, isCheckBtn=False)
+                    wid.grid(column=0, row=1, sticky="nsew")
                     tk.Entry(frSend, width=2, textvariable=Config.getTK('hotkeyFinishSendNumber')
-                            ).grid(column=1, row=0)
-                    tk.Label(frSend, text='次').grid(column=2, row=0)
+                            ).grid(column=1, row=1)
+                    tk.Label(frSend, text='次').grid(column=2, row=1)
 
                 # 切换截图模式
                 def onModeChange():
@@ -1247,7 +1250,7 @@ class MainWin:
             self.gotoTop()  # 主窗置顶
             self.notebook.select(self.notebookTab[1])  # 转到输出卡
 
-    def openScreenshot(self, e=None):  # 打开截图窗口
+    def runScreenshot(self):  # 进行截图
         if not self.isMsnReady() or not self.win.attributes('-disabled') == 0:
             return
         self.win.attributes("-disabled", 1)  # 禁用主窗口
@@ -1257,6 +1260,14 @@ class MainWin:
                            ScreenshotCopy)  # 延迟，等待最小化完成再截屏
         else:
             ScreenshotCopy()  # 立即截屏
+
+    def openScreenshot(self, e=None):  # 普通截图
+        Config.set('isFinishSend', False)
+        self.runScreenshot() 
+
+    def openLinkageScreenshot(self, e=None):  # 联动截图
+        Config.set('isFinishSend', True)
+        self.runScreenshot() 
 
     def closeScreenshot(self, flag, errMsg=None):  # 关闭截图窗口，返回T表示已复制到剪贴板
         self.win.attributes("-disabled", 0)  # 启用父窗口

@@ -223,12 +223,22 @@ _ConfigDict = {
         'isSave': True,
         'isTK': True,
     },
-    'isHotkeyFinishSend': {  # T时启用复制文本后发送按键
+    'isHotkeyFinishSend': {  # T时启用联动识别，复制文本、发送按键
         'default': False,
         'isSave': True,
         'isTK': True,
     },
-    'hotkeyFinishSend': {  # 复制文本后发送按键
+    'hotkeyFinishSend': {  # 联动识别快捷键
+        'default': 'win+alt+x',
+        'isSave': True,
+        'isTK': True,
+    },
+    'isHotkeyFinishSend2': {  # 占位，无意义
+        'default': False,
+        'isSave': False,
+        'isTK': True,
+    },
+    'hotkeyFinishSend2': {  # 联动识别的发送的按键
         'default': 'ctrl+c',
         'isSave': True,
         'isTK': True,
@@ -242,6 +252,11 @@ _ConfigDict = {
         'default': 0.2,
         'isSave': True,
         'isTK': True,
+    },
+    'isFinishSend': {  # 为T时本次任务需要发送快捷键
+        'default': False,
+        'isSave': False,
+        'isTK': False,
     },
     # 计划任务设置
     'isOpenExplorer': {   # T时任务完成后打开资源管理器到输出目录
