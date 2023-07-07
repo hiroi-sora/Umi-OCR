@@ -438,7 +438,7 @@ class MainWin:
                 lab3.pack(side='left', padx=9)
                 lab3.bind(
                     '<Button-1>', lambda *e: changeColor('scsColorBoxDown', '截图矩形框 虚线底层颜色'))
-                wid = Widget.hotkeyFrame(fhkUmi, '截图识别 ', 'Screenshot',
+                wid = Widget.hotkeyFrame(fhkUmi, '截图识别　快捷键　', 'Screenshot',
                                          lambda *e: self.win.event_generate(
                                              '<<ScreenshotEvent>>'), isAutoBind=False)
                 wid.pack(side='top', fill='x')
@@ -446,14 +446,14 @@ class MainWin:
                     wid, '关闭快捷键后，仍能通过面板上的按钮或托盘小图标调用截图\n点击【修改】可设置自定义快捷键')
 
                 syssscom = 'win+shift+s'
-                fhkSys = Widget.hotkeyFrame(frss, '系统截图 ', 'Screenshot',
+                fhkSys = Widget.hotkeyFrame(frss, '系统截图　快捷键　', 'Screenshot',
                                             lambda *e: self.win.event_generate(
                                                 '<<ScreenshotEvent>>'), True, syssscom, isAutoBind=False)
                 self.balloon.bind(
                     fhkSys, '监听到系统截图后调用OCR\n\n若截图后软件没有反应，请确保windows系统自带的\n【截图和草图】中【自动复制到剪贴板】开关处于打开状态')
 
                 wid = Widget.hotkeyFrame(
-                    fQuick, '粘贴图片 ', 'Clipboard', self.runClipboard, isAutoBind=True)
+                    fQuick, '粘贴图片　快捷键　', 'Clipboard', self.runClipboard, isAutoBind=True)
                 wid.pack(side='top', fill='x', padx=4)
                 self.balloon.bind(wid, '尝试读取剪贴板，若存在图片则调用OCR\n点击【修改】可设置自定义快捷键')
                 if Config.get('isAdvanced'):  # 隐藏高级选项：组合键判定调节
@@ -498,6 +498,21 @@ class MainWin:
                                       text='自动清空面板')
                 wid.grid(column=2, row=1)
                 self.balloon.bind(wid, f'每次快捷识图将清空识别内容面板，同时省略时间等信息')
+
+                if Config.get('isAdvanced'):  # 隐藏高级选项：截图联动
+                    frSend = tk.Frame(fQuick)
+                    frSend.pack(side='top', fill='x', pady=2, padx=4)
+                    frSend.grid_columnconfigure(0, weight=1)
+                    self.balloon.bind(frSend, '截图联动：按下快捷键，执行截图OCR并将结果复制到剪贴板，\n然后发送指定键盘按键\n可用于联动唤起翻译器或AHK等工具\n次：重复发送按键的次数，如2为双击')
+                    wid = Widget.hotkeyFrame(
+                        frSend, '截图联动　快捷键　', 'FinishSend', func=self.openLinkageScreenshot, isAutoBind=True)
+                    wid.grid(column=0, row=0, sticky="nsew")
+                    wid = Widget.hotkeyFrame(
+                        frSend, '　 联动发送按键　', 'FinishSend2', isAutoBind=False, isCheckBtn=False)
+                    wid.grid(column=0, row=1, sticky="nsew")
+                    tk.Entry(frSend, width=2, textvariable=Config.getTK('hotkeyFinishSendNumber')
+                            ).grid(column=1, row=1)
+                    tk.Label(frSend, text='次').grid(column=2, row=1)
 
                 # 切换截图模式
                 def onModeChange():
@@ -769,9 +784,20 @@ class MainWin:
                     # 隐藏高级选项：引擎管理策略
                     Widget.comboboxFrame(fr1, '引擎管理策略：', 'ocrRunMode', self.lockWidget
                                          ).grid(column=0, row=6, columnspan=2, sticky='we')
+                    # 隐藏高级选项：引擎启动超时
+                    fInit = tk.Frame(fr1)
+                    fInit.grid(column=0, row=7, columnspan=2,
+                              sticky='we', pady=2)
+                    self.balloon.bind(
+                        fInit, '引擎启动时，超过该时限未完成初始化，判定为启动失败')
+                    tk.Label(fInit, text='初始化超时判定：').pack(side='left')
+                    tk.Entry(fInit, width=5, 
+                             textvariable=Config.getTK('ocrInitTimeout')).pack(side='left')
+                    tk.Label(fInit, text='秒').pack(side='left')
+                    
                     # 隐藏高级选项：自动清理内存
                     fRam = tk.Frame(fr1)
-                    fRam.grid(column=0, row=7, columnspan=2,
+                    fRam.grid(column=0, row=8, columnspan=2,
                               sticky='we', pady=2)
                     tk.Label(fRam, text='自动清理内存： 占用超过').pack(side='left')
                     wid = tk.Entry(
@@ -785,7 +811,7 @@ class MainWin:
                     self.lockWidget.append(wid)
                     tk.Label(fRam, text='秒').pack(side='left')
                     self.balloon.bind(
-                        fRam, '引擎策略为“后台常驻”时生效\n占用内存超过指定值，或指定时间内未有任务执行，则清理一次内存\n非必要无需设置，频繁清理内存会导致卡顿，影响使用体验\n若需设置，建议占用不少于 1500 MB，空闲不少于 10 秒\n两个条件独立生效。填0时忽略该条件')
+                        fRam, '引擎策略为“后台常驻”时生效\n占用内存超过指定值，或指定时间内未有任务执行，则清理一次内存\n频繁清理内存会导致卡顿，影响使用体验\n建议占用不少于 1500 MB，空闲不少于 10 秒\n两个条件独立生效。填0时忽略该条件')
 
                 frState = tk.Frame(fr1)
                 frState.grid(column=0, row=10, columnspan=2, sticky='nsew')
@@ -852,7 +878,7 @@ class MainWin:
                 wid = tk.Checkbutton(fEX, text='高级选项', fg='gray',
                                      variable=Config.getTK('isAdvanced'))
                 self.balloon.bind(
-                    wid, '启用隐藏的高级选项，重启后生效：\n组合键判定规则 | 图片许可后缀 | 引擎启动参数 | 引擎管理策略')
+                    wid, '启用隐藏的高级选项，重启后生效')
                 wid.pack(side='right', padx=10)
                 # 若初始时非置顶，不显示提示，则尾部预留出空间
                 if not Config.get('isWindowTop'):
@@ -1224,7 +1250,7 @@ class MainWin:
             self.gotoTop()  # 主窗置顶
             self.notebook.select(self.notebookTab[1])  # 转到输出卡
 
-    def openScreenshot(self, e=None):  # 打开截图窗口
+    def runScreenshot(self):  # 进行截图
         if not self.isMsnReady() or not self.win.attributes('-disabled') == 0:
             return
         self.win.attributes("-disabled", 1)  # 禁用主窗口
@@ -1234,6 +1260,14 @@ class MainWin:
                            ScreenshotCopy)  # 延迟，等待最小化完成再截屏
         else:
             ScreenshotCopy()  # 立即截屏
+
+    def openScreenshot(self, e=None):  # 普通截图
+        Config.set('isFinishSend', False)
+        self.runScreenshot() 
+
+    def openLinkageScreenshot(self, e=None):  # 联动截图
+        Config.set('isFinishSend', True)
+        self.runScreenshot() 
 
     def closeScreenshot(self, flag, errMsg=None):  # 关闭截图窗口，返回T表示已复制到剪贴板
         self.win.attributes("-disabled", 0)  # 启用父窗口

@@ -223,6 +223,41 @@ _ConfigDict = {
         'isSave': True,
         'isTK': True,
     },
+    'isHotkeyFinishSend': {  # T时启用联动识别，复制文本、发送按键
+        'default': False,
+        'isSave': True,
+        'isTK': True,
+    },
+    'hotkeyFinishSend': {  # 联动识别快捷键
+        'default': 'win+alt+x',
+        'isSave': True,
+        'isTK': True,
+    },
+    'isHotkeyFinishSend2': {  # 占位，无意义
+        'default': False,
+        'isSave': False,
+        'isTK': True,
+    },
+    'hotkeyFinishSend2': {  # 联动识别的发送的按键
+        'default': 'ctrl+c',
+        'isSave': True,
+        'isTK': True,
+    },
+    'hotkeyFinishSendNumber': {  # 发送按键的次数
+        'default': 2,
+        'isSave': True,
+        'isTK': True,
+    },
+    'hotkeyFinishSendBetween': {  # 重复发送按键的间隔时间，秒
+        'default': 0.2,
+        'isSave': True,
+        'isTK': True,
+    },
+    'isFinishSend': {  # 为T时本次任务需要发送快捷键
+        'default': False,
+        'isSave': False,
+        'isTK': False,
+    },
     # 计划任务设置
     'isOpenExplorer': {   # T时任务完成后打开资源管理器到输出目录
         'default': False,
@@ -397,7 +432,12 @@ _ConfigDict = {
         'isTK': True,
     },
     'ocrRamMaxTime': {  # 内存占用时间上限
-        'default': 0,
+        'default': 30,
+        'isSave': True,
+        'isTK': True,
+    },
+    'ocrInitTimeout': {  # 初始化超时时间，秒
+        'default': 20.0,
         'isSave': True,
         'isTK': True,
     },

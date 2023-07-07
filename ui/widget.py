@@ -42,10 +42,10 @@ class Widget:
             Log.info(f'快捷键【{hotkey}】移除错误：{err}')
 
     @staticmethod
-    def hotkeyFrame(master, name, configName, func, isFix=False, hotkeyCom=None, isAutoBind=False):
+    def hotkeyFrame(master, name, configName, func=None, isFix=False, hotkeyCom=None, isAutoBind=False, isCheckBtn=True):
         '''添加一个热键框架
         父框架 | 热键名称(描述) | 热键在Config中的名称 | 触发事件 | 
-        固定热键 | 固定热键名 | 是否创建完成后自动绑定'''
+        固定热键 | 固定热键名 | 是否创建完成后自动绑定 | 显示选中控件'''
 
         isHotkey = f'isHotkey{configName}'
         hotkeyName = f'hotkey{configName}'
@@ -56,13 +56,14 @@ class Widget:
                 tk.messagebox.showwarning(
                     '提示', f'请先录制{name}快捷键')
                 return
-            try:
-                Hotkey.add(hotkey, func)  # 添加快捷键监听
-            except ValueError as err:
-                Config.set(isHotkey, False)
-                Config.set(hotkeyName, '')
-                tk.messagebox.showwarning(
-                    '提示', f'无法注册快捷键【{hotkey}】\n\n错误信息：\n{err}')
+            if callable(func):
+                try:
+                    Hotkey.add(hotkey, func)  # 添加快捷键监听
+                except ValueError as err:
+                    Config.set(isHotkey, False)
+                    Config.set(hotkeyName, '')
+                    tk.messagebox.showwarning(
+                        '提示', f'无法注册快捷键【{hotkey}】\n\n错误信息：\n{err}')
 
         def onRead():  # 当 修改键按下
 
@@ -113,8 +114,11 @@ class Widget:
         hFrame.grid_columnconfigure(2, weight=1)
 
         # 标题 | 快捷键Label | 修改
-        wid = ttk.Checkbutton(hFrame, variable=Config.getTK(isHotkey),
-                              text=f'{name} 快捷键　', command=onCheck)
+        if isCheckBtn:
+            wid = ttk.Checkbutton(hFrame, variable=Config.getTK(isHotkey),
+                                text=name, command=onCheck)
+        else:
+            wid = tk.Label(hFrame, text=name)
         wid.grid(column=0, row=0, sticky='w')
 
         if isFix:  # 固定组合，不给修改

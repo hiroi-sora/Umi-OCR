@@ -6,6 +6,7 @@ from time import time
 
 class TbpuLineHMultiLeft(TbpuLineH):
     def __init__(self):
+        super().__init__()
         self.tbpuName = '横排-合并多行-左对齐'
         # x、y方向上合并的允许阈值，为该行的行高乘上比例因子
         self.factorX = 1

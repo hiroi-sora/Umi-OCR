@@ -67,6 +67,7 @@
 - [忽略区域](#忽略区域功能) 如何排除截图水印处的文字？
 - [多国语言](#添加多国语言) 添加更多PP-OCR支持的语言模型库！
 - [命令行调用](#命令行调用) 用命令行或第三方工具来调用Umi-OCR！
+- [联动翻译软件](#goto-3) 截图OCR后发送指定按键，触发翻译软件进行翻译
 - [更多小技巧](#goto-2)
 - [问题排除](#问题排除) 无法启动引擎 / 多屏幕截图异常 ？
 
@@ -78,7 +79,7 @@
 
 #### Win10/11 用户：
 
-Github下载：[Release v1.3.4](https://github.com/hiroi-sora/Umi-OCR/releases/tag/v1.3.4)
+Github下载：[Release v1.3.5](https://github.com/hiroi-sora/Umi-OCR/releases/tag/v1.3.5)
 
 蓝奏云下载：[https://hiroi-sora.lanzoul.com/s/umi-ocr](https://hiroi-sora.lanzoul.com/s/umi-ocr)
 
@@ -330,6 +331,50 @@ OCR识别出的文本是按“块”划分的，通常一行文字分为一块�
 
 `umiocr.exe -screenshot`
 
+##### 指令7：切换识别语言
+
+`umiocr.exe -language=序号`
+
+“序号”为软件设置里各个语言的排序，从0开始。从上往下数，比如简中排第一，那么是`-language=0`。繁中排第二，那么是`-language=1`。英文排第四，`-language=3`。以此类推。
+
+
+</details>
+
+<a id="goto-3"></a>
+
+#### 复制后发送按键 & 联动翻译软件
+
+<details>
+<summary>展开</summary><BR>
+
+##### 发送指定按键
+
+`v1.3.5` 起，支持快捷识图完成并将结果写入剪贴板后，发送一组指定按键，触发翻译软件进行翻译。当然也可以用于触发你的AHK脚本等，实现更多奇奇怪怪的功能。
+
+这是一个隐藏高级功能，请先勾选设置页底部的`高级选项`，重启软件。设置页的`快捷识图`板块会多出一个项目：`自动复制后发送按键` 。可以录制一组快捷键并修改重复次数（支持单击、双击等）。当截图OCR完成后，会发送该按键组合。注意，必须同时勾选`自动复制结果`才能让该功能生效。
+
+经过测试，Umi-OCR可以顺利地与 [CopyTranslator](https://github.com/CopyTranslator/CopyTranslator) 及 [沙拉查词](https://github.com/crimx/ext-saladict) 联动触发翻译，以下是配置方法。
+
+##### 联动 CopyTranslator
+
+1. 下载 [CopyTranslator](https://github.com/CopyTranslator/CopyTranslator)。这里示例所用的版本是 `v11` 。
+2. 如果不介意CopyTranslator监听剪贴板（每次剪贴板变动都尝试翻译），那么勾选Umi-OCR的`自动复制结果` 和CopyTranslator的`监听剪贴板`即可。
+    ![](https://tupian.li/images/2023/06/20/64915f826f16d.png)
+
+3. 如果不一定始终开启监听剪贴板，又希望Umi-OCR在任何情况下能唤起CopyTranslator，可以这样处理：CopyTranslator在设置里勾选`双Ctrl+C翻译`；Umi-OCR的`自动复制后发送按键`录制为`ctrl+c`，`2`次。
+    ![](https://tupian.li/images/2023/06/20/6491611305570.png)
+
+##### 联动 沙拉查词
+
+1. [沙拉查词](https://github.com/crimx/ext-saladict) 是一款浏览器插件，支持Chrome、Edge等浏览器，[这是下载页面](https://saladict.crimx.com/download.html)。下面以Edge浏览器为例讲解配置方法。其他浏览器大同小异。（Firefox支持不完善，不推荐。）
+2. 打开沙拉查词的插件设置页面，左边栏选择`基本选项`，右边栏勾选`后台保持运行`。（如果不勾选也能使用，但必须保持浏览器开启。）
+3. 左边栏点击`隐私设置`，右边栏点击`设置快捷键`。
+    ![](https://tupian.li/images/2023/06/20/649165cae4b87.png)
+4. 在弹出的新页面中，将沙拉查词的`在独立窗口中搜索剪贴板内容`设置任意一组快捷键，然后右边改为`全局`。Umi-OCR的`自动复制后发送按键`录制为相同快捷键，`1`次。
+    ![](https://tupian.li/images/2023/06/20/649165faa434f.png)
+5. 回到沙拉查词的设置页，左边栏点击`权限管理`，勾选`读取剪贴板`。
+    ![](https://tupian.li/images/2023/06/20/649165f7dbf18.png)
+
 </details>
 
 
@@ -552,7 +597,14 @@ OCR识别出的文本是按“块”划分的，通常一行文字分为一块�
 
 点击版本号链接可前往对应备份分支。
 
-##### [v1.3.4](https://github.com/hiroi-sora/Umi-OCR/tree/release/1.3.3) `2023.4.26`
+##### [v1.3.5](https://github.com/hiroi-sora/Umi-OCR/tree/release/1.3.5) `2023.6.20`
+<!-- 6.5k★ 撒花~ -->
+- 新功能：复制识别结果后，可发送指定按键，以便联动唤起翻译器等工具。
+- 新功能：命令行增加切换识别语言的指令。
+- 修Bug：低配置机器上有概率误报`OCR init timeout: 5s` 。[#154](https://github.com/hiroi-sora/Umi-OCR/issues/154) , [#156](https://github.com/hiroi-sora/Umi-OCR/issues/156)。
+- 调整：默认停止任务30秒后释放一次内存。
+
+##### [v1.3.4](https://github.com/hiroi-sora/Umi-OCR/tree/release/1.3.4) `2023.4.26`
 <!-- 一周年纪念！ -->
 - 新功能：截图预览窗口。
 - 新功能：可用方向键微调截图框位置。
