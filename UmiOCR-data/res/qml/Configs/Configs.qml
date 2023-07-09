@@ -349,7 +349,7 @@ Item {
                 // 关闭：×
                 Icon_ {
                     anchors.fill: parent
-                    anchors.margins: 4
+                    anchors.margins: 3
                     icon: "close"
                     color: theme.noColor
                 }
@@ -401,7 +401,6 @@ Item {
                 }
                 comboBox.model = model
                 comboBox.currentIndex = index
-                console.log("数据", optionsList)
             }
             // 更新数值
             function set() {
@@ -478,7 +477,10 @@ Item {
 
         ConfigItemComp {
             id: rootFile
-
+            // 初始化
+            Component.onCompleted: {
+                textInput.text = value()
+            }
             // 导入路径
             function set(path) {
                 value(path) // 设置值
@@ -530,11 +532,13 @@ Item {
                     border.width: 2
                     border.color: theme.coverColor2
                     radius: theme.btnRadius
-                    clip: true
 
                     TextInput_ {
                         id: textInput
+                        clip: true
                         anchors.fill: parent
+                        anchors.leftMargin: parent.border.width
+                        anchors.rightMargin: parent.border.width
                         onTextChanged: { // 对话框文本改变时设置值
                             rootFile.set(text)
                         }

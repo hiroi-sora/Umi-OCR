@@ -50,9 +50,9 @@ QtObject {
     property real scale: 1
 
     // 主要文字大小
-    property int textSize: 17 *scale
+    property int textSize: 16 *scale
     // 较小的文字大小
-    property int smallTextSize: 14 *scale
+    property int smallTextSize: 13 *scale
 
     // 窗口圆角
     property real windowRadius: 0
@@ -71,7 +71,7 @@ QtObject {
     property real hTabMaxWidth: textSize * 8
 
     // 元素之间的常用间距
-    property real spacing: 12
+    property real spacing: 10
     // 小间距
     property real smallSpacing: spacing * 0.6
 
