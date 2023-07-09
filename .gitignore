@@ -1,0 +1,8 @@
+.idea/
+.vscode
+venv/
+__pycache__/
+main.build/
+main.dist/
+/build/
+/release/
