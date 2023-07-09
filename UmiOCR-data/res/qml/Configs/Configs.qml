@@ -27,9 +27,10 @@ configDict: {
     "文件路径 file （文件选择框）": {
         "title": ,
         "type": "file",
-        "selectExisting": true 只能选择现有文件 / false 用于保存新创建的文件(夹),
+        "selectExisting": true 选择现有文件 / false 新创建文件(夹),
         "selectFolder": true 选择文件夹 / false 选择文件,
-        "selectMultiple": true 可选择多个文件 / false 选择单个文件,
+        "dialogTitle": 对话框标题,
+        "nameFilters": ["图片 (*.jpg *.jpeg)", "类型2..."] 文件夹类型可不需要
     },
 
 }
@@ -41,6 +42,7 @@ configDict为嵌套形式，而originDict与valueDict为展开形式的单层字
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Dialogs 1.3 // 文件对话框
 import "../Widgets"
 
 Item {
@@ -72,6 +74,9 @@ Item {
             else if (config.hasOwnProperty("type")) {
                 if(config.type === "file") { // 文件选择
                     config.default = ""
+                    if(! config.hasOwnProperty("nameFilters")) {
+                        config.nameFilters = []
+                    }
                 }
             }
             else {
@@ -142,6 +147,8 @@ Item {
         return valueDict[key]
     }
     function setValue(key, value) {
+        if(valueDict[key] === value) // 排除相同值
+            return
         valueDict[key] = value
         saveValue(key)
     }
@@ -399,9 +406,7 @@ Item {
             // 更新数值
             function set() {
                 const curr = optionsList[comboBox.currentIndex][0]
-                if(value() != curr) {
-                    value(curr)
-                }
+                value(curr)
             }
 
             ComboBox {
@@ -472,6 +477,12 @@ Item {
         id: compFile
 
         ConfigItemComp {
+            id: rootFile
+
+            // 导入路径
+            function set(path) {
+                value(path) // 设置值
+            }
 
             Item {
                 anchors.top: parent.top
@@ -486,10 +497,27 @@ Item {
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
                     anchors.right: parent.right
-                    // anchors.margins: 2
                     width: height
                     icon_: "folder"
+                    onClicked: fileDialog.open()
+
+                    FileDialog_ {
+                        id: fileDialog
+                        title: origin.dialogTitle
+                        selectExisting: origin.selectExisting
+                        selectFolder: origin.selectFolder
+                        selectMultiple: false  // 始终禁止多选
+                        nameFilters: origin.nameFilters
+                        folder: shortcuts.desktop
+                        onAccepted: {
+                            if(fileDialog.fileUrls_.length > 0) {
+                                // rootFile.set(fileDialog.fileUrls_[0])
+                                textInput.text = fileDialog.fileUrls_[0] // 设置对话框文本
+                            }
+                        }
+                    }
                 }
+                
 
                 // 文本输入框
                 Rectangle {
@@ -505,7 +533,11 @@ Item {
                     clip: true
 
                     TextInput_ {
+                        id: textInput
                         anchors.fill: parent
+                        onTextChanged: { // 对话框文本改变时设置值
+                            rootFile.set(text)
+                        }
                     }
                 }
             }

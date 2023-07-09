@@ -26,6 +26,7 @@ Configs {
                 "type": "file",
                 "selectExisting": true, // 选择现有
                 "selectFolder": true, // 选择文件夹
+                "dialogTitle": qsTr("OCR结果保存目录"),
             },
 
             "filesType": {

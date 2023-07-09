@@ -14,6 +14,5 @@ FileDialog {
             if(s.startsWith("file:///"))
                 fileUrls_.push(s.substring(8))
         }
-        console.log(`关闭对话框，路径为${fileUrls_}`)
     }
 }
