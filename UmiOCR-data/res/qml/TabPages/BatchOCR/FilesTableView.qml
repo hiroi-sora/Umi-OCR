@@ -65,14 +65,14 @@ Item{
     // QT-5.15.2 会报错：“Model size of -225 is less than 0”，不影响使用。
     // QT-5.15.5 修复了这个Bug，但是PySide2尚未更新到这个版本号。只能先忍忍了
     // https://bugreports.qt.io/browse/QTBUG-92444
-    FileDialog {
+    FileDialog_ {
         id: fileDialog
         title: qsTr("请选择图片")
         nameFilters: [qsTr("图片")+" (*.jpg *.jpe *.jpeg *.jfif *.png *.webp *.bmp *.tif *.tiff)"]
         folder: shortcuts.pictures
         selectMultiple: true // 多选
         onAccepted: {
-            addImages(fileDialog.fileUrls) // 发送信号
+            addImages(fileDialog.fileUrls_) // 发送信号
         }
     }
 

@@ -58,18 +58,11 @@ TabPage {
 
     // 将需要查询的图片路径列表paths发送给python。传入值是qt url，file:/// 开头。
     function addImages(paths) {
-        // qt url 转为字符串
-        let fileList = []
-        for(let i in paths){
-            let s = paths[i]
-            if(s.startsWith("file:///"))
-                fileList.push(s.substring(8))
-        }
-        if(fileList.length == 0){
+        if(paths.length == 0){
             return
         }
         // 调用Python方法
-        const res = tabPage.callPy("findImages", fileList)
+        const res = tabPage.callPy("findImages", paths)
         // 结果写入数据
         if(filesDict==undefined){
             filesDict = {}
