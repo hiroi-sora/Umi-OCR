@@ -31,20 +31,33 @@ pip install -U nuitka
 官网下载地址：[https://jrsoftware.org/download.php/is.exe](https://jrsoftware.org/download.php/is.exe)
 中文语言包：[https://raw.githubusercontent.com/jrsoftware/issrc/main/Files/Languages/Unofficial/ChineseSimplified.isl](https://raw.githubusercontent.com/jrsoftware/issrc/main/Files/Languages/Unofficial/ChineseSimplified.isl)
 请保存语言包到Inno Setup安装目录
+
 ![image](https://github.com/hiroi-sora/Umi-OCR/assets/10486408/00c7f0d5-a0b3-4185-904a-c4238b3305f2)
+
 4、执行脚本
 ```
 python nuitka_build.py
 ```
+
 5、安装
+
 - 生成build目录，包括nuitka编译过程文件目录（main.build）、可执行文件目录（main.release）、Inno Setup安装脚本（.iss）
+
 ![image](https://github.com/hiroi-sora/Umi-OCR/assets/10486408/0fc8dd7e-1926-4e14-b35c-5cc4c29b5562)
+
 - 用Inno Setup打开生成的.iss文件，或双击.iss打开。点击Run，生成安装文件
+
 ![image](https://github.com/hiroi-sora/Umi-OCR/assets/10486408/6bf46fff-d699-4a20-9397-4762be837aa3)
+
 - release目录包含portable压缩文件以及安装文件
+
 ![image](https://github.com/hiroi-sora/Umi-OCR/assets/10486408/be27876e-2f1e-4208-a899-947702a5e7b0)
+
 - 双击安装文件，可以采用安装Umi-OCR到指定位置
+
 ![image](https://github.com/hiroi-sora/Umi-OCR/assets/10486408/b67b6fd2-d0d0-4295-b1cb-b1f586d9c38d)
+
 6、卸载
 控制面板找到Umi-OCR，卸载即可
+
 ![image](https://github.com/hiroi-sora/Umi-OCR/assets/10486408/ac4129be-32ab-42fc-886b-41a0534a5b3e)

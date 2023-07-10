@@ -1,8 +1,9 @@
-.idea/
-.vscode
-venv/
-__pycache__/
-main.build/
-main.dist/
-/build/
-/release/
+*
+*/
+!docs
+!ocr
+!PaddleOCR-json
+!ui
+!utils
+!main.py
+**/__pycache__/
