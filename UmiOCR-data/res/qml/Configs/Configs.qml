@@ -8,7 +8,7 @@
 configDict: {
 
     "配置项组": {
-        "title": 显示名称，可选，填写时自动生成控件,
+        "title": 显示名称，可选，填写时自动生成控件。若填单个空格“ ”，则不显示标题栏。
         "type": "group",
         "配置项或配置项组"
     },
@@ -245,6 +245,8 @@ Item {
                 id: groupText
                 text: title
                 anchors.left: parent.left
+                // 不显示标题时，高度为0；否则自动高度
+                height: (title && title!==" ") ? undefined:0
             }
             
             Rectangle {

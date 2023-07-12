@@ -14,7 +14,7 @@ Configs {
 
     configDict: {
         "output": {
-            "title": qsTr("结果保存"),
+            "title": " ",
             "type": "group",
 
             "directoryType": {
