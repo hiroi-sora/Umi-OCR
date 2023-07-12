@@ -8,10 +8,13 @@ import "../../Configs"
 Configs {
     category_: "BatchOCR"
 
+    UtilsConfigDicts { // 通用配置项
+        id: utilsDicts
+    }
 
     configDict: {
         "output": {
-            "title": qsTr("OCR结果保存"),
+            "title": qsTr("结果保存"),
             "type": "group",
 
             "directoryType": {
@@ -51,6 +54,8 @@ Configs {
                 "title": qsTr("忽略空白图片"),
                 "default": false,
             },
+
+            "scheduledTasks": utilsDicts.getScheduledTasks(), // 计划任务
         },
     }
 }

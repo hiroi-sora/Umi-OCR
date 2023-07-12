@@ -37,21 +37,22 @@ TabPage {
         onTriggered: {
             addImages(
                 [
-                    "file:///D:/Pictures/Screenshots/屏幕截图 2023-06-03 120958.png",
-                    "file:///D:/Pictures/Screenshots/屏幕截图 2021-04-27 171637.png",
-                    "file:///D:/Pictures/Screenshots/屏幕截图 2021-04-27 171639.png",
-                    "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-24 235542.png",
-                    "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-22 212147.png",
-                    "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-22 212204.png",
-                    "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-22 212207.png",
-                    "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-22 212310.png",
-                    "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-22 212813.png",
-                    "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-22 212854.png",
-                    "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-23 140303.png",
-                    "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-23 140829.png",
-                    "file:///D:/Pictures/Screenshots/屏幕截图 2023-04-23 191053.png",
+                    "D:/Pictures/Screenshots/屏幕截图 2023-06-03 120958.png",
+                    "D:/Pictures/Screenshots/屏幕截图 2021-04-27 171637.png",
+                    "D:/Pictures/Screenshots/屏幕截图 2021-04-27 171639.png",
+                    "D:/Pictures/Screenshots/屏幕截图 2023-04-24 235542.png",
+                    "D:/Pictures/Screenshots/屏幕截图 2023-04-22 212147.png",
+                    "D:/Pictures/Screenshots/屏幕截图 2023-04-22 212204.png",
+                    "D:/Pictures/Screenshots/屏幕截图 2023-04-22 212207.png",
+                    "D:/Pictures/Screenshots/屏幕截图 2023-04-22 212310.png",
+                    "D:/Pictures/Screenshots/屏幕截图 2023-04-22 212813.png",
+                    "D:/Pictures/Screenshots/屏幕截图 2023-04-22 212854.png",
+                    "D:/Pictures/Screenshots/屏幕截图 2023-04-23 140303.png",
+                    "D:/Pictures/Screenshots/屏幕截图 2023-04-23 140829.png",
+                    "D:/Pictures/Screenshots/屏幕截图 2023-04-23 191053.png",
                 ]
             )
+            console.log("自动添加！！！！！！！！！！！！！")
             // ocrImages()
         }
     }
