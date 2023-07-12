@@ -22,6 +22,7 @@ QtObject {
             },
             "extra": {
                 "title": qsTr("本次完成后执行："),
+                "save": false, // 不保存
                 "optionsList": [
                     ["", qsTr("无")],
                     ["default", qsTr("关机")],

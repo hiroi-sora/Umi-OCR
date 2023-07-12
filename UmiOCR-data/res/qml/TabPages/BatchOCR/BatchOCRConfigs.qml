@@ -51,7 +51,11 @@ Configs {
             },
 
             "ingoreBlank": {
-                "title": qsTr("忽略空白图片"),
+                "title": qsTr("输出忽略空白图片"),
+                "default": false,
+            },
+            "recurrence": {
+                "title": qsTr("递归读取子文件夹"),
                 "default": false,
             },
 

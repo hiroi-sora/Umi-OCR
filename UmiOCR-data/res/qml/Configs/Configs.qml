@@ -8,7 +8,7 @@
 configDict: {
 
     "配置项组": {
-        "title": 显示名称，可选，填写时自动生成控件。若填单个空格“ ”，则不显示标题栏。
+        "title": 若填单个空格“ ”，则不显示标题栏
         "type": "group",
         "配置项或配置项组"
     },
@@ -33,6 +33,11 @@ configDict: {
         "nameFilters": ["图片 (*.jpg *.jpeg)", "类型2..."] 文件夹类型可不需要
     },
 
+    通用配置元素：
+    "title": 显示名称，可选，填写时自动生成控件,
+    "type": 控件类型,
+    "default": 默认值,
+    "save": 可选，填false时不保存（每次初始化为默认值）,
 }
 
 configDict为嵌套形式，而originDict与valueDict为展开形式的单层字典。例：
@@ -63,6 +68,7 @@ Item {
         originDict = {}
         valueDict = {}
         function handleConfigItem(config, key) { // 处理一个配置项
+            originDict[key] = config // configDict项的引用绑定到originDict
             // 类型判断
             if (typeof config.default === "boolean") { // 布尔
                 config.type = "boolean"
@@ -112,7 +118,6 @@ Item {
                 setValue(key, val) // 存储
                 console.log(`${key}  取默认值 ${val}`)
             }
-            originDict[key] = config // configDict项的引用绑定到originDict
             config.fullKey = key // 记录完整key
             valueDict[key] = val // 设当前值
         }
@@ -127,6 +132,8 @@ Item {
                     config.title = ""
                 if(!config.hasOwnProperty("type")) // 类型
                     config.type = ""
+                if(!config.hasOwnProperty("save")) // 保存
+                    config.save = true
                 // 若是配置项组，递归遍历
                 if(config.type==="group") { 
                     config.fullKey = prefix+key // 记录完整key
@@ -150,7 +157,9 @@ Item {
         if(valueDict[key] === value) // 排除相同值
             return
         valueDict[key] = value
-        saveValue(key)
+        if(originDict[key].save) { // 需要保存值
+            saveValue(key)
+        }
     }
     // 带缓存的存储值
     property var cacheDict: {} // 缓存
