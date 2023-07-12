@@ -13,7 +13,7 @@ Configs {
     }
 
     configDict: {
-        "output": {
+        "batchOCR": {
             "title": " ",
             "type": "group",
 

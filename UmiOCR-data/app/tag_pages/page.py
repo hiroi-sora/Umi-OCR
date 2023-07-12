@@ -16,4 +16,7 @@ class Page(QObject):
         print(f"py控制器 {self.ctrlKey} 销毁！")
 
     def callQml(self, funcName, *args):  # python调用qml函数
-        self.controller.callQml(self.ctrlKey, funcName, *args)
+        return self.controller.callQml(self.ctrlKey, funcName, *args)
+
+    def getQmlConfigValueDict(self):  # python获取qml配置字典
+        return self.controller.callQml(self.ctrlKey, "getConfigValueDict").toVariant()

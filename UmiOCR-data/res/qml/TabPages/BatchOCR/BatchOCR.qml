@@ -16,6 +16,7 @@ TabPage {
 
     // 配置
     BatchOCRConfigs { id: batchOCRConfigs } 
+    configsComp: batchOCRConfigs
 
     // 文件表格模型
     property alias filesModel: filesTableView.filesModel
