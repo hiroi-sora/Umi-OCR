@@ -18,5 +18,9 @@
     "files.associations": {
         "*.ts": "xml"
     },
-    "svg.preview.background": "transparent"
+    "svg.preview.background": "transparent",
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter"
+    },
+    "python.formatting.provider": "none"
 }
