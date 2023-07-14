@@ -17,19 +17,23 @@ Configs {
             "title": " ",
             "type": "group",
 
-            "directoryType": {
+            "dirType": {
                 "title": qsTr("保存到"),
                 "optionsList": [
                     ["default", qsTr("图片原目录")],
                     ["specify", qsTr("指定目录")],
                 ],
             },
-            "directory": {
+            "dir": {
                 "title": qsTr("指定目录"),
                 "type": "file",
                 "selectExisting": true, // 选择现有
                 "selectFolder": true, // 选择文件夹
                 "dialogTitle": qsTr("OCR结果保存目录"),
+            },
+            "fileName": {
+                "title": qsTr("文件名"),
+                "default": "识别结果",
             },
 
             "filesType": {

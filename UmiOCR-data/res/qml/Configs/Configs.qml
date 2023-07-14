@@ -17,6 +17,10 @@ configDict: {
         "title": ,
         "default": true / false,
     },
+    "文本 text （文本框）": {
+        "title": ,
+        "default": "文本",
+    },
     "枚举 enum （下拉框）": {
         "title": ,
         "optionsList": [
@@ -36,7 +40,6 @@ configDict: {
     通用配置元素：
     "title": 显示名称，可选，填写时自动生成控件,
     "type": 控件类型,
-    "default": 默认值,
     "save": 可选，填false时不保存（每次初始化为默认值）,
 }
 
@@ -69,14 +72,18 @@ Item {
         valueDict = {}
         function handleConfigItem(config, key) { // 处理一个配置项
             originDict[key] = config // configDict项的引用绑定到originDict
-            // 类型判断
+            // 类型判断：省略type
             if (typeof config.default === "boolean") { // 布尔
                 config.type = "boolean"
+            }
+            else if (typeof config.default === "string") { // 文本
+                config.type = "text"
             }
             else if (config.hasOwnProperty("optionsList")) { // 枚举
                 config.type = "enum"
                 config.default = config.optionsList[0][0]
             }
+            // 类型：指定type
             else if (config.hasOwnProperty("type")) {
                 if(config.type === "file") { // 文件选择
                     config.default = ""
@@ -318,6 +325,7 @@ Item {
         "boolean": compBoolean,
         "enum": compEnum,
         "file": compFile,
+        "text": compText,
     }
     // 配置项：布尔值
     Component {
@@ -387,6 +395,45 @@ Item {
                     }
                 }
 
+            }
+        }
+    }
+    // 配置项：文本
+    Component {
+        id: compText
+
+        ConfigItemComp {
+            id: rootText
+            // 初始化
+            Component.onCompleted: {
+                textInput.text = value()
+            }
+            // 修改值
+            function set(t) {
+                value(t) // 设置值
+            }
+            // 输入框
+            Rectangle {
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.right: parent.right
+                anchors.margins: 1
+                width: parent.width*0.5
+                color: "#00000000"
+                border.width: 2
+                border.color: theme.coverColor2
+                radius: theme.btnRadius
+
+                TextInput_ {
+                    id: textInput
+                    clip: true
+                    anchors.fill: parent
+                    anchors.leftMargin: parent.border.width
+                    anchors.rightMargin: parent.border.width
+                    onTextChanged: { // 对话框文本改变时设置值
+                        rootText.set(text)
+                    }
+                }
             }
         }
     }
