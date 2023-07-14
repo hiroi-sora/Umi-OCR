@@ -16,14 +16,16 @@ Log = GetLog()
 # ======================= 参数解析 ===================================
 
 Flags = gflags.FLAGS
-gflags.DEFINE_bool('no_win', False, '（已过时，请用-hide）true时隐藏窗口，最小化到托盘。')  # 兼容旧版
+# 设置
+gflags.DEFINE_integer('language', -1, '更改识别语言。传入序号(从0开始)，切换为设置页中对应序号的语言。')
+# 指令
 gflags.DEFINE_bool('hide', False, 'true时隐藏窗口，最小化到托盘。')  # 兼容旧版
-gflags.DEFINE_bool('show', False, 'true时将主窗口显示到最前（不锁定）。')
+gflags.DEFINE_bool('show', False, 'true时将主窗口弹出到最前方。')
 gflags.DEFINE_bool('exit', False, 'true时退出Umi-OCR。')
+# 任务
 gflags.DEFINE_bool('clipboard', False, 'true时读取一次剪贴板进行识图。')
 gflags.DEFINE_bool('screenshot', False, 'true时进行一次截屏识图。')
 gflags.DEFINE_string('img', '', '传入本地图片路径。含空格的路径用引号""括起来。多个路径可用逗号,连接。')
-gflags.DEFINE_integer('language', -1, '更改识别语言。传入序号(从0开始)，切换为设置页中对应序号的语言。')
 
 
 DictDefault = Flags.FlagValuesDict()  # 生成默认值字典
@@ -39,8 +41,6 @@ def Parse(args):  # 解析参数。传入参数列表，返回解析后的字典
                 f['img'] = f['img'].split(',')
             else:  # 单个地址包装
                 f['img'] = [f['img']]
-        if f['no_win']:  # 兼容旧版
-            f['hide'] = True
         return f
     except Exception as e:
         return {'error': f'命令行参数解析异常。\n参数：{args}\n错误：{e}', **DictDefault}
@@ -49,7 +49,7 @@ def Parse(args):  # 解析参数。传入参数列表，返回解析后的字典
 def Mission(flags):
     '''执行任务。传入参数字典'''
 
-    # 设置
+    # 设置&指令
     if flags['exit']:  # 退出
         Config.main.win.event_generate('<<QuitEvent>>')
         return
