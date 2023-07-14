@@ -1,6 +1,6 @@
 import utils.gflags as gflags
 from utils.logger import GetLog
-from utils.config import Config
+from utils.config import Config, WindowTopModeFlag
 
 import re
 import os
@@ -18,8 +18,11 @@ Log = GetLog()
 Flags = gflags.FLAGS
 # 设置
 gflags.DEFINE_integer('language', -1, '更改识别语言。传入序号(从0开始)，切换为设置页中对应序号的语言。')
+gflags.DEFINE_integer('window_top_mode', -1, '窗口置顶模式。0为静默模式，1为自动弹出。')
+gflags.DEFINE_string('output_file_path', '', '指定输出文件的目录（文件夹）。')
+gflags.DEFINE_string('output_file_name', '', '指定输出文件的文件名（不含后缀）。')
 # 指令
-gflags.DEFINE_bool('hide', False, 'true时隐藏窗口，最小化到托盘。')  # 兼容旧版
+gflags.DEFINE_bool('hide', False, 'true时隐藏窗口，最小化到托盘。')
 gflags.DEFINE_bool('show', False, 'true时将主窗口弹出到最前方。')
 gflags.DEFINE_bool('exit', False, 'true时退出Umi-OCR。')
 # 任务
@@ -65,6 +68,14 @@ def Mission(flags):
         lans, index = list(Config.get("ocrConfig").keys()), flags['language']
         if(index < len(lans)):
             Config.set("ocrConfigName", lans[index])
+    if flags['window_top_mode'] == 0:  # 窗口弹出模式
+        Config.set("WindowTopMode", WindowTopModeFlag.never)
+    elif flags['window_top_mode'] == 1:
+        Config.set("WindowTopMode", WindowTopModeFlag.finish)
+    if flags['output_file_path']:  # 输出文件目录
+        Config.set("outputFilePath", flags['output_file_path'])
+    if flags['output_file_name']:  # 输出文件文件名前缀
+        Config.set("outputFileName", flags['output_file_name'])
 
     # 任务
     if not Config.main.isMsnReady():
