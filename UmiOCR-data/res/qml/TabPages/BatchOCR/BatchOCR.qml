@@ -8,6 +8,7 @@ import QtQuick.Controls 2.15
 import ".."
 import "../../Widgets"
 import "../../Widgets/ResultLayout"
+import "../../js/utils.js" as Utils
 
 TabPage {
     id: tabPage
@@ -58,7 +59,7 @@ TabPage {
         }
     }
 
-    // 将需要查询的图片路径列表paths发送给python。传入值是qt url，file:/// 开头。
+    // 将需要查询的图片路径列表paths发送给python。传入值是没有 file:/// 开头的纯字符串的列表。
     function addImages(paths) {
         if(paths.length == 0){
             return
@@ -339,7 +340,8 @@ TabPage {
         anchors.fill: parent;
         onDropped: {
             if(drop.hasUrls){
-                addImages(drop.urls)
+                var urls = Utils.QUrl2String(drop.urls)
+                addImages(urls)
             }
         }
 
