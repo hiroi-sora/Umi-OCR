@@ -54,7 +54,6 @@ class BatchOCR(Page):
         return imgPaths
 
     def msnPaths(self, paths):  # 接收路径列表，开始OCR任务
-        self.__setMsnState("init")
         msnInfo = {
             "onStart": lambda *e: self.__setMsnState("run"),
             "onGet": self.__onGet,
@@ -62,17 +61,11 @@ class BatchOCR(Page):
             "onFailure": lambda *e: self.__setMsnState("none"),
         }
         self.msnID = MissionOCR.addMissionList(msnInfo, paths)
-
-        # import copy
-
-        # msnID = MissionOCR.addMissionList(copy.deepcopy(mission))
-        # msnID = MissionOCR.addMissionList(copy.deepcopy(mission))
-        # msnID = MissionOCR.addMissionList(copy.deepcopy(mission))
-        print(f"在线程{threading.current_thread().ident}添加{len(paths)}个任务，id为{msnID}")
+        print(f"在线程{threading.current_thread().ident}添加{len(paths)}个任务，id为{self.msnID}")
 
     def msnStop(self):  # 任务停止，并清理任务列表
-        self.__setMsnState("stop")
         leftover = MissionOCR.stopMissionList(self.msnID)
+        self.__setMsnState("none")
         print(f"停止任务，剩余列表：\n{leftover}")
 
     # ========================= 【任务控制器的异步回调】 =========================

@@ -55,7 +55,7 @@ TabPage {
                 ]
             )
             console.log("自动添加！！！！！！！！！！！！！")
-            // ocrImages()
+            ocrImages()
         }
     }
 
@@ -96,6 +96,7 @@ TabPage {
                 break
             case "run":  // 工作中
                 tabPage.callPy("msnStop")
+                setMsnState("stop")
                 break
         }
     }
@@ -105,6 +106,7 @@ TabPage {
         let msnLength = Object.keys(filesDict).length
         if(msnLength <= 0)
             return
+        setMsnState("init")
         // 刷新表格
         for(let path in filesDict){
             filesModel.setRow(filesDict[path].index, {
