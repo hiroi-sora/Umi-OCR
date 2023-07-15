@@ -22,6 +22,7 @@
 from ..api_ocr import getOcrApi
 from .mission import Mission
 from PySide2.QtCore import QMutex, QThreadPool, QRunnable
+import time
 from uuid import uuid4  # 唯一ID
 import threading  # TODO: 测试
 
@@ -33,14 +34,16 @@ class __MissionOcrClass(Mission):
 
     # ========================= 【重载】 =========================
 
-    def msnUpdate(self):  # 用于更新api和参数
+    def msnUpdate(self, msnInfo):  # 用于更新api和参数
         # TODO: 检查参数更新
         self.__api.start({"exePath": "lib\PaddleOCR-json\PaddleOCR-json.exe"})
         return True
 
-    def msnTask(self, msnInfo):  # 执行msnInfo中第一个任务
-        msn = msnInfo["list"][0]
+    def msnTask(self, msnInfo, msn):  # 执行msnInfo中第一个任务
+        t1 = time.time()
         res = self.__api.runPath(msn)
+        t2 = time.time()
+        res["time"] = t2 - t1
         return res
 
 
