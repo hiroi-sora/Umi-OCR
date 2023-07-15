@@ -37,6 +37,11 @@ RowLayout  {
                     parent.hovered ? theme.coverColor2 : "#00000000"
                 )
             }
+
+            ToolTip_ {
+                visible: parent.hovered
+                text: qsTr("窗口置顶")
+            }
         }
     }
 
@@ -235,6 +240,11 @@ RowLayout  {
                 color: parent.checked ? theme.coverColor4 : (
                     parent.hovered ? theme.coverColor2 : "#00000000"
                 )
+            }
+
+            ToolTip_ {
+                visible: parent.hovered
+                text: qsTr("锁定标签栏")
             }
         }
     }
