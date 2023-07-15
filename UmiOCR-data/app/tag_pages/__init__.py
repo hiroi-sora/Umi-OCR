@@ -7,7 +7,7 @@
 前端页面访问各种后端功能，必须靠这个控制器作为中转。
 """
 
-from PySide2.QtCore import QObject, Slot
+from PySide2.QtCore import QObject, Slot, Signal
 
 # 导入本模块内定义的控制器类
 from .BatchOCR import BatchOCR
@@ -38,6 +38,9 @@ class TagPageController(QObject):
         # 当前已实例化的控制器
         self.page = {}
         self.keyIndex = 0  # 用于生成标识符
+        # 信号 异步的python调用主线程的qml
+        self.__callQmlSignal = self.CallSignal()
+        self.__callQmlSignal.signal.connect(self.__callQmlInMain)
 
     # ========================= 【增删改查】 =========================
 
@@ -109,3 +112,15 @@ class TagPageController(QObject):
             return None
         # 调用方法，参数不对的话让系统抛出错误
         return method(*args)
+
+    # python异步，在主线程中调用qml函数
+    def callQmlInMain(self, ctrlKey, funcName, *args):
+        self.__callQmlSignal.signal.emit((ctrlKey, funcName, *args))
+
+    @Slot("QVariant")
+    def __callQmlInMain(self, args):
+        self.callQml(*args)
+
+    # 信号类
+    class CallSignal(QObject):
+        signal = Signal("QVariant")

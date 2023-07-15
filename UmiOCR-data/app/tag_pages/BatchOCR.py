@@ -4,7 +4,9 @@
 
 import os
 from .page import Page
-from ..ocr.mission_controller import Mission
+
+# from ..ocr.mission_controller import Mission
+from ..mission.mission_ocr import MissionOCR
 
 from PySide2.QtCore import Slot
 
@@ -14,7 +16,7 @@ import threading  # TODO: 测试
 class BatchOCR(Page):
     def __init__(self, *args):
         super().__init__(*args)
-        self.mission = Mission(self.__setMsnState)  # 页面自身的任务控制器对象
+        self.msnID = ""
 
     # ========================= 【qml调用python】 =========================
 
@@ -52,27 +54,31 @@ class BatchOCR(Page):
         return imgPaths
 
     def msnPaths(self, paths):  # 接收路径列表，开始OCR任务
-        missions = [
-            {
-                "api": "",
-                "args": {"exePath": "./lib/PaddleOCR-json/PaddleOCR-json.exe"},
-            }
-        ]
-        for p in paths:
-            missions.append({"path": p, "callback": self.__onGet})
-        self.mission.add(missions)  # 添加到OCR任务列表
-        print(f"在线程{threading.current_thread().ident}添加{len(missions)}个任务")
+        self.__setMsnState("init")
+        msnInfo = {
+            "onStart": lambda *e: self.__setMsnState("run"),
+            "onGet": self.__onGet,
+            "onFinish": lambda *e: self.__setMsnState("none"),
+            "onFailure": lambda *e: self.__setMsnState("none"),
+        }
+        self.msnID = MissionOCR.addMissionList(msnInfo, paths)
+
+        # import copy
+
+        # msnID = MissionOCR.addMissionList(copy.deepcopy(mission))
+        # msnID = MissionOCR.addMissionList(copy.deepcopy(mission))
+        # msnID = MissionOCR.addMissionList(copy.deepcopy(mission))
+        print(f"在线程{threading.current_thread().ident}添加{len(paths)}个任务，id为{msnID}")
 
     def msnStop(self):  # 任务停止，并清理任务列表
-        self.mission.stop()
-        self.mission.clear()
+        self.__setMsnState("stop")
+        leftover = MissionOCR.stopMissionList(self.msnID)
+        print(f"停止任务，剩余列表：\n{leftover}")
 
     # ========================= 【任务控制器的异步回调】 =========================
 
     # 单个OCR任务完成
-    @Slot("QVariant", "QVariant")
-    def __onGet(self, res, msn):
-        # print(f"在线程{threading.current_thread().ident}执行回调，返回值\n    {res}")
+    def __onGet(self, res, path, msnInfo):
         # 计算平均置信度
         score = 0
         num = 0
@@ -83,10 +89,9 @@ class BatchOCR(Page):
             if num > 0:
                 score /= num
         res["score"] = score
-        self.callQml("setOcrRes", msn["path"], res)
+        self.callQmlInMain("setOcrRes", path, res)  # 在主线程中调用qml
 
     # 设置任务状态
-    @Slot(str)
     def __setMsnState(self, flag):
         print(f"在线程{threading.current_thread().ident}设置工作状态{flag}")
-        self.callQml("setMsnState", flag)
+        self.callQmlInMain("setMsnState", flag)
