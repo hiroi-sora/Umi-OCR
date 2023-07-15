@@ -1,7 +1,4 @@
-class OcrApi:
-    def check(self):  # 返回引擎是否就绪
-        return False
-
+class ApiOcr:
     def start(self, args):  # 启动引擎，或重设参数
         print("未知引擎组件-启动引擎")
 

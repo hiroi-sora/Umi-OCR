@@ -2,7 +2,7 @@
 # 项目主页：
 # https://github.com/hiroi-sora/PaddleOCR-json
 
-from .api import OcrApi
+from .api_ocr import ApiOcr
 
 import os
 import socket  # 套接字
@@ -188,26 +188,23 @@ class __PPOCR_socket(PPOCR_pipe):  # 调用OCR（套接字模式）
             return {"code": 905, "data": f"识别器输出值反序列化JSON失败。异常信息：[{e}]。原始内容：[{getStr}]"}
 
 
-class ApiPaddleOCR(OcrApi):  # 公开接口
+class ApiPaddleOCR(ApiOcr):  # 公开接口
     def __init__(self):
         self.api = None
         self.args = {}
 
-    def check(self):
-        return not self.api == None
-
-    def start(self, args):  # 启动引擎
+    def start(self, argd):  # 启动引擎
         if not self.api == None:
             # 若引擎已启动，且参数与传入参数一致，则无需重启
-            if not set(args.items()) == set(self.args.items()):
+            if not set(argd.items()) == set(self.args.items()):
                 return
             # 若引擎已启动但需要更改参数，则停止旧引擎
             self.stop()
         # 启动新引擎
-        self.args = args
-        exePath = args["exePath"]
-        del args["exePath"]
-        self.api = PPOCR_pipe(exePath, args)
+        self.args = argd
+        exePath = argd["exePath"]
+        del argd["exePath"]
+        self.api = PPOCR_pipe(exePath, argd)
 
     def stop(self):  # 停止引擎
         if self.api == None:
