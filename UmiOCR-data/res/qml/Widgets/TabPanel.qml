@@ -13,18 +13,21 @@ Item {
     /* 每一项：
     {   "key": 标识,
         "title": 标题,
-        "component": 组件 }  */
+        "component": 选项卡组件
+        选项卡组件中可有一个属性ctrlBar，指向一个控制栏子组件。这个子组件将会父级移动到选项卡的控制栏。
+         }  */
     property var tabsModel: []
     
     // 上方 选项栏
     Item {
-        id: "topContainer"
+        id: topContainer
         
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
         height: theme.textSize * 2
 
+        // 左：选项栏
         TabBar {
             id: bar
             anchors.left: parent.left
@@ -93,6 +96,35 @@ Item {
                 }
             }
         }
+        // 右：每个卡的控制栏
+        SwipeView {
+            id: ctrlSwipeView
+            anchors.left: bar.right
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            clip: true
+
+            currentIndex: bar.currentIndex
+            interactive: false // 禁止直接滑动视图本身
+            Component.onCompleted:{
+                if(!theme.enabledEffect) // 关闭动画
+                    contentItem.highlightMoveDuration = 0
+            }
+            
+            Repeater {
+                model: tabsModel
+
+                Item { // 控制栏子组件父级重定向
+                    Component.onCompleted: {
+                        if(modelData.component.ctrlBar) {
+                            modelData.component.ctrlBar.parent = this
+                        }
+                    }
+                }
+            }
+        }
+
     }
 
     // 下方 选项页
