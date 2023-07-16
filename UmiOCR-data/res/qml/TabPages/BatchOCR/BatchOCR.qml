@@ -55,7 +55,7 @@ TabPage {
                 ]
             )
             console.log("自动添加！！！！！！！！！！！！！")
-            ocrStart()
+            // ocrStart()
         }
     }
 
@@ -365,7 +365,7 @@ TabPage {
                     {
                         "key": "configs",
                         "title": qsTr("设置"),
-                        "component": batchOCRConfigs.panelComponent,
+                        "component": batchOCRConfigs.getPanelComponent(),
                     },
                     {
                         "key": "ocrResult",

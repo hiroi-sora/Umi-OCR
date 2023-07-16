@@ -63,11 +63,10 @@ Item {
     property var valueDict: { } // 值字典，动态变化
     property var compDict: { } // 组件字典。可能不是所有配置项都有组件
 
-    // ========================= 【接口】 =========================
+    // ========================= 【对外接口】 =========================
 
     // 重置所有设置为默认值
     function reset() {
-        console.log("恢复初始值")
         for (let key in originDict) {
             setValue(key, originDict[key].default) // 刷新值
             if(compDict.hasOwnProperty(key)) { // 刷新UI
@@ -75,8 +74,12 @@ Item {
             }
         }
     }
+    // 获取自动生成的滚动视图组件
+    function getPanelComponent() {
+        return panelComponent
+    }
     
-    // ==================================================
+    // ========================= 【数值逻辑（内部调用）】 =========================
 
     // 初始化数值
     function initConfigDict() {
@@ -262,6 +265,27 @@ Item {
             id: panelContainer
             anchors.fill: parent
             spacing: theme.spacing
+
+            // 顶部控制栏
+            Item {
+                id: ctrlBar
+                height: theme.textSize*1.5
+                anchors.left: parent.left
+                anchors.right: parent.right
+
+                Button_ {
+                    id: ctrlBtn1
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    anchors.right: parent.right
+                    text_: qsTr("重置")
+                    textColor_: theme.noColor
+                    onClicked: {
+                        // TODO: 确认对话框
+                        reset()
+                    }
+                }
+            }
         }
     }
     // 配置项组（外层）
