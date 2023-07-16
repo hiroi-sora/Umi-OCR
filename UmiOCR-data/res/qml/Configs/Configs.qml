@@ -56,11 +56,27 @@ import "../Widgets"
 Item {
     id: configs
     property string category_: "" // 配置名
-    property var configDict: { } // 定义字典，静态参数
+    property var configDict: { } // 定义字典，静态参数，key为嵌套
     property alias panelComponent: panelComponent // 自动生成的组件
-
+    // 以下的字典key为展开形式，key都相同
     property var originDict: { } // 键字典，键为展开形式，值指向configDict的项
     property var valueDict: { } // 值字典，动态变化
+    property var compDict: { } // 组件字典。可能不是所有配置项都有组件
+
+    // ========================= 【接口】 =========================
+
+    // 重置所有设置为默认值
+    function reset() {
+        console.log("恢复初始值")
+        for (let key in originDict) {
+            setValue(key, originDict[key].default) // 刷新值
+            if(compDict.hasOwnProperty(key)) { // 刷新UI
+                compDict[key].updateUI()
+            }
+        }
+    }
+    
+    // ==================================================
 
     // 初始化数值
     function initConfigDict() {
@@ -70,6 +86,7 @@ Item {
         }
         originDict = {}
         valueDict = {}
+        compDict = {}
         function handleConfigItem(config, key) { // 处理一个配置项
             originDict[key] = config // configDict项的引用绑定到originDict
             // 类型判断：省略type
@@ -155,11 +172,11 @@ Item {
         // console.log(`配置${category_}: `,JSON.stringify(originDict, null, 4))
         console.log(`配置${category_}: `,JSON.stringify(valueDict, null, 4))
     }
-
-    // 获取值，设置值
+    // 获取值
     function getValue(key) {
         return valueDict[key]
     }
+    // 设置值
     function setValue(key, value) {
         if(valueDict[key] === value) // 排除相同值
             return
@@ -208,7 +225,8 @@ Item {
         function handleConfigItem(config, parent) { // 处理一个配置项
             if(componentDict.hasOwnProperty(config.type)) {
                 const comp = componentDict[config.type]
-                comp.createObject(parent, {"key":config.fullKey, "configs": configs})
+                const obj = comp.createObject(parent, {"key":config.fullKey, "configs": configs})
+                compDict[config.fullKey] = obj
             }
         }
         function handleConfigGroup(group, parent=panelContainer) { // 处理一个配置组

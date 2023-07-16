@@ -8,7 +8,7 @@ import "../Widgets"
 Item {
     property string key: "" // valueDict的键
     property var configs: undefined // 保存对Configs组件的引用
-    property var updateUI: ()=>{console.log(`${key} 更新设置UI为${value()}`)} // 更新UI函数
+    property var updateUI: ()=>{console.log(`${key} 更新设置UI为${value()}`)} // 更新UI函数，子类重写，通过value()获取最新值
     property int cursorShape_: Qt.ArrowCursor // 鼠标指针
 
     property string title: "" // 标题，可不填
