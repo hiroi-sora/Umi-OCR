@@ -21,7 +21,14 @@ class Mission:
 
     def addMissionList(self, msnInfo, msnList):  # 添加一条任务队列，返回任务ID
         msnID = uuid4()
-        # state: 0等待开始，1进行中，-1要求停止
+        # 检查并补充回调函数
+        # 队列开始，单个任务准备开始，单任务取得结果，队列成功结束，队列失败结束
+        cbKeys = ["onStart", "onReady", "onGet", "onFinish", "onFailure"]
+        for k in cbKeys:
+            if k not in msnInfo or not callable(msnInfo[k]):
+                print(f"补充空回调函数{k}")
+                msnInfo[k] = (lambda key: lambda *e: print(f"空回调 {key}"))(k)
+        # 任务状态state: 0等待开始，1进行中，-1要求停止
         msnInfo["state"] = 0
         # 添加到任务队列
         self.__msnMutex.lock()  # 上锁
@@ -76,21 +83,22 @@ class Mission:
             # 3. 检查任务是否要求停止
             if msnInfo["state"] == -1:
                 self.__msnDictDel(dictKey)
-                msnInfo["onFailure"]()
+                msnInfo["onFailure"](msnInfo)
                 continue
 
-            # 4. 检查、更新参数
-            if not self.msnUpdate(msnInfo):
+            # 4. 前处理，检查、更新参数
+            if not self.msnPreTask(msnInfo):
                 print("任务管理器：跳过任务")
                 continue
 
             # 5. 首次任务
             if msnInfo["state"] == 0:
                 msnInfo["state"] = 1
-                msnInfo["onStart"]()
+                msnInfo["onStart"](msnInfo)
 
             # 6. 执行任务
             msn = msnList[0]
+            msnInfo["onReady"](msnInfo, msn)
             res = self.msnTask(msnInfo, msn)
             if res == None:
                 print("【Error】任务管理器：msnTask失败")
@@ -99,16 +107,16 @@ class Mission:
             # 7. 再次检查任务是否要求停止
             if msnInfo["state"] == -1:
                 self.__msnDictDel(dictKey)
-                msnInfo["onFailure"]()
+                msnInfo["onFailure"](msnInfo)
                 continue
 
             # 8. 不停止，则上报该任务
             msnList.pop(0)  # 弹出该任务
-            msnInfo["onGet"](res, msn, msnInfo)  # 回调
+            msnInfo["onGet"](msnInfo, msn, res)  # 回调
 
             # 9. 这条任务队列完成
             if len(msnList) == 0:
-                msnInfo["onFinish"]()
+                msnInfo["onFinish"](msnInfo)
                 self.__msnDictDel(dictKey)
                 dictIndex -= 1  # 字典下标回退1位，下次执行正确的下一项
 
@@ -127,11 +135,11 @@ class Mission:
 
     # ========================= 【继承重载】 =========================
 
-    def msnUpdate(self, msnInfo):  # 用于更新api和参数。返回True更新成功，False跳过本次任务
+    def msnPreTask(self, msnInfo):  # 任务前处理，用于更新api和参数。返回True处理成功，False跳过本次任务
         print("mission 父类 msnUpdate")
         return False
 
-    def msnTask(self, msnInfo, msn):  # 执行msnInfo中第一个任务
+    def msnTask(self, msnInfo, msn):  # 执行任务msn，返回结果
         print("mission 父类 msnTask")
         return None
 

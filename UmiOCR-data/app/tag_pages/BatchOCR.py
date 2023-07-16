@@ -55,23 +55,35 @@ class BatchOCR(Page):
 
     def msnPaths(self, paths):  # 接收路径列表，开始OCR任务
         msnInfo = {
-            "onStart": lambda *e: self.__setMsnState("run"),
+            "onStart": self.__onStart,
+            "onReady": self.__onReady,
             "onGet": self.__onGet,
-            "onFinish": lambda *e: self.__setMsnState("none"),
-            "onFailure": lambda *e: self.__setMsnState("none"),
+            "onFinish": self.__onFinish,
+            "onFailure": self.__onFinish,
         }
         self.msnID = MissionOCR.addMissionList(msnInfo, paths)
-        print(f"在线程{threading.current_thread().ident}添加{len(paths)}个任务，id为{self.msnID}")
+        if self.msnID:
+            print(
+                f"在线程{threading.current_thread().ident}添加{len(paths)}个任务，id为{self.msnID}"
+            )
+            self.callQml("setMsnState", "run")
+        else:
+            print(f"添加任务失败")
+            self.callQml("setMsnState", "None")
 
-    def msnStop(self):  # 任务停止，并清理任务列表
+    def msnStop(self):  # 任务停止（同步）
         leftover = MissionOCR.stopMissionList(self.msnID)
-        self.__setMsnState("none")
-        print(f"停止任务，剩余列表：\n{leftover}")
+        return leftover
 
     # ========================= 【任务控制器的异步回调】 =========================
 
-    # 单个OCR任务完成
-    def __onGet(self, res, path, msnInfo):
+    def __onStart(self, msnInfo):  # 任务队列开始
+        pass
+
+    def __onReady(self, msnInfo, path):  # 单个任务准备
+        self.callQmlInMain("onOcrReady", path)
+
+    def __onGet(self, msnInfo, path, res):  # 单个任务完成
         # 计算平均置信度
         score = 0
         num = 0
@@ -82,7 +94,10 @@ class BatchOCR(Page):
             if num > 0:
                 score /= num
         res["score"] = score
-        self.callQmlInMain("setOcrRes", path, res)  # 在主线程中调用qml
+        self.callQmlInMain("onOcrGet", path, res)  # 在主线程中调用qml
+
+    def __onFinish(self, msnInfo):  # 任务队列完成或失败
+        self.callQmlInMain("onOcrFinish")
 
     # 设置任务状态
     def __setMsnState(self, flag):

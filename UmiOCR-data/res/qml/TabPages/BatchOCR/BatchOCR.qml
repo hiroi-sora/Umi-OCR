@@ -55,7 +55,7 @@ TabPage {
                 ]
             )
             console.log("自动添加！！！！！！！！！！！！！")
-            ocrImages()
+            ocrStart()
         }
     }
 
@@ -92,27 +92,26 @@ TabPage {
     function runBtnClick() {
         switch(msnState) {
             case "none": // 不在运行
-                ocrImages()
+                ocrStart()
                 break
             case "run":  // 工作中
-                tabPage.callPy("msnStop")
-                setMsnState("stop")
+                ocrStop()
                 break
         }
     }
 
     // 运行OCR
-    function ocrImages() {
+    function ocrStart() {
         let msnLength = Object.keys(filesDict).length
         if(msnLength <= 0)
             return
-        setMsnState("init")
+        setMsnState("init") // 状态：初始化任务
         // 刷新表格
         for(let path in filesDict){
             filesModel.setRow(filesDict[path].index, {
                     "filePath": path,
                     "time": "",
-                    "state": "",
+                    "state": qsTr("排队"),
                 })
         }
         // 刷新计数
@@ -126,6 +125,26 @@ TabPage {
         missionShow = `0s  0/${msnLength}  0%` // 信息显示
         // 开始运行
         tabPage.callPy("msnPaths", Object.keys(filesDict))
+    }
+
+    // 停止OCR（同步）
+    function ocrStop() {
+        setMsnState("stop")
+        const leftover = tabPage.callPy("msnStop")
+        // console.log("剩余：", leftover)
+        // 刷新表格，清空未执行的任务的状态
+        for(let path in filesDict){
+            const r = filesDict[path].index
+            const row = filesModel.getRow(r)
+            if(row.time === "") {
+                filesModel.setRow(filesDict[path].index, {
+                        "filePath": path,
+                        "time": "",
+                        "state": "",
+                    })
+            }
+        }
+        setMsnState("none")
     }
 
     // 添加一个结果
@@ -168,10 +187,26 @@ TabPage {
         console.log("set mission state:  ", flag)
     }
 
-    // 设置一个OCR的返回值
-    function setOcrRes(path, res) {
+    // 准备开始一个任务
+    function onOcrReady(path) {
         if(!filesDict.hasOwnProperty(path)){
-            console.error("【Error】OCR结果不存在qml队列！", path)
+            console.error("【Error】qml队列不存在路径！", path)
+            return
+        }
+        // 刷新文件表格显示
+        const r = filesDict[path].index
+        const row = filesModel.getRow(r)
+        filesModel.setRow(r, {
+            "filePath": row.filePath,
+            "time": "",
+            "state": qsTr("处理中"),
+        })
+    }
+
+    // 获取一个OCR的返回值
+    function onOcrGet(path, res) {
+        if(!filesDict.hasOwnProperty(path)){
+            console.error("【Error】qml队列不存在路径！", path)
             return
         }
         // 刷新耗时显示
@@ -210,6 +245,11 @@ TabPage {
         })
         // 提取文字，添加到结果表格
         addResult(filename, formattedDate, ocrText)
+    }
+
+    // 任务队列完毕
+    function onOcrFinish() {
+        setMsnState("none")
     }
 
     // ========================= 【布局】 =========================

@@ -34,7 +34,7 @@ class __MissionOcrClass(Mission):
 
     # ========================= 【重载】 =========================
 
-    def msnUpdate(self, msnInfo):  # 用于更新api和参数
+    def msnPreTask(self, msnInfo):  # 用于更新api和参数
         # TODO: 检查参数更新
         self.__api.start({"exePath": "lib\PaddleOCR-json\PaddleOCR-json.exe"})
         return True
