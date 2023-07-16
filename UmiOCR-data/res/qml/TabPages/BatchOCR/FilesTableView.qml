@@ -14,6 +14,7 @@ Item{
     // ========================= 【逻辑】 =========================
 
     property string herderEleFile: qsTr("文件")
+    property string msnState // 任务状态，父组件传入
     // 表头模型
     ListModel {
         id: headerModel
@@ -52,6 +53,8 @@ Item{
 
     // 清空表格
     function clearTable() {
+        if(msnState !== "none")
+            return
         tableModel.clear()
         filesDict = {}
     }
@@ -105,7 +108,8 @@ Item{
                     text_: qsTr("选择图片")
 
                     onClicked: {
-                        fileDialog.open()
+                        if(msnState === "none")
+                            fileDialog.open()
                     }
                     
                 }

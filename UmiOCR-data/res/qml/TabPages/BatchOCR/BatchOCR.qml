@@ -337,6 +337,7 @@ TabPage {
                 anchors.bottom: parent.bottom
                 anchors.margins: theme.spacing
                 anchors.topMargin: theme.smallSpacing
+                msnState: tabPage.msnState
 
                 onAddImages: {
                     tabPage.addImages(paths)
