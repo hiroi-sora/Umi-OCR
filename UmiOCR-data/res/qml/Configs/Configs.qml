@@ -337,8 +337,12 @@ Item {
 
             // 初始化
             Component.onCompleted: {
-                checked = value()
                 isInit = true // 初始化完毕，允许启用动画
+            }
+
+            // 更新UI
+            updateUI: ()=>{
+                checked = value()
             }
 
             // 按下
@@ -404,8 +408,8 @@ Item {
 
         ConfigItemComp {
             id: rootText
-            // 初始化
-            Component.onCompleted: {
+            // 更新UI
+            updateUI: ()=>{
                 textInput.text = value()
             }
             // 修改值
@@ -444,8 +448,8 @@ Item {
         ConfigItemComp {
 
             property var optionsList: [] // 候选列表原型
-            // 初始化
-            Component.onCompleted: {
+            // 更新UI
+            updateUI: ()=>{
                 optionsList = origin.optionsList
                 let model = []
                 let index = 0
@@ -535,8 +539,8 @@ Item {
 
         ConfigItemComp {
             id: rootFile
-            // 初始化
-            Component.onCompleted: {
+            // 更新UI
+            updateUI: ()=>{
                 textInput.text = value()
             }
             // 导入路径

@@ -3,12 +3,12 @@
 // =============================================
 
 import QtQuick 2.15
-// import QtQuick.Controls 2.15
 import "../Widgets"
 
 Item {
     property string key: "" // valueDict的键
     property var configs: undefined // 保存对Configs组件的引用
+    property var updateUI: ()=>{console.log(`${key} 更新设置UI为${value()}`)} // 更新UI函数
     property int cursorShape_: Qt.ArrowCursor // 鼠标指针
 
     property string title: "" // 标题，可不填
@@ -22,6 +22,7 @@ Item {
     Component.onCompleted: {
         origin = configs.originDict[key]
         title = origin.title
+        updateUI()
     }
     // 获取或设置值
     function value(v=undefined) {
