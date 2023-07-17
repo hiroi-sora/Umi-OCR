@@ -365,7 +365,7 @@ TabPage {
                     {
                         "key": "configs",
                         "title": qsTr("设置"),
-                        "component": batchOCRConfigs.getPanelComponent(),
+                        "component": batchOCRConfigs.panelComponent,
                     },
                     {
                         "key": "ocrResult",

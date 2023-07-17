@@ -55,15 +55,12 @@ import "../Widgets"
 
 Item {
     id: configs
+
+    // ========================= 【对外接口】 =========================
+
     property string category_: "" // 配置名
     property var configDict: { } // 定义字典，静态参数，key为嵌套
     property alias panelComponent: panelComponent // 自动生成的组件
-    // 以下的字典key为展开形式，key都相同
-    property var originDict: { } // 键字典，键为展开形式，值指向configDict的项
-    property var valueDict: { } // 值字典，动态变化
-    property var compDict: { } // 组件字典。可能不是所有配置项都有组件
-
-    // ========================= 【对外接口】 =========================
 
     // 重置所有设置为默认值
     function reset() {
@@ -74,37 +71,39 @@ Item {
             }
         }
     }
-    // 获取自动生成的滚动视图组件
-    function getPanelComponent() {
-        return panelComponent
+    // 重新从 configDict 加载设置项和UI
+    function reload() {
+        initConfigDict() 
+        initPanelComponent()
+        console.log(`配置${category_}: `,JSON.stringify(valueDict, null, 4))
     }
     
+    // ========================= 【内部变量】 =========================
+
+    // 配置存储字典，key为展开形式，三个字典key对应
+    property var originDict: { } // 键字典，键为展开形式，值指向configDict的项
+    property var valueDict: { } // 值字典，动态变化
+    property var compDict: { } // 组件字典（不包括组）。可能不是所有配置项都有组件
+    property var compList: [] // 保存所有组件（包括组）的列表，便于删除
+    // 缓存相关
+    property var cacheDict: {} // 缓存
+    property int cacheInterval: 500 // 缓存写入本地时间
+
     // ========================= 【数值逻辑（内部调用）】 =========================
 
+    // 初始化
+    Component.onCompleted: { 
+        reload()
+    }
     // 初始化数值
     function initConfigDict() {
-        if(originDict!==undefined){
-            console.error("【Error】重复初始化配置"+category_+"！")
-            return
-        }
         originDict = {}
         valueDict = {}
-        compDict = {}
+        cacheDict = {}
         function handleConfigItem(config, key) { // 处理一个配置项
             originDict[key] = config // configDict项的引用绑定到originDict
-            // 类型判断：省略type
-            if (typeof config.default === "boolean") { // 布尔
-                config.type = "boolean"
-            }
-            else if (typeof config.default === "string") { // 文本
-                config.type = "text"
-            }
-            else if (config.hasOwnProperty("optionsList")) { // 枚举
-                config.type = "enum"
-                config.default = config.optionsList[0][0]
-            }
             // 类型：指定type
-            else if (config.hasOwnProperty("type")) {
+            if (config.type !== "") {
                 if(config.type === "file") { // 文件选择
                     config.default = ""
                     if(! config.hasOwnProperty("nameFilters")) {
@@ -112,9 +111,22 @@ Item {
                     }
                 }
             }
-            else {
-                console.error("【Error】未知类型的配置项："+key)
-                return
+            // 类型判断：省略type
+            else{
+                if (typeof config.default === "boolean") { // 布尔
+                    config.type = "boolean"
+                }
+                else if (typeof config.default === "string") { // 文本
+                    config.type = "text"
+                }
+                else if (config.hasOwnProperty("optionsList")) { // 枚举
+                    config.type = "enum"
+                    config.default = config.optionsList[0][0]
+                }
+                else {
+                    console.error("【Error】未知类型的配置项："+key)
+                    return
+                }
             }
             let flag = false
             // 从配置文件中取值
@@ -123,7 +135,8 @@ Item {
             if(val !== undefined) { 
                 switch(config.type) {
                     case "boolean": // 布尔，记录参数字符串转布尔值
-                        val = val=="true"
+                        if(typeof val === "string")
+                            val = val=="true"
                         flag = true
                         break
                     case "enum": // 枚举，检查记录参数是否在列表内
@@ -134,8 +147,9 @@ Item {
                             }
                         }
                         break
+                    // 无需检查
                     case "file": // 文件
-                        // 无需检查
+                    case "text": // 文本
                         flag = true
                         break
                 }
@@ -172,8 +186,6 @@ Item {
             }
         }
         handleConfigGroup(configDict)
-        // console.log(`配置${category_}: `,JSON.stringify(originDict, null, 4))
-        console.log(`配置${category_}: `,JSON.stringify(valueDict, null, 4))
     }
     // 获取值
     function getValue(key) {
@@ -189,8 +201,6 @@ Item {
         }
     }
     // 带缓存的存储值
-    property var cacheDict: {} // 缓存
-    property int cacheInterval: 500 // 缓存写入本地时间
     function saveValue(key) {
         cacheDict[key] = valueDict[key]
         cacheTimer.restart()
@@ -213,22 +223,25 @@ Item {
         id: settings
         category: category_ // 自定义类别名称
     }
-    // 初始化
-    Component.onCompleted: { 
-        cacheDict = {}
-        initConfigDict() 
-        getCinfigsComponent()
-    }
     
     // ========================= 【自动生成组件】 =========================
 
     // 初始化 自动生成组件
-    function getCinfigsComponent() {
+    function initPanelComponent() {
+        const compListLength = compList.length
+        if(compListLength !== 0) { // 外层组件列表非空，先删除旧的组件
+            for(let i = compListLength-1; i>=0; i--) { // 倒序遍历，从内层往外层删
+                compList[i].destroy()
+            }
+            compList = []
+        }
+        compDict = {}
 
         function handleConfigItem(config, parent) { // 处理一个配置项
             if(componentDict.hasOwnProperty(config.type)) {
                 const comp = componentDict[config.type]
                 const obj = comp.createObject(parent, {"key":config.fullKey, "configs": configs})
+                compList.push(obj) // 保存组件引用
                 compDict[config.fullKey] = obj
             }
         }
@@ -242,9 +255,9 @@ Item {
                 if(config.type === "group") { // 若是配置项组，递归遍历
                     // 若是外层，则生成外层group组件；若是内层则生成内层组件。
                     const c = parent===panelContainer ? compGroup : compGroupInner
-                    const p = c.createObject(parent, {"title":config.title})
-                    const par = p.container // 下一层的父级
-                    handleConfigGroup(config, par) // 递归下一层
+                    const obj = c.createObject(parent, {"title":config.title})
+                    compList.push(obj) // 保存组件引用
+                    handleConfigGroup(config, obj.container) // 递归下一层，父级变成本层
                 }
                 else { // 若是配置项
                     handleConfigItem(config, parent)
@@ -260,6 +273,7 @@ Item {
         anchors.fill: parent
         contentWidth: width // 内容宽度
         clip: true // 溢出隐藏
+        property alias ctrlBar: ctrlBar // 控制栏的引用
 
         Column {
             id: panelContainer
@@ -283,6 +297,15 @@ Item {
                     onClicked: {
                         // TODO: 确认对话框
                         reset()
+                    }
+                }
+                Button_ {
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    anchors.right: ctrlBtn1.left
+                    text_: qsTr("重载")
+                    onClicked: {
+                        reload()
                     }
                 }
             }
