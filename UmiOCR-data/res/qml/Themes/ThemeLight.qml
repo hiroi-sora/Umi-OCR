@@ -12,7 +12,6 @@ Theme {
     highlightColor: "#68b94d"
 
     // 叠加层颜色，从浅到深
-    coverColor0: "#00000000" // 按钮背景
     coverColor1: "#11000000" // 大部分需要突出的背景
     coverColor2: "#22000000" // 按钮悬停
     coverColor3: "#33000000" // 阴影

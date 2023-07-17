@@ -16,7 +16,6 @@ QtObject {
     // property color titleBarColor
 
     // 叠加层颜色，从浅到深
-    property color coverColor0
     property color coverColor1
     property color coverColor2
     property color coverColor3

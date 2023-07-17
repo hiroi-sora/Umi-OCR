@@ -69,7 +69,7 @@ Button {
         anchors.fill: parent
         
         color: parent.checked ? theme.tabColor : (
-            parent.hovered ? theme.coverColor1 : theme.coverColor0
+            parent.hovered ? theme.coverColor1 : "#00000000"
         )
 
         // 侧边小条

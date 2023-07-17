@@ -30,17 +30,18 @@ Window {
 
     // 全局样式，通过 theme 来访问
     property Theme theme: ThemeLight{}
-    // property Theme theme: ThemeDark{}
 
     // 全局逻辑，通过 app 来访问
     Item {
         id: app
 
-        TabViewManager { id: tab }  // 标签页逻辑管理器 app.tab
+        ThemeManager { id: themeManager } // 主题管理器 app.themeManager
         GlobalConfigs { id: globalConfigs }  // 全局设置 app.globalConfigs
+        TabViewManager { id: tab }  // 标签页逻辑管理器 app.tab
 
-        property alias tab: tab
+        property alias themeManager: themeManager
         property alias globalConfigs: globalConfigs
+        property alias tab: tab
     }
 
     // ========================= 【布局】 =========================

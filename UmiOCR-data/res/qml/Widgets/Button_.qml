@@ -12,7 +12,7 @@ Button {
     property bool bold_: false
     property color textColor_: theme.textColor
 
-    property color bgColor_: theme.coverColor0
+    property color bgColor_: "#00000000"
     property color bgPressColor_: theme.coverColor4
     property color bgHoverColor_: theme.coverColor2
 

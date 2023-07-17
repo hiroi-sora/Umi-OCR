@@ -82,7 +82,7 @@ RowLayout  {
             height: theme.hTabBarShadowHeight
             gradient: Gradient {
                 GradientStop { position: 0.0; color: "#00000000" }
-                GradientStop { position: 1.0; color: theme.coverColor3 }
+                GradientStop { position: 1.0; color: theme.coverColor2 }
             }
         }
 
