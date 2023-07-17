@@ -15,10 +15,10 @@ Configs {
 
             "theme": {
                 "title": qsTr("主题"),
-                "optionsList": [
-                    ["default", qsTr("浅色")],
-                    ["default1", qsTr("深色")],
-                ],
+                "optionsList": app.themeManager.themeList, // 从全局主题管理器中取列表
+                "onChanged": (val)=>{
+                    app.themeManager.switchTheme(val)
+                },
             },
         },
     }

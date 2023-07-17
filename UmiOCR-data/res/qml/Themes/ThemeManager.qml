@@ -19,6 +19,13 @@ Item {
         }
     }
 
+    // 外部接口：切换主题
+    function switchTheme(key){
+        if(themeDict.hasOwnProperty(key)) {
+            theme = themeDict[key]
+        }
+    }
+
     // 主题字典和列表，自动加载
     property var themeDict: {}
     property var themeList: []
@@ -31,7 +38,7 @@ Item {
         for (let i = 0; i < tc.length; i++) {
             let cname = tc[i].toString() // 取组件名称
             cname = cname.substring(0, cname.indexOf("_")) // 取第一个下划线之前的内容
-            themeDict[cname] = {"comp":tc[i], "themeTitle":tc[i].themeTitle}
+            themeDict[cname] = tc[i]
             themeList.push([cname, tc[i].themeTitle])
         }
     }

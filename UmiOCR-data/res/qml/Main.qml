@@ -34,9 +34,9 @@ Window {
     // 全局逻辑，通过 app 来访问
     Item {
         id: app
-
-        ThemeManager { id: themeManager } // 主题管理器 app.themeManager
+        // 顺序必须先GlobalConfigs后ThemeManager，它们onCompleted的顺序相反（从后往前）
         GlobalConfigs { id: globalConfigs }  // 全局设置 app.globalConfigs
+        ThemeManager { id: themeManager } // 主题管理器 app.themeManager
         TabViewManager { id: tab }  // 标签页逻辑管理器 app.tab
 
         property alias themeManager: themeManager
