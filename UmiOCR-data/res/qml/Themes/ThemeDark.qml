@@ -5,6 +5,8 @@
 import QtQuick 2.15
 
 Theme {
+    // 名称
+    themeTitle: qsTr("深色模式")
 
     // 背景颜色
     bgColor: "#444"

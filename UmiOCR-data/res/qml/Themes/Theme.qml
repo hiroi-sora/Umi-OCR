@@ -4,7 +4,9 @@
 
 import QtQuick 2.15
 
-QtObject {
+Item {
+    // 主题名称
+    property string themeTitle
 
     // ========================= 【颜色】 =========================
 
@@ -12,8 +14,6 @@ QtObject {
     property color bgColor
     // 高亮颜色
     property color highlightColor
-    // 标题栏颜色
-    // property color titleBarColor
 
     // 叠加层颜色，从浅到深
     property color coverColor1
