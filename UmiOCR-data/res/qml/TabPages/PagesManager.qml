@@ -32,6 +32,14 @@ Item {
 　  \n\
 导入本地图片或文件夹，批量转换文字。")
         },
+        {
+            key: "GlobalConfigsPage",
+            needController: false,
+            title: qsTr("全局设置"),
+            intro: qsTr("# 全局设置\n\
+　  \n\
+调节全局设置项，对所有页面生效。")
+        },
     ]
 
     /* 存放当前已打开的页面

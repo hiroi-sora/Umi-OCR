@@ -11,6 +11,7 @@ import Qt.labs.settings 1.1
 import "Themes"
 import "TabView_"
 import "Configs"
+import "TabPages/GlobalConfigsPage"
 
 Window {
 // ApplicationWindow {
@@ -35,10 +36,11 @@ Window {
     Item {
         id: app
 
-        // 标签页逻辑管理器
-        TabViewManager { id: tab_ }
-        property var tab: tab_ // 通过 app.tab 来访问
+        TabViewManager { id: tab }  // 标签页逻辑管理器 app.tab
+        GlobalConfigs { id: globalConfigs }  // 全局设置 app.globalConfigs
 
+        property alias tab: tab
+        property alias globalConfigs: globalConfigs
     }
 
     // ========================= 【布局】 =========================

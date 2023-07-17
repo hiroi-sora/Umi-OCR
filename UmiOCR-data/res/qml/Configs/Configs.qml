@@ -299,15 +299,15 @@ Item {
                         reset()
                     }
                 }
-                Button_ {
-                    anchors.top: parent.top
-                    anchors.bottom: parent.bottom
-                    anchors.right: ctrlBtn1.left
-                    text_: qsTr("重载")
-                    onClicked: {
-                        reload()
-                    }
-                }
+                // Button_ {
+                //     anchors.top: parent.top
+                //     anchors.bottom: parent.bottom
+                //     anchors.right: ctrlBtn1.left
+                //     text_: qsTr("重载")
+                //     onClicked: {
+                //         reload()
+                //     }
+                // }
             }
         }
     }
