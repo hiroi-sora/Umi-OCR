@@ -6,7 +6,7 @@
 
 ## 预计效果预览：
 
-![](docs/Preview2.png)
+![](docs/Preview1.png)
 
 当前进度：初步实现批量OCR的前后端处理。
 
