@@ -34,7 +34,6 @@ Item {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             
-            
             Repeater {
                 model: tabsModel
 
@@ -51,12 +50,17 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         color: parent.checked ? theme.textColor : theme.subTextColor
+                        font.bold: parent.checked
                     }
                     background: Rectangle {
                         anchors.fill: parent
-                        color: parent.checked ? theme.coverColor4 : (
-                            parent.hovered ? theme.coverColor3 : theme.coverColor2
-                        )
+                        color: theme.bgColor
+                        Rectangle {
+                            anchors.fill: parent
+                            color: parent.checked ? theme.coverColor4 : (
+                                parent.hovered ? theme.coverColor3 : theme.coverColor2
+                            )
+                        }
                     }
 
                     // 选中的动画
@@ -119,6 +123,7 @@ Item {
                     Component.onCompleted: {
                         if(modelData.component.ctrlBar) {
                             modelData.component.ctrlBar.parent = this
+                            modelData.component.ctrlBar.anchors.fill = this
                         }
                     }
                 }
