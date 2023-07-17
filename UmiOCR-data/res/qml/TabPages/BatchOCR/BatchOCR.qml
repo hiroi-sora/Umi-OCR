@@ -258,7 +258,6 @@ TabPage {
     DoubleColumnLayout {
         anchors.fill: parent
         initSplitterX: 0.5
-        hideWidth: 50
 
         // 左面板：控制板+文件表格
         leftItem: Panel {

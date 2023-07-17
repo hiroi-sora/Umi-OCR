@@ -12,7 +12,7 @@ Item {
 
     property QtObject leftItem // 左元素
     property QtObject rightItem // 右元素
-    property real hideWidth: 5 // 一个栏小于该值时隐藏
+    property real hideWidth: 80 // 一个栏小于该值时隐藏
     property real initSplitterX: 0.5 // 分割线初始位置。>1时为像素，0~1为比例。
 
     // ===============================================================
@@ -27,9 +27,8 @@ Item {
         anchors.margins: theme.spacing
 
         property alias hideWidth: doubleColumnCon.hideWidth
-        property bool isHideWidth: false // hideWidth触发时为true
+        property int hideLR: 0 // 0为不隐藏，1为隐藏左边，2为隐藏右边
         property alias splitterX: splitter.x // 分割线当前位置
-        property alias splitterWidth: splitter.width // 分割线宽度
         Component.onCompleted: { // 分割线初始时设为一半
             if(parent.initSplitterX <= 0)
                 parent.initSplitterX = 0.5 // 默认值0.5
@@ -41,28 +40,32 @@ Item {
         property int rightMax: width - splitter.width // 右边缘位置
 
         // 检查左右隐藏
-        function toHide(){
-            if(splitterX+splitterWidth > (width - hideWidth)){ // 隐藏右边
+        function toHide(isWidthChanged = false){
+            if(isWidthChanged && hideLR === 2) { // 总体宽度改变时右吸附
+                splitterX = width - splitter.width
+                return
+            }
+            if(splitterX+splitter.width > (width - hideWidth)){ // 隐藏右边
                 leftContainer.visible = true
                 rightContainer.visible = false
-                isHideWidth = true
-                if(splitterX > rightMax)
-                    splitterX = rightMax
+                hideLR = 2
+                splitterX = width - splitter.width
             }
             else if(splitterX < hideWidth){ // 隐藏左边
                 leftContainer.visible = false
                 rightContainer.visible = true
-                isHideWidth = true
+                hideLR = 1
+                splitterX = 0
             }
             else{
                 leftContainer.visible = true
                 rightContainer.visible = true
-                isHideWidth = false
+                hideLR = 0
             }
 
         } // 拖拽分割线，或者调整整体宽度，都会触发检查隐藏
         onSplitterXChanged: toHide()
-        onWidthChanged: toHide()
+        onWidthChanged: toHide(true)
         // 左容器
         Item{
             id: leftContainer
@@ -106,7 +109,7 @@ Item {
                 width: theme.spacing * 0.3
                 radius: theme.btnRadius
                 color: parent.isHover ? theme.coverColor4 : 
-                    (doubleColumn.isHideWidth ? theme.coverColor2 : "#00000000")
+                    (doubleColumn.hideLR===0 ? "#00000000" : theme.coverColor2)
             }
         }
 

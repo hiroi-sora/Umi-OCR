@@ -45,7 +45,6 @@ TabPage {
     DoubleColumnLayout {
         anchors.fill: parent
         initSplitterX: 250
-        hideWidth: 100
         
         // =============== 左侧，展示所有标签页名称 ===============
         leftItem: Panel{
