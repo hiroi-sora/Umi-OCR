@@ -41,6 +41,7 @@ configDict: {
     "title": 显示名称，可选，填写时自动生成控件,
     "type": 控件类型,
     "save": 可选，填false时不保存（每次初始化为默认值）,
+    "onChanged": 可选，值变化时的回调函数，  (val)=>{console.log("值变为: ", val)}
 }
 
 configDict为嵌套形式，而originDict与valueDict为展开形式的单层字典。例：
@@ -73,8 +74,10 @@ Item {
     }
     // 重新从 configDict 加载设置项和UI
     function reload() {
+        isChangedInit = false
         initConfigDict() 
         initPanelComponent()
+        initChangedFuncs()
         console.log(`配置${category_}: `,JSON.stringify(valueDict, null, 4))
     }
     
@@ -85,7 +88,7 @@ Item {
     property var valueDict: { } // 值字典，动态变化
     property var compDict: { } // 组件字典（不包括组）。可能不是所有配置项都有组件
     property var compList: [] // 保存所有组件（包括组）的列表，便于删除
-    // 缓存相关
+
     property var cacheDict: {} // 缓存
     property int cacheInterval: 500 // 缓存写入本地时间
 
@@ -157,7 +160,7 @@ Item {
             if(!flag) { // 未有存储项或类型检查不合格，则取默认值
                 val = config.default
                 setValue(key, val) // 存储
-                console.log(`${key}  取默认值 ${val}`)
+                console.log(`${key} 取默认值 ${val}`)
             }
             config.fullKey = key // 记录完整key
             valueDict[key] = val // 设当前值
@@ -192,12 +195,30 @@ Item {
         return valueDict[key]
     }
     // 设置值
-    function setValue(key, value) {
-        if(valueDict[key] === value) // 排除相同值
+    function setValue(key, val) {
+        if(valueDict[key] === val) // 排除相同值
             return
-        valueDict[key] = value
+        valueDict[key] = val
+        onChangedFunc(key, val) // 触发函数
         if(originDict[key].save) { // 需要保存值
             saveValue(key)
+        }
+    }
+    // 初始化期间。不执行触发函数
+    property bool isChangedInit: false
+    // 触发函数
+    function onChangedFunc(key, val) {
+        if(!isChangedInit) // 初始化期间。不执行触发函数
+            return
+        // 配置项存在触发函数，则执行
+        if(originDict[key].hasOwnProperty("onChanged")) 
+            originDict[key].onChanged(val)
+    }
+    // 初始化，执行全部触发函数
+    function initChangedFuncs() {
+        isChangedInit = true
+        for(let k in originDict) {
+            onChangedFunc(k, valueDict[k])
         }
     }
     // 带缓存的存储值
