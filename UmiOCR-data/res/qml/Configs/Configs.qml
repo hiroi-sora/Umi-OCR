@@ -31,6 +31,7 @@ configDict: {
     "文件路径 file （文件选择框）": {
         "title": ,
         "type": "file",
+        "default": "默认路径",
         "selectExisting": true 选择现有文件 / false 新创建文件(夹),
         "selectFolder": true 选择文件夹 / false 选择文件,
         "dialogTitle": 对话框标题,
@@ -108,7 +109,8 @@ Item {
             // 类型：指定type
             if (config.type !== "") {
                 if(config.type === "file") { // 文件选择
-                    config.default = ""
+                    if(! config.hasOwnProperty("default"))
+                        config.default = ""
                     if(! config.hasOwnProperty("nameFilters")) {
                         config.nameFilters = []
                     }

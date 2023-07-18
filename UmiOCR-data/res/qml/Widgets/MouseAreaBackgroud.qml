@@ -7,14 +7,17 @@ import QtQuick 2.15
 MouseArea {
     property color color_: theme.coverColor1 // 悬停颜色
     property real radius_: theme.btnRadius // 圆角
+    property bool hovered: false
 
     anchors.fill: parent
     hoverEnabled: true
     onEntered: {
         bgRectangle.visible = true
+        hovered = true
     }
     onExited: {
         bgRectangle.visible = false
+        hovered = false
     }
     // 事件穿透
     onClicked: {

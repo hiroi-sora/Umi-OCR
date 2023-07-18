@@ -12,4 +12,5 @@ UmiOCR-data/*
 # 高度定制的运行环境。前期暂时不git，项目中期再同步
 UmiOCR-data/.site-packages
 UmiOCR-data/.runtime
+UmiOCR-data/lib
 **__pycache__**

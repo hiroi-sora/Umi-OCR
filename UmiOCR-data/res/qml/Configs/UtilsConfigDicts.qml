@@ -4,7 +4,6 @@
 
 import QtQuick 2.15
 
-
 QtObject {
     // 计划任务
     function getScheduledTasks() {
