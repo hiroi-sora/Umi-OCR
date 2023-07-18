@@ -188,7 +188,7 @@ class __PPOCR_socket(PPOCR_pipe):  # 调用OCR（套接字模式）
             return {"code": 905, "data": f"识别器输出值反序列化JSON失败。异常信息：[{e}]。原始内容：[{getStr}]"}
 
 
-class ApiPaddleOCR(ApiOcr):  # 公开接口
+class ApiPaddleOcr(ApiOcr):  # 公开接口
     def __init__(self):
         self.api = None
         self.args = {}

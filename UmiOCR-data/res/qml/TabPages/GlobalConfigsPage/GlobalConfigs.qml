@@ -4,6 +4,7 @@
 
 import QtQuick 2.15
 import "../../Configs"
+import "../../Api"
 
 Configs {
     category_: "Global"
@@ -21,5 +22,10 @@ Configs {
                 },
             },
         },
+        // OCR接口全局设定
+        "ocr": ocrManager.globalOptions
     }
+
+    OcrManager { id: ocrManager }
+    property alias ocrManager: ocrManager
 }

@@ -10,11 +10,15 @@ Configs {
 
     UtilsConfigDicts { // 通用配置项
         id: utilsDicts
-    }
+    }    
 
     configDict: {
-        "batchOCR": {
-            "title": " ",
+        // OCR参数
+        "ocr": app.globalConfigs.ocrManager.deploy(this, "ocr"), 
+
+        // 任务参数
+        "mission": {
+            "title": qsTr("批量任务"),
             "type": "group",
 
             "dirType": {
