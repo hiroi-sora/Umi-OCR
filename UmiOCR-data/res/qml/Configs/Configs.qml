@@ -463,11 +463,11 @@ Item {
                 border.width: 2
                 border.color: theme.coverColor4
 
-                // 关闭：×
+                // 关闭：-
                 Icon_ {
                     anchors.fill: parent
                     anchors.margins: 3
-                    icon: "close"
+                    icon: "dash"
                     color: theme.noColor
                 }
 
