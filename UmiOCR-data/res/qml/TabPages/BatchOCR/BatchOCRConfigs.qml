@@ -8,10 +8,6 @@ import "../../Configs"
 Configs {
     category_: "BatchOCR"
 
-    UtilsConfigDicts { // 通用配置项
-        id: utilsDicts
-    }    
-
     configDict: {
         // OCR参数
         "ocr": app.globalConfigs.ocrManager.deploy(this, "ocr"), 
@@ -67,7 +63,7 @@ Configs {
                 "default": false,
             },
 
-            "scheduledTasks": utilsDicts.getScheduledTasks(), // 计划任务
+            "scheduledTasks": app.globalConfigs.utilsDicts.getScheduledTasks(), // 计划任务
         },
     }
 }

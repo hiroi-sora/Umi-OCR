@@ -26,6 +26,9 @@ Configs {
         "ocr": ocrManager.globalOptions
     }
 
-    OcrManager { id: ocrManager }
+    OcrManager { id: ocrManager } // OCR管理器
+    UtilsConfigDicts { id: utilsDicts } // 通用配置项
+
     property alias ocrManager: ocrManager
+    property alias utilsDicts: utilsDicts
 }
