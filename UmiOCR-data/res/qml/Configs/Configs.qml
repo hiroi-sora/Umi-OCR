@@ -623,11 +623,14 @@ Item {
                         anchors.leftMargin: theme.smallSpacing
                         font.pixelSize: theme.textSize
                         font.family: theme.fontFamily
-                        color: theme.subTextColor
+                        color: comboBox.currentIndex===index? theme.textColor:theme.subTextColor
                     }
-                    MouseAreaBackgroud {
-                        radius_: 0
-                        onClicked: parent.clicked()
+                    background: Rectangle {
+                        color: theme.bgColor
+                        MouseAreaBackgroud {
+                            radius_: 0
+                            onClicked: parent.clicked()
+                        }
                     }
                 }
             }
