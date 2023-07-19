@@ -42,6 +42,7 @@ configDict: {
     "title": 显示名称，可选，填写时自动生成控件,
     "type": 控件类型,
     "save": 可选，填false时不保存（每次初始化为默认值）,
+    "toolTip": 可选，字符串，鼠标悬停时的提示,
     "onChanged": 可选，值变化时的回调函数，  (val)=>{console.log("值变为: ", val)}
 }
 
@@ -180,12 +181,7 @@ Item {
                     continue
                 }
                 // 补充空白参数
-                if(!config.hasOwnProperty("title")) // 标题
-                    config.title = ""
-                if(!config.hasOwnProperty("type")) // 类型
-                    config.type = ""
-                if(!config.hasOwnProperty("save")) // 保存
-                    config.save = true
+                supplyDefaultParams(config)
                 // 若是配置项组，递归遍历
                 if(config.type==="group") { 
                     config.fullKey = prefix+key // 记录完整key
@@ -197,6 +193,16 @@ Item {
             }
         }
         handleConfigGroup(configDict)
+    }
+    // 补充空白参数
+    function supplyDefaultParams(config) {
+        if(!config.hasOwnProperty("title")) // 标题
+            config.title = ""
+        if(!config.hasOwnProperty("type")) // 类型
+            config.type = ""
+        if(!config.hasOwnProperty("save")) // 保存
+            config.save = true
+
     }
     // 获取值
     function getValue(key) {

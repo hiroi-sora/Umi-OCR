@@ -24,6 +24,7 @@ Configs {
             "enabledEffect": {
                 "title": qsTr("启用动画效果"),
                 "default": true,
+                "toolTip": qsTr("在低配置机器上，关闭动画效果可减少一丢丢资源占用"),
                 "onChanged": (flag)=>{
                     app.themeManager.switchEnabledEffect(flag)
                 },

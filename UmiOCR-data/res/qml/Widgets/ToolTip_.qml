@@ -20,7 +20,7 @@ ToolTip {
     }
 
     background: Rectangle { // 背景矩形
-        color: theme.coverColor1
+        color: theme.bgColor
         border.color: theme.coverColor4
         radius: theme.btnRadius
     }

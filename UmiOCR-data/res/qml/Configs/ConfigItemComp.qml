@@ -23,6 +23,10 @@ Item {
         origin = configs.originDict[key]
         title = origin.title
         updateUI()
+        // 如果设定了提示，则加载提示组件
+        if(origin.toolTip){
+            toolTipLoader.sourceComponent = toolTip
+        }
     }
     // 获取或设置值
     function value(v=undefined) {
@@ -43,6 +47,16 @@ Item {
     }
     // 背景
     MouseAreaBackgroud {
+        id: mouseAreaBackgroud
         cursorShape: cursorShape_
     }
+    // 提示
+    Component {
+        id: toolTip
+        ToolTip_ {
+            visible: mouseAreaBackgroud.hovered
+            text: origin.toolTip
+        }
+    }
+    Loader { id: toolTipLoader } // 默认不加载
 }
