@@ -81,6 +81,10 @@ Item {
         initChangedFuncs()
         console.log(`配置${category_}: `,JSON.stringify(valueDict, null, 4))
     }
+    // 获取配置值字典
+    function getConfigValueDict() {
+        return valueDict
+    }
     
     // ========================= 【内部变量】 =========================
 

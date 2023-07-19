@@ -17,10 +17,11 @@ Item {
     }
     // 获取配置项值字典
     function getConfigValueDict() {
-        if (typeof configsComp === "object" && "valueDict" in configsComp) {
-            console.log(`尝试：${configsComp.valueDict}`)
-            return configsComp.valueDict
+        // 控制组件存在，且有方法getConfigValueDict
+        if (typeof configsComp === "object" && typeof configsComp.getConfigValueDict === "function") {
+            return configsComp.getConfigValueDict()
         }
+        console.log("【Error】返回空配置项字典")
         return {}
     }
     
