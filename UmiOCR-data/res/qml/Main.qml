@@ -34,13 +34,32 @@ Window {
     // 全局单例，通过 app. 来访问
     Item {
         id: app
-        // 构建顺序由上到下，onCompleted的顺序相反（从下到上）
+
+        Item { // 全局延迟加载 初始化函数列表
+            // qml中，组件初始化顺序是从上到下，而onCompleted调用顺序相反。
+            // 故这个组件的onCompleted将是全局最后一个调用的。
+            // 将各个组件的初始化函数放在这里，可以保证其他组件都已经构建完毕。
+            id: initFuncs
+            property var list: []
+            property bool isComplete: false
+            function push(f) { // 添加一个要延迟加载的函数。若当前全局已初始化，则直接执行
+                if(isComplete) f()
+                else list.push(f)
+            }
+            Component.onCompleted: { // 全局初始化完毕，执行延迟加载的函数
+                isComplete = true
+                console.log("% 开始执行 延迟加载初始化函数！")
+                for(let i in list) list[i]()
+            }
+        }
+        
         GlobalConfigs { id: globalConfigs }  // 全局设置 app.globalConfigs
         ThemeManager { id: themeManager } // 主题管理器 app.themeManager
         TabViewManager { id: tab }  // 标签页逻辑管理器 app.tab
 
-        property alias themeManager: themeManager
+        property alias initFuncs: initFuncs
         property alias globalConfigs: globalConfigs
+        property alias themeManager: themeManager
         property alias tab: tab
     }
 

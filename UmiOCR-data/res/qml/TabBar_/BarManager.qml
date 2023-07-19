@@ -25,7 +25,6 @@ Repeater {
 
     Component.onCompleted: {
         app.tab.bar = this // 逆向连接引用
-        app.tab.init() // 主控制器初始化
     }
     // ========================= 【增删改查】 =========================
 

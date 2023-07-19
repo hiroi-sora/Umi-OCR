@@ -79,7 +79,7 @@ Item {
         initConfigDict() 
         initPanelComponent()
         initChangedFuncs()
-        console.log(`配置${category_}: `,JSON.stringify(valueDict, null, 4))
+        console.log(`% 加载配置 ${category_} ！`)//: `,JSON.stringify(valueDict, null, 4))
     }
     // 获取配置值字典
     function getConfigValueDict() {
@@ -101,7 +101,8 @@ Item {
 
     // 初始化
     Component.onCompleted: { 
-        reload()
+        // 延迟加载
+        app.initFuncs.push(reload)
     }
     // 初始化数值
     function initConfigDict() {

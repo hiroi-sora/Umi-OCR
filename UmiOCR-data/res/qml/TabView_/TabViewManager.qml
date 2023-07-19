@@ -11,12 +11,12 @@ Item {
     id: tabViewManager
     // ========================= 【子控制器】 =========================
 
-    PagesManager{ id: page_ } // 页管理器
-    property var page: page_
+    PagesManager{ id: page } // 页管理器
+    property alias page: page
     property var bar: undefined // 栏控制器
     // 连接别名
-    property alias infoList: page_.infoList
-    property alias pageList: page_.pageList
+    property alias infoList: page.infoList
+    property alias pageList: page.pageList
     // 控制属性
     property bool barIsLock: false // 栏是否已锁定
     property int showPageIndex: -1 // 当前展示的标签页序号
@@ -39,7 +39,7 @@ Item {
 
     // ========================= 【初始化】 =========================
 
-    function init() {
+    function init() { // 需要延迟加载，全局初始化完毕后执行
         page.initListUrl() // 页面控制器初始化文件
         // 提取所有info的url
         const urlList = [] 
@@ -78,6 +78,11 @@ Item {
             showTabPage(showPageI)
         }
         settings.save()
+        console.log("% TabViewManager 初始化页面完毕！")
+    }
+    Component.onCompleted: {
+        // 延迟加载
+        app.initFuncs.push(init)
     }
 
     // ========================= 【增删改查】 =========================

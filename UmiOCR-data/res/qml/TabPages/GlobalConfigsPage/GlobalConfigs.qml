@@ -31,4 +31,8 @@ Configs {
 
     property alias ocrManager: ocrManager
     property alias utilsDicts: utilsDicts
+
+    Component.onCompleted: {
+        console.log("% GlobalConfig 初始化全局配置完毕！")
+    }
 }

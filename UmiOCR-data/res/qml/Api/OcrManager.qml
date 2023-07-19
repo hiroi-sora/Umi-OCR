@@ -121,4 +121,8 @@ QtObject {
         "apiKey": "" // 当前选定的api
     }
     property var deployList: [] // 存放 部署了配置的页面
+
+    Component.onCompleted: {
+        console.log("% OcrManager 初始化OCR管理器完毕！")
+    }
 }
