@@ -55,7 +55,7 @@ QtObject {
     // 单独配置，每个页面的选项可以不同。都必须有 language 语言列表。
     property var pageOptions: {
         "PaddleOCR": {
-            "title": qsTr("PaddleOCR 设置"),
+            "title": qsTr("文字识别（PaddleOCR）"),
             "type": "group",
 
             "language": {
@@ -67,7 +67,7 @@ QtObject {
             },
         },
         "RapidOCR": {
-            "title": qsTr("RapidOCR 设置"),
+            "title": qsTr("文字识别（RapidOCR）"),
             "type": "group",
 
             "language": {

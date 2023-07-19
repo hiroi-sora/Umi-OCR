@@ -14,17 +14,24 @@ Item {
         // ===============================================
 
         id: themeComps
-        Component.onCompleted: {  // 初始化
-            init()
-        }
+        Component.onCompleted: init() // 初始化
     }
 
-    // 外部接口：切换主题
+    // ========================= 【对外接口】 =========================
+
+    // 切换主题
     function switchTheme(key){
         if(themeDict.hasOwnProperty(key)) {
             theme = themeDict[key]
         }
     }
+    // 切换动画特效 开true / 关false
+    function switchEnabledEffect(flag){
+        for(let k in themeDict)
+            themeDict[k].enabledEffect = flag
+    }
+
+    // ========================= 【内部】 =========================
 
     // 主题字典和列表，自动加载
     property var themeDict: {}

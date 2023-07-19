@@ -79,11 +79,4 @@ Item {
 
     // 是否全局启用美化特效
     property bool enabledEffect: true
-    // 关闭美化则取消圆角
-    Component.onCompleted: {
-        if(!enabledEffect){
-            windowRadius = baseRadius = panelRadius = btnRadius = 0
-        }
-    }
-    
 }

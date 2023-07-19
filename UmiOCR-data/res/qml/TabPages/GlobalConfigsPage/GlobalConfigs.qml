@@ -21,6 +21,13 @@ Configs {
                     app.themeManager.switchTheme(val)
                 },
             },
+            "enabledEffect": {
+                "title": qsTr("启用动画效果"),
+                "default": true,
+                "onChanged": (flag)=>{
+                    app.themeManager.switchEnabledEffect(flag)
+                },
+            },
         },
         // OCR接口全局设定
         "ocr": ocrManager.globalOptions

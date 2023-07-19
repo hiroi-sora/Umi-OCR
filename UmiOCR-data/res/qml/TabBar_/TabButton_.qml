@@ -83,7 +83,7 @@ Button {
         }
 
         // 边缘阴影
-        layer.enabled: theme.enabledEffect && parent.checked
+        layer.enabled: parent.checked
         layer.effect: DropShadow {
             transparentBorder: true
             color: theme.coverColor3
