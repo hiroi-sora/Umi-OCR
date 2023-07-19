@@ -55,7 +55,7 @@ TabPage {
                 ]
             )
             console.log("自动添加！！！！！！！！！！！！！")
-            // ocrStart()
+            ocrStart()
         }
     }
 
@@ -124,7 +124,10 @@ TabPage {
         missionProgress.percent = 0 // 进度条显示
         missionShow = `0s  0/${msnLength}  0%` // 信息显示
         // 开始运行
-        tabPage.callPy("msnPaths", Object.keys(filesDict))
+        const paths = Object.keys(filesDict)
+        const pageDict = batchOCRConfigs.getConfigValueDict()
+        const globalDict = app.globalConfigs.getConfigValueDict()
+        tabPage.callPy("msnPaths", paths, pageDict, globalDict)
     }
 
     // 停止OCR（同步）

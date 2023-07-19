@@ -101,10 +101,12 @@ QtObject {
     // 部署进一个Configs的配置项里，可动态改变配置页。
     // 传入configs页引用和所在字典键（只能在最外层）
     function deploy(page, configKey) {
-        deployList.push({ // 记录已部署页面
+        // 记录已部署页面
+        deployList.push({ 
             "page": page,
             "configKey": configKey,
         })
+        // 返回初始配置字典
         if(staticDict.apiKey === ""){
             return { // apiKey未初始化，先返回空的占位
                 "title": " ",

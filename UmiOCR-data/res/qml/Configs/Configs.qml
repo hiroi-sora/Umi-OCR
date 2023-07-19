@@ -79,7 +79,8 @@ Item {
         initConfigDict() 
         initPanelComponent()
         initChangedFuncs()
-        console.log(`% 加载配置 ${category_} ！`)//: `,JSON.stringify(valueDict, null, 4))
+        // console.log(`% 加载配置 ${category_} ！`)
+        console.log(`% 加载配置 ${category_} ！: ${JSON.stringify(valueDict, null, 2)}`)
     }
     // 获取配置值字典
     function getConfigValueDict() {
