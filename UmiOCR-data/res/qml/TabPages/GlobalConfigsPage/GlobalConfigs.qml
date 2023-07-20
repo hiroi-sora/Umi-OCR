@@ -21,12 +21,12 @@ Configs {
                     app.themeManager.switchTheme(val)
                 },
             },
-            "enabledEffect": {
-                "title": qsTr("启用动画效果"),
-                "default": true,
-                "toolTip": qsTr("在低配置机器上，关闭动画效果可减少一丢丢资源占用"),
+            "disableEffect": {
+                "title": qsTr("禁用美化效果"),
+                "default": false,
+                "toolTip": qsTr("在低配置机器上，禁用动画、阴影等效果可减少部分资源占用"),
                 "onChanged": (flag)=>{
-                    app.themeManager.switchEnabledEffect(flag)
+                    app.themeManager.switchEnabledEffect(!flag)
                 },
             },
         },

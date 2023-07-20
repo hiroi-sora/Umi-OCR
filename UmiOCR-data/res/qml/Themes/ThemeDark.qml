@@ -10,6 +10,8 @@ Theme {
 
     // 背景颜色
     bgColor: "#444"
+    // 突出的背景颜色
+    bgHighlightColor: "#293774"
     // 高亮颜色
     highlightColor: "#68b94d"
 

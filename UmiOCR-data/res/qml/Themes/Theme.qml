@@ -12,6 +12,8 @@ Item {
 
     // 背景颜色
     property color bgColor
+    // 突出的背景颜色
+    property color bgHighlightColor
     // 高亮颜色
     property color highlightColor
 
