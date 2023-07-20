@@ -16,7 +16,7 @@ import "TabPages/GlobalConfigsPage"
 
 Window {
 // ApplicationWindow {
-    // id: rootWindow
+    id: rootWindow
     visible: true
     // flags: Qt.Window | Qt.FramelessWindowHint // 无边框窗口，保留任务栏图标
 
@@ -24,9 +24,8 @@ Window {
     height: 500
     minimumWidth: 600
     minimumHeight: 400
-
     color: "#00000000"
-
+    
     // ========================= 【控制】 =========================
 
     // 全局样式，通过 theme 来访问
@@ -64,6 +63,8 @@ Window {
         property alias themeManager: themeManager
         property alias tab: tab
         property alias popupManager: popupManager
+        // 记录当前窗口状态，可见时为true。包括正常窗口、最大化、全屏。
+        property bool isVisible: rootWindow.visibility==2||rootWindow.visibility==4||rootWindow.visibility==5
     }
 
     // ========================= 【布局】 =========================

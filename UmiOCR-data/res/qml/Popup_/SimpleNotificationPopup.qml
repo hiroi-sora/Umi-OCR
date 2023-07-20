@@ -14,11 +14,17 @@ Item {
     // ========================= 【对外接口】 =========================
 
     function show(title, msg) {
-        notificationPopup.show(title, msg)
-        notificationWindow.show(title, msg)
+        if(!app.isVisible) {
+            // 主窗口隐藏，且允许外部通知时，发送外部通知
+            notificationWindow.show(title, msg)
+        }
+        else {
+            // 否则，发送内部通知
+            notificationPopup.show(title, msg)
+        }
     }
 
-    // ========================= 【内置模式】 =========================
+    // ========================= 【内部模式】 =========================
    
     Popup {
         id: notificationPopup
@@ -81,8 +87,8 @@ Item {
         }
     }
 
-    // ========================= 【外置模式】 =========================
-    Window {
+    // ========================= 【外部模式】 =========================
+    Window  {
         id: notificationWindow
 
         // 显示通知弹窗
@@ -90,7 +96,6 @@ Item {
             let screenWidth = Screen.width
             let screenHeight = Screen.height
             x = (screenWidth - width) / 2 // 水平居中
-
             nscWindow.show(title, msg, time) // 传入信息
             if(theme.enabledEffect) { // 出现动画
                 enterAnimeWin.start()
@@ -112,7 +117,7 @@ Item {
         // 属性
         property real showY: nscWindow.height+100 // 显示位置高度
         visible: false
-        flags: Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint // 无边框，置顶
+        flags: Qt.Popup | Qt.NoDropShadowWindowHint | Qt.WindowStaysOnTopHint // 弹出式，无阴影，置顶
         color: "#00000000"
         width: nscWindow.width+nscWindow.shadowWidth // 长宽要加上阴影宽度
         height: nscWindow.height+nscWindow.shadowWidth
