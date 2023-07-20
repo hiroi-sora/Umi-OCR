@@ -4,7 +4,7 @@
 
 
 import QtQuick 2.15
-import TagPageController 1.0 // Python页面控制器
+import TagPageConnector 1.0 // Python页面控制器
 
 Item {
 
@@ -49,8 +49,8 @@ Item {
     */
     property var pageList: []
 
-    // Python的页面控制器，手动维护单例状态
-    TagPageController { id: controller }
+    // Python的页面连接器，手动维护单例状态
+    TagPageConnector { id: connector }
     
     // ========================= 【增删改查】 =========================
 
@@ -86,7 +86,7 @@ Item {
         // 实例化逻辑控制器
         let ctrlKey = ""
         if(info.needController){
-            ctrlKey = controller.addPage(info.key)
+            ctrlKey = connector.addPage(info.key)
             if(!ctrlKey){
                 console.error("【Error】添加页面失败：组件["+info.key+"]创建控制器失败！")
                 return undefined
@@ -102,7 +102,7 @@ Item {
         const obj = comp.createObject(pagesNest, {
             z: -1, visible: false,
             ctrlKey: ctrlKey, // Python控制器key
-            controller: controller, // Python控制器对象
+            connector: connector, // Python控制器对象
         })
         // 收集并返回页面对象信息
         const dic = {
@@ -113,7 +113,7 @@ Item {
         }
         // 向控制器传入页面对象
         if(ctrlKey) {
-            controller.setPageQmlObj(ctrlKey, obj)
+            connector.setPageQmlObj(ctrlKey, obj)
         }
         return dic
     }
@@ -151,7 +151,7 @@ Item {
         const page = pageList[index]
         // 删除逻辑控制器
         if(page.ctrlKey){ 
-            const flag = controller.delPage(page.ctrlKey)
+            const flag = connector.delPage(page.ctrlKey)
             if(!flag){
                 console.error("【Warning】删除页面失败：控制器["+page.ctrlKey+"]删除失败！")
                 // return false // 暂时不管控制器删除失败

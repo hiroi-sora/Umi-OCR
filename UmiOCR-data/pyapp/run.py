@@ -5,7 +5,7 @@ from PySide2.QtCore import Qt, QTranslator
 from PySide2.QtGui import QGuiApplication, QOpenGLContext
 from PySide2.QtQml import QQmlApplicationEngine, qmlRegisterType
 
-from pyapp.tag_pages import TagPageController
+from pyapp.tag_pages.tag_pages_connector import TagPageConnector
 
 
 # 启动主qml
@@ -33,8 +33,8 @@ def main():
         os.MessageBox(msg, info="Umi-OCR Warning")
 
     # 4. 注册Python类
-    # 页面控制器
-    qmlRegisterType(TagPageController, "TagPageController", 1, 0, "TagPageController")
+    # 页面连接器
+    qmlRegisterType(TagPageConnector, "TagPageConnector", 1, 0, "TagPageConnector")
 
     # 5. 启动翻译
     # trans = QTranslator()
