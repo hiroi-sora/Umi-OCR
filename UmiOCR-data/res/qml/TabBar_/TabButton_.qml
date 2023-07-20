@@ -47,7 +47,7 @@ Button {
         // 关闭按钮
         IconButton {
             // 未锁定，且主按钮悬停或选中时才显示
-            visible: !app.tab.barIsLock && (parent.parent.hovered || parent.parent.checked)
+            visible: !qmlapp.tab.barIsLock && (parent.parent.hovered || parent.parent.checked)
             Layout.alignment: Qt.AlignRight
             Layout.rightMargin: theme.hTabBarHeight * 0.2
 
@@ -59,7 +59,7 @@ Button {
             icon_: "close"
 
             onClicked: {
-                app.tab.delTabPage(index)
+                qmlapp.tab.delTabPage(index)
             }
         }
     }
@@ -96,7 +96,7 @@ Button {
             acceptedButtons: Qt.LeftButton | Qt.MiddleButton
 
             // 拖拽
-            drag.target: app.tab.barIsLock ? undefined : parent.parent // 动态启用、禁用拖拽
+            drag.target: qmlapp.tab.barIsLock ? undefined : parent.parent // 动态启用、禁用拖拽
             drag.axis: Drag.XAxis // 只能沿X轴
             drag.threshold: 50 // 起始阈值
             property bool dragActive: drag.active // 动态记录拖拽状态
@@ -104,12 +104,12 @@ Button {
             
             onPressed: { // 左键按下，切换焦点
                 if(mouse.button === Qt.LeftButton) {
-                    app.tab.showTabPage(index)
+                    qmlapp.tab.showTabPage(index)
                 }
             }
             onClicked: { // 中键点击，删除标签
-                if(mouse.button === Qt.MiddleButton && !app.tab.barIsLock) {
-                    app.tab.delTabPage(index)
+                if(mouse.button === Qt.MiddleButton && !qmlapp.tab.barIsLock) {
+                    qmlapp.tab.delTabPage(index)
                 }
             }
             onDragActiveChanged: {

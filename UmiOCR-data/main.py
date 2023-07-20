@@ -2,6 +2,7 @@
 # ========== Umi-OCR 启动入口 ==========
 # =====================================
 
+
 def initRuntimeEnvironment(startup_script):
     """初始化运行环境"""
     import os
@@ -21,13 +22,16 @@ def initRuntimeEnvironment(startup_script):
 
     def except_hook(cls, exception, traceback):
         sys.__excepthook__(cls, exception, traceback)
+
     # sys.excepthook = except_hook
 
     # 定义一个最简单的消息弹窗
     def MessageBox(msg, info="Umi-OCR Message"):
         import ctypes
+
         ctypes.windll.user32.MessageBoxW(None, str(msg), str(info), 0)
         return 0
+
     os.MessageBox = MessageBox
 
     # 初始化工作目录和Python搜索路径
@@ -42,11 +46,11 @@ def initRuntimeEnvironment(startup_script):
     # 初始化Qt搜索路径，采用相对路径，避免中文路径编码问题
     try:
         from PySide2.QtCore import QCoreApplication
+
         QCoreApplication.addLibraryPath("./.site-packages/PySide2/plugins")
     except Exception as e:
         print(e)
-        os.MessageBox(
-            f"Qt plugins 目录导入失败！\nQt plugins directory import failed!\n\n{e}")
+        os.MessageBox(f"Qt plugins 目录导入失败！\nQt plugins directory import failed!\n\n{e}")
         os._exit(1)
     print("初始化Python运行环境完成！")
 
@@ -55,5 +59,6 @@ if __name__ == "__main__":
     initRuntimeEnvironment(__file__)  # 初始化运行环境
 
     # 必须初始化运行环境后，再导入自定义包
-    from app import main
+    from pyapp.run import main
+
     main()

@@ -104,7 +104,7 @@ Item {
     // 初始化
     Component.onCompleted: { 
         // 延迟加载
-        app.initFuncs.push(reload)
+        qmlapp.initFuncs.push(reload)
     }
     // 初始化数值
     function initConfigDict() {

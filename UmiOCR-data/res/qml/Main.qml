@@ -31,9 +31,9 @@ Window {
     // 全局样式，通过 theme 来访问
     property Theme theme: ThemeLight{}
 
-    // 全局单例，通过 app. 来访问
+    // 全局单例，通过 qmlapp. 来访问
     Item {
-        id: app
+        id: qmlapp
 
         Item { // 全局延迟加载 初始化函数列表
             // qml中，组件初始化顺序是从上到下，而onCompleted调用顺序相反。
@@ -53,10 +53,10 @@ Window {
             }
         }
         
-        GlobalConfigs { id: globalConfigs }  // 全局设置 app.globalConfigs
-        ThemeManager { id: themeManager } // 主题管理器 app.themeManager
-        TabViewManager { id: tab }  // 标签页逻辑管理器 app.tab
-        PopupManager { id: popupManager }  // 弹窗管理器 app.popupManager
+        GlobalConfigs { id: globalConfigs }  // 全局设置 qmlapp.globalConfigs
+        ThemeManager { id: themeManager } // 主题管理器 qmlapp.themeManager
+        TabViewManager { id: tab }  // 标签页逻辑管理器 qmlapp.tab
+        PopupManager { id: popupManager }  // 弹窗管理器 qmlapp.popupManager
 
         property alias initFuncs: initFuncs
         property alias globalConfigs: globalConfigs

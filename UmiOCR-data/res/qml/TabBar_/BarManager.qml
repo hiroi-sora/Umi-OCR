@@ -24,7 +24,7 @@ Repeater {
 
 
     Component.onCompleted: {
-        app.tab.bar = this // 逆向连接引用
+        qmlapp.tab.bar = this // 逆向连接引用
     }
     // ========================= 【增删改查】 =========================
 

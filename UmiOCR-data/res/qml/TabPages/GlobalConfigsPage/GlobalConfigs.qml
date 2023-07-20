@@ -16,9 +16,9 @@ Configs {
 
             "theme": {
                 "title": qsTr("主题"),
-                "optionsList": app.themeManager.themeList, // 从全局主题管理器中取列表
+                "optionsList": qmlapp.themeManager.themeList, // 从全局主题管理器中取列表
                 "onChanged": (val)=>{
-                    app.themeManager.switchTheme(val)
+                    qmlapp.themeManager.switchTheme(val)
                 },
             },
             "disableEffect": {
@@ -26,7 +26,7 @@ Configs {
                 "default": false,
                 "toolTip": qsTr("在低配置机器上，禁用动画、阴影等效果可减少部分资源占用"),
                 "onChanged": (flag)=>{
-                    app.themeManager.switchEnabledEffect(!flag)
+                    qmlapp.themeManager.switchEnabledEffect(!flag)
                 },
             },
             "disableExternalNotification": {
@@ -40,7 +40,7 @@ Configs {
                 "save": false,
                 "onChanged": (newVal, oldVal)=>{
                     if(oldVal!== undefined) {
-                        app.popupManager.showSimple("测试标题！", "测试内容112233445566！！！！")
+                        qmlapp.popupManager.showSimple("测试标题！", "测试内容112233445566！！！！")
                     }
                 },
             },

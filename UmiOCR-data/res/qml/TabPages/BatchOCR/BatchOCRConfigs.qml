@@ -10,7 +10,7 @@ Configs {
 
     configDict: {
         // OCR参数
-        "ocr": app.globalConfigs.ocrManager.deploy(this, "ocr"), 
+        "ocr": qmlapp.globalConfigs.ocrManager.deploy(this, "ocr"), 
 
         // 任务参数
         "mission": {
@@ -63,7 +63,7 @@ Configs {
                 "default": false,
             },
 
-            "scheduledTasks": app.globalConfigs.utilsDicts.getScheduledTasks(), // 计划任务
+            "scheduledTasks": qmlapp.globalConfigs.utilsDicts.getScheduledTasks(), // 计划任务
         },
     }
 }

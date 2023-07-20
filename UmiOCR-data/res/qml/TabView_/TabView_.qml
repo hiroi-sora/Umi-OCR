@@ -31,7 +31,7 @@ Rectangle {
         color: theme.bgColor
         
         Component.onCompleted: {
-            app.tab.page.pagesNest.parent = this
+            qmlapp.tab.page.pagesNest.parent = this
         }
     }
 }

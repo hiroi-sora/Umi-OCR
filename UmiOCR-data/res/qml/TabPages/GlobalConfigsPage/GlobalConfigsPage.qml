@@ -19,7 +19,7 @@ TabPage {
             anchors.margins: theme.spacing
             Component.onCompleted: { // 将全局设置UI的父级重定向过来
                 // 就算本页面删除，全局UI也不会被删，只会丢失父级
-                app.globalConfigs.panelComponent.parent = this
+                qmlapp.globalConfigs.panelComponent.parent = this
             }
         }
     }

@@ -5,7 +5,7 @@ from PySide2.QtCore import Qt, QTranslator
 from PySide2.QtGui import QGuiApplication, QOpenGLContext
 from PySide2.QtQml import QQmlApplicationEngine, qmlRegisterType
 
-from app.tag_pages import TagPageController
+from pyapp.tag_pages import TagPageController
 
 
 # 启动主qml
@@ -19,10 +19,10 @@ def main():
     QGuiApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
 
     # 2. 启动qt
-    app = QGuiApplication(sys.argv)
-    app.setApplicationName("Umi-OCR")
-    app.setOrganizationName("hiroi-sora")
-    app.setOrganizationDomain("hiroi-sora.com")
+    qtApp = QGuiApplication(sys.argv)
+    qtApp.setApplicationName("Umi-OCR")
+    qtApp.setOrganizationName("hiroi-sora")
+    qtApp.setOrganizationDomain("hiroi-sora.com")
 
     # 3. OpenGlES 兼容性检查
     if not QOpenGLContext.openGLModuleType() == QOpenGLContext.LibGLES:
@@ -39,7 +39,7 @@ def main():
     # 5. 启动翻译
     # trans = QTranslator()
     # if trans.load(r"翻译文1件.qm"):
-    #     app.installTranslator(trans)  # 安装翻译器
+    #     qtApp.installTranslator(trans)  # 安装翻译器
     # else:
     #     print("翻译文件安装失败！")
 
@@ -50,7 +50,7 @@ def main():
     # engine.load(f"qrc:/qml/Main.qml")  # 通过qrc启动
     if not engine.rootObjects():
         sys.exit(0)
-    sys.exit(app.exec_())
+    sys.exit(qtApp.exec_())
 
 
 # OpenGL渲染模式

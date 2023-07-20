@@ -57,13 +57,13 @@ RowLayout  {
         // 方法：重设标签按钮宽度
         function resetTabBtnWidth() {
             let w = hTabBarMain.width
-            if(!app.tab.barIsLock) w -= tabBarControl.width // 无锁定时，减去+按钮宽度
+            if(!qmlapp.tab.barIsLock) w -= tabBarControl.width // 无锁定时，减去+按钮宽度
             w = w / barManager.model.count
             tabWidth = Math.min(w, theme.hTabMaxWidth)
         }
         onWidthChanged: resetTabBtnWidth()  // 监听标签栏总宽度变化
         // 监听改变锁定，重设宽度
-        property bool isLock: app.tab.barIsLock
+        property bool isLock: qmlapp.tab.barIsLock
         onIsLockChanged: {
             hTabBarMain.resetTabBtnWidth()
         }
@@ -71,8 +71,8 @@ RowLayout  {
         MouseArea { // 点击标签栏空余位置，都是添加新标签
             anchors.fill: parent
             onClicked: {
-                if(!app.tab.barIsLock)
-                    app.tab.addNavi() // 添加导航页
+                if(!qmlapp.tab.barIsLock)
+                    qmlapp.tab.addNavi() // 添加导航页
             }
         }
 
@@ -165,7 +165,7 @@ RowLayout  {
                     let go = btnDragIndex(index) // 应该拖放到的序号
                     if(index !== go){ // 需要移动
                         // model.move(index, go, 1)
-                        app.tab.moveTabPage(index, go)
+                        qmlapp.tab.moveTabPage(index, go)
                     } else { // 无需移动，则回到原位
                         itemAt(index).x = originalX
                     }
@@ -179,7 +179,7 @@ RowLayout  {
                 color: "#00000000"
                 width: theme.hTabBarHeight
                 height: theme.hTabBarHeight
-                visible: !app.tab.barIsLock
+                visible: !qmlapp.tab.barIsLock
 
                 // 添加“+”按钮
                 IconButton {
@@ -187,7 +187,7 @@ RowLayout  {
                     anchors.margins: 5
                     icon_: "add"
                     onClicked: {
-                        app.tab.addNavi() // 添加导航页
+                        qmlapp.tab.addNavi() // 添加导航页
                     }
                 }
             }
@@ -221,9 +221,9 @@ RowLayout  {
         // 锁定“🔒︎”按钮
         Button {
             checkable: true
-            checked: app.tab.barIsLock
+            checked: qmlapp.tab.barIsLock
             onCheckedChanged: { // 双向绑定锁定标记
-                app.tab.barIsLock = checked
+                qmlapp.tab.barIsLock = checked
             }
             anchors.fill: parent
             anchors.margins: 5

@@ -24,7 +24,7 @@ TabPage {
     Component.onCompleted: initData()
     function initData() {
         pageModel.clear()
-        const f = app.tab.infoList
+        const f = qmlapp.tab.infoList
         // 遍历所有文件信息（排除第一项自己）
         for(let i=1,c=f.length; i<c; i++){
             pageModel.append({
@@ -82,11 +82,11 @@ TabPage {
                                 naviPage.introText = intro
                             }
                             onClicked: {
-                                let i = app.tab.getTabPageIndex(naviPage)
+                                let i = qmlapp.tab.getTabPageIndex(naviPage)
                                 if(i < 0){
                                     console.error("【Error】导航页"+text+"未找到下标！")
                                 }
-                                app.tab.changeTabPage(i, infoIndex)
+                                qmlapp.tab.changeTabPage(i, infoIndex)
                             }
                         }
                     }

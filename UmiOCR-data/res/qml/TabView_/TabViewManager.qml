@@ -82,7 +82,7 @@ Item {
     }
     Component.onCompleted: {
         // 延迟加载
-        app.initFuncs.push(init)
+        qmlapp.initFuncs.push(init)
     }
 
     // ========================= 【增删改查】 =========================
