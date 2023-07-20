@@ -11,11 +11,12 @@ import Qt.labs.settings 1.1
 import "Themes"
 import "TabView_"
 import "Configs"
+import "Popup_"
 import "TabPages/GlobalConfigsPage"
 
 Window {
 // ApplicationWindow {
-    id: root
+    // id: rootWindow
     visible: true
     // flags: Qt.Window | Qt.FramelessWindowHint // 无边框窗口，保留任务栏图标
 
@@ -56,11 +57,13 @@ Window {
         GlobalConfigs { id: globalConfigs }  // 全局设置 app.globalConfigs
         ThemeManager { id: themeManager } // 主题管理器 app.themeManager
         TabViewManager { id: tab }  // 标签页逻辑管理器 app.tab
+        PopupManager { id: popupManager }  // 弹窗管理器 app.popupManager
 
         property alias initFuncs: initFuncs
         property alias globalConfigs: globalConfigs
         property alias themeManager: themeManager
         property alias tab: tab
+        property alias popupManager: popupManager
     }
 
     // ========================= 【布局】 =========================
@@ -74,7 +77,7 @@ Window {
 
         // 主窗口的内容
         Rectangle {
-            id: main
+            id: mainUI
             anchors.fill: parent
             anchors.margins: 0 // 透明边框宽度
 
@@ -88,8 +91,8 @@ Window {
             layer.enabled: true
             layer.effect: OpacityMask {
                 maskSource: Rectangle {
-                    width: main.width
-                    height: main.height
+                    width: mainUI.width
+                    height: mainUI.height
                     radius: theme.windowRadius
                 }
             }
