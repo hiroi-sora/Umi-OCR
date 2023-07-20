@@ -1,10 +1,10 @@
 // ===============================================
-// =============== 页面的逻辑控制器 ===============
+// =============== 页面的逻辑管理器 ===============
 // ===============================================
 
 
 import QtQuick 2.15
-import TagPageConnector 1.0 // Python页面控制器
+import TagPageConnector 1.0 // Python页面连接器
 
 Item {
 
@@ -130,7 +130,7 @@ Item {
     }
 
     // 增改： 在 pageList 的 index 处，删除该页面，改为 infoIndex 页。
-    // TODO: 当前仅允许没有控制器的页面更换为别的页面，因为没有安全删除控制器的机制。
+    // TODO: 当前仅允许没有python控制器的页面更换为别的页面，因为没有安全删除控制器的机制。
     function changePage(index, infoIndex){
         const page = pageList[index]
         if(page.ctrlKey){ 
@@ -149,7 +149,7 @@ Item {
     // 删： 在 pageList 的 index 处，删除该页面。
     function delPage(index){
         const page = pageList[index]
-        // 删除逻辑控制器
+        // 删除python逻辑控制器
         if(page.ctrlKey){ 
             const flag = connector.delPage(page.ctrlKey)
             if(!flag){

@@ -7,6 +7,7 @@ import QtQuick.Window 2.15
 import QtQuick.Controls 2.15
 import QtGraphicalEffects 1.15
 import Qt.labs.settings 1.1
+import MissionConnector 1.0 // Python任务连接器
 
 import "Themes"
 import "TabView_"
@@ -57,12 +58,14 @@ Window {
         ThemeManager { id: themeManager } // 主题管理器 qmlapp.themeManager
         TabViewManager { id: tab }  // 标签页逻辑管理器 qmlapp.tab
         PopupManager { id: popupManager }  // 弹窗管理器 qmlapp.popupManager
+        MissionConnector { id: msnConnector } // 任务连接器 qmlapp.globalConfigs.msnConnector
 
         property alias initFuncs: initFuncs
         property alias globalConfigs: globalConfigs
         property alias themeManager: themeManager
         property alias tab: tab
         property alias popupManager: popupManager
+        property alias msnConnector: msnConnector
         // 记录当前窗口状态，可见时为true。包括正常窗口、最大化、全屏。
         property bool isVisible: rootWindow.visibility==2||rootWindow.visibility==4||rootWindow.visibility==5
     }

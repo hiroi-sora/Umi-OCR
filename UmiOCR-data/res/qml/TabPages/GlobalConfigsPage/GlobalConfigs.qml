@@ -9,6 +9,8 @@ import "../../ApiManager"
 Configs {
     category_: "Global"
 
+    // ========================= 【全局配置项】 =========================
+
     configDict: {
         "ui": {
             "title": qsTr("界面"),
@@ -42,6 +44,9 @@ Configs {
                     if(oldVal!== undefined) {
                         qmlapp.popupManager.showSimple("测试标题！", "测试内容112233445566！！！！")
                     }
+                    let s = qmlapp.msnConnector.getStatus("ocr")
+                    let l = Object.keys(s.missionListsLength).length
+                    console.log(`获取状态：${l}`)
                 },
             },
         },
@@ -49,8 +54,10 @@ Configs {
         "ocr": ocrManager.globalOptions
     }
 
-    OcrManager { id: ocrManager } // OCR管理器
-    UtilsConfigDicts { id: utilsDicts } // 通用配置项
+    // ========================= 【全局单例，通过 qmlapp.globalConfigs.xxx 访问】 =========================
+
+    OcrManager { id: ocrManager } // OCR管理器 qmlapp.globalConfigs.ocrManager
+    UtilsConfigDicts { id: utilsDicts } // 通用配置项 qmlapp.globalConfigs.utilsDicts
 
     property alias ocrManager: ocrManager
     property alias utilsDicts: utilsDicts

@@ -6,6 +6,7 @@ from PySide2.QtGui import QGuiApplication, QOpenGLContext
 from PySide2.QtQml import QQmlApplicationEngine, qmlRegisterType
 
 from pyapp.tag_pages.tag_pages_connector import TagPageConnector
+from pyapp.mission.mission_connector import MissionConnector
 
 
 # 启动主qml
@@ -35,6 +36,8 @@ def main():
     # 4. 注册Python类
     # 页面连接器
     qmlRegisterType(TagPageConnector, "TagPageConnector", 1, 0, "TagPageConnector")
+    # 任务连接器
+    qmlRegisterType(MissionConnector, "MissionConnector", 1, 0, "MissionConnector")
 
     # 5. 启动翻译
     # trans = QTranslator()

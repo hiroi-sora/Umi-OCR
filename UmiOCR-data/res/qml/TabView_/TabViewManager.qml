@@ -1,5 +1,5 @@
 // ====================================================
-// =============== 标签页整体的逻辑控制器 ===============
+// =============== 标签页整体的逻辑管理器 ===============
 // ====================================================
 
 
@@ -9,11 +9,11 @@ import "../Configs"
 
 Item {
     id: tabViewManager
-    // ========================= 【子控制器】 =========================
+    // ========================= 【子管理器】 =========================
 
     PagesManager{ id: page } // 页管理器
     property alias page: page
-    property var bar: undefined // 栏控制器
+    property var bar: undefined // 栏管理器
     // 连接别名
     property alias infoList: page.infoList
     property alias pageList: page.pageList
@@ -40,7 +40,7 @@ Item {
     // ========================= 【初始化】 =========================
 
     function init() { // 需要延迟加载，全局初始化完毕后执行
-        page.initListUrl() // 页面控制器初始化文件
+        page.initListUrl() // 页管理器初始化文件
         // 提取所有info的url
         const urlList = [] 
         for(let i in infoList){
