@@ -43,6 +43,9 @@ class __MissionOcrClass(Mission):
         res["time"] = t2 - t1
         return res
 
+    def getStatus(self):  # 返回当前状态
+        return {"missionListsLength": self.getMissionListsLength()}
+
 
 # 全局 OCR任务管理器
 MissionOCR = __MissionOcrClass()

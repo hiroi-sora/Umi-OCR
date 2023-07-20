@@ -49,6 +49,14 @@ class Mission:
         self.__msnMutex.unlock()  # 解锁
         return leftover
 
+    def getMissionListsLength(self):  # 获取每一条任务队列长度
+        lenDict = {}
+        self.__msnMutex.lock()
+        for k in self.__msnListDict:
+            lenDict[str(k)] = len(self.__msnListDict[k])
+        self.__msnMutex.unlock()
+        return lenDict
+
     # ========================= 【主线程 方法】 =========================
 
     def __startMsns(self):  # 启动异步任务，执行所有任务列表
@@ -142,6 +150,9 @@ class Mission:
     def msnTask(self, msnInfo, msn):  # 执行任务msn，返回结果
         print("mission 父类 msnTask")
         return None
+
+    def getStatus(self):  # 返回当前状态
+        return "Mission 基类 返回空状态"
 
     # ========================= 【异步类】 =========================
 
