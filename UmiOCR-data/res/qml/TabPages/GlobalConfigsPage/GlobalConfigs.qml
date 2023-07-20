@@ -4,7 +4,7 @@
 
 import QtQuick 2.15
 import "../../Configs"
-import "../../Api"
+import "../../ApiManager"
 
 Configs {
     category_: "Global"
@@ -38,8 +38,10 @@ Configs {
                 "title": qsTr("测试用"),
                 "default": false,
                 "save": false,
-                "onChanged": ()=>{
-                    app.popupManager.showSimple("测试标题！", "测试内容112233445566！！！！")
+                "onChanged": (newVal, oldVal)=>{
+                    if(oldVal!== undefined) {
+                        app.popupManager.showSimple("测试标题！", "测试内容112233445566！！！！")
+                    }
                 },
             },
         },

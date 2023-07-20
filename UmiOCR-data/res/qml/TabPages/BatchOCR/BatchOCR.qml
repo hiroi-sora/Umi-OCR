@@ -55,7 +55,7 @@ TabPage {
                 ]
             )
             console.log("自动添加！！！！！！！！！！！！！")
-            ocrStart()
+            // ocrStart()
         }
     }
 

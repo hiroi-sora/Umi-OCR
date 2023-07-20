@@ -21,10 +21,7 @@
 
 from ..api_ocr import getOcrApi
 from .mission import Mission
-from PySide2.QtCore import QMutex, QThreadPool, QRunnable
 import time
-from uuid import uuid4  # 唯一ID
-import threading  # TODO: 测试
 
 
 class __MissionOcrClass(Mission):
