@@ -24,6 +24,7 @@ Rectangle {
     property int allTime: 1 // 总时间
     property int nowTime: 0 // 当前时间
     property int interval: 10 // 间隔刷新
+    property int shadowWidth: theme.spacing * 3 // 边缘阴影宽度
     Timer {
         id: timer
         interval: simpleNoti.interval // 间隔
@@ -59,7 +60,7 @@ Rectangle {
             color: theme.coverColor1
             highlightColor: theme.coverColor2
             radius: theme.btnRadius
-            percent: 0.5
+            percent: 0
             // 鼠标悬浮背景
             Rectangle {
                 id: btnHoverBg
@@ -109,10 +110,10 @@ Rectangle {
         }
     }
     // 边缘阴影
-    layer.enabled: theme.enabledEffect
+    layer.enabled: theme.enabledEffect && shadowWidth>0
     layer.effect: DropShadow {
         transparentBorder: true
         color: theme.coverColor4
-        samples: theme.spacing * 3
+        samples: shadowWidth
     }
 }
