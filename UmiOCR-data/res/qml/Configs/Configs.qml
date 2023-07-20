@@ -43,7 +43,7 @@ configDict: {
     "type": 控件类型,
     "save": 可选，填false时不保存（每次初始化为默认值）,
     "toolTip": 可选，字符串，鼠标悬停时的提示,
-    "onChanged": 可选，值变化时的回调函数，  (val)=>{console.log("值变为: ", val)}
+    "onChanged": 可选，值变化时的回调函数，  (newVal, oldVal)=>{console.log(`值从 ${oldVal} 变为 ${newVal}`)}
 }
 
 configDict为嵌套形式，而originDict与valueDict为展开形式的单层字典。例：
@@ -80,8 +80,8 @@ Item {
         initConfigDict() 
         initPanelComponent()
         initChangedFuncs()
-        // console.log(`% 加载配置 ${category_} ！`)
-        console.log(`% 加载配置 ${category_} ！: ${JSON.stringify(valueDict, null, 2)}`)
+        console.log(`% 加载配置 ${category_} ！`)
+        // console.log(`% 加载配置 ${category_} ！: ${JSON.stringify(valueDict, null, 2)}`)
     }
     // 获取配置值字典
     function getConfigValueDict() {
@@ -212,8 +212,8 @@ Item {
     function setValue(key, val) {
         if(valueDict[key] === val) // 排除相同值
             return
+        onChangedFunc(key, val, valueDict[key]) // 触发函数，传入新值和旧值
         valueDict[key] = val
-        onChangedFunc(key, val) // 触发函数
         if(originDict[key].save) { // 需要保存值
             saveValue(key)
         }
@@ -221,18 +221,18 @@ Item {
     // 初始化期间。不执行触发函数
     property bool isChangedInit: false
     // 触发函数
-    function onChangedFunc(key, val) {
+    function onChangedFunc(key, newVal, oldVal) {
         if(!isChangedInit) // 初始化期间。不执行触发函数
             return
         // 配置项存在触发函数，则执行
         if(originDict[key].hasOwnProperty("onChanged")) 
-            originDict[key].onChanged(val)
+            originDict[key].onChanged(newVal, oldVal)
     }
     // 初始化，执行全部触发函数
     function initChangedFuncs() {
         isChangedInit = true
         for(let k in originDict) {
-            onChangedFunc(k, valueDict[k])
+            onChangedFunc(k, valueDict[k], undefined) // 传入空旧值
         }
     }
     // 带缓存的存储值

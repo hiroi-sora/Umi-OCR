@@ -13,14 +13,14 @@ import "../Widgets"
 Item {
     // ========================= 【对外接口】 =========================
 
-    function show(title, msg) {
-        if(!app.isVisible) {
-            // 主窗口隐藏，且允许外部通知时，发送外部通知
-            notificationWindow.show(title, msg)
+    function show(title, msg, time=3000) {
+        if(!app.isVisible && !app.globalConfigs.getValue("ui.disableExternalNotification")) {
+            // 主窗口隐藏，没禁止外部通知时，发送外部通知
+            notificationWindow.show(title, msg, time)
         }
         else {
             // 否则，发送内部通知
-            notificationPopup.show(title, msg)
+            notificationPopup.show(title, msg, time)
         }
     }
 
@@ -92,7 +92,7 @@ Item {
         id: notificationWindow
 
         // 显示通知弹窗
-        function show(title, msg, time=3000) {
+        function show(title, msg, time) {
             let screenWidth = Screen.width
             let screenHeight = Screen.height
             x = (screenWidth - width) / 2 // 水平居中

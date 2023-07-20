@@ -10,7 +10,7 @@ ToolTip {
     id: rootToolTip
 
     delay: 500
-    timeout: 5000
+    timeout: 0 // 不自动关闭
 
     contentItem: Text { // 前景文字
         text: rootToolTip.text
