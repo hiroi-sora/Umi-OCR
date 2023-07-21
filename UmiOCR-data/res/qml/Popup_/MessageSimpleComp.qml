@@ -1,5 +1,5 @@
 // =============================================
-// =============== 简单通知的界面 ===============
+// =============== 简单消息的界面 ===============
 // =============================================
 
 import QtQuick 2.15
@@ -9,7 +9,7 @@ import QtGraphicalEffects 1.15 // 阴影
 import "../Widgets"
 
 Rectangle {
-    id: simpleNoti
+    id: spMsg
 
     property var onHided: undefined // 关闭函数，外部传入
     function show(title, msg, time=5000) {
@@ -27,13 +27,13 @@ Rectangle {
     property int shadowWidth: theme.spacing * 3 // 边缘阴影宽度
     Timer {
         id: timer
-        interval: simpleNoti.interval // 间隔
+        interval: spMsg.interval // 间隔
         running: false
         repeat: true // 重复执行
         onTriggered: {
-            simpleNoti.nowTime += simpleNoti.interval
-            timerProgressBar.percent = simpleNoti.nowTime/simpleNoti.allTime
-            if(simpleNoti.nowTime>=simpleNoti.allTime) {
+            spMsg.nowTime += spMsg.interval
+            timerProgressBar.percent = spMsg.nowTime/spMsg.allTime
+            if(spMsg.nowTime>=spMsg.allTime) {
                 timer.stop() // 停止计时器
                 if(typeof onHided === "function")
                     onHided() // 调用关闭函数

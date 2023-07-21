@@ -54,6 +54,8 @@ Item {
     property int textSize: 16 *scale
     // 较小的文字大小
     property int smallTextSize: 13 *scale
+    // 较大的文字大小
+    property int largeTextSize: 20 *scale
 
     // 窗口圆角
     property real windowRadius: 0

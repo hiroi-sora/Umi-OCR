@@ -11,12 +11,24 @@ import "../Widgets"
 Item {
     // ========================= 【对外接口】 =========================
 
-    // 显示简单通知
+    // 显示简单通知，无需确认，计时自动消失
     function showSimple(title, msg) {
-        simpleNotificationPopup.show(title, msg)
+        messageSimple.show(title, msg)
+        showMessage(title, msg) // TODO: 
     }
+
+    // 显示带确认的通知弹窗
+    function showMessage(title, msg) {
+        message.show(title, msg)
+    }
+
+    Component.onCompleted: {
+        qmlapp.initFuncs.push(()=>{showSimple("111", "222")})
+    }
+    
 
     // ========================= 【内部】 =========================
 
-    SimpleNotificationPopup { id:simpleNotificationPopup }
+    Message{ id: message }
+    MessageSimple { id: messageSimple }
 }

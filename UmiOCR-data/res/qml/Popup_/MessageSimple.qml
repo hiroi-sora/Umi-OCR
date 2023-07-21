@@ -53,7 +53,7 @@ Item {
         y: Math.round((parent.height - height))
         closePolicy: Popup.NoAutoClose // 不被系统关闭
         // 组件
-        SimpleNotificationComp {
+        MessageSimpleComp {
             id: nscPopup
             onHided: notificationPopup.hide // 关闭事件
             anchors.horizontalCenter: parent.horizontalCenter
@@ -88,6 +88,7 @@ Item {
     }
 
     // ========================= 【外部模式】 =========================
+
     Window  {
         id: notificationWindow
 
@@ -122,7 +123,7 @@ Item {
         width: nscWindow.width+nscWindow.shadowWidth // 长宽要加上阴影宽度
         height: nscWindow.height+nscWindow.shadowWidth
         Component.onCompleted: y=Screen.height-showY // 初始y值，防止theme未加载导致第一次调用异常
-        SimpleNotificationComp {
+        MessageSimpleComp {
             id: nscWindow
             anchors.centerIn: parent
             onHided: notificationWindow.hide // 关闭事件
