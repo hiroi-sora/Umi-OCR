@@ -19,15 +19,15 @@
     MissionOCR.addMissionList(mission)
 """
 
-from ..api_ocr import getOcrApi
+from ..api.ocr import getApiOcr
 from .mission import Mission
-import time
 
 
 class __MissionOcrClass(Mission):
     def __init__(self):
         super().__init__()
-        self.__api = getOcrApi()  # 当前引擎api对象
+        self.__apiKey = "PaddleOCR"  # 当前api类型
+        self.__api = getApiOcr(self.__apiKey)  # 当前引擎api对象
 
     # ========================= 【重载】 =========================
 
@@ -37,14 +37,16 @@ class __MissionOcrClass(Mission):
         return True
 
     def msnTask(self, msnInfo, msn):  # 执行msnInfo中第一个任务
-        t1 = time.time()
         res = self.__api.runPath(msn)
-        t2 = time.time()
-        res["time"] = t2 - t1
         return res
 
+    # ========================= 【qml接口】 =========================
+
     def getStatus(self):  # 返回当前状态
-        return {"missionListsLength": self.getMissionListsLength()}
+        return {
+            "apiKey": self.__apiKey,
+            "missionListsLength": self.getMissionListsLength(),
+        }
 
 
 # 全局 OCR任务管理器

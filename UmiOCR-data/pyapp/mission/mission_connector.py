@@ -7,7 +7,7 @@ from PySide2.QtCore import QObject, Slot, Signal
 # 本模块内定义的任务控制器单例
 from .mission_ocr import MissionOCR
 
-# 控制器类列表
+# 控制器字典
 MsnObjDict = {"ocr": MissionOCR}
 
 

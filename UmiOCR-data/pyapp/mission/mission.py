@@ -5,6 +5,7 @@
 
 from PySide2.QtCore import QMutex, QThreadPool, QRunnable
 from uuid import uuid4  # 唯一ID
+import time
 import threading  # TODO: 测试
 
 
@@ -48,6 +49,8 @@ class Mission:
             self.__msnInfoDict[msnID]["state"] = -1  # 设为停止状态
         self.__msnMutex.unlock()  # 解锁
         return leftover
+
+    # TODO: 停止全部
 
     def getMissionListsLength(self):  # 获取每一条任务队列长度
         lenDict = {}
@@ -104,13 +107,17 @@ class Mission:
                 msnInfo["state"] = 1
                 msnInfo["onStart"](msnInfo)
 
-            # 6. 执行任务
+            # 6. 执行任务，并记录时间
             msn = msnList[0]
             msnInfo["onReady"](msnInfo, msn)
+            t1 = time.time()
             res = self.msnTask(msnInfo, msn)
+            t2 = time.time()
             if res == None:
                 print("【Error】任务管理器：msnTask失败")
                 continue
+            if type(res) == dict:  # 补充耗时
+                res["time"] = t2 - t1
 
             # 7. 再次检查任务是否要求停止
             if msnInfo["state"] == -1:
