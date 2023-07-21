@@ -34,10 +34,14 @@ Rectangle {
             case "warning":
                 icon = "warning"
                 iconColor = theme.noColor
+                if(title==="")
+                    title=qsTr("警告")
                 break
             case "error":
                 icon = "no"
                 iconColor = theme.noColor
+                if(title==="")
+                    title=qsTr("发生了一点小问题")
                 break
         }
     }

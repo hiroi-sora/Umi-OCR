@@ -12,23 +12,18 @@ Item {
     // ========================= 【对外接口】 =========================
 
     // 显示简单通知，无需确认，计时自动消失
-    function showSimple(title, msg) {
+    function simple(title, msg) {
         messageSimple.show(title, msg)
-        showMessage(title, msg) // TODO: 
     }
 
     // 显示带确认的通知弹窗
-    function showMessage(title, msg) {
-        message.show(title, msg)
+    // type可选: ""默认， "warning"警告， "error"错误
+    function message(title, msg, type="") {
+        messageWin.showMessage(title, msg, type)
     }
-
-    Component.onCompleted: {
-        qmlapp.initFuncs.push(()=>{showSimple("111", "222")})
-    }
-    
 
     // ========================= 【内部】 =========================
 
-    Message{ id: message }
+    MessageWin{ id: messageWin }
     MessageSimple { id: messageSimple }
 }

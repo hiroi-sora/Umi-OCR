@@ -18,8 +18,9 @@ QtObject {
         "btns": {
             "title": qsTr("操作"),
             "btnsList": [
+                {"text":qsTr("终止任务"), "onClicked":()=>{}, "textColor":theme.noColor},
+                {"text":qsTr("测试API"), "onClicked":()=>{}},
                 {"text":qsTr("应用修改"), "onClicked": applyConfigs, "textColor":theme.yesColor},
-                {"text":qsTr("终止任务"), "onClicked":()=>{qmlapp.popup.showSimple("11","通知内容通知内容通知内容通知内容通知内容通知内容通知内容通知内容通知内容通知内容通知内容")}, "textColor":theme.noColor},
             ],
         },
         "api": {
@@ -91,8 +92,8 @@ QtObject {
 
     // ========================= 【外部接口】 =========================
 
-    // 应用更改
-    function applyConfigs() {
+    // 应用更改，showSuccess=false时不显示成功提示
+    function applyConfigs(showSuccess=true) {
 
         // 成功应用修改之后的刷新函数
         function successUpdate() {
@@ -112,7 +113,8 @@ QtObject {
         // 获取当前全局 apiKey ，验证在本字典中的存在性
         const nowKey = qmlapp.globalConfigs.getValue("ocr.api")
         if(!pageOptions.hasOwnProperty(nowKey)) {
-            console.log("【Error】OCR api列表中不存在", nowKey)
+            const s = qsTr("OCR API 列表中不存在%1").arg(nowKey)
+            qmlapp.popup.message("", s, "error")
             return
         }
         // 验证 py 是否有执行中的任务
@@ -122,7 +124,8 @@ QtObject {
             let n = 0
             for(let k in pyStatus.missionListsLength)
                 n += pyStatus.missionListsLength[k]
-            console.log(`【Warning】当前已有${msnLen}组任务队列，共${n}个任务正在执行。终止任务后才可以修改API。`)
+            const s = qsTr("当前已有%1组任务队列、共%2个任务正在执行。终止任务后才可以修改API。").arg(msnLen).arg(n)
+            qmlapp.popup.message(qsTr("文字识别 API 应用成功"), s, "warning")
             return
         }
         // 从全局配置中，提取出目前apiKey对应的配置项
@@ -140,10 +143,12 @@ QtObject {
         if(msg.startsWith("[Success]")) {
             apiKey = nowKey
             successUpdate()
-            console.log("应用OCR更改成功！", msg)
+            if(showSuccess) { // 显示弹窗
+                qmlapp.popup.simple(qsTr("OCR API 应用成功"), qsTr("当前API为【%1】").arg(nowKey))
+            }
         }
         else {
-            console.log("应用OCR更改失败！", msg)
+            qmlapp.popup.message(qsTr("OCR API 应用失败"), msg, "error")
         }
     }
 
@@ -174,7 +179,7 @@ QtObject {
 
     Component.onCompleted: {
         deployDict = {}
-        qmlapp.initFuncs.push2(applyConfigs)
+        qmlapp.initFuncs.push2(()=>{applyConfigs(false)})
         console.log("% OcrManager 初始化OCR管理器完毕！")
     }
 }
