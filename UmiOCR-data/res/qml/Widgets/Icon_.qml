@@ -11,7 +11,7 @@ Image {
 
     // =============================================================
     id: image
-    source: `../../images/icons/${icon}.svg`
+    source: icon ? `../../images/icons/${icon}.svg` : ""
     fillMode: Image.PreserveAspectFit // 均匀缩放
 
     // 填充颜色

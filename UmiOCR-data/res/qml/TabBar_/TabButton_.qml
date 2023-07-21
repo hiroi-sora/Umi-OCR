@@ -56,7 +56,7 @@ Button {
             implicitHeight: size
             bgColor_: "#00000000"
 
-            icon_: "close"
+            icon_: "no"
 
             onClicked: {
                 qmlapp.tab.delTabPage(index)

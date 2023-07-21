@@ -497,7 +497,7 @@ Item {
                     radius: theme.btnRadius
                     Icon_ {
                         anchors.fill: parent
-                        icon: "check"
+                        icon: "yes"
                         color: theme.bgColor
                     }
                     Behavior on x { // 位移动画

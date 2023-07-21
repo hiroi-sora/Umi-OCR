@@ -12,12 +12,13 @@ Rectangle {
     id: spMsg
 
     property var onHided: undefined // 关闭函数，外部传入
-    function show(title, msg, time=5000) {
+    function show(title, msg, time=5000, icon="bell") {
         textTitle.text = title
         textMsg.text = msg
         nowTime = 0
         allTime = time>0?time:1 // 防止除0
         timerProgressBar.percent = 0
+        iconComp.icon = icon // 图标
         timer.start() // 启动计时器
     }
 
@@ -43,12 +44,15 @@ Rectangle {
     }
 
     width: theme.textSize * 20
-    height: theme.textSize*2+theme.smallTextSize*4
+    height: childrenRect.height+theme.spacing*2
     color: theme.bgHighlightColor
     radius: theme.panelRadius
     // 内容组件
     Item {
-        anchors.fill: parent
+        height: childrenRect.height
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: parent.top
         anchors.margins: theme.spacing
         // 倒计时 ▽按钮
         HProgressBar {
@@ -76,11 +80,23 @@ Rectangle {
                 color: theme.bgColor
             }
         }
+        // 标题图标
+        Icon_ {
+            id: iconComp
+            anchors.top: parent.top
+            anchors.left: parent.left
+            color: theme.yesColor
+            height: theme.textSize
+            width: theme.textSize
+        }
         // 标题文字
         Text_ {
             id: textTitle
             anchors.top: parent.top
-            anchors.left: parent.left
+            anchors.left: iconComp.right
+            anchors.leftMargin: theme.textSize*0.5
+            height: theme.textSize
+            verticalAlignment: Text.AlignVCenter // 垂直居中
         }
         // 内容文字
         Text_ {
