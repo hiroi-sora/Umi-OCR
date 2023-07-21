@@ -37,9 +37,16 @@ configDict: {
         "dialogTitle": 对话框标题,
         "nameFilters": ["图片 (*.jpg *.jpeg)", "类型2..."] 文件夹类型可不需要
     },
+    "按钮组 buttons": {
+        "title": ,
+        "btnsList": [
+            {"text":"名称1", "onClicked":函数1, "textColor": 字体颜色}},
+            {"text":"名称2", "onClicked":函数2, "bgColor": 背景颜色}},
+        ],
+    },
 
     通用配置元素：
-    "title": 显示名称，可选，填写时自动生成控件,
+    "title": 显示名称。不填（或undefined）时不生成组件。填写（包括空字符串""）时自动生成控件。
     "type": 控件类型,
     "save": 可选，填false时不保存（每次初始化为默认值）,
     "toolTip": 可选，字符串，鼠标悬停时的提示,
@@ -135,6 +142,11 @@ Item {
                     config.type = "enum"
                     config.default = config.optionsList[0][0]
                 }
+                else if (config.hasOwnProperty("btnsList")) { // 按钮组
+                    config.type = "buttons"
+                    config.fullKey = key // 记录完整key
+                    return
+                }
                 else {
                     console.error("【Error】未知类型的配置项："+key)
                     return
@@ -196,13 +208,10 @@ Item {
     }
     // 补充空白参数
     function supplyDefaultParams(config) {
-        if(!config.hasOwnProperty("title")) // 标题
-            config.title = ""
         if(!config.hasOwnProperty("type")) // 类型
             config.type = ""
         if(!config.hasOwnProperty("save")) // 保存
             config.save = true
-
     }
     // 获取值
     function getValue(key) {
@@ -285,7 +294,7 @@ Item {
                 const config = group[key]
                 if(typeof config !== "object")
                     continue
-                if(!config.title) // 无标题，则表示不生成组件
+                if(! (typeof config.title === "string")) // 无标题，则表示不生成组件
                     continue
                 if(config.type === "group") { // 若是配置项组，递归遍历
                     // 若是外层，则生成外层group组件；若是内层则生成内层组件。
@@ -426,6 +435,7 @@ Item {
         "enum": compEnum,
         "file": compFile,
         "text": compText,
+        "buttons": compBtns,
     }
     // 配置项：布尔值
     Component {
@@ -706,6 +716,38 @@ Item {
                         anchors.rightMargin: parent.border.width
                         onTextChanged: { // 对话框文本改变时设置值
                             rootFile.set(text)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    // 配置项：按钮组
+    Component {
+        id: compBtns
+
+        ConfigItemComp {
+            id: rootFile
+
+            Row {
+                anchors.right: parent.right
+                anchors.rightMargin: theme.smallSpacing
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                spacing: theme.smallSpacing
+
+                Repeater {
+                    model: origin.btnsList
+                    Button_ {
+                        property var info: origin.btnsList[index]
+                        text_: info.text
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        bgColor_: info.bgColor?info.bgColor:theme.coverColor1
+                        textColor_: info.textColor?info.textColor:theme.textColor
+
+                        onClicked: {
+                            info.onClicked()
                         }
                     }
                 }
