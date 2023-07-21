@@ -442,6 +442,7 @@ Item {
         id: compBoolean
 
         ConfigItemComp {
+            id: boolRoot
             property bool checked: true
             property bool isInit: false
 
@@ -466,49 +467,13 @@ Item {
             }
 
             // 开关图标
-            Rectangle {
+            CheckBox_ {
                 id: switchBtn
                 anchors.right: parent.right
                 anchors.rightMargin: theme.smallSpacing
                 anchors.verticalCenter: parent.verticalCenter
-                height: theme.textSize
-                width: theme.textSize*2
-                clip: true
-                color: theme.bgColor
-                radius: theme.btnRadius
-                border.width: 2
-                border.color: theme.coverColor4
-
-                // 关闭：-
-                Icon_ {
-                    anchors.fill: parent
-                    anchors.margins: 3
-                    icon: "dash"
-                    color: theme.noColor
-                }
-
-                // 启用：√
-                Rectangle {
-                    id: enableIcon
-                    x: checked ? 0 : width*-1.1
-                    height: parent.height
-                    width: parent.width
-                    color: theme.yesColor
-                    radius: theme.btnRadius
-                    Icon_ {
-                        anchors.fill: parent
-                        icon: "yes"
-                        color: theme.bgColor
-                    }
-                    Behavior on x { // 位移动画
-                        enabled: theme.enabledEffect && isInit
-                        NumberAnimation {
-                            duration: 200
-                            easing.type: Easing.OutCirc
-                        }
-                    }
-                }
-
+                checked: boolRoot.checked
+                enabledAnime: boolRoot.isInit
             }
         }
     }
