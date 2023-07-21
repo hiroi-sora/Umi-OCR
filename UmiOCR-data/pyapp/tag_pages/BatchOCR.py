@@ -53,11 +53,10 @@ class BatchOCR(Page):
             imgPaths[i] = p.replace("\\", "/")
         return imgPaths
 
-    def msnPaths(self, paths, pageDict, globalDict):  # 接收路径列表和配置，开始OCR任务
+    def msnPaths(self, paths, pageDict):  # 接收路径列表和配置，开始OCR任务
         # 初解析配置字典，提取OCR参数
         # 获取qml配置字典
         print("获取配置字典：", pageDict)
-        print("获取全局字典：", globalDict)
         # return
         # 任务信息
         msnInfo = {

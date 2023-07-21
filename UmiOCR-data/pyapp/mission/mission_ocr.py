@@ -19,15 +19,15 @@
     MissionOCR.addMissionList(mission)
 """
 
-from ..api.ocr import getApiOcr
+from ..api.ocr import getApiOcr, isApiOcr
 from .mission import Mission
 
 
 class __MissionOcrClass(Mission):
     def __init__(self):
         super().__init__()
-        self.__apiKey = "PaddleOCR"  # 当前api类型
-        self.__api = getApiOcr(self.__apiKey)  # 当前引擎api对象
+        self.__apiKey = ""  # 当前api类型
+        self.__api = None  # 当前引擎api对象
 
     # ========================= 【重载】 =========================
 
@@ -47,6 +47,27 @@ class __MissionOcrClass(Mission):
             "apiKey": self.__apiKey,
             "missionListsLength": self.getMissionListsLength(),
         }
+
+    def setApi(self, info):  # 设置api
+        # 成功返回 [Success] ，失败返回 [Error] 开头的字符串
+        apiKey = info["ocr.api"]
+        # 如果api对象已启动，则先停止
+        if self.__api:
+            self.__api.stop()
+        # 获取新api对象
+        res = getApiOcr(apiKey, info)
+        # 成功
+        if isApiOcr(res):
+            self.__api = res
+            self.__apiKey = apiKey
+            return "[Success]"
+        # 失败
+        else:
+            self.__apiKey = ""
+            self.__api = None
+            if type(res) == str:
+                return res
+            return "[Error] MissionOCR Failed to setApi, unknown reason"
 
 
 # 全局 OCR任务管理器

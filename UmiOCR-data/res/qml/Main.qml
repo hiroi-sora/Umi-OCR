@@ -42,29 +42,35 @@ Window {
             // 将各个组件的初始化函数放在这里，可以保证其他组件都已经构建完毕。
             id: initFuncs
             property var list: []
+            property var list2: []
             property bool isComplete: false
             function push(f) { // 添加一个要延迟加载的函数。若当前全局已初始化，则直接执行
                 if(isComplete) f()
                 else list.push(f)
             }
+            function push2(f) { // 添加一个要延迟加载的函数，比push()更晚执行
+                if(isComplete) f()
+                else list2.push(f)
+            }
             Component.onCompleted: { // 全局初始化完毕，执行延迟加载的函数
                 isComplete = true
                 console.log("% 开始执行 延迟加载初始化函数！")
                 for(let i in list) list[i]()
+                for(let i in list2) list2[i]()
             }
         }
         
         GlobalConfigs { id: globalConfigs }  // 全局设置 qmlapp.globalConfigs
         ThemeManager { id: themeManager } // 主题管理器 qmlapp.themeManager
         TabViewManager { id: tab }  // 标签页逻辑管理器 qmlapp.tab
-        PopupManager { id: popupManager }  // 弹窗管理器 qmlapp.popupManager
+        PopupManager { id: popup }  // 弹窗管理器 qmlapp.popup
         MissionConnector { id: msnConnector } // 任务连接器 qmlapp.globalConfigs.msnConnector
 
         property alias initFuncs: initFuncs
         property alias globalConfigs: globalConfigs
         property alias themeManager: themeManager
         property alias tab: tab
-        property alias popupManager: popupManager
+        property alias popup: popup
         property alias msnConnector: msnConnector
         // 记录当前窗口状态，可见时为true。包括正常窗口、最大化、全屏。
         property bool isVisible: rootWindow.visibility==2||rootWindow.visibility==4||rootWindow.visibility==5

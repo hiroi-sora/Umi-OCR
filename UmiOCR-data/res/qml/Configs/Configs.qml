@@ -370,8 +370,8 @@ Item {
                 id: groupText
                 text: title
                 anchors.left: parent.left
-                // 不显示标题时，高度为0；否则自动高度
-                height: (title && title!==" ") ? undefined:0
+                // 显示标题时，自动高度；否则高度为0
+                height: (title) ? undefined:0
             }
             
             Rectangle {

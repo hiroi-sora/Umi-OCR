@@ -126,8 +126,7 @@ TabPage {
         // 开始运行
         const paths = Object.keys(filesDict)
         const pageDict = batchOCRConfigs.getConfigValueDict()
-        const globalDict = qmlapp.globalConfigs.getConfigValueDict()
-        tabPage.callPy("msnPaths", paths, pageDict, globalDict)
+        tabPage.callPy("msnPaths", paths, pageDict)
     }
 
     // 停止OCR（同步）

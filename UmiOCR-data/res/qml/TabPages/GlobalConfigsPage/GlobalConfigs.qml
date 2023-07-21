@@ -36,19 +36,6 @@ Configs {
                 "default": false,
                 "toolTip": qsTr("不再发送窗口外部通知。当应用处于后台时，你可能错过信息。"),
             },
-            "qwerweqreqeqwr": {
-                "title": qsTr("测试用"),
-                "default": false,
-                "save": false,
-                "onChanged": (newVal, oldVal)=>{
-                    if(oldVal!== undefined) {
-                        qmlapp.popupManager.showSimple("测试标题！", "测试内容112233445566！！！！")
-                    }
-                    let s = qmlapp.msnConnector.getStatus("ocr")
-                    let l = Object.keys(s.missionListsLength).length
-                    console.log(`获取状态：${l}`)
-                },
-            },
         },
         // OCR接口全局设定
         "ocr": ocrManager.globalOptions

@@ -29,8 +29,3 @@ class MissionConnector(QObject):
             return None
         # 调用方法，参数不对的话让系统抛出错误
         return method(*args)
-
-    # 获取任务控制器msnKey的状态
-    @Slot(str, result="QVariant")
-    def getStatus(self, msnKey):
-        return self.callPy(msnKey, "getStatus")

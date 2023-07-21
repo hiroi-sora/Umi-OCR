@@ -188,20 +188,50 @@ class __PPOCR_socket(PPOCR_pipe):  # 调用OCR（套接字模式）
             return {"code": 905, "data": f"识别器输出值反序列化JSON失败。异常信息：[{e}]。原始内容：[{getStr}]"}
 
 
+# 配置映射表，表1为全局，2为局部。每一项为： ["exe键", "qml键"]
+ConfigMap1 = [
+    ("exe_path", "ocr.PaddleOCR.path"),  # 引擎路径
+    ("enable_mkldnn", "ocr.PaddleOCR.enable_mkldnn"),  # mkl加速
+]
+ConfigMap2 = [
+    ("config_path"),  # 配置文件路径
+    ("cls"),  # 方向分类
+    ("use_angle_cls"),  # 方向分类
+    ("enable_mkldnn"),  # mkl加速
+    ("limit_side_len"),  # 长边压缩
+]
+
+
 class ApiPaddleOcr(ApiOcr):  # 公开接口
-    def __init__(self):
-        self.api = None
-        self.args = {}
+    def __init__(self, globalArgd):
+        # 测试路径是否存在
+        pathKey = ConfigMap1[0][1]
+        if pathKey not in globalArgd:
+            raise ValueError(f'[Error] Missing parameter "{pathKey}".')
+        if not os.path.exists(globalArgd[pathKey]):
+            raise ValueError(
+                f'[Error] Exe path "{globalArgd[pathKey]}" does not exist.'
+            )
+        # 初始化参数
+        self.api = None  # api对象
+        self.lArgd = {}  # 局部参数
+        self.gArgd = {}  # 全局参数
+        for c in ConfigMap1:  # 加载全局参数
+            if c[1] not in globalArgd:
+                raise ValueError(f'[Error] Key "{c[1]}" not in ConfigMap1[qml].')
+            self.gArgd[c[0]] = globalArgd[c[1]]
+        print("获取全局参数：", self.gArgd)
 
     def start(self, argd):  # 启动引擎
+        # TODO: 整理局部参数
         if not self.api == None:
-            # 若引擎已启动，且参数与传入参数一致，则无需重启
-            if not set(argd.items()) == set(self.args.items()):
+            # 若引擎已启动，且局部参数与传入参数一致，则无需重启
+            if not set(argd.items()) == set(self.argd.items()):
                 return
             # 若引擎已启动但需要更改参数，则停止旧引擎
             self.stop()
         # 启动新引擎
-        self.args = argd
+        self.argd = argd  # 记录局部参数
         exePath = argd["exePath"]
         del argd["exePath"]
         self.api = PPOCR_pipe(exePath, argd)
