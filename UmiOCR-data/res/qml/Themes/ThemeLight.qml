@@ -10,10 +10,11 @@ Theme {
 
     // 背景颜色
     bgColor: "#FFF"
-    // 突出的背景颜色
-    bgHighlightColor: "#ffd8d8"
-    // 高亮颜色
-    highlightColor: "#68b94d"
+    
+    // 主题颜色，不透明，由浅到深
+    themeColor1: "#DDFFFF" // 背景
+    themeColor2: "#00CCFF" // 装饰性前景
+    themeColor3: "#0066FF" // 文字
 
     // 叠加层颜色，从浅到深
     coverColor1: "#11000000" // 大部分需要突出的背景
@@ -30,4 +31,9 @@ Theme {
     textColor: "#000"
     // 次要文字颜色
     subTextColor: "#555"
+
+    // 表示允许、成功的颜色
+    yesColor: "#00CC00"
+    // 表示禁止、失败的颜色
+    noColor: "#FF0000"
 }

@@ -45,7 +45,7 @@ Rectangle {
 
     width: theme.textSize * 20
     height: childrenRect.height+theme.spacing*2
-    color: theme.bgHighlightColor
+    color: theme.themeColor1
     radius: theme.panelRadius
     // 内容组件
     Item {
@@ -85,7 +85,7 @@ Rectangle {
             id: iconComp
             anchors.top: parent.top
             anchors.left: parent.left
-            color: theme.yesColor
+            color: theme.themeColor2
             height: theme.textSize
             width: theme.textSize
         }
