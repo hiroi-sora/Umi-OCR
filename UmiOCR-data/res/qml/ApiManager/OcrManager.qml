@@ -19,7 +19,7 @@ QtObject {
             "title": qsTr("操作"),
             "btnsList": [
                 {"text":qsTr("应用修改"), "onClicked": applyConfigs, "textColor":theme.yesColor},
-                {"text":qsTr("终止任务"), "onClicked":()=>{qmlapp.popup.showSimple("11","22")}, "textColor":theme.noColor},
+                {"text":qsTr("终止任务"), "onClicked":()=>{qmlapp.popup.showSimple("11","通知内容通知内容通知内容通知内容通知内容通知内容通知内容通知内容通知内容通知内容通知内容")}, "textColor":theme.noColor},
             ],
         },
         "api": {

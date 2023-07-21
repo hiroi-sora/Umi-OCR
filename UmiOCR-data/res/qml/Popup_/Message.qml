@@ -4,7 +4,6 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtGraphicalEffects 1.15 // 阴影
 import QtQuick.Window 2.15
 
 import "../Widgets"
@@ -23,8 +22,7 @@ Item {
         winDict[winId] = obj
     }
 
-    function hide(winId) {
-        console.log("关闭弹窗对象", winId)
+    function close(winId) {
         if(winDict.hasOwnProperty(winId)) {
             winDict[winId].destroy()
         }
@@ -37,27 +35,47 @@ Item {
     Component {
         id: msgWin
 
-        Window  {
+        Window {
+            id: win
             visible: true
 
-            MessageComp {
-                id: msgComp
+            // 鼠标拖拽移动窗口
+            MouseArea {
+                anchors.fill: parent
+                property int ox: 0
+                property int oy: 0
+                onPressed: {
+                    ox = mouse.x
+                    oy = mouse.y
+                }
+                onPositionChanged: {
+                    win.setX(win.x+mouse.x-ox)
+                    win.setY(win.y+mouse.y-oy)
+                }
             }
 
             property string title: ""
             property string msg: ""
             property string winId: ""
-            width: msgComp.width
-            height: msgComp.height
+            width: msgComp.width+msgComp.shadowWidth
+            height: msgComp.height+msgComp.shadowWidth
             flags: Qt.FramelessWindowHint // 无边框
             color: "#00000000"
-            Component.onCompleted: {
-                msgComp.show(title, msg)
-                msgComp.onHided = hide
+
+            // 消息盒组件
+            MessageBox {
+                id: msgComp
+                anchors.centerIn: parent
+                title: win.title // 标题
+                msg: win.msg // 内容
+                btnsList: [ // 按钮列表
+                    {"text":qsTr("确定"), "textColor": theme.themeColor3, "bgColor": theme.themeColor1},
+                ]
+                onClosed: win.close // 关闭函数
             }
 
-            function hide() {
-                messageRoot.hide(winId)
+            function close() {
+                messageRoot.close(winId)
             }
         }
     }
