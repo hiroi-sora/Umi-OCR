@@ -41,6 +41,7 @@ TabPage {
                 [
                     "D:/Pictures/Screenshots/屏幕截图 2023-06-03 120958.png",
                     "D:/Pictures/Screenshots/屏幕截图 2021-04-27 171637.png",
+                    "D:/Pictures/Screenshots/损坏的图片.png",
                     "D:/Pictures/Screenshots/屏幕截图 2021-04-27 171639.png",
                     "D:/Pictures/Screenshots/屏幕截图 2023-04-24 235542.png",
                     "D:/Pictures/Screenshots/屏幕截图 2023-04-22 212147.png",
@@ -55,7 +56,7 @@ TabPage {
                 ]
             )
             console.log("自动添加！！！！！！！！！！！！！")
-            // ocrStart()
+            ocrStart()
         }
     }
 
@@ -125,8 +126,8 @@ TabPage {
         missionShow = `0s  0/${msnLength}  0%` // 信息显示
         // 开始运行
         const paths = Object.keys(filesDict)
-        const pageDict = batchOCRConfigs.getConfigValueDict()
-        tabPage.callPy("msnPaths", paths, pageDict)
+        const argd = batchOCRConfigs.getConfigValueDict()
+        tabPage.callPy("msnPaths", paths, argd)
     }
 
     // 停止OCR（同步）
@@ -250,8 +251,18 @@ TabPage {
     }
 
     // 任务队列完毕
-    function onOcrFinish() {
+    function onOcrEnd(msg) {
         setMsnState("none")
+        // msg: [Success] [Warning] [Error]
+        if(msg.startsWith("[Success]")) {
+            qmlapp.popup.simple(qsTr("批量识别完成"), "")
+        }
+        else if(msg.startsWith("[Warning]")) {
+            qmlapp.popup.simple(qsTr("批量识别任务被终止"), "")
+        }
+        else if(msg.startsWith("[Error]")) {
+            qmlapp.popup.message(qsTr("批量识别任务异常"), msg, "error")
+        }
     }
 
     // ========================= 【布局】 =========================

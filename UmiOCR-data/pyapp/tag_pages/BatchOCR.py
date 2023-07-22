@@ -53,19 +53,20 @@ class BatchOCR(Page):
             imgPaths[i] = p.replace("\\", "/")
         return imgPaths
 
-    def msnPaths(self, paths, pageDict):  # 接收路径列表和配置，开始OCR任务
+    def msnPaths(self, paths, argd):  # 接收路径列表和配置，开始OCR任务
         # 初解析配置字典，提取OCR参数
         # 获取qml配置字典
-        print("获取配置字典：", pageDict)
+        print("获取配置字典：", argd)
         # return
         # 任务信息
         msnInfo = {
             "onStart": self.__onStart,
             "onReady": self.__onReady,
             "onGet": self.__onGet,
-            "onFinish": self.__onFinish,
-            "onFailure": self.__onFinish,
+            "onEnd": self.__onEnd,
+            "argd": argd,
         }
+        # return
         self.msnID = MissionOCR.addMissionList(msnInfo, paths)
         if self.msnID:
             print(
@@ -101,8 +102,9 @@ class BatchOCR(Page):
         res["score"] = score
         self.callQmlInMain("onOcrGet", path, res)  # 在主线程中调用qml
 
-    def __onFinish(self, msnInfo):  # 任务队列完成或失败
-        self.callQmlInMain("onOcrFinish")
+    def __onEnd(self, msnInfo, msg):  # 任务队列完成或失败
+        # msg: [Success] [Warning] [Error]
+        self.callQmlInMain("onOcrEnd", msg)
 
     # 设置任务状态
     def __setMsnState(self, flag):
