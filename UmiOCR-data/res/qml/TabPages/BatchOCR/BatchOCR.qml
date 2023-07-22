@@ -157,6 +157,25 @@ TabPage {
             "textMain_": text
         })
     }
+
+    // 关闭页面
+    function closePage() {
+        if(msnState !== "none") {
+            console.log("任务进行中，不允许关闭页面！")
+            const argd = {yesText: qsTr("依然关闭")}
+            const callback = (flag)=>{
+                if(flag) {
+                    ocrStop()
+                    delPage()
+                }
+            }
+            qmlapp.popup.dialog("", qsTr("任务进行中。仍要关闭页面吗？"), callback, "warning", argd)
+        }
+        else {
+            delPage()
+        }
+    }
+
     // ========================= 【python调用qml】 =========================
 
     /* 
