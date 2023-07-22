@@ -25,13 +25,11 @@ class __MissionOcrClass(Mission):
         if not self.__api:
             return "[Error] MissionOCR: API object is None."
         # 检查参数更新
-        self.__api.start({"exePath": "lib\PaddleOCR-json\PaddleOCR-json.exe"})
-        """返回值可选：
-        "" ：空字符串表示正常继续。
-        "continue" ：跳过本次任务
-        "[Error] xxxx" ：终止这条任务队列，返回异常信息
-        """
-        return ""
+        msg = self.__api.start(msnInfo["argd"])
+        if msg.startswith("[Error]"):
+            return msg  # 更新失败，结束该队列
+        else:
+            return ""  # 更新成功 TODO: continue
 
     def msnTask(self, msnInfo, msn):  # 执行msnInfo中第一个任务
         res = self.__api.runPath(msn)

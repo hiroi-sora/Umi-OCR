@@ -52,14 +52,11 @@ class Mission:
         # 返回任务id
         return msnID
 
-    def stopMissionList(self, msnID):  # 停止一条任务队列，返回剩余未执行的任务
-        leftover = None
+    def stopMissionList(self, msnID):  # 停止一条任务队列
         self.__msnMutex.lock()  # 上锁
         if msnID in self.__msnListDict:
-            leftover = self.__msnListDict[msnID]
             self.__msnInfoDict[msnID]["state"] = -1  # 设为停止状态
         self.__msnMutex.unlock()  # 解锁
-        return leftover
 
     # TODO: 停止全部
 

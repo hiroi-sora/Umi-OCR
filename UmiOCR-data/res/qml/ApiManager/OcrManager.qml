@@ -72,9 +72,24 @@ QtObject {
             "language": {
                 "title": qsTr("语言/模型库"),
                 "optionsList": [
-                    ["default", "简体中文"],
-                    ["specify", "English"],
+                    ["models/config_chinese.txt", "简体中文"],
+                    ["models/config_en.txt", "English"],
                 ],
+            },
+            "cls": {
+                "title": qsTr("纠正文本方向"),
+                "default": false,
+                "toolTip": qsTr("启用方向分类，识别倾斜或倒置的文本。可能降低识别速度。")
+            },
+            "limit_side_len": {
+                "title": qsTr("限制图像边长"),
+                "optionsList": [
+                    [960, "960 "+qsTr("（默认）")],
+                    [2880, "2880"],
+                    [4320, "4320"],
+                    [999999, qsTr("无限制")],
+                ],
+                "toolTip": qsTr("将边长大于该值的图片进行压缩，可以提高识别速度。可能降低识别精度。")
             },
         },
         "RapidOCR": {

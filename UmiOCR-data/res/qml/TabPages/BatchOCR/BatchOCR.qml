@@ -130,11 +130,10 @@ TabPage {
         tabPage.callPy("msnPaths", paths, argd)
     }
 
-    // 停止OCR（同步）
+    // 停止OCR
     function ocrStop() {
         setMsnState("stop")
-        const leftover = tabPage.callPy("msnStop")
-        // console.log("剩余：", leftover)
+        tabPage.callPy("msnStop")
         // 刷新表格，清空未执行的任务的状态
         for(let path in filesDict){
             const r = filesDict[path].index
@@ -252,13 +251,25 @@ TabPage {
 
     // 任务队列完毕
     function onOcrEnd(msg) {
-        setMsnState("none")
+        // 如果是用户手动停止的，那么不管它。
+        if(msg === "[Warning] Task stop.")
+            return
+        // 否则，刷新表格，清空未执行的任务的状态
+        for(let path in filesDict){
+            const r = filesDict[path].index
+            const row = filesModel.getRow(r)
+            if(row.time === "") {
+                filesModel.setRow(filesDict[path].index, {
+                        "filePath": path,
+                        "time": "",
+                        "state": "",
+                    })
+            }
+        }
+        setMsnState("none") // 设置结束状态
         // msg: [Success] [Warning] [Error]
         if(msg.startsWith("[Success]")) {
             qmlapp.popup.simple(qsTr("批量识别完成"), "")
-        }
-        else if(msg.startsWith("[Warning]")) {
-            qmlapp.popup.simple(qsTr("批量识别任务被终止"), "")
         }
         else if(msg.startsWith("[Error]")) {
             qmlapp.popup.message(qsTr("批量识别任务异常"), msg, "error")

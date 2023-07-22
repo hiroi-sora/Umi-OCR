@@ -54,10 +54,6 @@ class BatchOCR(Page):
         return imgPaths
 
     def msnPaths(self, paths, argd):  # 接收路径列表和配置，开始OCR任务
-        # 初解析配置字典，提取OCR参数
-        # 获取qml配置字典
-        print("获取配置字典：", argd)
-        # return
         # 任务信息
         msnInfo = {
             "onStart": self.__onStart,
@@ -77,9 +73,8 @@ class BatchOCR(Page):
             print(f"添加任务失败")
             self.callQml("setMsnState", "None")
 
-    def msnStop(self):  # 任务停止（同步）
-        leftover = MissionOCR.stopMissionList(self.msnID)
-        return leftover
+    def msnStop(self):  # 任务停止（异步）
+        MissionOCR.stopMissionList(self.msnID)
 
     # ========================= 【任务控制器的异步回调】 =========================
 

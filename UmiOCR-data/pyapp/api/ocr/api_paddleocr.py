@@ -194,11 +194,10 @@ ConfigMap1 = [
     ("enable_mkldnn", "ocr.PaddleOCR.enable_mkldnn"),  # mkl加速
 ]
 ConfigMap2 = [
-    ("config_path"),  # 配置文件路径
-    ("cls"),  # 方向分类
-    ("use_angle_cls"),  # 方向分类
-    ("enable_mkldnn"),  # mkl加速
-    ("limit_side_len"),  # 长边压缩
+    ("config_path", "ocr.language"),  # 配置文件路径
+    ("cls", "ocr.cls"),  # 方向分类
+    ("use_angle_cls", "ocr.cls"),  # 方向分类
+    ("limit_side_len", "ocr.limit_side_len"),  # 长边压缩
 ]
 
 
@@ -214,27 +213,40 @@ class ApiPaddleOcr(ApiOcr):  # 公开接口
             )
         # 初始化参数
         self.api = None  # api对象
-        self.lArgd = {}  # 局部参数
+        self.lArgs = None  # 局部参数
         self.gArgd = {}  # 全局参数
         for c in ConfigMap1:  # 加载全局参数
             if c[1] not in globalArgd:
-                raise ValueError(f'[Error] Key "{c[1]}" not in ConfigMap1[qml].')
+                raise ValueError(f'[Error] global Key "{c[1]}" not in qml config dict.')
             self.gArgd[c[0]] = globalArgd[c[1]]
         print("获取全局参数：", self.gArgd)
 
-    def start(self, argd):  # 启动引擎
-        # TODO: 整理局部参数
+    def start(self, argd):  # 启动引擎。返回： "" 成功，"[Error] xxx" 失败
+        # 加载局部参数
+        lArgd = {}
+        for c in ConfigMap2:
+            if c[1] not in argd:
+                return f'[Error] Local key "{c[1]}" not in qml config dict.'
+            lArgd[c[0]] = argd[c[1]]
         if not self.api == None:
             # 若引擎已启动，且局部参数与传入参数一致，则无需重启
-            if not set(argd.items()) == set(self.argd.items()):
-                return
+            if set(lArgd.items()) == self.lArgs:
+                return ""
             # 若引擎已启动但需要更改参数，则停止旧引擎
             self.stop()
         # 启动新引擎
-        self.argd = argd  # 记录局部参数
-        exePath = argd["exePath"]
-        del argd["exePath"]
-        self.api = PPOCR_pipe(exePath, argd)
+        self.lArgs = set(lArgd.items())  # 记录局部参数
+        # 拼合最终参数
+        lArgd.update(self.gArgd)
+        exePath = lArgd["exe_path"]
+        del lArgd["exe_path"]
+        print("启动引擎：", lArgd)
+        # 启动引擎
+        try:
+            self.api = PPOCR_pipe(exePath, lArgd)
+        except Exception as e:
+            return f"[Error] OCR init fail. Argd: {lArgd}"
+        return ""
 
     def stop(self):  # 停止引擎
         if self.api == None:
