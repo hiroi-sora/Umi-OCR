@@ -22,12 +22,12 @@ RowLayout  {
         Button {
             checkable: true
             anchors.fill: parent
-            anchors.margins: 5
+            anchors.margins: 4
 
             contentItem: Icon_ {
                 icon: "pin"
                 anchors.fill: parent
-                anchors.margins: parent.height * 0.1
+                color: theme.textColor
             }
 
             background: Rectangle {
@@ -184,8 +184,9 @@ RowLayout  {
                 // 添加“+”按钮
                 IconButton {
                     anchors.fill: parent
-                    anchors.margins: 5
+                    anchors.margins: 4
                     icon_: "add"
+                    color: theme.textColor
                     onClicked: {
                         qmlapp.tab.addNavi() // 添加导航页
                     }
@@ -226,12 +227,12 @@ RowLayout  {
                 qmlapp.tab.barIsLock = checked
             }
             anchors.fill: parent
-            anchors.margins: 5
+            anchors.margins: 4
 
             contentItem: Icon_ {
                 icon: "lock"
                 anchors.fill: parent
-                anchors.margins: parent.height * 0.1
+                color: theme.textColor
             }
 
             background: Rectangle {

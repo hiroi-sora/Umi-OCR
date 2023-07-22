@@ -25,41 +25,46 @@ Button {
     signal dragMoving(int index, int x) // 拖拽移动的信号
 
     // 按钮前景
-    contentItem: RowLayout {
-        // anchors.fill: parent
+    contentItem: Item {
+        anchors.fill: parent
 
-        // TODO: 图标
-        Item {
-            width: theme.textSize*0.2 // 先占位
-        }
+        RowLayout {
+            anchors.fill: parent
 
-        // 标题
-        Text_ {
-            text: title // 外部传入的title
-            
-            elide: Text.ElideRight // 隐藏超出宽度
-            Layout.fillWidth: true // 填充宽度
-            height: btn.height // 适应整个按钮的高度
-            color: (parent.parent.hovered || parent.parent.checked)?theme.textColor:theme.subTextColor
-            font.bold: btn.checked
-        }
+            // TODO: 图标
+            Item {
+                width: theme.textSize*0.2 // 先占位
+                height: btn.height // 适应整个按钮的高度
+            }
 
-        // 关闭按钮
-        IconButton {
-            // 未锁定，且主按钮悬停或选中时才显示
-            visible: !qmlapp.tab.barIsLock && (parent.parent.hovered || parent.parent.checked)
-            Layout.alignment: Qt.AlignRight
-            Layout.rightMargin: theme.hTabBarHeight * 0.2
+            // 标题
+            Text_ {
+                text: title // 外部传入的title
+                
+                elide: Text.ElideRight // 隐藏超出宽度
+                Layout.fillWidth: true // 填充宽度
+                height: btn.height // 适应整个按钮的高度
+                color: (btn.hovered || btn.checked)?theme.textColor:theme.subTextColor
+                font.bold: btn.checked
+            }
 
-            property real size: theme.hTabBarHeight * 0.7
-            implicitWidth: size
-            implicitHeight: size
-            bgColor_: "#00000000"
+            // 关闭按钮
+            IconButton {
+                // 未锁定，且主按钮悬停或选中时才显示
+                visible: !qmlapp.tab.barIsLock && (btn.hovered || btn.checked)
+                Layout.alignment: Qt.AlignRight
+                Layout.rightMargin: theme.hTabBarHeight * 0.2
 
-            icon_: "no"
+                property real size: theme.hTabBarHeight * 0.7
+                implicitWidth: size
+                implicitHeight: size
+                bgColor_: "#00000000"
 
-            onClicked: {
-                qmlapp.tab.delTabPage(index)
+                icon_: "no"
+
+                onClicked: {
+                    qmlapp.tab.delTabPage(index)
+                }
             }
         }
     }

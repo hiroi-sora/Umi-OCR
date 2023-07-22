@@ -10,7 +10,7 @@ Button_ {
 
     contentItem: Icon_ {
         anchors.fill: parent
-        anchors.margins: parent.height * 0.2
+        anchors.margins: parent.height * 0.1
         
         icon: icon_
         color: parent.color

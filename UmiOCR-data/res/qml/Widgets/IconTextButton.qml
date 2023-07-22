@@ -17,6 +17,7 @@ Button_ {
             id: btnIcon
             icon: icon_
             height: theme.textSize
+            width: theme.textSize
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
             anchors.leftMargin: theme.smallSpacing * 0.5

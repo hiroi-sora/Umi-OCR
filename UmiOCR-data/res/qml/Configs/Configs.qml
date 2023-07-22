@@ -572,6 +572,7 @@ Item {
                     anchors.right: parent.right
                     anchors.margins: theme.smallSpacing
                     height: theme.smallTextSize
+                    width: theme.smallTextSize
                     icon: "down"
                     color: theme.subTextColor
                 }

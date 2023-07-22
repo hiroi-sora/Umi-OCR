@@ -125,7 +125,7 @@ QtObject {
             for(let k in pyStatus.missionListsLength)
                 n += pyStatus.missionListsLength[k]
             const s = qsTr("当前已有%1组任务队列、共%2个任务正在执行。终止任务后才可以修改API。").arg(msnLen).arg(n)
-            qmlapp.popup.message(qsTr("文字识别 API 应用成功"), s, "warning")
+            qmlapp.popup.message(qsTr("无法修改 文字识别接口设置"), s, "warning")
             return
         }
         // 从全局配置中，提取出目前apiKey对应的配置项
@@ -144,11 +144,11 @@ QtObject {
             apiKey = nowKey
             successUpdate()
             if(showSuccess) { // 显示弹窗
-                qmlapp.popup.simple(qsTr("OCR API 应用成功"), qsTr("当前API为【%1】").arg(nowKey))
+                qmlapp.popup.simple(qsTr("文字识别接口应用成功"), qsTr("当前API为【%1】").arg(nowKey))
             }
         }
         else {
-            qmlapp.popup.message(qsTr("OCR API 应用失败"), msg, "error")
+            qmlapp.popup.message(qsTr("文字识别接口应用失败"), msg, "error")
         }
     }
 
