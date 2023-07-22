@@ -98,6 +98,9 @@ class TagPageConnector(QObject):
 
     # python调用qml的函数（同步）
     def callQml(self, ctrlKey, funcName, *args):
+        if ctrlKey not in self.page:
+            print(f"【Warning】调用qml方法{funcName}，但{ctrlKey}不存在！")
+            return None
         page = self.page[ctrlKey]
         # 获取方法的引用
         method = None

@@ -22,6 +22,16 @@ Item {
         messageWin.showMessage(title, msg, type)
     }
 
+    // 双选项对话窗（确定|取消）。需要传入回调函数，返回true/false
+    function dialog(title, msg, callback, type="", argd={}) {
+        let yesText=qsTr("确认"), noText=("取消")
+        if(argd.hasOwnProperty("yesText"))
+            yesText = argd.yesText
+        if(argd.hasOwnProperty("noText"))
+            noText = argd.noText
+        messageWin.showDialog(title, msg, callback, yesText, noText, type)
+    }
+
     // ========================= 【内部】 =========================
 
     MessageWin{ id: messageWin }
