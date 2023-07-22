@@ -110,6 +110,11 @@ Item {
         showTabPage(-1) // 选中页
     }
 
+    // 删：关闭页面（点击关闭按钮），不立刻删除
+    function closeTabPage(index){
+        page.closePage(index)
+    }
+
     // 删： 在 index 处，删除该标签页。
     function delTabPage(index){
         if(!isIndex(index, pageList, "【Error】删除标签页失败：页面"))

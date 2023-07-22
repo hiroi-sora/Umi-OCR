@@ -146,6 +146,11 @@ Item {
         return true
     }
 
+    // 删： 在 pageList 的 index 处，发送关闭指令。
+    function closePage(index){
+        pageList[index].obj.closePage()
+    }
+
     // 删： 在 pageList 的 index 处，删除该页面。
     function delPage(index){
         const page = pageList[index]

@@ -63,7 +63,7 @@ Button {
                 icon_: "no"
 
                 onClicked: {
-                    qmlapp.tab.delTabPage(index)
+                    qmlapp.tab.closeTabPage(index)
                 }
             }
         }
@@ -114,7 +114,7 @@ Button {
             }
             onClicked: { // 中键点击，删除标签
                 if(mouse.button === Qt.MiddleButton && !qmlapp.tab.barIsLock) {
-                    qmlapp.tab.delTabPage(index)
+                    qmlapp.tab.closeTabPage(index)
                 }
             }
             onDragActiveChanged: {
