@@ -24,8 +24,6 @@ Theme {
 
     // 标签栏颜色
     tabBarColor: "#444"
-    // 标签颜色（选中）
-    tabColor: bgColor
 
     // 主要文字颜色
     textColor: "#FFF"

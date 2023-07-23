@@ -12,9 +12,9 @@ Theme {
     bgColor: "#FFF"
     
     // 主题颜色，不透明，由浅到深
-    themeColor1: "#DDFFFF" // 背景
-    themeColor2: "#00CCFF" // 装饰性前景
-    themeColor3: "#0066FF" // 文字
+    themeColor1: "#FCF9BE" // 背景
+    themeColor2: "#FFDCA9" // 装饰性前景
+    themeColor3: "#C58940" // 文字
 
     // 叠加层颜色，从浅到深
     coverColor1: "#11000000" // 大部分需要突出的背景
@@ -24,8 +24,6 @@ Theme {
 
     // 标签栏颜色
     tabBarColor: "#F3F3F3"
-    // 标签颜色（选中）
-    tabColor: bgColor
 
     // 主要文字颜色
     textColor: "#000"

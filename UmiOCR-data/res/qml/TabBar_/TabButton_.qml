@@ -73,7 +73,7 @@ Button {
     background: Rectangle {
         anchors.fill: parent
         
-        color: parent.checked ? theme.tabColor : (
+        color: parent.checked ? theme.bgColor : (
             parent.hovered ? theme.coverColor1 : "#00000000"
         )
 

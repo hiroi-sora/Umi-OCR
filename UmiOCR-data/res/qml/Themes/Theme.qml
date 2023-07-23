@@ -26,18 +26,17 @@ Item {
 
     // 标签栏颜色
     property color tabBarColor
-    // 标签颜色（选中）
-    property color tabColor
 
     // 主要文字颜色
     property color textColor
     // 次要文字颜色
     property color subTextColor
 
+    // 以下三种警告色，不同主题都应该为红绿，但饱和度可以根据主题背景来微调
     // 表示允许、成功的颜色
-    property color yesColor
+    property color yesColor: "green"
     // 表示禁止、失败的颜色
-    property color noColor
+    property color noColor: "red"
 
     // ========================= 【字体】 =========================
 
