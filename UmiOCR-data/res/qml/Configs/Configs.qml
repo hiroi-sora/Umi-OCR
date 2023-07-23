@@ -11,6 +11,9 @@ configDict: {
         "title": 若填单个空格“ ”，则不显示标题栏
         "type": "group",
         "配置项或配置项组"
+        // 折叠属性，仅内层组生效
+        "enabledFold": 填true时显示折叠标签
+        "fold": 填true时初始折叠
     },
 
     "布尔 boolean （开关）": {
@@ -119,7 +122,6 @@ Item {
         valueDict = {}
         cacheDict = {}
         function handleConfigItem(config, key) { // 处理一个配置项
-            originDict[key] = config // configDict项的引用绑定到originDict
             // 类型：指定type
             if (config.type !== "") {
                 if(config.type === "file") { // 文件选择
@@ -194,13 +196,15 @@ Item {
                 }
                 // 补充空白参数
                 supplyDefaultParams(config)
-                // 若是配置项组，递归遍历
-                if(config.type==="group") { 
-                    config.fullKey = prefix+key // 记录完整key
-                    handleConfigGroup(config, prefix+key+".") // 前缀加深一层
+                // 记录完整key
+                const fullKey = prefix+key
+                config.fullKey = fullKey
+                originDict[fullKey] = config
+                if(config.type==="group") { // 若是配置项组，递归遍历
+                    handleConfigGroup(config, fullKey+".") // 前缀加深一层
                 }
                 else { // 若是配置项
-                    handleConfigItem(config, prefix+key)
+                    handleConfigItem(config, fullKey)
                 }
             }
         }
@@ -267,6 +271,11 @@ Item {
         id: settings
         category: category_ // 自定义类别名称
     }
+    // 存储UI项
+    Settings_ {
+        id: uiSettings
+        category: category_+"-UI" // 类别名称-ui
+    }
     
     // ========================= 【自动生成组件】 =========================
 
@@ -281,14 +290,6 @@ Item {
         }
         compDict = {}
 
-        function handleConfigItem(config, parent) { // 处理一个配置项
-            if(componentDict.hasOwnProperty(config.type)) {
-                const comp = componentDict[config.type]
-                const obj = comp.createObject(parent, {"key":config.fullKey, "configs": configs})
-                compList.push(obj) // 保存组件引用
-                compDict[config.fullKey] = obj
-            }
-        }
         function handleConfigGroup(group, parent=panelContainer) { // 处理一个配置组
             for(let key in group) {
                 const config = group[key]
@@ -296,15 +297,23 @@ Item {
                     continue
                 if(! (typeof config.title === "string")) // 无标题，则表示不生成组件
                     continue
-                if(config.type === "group") { // 若是配置项组，递归遍历
+                // 若是配置项组，递归遍历
+                if(config.type === "group") { 
                     // 若是外层，则生成外层group组件；若是内层则生成内层组件。
-                    const c = parent===panelContainer ? compGroup : compGroupInner
-                    const obj = c.createObject(parent, {"title":config.title})
+                    const comp = parent===panelContainer ? compGroup : compGroupInner
+                    const fold = config.fold?true:false // 是否折叠，转布尔值
+                    const obj = comp.createObject(parent, {"key":config.fullKey, "configs":configs})
                     compList.push(obj) // 保存组件引用
                     handleConfigGroup(config, obj.container) // 递归下一层，父级变成本层
                 }
-                else { // 若是配置项
-                    handleConfigItem(config, parent)
+                // 若是配置项
+                else {
+                    if(componentDict.hasOwnProperty(config.type)) {
+                        const comp = componentDict[config.type]
+                        const obj = comp.createObject(parent, {"key":config.fullKey, "configs":configs})
+                        compList.push(obj) // 保存组件引用
+                        compDict[config.fullKey] = obj
+                    }
                 }
             }
         }
@@ -360,11 +369,21 @@ Item {
         id: compGroup
 
         Item {
+            id: groupRoot
+            property string key: "" // 键
+            property var configs: undefined // 保存对Configs组件的引用
+            property var origin: undefined // 起源参数（静态）
             property string title: "" // 标题
             property alias container: panelContainer // 容器
             anchors.left: parent.left
             anchors.right: parent.right
             height: childrenRect.height
+
+            Component.onCompleted: {
+                origin = configs.originDict[key]
+                title = origin.title
+            }
+
 
             Text_ {
                 id: groupText
@@ -405,16 +424,38 @@ Item {
         id: compGroupInner
 
         Item {
+            property string key: "" // 键
+            property var configs: undefined // 保存对Configs组件的引用
+            property var origin: undefined // 起源参数（静态）
             property string title: "" // 标题
             property alias container: panelContainer // 容器
             property bool enabledFold: false // 启用折叠机制
             property bool fold: false // 折叠状态
+            property string foldKey: key+".fold" // 折叠键
             property alias isFold: foldBtn.checked // 折叠
             anchors.left: parent.left
             anchors.right: parent.right
             clip: true
             // 折叠时高度=标题+0，展开时高度=标题+内容
             height: groupText.height + (fold ? 0:panelContainer.height)
+
+            Component.onCompleted: {
+                origin = configs.originDict[key]
+                title = origin.title
+                // 折叠属性。origin值转布尔，undefined当成false
+                enabledFold = origin.enabledFold?true:false
+                const f = origin.fold?true:false
+                if(enabledFold) { // 若启用折叠按钮，则取记录值，无记录则使用设定值
+                    const readf = uiSettings.value(foldKey, undefined)
+                    // 字符串转bool
+                    if(readf===undefined) fold = f
+                    else if(readf===true || readf==="true") fold = true
+                    else if(readf===false || readf==="false") fold = false
+                }
+                else { // 未启用折叠按钮，则使用设定值
+                    fold = f
+                }
+            }
 
             // 背景
             MouseAreaBackgroud { }
@@ -424,6 +465,8 @@ Item {
                 text: title
                 anchors.left: parent.left
                 anchors.leftMargin: theme.smallSpacing
+                height: theme.textSize+theme.smallSpacing*2
+                verticalAlignment: Text.AlignVCenter
             }
             // 折叠按钮
             Button_ {
@@ -432,11 +475,14 @@ Item {
                 anchors.right: parent.right
                 anchors.rightMargin: theme.smallSpacing
                 anchors.verticalCenter: groupText.verticalCenter
-                height: theme.textSize
+                height: groupText.height
                 textSize: theme.smallTextSize
                 textColor_: theme.subTextColor
-                text_: fold ? qsTr("展开")+" ▽" : qsTr("折叠")+" △"
-                onClicked: fold=!fold
+                text_: fold ? qsTr("展开")+" 🔽" : qsTr("折叠")+" 🔼"
+                onClicked: {
+                    fold=!fold
+                    uiSettings.setValue(foldKey, fold) // 折叠状态写入本地
+                }
             }
             // 内容
             Column {

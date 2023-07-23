@@ -39,6 +39,8 @@ Configs {
             "filesType": {
                 "title": qsTr("保存文件类型："),
                 "type": "group",
+                "enabledFold": true,
+                "fold": false,
 
                 "txt": {
                     "title": qsTr(".txt 标准格式"),
