@@ -8,7 +8,7 @@
 标签页可以向任务管理器提交一组任务队列，其中包含了每一项任务的信息，及总体的参数和回调。
 """
 
-from ..api.ocr import getApiOcr, isApiOcr
+from ..ocr.api import getApiOcr, isApiOcr
 from .mission import Mission
 
 
@@ -31,8 +31,14 @@ class __MissionOcrClass(Mission):
         else:
             return ""  # 更新成功 TODO: continue
 
-    def msnTask(self, msnInfo, msn):  # 执行msnInfo中第一个任务
-        res = self.__api.runPath(msn)
+    def msnTask(self, msnInfo, msn):  # 执行msn
+        res = {"error": f"[Error] Unknown task type.\n【异常】未知的任务类型。\n{msn}"}
+        if "path" in msn:
+            res = self.__api.runPath(msn["path"])
+        elif "bytes" in msn:
+            res = self.__api.runPath(msn["bytes"])
+        elif "clipboard" in msn:
+            res = self.__api.runClipboard()
         return res
 
     # ========================= 【qml接口】 =========================

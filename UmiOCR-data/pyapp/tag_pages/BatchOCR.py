@@ -2,14 +2,17 @@
 # =============== 批量OCR页 ===============
 # ========================================
 
-import os
 from .page import Page
-
-# from ..ocr.mission_controller import Mission
 from ..mission.mission_ocr import MissionOCR
+from ..utils.utils import allowedFileName
 
+# 输出器
+from ..ocr.output.output_txt import OutputTxt
+
+import os
+import json
+import time
 from PySide2.QtCore import Slot
-
 import threading  # TODO: 测试
 
 
@@ -17,6 +20,7 @@ class BatchOCR(Page):
     def __init__(self, *args):
         super().__init__(*args)
         self.msnID = ""
+        self.outputList = []  # 输出器列表
 
     # ========================= 【qml调用python】 =========================
 
@@ -62,16 +66,45 @@ class BatchOCR(Page):
             "onEnd": self.__onEnd,
             "argd": argd,
         }
-        # return
-        self.msnID = MissionOCR.addMissionList(msnInfo, paths)
-        if self.msnID:
-            print(
-                f"在线程{threading.current_thread().ident}添加{len(paths)}个任务，id为{self.msnID}"
+        # 初步处理参数
+        startTimestamp = time.time()  # 开始时间戳
+        argd["startTimestamp"] = startTimestamp
+        argd["startDatetime"] = time.strftime(  # 格式化日期时间
+            "%Y-%m-%d %H:%M:%S", time.localtime(startTimestamp)
+        )
+        if argd["mission.dirType"] == "source":  # 若保存到原目录
+            argd["mission.dir"] = os.path.dirname(paths[0])  # 则保存路径设为第1张图片的目录
+        fileName = argd["mission.fileName"]
+        if not allowedFileName(fileName):  # 文件名不合法
+            self.__onEnd(
+                None,
+                '[Error] The file name is illegal.\n【错误】文件名【{fileName}】含有不允许的字符。\n不允许含有下列字符： \  /  :  *  ?  "  <  >  |',
             )
+            return
+        # 构造输出器
+        self.__initOutputList(argd)
+        # 路径转为任务列表格式，加载进任务管理器
+        msnList = [{"path": x} for x in paths]
+        self.msnID = MissionOCR.addMissionList(msnInfo, msnList)
+        if self.msnID:  # 添加成功，通知前端刷新UI
             self.callQml("setMsnState", "run")
-        else:
-            print(f"添加任务失败")
-            self.callQml("setMsnState", "None")
+        else:  # 添加任务失败
+            self.__onEnd(None, "[Error] Failed to add task.\n【错误】添加任务失败。")
+
+    def __initOutputList(self, argd):  # 初始化输出器列表
+        fileName = argd["mission.fileName"]
+        self.outputList = []
+        try:
+            if argd["mission.filesType.txt"]:  # 标准txt
+                self.outputList.append(
+                    OutputTxt(argd["mission.dir"], fileName, argd["startDatetime"])
+                )
+        except Exception as e:
+            self.__onEnd(
+                None,
+                f"[Error] Failed to initialize output file.\n【错误】初始化输出文件失败。\n{e}",
+            )
+            return
 
     def msnStop(self):  # 任务停止（异步）
         MissionOCR.stopMissionList(self.msnID)
@@ -81,10 +114,10 @@ class BatchOCR(Page):
     def __onStart(self, msnInfo):  # 任务队列开始
         pass
 
-    def __onReady(self, msnInfo, path):  # 单个任务准备
-        self.callQmlInMain("onOcrReady", path)
+    def __onReady(self, msnInfo, msn):  # 单个任务准备
+        self.callQmlInMain("onOcrReady", msn["path"])
 
-    def __onGet(self, msnInfo, path, res):  # 单个任务完成
+    def __onGet(self, msnInfo, msn, res):  # 单个任务完成
         # 计算平均置信度
         score = 0
         num = 0
@@ -94,12 +127,23 @@ class BatchOCR(Page):
                 num += 1
             if num > 0:
                 score /= num
+        # 补充参数
         res["score"] = score
-        self.callQmlInMain("onOcrGet", path, res)  # 在主线程中调用qml
+        res["path"] = msn["path"]
+        res["fileName"] = os.path.basename(msn["path"])
+        res["dir"] = os.path.dirname(msn["path"])
+        # 输出器输出
+        for o in self.outputList:
+            o.print(res)
+        # 通知qml更新UI
+        self.callQmlInMain("onOcrGet", msn["path"], res)  # 在主线程中调用qml
 
     def __onEnd(self, msnInfo, msg):  # 任务队列完成或失败
         # msg: [Success] [Warning] [Error]
         self.callQmlInMain("onOcrEnd", msg)
+        # TODO: debug 打开文件
+        for o in self.outputList:
+            o.openOutputFile()
 
     # 设置任务状态
     def __setMsnState(self, flag):

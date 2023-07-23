@@ -39,6 +39,7 @@ class PPOCR_pipe:  # 调用OCR（管道模式）
             cwd=cwd,
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,  # 丢弃stderr的内容
             startupinfo=startupinfo,  # 开启静默模式
         )
         # 启动子进程

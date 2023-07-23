@@ -358,11 +358,7 @@ Item {
                     textColor_: theme.noColor
                     onClicked: {
                         const argd = {yesText: qsTr("重置设定")}
-                        const callback = (flag)=>{
-                            if(flag) {
-                                reset()
-                            }
-                        }
+                        const callback = (flag)=>{ if(flag) reset() }
                         qmlapp.popup.dialog("", qsTr("要重置本页的设定吗？"), callback, "warning", argd)
                     }
                 }

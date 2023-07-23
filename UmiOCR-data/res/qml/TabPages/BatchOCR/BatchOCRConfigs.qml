@@ -20,7 +20,7 @@ Configs {
             "dirType": {
                 "title": qsTr("保存到"),
                 "optionsList": [
-                    ["default", qsTr("图片原目录")],
+                    ["source", qsTr("图片原目录")],
                     ["specify", qsTr("指定目录")],
                 ],
             },

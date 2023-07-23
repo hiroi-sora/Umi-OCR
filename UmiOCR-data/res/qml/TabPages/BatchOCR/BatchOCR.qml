@@ -211,7 +211,7 @@ TabPage {
     // 准备开始一个任务
     function onOcrReady(path) {
         if(!filesDict.hasOwnProperty(path)){
-            console.error("【Error】qml队列不存在路径！", path)
+            qmlapp.popup.simple(qsTr("函数 onOcrReady 异常"), qsTr("qml任务队列不存在路径")+path.toString())
             return
         }
         // 刷新文件表格显示
@@ -271,7 +271,7 @@ TabPage {
     // 任务队列完毕
     function onOcrEnd(msg) {
         // 如果是用户手动停止的，那么不管它。
-        if(msg === "[Warning] Task stop.")
+        if(msg.startsWith("[Warning] Task stop."))
             return
         // 否则，刷新表格，清空未执行的任务的状态
         for(let path in filesDict){

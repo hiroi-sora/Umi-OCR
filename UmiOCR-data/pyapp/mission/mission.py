@@ -40,8 +40,8 @@ class Mission:
             if k not in msnInfo or not callable(msnInfo[k]):
                 print(f"补充空回调函数{k}")
                 msnInfo[k] = (lambda key: lambda *e: print(f"空回调 {key}"))(k)
-        # 任务状态state: 0等待开始，1进行中，-1要求停止
-        msnInfo["state"] = 0
+        # 任务状态state:  waiting 等待开始， running 进行中， stop 要求停止
+        msnInfo["state"] = "waiting"
         # 添加到任务队列
         self.__msnMutex.lock()  # 上锁
         self.__msnInfoDict[msnID] = msnInfo  # 添加任务信息
@@ -55,7 +55,7 @@ class Mission:
     def stopMissionList(self, msnID):  # 停止一条任务队列
         self.__msnMutex.lock()  # 上锁
         if msnID in self.__msnListDict:
-            self.__msnInfoDict[msnID]["state"] = -1  # 设为停止状态
+            self.__msnInfoDict[msnID]["state"] = "stop"  # 设为停止状态
         self.__msnMutex.unlock()  # 解锁
 
     # TODO: 停止全部
@@ -100,7 +100,7 @@ class Mission:
             self.__msnMutex.unlock()  # 解锁
 
             # 3. 检查任务是否要求停止
-            if msnInfo["state"] == -1:
+            if msnInfo["state"] == "stop":
                 self.__msnDictDel(dictKey)
                 msnInfo["onEnd"](msnInfo, "[Warning] Task stop.")
                 continue
@@ -117,8 +117,8 @@ class Mission:
                 continue
 
             # 5. 首次任务
-            if msnInfo["state"] == 0:
-                msnInfo["state"] = 1
+            if msnInfo["state"] == "waiting":
+                msnInfo["state"] = "running"
                 msnInfo["onStart"](msnInfo)
 
             # 6. 执行任务，并记录时间
@@ -127,14 +127,11 @@ class Mission:
             t1 = time.time()
             res = self.msnTask(msnInfo, msn)
             t2 = time.time()
-            if res == None:
-                print("【Error】任务管理器：msnTask失败")
-                res = {"Error": "[Error]"}
             if type(res) == dict:  # 补充耗时
                 res["time"] = t2 - t1
 
             # 7. 再次检查任务是否要求停止
-            if msnInfo["state"] == -1:
+            if msnInfo["state"] == "stop":
                 self.__msnDictDel(dictKey)
                 msnInfo["onEnd"](msnInfo, "[Warning] Task stop.")
                 continue
@@ -170,11 +167,11 @@ class Mission:
         "continue" ：跳过本次任务
         "[Error] xxxx" ：终止这条任务队列，返回异常信息
         """
-        return "[Error] 未重载 msnPreTask"
+        return "[Error] No overloaded msnPreTask. \n【异常】未重载msnPreTask。"
 
-    def msnTask(self, msnInfo, msn):  # 执行任务msn，返回结果
+    def msnTask(self, msnInfo, msn):  # 执行任务msn，返回结果字典。
         print("mission 父类 msnTask")
-        return None
+        return {"error": f"[Error] No overloaded msnTask. \n【异常】未重载msnTask。"}
 
     def getStatus(self):  # 返回当前状态
         return "Mission 基类 返回空状态"
