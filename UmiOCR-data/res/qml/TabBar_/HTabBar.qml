@@ -27,7 +27,7 @@ RowLayout  {
             contentItem: Icon_ {
                 icon: "pin"
                 anchors.fill: parent
-                color: theme.textColor
+                color: parent.checked ? theme.bgColor : theme.textColor
             }
 
             background: Rectangle {
@@ -232,7 +232,7 @@ RowLayout  {
             contentItem: Icon_ {
                 icon: "lock"
                 anchors.fill: parent
-                color: theme.textColor
+                color: parent.checked ? theme.bgColor : theme.textColor
             }
 
             background: Rectangle {
