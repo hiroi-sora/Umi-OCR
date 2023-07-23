@@ -10,6 +10,7 @@ Button {
     // ========================= 【可调参数】 =========================
     property string text_: ""
     property bool bold_: false
+    property int textSize: theme.textSize
     property color textColor_: theme.textColor
 
     property color bgColor_: "#00000000"
@@ -20,6 +21,7 @@ Button {
         text: btn.text_
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
+        font.pixelSize: btn.textSize
         color: btn.textColor_
         font.bold: btn.bold_
     }

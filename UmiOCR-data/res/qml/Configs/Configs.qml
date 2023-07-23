@@ -407,18 +407,35 @@ Item {
         Item {
             property string title: "" // 标题
             property alias container: panelContainer // 容器
+            property alias isFold: foldBtn.checked // 折叠
             anchors.left: parent.left
             anchors.right: parent.right
-            height: childrenRect.height
+            clip: true
+            // 折叠时高度降低
+            height: isFold ? groupText.height : childrenRect.height
 
+            // 背景
+            MouseAreaBackgroud { }
+            // 标题
             Text_ {
                 id: groupText
                 text: title
                 anchors.left: parent.left
                 anchors.leftMargin: theme.smallSpacing
             }
-            // 背景
-            MouseAreaBackgroud { }
+            // 折叠按钮
+            Button_ {
+                id: foldBtn
+                checkable: true
+                checked: false
+                anchors.right: parent.right
+                anchors.rightMargin: theme.smallSpacing
+                anchors.verticalCenter: groupText.verticalCenter
+                height: theme.textSize
+                textSize: theme.smallTextSize
+                textColor_: theme.subTextColor
+                text_: foldBtn.checked ? qsTr("展开")+" ▽" : qsTr("折叠")+" △"
+            }
             // 内容
             Column {
                 id: panelContainer
