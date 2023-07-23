@@ -407,12 +407,14 @@ Item {
         Item {
             property string title: "" // 标题
             property alias container: panelContainer // 容器
+            property bool enabledFold: false // 启用折叠机制
+            property bool fold: false // 折叠状态
             property alias isFold: foldBtn.checked // 折叠
             anchors.left: parent.left
             anchors.right: parent.right
             clip: true
-            // 折叠时高度降低
-            height: isFold ? groupText.height : childrenRect.height
+            // 折叠时高度=标题+0，展开时高度=标题+内容
+            height: groupText.height + (fold ? 0:panelContainer.height)
 
             // 背景
             MouseAreaBackgroud { }
@@ -426,15 +428,15 @@ Item {
             // 折叠按钮
             Button_ {
                 id: foldBtn
-                checkable: true
-                checked: false
+                visible: enabledFold
                 anchors.right: parent.right
                 anchors.rightMargin: theme.smallSpacing
                 anchors.verticalCenter: groupText.verticalCenter
                 height: theme.textSize
                 textSize: theme.smallTextSize
                 textColor_: theme.subTextColor
-                text_: foldBtn.checked ? qsTr("展开")+" ▽" : qsTr("折叠")+" △"
+                text_: fold ? qsTr("展开")+" ▽" : qsTr("折叠")+" △"
+                onClicked: fold=!fold
             }
             // 内容
             Column {
