@@ -9,6 +9,7 @@ Button {
     id: btn
     // ========================= 【可调参数】 =========================
     property string text_: ""
+    property string toolTip: "" // 鼠标悬停提示
     property bool bold_: false
     property int textSize: theme.textSize
     property color textColor_: theme.textColor
@@ -16,6 +17,13 @@ Button {
     property color bgColor_: "#00000000"
     property color bgPressColor_: theme.coverColor4
     property color bgHoverColor_: theme.coverColor2
+
+    Component.onCompleted: {
+        // 如果设定了提示，则加载提示组件
+        if(btn.toolTip){
+            toolTipLoader.sourceComponent = toolTip
+        }
+    }
 
     contentItem: Text_ {
         text: btn.text_
@@ -34,6 +42,7 @@ Button {
         )
     }
     MouseArea {
+        id: mouseArea
         anchors.fill: parent
         hoverEnabled: true
         cursorShape: Qt.PointingHandCursor
@@ -45,4 +54,13 @@ Button {
             mouse.accepted = false
         }
     }
+    // 提示
+    Component {
+        id: toolTip
+        ToolTip_ {
+            visible: btn.hovered
+            text: btn.toolTip
+        }
+    }
+    Loader { id: toolTipLoader } // 默认不加载
 }

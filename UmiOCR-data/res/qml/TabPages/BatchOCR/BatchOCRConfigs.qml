@@ -26,6 +26,7 @@ Configs {
             },
             "dir": {
                 "title": qsTr("指定目录"),
+                "toolTip": qsTr("必须先指定“保存到指定目录”才生效"),
                 "type": "file",
                 "selectExisting": true, // 选择现有
                 "selectFolder": true, // 选择文件夹
@@ -58,6 +59,7 @@ Configs {
 
             "ingoreBlank": {
                 "title": qsTr("输出忽略空白图片"),
+                "toolTip": qsTr("若图片中没有文字，则不会将图片信息写入生成文件"),
                 "default": false,
             },
             "recurrence": {

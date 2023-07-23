@@ -53,6 +53,7 @@ configDict: {
     "type": 控件类型,
     "save": 可选，填false时不保存（每次初始化为默认值）,
     "toolTip": 可选，字符串，鼠标悬停时的提示,
+    "advanced": 可选，填true时为高级选项，平时隐藏
     "onChanged": 可选，值变化时的回调函数，  (newVal, oldVal)=>{console.log(`值从 ${oldVal} 变为 ${newVal}`)}
 }
 
@@ -108,6 +109,9 @@ Item {
 
     property var cacheDict: {} // 缓存
     property int cacheInterval: 500 // 缓存写入本地时间
+
+    property bool enabledAdvanced: false // true时显示高级模式的按钮。只有任意设置项设了高级模式，此项才会被置true
+    property bool advanced: false // true时进入高级模式
 
     // ========================= 【数值逻辑（内部调用）】 =========================
 
@@ -266,7 +270,7 @@ Item {
         }
     }
 
-    // 存储
+    // 存储配置项
     Settings_ {
         id: settings
         category: category_ // 自定义类别名称
@@ -275,12 +279,14 @@ Item {
     Settings_ {
         id: uiSettings
         category: category_+"-UI" // 类别名称-ui
+        property alias advanced: configs.advanced
     }
-    
+
     // ========================= 【自动生成组件】 =========================
 
     // 初始化 自动生成组件
     function initPanelComponent() {
+        enabledAdvanced = false
         const compListLength = compList.length
         if(compListLength !== 0) { // 外层组件列表非空，先删除旧的组件
             for(let i = compListLength-1; i>=0; i--) { // 倒序遍历，从内层往外层删
@@ -297,6 +303,8 @@ Item {
                     continue
                 if(! (typeof config.title === "string")) // 无标题，则表示不生成组件
                     continue
+                if(config.advanced) // 任意一个选项是高级选项，则总体开启高级模式
+                    enabledAdvanced = true
                 // 若是配置项组，递归遍历
                 if(config.type === "group") { 
                     // 若是外层，则生成外层group组件；若是内层则生成内层组件。
@@ -346,21 +354,30 @@ Item {
                     anchors.bottom: parent.bottom
                     anchors.right: parent.right
                     text_: qsTr("重置")
+                    toolTip: qsTr("重置本页上的设定")
                     textColor_: theme.noColor
                     onClicked: {
-                        // TODO: 确认对话框
-                        reset()
+                        const argd = {yesText: qsTr("重置设定")}
+                        const callback = (flag)=>{
+                            if(flag) {
+                                reset()
+                            }
+                        }
+                        qmlapp.popup.dialog("", qsTr("要重置本页的设定吗？"), callback, "warning", argd)
                     }
                 }
-                // Button_ {
-                //     anchors.top: parent.top
-                //     anchors.bottom: parent.bottom
-                //     anchors.right: ctrlBtn1.left
-                //     text_: qsTr("重载")
-                //     onClicked: {
-                //         reload()
-                //     }
-                // }
+                CheckButton {
+                    visible: enabledAdvanced
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    anchors.right: ctrlBtn1.left
+                    text_: qsTr("高级")
+                    toolTip: qsTr("显示更多高级选项")
+                    textColor_: configs.advanced ? theme.textColor : theme.subTextColor
+                    checked: configs.advanced
+                    enabledAnime: true
+                    onCheckedChanged: configs.advanced = checked
+                }
             }
         }
     }

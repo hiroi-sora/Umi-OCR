@@ -13,19 +13,25 @@ Item {
 
     property string title: "" // 标题，可不填
     property var origin: undefined // 起源参数（静态）
+    property bool advanced: false // true时是高级选项
 
     anchors.left: parent.left
     anchors.right: parent.right
-    height: theme.textSize + theme.spacing
     clip: true
+    // 这个选项是高级选项，且设置页未开启高级模式，则高度为0隐藏
+    height: (advanced&&!configs.advanced) ? 0 : (theme.textSize + theme.spacing)
+
     // 初始化
     Component.onCompleted: {
         origin = configs.originDict[key]
         title = origin.title
         updateUI()
         // 如果设定了提示，则加载提示组件
-        if(origin.toolTip){
+        if(origin.toolTip) {
             toolTipLoader.sourceComponent = toolTip
+        }
+        if(origin.advanced) {
+            advanced = origin.advanced
         }
     }
     // 获取或设置值

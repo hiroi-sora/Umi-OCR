@@ -9,6 +9,7 @@ Button_ {
     id: btn
     property bool enabledAnime: false
     checkable: true
+    checked: false
 
     contentItem: Row {
         spacing: theme.smallSpacing
