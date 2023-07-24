@@ -8,6 +8,7 @@ from ..utils.utils import allowedFileName
 
 # 输出器
 from ..ocr.output.output_txt import OutputTxt
+from ..ocr.output.output_txt_plain import OutputTxtPlain
 
 import os
 import json
@@ -77,6 +78,7 @@ class BatchOCR(Page):
         self.msnID = MissionOCR.addMissionList(msnInfo, msnList)
         if self.msnID:  # 添加成功，通知前端刷新UI
             self.callQml("setMsnState", "run")
+            print(f'添加任务成功 {self.msnID}\n{argd}')
         else:  # 添加任务失败
             self.__onEnd(None, "[Error] Failed to add task.\n【错误】添加任务失败。")
 
@@ -130,6 +132,8 @@ class BatchOCR(Page):
         try:
             if argd["mission.filesType.txt"]:  # 标准txt
                 self.outputList.append(OutputTxt(outputArgd))
+            if argd["mission.filesType.txtPlain"]:  # 纯文本txt
+                self.outputList.append(OutputTxtPlain(outputArgd))
         except Exception as e:
             self.__onEnd(
                 None,

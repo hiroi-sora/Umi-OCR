@@ -11,8 +11,7 @@ class Output:
         self.outputPath = f"{self.dir}/{self.fileName}.txt"  # 输出路径
         self.ingoreBlank = argd["ingoreBlank"]  # 忽略空白文件
 
-    def print(self, res):
-        """输出图片信息"""
+    def print(self, res): # 输出图片信息
         if not res["code"] == 100 and self.ingoreBlank:
             return # 忽略空白图片
         textOut = f"图片路径：{res['path']}\n代码：{res['code']}\n"
@@ -25,7 +24,6 @@ class Output:
             textOut += f"错误原因：{res['data']}"
         print(textOut)
 
-    def openOutputFile(self):
-        """打开输出文件（夹）"""
+    def openOutputFile(self): # 打开输出文件
         if self.outputPath and os.path.exists(self.outputPath):
             os.startfile(self.outputPath)

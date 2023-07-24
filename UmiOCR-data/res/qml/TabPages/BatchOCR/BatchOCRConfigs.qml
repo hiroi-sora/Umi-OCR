@@ -34,7 +34,7 @@ Configs {
             },
             "fileNameFormat": {
                 "title": qsTr("文件名格式"),
-                "toolTip": qsTr("无需填写后缀。支持插入以下占位符：\n%date 日期时间\n%name 原文件夹名/文件名\n举例：[OCR]_%name_%date\n生成：[OCR]_我的图片_2023-09-01_12-13.txt\n如果不想新的生成文件覆盖旧文件，请在文件名中添加 %date 。"),
+                "toolTip": qsTr("无需填写拓展名。支持插入以下占位符：\n%date 日期时间\n%name 原文件夹名/文件名\n举例：[OCR]_%name_%date\n生成：[OCR]_我的图片_2023-09-01_12-13.txt\n添加占位符可以避免旧文件被新文件覆盖。"),
                 "default": "[OCR]_%name_%date",
                 "advanced": true, // 高级选项
             },
@@ -57,13 +57,13 @@ Configs {
                     "default": true,
                 },
                 "txtPlain": {
-                    "title": qsTr(".txt 纯文字"),
-                    "toolTip": qsTr("只含识别文字"),
+                    "title": qsTr(".p.txt 纯文字"),
+                    "toolTip": qsTr("仅输出识别文字"),
                     "default": false,
                 },
                 "txtSingle": {
                     "title": qsTr(".txt 单独文件"),
-                    "toolTip": qsTr("对每张图片，生成同名txt文件"),
+                    "toolTip": qsTr("对每张图片，生成同名txt文件，仅输出识别文字"),
                     "default": false,
                 },
             },
@@ -75,7 +75,9 @@ Configs {
             },
             "recurrence": {
                 "title": qsTr("递归读取子文件夹"),
+                "toolTip": qsTr("导入文件夹时，导入子文件夹中全部图片"),
                 "default": false,
+                "advanced": true,
             },
 
             "scheduledTasks": qmlapp.globalConfigs.utilsDicts.getScheduledTasks(), // 计划任务

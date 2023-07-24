@@ -1,6 +1,5 @@
 # 输出到txt文件
 
-import os
 from .output import Output
 
 
@@ -9,17 +8,14 @@ class OutputTxt(Output):
         self.dir = argd["outputDir"]  # 输出路径（文件夹）
         self.fileName = argd["outputFileName"]  # 文件名
         self.fileName = self.fileName.replace("%name", argd["outputDirName"]) # 文件名添加路径名
-        print("生成文件名：\n", self.fileName)
         self.outputPath = f"{self.dir}/{self.fileName}.txt"  # 输出路径
         self.ingoreBlank = argd["ingoreBlank"]  # 忽略空白文件
         # 创建输出文件
         try:
             with open(self.outputPath, "w", encoding="utf-8") as f:  # 覆盖创建文件
                 f.write(f'{argd["startDatetime"]}\n\n')  # 写入开始时间日期
-        except FileNotFoundError:
-            raise Exception(f"创建txt文件失败。请检查以下地址是否正确。\n{self.outputPath}")
         except Exception as e:
-            raise Exception(f"创建txt文件失败。\n错误信息：\n{e}")
+            raise Exception(f"Failed to create txt file. {e}\n创建txt文件失败。")
 
     def print(self, res):  # 输出图片结果
         """输出图片信息"""
