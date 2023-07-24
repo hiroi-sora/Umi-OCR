@@ -21,6 +21,10 @@ RowLayout  {
         // 图钉按钮
         Button {
             checkable: true
+            checked: qmlapp.rootWindow.isOnTop
+            onCheckedChanged: { // 双向绑定锁定标记
+                qmlapp.rootWindow.isOnTop = checked
+            }
             anchors.fill: parent
             anchors.margins: 4
 

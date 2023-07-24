@@ -16,10 +16,12 @@ import "Popup_"
 import "TabPages/GlobalConfigsPage"
 
 Window {
-// ApplicationWindow {
-    id: rootWindow
+    id: rootWindow // 通过 qmlapp.rootWindow 访问
     visible: true
-    // flags: Qt.Window | Qt.FramelessWindowHint // 无边框窗口，保留任务栏图标
+    property bool isOnTop: false // 标记是否置顶
+    // 窗口 | 自定义标题栏 | 有标题 | 有系统菜单 | 有最小最大化按钮 | 有关闭按钮 | 根据条件是否置顶
+    flags: Qt.Window | Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.WindowSystemMenuHint 
+        | Qt.WindowMinMaxButtonsHint | Qt.WindowCloseButtonHint | (isOnTop?Qt.WindowStaysOnTopHint:0)
 
     width: 800
     height: 500
@@ -35,6 +37,7 @@ Window {
     // 全局单例，通过 qmlapp. 来访问
     Item {
         id: qmlapp
+        property alias rootWindow: rootWindow
 
         Item { // 全局延迟加载 初始化函数列表
             // qml中，组件初始化顺序是从上到下，而onCompleted调用顺序相反。
@@ -107,5 +110,15 @@ Window {
                 }
             }
         }
+    }
+
+    // ========================= 【主窗UI存储】 =========================
+    
+    // 持久化存储
+    Settings_ { 
+        id: rootSettings
+        category: "MainWindow"
+
+        property alias winIsOnTop: rootWindow.isOnTop
     }
 }
