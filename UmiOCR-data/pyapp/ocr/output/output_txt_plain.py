@@ -16,7 +16,6 @@ class OutputTxtPlain(Output):
             raise Exception(f"Failed to create plain txt file. {e}\n创建纯文本txt文件失败。")
 
     def print(self, res):  # 输出图片结果
-        """输出图片信息"""
         if not res["code"] == 100:
             return # 忽略空白图片
         textOut = ""

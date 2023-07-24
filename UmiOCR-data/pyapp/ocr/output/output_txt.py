@@ -18,7 +18,6 @@ class OutputTxt(Output):
             raise Exception(f"Failed to create txt file. {e}\n创建txt文件失败。")
 
     def print(self, res):  # 输出图片结果
-        """输出图片信息"""
         if not res["code"] == 100 and self.ingoreBlank:
             return # 忽略空白图片
         textOut = f'≦ {res["fileName"]} ≧\n'

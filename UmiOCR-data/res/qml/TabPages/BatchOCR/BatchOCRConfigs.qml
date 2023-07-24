@@ -61,7 +61,7 @@ Configs {
                     "toolTip": qsTr("仅输出识别文字"),
                     "default": false,
                 },
-                "txtSingle": {
+                "txtIndividual": {
                     "title": qsTr(".txt 单独文件"),
                     "toolTip": qsTr("对每张图片，生成同名txt文件，仅输出识别文字"),
                     "default": false,

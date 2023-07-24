@@ -9,6 +9,7 @@ from ..utils.utils import allowedFileName
 # 输出器
 from ..ocr.output.output_txt import OutputTxt
 from ..ocr.output.output_txt_plain import OutputTxtPlain
+from ..ocr.output.output_txt_individual import OutputTxtIndividual
 
 import os
 import json
@@ -134,6 +135,8 @@ class BatchOCR(Page):
                 self.outputList.append(OutputTxt(outputArgd))
             if argd["mission.filesType.txtPlain"]:  # 纯文本txt
                 self.outputList.append(OutputTxtPlain(outputArgd))
+            if argd["mission.filesType.txtIndividual"]:  # 单独txt
+                self.outputList.append(OutputTxtIndividual(outputArgd))
         except Exception as e:
             self.__onEnd(
                 None,
@@ -170,7 +173,10 @@ class BatchOCR(Page):
         res["dir"] = os.path.dirname(msn["path"])
         # 输出器输出
         for o in self.outputList:
-            o.print(res)
+            try:
+                o.print(res)
+            except Exception as e:
+                print(f"输出失败：{o}\n{e}")
         # 通知qml更新UI
         self.callQmlInMain("onOcrGet", msn["path"], res)  # 在主线程中调用qml
 
