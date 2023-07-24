@@ -53,22 +53,25 @@ Configs {
 
                 "txt": {
                     "title": qsTr(".txt 标准格式"),
+                    "toolTip": qsTr("含原图片文件名和识别文字"),
                     "default": true,
                 },
                 "txtPlain": {
                     "title": qsTr(".txt 纯文字"),
+                    "toolTip": qsTr("只含识别文字"),
                     "default": false,
                 },
                 "txtSingle": {
                     "title": qsTr(".txt 单独文件"),
+                    "toolTip": qsTr("对每张图片，生成同名txt文件"),
                     "default": false,
                 },
             },
 
             "ingoreBlank": {
                 "title": qsTr("输出忽略空白图片"),
-                "toolTip": qsTr("若图片中没有文字，则不会将图片信息写入生成文件"),
-                "default": false,
+                "toolTip": qsTr("若图片没有文字或识别失败，也不会输出错误提示信息"),
+                "default": true,
             },
             "recurrence": {
                 "title": qsTr("递归读取子文件夹"),

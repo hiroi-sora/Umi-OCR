@@ -81,18 +81,19 @@ class BatchOCR(Page):
             self.__onEnd(None, "[Error] Failed to add task.\n【错误】添加任务失败。")
 
     def __preprocessArgd(self, argd, path0):  # 预处理参数字典，无异常返回True
+        if argd["mission.dirType"] == "source":  # 若保存到原目录
+            argd["mission.dir"] = os.path.dirname(path0)  # 则保存路径设为第1张图片的目录
+        argd["mission.dirName"] = os.path.basename(argd["mission.dir"])  # 提取最后一层文件夹名称
+        print(f'转换\n{argd["mission.dir"]}\n{argd["mission.dirName"]}')
         startTimestamp = time.time()  # 开始时间戳
-        argd["mission.dirName"] = os.path.dirname(argd["mission.dir"])
         argd["startTimestamp"] = startTimestamp
         argd["startDatetime"] = time.strftime(  # 格式化日期时间（标准格式）
             r"%Y-%m-%d %H:%M:%S", time.localtime(startTimestamp)
         )
-        # 格式化日期时间（用户指定格式），先添加时间戳，再strftime
+        # 添加格式化日期时间（用户指定格式）：先替换时间戳，再strftime
         startDatetimeUser = argd["mission.datetimeFormat"].replace(r"%unix", str(startTimestamp))  
         startDatetimeUser = time.strftime(
             startDatetimeUser, time.localtime(startTimestamp))
-        if argd["mission.dirType"] == "source":  # 若保存到原目录
-            argd["mission.dir"] = os.path.dirname(path0)  # 则保存路径设为第1张图片的目录
         # 处理文件名
         fileName = argd["mission.fileNameFormat"]
         fileName = fileName.replace(r"%date", startDatetimeUser) # 替换时间
@@ -112,6 +113,7 @@ class BatchOCR(Page):
             "outputDirName": argd["mission.dirName"], # 输出文件夹名称
             "outputFileName": argd["mission.fileName"], # 输出文件名（前缀）
             "startDatetime": argd["startDatetime"], # 开始日期
+            "ingoreBlank": argd["mission.ingoreBlank"], # 忽略空白文件
         }
         try:
             if argd["mission.filesType.txt"]:  # 标准txt
