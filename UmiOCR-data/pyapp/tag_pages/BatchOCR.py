@@ -94,11 +94,14 @@ class BatchOCR(Page):
     def __initOutputList(self, argd):  # 初始化输出器列表
         fileName = argd["mission.fileName"]
         self.outputList = []
+        outputArgd = { # 数据转换，封装有需要的值
+            "outputDir": argd["mission.dir"], # 输出路径
+            "outputFileName": argd["mission.fileName"], # 输出文件名（前缀）
+            "startDatetime": argd["startDatetime"], # 开始日期
+        }
         try:
             if argd["mission.filesType.txt"]:  # 标准txt
-                self.outputList.append(
-                    OutputTxt(argd["mission.dir"], fileName, argd["startDatetime"])
-                )
+                self.outputList.append(OutputTxt(outputArgd))
         except Exception as e:
             self.__onEnd(
                 None,
@@ -141,9 +144,17 @@ class BatchOCR(Page):
     def __onEnd(self, msnInfo, msg):  # 任务队列完成或失败
         # msg: [Success] [Warning] [Error]
         self.callQmlInMain("onOcrEnd", msg)
-        # TODO: debug 打开文件
-        for o in self.outputList:
-            o.openOutputFile()
+
+        if(msg.startswith("[Success]")):
+            # 打开目录
+            if msnInfo["argd"]["mission.scheduledTasks.openFolder"]:
+                dir = msnInfo["argd"]["mission.dir"]
+                if dir and os.path.exists(dir):
+                    os.startfile(dir)
+            # 打开文件
+            if msnInfo["argd"]["mission.scheduledTasks.openFile"]:
+                for o in self.outputList:
+                    o.openOutputFile()
 
     # 设置任务状态
     def __setMsnState(self, flag):

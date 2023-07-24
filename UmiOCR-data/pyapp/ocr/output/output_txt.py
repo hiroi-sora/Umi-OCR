@@ -5,14 +5,14 @@ from .output import Output
 
 
 class OutputTxt(Output):
-    def __init__(self, dir, fileName, startDatetime):
-        self.dir = dir  # 输出路径（文件夹）
-        self.fileName = fileName  # 文件名
-        self.outputPath = f"{dir}/{fileName}.txt"  # 输出路径
+    def __init__(self, argd):
+        self.dir = argd["outputDir"]  # 输出路径（文件夹）
+        self.fileName = argd["outputFileName"]  # 文件名
+        self.outputPath = f"{self.dir}/{self.fileName}.txt"  # 输出路径
         # 创建输出文件
         try:
             with open(self.outputPath, "w", encoding="utf-8") as f:  # 覆盖创建文件
-                f.write(f"{startDatetime}\n\n")  # 写入开始时间戳
+                f.write(f'{argd["startDatetime"]}\n\n')  # 写入开始时间日期
         except FileNotFoundError:
             raise Exception(f"创建txt文件失败。请检查以下地址是否正确。\n{self.outputPath}")
         except Exception as e:
