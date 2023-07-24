@@ -83,6 +83,18 @@ class BatchOCR(Page):
     def __preprocessArgd(self, argd, path0):  # 预处理参数字典，无异常返回True
         if argd["mission.dirType"] == "source":  # 若保存到原目录
             argd["mission.dir"] = os.path.dirname(path0)  # 则保存路径设为第1张图片的目录
+        else:  # 若保存到用户指定目录
+            d = os.path.abspath(argd["mission.dir"])  # 转绝对地址
+            if not os.path.exists(d):  # 检查地址是否存在
+                try:  # 不存在，尝试创建地址
+                    os.makedirs(d)
+                except OSError as e:  # 创建地址失败，报错
+                    self.__onEnd(
+                        None,
+                        f'[Error] Failed to create directory: "{d}"\n【异常】无法创建路径。',
+                    )
+                    return False
+            argd["mission.dir"] = d # 写回字典
         argd["mission.dirName"] = os.path.basename(argd["mission.dir"])  # 提取最后一层文件夹名称
         print(f'转换\n{argd["mission.dir"]}\n{argd["mission.dirName"]}')
         startTimestamp = time.time()  # 开始时间戳
