@@ -4,8 +4,11 @@ import os
 
 
 class Output:
-    def __init__(self):
-        self.outputPath = ""  # 输出路径
+    def __init__(self, argd):
+        self.dir = argd["outputDir"]  # 输出路径（文件夹）
+        self.fileName = argd["outputFileName"]  # 文件名
+        self.fileName = self.fileName.replace("%name", argd["outputDirName"]) # 文件名添加路径名
+        self.outputPath = f"{self.dir}/{self.fileName}.txt"  # 输出路径
 
     def print(self, res):
         """输出图片信息"""

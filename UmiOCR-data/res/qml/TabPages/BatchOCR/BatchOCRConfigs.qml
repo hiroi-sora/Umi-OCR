@@ -32,9 +32,17 @@ Configs {
                 "selectFolder": true, // 选择文件夹
                 "dialogTitle": qsTr("OCR结果保存目录"),
             },
-            "fileName": {
-                "title": qsTr("文件名"),
-                "default": "识别结果",
+            "fileNameFormat": {
+                "title": qsTr("文件名格式"),
+                "toolTip": qsTr("无需填写后缀。支持插入以下占位符：\n%date 日期时间\n%name 原文件夹名/文件名\n举例：[OCR]_%name_%date\n生成：[OCR]_我的图片_2023-09-01_12-13.txt\n如果不想新的生成文件覆盖旧文件，请在文件名中添加 %date 。"),
+                "default": "[OCR]_%name_%date",
+                "advanced": true, // 高级选项
+            },
+            "datetimeFormat": {
+                "title": qsTr("日期时间格式"),
+                "toolTip": qsTr("文件名中 %date 的日期格式。支持插入以下占位符：\n%Y 年、 %m 月、 %d 日、 %H 小时、 \n%M 分钟、 %S 秒 、 %unix 时间戳 \n举例：%Y年%m月%d日_%H-%M\n生成：2023年09月01日_12-13.txt"),
+                "default": "%Y-%m-%d_%H-%M",
+                "advanced": true, // 高级选项
             },
 
             "filesType": {

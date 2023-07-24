@@ -57,7 +57,7 @@ class BatchOCR(Page):
             imgPaths[i] = p.replace("\\", "/")
         return imgPaths
 
-    def msnPaths(self, paths, argd):  # 接收路径列表和配置，开始OCR任务
+    def msnPaths(self, paths, argd):  # 接收路径列表和配置参数字典，开始OCR任务
         # 任务信息
         msnInfo = {
             "onStart": self.__onStart,
@@ -66,23 +66,12 @@ class BatchOCR(Page):
             "onEnd": self.__onEnd,
             "argd": argd,
         }
-        # 初步处理参数
-        startTimestamp = time.time()  # 开始时间戳
-        argd["startTimestamp"] = startTimestamp
-        argd["startDatetime"] = time.strftime(  # 格式化日期时间
-            "%Y-%m-%d %H:%M:%S", time.localtime(startTimestamp)
-        )
-        if argd["mission.dirType"] == "source":  # 若保存到原目录
-            argd["mission.dir"] = os.path.dirname(paths[0])  # 则保存路径设为第1张图片的目录
-        fileName = argd["mission.fileName"]
-        if not allowedFileName(fileName):  # 文件名不合法
-            self.__onEnd(
-                None,
-                '[Error] The file name is illegal.\n【错误】文件名【{fileName}】含有不允许的字符。\n不允许含有下列字符： \  /  :  *  ?  "  <  >  |',
-            )
+        # 预处理参数字典
+        if not self.__preprocessArgd(argd, paths[0]):
             return
         # 构造输出器
-        self.__initOutputList(argd)
+        if not self.__initOutputList(argd):
+            return
         # 路径转为任务列表格式，加载进任务管理器
         msnList = [{"path": x} for x in paths]
         self.msnID = MissionOCR.addMissionList(msnInfo, msnList)
@@ -91,11 +80,36 @@ class BatchOCR(Page):
         else:  # 添加任务失败
             self.__onEnd(None, "[Error] Failed to add task.\n【错误】添加任务失败。")
 
-    def __initOutputList(self, argd):  # 初始化输出器列表
-        fileName = argd["mission.fileName"]
+    def __preprocessArgd(self, argd, path0):  # 预处理参数字典，无异常返回True
+        startTimestamp = time.time()  # 开始时间戳
+        argd["mission.dirName"] = os.path.dirname(argd["mission.dir"])
+        argd["startTimestamp"] = startTimestamp
+        argd["startDatetime"] = time.strftime(  # 格式化日期时间（标准格式）
+            r"%Y-%m-%d %H:%M:%S", time.localtime(startTimestamp)
+        )
+        # 格式化日期时间（用户指定格式），先添加时间戳，再strftime
+        startDatetimeUser = argd["mission.datetimeFormat"].replace(r"%unix", str(startTimestamp))  
+        startDatetimeUser = time.strftime(
+            startDatetimeUser, time.localtime(startTimestamp))
+        if argd["mission.dirType"] == "source":  # 若保存到原目录
+            argd["mission.dir"] = os.path.dirname(path0)  # 则保存路径设为第1张图片的目录
+        # 处理文件名
+        fileName = argd["mission.fileNameFormat"]
+        fileName = fileName.replace(r"%date", startDatetimeUser) # 替换时间
+        if not allowedFileName(fileName):  # 文件名不合法
+            self.__onEnd(
+                None,
+                f'[Error] The file name is illegal.\n【错误】文件名【{fileName}】含有不允许的字符。\n不允许含有下列字符： \  /  :  *  ?  "  <  >  |',
+            )
+            return False
+        argd["mission.fileName"] = fileName # 回填文件名
+        return True
+
+    def __initOutputList(self, argd):  # 初始化输出器列表，无异常返回True
         self.outputList = []
         outputArgd = { # 数据转换，封装有需要的值
             "outputDir": argd["mission.dir"], # 输出路径
+            "outputDirName": argd["mission.dirName"], # 输出文件夹名称
             "outputFileName": argd["mission.fileName"], # 输出文件名（前缀）
             "startDatetime": argd["startDatetime"], # 开始日期
         }
@@ -107,7 +121,8 @@ class BatchOCR(Page):
                 None,
                 f"[Error] Failed to initialize output file.\n【错误】初始化输出文件失败。\n{e}",
             )
-            return
+            return False
+        return True
 
     def msnStop(self):  # 任务停止（异步）
         MissionOCR.stopMissionList(self.msnID)
