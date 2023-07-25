@@ -53,10 +53,12 @@ TabPage {
                     "D:/Pictures/Screenshots/屏幕截图 2023-04-23 140303.png",
                     "D:/Pictures/Screenshots/屏幕截图 2023-04-23 140829.png",
                     "D:/Pictures/Screenshots/屏幕截图 2023-04-23 191053.png",
+                    // "D:/图片/Screenshots/测试图片",
+                    "D:/图片/Screenshots/测试图片/_无文字.png"
                 ]
             )
             console.log("自动添加！！！！！！！！！！！！！")
-            ocrStart()
+            // ocrStart()
         }
     }
 
@@ -270,6 +272,7 @@ TabPage {
 
     // 任务队列完毕
     function onOcrEnd(msg) {
+        // msg: [Success] [Warning] [Error]
         // 如果是用户手动停止的，那么不管它。
         if(msg.startsWith("[Warning] Task stop."))
             return
@@ -286,10 +289,34 @@ TabPage {
             }
         }
         setMsnState("none") // 设置结束状态
-        // msg: [Success] [Warning] [Error]
+        // 任务成功
         if(msg.startsWith("[Success]")) {
             qmlapp.popup.simple(qsTr("批量识别完成"), "")
+            // 任务完成后续操作：打开文件/文件夹
+            const openWhat = {
+                "openFile": batchOCRConfigs.getValue("mission.postTaskActions.openFile"),
+                "openFolder": batchOCRConfigs.getValue("mission.postTaskActions.openFolder"),
+            }
+            tabPage.callPy("postTaskActions", openWhat)
+            // 任务完成后续操作：系统关机/待机
+            const actSys = batchOCRConfigs.getValue("mission.postTaskActions.system")
+            if(actSys) {
+                let actStr = ""
+                // 对话框：系统即将关机  继续关机 | 取消关机
+                if(actSys==="shutdown") actStr = qsTr("关机")
+                else if(actSys==="hibernate") actStr = qsTr("休眠")
+                const argd = {yesText: qsTr("继续%1").arg(actStr), noText: qsTr("取消%1").arg(actStr)}
+                const callback = (flag)=>{
+                    if(flag) {
+                        const d = {}
+                        d[actSys] = true
+                        tabPage.callPy("postTaskActions", d)
+                    }
+                }
+                qmlapp.popup.dialogCountdown(qsTr("系统即将%1").arg(actStr), "", callback, "", argd)
+            }
         }
+        // 任务失败
         else if(msg.startsWith("[Error]")) {
             qmlapp.popup.message(qsTr("批量识别任务异常"), msg, "error")
         }

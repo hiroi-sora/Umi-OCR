@@ -46,23 +46,23 @@ Configs {
             },
 
             "filesType": {
-                "title": qsTr("保存文件类型："),
+                "title": qsTr("保存文件类型"),
                 "type": "group",
                 "enabledFold": true,
                 "fold": false,
 
                 "txt": {
-                    "title": qsTr(".txt 标准格式"),
+                    "title": qsTr("txt 标准格式"),
                     "toolTip": qsTr("含原图片文件名和识别文字"),
                     "default": true,
                 },
                 "txtPlain": {
-                    "title": qsTr(".p.txt 纯文字"),
-                    "toolTip": qsTr("仅输出识别文字"),
+                    "title": qsTr("p.txt 纯文字格式"),
+                    "toolTip": qsTr("仅输出识别文字，不含图片标题"),
                     "default": false,
                 },
                 "txtIndividual": {
-                    "title": qsTr(".txt 单独文件"),
+                    "title": qsTr("txt 单独文件"),
                     "toolTip": qsTr("对每张图片，生成同名txt文件，仅输出识别文字"),
                     "default": false,
                 },
@@ -80,7 +80,8 @@ Configs {
                 "advanced": true,
             },
 
-            "scheduledTasks": qmlapp.globalConfigs.utilsDicts.getScheduledTasks(), // 计划任务
+             // 任务完成后续操作
+            "postTaskActions": qmlapp.globalConfigs.utilsDicts.getPostTaskActions(),
         },
     }
 }

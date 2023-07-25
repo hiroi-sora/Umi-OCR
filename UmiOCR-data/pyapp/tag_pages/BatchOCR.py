@@ -21,6 +21,7 @@ import threading  # TODO: 测试
 class BatchOCR(Page):
     def __init__(self, *args):
         super().__init__(*args)
+        self.argd = None
         self.msnID = ""
         self.outputList = []  # 输出器列表
 
@@ -84,6 +85,7 @@ class BatchOCR(Page):
             self.__onEnd(None, "[Error] Failed to add task.\n【错误】添加任务失败。")
 
     def __preprocessArgd(self, argd, path0):  # 预处理参数字典，无异常返回True
+        self.argd = None
         if argd["mission.dirType"] == "source":  # 若保存到原目录
             argd["mission.dir"] = os.path.dirname(path0)  # 则保存路径设为第1张图片的目录
         else:  # 若保存到用户指定目录
@@ -119,6 +121,7 @@ class BatchOCR(Page):
             )
             return False
         argd["mission.fileName"] = fileName # 回填文件名
+        self.argd = argd
         return True
 
     def __initOutputList(self, argd):  # 初始化输出器列表，无异常返回True
@@ -147,6 +150,25 @@ class BatchOCR(Page):
 
     def msnStop(self):  # 任务停止（异步）
         MissionOCR.stopMissionList(self.msnID)
+
+    def postTaskActions(self, argd):  # 任务完成后续操作
+        # argd可选值 "openFolder": "要打开的目录", "openFile": True(打开上次任务的文件), 
+        # "shutdown": True(关机), "hibernate": True(休眠)
+
+        # 打开目录
+        openFolder = argd.get("openFolder", False)
+        if openFolder and os.path.exists(self.argd["mission.dir"]):
+            os.startfile(self.argd["mission.dir"])
+        # 打开文件
+        if argd.get("openFile", False):
+            for o in self.outputList:
+                o.openOutputFile()
+        # 关机
+        if argd.get("shutdown", False):
+            print("==== 关机！")
+        # 休眠
+        elif argd.get("hibernate", False):
+            print("==== 休眠！")
 
     # ========================= 【任务控制器的异步回调】 =========================
 
@@ -183,19 +205,3 @@ class BatchOCR(Page):
     def __onEnd(self, msnInfo, msg):  # 任务队列完成或失败
         # msg: [Success] [Warning] [Error]
         self.callQmlInMain("onOcrEnd", msg)
-
-        if(msg.startswith("[Success]")):
-            # 打开目录
-            if msnInfo["argd"]["mission.scheduledTasks.openFolder"]:
-                dir = msnInfo["argd"]["mission.dir"]
-                if dir and os.path.exists(dir):
-                    os.startfile(dir)
-            # 打开文件
-            if msnInfo["argd"]["mission.scheduledTasks.openFile"]:
-                for o in self.outputList:
-                    o.openOutputFile()
-
-    # 设置任务状态
-    def __setMsnState(self, flag):
-        print(f"在线程{threading.current_thread().ident}设置工作状态{flag}")
-        self.callQmlInMain("setMsnState", flag)

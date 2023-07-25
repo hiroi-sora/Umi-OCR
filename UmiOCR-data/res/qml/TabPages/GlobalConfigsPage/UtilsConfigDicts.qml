@@ -5,27 +5,27 @@
 import QtQuick 2.15
 
 QtObject {
-    // 计划任务
-    function getScheduledTasks() {
+    // 任务完成后续操作
+    function getPostTaskActions() {
         return {
-            "title": qsTr("计划任务："),
+            "title": qsTr("任务完成后的操作"),
             "type": "group",
 
             "openFile": {
-                "title": qsTr("完成后打开文件"),
+                "title": qsTr("自动打开文件"),
                 "default": false,
             },
             "openFolder": {
-                "title": qsTr("完成后打开目录"),
+                "title": qsTr("自动打开目录"),
                 "default": false,
             },
-            "extra": {
-                "title": qsTr("本次完成后执行"),
+            "system": {
+                "title": qsTr("系统"),
                 "save": false, // 不保存
                 "optionsList": [
                     ["", qsTr("无")],
-                    ["default", qsTr("关机")],
-                    ["specify", qsTr("休眠")],
+                    ["shutdown", qsTr("关机")],
+                    ["hibernate", qsTr("休眠")],
                 ],
             },
         }
