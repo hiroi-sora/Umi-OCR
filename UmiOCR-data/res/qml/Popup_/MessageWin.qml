@@ -28,8 +28,27 @@ Item {
         createWin(winDialog, argd)
     }
 
+    // 显示一个双选项带倒计时对话窗
+    function showDialogCountdown(title, msg, callback, yesText, noText, type, time) {
+        const argd = {
+            title:title, msg:msg, callback:callback, yesText:yesText, noText:noText, type:type, time:time
+        }
+        createWin(winDialogCountdown, argd)
+    }
+
 
     // ========================= 【弹窗】 =========================
+    
+    // 主按钮颜色
+    function getYesColor(type) {
+        switch(type) {
+            case "warning":
+            case "error":
+                return  theme.noColor
+            default:
+                return theme.themeColor3
+        }
+    }
 
     property var winDict: {}
     // 生成一个弹窗，返回生成ID
@@ -112,21 +131,79 @@ Item {
                 type: win.type // 类型
                 btnsList: [ // 按钮列表
                     // 确认
-                    {"text": yesText, "value": true, "textColor": getYesColor(), "bgColor": theme.themeColor1},
+                    {"text": yesText, "value": true, "textColor": messageRoot.getYesColor(win.type), "bgColor": theme.themeColor1},
                     // 取消
                     {"text": noText, "value": false, "textColor": theme.subTextColor, "bgColor": theme.bgColor},
                 ]
-                // 主按钮颜色
-                function getYesColor() {
-                    switch(type) {
-                        case "warning":
-                        case "error":
-                            return  theme.noColor
-                        default:
-                            return theme.themeColor3
+                onClosed: (value)=>{
+                    callback(value)
+                    messageRoot.close(winId) // 关闭窗口
+                }
+            }
+        }
+    }
+
+    // 带倒计时的双键对话框
+    Component {
+        id: winDialogCountdown
+
+        FramelessWindow {
+            id: win
+            property string title: ""
+            property string msg: ""
+            property string type: ""
+            property string winId: ""
+            property string yesText: ""
+            property string yesTextTime: "" // 带倒计时的确定文本
+            property string noText: ""
+            property int time: 10000
+            property int nowTime: 0
+            property int interval: 1000
+            property var callback // 回调函数
+
+            visible: true
+            width: msgComp.width+msgComp.shadowWidth
+            height: msgComp.height+msgComp.shadowWidth
+            color: "#00000000"
+
+            
+            Component.onCompleted: {
+                win.yesTextTime = win.yesText+` (${win.time*0.001})`
+                win.nowTime = win.time
+                timer.running = true
+            }
+
+            Timer {
+                id: timer
+                interval: win.interval // 间隔
+                running: false
+                repeat: true // 重复执行
+                onTriggered: {
+                    win.nowTime -= win.interval
+                    win.yesTextTime = win.yesText+` (${win.nowTime*0.001})`
+                    if(win.nowTime<=0) {
+                        timer.stop() // 停止计时器
+                        callback(true) // 回调
+                        messageRoot.close(winId) // 关闭窗口
+                        return
                     }
                 }
+            }
+
+            MessageBox {
+                id: msgComp
+                anchors.centerIn: parent
+                title: win.title // 标题
+                msg: win.msg // 内容
+                type: win.type // 类型
+                btnsList: [ // 按钮列表
+                    // 确认
+                    {"text": yesTextTime, "value": true, "textColor": messageRoot.getYesColor(win.type), "bgColor": theme.themeColor1},
+                    // 取消
+                    {"text": noText, "value": false, "textColor": theme.subTextColor, "bgColor": theme.bgColor},
+                ]
                 onClosed: (value)=>{
+                    timer.running = false // 停止计时器
                     callback(value)
                     messageRoot.close(winId) // 关闭窗口
                 }
