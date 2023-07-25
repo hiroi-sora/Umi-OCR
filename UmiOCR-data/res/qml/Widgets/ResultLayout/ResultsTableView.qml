@@ -10,6 +10,8 @@ Item {
 
     // ========================= 【对外接口】 =========================
 
+    property alias ctrlBar: ctrlBar // 控制栏的引用
+
     // 添加一条OCR结果
     function addOcrResult(res) {
         // 提取并转换结果时间
@@ -82,5 +84,25 @@ Item {
             }
         } 
         ScrollBar.vertical: ScrollBar { }
+    }
+
+    // 外置控制栏
+    Item {
+        id: ctrlBar
+        height: theme.textSize*1.5
+        anchors.left: parent.left
+        anchors.right: parent.right
+
+        Button_ {
+            id: ctrlBtn1
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            text_: qsTr("清空")
+            textColor_: theme.noColor
+            onClicked: {
+                resultsModel.clear()
+            }
+        }
     }
 }
