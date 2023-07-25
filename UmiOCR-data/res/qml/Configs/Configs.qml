@@ -475,7 +475,7 @@ Item {
             // 标题
             Text_ {
                 id: groupText
-                text: title
+                text: title+"："
                 anchors.left: parent.left
                 anchors.leftMargin: theme.smallSpacing
                 height: theme.textSize+theme.smallSpacing*2
@@ -500,10 +500,20 @@ Item {
             // 内容
             Column {
                 id: panelContainer
-                anchors.left: parent.left
+                anchors.left: panelLeftBorder.right
                 anchors.right: parent.right
                 anchors.top: groupText.bottom
-                anchors.leftMargin: theme.textSize*1.5 // 子项右偏移
+                anchors.leftMargin: theme.smallSpacing*0.5 // 子项右偏移
+            }
+            // 内容左边的边框
+            Rectangle {
+                id: panelLeftBorder
+                anchors.left: parent.left
+                anchors.top: panelContainer.top
+                anchors.bottom: panelContainer.bottom
+                anchors.leftMargin: theme.smallSpacing*2
+                width: theme.smallSpacing*0.5
+                color: theme.coverColor1
             }
         }
     }
