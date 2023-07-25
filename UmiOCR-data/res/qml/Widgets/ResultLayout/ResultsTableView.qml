@@ -69,13 +69,17 @@ Item {
                 return tableView.width
             }
         }
-        onWidthChanged: forceLayout()  // 组件宽度变化时重设列宽
+        onWidthChanged: tableView.forceLayout()  // 组件宽度变化时重设列宽
         // 元素
         delegate: ResultTextContainer {
             resStatus: resStatus_
             textLeft: fileName
             textRight: datetime
             textMain: resText
+            onTextHeightChanged: tableView.forceLayout // 文字高度改变时重设列宽
+            onTextMainChanged: {
+                resultsModel.setProperty(index, "resText", textMain) // 文字改变时写入列表
+            }
         } 
         ScrollBar.vertical: ScrollBar { }
     }

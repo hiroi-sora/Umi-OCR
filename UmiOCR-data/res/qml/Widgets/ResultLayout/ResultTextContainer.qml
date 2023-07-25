@@ -14,9 +14,18 @@ Item {
     property alias textLeft: textLeft.text
     property alias textRight: textRight.text
     property alias textMain: textMain.text
-
+    // 高度适应子组件
     implicitHeight: resultTop.height+resultBottom.height+theme.smallSpacing
+    height: resultTop.height+resultBottom.height+theme.smallSpacing
+    property var onTextHeightChanged // 当文字输入导致高度改变时，调用的函数
 
+    onHeightChanged: { // 高度改变时，通知父级
+        // 必须文本框获得焦点时才触发
+        if(textMain.activeFocus && (typeof onTextHeightChanged === "function"))
+            onTextHeightChanged()
+    }
+
+    // 顶部信息
     Item {
         id: resultTop
         anchors.top: parent.top
@@ -46,7 +55,7 @@ Item {
         }
     }
 
-    // 主要文字内容
+    // 下方主要文字内容
     Rectangle {
         id: resultBottom
         color: theme.bgColor
