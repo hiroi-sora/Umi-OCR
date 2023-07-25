@@ -10,6 +10,7 @@ import "../"
 Item {
     id: resultRoot
 
+    property string resStatus: "" // 状态， text / noText / error
     property alias textLeft: textLeft.text
     property alias textRight: textRight.text
     property alias textMain: textMain.text
@@ -36,7 +37,7 @@ Item {
             clip: true
             elide: Text.ElideLeft
         }
-        // 备用，显示状态
+        // 日期时间
         Text_ {
             id: textRight
             anchors.right: parent.right
@@ -67,7 +68,7 @@ Item {
             readOnly: false // 可编辑
             selectByMouse: true // 允许鼠标选择文本
             selectByKeyboard: true // 允许键盘选择文本
-            color: theme.textColor
+            color: resStatus==="error"? theme.noColor:theme.textColor
             font.pixelSize: theme.textSize
             font.family: theme.fontFamily
         }

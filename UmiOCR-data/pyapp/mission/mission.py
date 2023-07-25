@@ -127,8 +127,9 @@ class Mission:
             t1 = time.time()
             res = self.msnTask(msnInfo, msn)
             t2 = time.time()
-            if type(res) == dict:  # 补充耗时
+            if type(res) == dict:  # 补充耗时和时间戳
                 res["time"] = t2 - t1
+                res["timestamp"] = t2
 
             # 7. 再次检查任务是否要求停止
             if msnInfo["state"] == "stop":

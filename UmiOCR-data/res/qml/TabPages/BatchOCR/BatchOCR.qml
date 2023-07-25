@@ -26,9 +26,6 @@ TabPage {
     property var missionInfo: {} // 当前任务信息，耗时等
     property string missionShow: "" // 当前任务信息展示字符串
 
-    // 输出表格模型
-    property alias resultsModel: resultsTableView.resultsModel
-
     Component.onCompleted: {
         setMsnState("none")
     }
@@ -53,7 +50,7 @@ TabPage {
                     "D:/Pictures/Screenshots/屏幕截图 2023-04-23 140303.png",
                     "D:/Pictures/Screenshots/屏幕截图 2023-04-23 140829.png",
                     "D:/Pictures/Screenshots/屏幕截图 2023-04-23 191053.png",
-                    // "D:/图片/Screenshots/测试图片",
+                    "D:/图片/Screenshots/测试图片",
                     "D:/图片/Screenshots/测试图片/_无文字.png"
                 ]
             )
@@ -151,15 +148,6 @@ TabPage {
         setMsnState("none")
     }
 
-    // 添加一个结果
-    function addResult(path, date, text) {
-        resultsModel.append({
-            "textLeft_": path,
-            "textRight_": date,
-            "textMain_": text
-        })
-    }
-
     // 关闭页面
     function closePage() {
         if(msnState !== "none") {
@@ -244,17 +232,10 @@ TabPage {
         missionShow = `${costTime}s  ${nowNum}/${missionInfo.allNum}  ${percent}%` // 信息显示
         const index = filesDict[path].index
         const time = res.time.toFixed(2)
-        const filename = path.split('/').pop()
-        const formattedDate = `${date.getMonth()+1}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}`
         let state = ""
-        let ocrText = ""
         switch(res.code){
             case 100:
-                state = "√ "+res.score.toFixed(2)
-                // 合并文字
-                const textArray = res.data.map(item => item.text);
-                ocrText = textArray.join('\n');
-                break
+                state = "√ "+res.score.toFixed(2);break
             case 101:
                 state = "√ ---- ";break
             default:
@@ -267,7 +248,7 @@ TabPage {
             "state": state,
         })
         // 提取文字，添加到结果表格
-        addResult(filename, formattedDate, ocrText)
+        resultsTableView.addOcrResult(res)
     }
 
     // 任务队列完毕
