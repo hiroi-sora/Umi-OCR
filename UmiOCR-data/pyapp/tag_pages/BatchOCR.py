@@ -2,9 +2,10 @@
 # =============== 批量OCR页 ===============
 # ========================================
 
-from .page import Page
-from ..mission.mission_ocr import MissionOCR
+from .page import Page  # 页基类
+from ..mission.mission_ocr import MissionOCR  # 任务管理器
 from ..utils.utils import allowedFileName
+from ..platform import Platform  # 跨平台
 
 # 输出器
 from ..ocr.output.output_txt import OutputTxt
@@ -12,10 +13,8 @@ from ..ocr.output.output_txt_plain import OutputTxtPlain
 from ..ocr.output.output_txt_individual import OutputTxtIndividual
 
 import os
-import json
 import time
 from PySide2.QtCore import Slot
-import threading  # TODO: 测试
 
 
 class BatchOCR(Page):
@@ -165,10 +164,10 @@ class BatchOCR(Page):
                 o.openOutputFile()
         # 关机
         if argd.get("shutdown", False):
-            print("==== 关机！")
+            Platform.shutdown()
         # 休眠
         elif argd.get("hibernate", False):
-            print("==== 休眠！")
+            Platform.hibernate()
 
     # ========================= 【任务控制器的异步回调】 =========================
 
