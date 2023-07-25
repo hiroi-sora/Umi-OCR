@@ -7,7 +7,10 @@ import QtQuick.Controls 2.15
 import QtGraphicalEffects 1.15
 
 Item {
-    clip: true
+    property alias currentIndex: bar.currentIndex // 当前下标
+    property int indexChangeNum: 0 // 下标变化次数
+
+    onCurrentIndexChanged: indexChangeNum++
 
     // 模型选项卡
     /* 每一项：
@@ -17,6 +20,7 @@ Item {
         选项卡组件中可有一个属性ctrlBar，指向一个控制栏子组件。这个子组件将会父级移动到选项卡的控制栏。
          }  */
     property var tabsModel: []
+    clip: true
     
     // 上方 选项栏
     Item {
@@ -52,14 +56,17 @@ Item {
                         color: parent.checked ? theme.textColor : theme.subTextColor
                         font.bold: parent.checked
                     }
-                    background: Rectangle {
+                    background: Rectangle{
                         anchors.fill: parent
                         color: theme.bgColor
+                        MouseAreaBackgroud {
+                            anchors.fill: parent
+                            radius_: 0
+                            cursorShape: Qt.PointingHandCursor
+                        }
                         Rectangle {
                             anchors.fill: parent
-                            color: parent.checked ? theme.coverColor4 : (
-                                parent.hovered ? theme.coverColor3 : theme.coverColor2
-                            )
+                            color: parent.parent.checked ? theme.coverColor3 : theme.coverColor2
                         }
                     }
 

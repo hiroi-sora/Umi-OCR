@@ -249,6 +249,9 @@ TabPage {
         })
         // 提取文字，添加到结果表格
         resultsTableView.addOcrResult(res)
+        // 若tabPanel面板的下标没有变化过，则切换到记录页
+        if(tabPanel.indexChangeNum < 2)
+            tabPanel.currentIndex = 1
     }
 
     // 任务队列完毕
@@ -408,6 +411,7 @@ TabPage {
 
             // 配置项控制板
             TabPanel {
+                id: tabPanel
                 anchors.fill: parent
                 anchors.margins: theme.spacing
 
@@ -419,7 +423,7 @@ TabPage {
                     },
                     {
                         "key": "ocrResult",
-                        "title": qsTr("信息"),
+                        "title": qsTr("记录"),
                         "component": resultsTableView,
                     },
                 ]
