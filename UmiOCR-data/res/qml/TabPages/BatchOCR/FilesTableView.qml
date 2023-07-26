@@ -185,6 +185,13 @@ Item{
                     model: tableModel // 模型
                     flickableDirection: Flickable.VerticalFlick // 只允许垂直滚动
                     property int hoveredRow: -1 // 鼠标悬停的列表序号
+                    property var hoveredY: -1 // 鼠标悬停的组件的y值
+
+                    ToolTip_ {
+                        visible: tableView.hoveredRow>-1
+                        text: tableView.hoveredRow>-1 ? tableModel.getRow(tableView.hoveredRow).filePath : ""
+                        y: tableView.hoveredY-height
+                    }
 
                     // 宽度设定函数
                     columnWidthProvider: (column)=>{
@@ -206,19 +213,34 @@ Item{
                         clip: true
 
                         Text_ {
-                            text: display
+                            text: column===0 ? getFileName(display) : display // 如果是地址，则转为文件名显示
                             color: row===tableView.hoveredRow ? theme.textColor : theme.subTextColor
-                            anchors.right: parent.right
-                            anchors.rightMargin: theme.smallTextSize * 0.5
+                            // 文件名左对齐，其它项居中对齐
+                            anchors.horizontalCenter: column===0 ? undefined : parent.horizontalCenter
+                            anchors.left: column===0 ? parent.left : undefined
+                            anchors.leftMargin: theme.smallTextSize * 0.5
                             font.pixelSize: theme.smallTextSize
                             font.family: theme.dataFontFamily
+                        }
+
+                        // 从路径中提取文件名
+                        function getFileName(filePath) {
+                            let parts = filePath.split("/")
+                            let fileName = parts[parts.length - 1]
+                            return fileName
                         }
 
                         MouseArea { // 鼠标悬停在一行上时，高亮一行
                             anchors.fill: parent
                             hoverEnabled: true
-                            onEntered: tableView.hoveredRow = row
-                            onExited:  tableView.hoveredRow = -1
+                            onEntered: {
+                                tableView.hoveredRow = row
+                                tableView.hoveredY = parent.y
+                            }
+                            onExited: {
+                                tableView.hoveredRow = -1
+                                tableView.hoveredY = -1
+                            }
                             onClicked: {
                                 console.log("点击图片：", tableModel.getRow(row).filePath)
                             }

@@ -111,7 +111,7 @@ TabPage {
             filesModel.setRow(filesDict[path].index, {
                     "filePath": path,
                     "time": "",
-                    "state": qsTr("排队"),
+                    "state": qsTr("排队中"),
                 })
         }
         // 刷新计数
