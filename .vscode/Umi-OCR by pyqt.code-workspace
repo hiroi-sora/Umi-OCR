@@ -1,0 +1,40 @@
+{
+    "folders": [
+        {
+            "path": ".."
+        }
+    ],
+    "settings": {
+        "files.associations": {
+            "bit": "cpp",
+            "cctype": "cpp",
+            "compare": "cpp",
+            "concepts": "cpp",
+            "cstddef": "cpp",
+            "cstdint": "cpp",
+            "cstdio": "cpp",
+            "cstdlib": "cpp",
+            "cstring": "cpp",
+            "cwchar": "cpp",
+            "exception": "cpp",
+            "initializer_list": "cpp",
+            "iosfwd": "cpp",
+            "limits": "cpp",
+            "new": "cpp",
+            "string": "cpp",
+            "tuple": "cpp",
+            "type_traits": "cpp",
+            "utility": "cpp",
+            "vector": "cpp",
+            "xmemory": "cpp",
+            "xstddef": "cpp",
+            "xstring": "cpp",
+            "xtr1common": "cpp",
+            "xutility": "cpp"
+        },
+        "[python]": {
+            "editor.defaultFormatter": "ms-python.black-formatter"
+        },
+        "python.formatting.provider": "none"
+    }
+}
