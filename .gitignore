@@ -4,13 +4,18 @@
 命名规范.md
 Umi-OCR.exe
 Temp
-
 PyStand_for_UmiOCR/build
+
+# 排除一级目录
 UmiOCR-data/*
-!UmiOCR-data/*.py
+# 允许二级目录
 !UmiOCR-data/**/
-# 高度定制的运行环境。前期暂时不git，项目中期再同步
+# 排除运行环境目录
 UmiOCR-data/.site-packages
+UmiOCR-data/.site-packages - full
 UmiOCR-data/.runtime
 UmiOCR-data/lib
+# 允许运行环境压缩包
+!UmiOCR-data/*.7z
+# 排除缓存
 **__pycache__**
