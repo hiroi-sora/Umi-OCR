@@ -127,6 +127,9 @@ TabPage {
         const paths = Object.keys(filesDict)
         const argd = batchOCRConfigs.getConfigValueDict()
         tabPage.callPy("msnPaths", paths, argd)
+        // 若tabPanel面板的下标没有变化过，则切换到记录页
+        if(tabPanel.indexChangeNum < 2)
+            tabPanel.currentIndex = 1
     }
 
     // 停止OCR
@@ -249,9 +252,6 @@ TabPage {
         })
         // 提取文字，添加到结果表格
         resultsTableView.addOcrResult(res)
-        // 若tabPanel面板的下标没有变化过，则切换到记录页
-        if(tabPanel.indexChangeNum < 2)
-            tabPanel.currentIndex = 1
     }
 
     // 任务队列完毕
