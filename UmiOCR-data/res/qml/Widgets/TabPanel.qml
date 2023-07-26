@@ -37,6 +37,10 @@ Item {
             anchors.left: parent.left
             anchors.top: parent.top
             anchors.bottom: parent.bottom
+
+            background: Rectangle {
+                color: theme.bgColor
+            }
             
             Repeater {
                 model: tabsModel
@@ -56,18 +60,15 @@ Item {
                         color: parent.checked ? theme.textColor : theme.subTextColor
                         font.bold: parent.checked
                     }
-                    background: Rectangle{
-                        anchors.fill: parent
-                        color: theme.bgColor
-                        MouseAreaBackgroud {
+                    background: MouseAreaBackgroud {
                             anchors.fill: parent
                             radius_: 0
                             cursorShape: Qt.PointingHandCursor
-                        }
-                        Rectangle {
-                            anchors.fill: parent
-                            color: parent.parent.checked ? theme.coverColor3 : theme.coverColor2
-                        }
+
+                            Rectangle {
+                                anchors.fill: parent
+                                color: parent.parent.checked ? theme.coverColor3 : theme.coverColor2
+                            }
                     }
 
                     // 选中的动画
@@ -127,6 +128,7 @@ Item {
                 model: tabsModel
 
                 Item { // 控制栏子组件父级重定向
+                    visible: SwipeView.isCurrentItem
                     Component.onCompleted: {
                         if(modelData.component.ctrlBar) {
                             modelData.component.ctrlBar.parent = this
@@ -158,6 +160,7 @@ Item {
             model: tabsModel
 
             Item {
+                visible: SwipeView.isCurrentItem
                 Component.onCompleted: {
                     modelData.component.parent = this
                     modelData.component.visible = true
