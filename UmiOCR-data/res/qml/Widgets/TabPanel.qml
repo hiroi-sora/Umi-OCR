@@ -61,14 +61,14 @@ Item {
                         font.bold: parent.checked
                     }
                     background: MouseAreaBackgroud {
-                            anchors.fill: parent
-                            radius_: 0
-                            cursorShape: Qt.PointingHandCursor
+                        anchors.fill: parent
+                        radius_: 0
+                        cursorShape: Qt.PointingHandCursor
 
-                            Rectangle {
-                                anchors.fill: parent
-                                color: parent.parent.checked ? theme.coverColor3 : theme.coverColor2
-                            }
+                        Rectangle {
+                            anchors.fill: parent
+                            color: parent.parent.checked ? theme.coverColor3 : theme.coverColor2
+                        }
                     }
 
                     // 选中的动画

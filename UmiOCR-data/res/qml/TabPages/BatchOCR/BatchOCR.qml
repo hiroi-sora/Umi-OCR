@@ -65,7 +65,8 @@ TabPage {
             return
         }
         // 调用Python方法
-        const res = tabPage.callPy("findImages", paths)
+        const isRecurrence = batchOCRConfigs.getValue("mission.recurrence")
+        const res = tabPage.callPy("findImages", paths, isRecurrence)
         // 结果写入数据
         if(filesDict==undefined){
             filesDict = {}
