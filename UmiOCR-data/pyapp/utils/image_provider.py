@@ -25,13 +25,13 @@ class PixmapProviderClass(QQuickImageProvider):
             painter.drawLine(0, 0, 0, 5)
             painter.drawLine(0, 95, 0, 100)
             return pixmap
-        print(f"===== 提供图片 {imgID}")
         return self.pixmapDict[imgID]
 
     # 添加一个Pixmap图片到提供器，返回imgID
     def addPixmap(self, pixmap):
-        imgID = uuid4()
+        imgID = str(uuid4())
         self.pixmapDict[imgID] = pixmap
+        return imgID
 
 
 # 图片提供器 单例
