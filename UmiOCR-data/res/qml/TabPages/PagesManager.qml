@@ -25,6 +25,14 @@ Item {
             intro: ""                  // 页面的简介。
         },
         {
+            key: "ScreenshotOCR",
+            needController: true,
+            title: qsTr("截图OCR"),
+            intro: qsTr("# 截图OCR\n\
+　  \n\
+屏幕截图，快捷转文字。也支持粘贴图片。")
+        },
+        {
             key: "BatchOCR",
             needController: true,
             title: qsTr("批量OCR"),

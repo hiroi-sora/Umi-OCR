@@ -11,9 +11,10 @@ from PySide2.QtCore import QObject, Slot, Signal
 
 # 导入本模块内定义的控制器类
 from .BatchOCR import BatchOCR
+from .ScreenshotOCR import ScreenshotOCR
 
 # 控制器类列表
-PageClass = [BatchOCR]
+PageClass = [BatchOCR, ScreenshotOCR]
 
 
 SingObj = None  # 记录实例
