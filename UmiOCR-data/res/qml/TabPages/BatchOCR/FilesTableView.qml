@@ -15,6 +15,7 @@ Item{
 
     property string herderEleFile: qsTr("文件")
     property string msnState // 任务状态，父组件传入
+    property alias tableView: tableView
     // 表头模型
     ListModel {
         id: headerModel
