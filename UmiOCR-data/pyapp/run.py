@@ -5,8 +5,9 @@ from PySide2.QtCore import Qt, QTranslator
 from PySide2.QtGui import QGuiApplication, QOpenGLContext
 from PySide2.QtQml import QQmlApplicationEngine, qmlRegisterType
 
-from pyapp.tag_pages.tag_pages_connector import TagPageConnector
-from pyapp.mission.mission_connector import MissionConnector
+from .tag_pages.tag_pages_connector import TagPageConnector  # 页面连接器
+from .mission.mission_connector import MissionConnector  # 任务连接器
+from .utils.image_provider import PixmapProvider  # 图片提供器
 
 
 # 启动主qml
@@ -49,6 +50,7 @@ def main():
     # 6. 启动qml引擎
     engine = QQmlApplicationEngine()
     engine.addImportPath("./.site-packages/PySide2/qml")  # 相对路径重新导入包
+    engine.addImageProvider("pixmapprovider", PixmapProvider)  # 注册图片提供器
     engine.load(f"res/qml/Main.qml")  # 通过本地文件启动
     # engine.load(f"qrc:/qml/Main.qml")  # 通过qrc启动
     if not engine.rootObjects():
