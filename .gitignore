@@ -2,6 +2,7 @@
 开发工具
 命名规范.md
 Temp
+build
 PyStand_for_UmiOCR/build
 
 # 排除一级目录
@@ -9,8 +10,7 @@ UmiOCR-data/*
 # 允许二级目录
 !UmiOCR-data/**/
 # 排除运行环境目录
-UmiOCR-data/.site-packages
-UmiOCR-data/.site-packages - full
+UmiOCR-data/.site-packages*
 UmiOCR-data/.runtime
 UmiOCR-data/lib
 # 允许运行环境压缩包
