@@ -10,11 +10,11 @@ import "../../Widgets"
 TabPage {
     id: tabPage
 
+    // ========================= 【逻辑】 =========================
+
     function screenshot() {
         const grabList = tabPage.callPy("screenshot")
-        for(let i in grabList) {
-            console.log("得到id：", grabList[i].imgID)
-        }
+        ssWindowManager.create(grabList)
     }
     
     // TODO: 测试用
@@ -25,6 +25,11 @@ TabPage {
             screenshot()
         }
     }
+
+    // 截图窗口管理器
+    ScreenshotWindowManager{ id: ssWindowManager }
+
+    // ========================= 【布局】 =========================
 
     // 左控制栏
     Rectangle {
