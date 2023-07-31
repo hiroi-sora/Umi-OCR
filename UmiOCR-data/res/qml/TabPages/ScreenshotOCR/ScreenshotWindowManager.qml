@@ -47,33 +47,8 @@ Item {
     Component {
         id: ssWinComp
 
-        Window {
-            id: win
-
-            property string imgID: "" // 图片id
-
-            visible: true
-            flags: Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint // 无边框+置顶
-
-            // 底层，图片
-            Image {
-                anchors.fill: parent
-                source: "image://pixmapprovider/"+imgID
-            }
-            // 叠加层，暗
-            Rectangle {
-                anchors.fill: parent
-                color: "#22000000"
-                border.width: 50
-                border.color: "red"
-            }
-            // 鼠标触控层
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    ssWinRoot.close(win.imgID)
-                }
-            }
+        ScreenshotWindowComp {
+            onClosed: close // 关闭函数
         }
     }
 }
