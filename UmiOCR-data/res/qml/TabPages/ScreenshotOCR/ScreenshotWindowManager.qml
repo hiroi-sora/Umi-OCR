@@ -3,6 +3,7 @@
 // =============================================
 
 import QtQuick 2.15
+// import QtQml 2.15
 import QtQuick.Window 2.15
 
 Item {
@@ -15,16 +16,21 @@ Item {
         if(winDict===undefined) winDict={}
         // 遍历截图列表，生成数量一致的覆盖窗口
         for(let i in grabList) {
-            const g = grabList[i]
-            console.log("得到id：", g.imgID)
+            const g = grabList[i]  // 截图属性
+            const screen = Qt.application.screens[i]  // 获取对应编号的
+            if(screen.name !== g.screenName) {
+                qmlapp.popup.message(qsTr("截图窗口展开异常"), 
+                qsTr("屏幕设备名称不相同：\n%1\n%2").arg(screen.name).arg(g.screenName), "error")
+                return
+            }
             const argd = {
                 imgID: g.imgID,
-                x: g.geometry.x,
-                y: g.geometry.y,
-                width: g.geometry.width,
-                height: g.geometry.height,
+                screen: screen,
+                x: screen.virtualX,
+                y: screen.virtualY,
+                width: screen.width,
+                height: screen.height,
             }
-            console.log(`屏幕： ${argd.x} ${argd.y} ${argd.width} ${argd.height}`)
             const obj = ssWinComp.createObject(this, argd)
             winDict[g.imgID] = obj
         }
@@ -32,8 +38,8 @@ Item {
 
     // 关闭一个覆盖窗口，传入图片ID
     function close(imgID) {
-        if(winDict.hasOwnProperty(imgID)) {
-            winDict[imgID].destroy()
+        for (let key in winDict) {
+            winDict[key].destroy()
         }
     }
 
@@ -47,19 +53,21 @@ Item {
             property string imgID: "" // 图片id
 
             visible: true
-            flags: Qt.FramelessWindowHint // 无边框
-            // visibility: Window.FullScreen
+            flags: Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint // 无边框+置顶
 
+            // 底层，图片
             Image {
                 anchors.fill: parent
                 source: "image://pixmapprovider/"+imgID
             }
+            // 叠加层，暗
             Rectangle {
                 anchors.fill: parent
                 color: "#22000000"
                 border.width: 50
                 border.color: "red"
             }
+            // 鼠标触控层
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
