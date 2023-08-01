@@ -26,31 +26,29 @@ Item {
             }
             const argd = {
                 imgID: g.imgID,
-                screen: screen,
+                screen: screen, // 为Window设定所属屏幕属性
+                screenRatio: screen.devicePixelRatio, // 屏幕缩放比
                 x: screen.virtualX,
                 y: screen.virtualY,
                 width: screen.width,
                 height: screen.height,
+                onClosed: ssWinRoot.ssEnd // 关闭函数
             }
             const obj = ssWinComp.createObject(this, argd)
             winDict[g.imgID] = obj
         }
     }
 
-    // 关闭所有覆盖窗口
-    function close() {
-        for (let key in winDict) {
+    // 截图完毕的回调
+    function ssEnd(imgID="", clipX=-1, clipY=-1, clipW=-1, clipH=-1) {
+        // 关闭所有覆盖窗口
+        for (let key in winDict)
             winDict[key].destroy()
-        }
         winDict = {}
     }
 
-
     Component {
         id: ssWinComp
-
-        ScreenshotWindowComp {
-            onClosed: ssWinRoot.close // 关闭函数
-        }
+        ScreenshotWindowComp { }
     }
 }

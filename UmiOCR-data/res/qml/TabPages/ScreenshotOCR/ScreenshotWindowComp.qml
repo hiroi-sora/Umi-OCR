@@ -11,7 +11,10 @@ Window {
     id: win
 
     property string imgID: "" // 图片id
+    property var screenRatio: 1 // 屏幕缩放比
     property var onClosed: undefined // 关闭函数，外部传入
+
+    // 配置
     property int lineWidth: 1 // 线宽
     property color crossLineColor: "#00f91a" // 十字指示器的颜色
     property color clipBorderColor: "white" // 框选区边框的颜色
@@ -99,6 +102,7 @@ Window {
         anchors.fill: parent
         hoverEnabled: true
         acceptedButtons: Qt.LeftButton | Qt.RightButton // 捕获左右键
+        cursorShape: Qt.CrossCursor // 十字光标
 
         // 按下
         onPressed: {
@@ -156,9 +160,13 @@ Window {
         // 松开
         onReleased: {
             if(mouseStatus == 1) {
-                console.log("结束，", clipX, clipY, clipW, clipH)
+                // 乘以屏幕缩放比
+                if(screenRatio !== 1) {
+                    clipX*=screenRatio; clipY*=screenRatio;
+                    clipW*=screenRatio; clipH*=screenRatio;
+                }
                 if(typeof win.onClosed === "function")
-                    win.onClosed() // 调用关闭函数
+                    win.onClosed(imgID, clipX, clipY, clipW, clipH) // 调用关闭函数
             }
         }
         // Esc 退出
