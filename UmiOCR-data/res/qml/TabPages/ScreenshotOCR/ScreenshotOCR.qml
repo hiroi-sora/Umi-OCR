@@ -13,6 +13,15 @@ TabPage {
     // 配置
     ScreenshotOcrConfigs { id: screenshotOcrConfigs } 
     configsComp: screenshotOcrConfigs
+    
+    // TODO: 测试用
+    Timer {
+        interval: 200
+        // running: true
+        onTriggered: {
+            screenshot()
+        }
+    }
 
     // ========================= 【逻辑】 =========================
 
@@ -36,23 +45,27 @@ TabPage {
         console.log("裁切成功", clipID)
         showImage.source = "image://pixmapprovider/"+clipID
     }
+
+    // ========================= 【python调用qml】 =========================
     
-    // TODO: 测试用
-    Timer {
-        interval: 200
-        // running: true
-        onTriggered: {
-            screenshot()
-        }
+    // 获取一个OCR的返回值
+    function onOcrGet(imgID, res) {
+        // 添加到结果
+        showImage.source = "image://pixmapprovider/"+imgID
+        res.fileName = res.path = "" // 补充空参数
+        resultsTableView.addOcrResult(res)
+        // 若tabPanel面板的下标没有变化过，则切换到记录页
+        if(tabPanel.indexChangeNum < 2)
+            tabPanel.currentIndex = 1
     }
+
+    // ========================= 【布局】 =========================
 
     // 截图窗口管理器
     ScreenshotWindowManager{
         id: ssWindowManager
         screenshotEnd: tabPage.screenshotEnd
     }
-
-    // ========================= 【布局】 =========================
 
     // 左控制栏
     Rectangle {

@@ -40,12 +40,12 @@ class ScreenshotOCR(Page):
         clipID = PixmapProvider.addPixmap(pixmap)  # 存入提供器，获取imgID
         if "allImgID" in argd:  # 删除完整图片的缓存
             PixmapProvider.delPixmap(argd["allImgID"])
-        self.__msnPixmap(pixmap, configDict)  # 开始OCR
+        self.__msnPixmap(pixmap, clipID, configDict)  # 开始OCR
         return clipID
 
     # ========================= 【OCR 任务控制】 =========================
 
-    def __msnPixmap(self, pixmap, configDict):  # 接收路径列表和配置参数字典，开始OCR任务
+    def __msnPixmap(self, pixmap, imgID, configDict):  # 接收路径列表和配置参数字典，开始OCR任务
         # 任务信息
         msnInfo = {
             "onStart": self.__onStart,
@@ -56,7 +56,7 @@ class ScreenshotOCR(Page):
         }
         # 图片转字节，加入任务队列
         bytesData = PixmapProvider.toBytes(pixmap)
-        msnList = [{"bytes": bytesData}]
+        msnList = [{"bytes": bytesData, "imgID": imgID}]
         self.msnID = MissionOCR.addMissionList(msnInfo, msnList)
         if self.msnID:  # 添加成功，通知前端刷新UI
             print(f"添加任务成功 {self.msnID}\n")
@@ -80,7 +80,8 @@ class ScreenshotOCR(Page):
             if num > 0:
                 score /= num
         res["score"] = score
-        print(f"OCR完成， {res}")
+        # 通知qml更新UI
+        self.callQmlInMain("onOcrGet", msn["imgID"], res)  # 在主线程中调用qml
 
     def __onEnd(self, msnInfo, msg):  # 任务队列完成或失败
         # msg: [Success] [Warning] [Error]
