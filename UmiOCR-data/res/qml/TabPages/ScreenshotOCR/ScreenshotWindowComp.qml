@@ -12,7 +12,7 @@ Window {
 
     property string imgID: "" // 图片id
     property var screenRatio: 1 // 屏幕缩放比
-    property var onClosed: undefined // 关闭函数，外部传入
+    property var screenshotEnd // 关闭函数，外部传入
 
     // 配置
     property int lineWidth: 1 // 线宽
@@ -32,6 +32,27 @@ Window {
 
     visible: true
     flags: Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint // 无边框+置顶
+
+    // 截图完毕，成功为true
+    function ssEnd(okk) {
+        let argd = {}
+        if(okk) { // 成功
+            // 乘以屏幕缩放比
+            if(screenRatio !== 1) {
+                clipX*=screenRatio; clipY*=screenRatio;
+                clipW*=screenRatio; clipH*=screenRatio;
+            }
+            argd = {
+                imgID: imgID, 
+                clipX: clipX, 
+                clipY: clipY, 
+                clipW: clipW, 
+                clipH: clipH,
+            }
+        }
+        // 向父级回报
+        win.screenshotEnd(argd) 
+    }
 
     // 底层，图片
     Image {
@@ -160,21 +181,14 @@ Window {
         // 松开
         onReleased: {
             if(mouseStatus == 1) {
-                // 乘以屏幕缩放比
-                if(screenRatio !== 1) {
-                    clipX*=screenRatio; clipY*=screenRatio;
-                    clipW*=screenRatio; clipH*=screenRatio;
-                }
-                if(typeof win.onClosed === "function")
-                    win.onClosed(imgID, clipX, clipY, clipW, clipH) // 调用关闭函数
+                ssEnd(true)
             }
         }
         // Esc 退出
         focus: true
         Keys.onPressed: {
             if (event.key === Qt.Key_Escape) {
-                if(typeof win.onClosed === "function")
-                    win.onClosed() // 调用关闭函数
+                ssEnd(false)
             }
         }
     }

@@ -8,12 +8,18 @@ import QtQuick.Window 2.15
 
 Item {
     id: ssWinRoot
-    property var winDict: {}
+    property var screenshotEnd // 截图完毕的回调
+    property var winDict: {} // 存放当前已打开的窗口
 
     // 传入py获取的截图列表，生成覆盖窗口
     function create(grabList) {
         // 初始化字典
         if(winDict===undefined) winDict={}
+        // 如果当前字典非空，则上次截图还未结束，不允许新截图
+        if(Object.keys(winDict).length > 0) {
+            console.log("【Error】上次截图还未结束！")
+            return
+        }
         // 遍历截图列表，生成数量一致的覆盖窗口
         for(let i in grabList) {
             // if(i==0) continue
@@ -32,7 +38,7 @@ Item {
                 y: screen.virtualY,
                 width: screen.width,
                 height: screen.height,
-                onClosed: ssWinRoot.ssEnd // 关闭函数
+                screenshotEnd: ssWinRoot.ssEnd // 关闭函数
             }
             const obj = ssWinComp.createObject(this, argd)
             winDict[g.imgID] = obj
@@ -40,11 +46,17 @@ Item {
     }
 
     // 截图完毕的回调
-    function ssEnd(imgID="", clipX=-1, clipY=-1, clipW=-1, clipH=-1) {
-        // 关闭所有覆盖窗口
-        for (let key in winDict)
+    function ssEnd(argd) {
+        // 关闭所有覆盖窗口，获取所有图片id
+        let allImgID = []
+        for (let key in winDict) {
+            allImgID.push(winDict[key].imgID)
             winDict[key].destroy()
+        }
         winDict = {}
+        argd.allImgID = allImgID
+        // 向父级回报
+        ssWinRoot.screenshotEnd(argd)
     }
 
     Component {

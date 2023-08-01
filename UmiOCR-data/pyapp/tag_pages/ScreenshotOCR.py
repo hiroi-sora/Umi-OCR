@@ -11,7 +11,7 @@ from PySide2.QtGui import QGuiApplication  # 截图
 class ScreenshotOCR(Page):
     # ========================= 【qml调用python】 =========================
 
-    def screenshot(self):
+    def screenshot(self):  # 开始截图
         screensList = QGuiApplication.screens()
         grabList = []
         for screen in screensList:
@@ -24,3 +24,7 @@ class ScreenshotOCR(Page):
                 }
             )
         return grabList
+
+    # 截图完毕，提交OCR，并返回裁切结果
+    def screenshotEnd(self, argd):
+        print("截图完毕！！！", argd)

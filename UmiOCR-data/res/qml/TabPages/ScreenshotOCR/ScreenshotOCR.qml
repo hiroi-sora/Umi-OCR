@@ -12,9 +12,15 @@ TabPage {
 
     // ========================= 【逻辑】 =========================
 
+    // 开始截图
     function screenshot() {
         const grabList = tabPage.callPy("screenshot")
         ssWindowManager.create(grabList)
+    }
+
+    // 截图完毕
+    function screenshotEnd(argd) {
+        const res = tabPage.callPy("screenshotEnd", argd)
     }
     
     // TODO: 测试用
@@ -27,7 +33,10 @@ TabPage {
     }
 
     // 截图窗口管理器
-    ScreenshotWindowManager{ id: ssWindowManager }
+    ScreenshotWindowManager{
+        id: ssWindowManager
+        screenshotEnd: tabPage.screenshotEnd
+    }
 
     // ========================= 【布局】 =========================
 
