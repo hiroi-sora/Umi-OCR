@@ -4,6 +4,7 @@
 
 from PySide2.QtCore import Qt
 from PySide2.QtGui import QPixmap, QPainter
+from PySide2.QtCore import QByteArray, QBuffer, QIODevice
 from PySide2.QtQuick import QQuickImageProvider
 from uuid import uuid4  # 唯一ID
 
@@ -44,6 +45,16 @@ class PixmapProviderClass(QQuickImageProvider):
         for i in imgIDs:
             if i in self.pixmapDict:
                 del self.pixmapDict[i]
+
+    # 将 QPixmap 转换为字节
+    @staticmethod
+    def toBytes(pixmap):
+        image = pixmap.toImage()
+        byteArray = QByteArray()  # 创建一个字节数组
+        buffer = QBuffer(byteArray)  # 创建一个缓冲区
+        image.save(buffer, "PNG")  # 将 QImage 保存为字节数组
+        bytesData = byteArray.data()  # 获取字节数组的内容
+        return bytesData
 
 
 # 图片提供器 单例

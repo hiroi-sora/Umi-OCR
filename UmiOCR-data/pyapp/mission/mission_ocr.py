@@ -36,7 +36,7 @@ class __MissionOcrClass(Mission):
         if "path" in msn:
             res = self.__api.runPath(msn["path"])
         elif "bytes" in msn:
-            res = self.__api.runPath(msn["bytes"])
+            res = self.__api.runBytes(msn["bytes"])
         elif "clipboard" in msn:
             res = self.__api.runClipboard()
         return res

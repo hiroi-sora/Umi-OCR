@@ -27,7 +27,8 @@ TabPage {
         const x = argd["clipX"], y = argd["clipY"], w = argd["clipW"], h = argd["clipH"]
         if(x < 0 || y < 0 || w <= 0 || h <= 0) // 裁切区域无实际像素
             return
-        const clipID = tabPage.callPy("screenshotEnd", argd)
+        const configDict = screenshotOcrConfigs.getConfigValueDict()
+        const clipID = tabPage.callPy("screenshotEnd", argd, configDict)
         if(clipID.startsWith("[Error]")) {
             qmlapp.popup.message(qsTr("截图裁切异常"), clipID, "error")
             return
