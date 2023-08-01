@@ -16,6 +16,7 @@ Item {
         if(winDict===undefined) winDict={}
         // 遍历截图列表，生成数量一致的覆盖窗口
         for(let i in grabList) {
+            // if(i==0) continue
             const g = grabList[i]  // 截图属性
             const screen = Qt.application.screens[i]  // 获取对应编号的
             if(screen.name !== g.screenName) {
@@ -36,11 +37,12 @@ Item {
         }
     }
 
-    // 关闭一个覆盖窗口，传入图片ID
-    function close(imgID) {
+    // 关闭所有覆盖窗口
+    function close() {
         for (let key in winDict) {
             winDict[key].destroy()
         }
+        winDict = {}
     }
 
 
@@ -48,7 +50,7 @@ Item {
         id: ssWinComp
 
         ScreenshotWindowComp {
-            onClosed: close // 关闭函数
+            onClosed: ssWinRoot.close // 关闭函数
         }
     }
 }
