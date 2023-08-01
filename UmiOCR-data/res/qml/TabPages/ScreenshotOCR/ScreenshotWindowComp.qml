@@ -12,8 +12,9 @@ Window {
 
     property string imgID: "" // 图片id
     property var onClosed: undefined // 关闭函数，外部传入
-    property int crossLineWidth: 2 // 十字指示器的宽度
-    property color crossLineColor: "green" // 十字指示器的颜色
+    property int lineWidth: 1 // 线宽
+    property color crossLineColor: "#00f91a" // 十字指示器的颜色
+    property color clipBorderColor: "white" // 框选区边框的颜色
 
     // 鼠标状态， 0 等待 ， 1 拖拽中
     property int mouseStatus: 0
@@ -38,7 +39,7 @@ Window {
     Rectangle {
         id: darkLayer
         anchors.fill: parent
-        color: "#44000000"
+        color: "#88000000"
         // 遮罩，拖拽时扣除框选区域
         layer.enabled: mouseStatus==1
         layer.effect: OpacityMask {
@@ -55,12 +56,23 @@ Window {
             }
         }
     }
-    // 边框
+    // TODO: 调试用 总边框
     Rectangle{
         anchors.fill: parent
         color: "#00000000"
         border.width: 5
         border.color: "red"
+    }
+    // 框选区边框
+    Rectangle {
+        visible: mouseStatus==1
+        x: clipX
+        y: clipY
+        width: clipW
+        height: clipH
+        color: "#00000000"
+        border.width: lineWidth
+        border.color: clipBorderColor
     }
     // 十字指示器， mouseStatus==0 时启用
     Item {
@@ -70,15 +82,15 @@ Window {
             anchors.left: parent.left
             anchors.right: parent.right
             color: crossLineColor
-            height: crossLineWidth
-            y: mouseY-crossLineWidth
+            height: lineWidth
+            y: mouseY-lineWidth
         }
         Rectangle { // 垂直
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             color: crossLineColor
-            width: crossLineWidth
-            x: mouseX-crossLineWidth
+            width: lineWidth
+            x: mouseX-lineWidth
         }
     }
     // 鼠标触控层
@@ -86,6 +98,7 @@ Window {
         id: mouseArea
         anchors.fill: parent
         hoverEnabled: true
+        acceptedButtons: Qt.LeftButton | Qt.RightButton // 捕获左右键
 
         // 按下
         onPressed: {
@@ -144,6 +157,14 @@ Window {
         onReleased: {
             if(mouseStatus == 1) {
                 console.log("结束，", clipX, clipY, clipW, clipH)
+                if(typeof win.onClosed === "function")
+                    win.onClosed() // 调用关闭函数
+            }
+        }
+        // Esc 退出
+        focus: true
+        Keys.onPressed: {
+            if (event.key === Qt.Key_Escape) {
                 if(typeof win.onClosed === "function")
                     win.onClosed() // 调用关闭函数
             }
