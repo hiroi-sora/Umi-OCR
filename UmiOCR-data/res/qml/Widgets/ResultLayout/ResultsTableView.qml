@@ -7,6 +7,7 @@ import QtQuick.Controls 2.15
 import "../"
 
 Item {
+    ListModel { id: resultsModel } // OCR结果模型
 
     // ========================= 【对外接口】 =========================
 
@@ -56,7 +57,6 @@ Item {
     
     // ========================= 【布局】 =========================
 
-    ListModel { id: resultsModel }
     anchors.fill: parent
     clip: true // 溢出隐藏
     property bool autoToBottom: true // 自动滚动到底部

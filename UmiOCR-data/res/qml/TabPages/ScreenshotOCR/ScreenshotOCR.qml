@@ -6,9 +6,13 @@ import QtQuick 2.15
 
 import ".."
 import "../../Widgets"
+import "../../Widgets/ResultLayout"
 
 TabPage {
     id: tabPage
+    // 配置
+    ScreenshotOcrConfigs { id: screenshotOcrConfigs } 
+    configsComp: screenshotOcrConfigs
 
     // ========================= 【逻辑】 =========================
 
@@ -20,6 +24,9 @@ TabPage {
 
     // 截图完毕
     function screenshotEnd(argd) {
+        const x = argd["clipX"], y = argd["clipY"], w = argd["clipW"], h = argd["clipH"]
+        if(x < 0 || y < 0 || w <= 0 || h <= 0) // 裁切区域无实际像素
+            return
         const clipID = tabPage.callPy("screenshotEnd", argd)
         if(clipID.startsWith("[Error]")) {
             qmlapp.popup.message(qsTr("截图裁切异常"), clipID, "error")
@@ -32,7 +39,7 @@ TabPage {
     // TODO: 测试用
     Timer {
         interval: 200
-        running: true
+        // running: true
         onTriggered: {
             screenshot()
         }
@@ -112,6 +119,32 @@ TabPage {
         // 右面板
         rightItem: Panel {
             anchors.fill: parent
+
+            TabPanel {
+                id: tabPanel
+                anchors.fill: parent
+                anchors.margins: theme.spacing
+
+                // 结果面板
+                ResultsTableView {
+                    id: resultsTableView
+                    anchors.fill: parent
+                    visible: false
+                }
+
+                tabsModel: [
+                    {
+                        "key": "configs",
+                        "title": qsTr("设置"),
+                        "component": screenshotOcrConfigs.panelComponent,
+                    },
+                    {
+                        "key": "ocrResult",
+                        "title": qsTr("记录"),
+                        "component": resultsTableView,
+                    },
+                ]
+            }
         }
     }
 }

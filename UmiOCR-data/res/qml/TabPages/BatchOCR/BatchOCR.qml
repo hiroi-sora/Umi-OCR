@@ -12,12 +12,11 @@ import "../../js/utils.js" as Utils
 
 TabPage {
     id: tabPage
-
-    // ========================= 【逻辑】 =========================
-
     // 配置
     BatchOcrConfigs { id: batchOcrConfigs } 
     configsComp: batchOcrConfigs
+
+    // ========================= 【逻辑】 =========================
 
     // 文件表格模型
     property alias filesModel: filesTableView.filesModel
