@@ -20,7 +20,13 @@ TabPage {
 
     // 截图完毕
     function screenshotEnd(argd) {
-        const res = tabPage.callPy("screenshotEnd", argd)
+        const clipID = tabPage.callPy("screenshotEnd", argd)
+        if(clipID.startsWith("[Error]")) {
+            qmlapp.popup.message(qsTr("截图裁切异常"), clipID, "error")
+            return
+        }
+        console.log("裁切成功", clipID)
+        showImage.source = "image://pixmapprovider/"+clipID
     }
     
     // TODO: 测试用
@@ -96,8 +102,10 @@ TabPage {
             anchors.fill: parent
 
             Image {
+                id: showImage
                 anchors.fill: parent
-                source: "image://pixmapprovider/123"
+                fillMode: Image.PreserveAspectFit
+                source: ""
             }
         }
 

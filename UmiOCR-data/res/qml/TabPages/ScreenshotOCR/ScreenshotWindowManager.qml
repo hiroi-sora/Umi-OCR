@@ -47,7 +47,7 @@ Item {
 
     // 截图完毕的回调
     function ssEnd(argd) {
-        // 关闭所有覆盖窗口，获取所有图片id
+        // 关闭所有覆盖窗口。同时获取所有图片id以便删除其缓存占用
         let allImgID = []
         for (let key in winDict) {
             allImgID.push(winDict[key].imgID)

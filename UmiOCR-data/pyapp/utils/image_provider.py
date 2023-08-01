@@ -12,10 +12,10 @@ from uuid import uuid4  # 唯一ID
 class PixmapProviderClass(QQuickImageProvider):
     def __init__(self):
         super().__init__(QQuickImageProvider.Pixmap)
-        self.pixmapDict = {}  # 存放所有pixmap的字典
+        self.pixmapDict = {}  # 缓存所有pixmap的字典
 
-    # 向qml返回图片
-    def requestPixmap(self, imgID, size, resSize):
+    # 向qml返回图片，imgID不存在时返回警告图
+    def requestPixmap(self, imgID, size=None, resSize=None):
         if imgID not in self.pixmapDict:
             print(f"【Error】请求Pixmap，传入不存在的imgID：{imgID}")
             pixmap = QPixmap(1, 100)
@@ -32,6 +32,18 @@ class PixmapProviderClass(QQuickImageProvider):
         imgID = str(uuid4())
         self.pixmapDict[imgID] = pixmap
         return imgID
+
+    # 向py返回图片，相当于requestPixmap，但imgID不存在时返回None
+    def getPixmap(self, imgID):
+        return self.pixmapDict.get(imgID, None)
+
+    # 从pixmapDict缓存中删除一个或一批图片
+    def delPixmap(self, imgIDs):
+        if type(imgIDs) == str:
+            imgIDs = [imgIDs]
+        for i in imgIDs:
+            if i in self.pixmapDict:
+                del self.pixmapDict[i]
 
 
 # 图片提供器 单例
