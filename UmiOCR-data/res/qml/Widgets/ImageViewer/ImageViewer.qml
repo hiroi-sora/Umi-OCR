@@ -11,45 +11,52 @@ Item {
 
     // 设置图片源，展示一张图片
     function setSource(source) {
-        showImage.source = source
-        imageScaleAddSub(0)
+        showImage.source = source // 设置源
+        imageW = showImage.sourceSize.width // 记录图片宽高
+        imageH = showImage.sourceSize.height
+        imageW2 = imageW*0.5
+        imageH2 = imageH*0.5
+        imageX = 0 // 中心位置归零
+        imageY = 0
+        imageScale = Math.min(flickable.width/imageW, flickable.height/imageH)
+        updateImageXY()
+    }
+
+    // 根据中心位置，更新Image的图片实际位置
+    function updateImageXY() {
+        flickable.contentY = imageY - (flickable.height - showImageContainer.height)/2
+        flickable.contentX = imageX - (flickable.width - showImageContainer.width)/2
     }
 
     // 缩放，传入 flag>0 放大， <0 缩小 ，0回归100%
     function imageScaleAddSub(flag, step=0.1) {
         // 计算缩放比例
-        if (flag === 0) { // 复原
-            imageScale = 1.0
+        let s = 1.0 // flag==0 时复原
+        if (flag > 0) {  // 放大
+            s = (imageScale + step).toFixed(1)
+            if(s > 2.0) s = 2.0
         }
-        else if (flag > 0) {  // 放大
-            imageScale = (imageScale + step).toFixed(1)
-            if(imageScale > 2) imageScale = 2
+        else if(flag < 0) {  // 缩小
+            s = (imageScale - step).toFixed(1)
+            if(s < 0.1) s = 0.1
         }
-      
-        else {  // 缩小
-            imageScale = (imageScale - step).toFixed(1)
-            if(imageScale < 0.1) imageScale = 0.1
-        }
-        // 计算缩放宽高
-        const w = showImage.sourceSize.width * imageScale
-        const h = showImage.sourceSize.height * imageScale
-        // 计算偏移量
-        const offsetX = (showImage.width - w) / 2
-        const offsetY = (showImage.height - h) / 2
-        // 应用缩放和偏移
-        showImage.width = w
-        showImage.height = h
-        flickable.contentX = (w - flickable.width)/2
-        flickable.contentY = (h - flickable.height)/2
+        imageScale = s
+        updateImageXY()
     }
     
-    // ========================= 【布局】 =========================
+    // ======================== 【布局】 =========================
 
-    property real imageScale: 1.0 // 图片比例
+    property real imageScale: 1.0 // 图片缩放比例
+    property real imageX: 0 // 图片偏移坐标，以 flickable 中心为原点
+    property real imageY: 0
+    property int imageW: 0 // 图片宽高
+    property int imageH: 0
+    property int imageW2: 0 // 图片宽高的一半
+    property int imageH2: 0
 
     // 图片区域
     Rectangle {
-        id: showImageContainer
+        id: flickableContainer
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
@@ -62,14 +69,20 @@ Item {
         Flickable {
             id: flickable
             anchors.fill: parent
-            contentWidth: showImage.width
-            contentHeight: showImage.height
+            contentWidth: showImageContainer.width
+            contentHeight: showImageContainer.height
             clip: true
-            boundsBehavior: Flickable.DragOverBounds
             
-            Image {
-                id: showImage
-                fillMode: Image.Stretch
+            // 图片容器，大小不小于滑动区域
+            Item {
+                id: showImageContainer
+                width: Math.max( imageW * imageScale , flickable.width )
+                height: Math.max( imageH * imageScale , flickable.height )
+                Image {
+                    id: showImage
+                    anchors.centerIn: parent
+                    scale: imageScale
+                }
             }
 
             // 滚动条
