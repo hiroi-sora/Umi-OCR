@@ -10,7 +10,7 @@ import "../"
 Item {
     id: resultRoot
 
-    property string resStatus: "" // 状态， text / noText / error
+    property string status_: "" // 状态， text / noText / error
     property alias textLeft: textLeft.text
     property alias textRight: textRight.text
     property alias textMain: textMain.text
@@ -77,7 +77,7 @@ Item {
             readOnly: false // 可编辑
             selectByMouse: true // 允许鼠标选择文本
             selectByKeyboard: true // 允许键盘选择文本
-            color: resStatus==="error"? theme.noColor:theme.textColor
+            color: status_==="error"? theme.noColor:theme.textColor
             font.pixelSize: theme.textSize
             font.family: theme.fontFamily
         }

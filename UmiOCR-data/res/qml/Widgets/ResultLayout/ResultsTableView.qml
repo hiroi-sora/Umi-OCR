@@ -13,7 +13,10 @@ Item {
 
     property alias ctrlBar: ctrlBar // 控制栏的引用
 
-    // 添加一条OCR结果
+    // 添加一条OCR结果。元素：
+    // timestamp 时间戳，秒为单位
+    // title 左边显示标题，可选
+    // code 结果代码， data 结果内容
     function addOcrResult(res) {
         // 提取并转换结果时间
         let date = new Date(res.timestamp * 1000)  // 时间戳转日期对象
@@ -25,27 +28,28 @@ Item {
         let seconds = ('0' + date.getSeconds()).slice(-2)
         let dateTimeString = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
         // 提取结果文本和状态
-        let resStatus = ""
+        let status_ = ""
         let resText = ""
         switch(res.code){
             case 100: // 成功
-                resStatus = "text"
+                status_ = "text"
                 const textArray = res.data.map(item => item.text);
                 resText = textArray.join('\n');
                 break
             case 101: // 无文字
-                resStatus = "noText"
+                status_ = "noText"
                 break
             default: // 失败
-                resStatus = "error"
+                status_ = "error"
                 resText = qsTr("异常状态码：%1\n异常信息：%2").arg(res.code).arg(res.data)
                 break
         }
+        if(res.title === undefined)
+            res.title = "" // 补充空白参数
         // 添加到列表模型
         resultsModel.append({
-            "resStatus_": resStatus,
-            "path": res.path,
-            "fileName": res.fileName,
+            "status__": status_,
+            "title": res.title,
             "datetime": dateTimeString,
             "resText": resText,
         })
@@ -102,8 +106,8 @@ Item {
         onWidthChanged: tableView.forceLayout()  // 组件宽度变化时重设列宽
         // 元素
         delegate: ResultTextContainer {
-            resStatus: resStatus_
-            textLeft: fileName
+            status_: status__
+            textLeft: title
             textRight: datetime
             textMain: resText
             onTextHeightChanged: tableView.forceLayout // 文字高度改变时重设列宽

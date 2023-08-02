@@ -52,7 +52,6 @@ TabPage {
     function onOcrGet(imgID, res) {
         // 添加到结果
         showImage.source = "image://pixmapprovider/"+imgID
-        res.fileName = res.path = "" // 补充空参数
         resultsTableView.addOcrResult(res)
         // 若tabPanel面板的下标没有变化过，则切换到记录页
         if(tabPanel.indexChangeNum < 2)

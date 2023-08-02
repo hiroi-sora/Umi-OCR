@@ -254,6 +254,7 @@ TabPage {
             "state": state,
         })
         // 提取文字，添加到结果表格
+        res.title = res.fileName
         resultsTableView.addOcrResult(res)
     }
 
