@@ -7,6 +7,7 @@ import QtQuick 2.15
 import ".."
 import "../../Widgets"
 import "../../Widgets/ResultLayout"
+import "../../Widgets/ImageViewer"
 
 TabPage {
     id: tabPage
@@ -17,9 +18,10 @@ TabPage {
     // TODO: 测试用
     Timer {
         interval: 200
-        // running: true
+        running: true
         onTriggered: {
-            screenshot()
+            // screenshot()
+            imageViewer.setSource("file:///D:/Pictures/Screenshots/屏幕截图 2023-04-23 191053.png")
         }
     }
 
@@ -42,8 +44,7 @@ TabPage {
             qmlapp.popup.message(qsTr("截图裁切异常"), clipID, "error")
             return
         }
-        console.log("裁切成功", clipID)
-        showImage.source = "image://pixmapprovider/"+clipID
+        imageViewer.setSource("image://pixmapprovider/"+clipID)
     }
 
     // ========================= 【python调用qml】 =========================
@@ -51,7 +52,7 @@ TabPage {
     // 获取一个OCR的返回值
     function onOcrGet(imgID, res) {
         // 添加到结果
-        showImage.source = "image://pixmapprovider/"+imgID
+        imageViewer.setSource("image://pixmapprovider/"+imgID)
         resultsTableView.addOcrResult(res)
         // 若tabPanel面板的下标没有变化过，则切换到记录页
         if(tabPanel.indexChangeNum < 2)
@@ -67,7 +68,7 @@ TabPage {
     }
 
     // 左控制栏
-    Rectangle {
+    Item {
         id: leftCtrlPanel
         anchors.left: parent.left
         anchors.top: parent.top
@@ -121,12 +122,17 @@ TabPage {
         leftItem: Panel {
             anchors.fill: parent
 
-            Image {
-                id: showImage
+            ImageViewer {
+                id: imageViewer
                 anchors.fill: parent
-                fillMode: Image.PreserveAspectFit
-                source: ""
             }
+
+            // Image {
+            //     id: showImage
+            //     anchors.fill: parent
+            //     fillMode: Image.PreserveAspectFit
+            //     source: ""
+            // }
         }
 
         // 右面板
