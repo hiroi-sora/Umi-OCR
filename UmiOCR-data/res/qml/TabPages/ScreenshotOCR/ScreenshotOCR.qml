@@ -47,6 +47,21 @@ TabPage {
         imageViewer.setSource("image://pixmapprovider/"+clipID)
     }
 
+    // 开始粘贴
+    function paste() {
+        const configDict = screenshotOcrConfigs.getConfigValueDict()
+        const pasteID = tabPage.callPy("paste", configDict)
+        if(pasteID.startsWith("[Error]")) {
+            qmlapp.popup.message(qsTr("获取剪贴板异常"), pasteID, "error")
+            return
+        }
+        else if(pasteID === "[Warning] No image.") {
+            qmlapp.popup.simple(qsTr("剪贴板中未找到图片"), "")
+            return
+        }
+        imageViewer.setSource("image://pixmapprovider/"+pasteID)
+    }
+
     // ========================= 【python调用qml】 =========================
     
     // 获取一个OCR的返回值
@@ -95,9 +110,7 @@ TabPage {
                 icon_: "screenshot"
                 color: theme.textColor
                 toolTip: qsTr("屏幕截图")
-                onClicked: {
-                    tabPage.screenshot()
-                }
+                onClicked: tabPage.screenshot()
             }
             IconButton {
                 anchors.left: parent.left
@@ -106,9 +119,9 @@ TabPage {
                 icon_: "paste"
                 color: theme.textColor
                 toolTip: qsTr("粘贴图片")
+                onClicked: tabPage.paste()
             }
         }
-        // color: "red"
     }
     // 主区域：双栏面板
     DoubleColumnLayout {
@@ -126,13 +139,6 @@ TabPage {
                 id: imageViewer
                 anchors.fill: parent
             }
-
-            // Image {
-            //     id: showImage
-            //     anchors.fill: parent
-            //     fillMode: Image.PreserveAspectFit
-            //     source: ""
-            // }
         }
 
         // 右面板

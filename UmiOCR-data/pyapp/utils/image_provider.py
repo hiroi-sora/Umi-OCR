@@ -3,7 +3,7 @@
 # ==========================================================
 
 from PySide2.QtCore import Qt
-from PySide2.QtGui import QPixmap, QPainter
+from PySide2.QtGui import QPixmap, QImage, QPainter
 from PySide2.QtCore import QByteArray, QBuffer, QIODevice
 from PySide2.QtQuick import QQuickImageProvider
 from uuid import uuid4  # 唯一ID
@@ -46,10 +46,15 @@ class PixmapProviderClass(QQuickImageProvider):
             if i in self.pixmapDict:
                 del self.pixmapDict[i]
 
-    # 将 QPixmap 转换为字节
+    # 将 QPixmap 或 QImage 转换为字节
     @staticmethod
-    def toBytes(pixmap):
-        image = pixmap.toImage()
+    def toBytes(image):
+        if isinstance(image, QPixmap):
+            image = image.toImage()
+        elif not isinstance(image, QImage):
+            raise ValueError(
+                f"[Error] Only QImage or QPixmap can toBytes(), no {str(type(image))}."
+            )
         byteArray = QByteArray()  # 创建一个字节数组
         buffer = QBuffer(byteArray)  # 创建一个缓冲区
         image.save(buffer, "PNG")  # 将 QImage 保存为字节数组
