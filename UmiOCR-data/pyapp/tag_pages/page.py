@@ -19,7 +19,10 @@ class Page(QObject):
         return self.controller.callQml(self.ctrlKey, funcName, *args)
 
     def callQmlInMain(self, funcName, *args):  # python调用qml函数，可在子线程调用
-        return self.controller.callQmlInMain(self.ctrlKey, funcName, *args)
+        self.callFunc(self.callQml, funcName, *args)
+
+    def callFunc(self, func, *args):  # 在主线程中调用py函数
+        return self.controller.callFunc(func, *args)
 
     def getQmlConfigValueDict(self):  # python获取qml配置字典
         return self.controller.callQml(self.ctrlKey, "getConfigValueDict").toVariant()

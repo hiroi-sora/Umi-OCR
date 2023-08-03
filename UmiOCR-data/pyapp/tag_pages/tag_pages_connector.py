@@ -39,9 +39,9 @@ class TagPageConnector(QObject):
         # 当前已实例化的控制器
         self.page = {}
         self.keyIndex = 0  # 用于生成标识符
-        # 信号 异步的python调用主线程的qml
-        self.__callQmlSignal = self.CallSignal()
-        self.__callQmlSignal.signal.connect(self.__callQmlInMain)
+        # 信号 在主线程中调用函数
+        self.__callFuncSignal = self.CallSignal()
+        self.__callFuncSignal.signal.connect(self.__callFunc)
 
     # ========================= 【增删改查】 =========================
 
@@ -117,13 +117,14 @@ class TagPageConnector(QObject):
         # 调用方法，参数不对的话让系统抛出错误
         return method(*args)
 
-    # python异步，在主线程中调用qml函数
-    def callQmlInMain(self, ctrlKey, funcName, *args):
-        self.__callQmlSignal.signal.emit((ctrlKey, funcName, *args))
+    # 在子线程中调用，到主线程中调用python函数
+
+    def callFunc(self, func, *args):
+        self.__callFuncSignal.signal.emit((func, args))
 
     @Slot("QVariant")
-    def __callQmlInMain(self, args):
-        self.callQml(*args)
+    def __callFunc(self, args):
+        args[0](*args[1])
 
     # 信号类
     class CallSignal(QObject):
