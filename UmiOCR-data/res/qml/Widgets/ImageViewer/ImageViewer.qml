@@ -128,6 +128,16 @@ Item {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
 
+            // 保存
+            // IconButton {
+            //     anchors.top: parent.top
+            //     anchors.bottom: parent.bottom
+            //     width: height
+            //     icon_: "save"
+            //     color: theme.textColor
+            //     onClicked: imageScaleFull()
+            //     toolTip: qsTr("保存图片")
+            // }
             // 适合宽高
             IconButton {
                 anchors.top: parent.top
