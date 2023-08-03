@@ -57,7 +57,9 @@ class PixmapProviderClass(QQuickImageProvider):
             )
         byteArray = QByteArray()  # 创建一个字节数组
         buffer = QBuffer(byteArray)  # 创建一个缓冲区
-        image.save(buffer, "PNG")  # 将 QImage 保存为字节数组
+        buffer.open(QBuffer.WriteOnly)
+        image.save(buffer, "JPEG")  # 将 QImage 保存为字节数组
+        buffer.close()
         bytesData = byteArray.data()  # 获取字节数组的内容
         return bytesData
 
