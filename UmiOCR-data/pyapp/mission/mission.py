@@ -42,6 +42,7 @@ class Mission:
                 msnInfo[k] = (lambda key: lambda *e: print(f"空回调 {key}"))(k)
         # 任务状态state:  waiting 等待开始， running 进行中， stop 要求停止
         msnInfo["state"] = "waiting"
+        msnInfo["msnID"] = msnID
         # 添加到任务队列
         self.__msnMutex.lock()  # 上锁
         self.__msnInfoDict[msnID] = msnInfo  # 添加任务信息

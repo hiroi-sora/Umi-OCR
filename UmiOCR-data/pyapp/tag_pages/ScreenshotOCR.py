@@ -73,6 +73,8 @@ class ScreenshotOCR(Page):
             imgPathList = findImages(imgPathList, False)  # 过滤，保留图片的路径
             if len(imgPathList) == 0:
                 return "[Warning] No image."
+            if len(imgPathList) > 10:
+                imgPathList = imgPathList[:10]  # 安全措施，防止一次加载太多图片
             idList = self.__msnPaths(imgPathList, configDict)
             if len(idList) > 0:
                 return idList[0]
@@ -81,6 +83,12 @@ class ScreenshotOCR(Page):
             return "[Warning] No image."
         else:
             return "[Warning] No image."
+
+    def msnStop(self):  # 停止全部任务
+        for i in self.msnDict:
+            MissionOCR.stopMissionList(i)
+        self.msnDict = {}
+        self.callQml("setMsnState", "none")
 
     # ========================= 【OCR 任务控制】 =========================
 
@@ -102,7 +110,7 @@ class ScreenshotOCR(Page):
             pixmap = QPixmap.fromImage(image)
             imgID = PixmapProvider.addPixmap(pixmap)  # 存入提供器
             msnList.append({"bytes": bytesData, "imgID": imgID})
-            idList.append(imgID)
+        idList.append(imgID)
         if len(idList) > 0:
             self.__msn(msnList, configDict)
         return idList
@@ -120,6 +128,7 @@ class ScreenshotOCR(Page):
         msnID = MissionOCR.addMissionList(msnInfo, msnList)
         if msnID:  # 添加成功
             self.msnDict[msnID] = None
+            self.callQml("setMsnState", "run")
         else:  # 添加任务失败
             self.__onEnd(None, "[Error] Failed to add task.\n【错误】添加任务失败。")
 
@@ -145,4 +154,7 @@ class ScreenshotOCR(Page):
 
     def __onEnd(self, msnInfo, msg):  # 任务队列完成或失败
         # msg: [Success] [Warning] [Error]
-        pass
+        if msnInfo["msnID"] in self.msnDict:
+            del self.msnDict[msnInfo["msnID"]]
+        if not self.msnDict:
+            self.callQmlInMain("setMsnState", "none")

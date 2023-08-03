@@ -14,6 +14,7 @@ TabPage {
     // 配置
     ScreenshotOcrConfigs { id: screenshotOcrConfigs } 
     configsComp: screenshotOcrConfigs
+    property string msnState: "none" // OCR任务状态， none run
     
     // TODO: 测试用
     Timer {
@@ -62,6 +63,28 @@ TabPage {
         imageViewer.setSource("image://pixmapprovider/"+pasteID)
     }
 
+    // 停止所有任务
+    function msnStop() {
+        tabPage.callPy("msnStop")
+    }
+
+    // 关闭页面
+    function closePage() {
+        if(msnState !== "none") {
+            const argd = {yesText: qsTr("依然关闭")}
+            const callback = (flag)=>{
+                if(flag) {
+                    msnStop()
+                    delPage()
+                }
+            }
+            qmlapp.popup.dialog("", qsTr("任务正在进行中。\n要结束任务并关闭页面吗？"), callback, "warning", argd)
+        }
+        else {
+            delPage()
+        }
+    }
+
     // ========================= 【python调用qml】 =========================
     
     // 获取一个OCR的返回值
@@ -72,6 +95,11 @@ TabPage {
         // 若tabPanel面板的下标没有变化过，则切换到记录页
         if(tabPanel.indexChangeNum < 2)
             tabPanel.currentIndex = 1
+    }
+
+    // 设置任务状态
+    function setMsnState(flag) {
+        msnState = flag
     }
 
     // ========================= 【布局】 =========================
@@ -120,6 +148,16 @@ TabPage {
                 color: theme.textColor
                 toolTip: qsTr("粘贴图片")
                 onClicked: tabPage.paste()
+            }
+            IconButton {
+                visible: msnState==="run"
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: width
+                icon_: "stop"
+                color: theme.noColor
+                toolTip: qsTr("停止任务")
+                onClicked: tabPage.msnStop()
             }
         }
     }

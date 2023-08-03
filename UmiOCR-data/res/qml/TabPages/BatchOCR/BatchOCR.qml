@@ -21,7 +21,7 @@ TabPage {
     // 文件表格模型
     property alias filesModel: filesTableView.filesModel
     property alias filesDict: filesTableView.filesDict
-    property string msnState: "" // OCR任务状态
+    property string msnState: "" // OCR任务状态， none init run stop
     property var missionInfo: {} // 当前任务信息，耗时等
     property string missionShow: "" // 当前任务信息展示字符串
 
@@ -157,7 +157,6 @@ TabPage {
     // 关闭页面
     function closePage() {
         if(msnState !== "none") {
-            console.log("任务进行中，不允许关闭页面！")
             const argd = {yesText: qsTr("依然关闭")}
             const callback = (flag)=>{
                 if(flag) {
@@ -165,7 +164,7 @@ TabPage {
                     delPage()
                 }
             }
-            qmlapp.popup.dialog("", qsTr("任务进行中。仍要关闭页面吗？"), callback, "warning", argd)
+            qmlapp.popup.dialog("", qsTr("任务正在进行中。\n要结束任务并关闭页面吗？"), callback, "warning", argd)
         }
         else {
             delPage()
