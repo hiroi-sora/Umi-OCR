@@ -4,7 +4,7 @@
 
 from .page import Page  # 页基类
 from ..mission.mission_ocr import MissionOCR  # 任务管理器
-from ..utils.utils import allowedFileName
+from ..utils.utils import allowedFileName, findImages as findImages_
 from ..platform import Platform  # 跨平台
 
 # 输出器
@@ -27,42 +27,7 @@ class BatchOCR(Page):
     # ========================= 【qml调用python】 =========================
 
     def findImages(self, paths, isRecurrence):  # 接收路径列表，在路径中搜索图片。
-        # isRecurrence 递归读取
-        suf = [
-            ".jpg",
-            ".jpe",
-            ".jpeg",
-            ".jfif",
-            ".png",
-            ".webp",
-            ".bmp",
-            ".tif",
-            ".tiff",
-        ]
-
-        def isImg(path):  # 路径是图片返回true
-            return os.path.splitext(path)[-1].lower() in suf
-
-        imgPaths = []
-        for p in paths:
-            if os.path.isfile(p) and isImg(p):  # 是文件，直接判断
-                imgPaths.append(os.path.abspath(p))
-            elif os.path.isdir(p):  # 是路径
-                if isRecurrence:  # 需要递归
-                    for root, dirs, files in os.walk(p):
-                        print("dirs: ", dirs)
-                        for file in files:
-                            if isImg(file):  # 收集子文件
-                                imgPaths.append(
-                                    os.path.abspath(os.path.join(root, file))
-                                )  # 将路径转换为绝对路径
-                else:  # 不递归读取子文件夹
-                    for file in os.listdir(p):
-                        if os.path.isfile(os.path.join(p, file)) and isImg(file):
-                            imgPaths.append(os.path.abspath(os.path.join(p, file)))
-        for i, p in enumerate(imgPaths):  # 规范化正斜杠
-            imgPaths[i] = p.replace("\\", "/")
-        return imgPaths
+        return findImages_(paths, isRecurrence)
 
     def msnPaths(self, paths, argd):  # 接收路径列表和配置参数字典，开始OCR任务
         # 任务信息

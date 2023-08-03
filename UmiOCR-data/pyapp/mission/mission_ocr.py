@@ -32,13 +32,17 @@ class __MissionOcrClass(Mission):
             return ""  # 更新成功 TODO: continue
 
     def msnTask(self, msnInfo, msn):  # 执行msn
-        res = {"error": f"[Error] Unknown task type.\n【异常】未知的任务类型。\n{msn}"}
         if "path" in msn:
             res = self.__api.runPath(msn["path"])
         elif "bytes" in msn:
             res = self.__api.runBytes(msn["bytes"])
         elif "clipboard" in msn:
             res = self.__api.runClipboard()
+        else:
+            res = {
+                "code": 901,
+                "data": f"[Error] Unknown task type.\n【异常】未知的任务类型。\n{str(msn)[:100]}",
+            }
         return res
 
     # ========================= 【qml接口】 =========================
