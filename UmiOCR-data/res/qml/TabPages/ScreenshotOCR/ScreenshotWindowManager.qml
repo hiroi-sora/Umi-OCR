@@ -47,14 +47,11 @@ Item {
 
     // 截图完毕的回调
     function ssEnd(argd) {
-        // 关闭所有覆盖窗口。同时获取所有图片id以便删除其缓存占用
-        let allImgID = []
+        // 关闭所有覆盖窗口
         for (let key in winDict) {
-            allImgID.push(winDict[key].imgID)
             winDict[key].destroy()
         }
         winDict = {}
-        argd.allImgID = allImgID
         // 向父级回报
         ssWinRoot.screenshotEnd(argd)
     }

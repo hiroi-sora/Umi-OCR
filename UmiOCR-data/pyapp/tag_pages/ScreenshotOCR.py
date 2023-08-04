@@ -16,6 +16,7 @@ class ScreenshotOCR(Page):
     def __init__(self, *args):
         super().__init__(*args)
         self.msnDict = {}
+        self.ssImgIDs = []  # 缓存当前完整截屏id
 
     # ========================= 【qml调用python】 =========================
 
@@ -32,6 +33,7 @@ class ScreenshotOCR(Page):
                     "screenName": screen.name(),
                 }
             )
+            self.ssImgIDs.append(imgID)
         return grabList
 
     # 截图完毕，前端提供裁切数据，py裁切图片并提交OCR，返回裁切小图
@@ -46,8 +48,9 @@ class ScreenshotOCR(Page):
             return e
         pixmap = pixmap.copy(x, y, w, h)  # 进行裁切
         clipID = PixmapProvider.addPixmap(pixmap)  # 存入提供器，获取imgID
-        if "allImgID" in argd:  # 删除完整图片的缓存
-            PixmapProvider.delPixmap(argd["allImgID"])
+        # 删除截屏图片的缓存
+        PixmapProvider.delPixmap(self.ssImgIDs)
+        self.ssImgIDs = []
         self.__msnImage(pixmap, clipID, configDict)  # 开始OCR
         return clipID
 
