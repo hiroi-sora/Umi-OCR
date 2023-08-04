@@ -51,16 +51,23 @@ TabPage {
     // 开始粘贴
     function paste() {
         const configDict = screenshotOcrConfigs.getConfigValueDict()
-        const pasteID = tabPage.callPy("paste", configDict)
-        if(pasteID.startsWith("[Error]")) {
-            qmlapp.popup.message(qsTr("获取剪贴板异常"), pasteID, "error")
+        const res = tabPage.callPy("paste", configDict)
+        if(res.error) {
+            if(res.error.startsWith("[Error]")) {
+                qmlapp.popup.message(qsTr("获取剪贴板异常"), res.err, "error")
+            }
+            else if(res.error === "[Warning] No image.") {
+                qmlapp.popup.simple(qsTr("剪贴板中未找到图片"), "")
+            }
             return
         }
-        else if(pasteID === "[Warning] No image.") {
-            qmlapp.popup.simple(qsTr("剪贴板中未找到图片"), "")
-            return
+        if(res.imgID) { // 缓存图片类型
+            imageViewer.setSource("image://pixmapprovider/"+res.imgID)
         }
-        imageViewer.setSource("image://pixmapprovider/"+pasteID)
+        else if(res.paths) { // 地址类型
+            qmlapp.popup.simple(qsTr("粘贴%1条图片路径").arg(res.paths.length), res.paths[0])
+            imageViewer.setSource("")
+        }
     }
 
     // 停止所有任务
@@ -88,10 +95,13 @@ TabPage {
     // ========================= 【python调用qml】 =========================
     
     // 获取一个OCR的返回值
-    function onOcrGet(imgID, res) {
+    function onOcrGet(res, imgID="", imgPath="") {
         // 添加到结果
-        imageViewer.setSource("image://pixmapprovider/"+imgID)
         resultsTableView.addOcrResult(res)
+        if(imgID) // 图片类型
+            imageViewer.setSource("image://pixmapprovider/"+imgID)
+        else if(imgPath) // 地址类型
+            imageViewer.setSource("file:///"+imgPath)
         // 若tabPanel面板的下标没有变化过，则切换到记录页
         if(tabPanel.indexChangeNum < 2)
             tabPanel.currentIndex = 1

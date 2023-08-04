@@ -17,6 +17,7 @@ class ScreenshotOCR(Page):
         super().__init__(*args)
         self.msnDict = {}
         self.ssImgIDs = []  # 缓存当前完整截屏id
+        self.showImgIDs = []  # 缓存当前展示图片id
 
     # ========================= 【qml调用python】 =========================
 
@@ -58,34 +59,33 @@ class ScreenshotOCR(Page):
     def paste(self, configDict):
         # 获取剪贴板数据
         mime_data = Clipboard.mimeData()
+        res = {}  # 结果字典
         # 检查剪贴板的内容，若是图片，则提取它并扔给OCR
         if mime_data.hasImage():
             image = Clipboard.image()
             pixmap = QPixmap.fromImage(image)
             pasteID = PixmapProvider.addPixmap(pixmap)  # 存入提供器
             self.__msnImage(image, pasteID, configDict)
-            return pasteID
+            res["imgID"] = pasteID
         # 若为URL
         elif mime_data.hasUrls():
             urlList = mime_data.urls()
-            imgPathList = []
+            paths = []
             for url in urlList:  # 遍历URL列表，提取其中的文件
                 if url.isLocalFile():
                     p = url.toLocalFile()
-                    imgPathList.append(p)
-            imgPathList = findImages(imgPathList, False)  # 过滤，保留图片的路径
-            if len(imgPathList) == 0:
-                return "[Warning] No image."
-            if len(imgPathList) > 10:
-                imgPathList = imgPathList[:10]  # 安全措施，防止一次加载太多图片
-            idList = self.__msnPaths(imgPathList, configDict)
-            if len(idList) > 0:
-                return idList[0]
-            return "[Warning] No image."
+                    paths.append(p)
+            paths = findImages(paths, False)  # 过滤，保留图片的路径
+            if len(paths) == 0:  # 没有有效图片
+                res["error"] = "[Warning] No image."
+            else:  # 将有效图片地址传入OCR，返回地址列表
+                self.__msnPaths(paths, configDict)
+                res["paths"] = paths
         elif mime_data.hasText():
-            return "[Warning] No image."
+            res["error"] = "[Warning] No image."
         else:
-            return "[Warning] No image."
+            res["error"] = "[Warning] No image."
+        return res  # 返回结果字典
 
     def msnStop(self):  # 停止全部任务
         for i in self.msnDict:
@@ -104,19 +104,8 @@ class ScreenshotOCR(Page):
 
     # 传入路径列表，提交OCR任务，返回图片缓存ID
     def __msnPaths(self, paths, configDict):
-        msnList = []
-        idList = []
-        for i in paths:
-            # 读取图片，获取字节，缓存ID
-            image = QImage(i)
-            bytesData = PixmapProvider.toBytes(image)
-            pixmap = QPixmap.fromImage(image)
-            imgID = PixmapProvider.addPixmap(pixmap)  # 存入提供器
-            msnList.append({"bytes": bytesData, "imgID": imgID})
-        idList.append(imgID)
-        if len(idList) > 0:
-            self.__msn(msnList, configDict)
-        return idList
+        msnList = [{"path": x} for x in paths]
+        self.__msn(msnList, configDict)
 
     # 开始任务
     def __msn(self, msnList, configDict):
@@ -153,7 +142,9 @@ class ScreenshotOCR(Page):
                 score /= num
         res["score"] = score
         # 通知qml更新UI
-        self.callQmlInMain("onOcrGet", msn["imgID"], res)  # 在主线程中调用qml
+        imgID = msn.get("imgID", "")
+        imgPath = msn.get("path", "")
+        self.callQmlInMain("onOcrGet", res, imgID, imgPath)  # 在主线程中调用qml
 
     def __onEnd(self, msnInfo, msg):  # 任务队列完成或失败
         # msg: [Success] [Warning] [Error]
