@@ -80,10 +80,6 @@ Item {
         settings.save()
         console.log("% TabViewManager 初始化页面完毕！")
     }
-    Component.onCompleted: {
-        // 延迟加载
-        qmlapp.initFuncs.push(init)
-    }
 
     // ========================= 【增删改查】 =========================
 

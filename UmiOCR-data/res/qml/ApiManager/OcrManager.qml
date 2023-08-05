@@ -189,13 +189,17 @@ QtObject {
         }
     }
 
+    // 必须等全局配置初始化完毕后才能初始化OCR管理器
+    function init() {
+        applyConfigs(false)
+        console.log("% OcrManager 初始化OCR管理器完毕！")
+    }
+
     // ========================= 【内部】 =========================
     property string apiKey: "" // 当前选定的apiKey
     property var deployDict: {} // 存放 部署了配置的页面
 
     Component.onCompleted: {
         deployDict = {}
-        qmlapp.initFuncs.push2(()=>{applyConfigs(false)})
-        console.log("% OcrManager 初始化OCR管理器完毕！")
     }
 }
