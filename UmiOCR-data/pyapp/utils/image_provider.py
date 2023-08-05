@@ -45,6 +45,7 @@ class PixmapProviderClass(QQuickImageProvider):
         for i in imgIDs:
             if i in self.pixmapDict:
                 del self.pixmapDict[i]
+        print(f"删除图片缓存，剩余：{len(self.pixmapDict)}")
 
     # 将 QPixmap 或 QImage 转换为字节
     @staticmethod

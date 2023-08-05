@@ -49,6 +49,7 @@ class ScreenshotOCR(Page):
             return e
         pixmap = pixmap.copy(x, y, w, h)  # 进行裁切
         clipID = PixmapProvider.addPixmap(pixmap)  # 存入提供器，获取imgID
+        self.showImgIDs.append(clipID)
         # 删除截屏图片的缓存
         PixmapProvider.delPixmap(self.ssImgIDs)
         self.ssImgIDs = []
@@ -65,6 +66,7 @@ class ScreenshotOCR(Page):
             image = Clipboard.image()
             pixmap = QPixmap.fromImage(image)
             pasteID = PixmapProvider.addPixmap(pixmap)  # 存入提供器
+            self.showImgIDs.append(pasteID)
             self.__msnImage(image, pasteID, configDict)
             res["imgID"] = pasteID
         # 若为URL
@@ -87,11 +89,16 @@ class ScreenshotOCR(Page):
             res["error"] = "[Warning] No image."
         return res  # 返回结果字典
 
-    def msnStop(self):  # 停止全部任务
+    # 停止全部任务
+    def msnStop(self):
+        self.callQml("setMsnState", "none")
         for i in self.msnDict:
             MissionOCR.stopMissionList(i)
         self.msnDict = {}
-        self.callQml("setMsnState", "none")
+        PixmapProvider.delPixmap(self.showImgIDs)
+        self.showImgIDs = []
+        PixmapProvider.delPixmap(self.ssImgIDs)
+        self.ssImgIDs = []
 
     # ========================= 【OCR 任务控制】 =========================
 
@@ -148,7 +155,17 @@ class ScreenshotOCR(Page):
 
     def __onEnd(self, msnInfo, msg):  # 任务队列完成或失败
         # msg: [Success] [Warning] [Error]
-        if msnInfo["msnID"] in self.msnDict:
-            del self.msnDict[msnInfo["msnID"]]
-        if not self.msnDict:
-            self.callQmlInMain("setMsnState", "none")
+
+        def update():
+            # 清除任务id
+            if msnInfo["msnID"] in self.msnDict:
+                del self.msnDict[msnInfo["msnID"]]
+            # 所有任务都完成了
+            if not self.msnDict:
+                # 停止前端显示
+                self.callQml("setMsnState", "none")
+                # 删除缓存列表中除了最后一项以外的图片。最后一项可能正在展示中所以不能删
+                PixmapProvider.delPixmap(self.showImgIDs[:-1])
+                del self.showImgIDs[:-1]
+
+        self.callFunc(update)  # 在主线程中执行

@@ -118,7 +118,6 @@ class TagPageConnector(QObject):
         return method(*args)
 
     # 在子线程中调用，到主线程中调用python函数
-
     def callFunc(self, func, *args):
         self.__callFuncSignal.signal.emit((func, args))
 
