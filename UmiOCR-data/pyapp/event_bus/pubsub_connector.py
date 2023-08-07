@@ -15,9 +15,6 @@ class PubSubConnector(QObject):
         if not func:
             print(f"[Error] qml订阅事件失败！未在 {item} 中找到函数 {funcName} 。")
             return
-        if not callable(func):
-            print(f"[Error] qml订阅事件失败！{item} 的属性 {funcName} 不可调用。")
-            return
         PubSubService.subscribe(title, func)
 
     # 取消订阅事件
@@ -26,9 +23,6 @@ class PubSubConnector(QObject):
         func = getattr(item, funcName, None)
         if not func:
             print(f"[Error] qml取消订阅事件失败！未在 {item} 中找到函数 {funcName} 。")
-            return
-        if not callable(func):
-            print(f"[Error] qml取消订阅事件失败！{item} 的属性 {funcName} 不可调用。")
             return
         PubSubService.unsubscribe(title, func)
 

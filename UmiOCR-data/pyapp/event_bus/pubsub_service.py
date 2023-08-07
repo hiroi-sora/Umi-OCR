@@ -19,16 +19,22 @@ class __PubSubServiceClass:
 
     # 订阅事件
     def subscribe(self, title, func):
+        if not callable(func):
+            print(f"[Error] 订阅事件失败！{func} 不可调用。")
+            return
         self.__eventDictMutex.lock()  # 上锁
         if title not in self.__eventDict:
             self.__eventDict[title] = [func]
         else:
-            self.__eventDict[title].append([func])
+            self.__eventDict[title].append(func)
         self.__eventDictMutex.unlock()  # 解锁
         print("== 加入订阅：", title, self.__eventDict[title])
 
     # 取消订阅事件
     def unsubscribe(self, title, func):
+        if not callable(func):
+            print(f"[Error] 取消订阅事件失败！{func} 不可调用。")
+            return
         # 将回调函数从 对应标题的事件列表中 移除
         self.__eventDictMutex.lock()  # 上锁
         if title in self.__eventDict:
@@ -63,7 +69,7 @@ class __PubSubServiceClass:
                 try:
                     func(*args)
                 except Exception as e:
-                    print(f"[Error] 发送事件异常。{e}\n原始信息： {title} - {args}")
+                    print(f"[Error] 发送事件异常。{e}\n原始信息： {title} - {args}\nfunc：{func}")
         self.__eventDictMutex.unlock()  # 解锁
 
     # 信号类
