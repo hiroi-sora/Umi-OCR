@@ -82,14 +82,31 @@ TabPage {
             const callback = (flag)=>{
                 if(flag) {
                     msnStop()
+                    eventUnsub()
                     delPage()
                 }
             }
             qmlapp.popup.dialog("", qsTr("任务正在进行中。\n要结束任务并关闭页面吗？"), callback, "warning", argd)
         }
         else {
+            eventUnsub()
             delPage()
         }
+    }
+
+    // ========================= 【事件管理】 =========================
+
+    Component.onCompleted: {
+        eventSub() // 订阅事件
+    }
+    // 订阅事件
+    function eventSub() {
+        qmlapp.pubSub.subscribeGroup("<<screenshot>>", this, "screenshot", ctrlKey)
+        qmlapp.pubSub.subscribeGroup("<<paste>>", this, "paste", ctrlKey)
+    }
+    // 取消订阅事件
+    function eventUnsub() {
+        qmlapp.pubSub.unsubscribeGroup(ctrlKey)
     }
 
     // ========================= 【python调用qml】 =========================

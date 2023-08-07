@@ -31,7 +31,6 @@ class __PubSubServiceClass:
         else:
             self.__eventDict[title].append(func)
         self.__eventDictMutex.unlock()  # 解锁
-        print("== 加入订阅：", title, self.__eventDict[title])
 
     # 订阅事件，可额外传入组名，以便管理。
     def subscribeGroup(self, title, func, groupName):
@@ -41,7 +40,6 @@ class __PubSubServiceClass:
         else:
             self.__groupDict[groupName].append((title, func))
         self.__groupDictMutex.unlock()  # 解锁
-        print("== 加入订阅组：", groupName)
         self.subscribe(title, func)
 
     # 取消订阅事件
@@ -56,7 +54,6 @@ class __PubSubServiceClass:
             if func in l:
                 l.remove(func)
         self.__eventDictMutex.unlock()  # 解锁
-        print("== 取消订阅：", title, self.__eventDict[title])
 
     # 取消订阅某个组的所有事件
     def unsubscribeGroup(self, groupName):
@@ -66,7 +63,6 @@ class __PubSubServiceClass:
             for i in l:
                 self.unsubscribe(i[0], i[1])
             self.__groupDict[groupName] = []
-        print("== 取消订阅组：", groupName)
         self.__groupDictMutex.unlock()  # 解锁
 
     # 发布事件
