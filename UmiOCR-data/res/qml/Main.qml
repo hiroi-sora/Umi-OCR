@@ -12,6 +12,7 @@ import MissionConnector 1.0 // Python任务连接器
 import "Themes"
 import "TabView_"
 import "Configs"
+import "EventBus"
 import "Popup_"
 import "TabPages/GlobalConfigsPage"
 
@@ -44,12 +45,14 @@ Window {
         TabViewManager { id: tab }  // 标签页逻辑管理器 qmlapp.tab
         PopupManager { id: popup }  // 弹窗管理器 qmlapp.popup
         MissionConnector { id: msnConnector } // 任务连接器 qmlapp.globalConfigs.msnConnector
+        PubSub { id: pubSub } // 全局事件发布/订阅
 
         property alias globalConfigs: globalConfigs
         property alias themeManager: themeManager
         property alias tab: tab
         property alias popup: popup
         property alias msnConnector: msnConnector
+        property alias pubSub: pubSub
         // 记录当前窗口状态，可见时为true。包括正常窗口、最大化、全屏。
         property bool isVisible: rootWindow.visibility==2||rootWindow.visibility==4||rootWindow.visibility==5
 

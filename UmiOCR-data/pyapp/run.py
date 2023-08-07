@@ -7,6 +7,7 @@ from PySide2.QtQml import QQmlApplicationEngine, qmlRegisterType
 
 from .tag_pages.tag_pages_connector import TagPageConnector  # 页面连接器
 from .mission.mission_connector import MissionConnector  # 任务连接器
+from .event_bus.pubsub_connector import PubSubConnector  # 发布/订阅连接器
 from .utils.image_provider import PixmapProvider  # 图片提供器
 
 
@@ -39,6 +40,8 @@ def main():
     qmlRegisterType(TagPageConnector, "TagPageConnector", 1, 0, "TagPageConnector")
     # 任务连接器
     qmlRegisterType(MissionConnector, "MissionConnector", 1, 0, "MissionConnector")
+    # 发布/订阅连接器
+    qmlRegisterType(PubSubConnector, "PubSubConnector", 1, 0, "PubSubConnector")
 
     # 5. 启动翻译
     # trans = QTranslator()
