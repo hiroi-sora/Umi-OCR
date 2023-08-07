@@ -11,6 +11,9 @@ class __PubSubServiceClass:
         # 事件字典，元素为 回调函数列表
         self.__eventDict = {}
         self.__eventDictMutex = QMutex()  # 事件字典的锁
+        # 组字典，元素为 组列表。可以成组取消订阅，方便管理。
+        self.__groupDict = {}
+        self.__groupDictMutex = QMutex()  # 组字典的锁
         # 信号
         self.__eventSignal = self.__EventSignal()
         self.__eventSignal.signal.connect(self.__publish)
@@ -30,6 +33,17 @@ class __PubSubServiceClass:
         self.__eventDictMutex.unlock()  # 解锁
         print("== 加入订阅：", title, self.__eventDict[title])
 
+    # 订阅事件，可额外传入组名，以便管理。
+    def subscribeGroup(self, title, func, groupName):
+        self.__groupDictMutex.lock()  # 上锁
+        if groupName not in self.__groupDict:
+            self.__groupDict[groupName] = [(title, func)]
+        else:
+            self.__groupDict[groupName].append((title, func))
+        self.__groupDictMutex.unlock()  # 解锁
+        print("== 加入订阅组：", groupName)
+        self.subscribe(title, func)
+
     # 取消订阅事件
     def unsubscribe(self, title, func):
         if not callable(func):
@@ -43,6 +57,17 @@ class __PubSubServiceClass:
                 l.remove(func)
         self.__eventDictMutex.unlock()  # 解锁
         print("== 取消订阅：", title, self.__eventDict[title])
+
+    # 取消订阅某个组的所有事件
+    def unsubscribeGroup(self, groupName):
+        self.__groupDictMutex.lock()  # 上锁
+        if groupName in self.__groupDict:
+            l = self.__groupDict[groupName]
+            for i in l:
+                self.unsubscribe(i[0], i[1])
+            self.__groupDict[groupName] = []
+        print("== 取消订阅组：", groupName)
+        self.__groupDictMutex.unlock()  # 解锁
 
     # 发布事件
     def publish(self, title, *args):

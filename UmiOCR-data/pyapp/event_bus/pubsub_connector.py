@@ -17,6 +17,15 @@ class PubSubConnector(QObject):
             return
         PubSubService.subscribe(title, func)
 
+    # 订阅事件，可额外传入组
+    @Slot(str, "QVariant", str, str)
+    def subscribeGroup(self, title, item, funcName, groupName):
+        func = getattr(item, funcName, None)
+        if not func:
+            print(f"[Error] qml订阅事件失败！未在 {item} 中找到函数 {funcName} 。")
+            return
+        PubSubService.subscribeGroup(title, func, groupName)
+
     # 取消订阅事件
     @Slot(str, "QVariant", str)
     def unsubscribe(self, title, item, funcName):
@@ -25,6 +34,11 @@ class PubSubConnector(QObject):
             print(f"[Error] qml取消订阅事件失败！未在 {item} 中找到函数 {funcName} 。")
             return
         PubSubService.unsubscribe(title, func)
+
+    # 取消订阅整个组的事件
+    @Slot(str)
+    def unsubscribeGroup(self, groupName):
+        PubSubService.unsubscribeGroup(groupName)
 
     # 发布事件，在qml扩展此函数。传入 args 为参数列表。
     @Slot(str, list)
