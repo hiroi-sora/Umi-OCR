@@ -167,6 +167,15 @@ Item {
         bar.showTab(index)
     }
 
+    // 改： 展示 obj 页。
+    function showTabPageObj(obj){
+        const index = getTabPageIndex(obj)
+        if(index < 0) {
+            return // 未找到对应页下标
+        }
+        showTabPage(index)
+    }
+
     // 改： 将一个原本在 index 的页移到 go 处。
     function moveTabPage(index, go){
         if(!isIndex(index, pageList, "【Error】移动页面失败：起点"))

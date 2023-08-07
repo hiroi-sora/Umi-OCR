@@ -45,6 +45,7 @@ TabPage {
             qmlapp.popup.message(qsTr("截图裁切异常"), clipID, "error")
             return
         }
+        qmlapp.tab.showTabPageObj(tabPage) // 切换标签页
         imageViewer.setSource("image://pixmapprovider/"+clipID)
     }
 
@@ -61,6 +62,7 @@ TabPage {
             }
             return
         }
+        qmlapp.tab.showTabPageObj(tabPage) // 切换标签页
         if(res.imgID) { // 缓存图片类型
             imageViewer.setSource("image://pixmapprovider/"+res.imgID)
         }
