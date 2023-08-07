@@ -11,6 +11,8 @@ Item {
     property var connector // Python连接器的引用
     property var configsComp: undefined // 该页面的配置组件
 
+    // ========================= 【页面控制】 =========================
+
     // 关闭页面。子类重载后可先向用户弹窗询问，再调用 delPage()
     function closePage() {
         delPage()
@@ -21,8 +23,8 @@ Item {
         qmlapp.tab.delTabPage(index) // 销毁页面
     }
     // 调用Python连接器的func方法名，传入任意个数的args作为参数
-    function callPy(func, ...args) {
-        return connector.callPy(ctrlKey, func, args)
+    function callPy(funcName, ...args) {
+        return connector.callPy(ctrlKey, funcName, args)
     }
     // 获取配置项值字典
     function getConfigValueDict() {
