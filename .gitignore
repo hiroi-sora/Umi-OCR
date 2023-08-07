@@ -15,5 +15,6 @@ UmiOCR-data/.runtime
 UmiOCR-data/lib
 # 允许运行环境压缩包
 !UmiOCR-data/*.7z
+!UmiOCR-data/*.zip
 # 排除缓存
 **__pycache__**
