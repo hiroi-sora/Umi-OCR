@@ -6,7 +6,7 @@ from PySide2.QtCore import QObject, Slot, Signal, QMutex, QThread, QCoreApplicat
 
 
 # 发布/订阅 服务类
-class PubSubServiceClass(QObject):
+class __PubSubServiceClass:
     def __init__(self):
         # 事件字典，元素为 回调函数列表
         self.__eventDict = {}
@@ -63,7 +63,7 @@ class PubSubServiceClass(QObject):
                 try:
                     func(*args)
                 except Exception as e:
-                    print(f"[Error] 发送事件异常。\n{title} - {args}\n{e}")
+                    print(f"[Error] 发送事件异常。{e}\n原始信息： {title} - {args}")
         self.__eventDictMutex.unlock()  # 解锁
 
     # 信号类
@@ -72,4 +72,4 @@ class PubSubServiceClass(QObject):
 
 
 # 发布/订阅 服务单例
-PubSubService = PubSubServiceClass()
+PubSubService = __PubSubServiceClass()
