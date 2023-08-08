@@ -28,7 +28,23 @@ class _KeyTranslator:
 
     # 集合转键名
     def set2names(keys):
-        return "+".join(keys)
+        keys = keys.copy()
+        # 优先级键名
+        highPriority = ("win", "cmd", "shift", "ctrl", "alt")
+        names = ""
+        # 添加高优先级键
+        for h in highPriority:
+            if h in keys:
+                if names != "":
+                    names += "+"
+                names += h
+                keys.discard(h)
+        # 添加剩下的键
+        for k in keys:
+            if names != "":
+                names += "+"
+            names += k
+        return names
 
 
 # 热键控制器类
@@ -97,7 +113,7 @@ class __HotkeyController:
         self.__status = 0  # 状态，0正常，1录制中
         self.__pressSet = set()  # 当前已按下的按键集合
         self.__strict = True  # 键集合相等的判定，T为严格，F为宽松
-        self.__ttl = 3  # 长按键超时忽略时间，秒
+        self.__ttl = 30  # 长按键超时忽略时间，秒
         self.__ttlDict = {}  # 存放当前已按下按键的超时时间
         self.__readRunningTitle = ""
         self.__readFinishTitle = ""
@@ -158,8 +174,11 @@ class __HotkeyController:
     # 录制结束
     def __readFinish(self):
         self.__status = 0
-        names = _KeyTranslator.set2names(self.__pressSet)
-        PubSubService.publish(self.__readFinishTitle, names)
+        if "esc" in self.__pressSet:  # 含esc，则为退出
+            PubSubService.publish(self.__readFinishTitle, "")
+        else:
+            names = _KeyTranslator.set2names(self.__pressSet)
+            PubSubService.publish(self.__readFinishTitle, names)
 
     # 检查已按键的超时时间。若超时，则删除该键
     def __checkTTL(self):
