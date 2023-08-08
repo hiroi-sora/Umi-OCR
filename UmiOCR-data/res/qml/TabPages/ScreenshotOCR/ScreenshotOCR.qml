@@ -15,16 +15,6 @@ TabPage {
     ScreenshotOcrConfigs { id: screenshotOcrConfigs } 
     configsComp: screenshotOcrConfigs
     property string msnState: "none" // OCR任务状态， none run
-    
-    // TODO: 测试用
-    Timer {
-        interval: 200
-        running: true
-        onTriggered: {
-            // screenshot()
-            imageViewer.setSource("file:///D:/Pictures/Screenshots/屏幕截图 2023-04-23 191053.png")
-        }
-    }
 
     // ========================= 【逻辑】 =========================
 
@@ -116,7 +106,7 @@ TabPage {
     // 获取一个OCR的返回值
     function onOcrGet(res, imgID="", imgPath="") {
         // 添加到结果
-        resultsTableView.addOcrResult(res)
+        const resText = resultsTableView.addOcrResult(res)
         if(imgID) // 图片类型
             imageViewer.setSource("image://pixmapprovider/"+imgID)
         else if(imgPath) // 地址类型
@@ -124,6 +114,27 @@ TabPage {
         // 若tabPanel面板的下标没有变化过，则切换到记录页
         if(tabPanel.indexChangeNum < 2)
             tabPanel.currentIndex = 1
+        // 完成后的动作
+        const popMainWindow = screenshotOcrConfigs.getValue("action.popMainWindow")
+        const popSimple = screenshotOcrConfigs.getValue("action.popSimple")
+        const copy = screenshotOcrConfigs.getValue("action.copy")
+        // 复制到剪贴板
+        if(copy && resText!="") {
+            callPy("copyText", resText)
+        }
+        // 弹出通知
+        if(popSimple) {
+            if(resText=="") {
+                qmlapp.popup.simple(qsTr("无文字"), "")
+            }
+            else if(copy) {
+                qmlapp.popup.simple(qsTr("已复制到剪贴板"), resText)
+            }
+            else {
+                qmlapp.popup.simple(qsTr("识图完成"), resText)
+            }
+        }
+        console.log(popMainWindow)
     }
 
     // 设置任务状态

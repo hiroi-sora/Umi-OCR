@@ -14,22 +14,12 @@ from PySide2.QtGui import QGuiApplication, QClipboard, QImage, QPixmap  # 截图
 Clipboard = QClipboard()  # 剪贴板
 
 
-def test():
-    print("&&&&& 触发测试！！！")
-
-
 class ScreenshotOCR(Page):
     def __init__(self, *args):
         super().__init__(*args)
         self.msnDict = {}
         self.ssImgIDs = []  # 缓存当前完整截屏id
         self.showImgIDs = []  # 缓存当前展示图片id
-        PubSubService.subscribe("<<test>>", test)
-        # HotkeyCtrl.addHotkey("win+alt+a", "<<test>>")
-        # HotkeyCtrl.delHotkey("win+alt+a")
-        # HotkeyCtrl.addHotkey("win+alt+c", "<<test>>")
-        # HotkeyCtrl.addHotkey("win+alt+c", "<<test>>")
-        # HotkeyCtrl.readHotkey()
 
     # ========================= 【qml调用python】 =========================
 
@@ -111,6 +101,10 @@ class ScreenshotOCR(Page):
         self.showImgIDs = []
         PixmapProvider.delPixmap(self.ssImgIDs)
         self.ssImgIDs = []
+
+    # 将文本写入剪贴板
+    def copyText(self, text):
+        Clipboard.setText(text)
 
     # ========================= 【OCR 任务控制】 =========================
 

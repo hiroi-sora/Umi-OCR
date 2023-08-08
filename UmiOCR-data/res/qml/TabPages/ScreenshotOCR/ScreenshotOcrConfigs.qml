@@ -28,6 +28,25 @@ Configs {
                 "default": "win+alt+v",
                 "eventTitle": "<<paste>>",
             },
+        },
+
+        "action": {
+            "title": qsTr("识图完成后的操作"),
+            "type": "group",
+
+            "copy": {
+                "title": qsTr("复制结果"),
+                "default": false,
+            },
+            "popMainWindow": {
+                "title": qsTr("弹出主窗口"),
+                "toolTip": qsTr("如果主窗口最小化或处于后台，则弹到前台"),
+                "default": true,
+            },
+            "popSimple": {
+                "title": qsTr("弹出通知"),
+                "default": true,
+            },
         }
     }
 }

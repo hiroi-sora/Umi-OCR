@@ -17,6 +17,7 @@ Item {
     // timestamp 时间戳，秒为单位
     // title 左边显示标题，可选
     // code 结果代码， data 结果内容
+    // 返回结果字符串
     function addOcrResult(res) {
         // 提取并转换结果时间
         let date = new Date(res.timestamp * 1000)  // 时间戳转日期对象
@@ -57,6 +58,7 @@ Item {
         if(autoToBottom) {
             tableView.toBottom()
         }
+        return resText
     }
     
     // ========================= 【布局】 =========================

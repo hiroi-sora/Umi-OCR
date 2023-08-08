@@ -69,11 +69,9 @@ class __PubSubServiceClass:
     def publish(self, title, *args):
         # 在主线程调用
         if QThread.currentThread() == QCoreApplication.instance().thread():
-            print("== 主线程 发布消息：", title, args)
             self.__publish(title, args)
         # 在子线程调用
         else:
-            print("== 子线程 发布消息：", title, args)
             self.__eventSignal.signal.emit(title, args)
 
     # ========================= 【实现】 =========================
