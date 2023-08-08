@@ -18,6 +18,9 @@ Button {
     property color bgPressColor_: theme.coverColor4
     property color bgHoverColor_: theme.coverColor2
 
+    property int borderWidth: 0
+    property color borderColor: theme.coverColor3
+
     Component.onCompleted: {
         // 如果设定了提示，则加载提示组件
         if(btn.toolTip){
@@ -40,6 +43,8 @@ Button {
         color: parent.pressed ? parent.bgPressColor_ : (
             parent.hovered ? parent.bgHoverColor_ : parent.bgColor_
         )
+        border.width: borderWidth
+        border.color: borderColor
     }
     MouseArea {
         id: mouseArea

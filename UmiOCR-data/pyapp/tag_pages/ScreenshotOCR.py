@@ -6,10 +6,16 @@ from .page import Page  # 页基类
 from ..utils.image_provider import PixmapProvider  # 图片提供器
 from ..mission.mission_ocr import MissionOCR  # 任务管理器
 from ..utils.utils import findImages
+from ..event_bus.key_mouse.keyboard import HotkeyCtrl
+from ..event_bus.pubsub_service import PubSubService
 
 from PySide2.QtGui import QGuiApplication, QClipboard, QImage, QPixmap  # 截图 剪贴板
 
 Clipboard = QClipboard()  # 剪贴板
+
+
+def test():
+    print("&&&&& 触发测试！！！")
 
 
 class ScreenshotOCR(Page):
@@ -18,6 +24,12 @@ class ScreenshotOCR(Page):
         self.msnDict = {}
         self.ssImgIDs = []  # 缓存当前完整截屏id
         self.showImgIDs = []  # 缓存当前展示图片id
+        PubSubService.subscribe("<<test>>", test)
+        # HotkeyCtrl.addHotkey("win+alt+a", "<<test>>")
+        # HotkeyCtrl.delHotkey("win+alt+a")
+        # HotkeyCtrl.addHotkey("win+alt+c", "<<test>>")
+        # HotkeyCtrl.addHotkey("win+alt+c", "<<test>>")
+        # HotkeyCtrl.readHotkey()
 
     # ========================= 【qml调用python】 =========================
 

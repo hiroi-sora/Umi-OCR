@@ -40,6 +40,12 @@ configDict: {
         "dialogTitle": 对话框标题,
         "nameFilters": ["图片 (*.jpg *.jpeg)", "类型2..."] 文件夹类型可不需要
     },
+    "热键 hotkey": {
+        "title": ,
+        "type": "hotkey",
+        "default": "win+alt+c", // 默认热键
+        "eventTitle": "<<screenshot>>", // 触发事件标题
+    },
     "按钮组 buttons": {
         "title": ,
         "btnsList": [
@@ -179,6 +185,7 @@ Item {
                     // 无需检查
                     case "file": // 文件
                     case "text": // 文本
+                    case "hotkey": // 热键
                         flag = true
                         break
                 }
@@ -522,6 +529,7 @@ Item {
         "enum": compEnum,
         "file": compFile,
         "text": compText,
+        "hotkey": compHotkey,
         "buttons": compBtns,
     }
     // 配置项：布尔值
@@ -780,7 +788,6 @@ Item {
         id: compBtns
 
         ConfigItemComp {
-            id: rootFile
 
             Row {
                 anchors.right: parent.right
@@ -803,6 +810,121 @@ Item {
                             info.onClicked()
                         }
                     }
+                }
+            }
+        }
+    }
+    // 配置项：热键
+    Component {
+        id: compHotkey
+
+        ConfigItemComp {
+            id: rootHotkey
+            property string eventTitle: origin.eventTitle
+            property string keysName: ""
+            property int readNum: 0 // 记录更新了几次
+
+            // 初始化，更新UI
+            updateUI: ()=>{
+                const kn = value()
+                changeHotkey(kn, false)
+            }
+            // 改变快捷键
+            function changeHotkey(kn, showMsg=true) {
+                // 移除相同事件的快捷键
+                qmlapp.keyMouse.delHotkey("", eventTitle, 0)
+                // 取消快捷键
+                if(kn === "") {
+                    keysName = ""
+                    value("")
+                    if(showMsg)
+                        qmlapp.popup.simple(qsTr("已取消%1的快捷键。").arg(title), "")
+                }
+                // 注册新按键
+                else {
+                    const res = qmlapp.keyMouse.addHotkey(kn, eventTitle, 0)
+                    // 成功
+                    if(res.startsWith("[Success]")) {
+                        keysName = kn
+                        value(kn)
+                        if(showMsg)
+                            qmlapp.popup.simple(qsTr("更新热键成功"), qsTr("%1的快捷键为 %2").arg(title).arg(kn))
+                    }
+                    // 失败
+                    else {
+                        keysName = ""
+                        value("")
+                        // 重复注册
+                        if(res.startsWith("[Warning] Registering same hotkey.")) {
+                            qmlapp.popup.message("", qsTr("%1 快捷键%2已被注册，请尝试另外的按键组合。").arg(title).arg(kn), "warning")
+                        }
+                        else { // 未知原因
+                            qmlapp.popup.message("", qsTr("%1 快捷键%2无法注册，请尝试另外的按键组合。").arg(title).arg(kn), "error")
+                        }
+                    }
+                }
+            }
+            // 录制开始
+            function readHotkey() {
+                // 展开遮罩
+                readNum = 1
+                qmlapp.popup.showMask(qsTr("请按下快捷键"), "<<readHotkey>>")
+                // 订阅事件
+                qmlapp.pubSub.subscribe("<<readHotkeyRunning>>", rootHotkey, "readRunning")
+                qmlapp.pubSub.subscribe("<<readHotkeyFinish>>", rootHotkey, "readFinish")
+                // 开始录制
+                let res = qmlapp.keyMouse.readHotkey("<<readHotkeyRunning>>", "<<readHotkeyFinish>>")
+                console.log(res)
+            }
+            // 录制中的回调
+            function readRunning(kn){
+                readNum++  // 更新遮罩
+                qmlapp.popup.showMask(kn, "<<readHotkey>>")
+            }
+            // 录制完毕的回调
+            function readFinish(kn) {
+                // 隐藏遮罩
+                for(let i=0; i<readNum; i++)
+                    qmlapp.popup.hideMask("<<readHotkey>>")
+                // 取消订阅事件
+                qmlapp.pubSub.unsubscribe("<<readHotkeyRunning>>", rootHotkey, "readRunning")
+                qmlapp.pubSub.unsubscribe("<<readHotkeyFinish>>", rootHotkey, "readFinish")
+                // 改变快捷键
+                changeHotkey(kn)
+            }
+            // 销毁时取注销快捷键
+            Component.onDestruction: {
+                changeHotkey("", false)
+            }
+
+            Item {
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.right: parent.right
+                anchors.margins: 1
+                width: parent.width*0.5
+
+                IconButton {
+                    id: clearBtn
+                    icon_: "clear"
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    anchors.right: parent.right
+                    anchors.margins: 1
+                    width: height
+                    onClicked: changeHotkey("")
+                }
+                Button_ {
+                    id: hotkeyBtn
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    anchors.left: parent.left
+                    anchors.right: clearBtn.left
+                    textColor_: theme.subTextColor
+                    borderWidth: 2
+                    borderColor: theme.coverColor2
+                    text_: keysName
+                    onClicked: readHotkey()
                 }
             }
         }
