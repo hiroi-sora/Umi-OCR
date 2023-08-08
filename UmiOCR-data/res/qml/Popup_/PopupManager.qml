@@ -49,8 +49,19 @@ Item {
         messageWin.showDialogCountdown(title, msg, callback, yesText, noText, type, time)
     }
 
+    // 展示遮罩层
+    function showMask(msg="", id="") {
+        maskLayer.showMask(msg, id)
+    }
+
+    // 隐藏指定id的遮罩层
+    function hideMask(id="") {
+        maskLayer.hideMask(id)
+    }
+
     // ========================= 【内部】 =========================
 
     MessageWin{ id: messageWin }
     MessageSimple { id: messageSimple }
+    MaskLayer{ id: maskLayer }
 }

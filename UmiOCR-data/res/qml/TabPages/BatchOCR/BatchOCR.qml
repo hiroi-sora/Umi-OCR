@@ -437,32 +437,18 @@ TabPage {
     // 鼠标拖入图片
     DropArea {
         id: imgDropArea
-        anchors.fill: parent;
+        anchors.fill: parent
+        onEntered: {
+            qmlapp.popup.showMask(qsTr("松手放入图片"), "BatchOCR-DropImage")
+        }
+        onExited: {
+            qmlapp.popup.hideMask("BatchOCR-DropImage")
+        }
         onDropped: {
+            qmlapp.popup.hideMask("BatchOCR-DropImage")
             if(drop.hasUrls){
                 var urls = Utils.QUrl2String(drop.urls)
                 addImages(urls)
-            }
-        }
-
-        // 背景
-        Rectangle {
-            id: dropAreaBg
-            visible: imgDropArea.containsDrag 
-            anchors.fill: parent
-            color: theme.coverColor4
-
-            Panel {
-                color: theme.bgColor
-                anchors.centerIn: parent
-                implicitWidth: dragText.width*2
-                implicitHeight: dragText.height*2
-                
-                Text_ {
-                    id: dragText
-                    anchors.centerIn: parent
-                    text: qsTr("松手放入图片")
-                }
             }
         }
     }
