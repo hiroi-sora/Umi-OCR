@@ -8,6 +8,7 @@ import QtQuick.Controls 2.15
 import QtGraphicalEffects 1.15
 import Qt.labs.settings 1.1
 import MissionConnector 1.0 // Python任务连接器
+import KeyMouseConnector 1.0 // 键盘/鼠标连接器
 
 import "Themes"
 import "TabView_"
@@ -46,6 +47,7 @@ Window {
         PopupManager { id: popup }  // 弹窗管理器 qmlapp.popup
         MissionConnector { id: msnConnector } // 任务连接器 qmlapp.globalConfigs.msnConnector
         PubSub { id: pubSub } // 全局事件发布/订阅
+        KeyMouseConnector { id:keyMouse } // 鼠标/键盘
 
         property alias globalConfigs: globalConfigs
         property alias themeManager: themeManager
@@ -53,6 +55,7 @@ Window {
         property alias popup: popup
         property alias msnConnector: msnConnector
         property alias pubSub: pubSub
+        property alias keyMouse: keyMouse
         // 记录当前窗口状态，可见时为true。包括正常窗口、最大化、全屏。
         property bool isVisible: rootWindow.visibility==2||rootWindow.visibility==4||rootWindow.visibility==5
 

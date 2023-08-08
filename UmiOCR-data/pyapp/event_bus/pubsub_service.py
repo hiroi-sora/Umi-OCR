@@ -83,7 +83,7 @@ class __PubSubServiceClass:
     def __publish(self, title, args):
         self.__eventDictMutex.lock()  # 上锁
         if title not in self.__eventDict:
-            print(f"[Warning] 发布标题{title}不存在事件字典中！")
+            pass
         else:
             l = self.__eventDict[title]
             for func in l:

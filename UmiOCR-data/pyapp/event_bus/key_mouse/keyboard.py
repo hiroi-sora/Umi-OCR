@@ -45,10 +45,11 @@ class __HotkeyController:
         kl = self.__hotkeyList[press]
         for k in kl:  # 检测重复
             if k["keySet"] == keySet:  # 键集合相同
-                if k["title"] != title:  # 事件标题不同
-                    return f'[Warning] Registering same hotkey. The existing event for {keysName} is {k["title"]}, new event is {title} .'
                 self.__hotkeyMutex.unlock()
-                return "[Success] 注册事件相同的重复快捷键。"
+                msg = "[Success] 注册事件相同的重复快捷键。"
+                if k["title"] != title:  # 事件标题不同
+                    msg = f'[Warning] Registering same hotkey. The existing event for {keysName} is {k["title"]}, new event is {title} .'
+                return msg
         # 加入列表
         kl.append({"keySet": keySet, "title": title})
         self.__hotkeyMutex.unlock()
