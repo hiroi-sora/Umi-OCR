@@ -11,7 +11,7 @@ class KeyMouseConnector(QObject):
     # ========================= 【热键】 =========================
 
     # 注册热键
-    @Slot(str, str, int)
+    @Slot(str, str, int, result=str)
     def addHotkey(self, keysName, title, press):
         return HotkeyCtrl.addHotkey(keysName, title, press)
 
@@ -21,6 +21,6 @@ class KeyMouseConnector(QObject):
         return HotkeyCtrl.delHotkey(keysName, title, press)
 
     # 开始录制热键
-    @Slot()
+    @Slot(str, str, result=str)
     def readHotkey(self, runningTitle, finishTitle):
         return HotkeyCtrl.readHotkey(runningTitle, finishTitle)

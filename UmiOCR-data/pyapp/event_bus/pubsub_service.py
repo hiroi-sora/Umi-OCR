@@ -81,17 +81,18 @@ class __PubSubServiceClass:
     # 发布事件的实现（主线程）
     @Slot(str, "QVariant")
     def __publish(self, title, args):
+        l = []
         self.__eventDictMutex.lock()  # 上锁
         if title not in self.__eventDict:
             pass
         else:
-            l = self.__eventDict[title]
-            for func in l:
-                try:
-                    func(*args)
-                except Exception as e:
-                    print(f"[Error] 发送事件异常。{e}\n原始信息： {title} - {args}\nfunc：{func}")
+            l = self.__eventDict[title].copy()  # 拷贝一份
         self.__eventDictMutex.unlock()  # 解锁
+        for func in l:
+            try:
+                func(*args)
+            except Exception as e:
+                print(f"[Error] 发送事件异常。{e}\n原始信息： {title} - {args}\nfunc：{func}")
 
     # 信号类
     class __EventSignal(QObject):

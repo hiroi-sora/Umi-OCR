@@ -53,7 +53,6 @@ class __HotkeyController:
         # 加入列表
         kl.append({"keySet": keySet, "title": title})
         self.__hotkeyMutex.unlock()
-        print(self.__hotkeyList)
         return "[Success]"
 
     # 移除一组快捷键，传入键名或事件之一
@@ -79,6 +78,7 @@ class __HotkeyController:
     def readHotkey(
         self, runningTitle="<<readHotkeyRunning>>", finishTitle="<<readHotkeyFinish>>"
     ):
+        self.__start()
         if self.__status == 1:
             return "[Warning] Recording is running. 当前快捷键录制已在进行，不能同时录制！"
         self.__status = 1
