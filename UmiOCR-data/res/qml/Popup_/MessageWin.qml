@@ -61,12 +61,16 @@ Item {
         // 生成组件，计入字典
         const obj = winComponent.createObject(this, argd)
         winDict[winId] = obj
+        // 显示遮罩层
+        qmlapp.popup.showMask("", winId)
     }
     // 关闭一个弹窗，传入生成ID
     function close(winId) {
         if(winDict.hasOwnProperty(winId)) {
             winDict[winId].destroy()
         }
+        // 隐藏遮罩层
+        qmlapp.popup.hideMask(winId)
     }
     
     // 只有单个确认键的普通消息
