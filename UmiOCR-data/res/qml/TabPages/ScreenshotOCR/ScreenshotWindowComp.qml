@@ -50,6 +50,15 @@ Window {
                 clipH: clipH,
             }
         }
+        else {
+            argd = {
+                imgID: imgID, 
+                clipX: -1, 
+                clipY: -1, 
+                clipW: -1, 
+                clipH: -1,
+            }
+        }
         // 向父级回报
         win.screenshotEnd(argd) 
     }
@@ -81,12 +90,12 @@ Window {
         }
     }
     // TODO: 调试用 总边框
-    Rectangle{
-        anchors.fill: parent
-        color: "#00000000"
-        border.width: 5
-        border.color: "red"
-    }
+    // Rectangle{
+    //     anchors.fill: parent
+    //     color: "#00000000"
+    //     border.width: 5
+    //     border.color: "red"
+    // }
     // 框选区边框
     Rectangle {
         visible: mouseStatus==1
