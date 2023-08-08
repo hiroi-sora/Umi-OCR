@@ -868,13 +868,23 @@ Item {
             function readHotkey() {
                 // 展开遮罩
                 readNum = 1
-                qmlapp.popup.showMask(qsTr("请按下快捷键"), "<<readHotkey>>")
+                qmlapp.popup.showMask(qsTr("请按下快捷键组合。按【Esc】退出。"), "<<readHotkey>>")
                 // 订阅事件
                 qmlapp.pubSub.subscribe("<<readHotkeyRunning>>", rootHotkey, "readRunning")
                 qmlapp.pubSub.subscribe("<<readHotkeyFinish>>", rootHotkey, "readFinish")
                 // 开始录制
                 let res = qmlapp.keyMouse.readHotkey("<<readHotkeyRunning>>", "<<readHotkeyFinish>>")
-                console.log(res)
+                if(res !== "[Success]") { // 开始录制失败
+                    // 隐藏遮罩
+                    qmlapp.popup.hideMask("<<readHotkey>>")
+                    // 取消订阅事件
+                    qmlapp.pubSub.unsubscribe("<<readHotkeyRunning>>", rootHotkey, "readRunning")
+                    qmlapp.pubSub.unsubscribe("<<readHotkeyFinish>>", rootHotkey, "readFinish")
+                    if(res.startsWith("[Warning] Recording is running.")) // 报错
+                        qmlapp.popup.message("", qsTr("当前快捷键录制已在进行，不能同时录制！"), "warning")
+                    else
+                        qmlapp.popup.message(qsTr("无法录制快捷键"), res, "error")
+                }
             }
             // 录制中的回调
             function readRunning(kn){
