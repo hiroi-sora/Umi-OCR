@@ -15,6 +15,7 @@ import "TabView_"
 import "Configs"
 import "EventBus"
 import "Popup_"
+import "Components"
 import "TabPages/GlobalConfigsPage"
 
 Window {
@@ -48,6 +49,7 @@ Window {
         MissionConnector { id: msnConnector } // 任务连接器 qmlapp.globalConfigs.msnConnector
         PubSub { id: pubSub } // 全局事件发布/订阅
         KeyMouseConnector { id:keyMouse } // 鼠标/键盘
+        SystemTray { id:systemTray } // 系统托盘
 
         property alias globalConfigs: globalConfigs
         property alias themeManager: themeManager
@@ -56,11 +58,12 @@ Window {
         property alias msnConnector: msnConnector
         property alias pubSub: pubSub
         property alias keyMouse: keyMouse
+        property alias systemTray: systemTray
         // 记录当前窗口状态，可见时为true。包括正常窗口、最大化、全屏。
         property bool isVisible: rootWindow.visibility==2||rootWindow.visibility==4||rootWindow.visibility==5
 
-        // 延时加载标签页
-        Component.onCompleted: { // 全局初始化完毕，执行延迟加载的函数
+        Component.onCompleted: {
+            // 延时加载标签页
             Qt.callLater(()=>{
                 qmlapp.tab.init()
             })
