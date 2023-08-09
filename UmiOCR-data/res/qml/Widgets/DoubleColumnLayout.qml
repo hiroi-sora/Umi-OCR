@@ -32,7 +32,7 @@ Item {
         Component.onCompleted: { // 分割线初始时设为一半
             if(parent.initSplitterX <= 0)
                 parent.initSplitterX = 0.5 // 默认值0.5
-            if(parent.initSplitterX > 0 && parent.initSplitterX < 1)
+            if(parent.initSplitterX >= 0 && parent.initSplitterX <= 1)
                 splitterX = width * parent.initSplitterX - theme.spacing * 2
             else
                 splitterX = parent.initSplitterX
@@ -84,14 +84,12 @@ Item {
             anchors.bottomMargin: theme.spacing
             width: theme.spacing
             x: 0 // 位置可变换
-            property bool isHover: false // 是否鼠标悬停
 
             // 拖拽、悬停
             MouseArea {
+                id: splitterMouseArea
                 anchors.fill: parent
                 hoverEnabled: true // 鼠标悬停时，分割线颜色变深
-                onEntered: parent.isHover = true
-                onExited: parent.isHover = false
                 cursorShape: Qt.SizeHorCursor // 鼠标指针为双箭头
                 // 拖拽
                 drag.target: splitter
@@ -108,7 +106,7 @@ Item {
                 anchors.bottom: parent.bottom
                 width: theme.spacing * 0.3
                 radius: theme.btnRadius
-                color: parent.isHover ? theme.coverColor4 : 
+                color: (splitterMouseArea.containsMouse  || splitterMouseArea.drag.active) ? theme.coverColor4 : 
                     (doubleColumn.hideLR===0 ? "#00000000" : theme.coverColor2)
             }
         }
