@@ -27,7 +27,7 @@ QtObject {
             "title": qsTr("当前接口"),
             "optionsList": [
                 ["PaddleOCR", qsTr("PaddleOCR（本地）")],
-                ["RapidOCR", qsTr("RapidOCR（本地）")],
+                // ["RapidOCR", qsTr("RapidOCR（本地）")],
             ],
         },
         "PaddleOCR": {
@@ -48,19 +48,19 @@ QtObject {
                 "toolTip": qsTr("使用MKL-DNN数学库提高神经网络的计算速度。能大幅加快OCR识别速度，但也会增加内存占用。"),
             },
         },
-        "RapidOCR": {
-            "title": qsTr("RapidOCR（本地）"),
-            "type": "group",
+        // "RapidOCR": {
+        //     "title": qsTr("RapidOCR（本地）"),
+        //     "type": "group",
 
-            "path": {
-                "title": qsTr("引擎exe路径"),
-                "type": "file",
-                "default": "lib/RapidOCR-json/RapidOCR-json.exe",
-                "selectExisting": true, // 选择现有
-                "selectFolder": false, // 选择文件
-                "dialogTitle": qsTr("RapidOCR 引擎exe路径"),
-            },
-        },
+        //     "path": {
+        //         "title": qsTr("引擎exe路径"),
+        //         "type": "file",
+        //         "default": "lib/RapidOCR-json/RapidOCR-json.exe",
+        //         "selectExisting": true, // 选择现有
+        //         "selectFolder": false, // 选择文件
+        //         "dialogTitle": qsTr("RapidOCR 引擎exe路径"),
+        //     },
+        // },
     }
 
     // 单独配置，每个页面的选项可以不同。都必须有 language 语言列表。

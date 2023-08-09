@@ -374,7 +374,7 @@ Item {
                     anchors.bottom: parent.bottom
                     anchors.right: ctrlBtn1.left
                     text_: qsTr("高级")
-                    toolTip: qsTr("显示更多高级选项")
+                    toolTip: qsTr("显示更多高级选项。它们标有 * 号。\n请谨慎修改高级选项。")
                     textColor_: configs.advanced ? theme.textColor : theme.subTextColor
                     checked: configs.advanced
                     enabledAnime: true

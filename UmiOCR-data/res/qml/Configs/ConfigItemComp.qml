@@ -32,6 +32,7 @@ Item {
         }
         if(origin.advanced) {
             advanced = origin.advanced
+            title = "* "+title
         }
     }
     // 获取或设置值
