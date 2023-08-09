@@ -85,10 +85,7 @@ Item {
     // 重置所有设置为默认值
     function reset() {
         for (let key in originDict) {
-            setValue(key, originDict[key].default) // 刷新值
-            if(compDict.hasOwnProperty(key)) { // 刷新UI
-                compDict[key].updateUI()
-            }
+            setValue(key, originDict[key].default, true) // 刷新值
         }
     }
     // 重新从 configDict 加载设置项和UI
@@ -232,13 +229,16 @@ Item {
         return valueDict[key]
     }
     // 设置值
-    function setValue(key, val) {
+    function setValue(key, val, isupdateUI=false) {
         if(valueDict[key] === val) // 排除相同值
             return
         onChangedFunc(key, val, valueDict[key]) // 触发函数，传入新值和旧值
         valueDict[key] = val
         if(originDict[key].save) { // 需要保存值
             saveValue(key)
+        }
+        if(isupdateUI && compDict.hasOwnProperty(key)) { // 刷新UI
+            compDict[key].updateUI()
         }
     }
     // 初始化期间。不执行触发函数
