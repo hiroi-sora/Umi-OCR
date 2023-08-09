@@ -30,8 +30,14 @@ Window {
     property int clipW: -1
     property int clipH: -1
 
-    visible: true
     flags: Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint // 无边框+置顶
+    
+    Component.onCompleted: {
+        visible = true // 窗口可见
+        visibility = Window.Windowed
+        raise() // 弹到最前层
+        requestActivate() // 激活窗口
+    }
 
     // 截图完毕，成功为true
     function ssEnd(okk) {
@@ -89,13 +95,6 @@ Window {
             }
         }
     }
-    // TODO: 调试用 总边框
-    // Rectangle{
-    //     anchors.fill: parent
-    //     color: "#00000000"
-    //     border.width: 5
-    //     border.color: "red"
-    // }
     // 框选区边框
     Rectangle {
         visible: mouseStatus==1
@@ -191,13 +190,6 @@ Window {
         onReleased: {
             if(mouseStatus == 1) {
                 ssEnd(true)
-            }
-        }
-        // Esc 退出
-        focus: true
-        Keys.onPressed: {
-            if (event.key === Qt.Key_Escape) {
-                ssEnd(false)
             }
         }
     }
