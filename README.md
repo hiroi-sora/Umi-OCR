@@ -6,10 +6,14 @@
 
 项目细节请见：[V2.0版本 | 前景展望 | 意见收集 | 功能投票](https://github.com/hiroi-sora/Umi-OCR/issues/146)
 
-## 预计效果预览：
+## 体验预览版本：
 
-浅色/深色主题
-![](docs/Preview3.jpg)
+[Releases](https://github.com/hiroi-sora/Umi-OCR_v2/releases)
+
+## 预计效果：
+
+![](docs/Preview1.png)
+![](docs/Preview2.png)
 
 ## 当前进度：
 
@@ -19,7 +23,11 @@
 - [x] 主题管理器，支持切换浅色/深色主题主题。
 - [x] 实现 **批量OCR**。
 - [x] 实现 **截图OCR**。
-- [ ] 快捷键机制。
+- [x] 快捷键机制。
+- [x] 系统托盘菜单。
 - [ ] 文本块后处理（排版优化）。
+- [ ] 命令行模式。
 
-## [构建项目](docs/项目开发指南.md)
+## 构建项目：
+
+[项目开发指南](docs/项目开发指南.md)
