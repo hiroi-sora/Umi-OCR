@@ -14,7 +14,7 @@ Item {
     // ========================= 【对外接口】 =========================
 
     function show(title, msg, time=3000) {
-        if(!qmlapp.isVisible && !qmlapp.globalConfigs.getValue("ui.disableExternalNotification")) {
+        if(!qmlapp.mainWin.getVisible() && !qmlapp.globalConfigs.getValue("ui.disableExternalNotification")) {
             // 主窗口隐藏，没禁止外部通知时，发送外部通知
             notificationWindow.show(title, msg, time)
         }
@@ -105,6 +105,7 @@ Item {
                 y = screenHeight-showY
             }
             visible = true
+            visibility = Window.Windowed
         }
         // 隐藏通知弹窗
         function hide() {

@@ -131,6 +131,8 @@ TabPage {
         if(copy && resText!="") callPy("copyText", resText)
         // 弹出通知
         if(popSimple) showSimple(res.code, resText, copy)
+        // 升起主窗口
+        if(popMainWindow) qmlapp.mainWin.setVisible(true)
     }
 
     // ========================= 【后处理】 =========================
