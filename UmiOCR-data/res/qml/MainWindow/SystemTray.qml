@@ -102,6 +102,7 @@ SystemTrayIcon {
     }
 
     onActivated: {
-        // console.log("点击！")
+        if(reason == SystemTrayIcon.DoubleClick)
+            qmlapp.mainWin.setVisible(true) // 主窗可见
     }
 }
