@@ -92,6 +92,12 @@ Item {
     Window  {
         id: notificationWindow
 
+        /* TODO
+        当：主窗口初始隐藏，弹出通知弹窗，隐藏通知弹窗，恢复主窗口。会报错：
+        Conflicting properties 'visible' and 'visibility' for Window 'notificationWindow'
+        似乎不影响使用，待调查。
+        */
+
         // 显示通知弹窗
         function show(title, msg, time) {
             let screenWidth = Screen.width

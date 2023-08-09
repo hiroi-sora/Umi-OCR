@@ -120,6 +120,7 @@ Rectangle {
                 btnHoverBg.visible = false
             }
             onClicked: {
+                timer.stop() // 停止计时器
                 if(typeof onHided === "function")
                     onHided() // 调用关闭函数
             }
