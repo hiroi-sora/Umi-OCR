@@ -52,8 +52,15 @@ Item {
         }
     }
 
-    // 点击主窗口关闭
-    function winClose() {
-
+    // 关闭主窗口
+    function close() {
+        // 隐藏
+        if(qmlapp.globalConfigs.getValue("ui.closeWin2Hide")) {
+            setVisible(false)
+        }
+        // 关闭
+        else {
+            Qt.quit()
+        }
     }
 }

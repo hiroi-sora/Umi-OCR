@@ -28,6 +28,24 @@ Configs {
                     qmlapp.mainWin.setTopping(val)
                 },
             },
+            "closeWin2Hide": {
+                "title": qsTr("关闭主窗口时"),
+                "optionsList": [
+                    [true, qsTr("最小化到系统托盘")],
+                    [false, qsTr("退出应用")],
+                ],
+            },
+            "disableExternalNotification": {
+                "title": qsTr("禁用外部通知"),
+                "default": false,
+                "toolTip": qsTr("不再发送窗口外部通知。当应用处于后台时，你可能错过信息"),
+            },
+        },
+    
+        "style": {
+            "title": qsTr("外观"),
+            "type": "group",
+
             "theme": {
                 "title": qsTr("主题"),
                 "optionsList": qmlapp.themeManager.themeList, // 从全局主题管理器中取列表
@@ -42,11 +60,6 @@ Configs {
                 "onChanged": (flag)=>{
                     qmlapp.themeManager.switchEnabledEffect(!flag)
                 },
-            },
-            "disableExternalNotification": {
-                "title": qsTr("禁用外部通知"),
-                "default": false,
-                "toolTip": qsTr("不再发送窗口外部通知。当应用处于后台时，你可能错过信息"),
             },
         },
         // OCR接口全局设定
