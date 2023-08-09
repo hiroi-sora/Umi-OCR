@@ -103,6 +103,11 @@ TabPage {
 
     // ========================= 【python调用qml】 =========================
     
+    // 设置任务状态
+    function setMsnState(flag) {
+        msnState = flag
+    }
+
     // 获取一个OCR的返回值
     function onOcrGet(res, imgID="", imgPath="") {
         // 添加到结果
@@ -119,27 +124,29 @@ TabPage {
         const popSimple = screenshotOcrConfigs.getValue("action.popSimple")
         const copy = screenshotOcrConfigs.getValue("action.copy")
         // 复制到剪贴板
-        if(copy && resText!="") {
-            callPy("copyText", resText)
-        }
+        if(copy && resText!="") callPy("copyText", resText)
         // 弹出通知
-        if(popSimple) {
-            if(resText=="") {
-                qmlapp.popup.simple(qsTr("无文字"), "")
-            }
-            else if(copy) {
+        if(popSimple) showSimple(res.code, resText, copy)
+    }
+
+    // ========================= 【后处理】 =========================
+
+    // 任务完成后发送通知
+    function showSimple(code, resText, isCopy) {
+        resText = resText.replace(/\n/g, " ") // 换行符替换空格
+        if(code == 100) {
+            if(isCopy) {
                 qmlapp.popup.simple(qsTr("已复制到剪贴板"), resText)
             }
             else {
                 qmlapp.popup.simple(qsTr("识图完成"), resText)
             }
         }
-        console.log(popMainWindow)
-    }
-
-    // 设置任务状态
-    function setMsnState(flag) {
-        msnState = flag
+        else if(code == 101)
+            qmlapp.popup.simple(qsTr("无文字"), "")
+        else {
+            qmlapp.popup.simple(qsTr("识别失败"), resText)
+        }
     }
 
     // ========================= 【布局】 =========================

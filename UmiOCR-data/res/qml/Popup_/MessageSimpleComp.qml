@@ -85,7 +85,7 @@ Rectangle {
             id: iconComp
             anchors.top: parent.top
             anchors.left: parent.left
-            color: theme.themeColor2
+            color: theme.themeColor3
             height: theme.textSize
             width: theme.textSize
         }
