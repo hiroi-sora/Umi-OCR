@@ -7,7 +7,6 @@ import QtQuick.Window 2.15
 
 Item {
     property var mainWin // 主窗口的引用
-    property bool isTopping: false
     
     // ========================= 【保存量】 =========================
     
@@ -33,8 +32,11 @@ Item {
     function setVisible(flag) {
         if(flag) {
             mainWin.visibility = Window.Windowed // 状态为可见
-            mainWin.raise() // 弹到最前层
             mainWin.requestActivate() // 激活窗口
+            // 置顶，取消置顶
+            mainWin.isMainWindowTop = true
+            if(!qmlapp.globalConfigs.getValue("ui.topping")) 
+                mainWin.isMainWindowTop = false
         }
         else {
             mainWin.visibility = Window.Hidden
@@ -42,14 +44,15 @@ Item {
     }
 
     // 设置置顶状态。 toConfig 为 true 表示需要同步到设置
-    function setTopping(flag, toConfig) {
-        isTopping = flag
-        // 窗口 | 自定义标题栏 | 有标题 | 有系统菜单 | 有最小最大化按钮 | 有关闭按钮 | 根据条件是否置顶
-        mainWin.flags = Qt.Window | Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.WindowSystemMenuHint 
-            | Qt.WindowMinMaxButtonsHint | Qt.WindowCloseButtonHint | (flag?Qt.WindowStaysOnTopHint:0)
+    function setTopping(flag, toConfig=false) {
+        mainWin.isMainWindowTop = flag
         if(toConfig) {
             qmlapp.globalConfigs.setValue("ui.topping", flag, true)
         }
+    }
+    // 获取置顶状态
+    function getTopping() {
+        return mainWin.isMainWindowTop
     }
 
     // 关闭主窗口

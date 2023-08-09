@@ -21,7 +21,7 @@ RowLayout  {
         // 图钉按钮
         Button {
             checkable: true
-            checked: qmlapp.mainWin.isTopping
+            checked: qmlapp.mainWin.getTopping()
             onCheckedChanged: { // 双向绑定锁定标记
                 qmlapp.mainWin.setTopping(checked, true)
             }

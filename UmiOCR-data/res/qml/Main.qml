@@ -22,8 +22,9 @@ Window {
     id: mainWindowRoot
     visibility: Window.Hidden // 在 MainWindowManager 中启用可见性
     // 窗口 | 自定义标题栏 | 有标题 | 有系统菜单 | 有最小最大化按钮 | 有关闭按钮 | 根据条件是否置顶
+    property bool isMainWindowTop: false
     flags: Qt.Window | Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.WindowSystemMenuHint 
-        | Qt.WindowMinMaxButtonsHint | Qt.WindowCloseButtonHint
+        | Qt.WindowMinMaxButtonsHint | Qt.WindowCloseButtonHint | (isMainWindowTop?Qt.WindowStaysOnTopHint:0)
 
     width: 800
     height: 500
@@ -85,25 +86,36 @@ Window {
         color: "#00000000"
         radius: theme.windowRadius // 窗口圆角
 
-        // 主窗口的内容
-        Rectangle {
-            id: mainUI
-            anchors.fill: parent
-            anchors.margins: 0 // 透明边框宽度
+        // 为了防止主窗启动不显示时，内容的宽度初始值为0，先让内容挂到固定宽度的Item下
+        Item {
+            width: 800
+            height: 500
+            property alias mainWidth: mainContainer.width
+            onMainWidthChanged: { // 主窗恢复显示时，再让内容挂回主窗
+                if(mainUI.parent !== mainContainer)
+                    mainUI.parent = mainContainer
+            }
 
-            color: theme.bgColor // 整个窗口的背景颜色
-            radius: theme.windowRadius // 窗口圆角
+            // 主窗口的内容
+            Rectangle {
+                id: mainUI
+                anchors.fill: parent
+                anchors.margins: 0 // 透明边框宽度
 
-            // 标签视图
-            TabView_ { }
+                color: theme.bgColor // 整个窗口的背景颜色
+                radius: theme.windowRadius // 窗口圆角
 
-            // 裁切子元素，并应用圆角
-            layer.enabled: true
-            layer.effect: OpacityMask {
-                maskSource: Rectangle {
-                    width: mainUI.width
-                    height: mainUI.height
-                    radius: theme.windowRadius
+                // 标签视图
+                TabView_ { }
+
+                // 裁切子元素，并应用圆角
+                layer.enabled: true
+                layer.effect: OpacityMask {
+                    maskSource: Rectangle {
+                        width: mainUI.width
+                        height: mainUI.height
+                        radius: theme.windowRadius
+                    }
                 }
             }
         }
