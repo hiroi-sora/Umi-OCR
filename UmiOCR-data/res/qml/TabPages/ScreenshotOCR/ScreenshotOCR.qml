@@ -116,10 +116,12 @@ TabPage {
     function onOcrGet(res, imgID="", imgPath="") {
         // 添加到结果
         const resText = resultsTableView.addOcrResult(res)
+        let source = "" // 图片源
         if(imgID) // 图片类型
-            imageViewer.setSource("image://pixmapprovider/"+imgID)
+            source = "image://pixmapprovider/"+imgID
         else if(imgPath) // 地址类型
-            imageViewer.setSource("file:///"+imgPath)
+            source = "file:///"+imgPath
+        imageViewer.setSourceResult(source, res) // 将图片源及结果传入图片组件
         // 若tabPanel面板的下标没有变化过，则切换到记录页
         if(tabPanel.indexChangeNum < 2)
             tabPanel.currentIndex = 1

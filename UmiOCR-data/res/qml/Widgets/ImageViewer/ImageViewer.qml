@@ -11,11 +11,26 @@ Item {
 
     // 设置图片源，展示一张图片
     function setSource(source) {
+        hasTextBoxes = false
         showImage.source = source // 设置源
+        if(showImage.source == "") {
+            imageScale = 1.0
+            return
+        }
         imageW = showImage.sourceSize.width // 记录图片宽高
         imageH = showImage.sourceSize.height
         imageScaleFull()
     }
+
+    // 展示图片及 OCR结果
+    function setSourceResult(source, res) {
+        setSource(source)
+        return
+        // TODO !!!!
+        hasTextBoxes = true
+    }
+
+    // ========================= 【处理】 =========================
 
     // 根据中心位置，更新Image的图片实际位置
     function updateImageXY() {
@@ -25,6 +40,7 @@ Item {
 
     // 缩放，传入 flag>0 放大， <0 缩小 ，0回归100%
     function imageScaleAddSub(flag, step=0.1) {
+        if(showImage.source == "") return
         // 计算缩放比例
         let s = 1.0 // flag==0 时复原
         if (flag > 0) {  // 放大
@@ -43,6 +59,7 @@ Item {
 
     // 图片填满组件
     function imageScaleFull() {
+        if(showImage.source == "") return
         imageScale = Math.min(flickable.width/imageW, flickable.height/imageH)
         updateImageXY()
     }
@@ -53,6 +70,8 @@ Item {
     property real imageScale: 1.0 // 图片缩放比例
     property int imageW: 0 // 图片宽高
     property int imageH: 0
+    property bool hasTextBoxes: false // 当前有无文本块
+    property bool showTextBoxes: true // 显示文本框
 
     // 图片区域
     Rectangle {
@@ -81,6 +100,21 @@ Item {
                     id: showImage
                     anchors.centerIn: parent
                     scale: imageScale
+
+                    // OCR 结果文本框容器
+                    Item {
+                        visible: hasTextBoxes && showTextBoxes
+
+                        // Rectangle {
+                        //     x: 10
+                        //     y: 20
+                        //     width: 30
+                        //     height: 40
+                        //     color: "#00000000"
+                        //     border.width: 2 / imageScale
+                        //     border.color: "red"
+                        // }
+                    }
                 }
             }
 
@@ -123,6 +157,22 @@ Item {
         height: theme.textSize*1.5
         clip: true
 
+        // 左
+        Row {
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+
+            Button_ {
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                textSize: theme.smallTextSize
+                text_: showTextBoxes ? qsTr("显示文本")+" 🔼" : qsTr("隐藏文本")+" 🔽"
+                onClicked: showTextBoxes = !showTextBoxes
+                visible: hasTextBoxes
+            }
+        }
+        // 右
         Row {
             anchors.right: parent.right
             anchors.top: parent.top
