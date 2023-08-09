@@ -82,6 +82,7 @@ Item {
         anchors.bottom: bottomCtrl.top
         anchors.margins: theme.spacing
         anchors.bottomMargin: 0
+        color: theme.bgColor
 
         // 滑动区域，自动监听左键拖拽
         Flickable {
