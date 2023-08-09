@@ -95,10 +95,14 @@ TabPage {
     function eventSub() {
         qmlapp.pubSub.subscribeGroup("<<screenshot>>", this, "screenshot", ctrlKey)
         qmlapp.pubSub.subscribeGroup("<<paste>>", this, "paste", ctrlKey)
+        qmlapp.systemTray.addMenuItem("%screenshot%", qsTr("屏幕截图"), screenshot)
+        qmlapp.systemTray.addMenuItem("%paste%", qsTr("粘贴图片"), paste)
     }
     // 取消订阅事件
     function eventUnsub() {
         qmlapp.pubSub.unsubscribeGroup(ctrlKey)
+        qmlapp.systemTray.delMenuItem("%screenshot%")
+        qmlapp.systemTray.delMenuItem("%paste%")
     }
 
     // ========================= 【python调用qml】 =========================
