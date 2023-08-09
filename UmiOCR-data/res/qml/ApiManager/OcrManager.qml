@@ -18,8 +18,8 @@ QtObject {
         "btns": {
             "title": qsTr("操作"),
             "btnsList": [
-                {"text":qsTr("终止任务"), "onClicked":()=>{}, "textColor":theme.noColor},
-                {"text":qsTr("测试API"), "onClicked":()=>{}},
+                // {"text":qsTr("终止任务"), "onClicked":()=>{}, "textColor":theme.noColor},
+                // {"text":qsTr("测试API"), "onClicked":()=>{}},
                 {"text":qsTr("应用修改"), "onClicked": applyConfigs, "textColor":theme.yesColor},
             ],
         },

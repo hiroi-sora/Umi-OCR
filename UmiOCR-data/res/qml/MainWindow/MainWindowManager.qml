@@ -24,8 +24,7 @@ Item {
 
     // 返回主窗口是否可见
     function getVisible() {
-        return mainWin.visible
-        // return mainWin.visibility==2||mainWin.visibility==4||mainWin.visibility==5
+        return mainWin.visibility==2||mainWin.visibility==4||mainWin.visibility==5
     }
 
     // 设置主窗口可见性。 false 隐藏， true 恢复。
