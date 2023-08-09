@@ -15,7 +15,6 @@ RowLayout  {
 
     // 标签栏控制（左，置顶按钮）
     Item  {
-        // visible: false // 先隐藏
         width: theme.hTabBarHeight
         Layout.fillHeight: true
         // 图钉按钮

@@ -33,10 +33,7 @@ Item {
         if(flag) {
             mainWin.visibility = Window.Windowed // 状态为可见
             mainWin.requestActivate() // 激活窗口
-            // 置顶，取消置顶
-            mainWin.isMainWindowTop = true
-            if(!qmlapp.globalConfigs.getValue("ui.topping")) 
-                mainWin.isMainWindowTop = false
+            mainWin.raise() // 弹到顶层
         }
         else {
             mainWin.visibility = Window.Hidden
