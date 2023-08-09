@@ -15,16 +15,15 @@ import "TabView_"
 import "Configs"
 import "EventBus"
 import "Popup_"
-import "Components"
+import "MainWindow"
 import "TabPages/GlobalConfigsPage"
 
 Window {
-    id: rootWindow // 通过 qmlapp.rootWindow 访问
-    visible: true
-    property bool isOnTop: false // 标记是否置顶
+    id: mainWindowRoot
+    visibility: Window.Hidden // 在 MainWindowManager 中启用可见性
     // 窗口 | 自定义标题栏 | 有标题 | 有系统菜单 | 有最小最大化按钮 | 有关闭按钮 | 根据条件是否置顶
     flags: Qt.Window | Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.WindowSystemMenuHint 
-        | Qt.WindowMinMaxButtonsHint | Qt.WindowCloseButtonHint | (isOnTop?Qt.WindowStaysOnTopHint:0)
+        | Qt.WindowMinMaxButtonsHint | Qt.WindowCloseButtonHint
 
     width: 800
     height: 500
@@ -40,16 +39,19 @@ Window {
     // 全局单例，通过 qmlapp. 来访问
     Item {
         id: qmlapp
-        property alias rootWindow: rootWindow
 
-        GlobalConfigs { id: globalConfigs }  // 全局设置 qmlapp.globalConfigs
-        ThemeManager { id: themeManager } // 主题管理器 qmlapp.themeManager
-        TabViewManager { id: tab }  // 标签页逻辑管理器 qmlapp.tab
-        PopupManager { id: popup }  // 弹窗管理器 qmlapp.popup
-        MissionConnector { id: msnConnector } // 任务连接器 qmlapp.globalConfigs.msnConnector
+        // 普通全局单例
+        TabViewManager { id: tab }  // 标签页逻辑管理器
+        MissionConnector { id: msnConnector } // 任务连接器
         PubSub { id: pubSub } // 全局事件发布/订阅
         KeyMouseConnector { id:keyMouse } // 鼠标/键盘
-        SystemTray { id:systemTray } // 系统托盘
+
+        // 必须先初始化的单例，onCompleted顺序从下往上
+        MainWindowManager { id:mainWin; mainWin:mainWindowRoot } // 5. 主窗管理
+        SystemTray { id:systemTray } // 4. 系统托盘
+        PopupManager { id: popup }  // 3. 弹窗管理器
+        GlobalConfigs { id: globalConfigs }  // 2.全局设置
+        ThemeManager { id: themeManager } // 1. 主题管理器
 
         property alias globalConfigs: globalConfigs
         property alias themeManager: themeManager
@@ -59,8 +61,7 @@ Window {
         property alias pubSub: pubSub
         property alias keyMouse: keyMouse
         property alias systemTray: systemTray
-        // 记录当前窗口状态，可见时为true。包括正常窗口、最大化、全屏。
-        property bool isVisible: rootWindow.visibility==2||rootWindow.visibility==4||rootWindow.visibility==5
+        property alias mainWin: mainWin
 
         Component.onCompleted: {
             // 延时加载标签页
@@ -101,15 +102,5 @@ Window {
                 }
             }
         }
-    }
-
-    // ========================= 【主窗UI存储】 =========================
-    
-    // 持久化存储
-    Settings_ { 
-        id: rootSettings
-        category: "MainWindow"
-
-        property alias winIsOnTop: rootWindow.isOnTop
     }
 }

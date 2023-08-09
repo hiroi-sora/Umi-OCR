@@ -16,6 +16,18 @@ Configs {
             "title": qsTr("界面"),
             "type": "group",
 
+            "startupInvisible": {
+                "title": qsTr("启动时缩小到任务栏"),
+                "default": false,
+                "toolTip": qsTr("软件启动时，不弹出主窗口"),
+            },
+            "topping": {
+                "title": qsTr("窗口置顶"),
+                "default": false,
+                "onChanged": (val)=>{
+                    qmlapp.mainWin.setTopping(val)
+                },
+            },
             "theme": {
                 "title": qsTr("主题"),
                 "optionsList": qmlapp.themeManager.themeList, // 从全局主题管理器中取列表
@@ -34,7 +46,7 @@ Configs {
             "disableExternalNotification": {
                 "title": qsTr("禁用外部通知"),
                 "default": false,
-                "toolTip": qsTr("不再发送窗口外部通知。当应用处于后台时，你可能错过信息。"),
+                "toolTip": qsTr("不再发送窗口外部通知。当应用处于后台时，你可能错过信息"),
             },
         },
         // OCR接口全局设定
