@@ -29,7 +29,7 @@ Item {
         property alias hideWidth: doubleColumnCon.hideWidth
         property int hideLR: 0 // 0为不隐藏，1为隐藏左边，2为隐藏右边
         property alias splitterX: splitter.x // 分割线当前位置
-        Component.onCompleted: { // 分割线初始时设为一半
+        Component.onCompleted: { // 初始化分割线位置
             if(parent.initSplitterX <= 0)
                 parent.initSplitterX = 0.5 // 默认值0.5
             if(parent.initSplitterX >= 0 && parent.initSplitterX <= 1)
@@ -88,7 +88,11 @@ Item {
             // 拖拽、悬停
             MouseArea {
                 id: splitterMouseArea
-                anchors.fill: parent
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                // 平常宽度为分隔栏宽度，按下拖拽时宽度增加防止鼠标出界
+                width: pressed ? 500 : parent.width
                 hoverEnabled: true // 鼠标悬停时，分割线颜色变深
                 cursorShape: Qt.SizeHorCursor // 鼠标指针为双箭头
                 // 拖拽
@@ -96,18 +100,19 @@ Item {
                 drag.axis: Drag.XAxis
                 drag.minimumX: 0
                 drag.maximumX: doubleColumn.rightMax
+                drag.smoothed: false // 无阈值，一拖就动
             }
 
             // 视觉展示
             Rectangle{
                 id: splitterShow
+                visible: splitterMouseArea.containsMouse || splitterMouseArea.drag.active || doubleColumn.hideLR!==0
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
                 width: theme.spacing * 0.3
                 radius: theme.btnRadius
-                color: (splitterMouseArea.containsMouse  || splitterMouseArea.drag.active) ? theme.coverColor4 : 
-                    (doubleColumn.hideLR===0 ? "#00000000" : theme.coverColor2)
+                color: splitterMouseArea.pressed ? theme.coverColor4 : theme.coverColor2
             }
         }
 
