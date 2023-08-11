@@ -32,10 +32,7 @@ Item {
         Component.onCompleted: { // 初始化分割线位置
             if(parent.initSplitterX <= 0)
                 parent.initSplitterX = 0.5 // 默认值0.5
-            if(parent.initSplitterX >= 0 && parent.initSplitterX <= 1)
-                splitterX = width * parent.initSplitterX - theme.spacing * 2
-            else
-                splitterX = parent.initSplitterX
+            toInit()
         }
         property int rightMax: width - splitter.width // 右边缘位置
 
@@ -63,7 +60,25 @@ Item {
                 hideLR = 0
             }
 
-        } // 拖拽分割线，或者调整整体宽度，都会触发检查隐藏
+        }
+        // 去到左右。flag: 0 初始 1 左 2 右
+        function toLR(flag) {
+            if(flag === 0)
+                toInit()
+            else if(flag === 1)
+                splitterX = splitterX = 0
+            else if(flag === 2)
+                splitterX = splitterX = width - splitter.width
+            toHide()
+        }
+        // 去到初始位置
+        function toInit() {
+            if(parent.initSplitterX >= 0 && parent.initSplitterX <= 1)
+                splitterX = width * parent.initSplitterX - theme.spacing * 2
+            else
+                splitterX = parent.initSplitterX
+        }
+        // 拖拽分割线，或者调整整体宽度，都会触发检查隐藏
         onSplitterXChanged: toHide()
         onWidthChanged: toHide(true)
         // 左容器
@@ -84,13 +99,15 @@ Item {
             anchors.bottomMargin: theme.spacing
             width: theme.spacing
             x: 0 // 位置可变换
+            z: 1
+            property bool isVisible: splitterMouseArea.containsMouse || btnsMouseArea.containsMouse || splitterMouseArea.drag.active || doubleColumn.hideLR!==0
 
-            // 拖拽、悬停
+            // 分割线 拖拽、悬停
             MouseArea {
                 id: splitterMouseArea
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
-                anchors.bottom: parent.bottom
+                anchors.bottom: btnsMouseArea.top
                 // 平常宽度为分隔栏宽度，按下拖拽时宽度增加防止鼠标出界
                 width: pressed ? 500 : parent.width
                 hoverEnabled: true // 鼠标悬停时，分割线颜色变深
@@ -101,19 +118,86 @@ Item {
                 drag.minimumX: 0
                 drag.maximumX: doubleColumn.rightMax
                 drag.smoothed: false // 无阈值，一拖就动
-            }
 
-            // 视觉展示
-            Rectangle{
+            }
+            // 分割线 视觉展示
+            Rectangle {
                 id: splitterShow
-                visible: splitterMouseArea.containsMouse || splitterMouseArea.drag.active || doubleColumn.hideLR!==0
+                visible: splitter.isVisible
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
                 width: theme.spacing * 0.3
-                radius: theme.btnRadius
+                radius: width
                 color: splitterMouseArea.pressed ? theme.coverColor4 : theme.coverColor2
             }
+
+            // 控制按钮 点击
+            MouseArea {
+                id: btnsMouseArea
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.bottom: parent.bottom
+                hoverEnabled: true
+                cursorShape: Qt.PointingHandCursor
+                width: containsMouse ? theme.textSize * 2 : parent.width 
+                height: theme.textSize * (doubleColumn.hideLR===0 ? 6 : 4)
+                property int selectIndex: -1
+                onExited: selectIndex = -1
+                onPositionChanged: {
+                    if(doubleColumn.hideLR===0) {
+                        if(mouse.y < theme.textSize * 2)
+                            selectIndex = 1
+                        else if(mouse.y < theme.textSize * 4)
+                            selectIndex = 2
+                        else
+                            selectIndex = 0
+                    }
+                    else {
+                        if(mouse.y < theme.textSize * 2)
+                            selectIndex = doubleColumn.hideLR===1 ? 2 : 1
+                        else
+                            selectIndex = 0
+                    }
+                }
+                onClicked: doubleColumn.toLR(selectIndex)
+
+                // 控制按钮 视觉
+                Rectangle {
+                    color: theme.themeColor2
+                    visible: (splitterMouseArea.containsMouse || btnsMouseArea.containsMouse) && !splitterMouseArea.drag.active
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    width: theme.textSize * 2
+                    radius: theme.panelRadius
+
+                    Column {
+                        width: parent.width
+                        Icon_ {
+                            visible: doubleColumn.hideLR!==1
+                            width: parent.width
+                            height: width
+                            color: btnsMouseArea.selectIndex===1 ? theme.textColor:theme.themeColor3
+                            icon: "arrow_to_left"
+                        }
+                        Icon_ {
+                            visible: doubleColumn.hideLR!==2
+                            width: parent.width
+                            height: width
+                            color: btnsMouseArea.selectIndex===2 ? theme.textColor:theme.themeColor3
+                            icon: "arrow_to_left"
+                            mirror: true
+                        }
+                        Icon_ {
+                            width: parent.width
+                            height: width
+                            color: btnsMouseArea.selectIndex===0 ? theme.textColor:theme.themeColor3
+                            icon: "arrow_to_center"
+                        }
+                    }
+                }
+            }
+
         }
 
         // 右容器

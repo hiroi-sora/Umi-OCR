@@ -7,15 +7,17 @@ Item {
 
     property string icon: ""
     property color color: theme.subTextColor
+    property bool mirror: false // 水平翻转
 
     // =============================================================
-
+    id: iconRoot
     Image {
         id: image
         anchors.fill: parent
         source: icon ? `../../images/icons/${icon}.svg` : ""
         fillMode: Image.PreserveAspectFit // 均匀缩放
         visible: false // 关闭原图显示，只显示填充颜色
+        mirror: iconRoot.mirror
     }
     // 填充颜色
     ColorOverlay{
