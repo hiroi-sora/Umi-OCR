@@ -25,9 +25,23 @@ Item {
     // 展示图片及 OCR结果
     function setSourceResult(source, res) {
         setSource(source)
-        return
-        // TODO !!!!
-        hasTextBoxes = true
+        // 格式转换
+        if(res.code == 100 && res.data.length > 0) {
+            let tbs = []
+            for(let i in res.data) {
+                const d = res.data[i]
+                const info = {
+                    x: d.box[0][0],
+                    y: d.box[0][1],
+                    width: d.box[2][0] - d.box[0][0],
+                    height: d.box[2][1] - d.box[0][1],
+                    text: d.text
+                }
+                tbs.push(info)
+            }
+            textBoxes = tbs
+            hasTextBoxes = true
+        }
     }
 
     // ========================= 【处理】 =========================
@@ -72,6 +86,7 @@ Item {
     property int imageH: 0
     property bool hasTextBoxes: false // 当前有无文本块
     property bool showTextBoxes: true // 显示文本框
+    property var textBoxes: [] // 文本框列表
 
     // 图片区域
     Rectangle {
@@ -106,15 +121,20 @@ Item {
                     Item {
                         visible: hasTextBoxes && showTextBoxes
 
-                        // Rectangle {
-                        //     x: 10
-                        //     y: 20
-                        //     width: 30
-                        //     height: 40
-                        //     color: "#00000000"
-                        //     border.width: 2 / imageScale
-                        //     border.color: "red"
-                        // }
+                        Repeater {
+                            model: textBoxes
+                            Rectangle {
+                                property var info: textBoxes[index]
+                                x: info.x
+                                y: info.y
+                                width: info.width
+                                height: info.height
+                                // border.width: 1
+                                border.width: imageScale>1?1:1/imageScale
+                                border.color: "red"
+                                color: "#00000000"
+                            }
+                        }
                     }
                 }
             }
