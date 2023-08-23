@@ -132,7 +132,7 @@ TabPage {
         // 复制到剪贴板
         if(copy && resText!="") callPy("copyText", resText)
         // 弹出通知
-        if(popSimple) showSimple(res.code, resText, copy)
+        if(popSimple) showSimple(res, resText, copy)
         // 升起主窗口
         if(popMainWindow) qmlapp.mainWin.setVisible(true)
     }
@@ -140,21 +140,24 @@ TabPage {
     // ========================= 【后处理】 =========================
 
     // 任务完成后发送通知
-    function showSimple(code, resText, isCopy) {
+    function showSimple(res, resText, isCopy) {
+        const code = res.code
+        const time = res.time.toFixed(2)
+        let title = ""
         resText = resText.replace(/\n/g, " ") // 换行符替换空格
         if(code == 100) {
-            if(isCopy) {
-                qmlapp.popup.simple(qsTr("已复制到剪贴板"), resText)
-            }
-            else {
-                qmlapp.popup.simple(qsTr("识图完成"), resText)
-            }
+            if(isCopy) title = qsTr("已复制到剪贴板")
+            else title = qsTr("识图完成")
         }
-        else if(code == 101)
-            qmlapp.popup.simple(qsTr("无文字"), "")
+        else if(code == 101) {
+            title = qsTr("无文字")
+            resText = ""
+        }
         else {
-            qmlapp.popup.simple(qsTr("识别失败"), resText)
+            title = qsTr("识别失败")
         }
+        title += `  -  ${time}s`
+        qmlapp.popup.simple(title, resText)
     }
 
     // ========================= 【布局】 =========================
