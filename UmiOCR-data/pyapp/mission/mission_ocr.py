@@ -72,7 +72,10 @@ class __MissionOcrClass(Mission):
             self.__api = None
             if type(res) == str:
                 return res
-            return "[Error] MissionOCR Failed to setApi, unknown reason"
+            return "[Error] MissionOCR Failed to setApi, unknown reason."
+
+    def getApiInfo(self):  # 获取当前API的额外信息
+        return self.__api.getApiInfo()
 
 
 # 全局 OCR任务管理器

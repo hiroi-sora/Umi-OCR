@@ -71,10 +71,7 @@ QtObject {
 
             "language": {
                 "title": qsTr("语言/模型库"),
-                "optionsList": [
-                    ["models/config_chinese.txt", "简体中文"],
-                    ["models/config_en.txt", "English"],
-                ],
+                "optionsList": [],
             },
             "cls": {
                 "title": qsTr("纠正文本方向"),
@@ -113,6 +110,13 @@ QtObject {
 
         // 成功应用修改之后的刷新函数
         function successUpdate() {
+            // 从python获取额外信息，填入pageOptions。主要为了动态刷新[language][optionsList]
+            const info = qmlapp.msnConnector.callPy("ocr", "getApiInfo", [])
+            for(let k1 in info) {
+                if(k1 in pageOptions[apiKey])
+                    for(let k2 in info[k1])
+                        pageOptions[apiKey][k1][k2] = info[k1][k2]
+            }
             // 刷新qml各个页面的独立配置
             for (let key in deployDict) {
                 const p = deployDict[key].page

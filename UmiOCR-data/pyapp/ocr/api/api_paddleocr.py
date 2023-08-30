@@ -263,3 +263,25 @@ class ApiPaddleOcr(ApiOcr):  # 公开接口
 
     def runBytes(self, imageBytes):  # 字节流
         return self.api.runBytes(imageBytes)
+
+    def getApiInfo(self):  # 获取额外信息
+        # 动态载入模型库
+        """configs.txt 格式示例：
+        config_chinese.txt 简体中文
+        config_en.txt English
+        """
+        optionsList = []
+        configsPath = os.path.dirname(self.gArgd["exe_path"]) + "/models/configs.txt"
+        try:
+            with open(configsPath, "r", encoding="utf-8") as file:
+                content = file.read()
+                lines = content.split("\n")
+                for l in lines:
+                    parts = l.split(" ", 1)
+                    optionsList.append(parts)
+        except FileNotFoundError:
+            print("【Error】PPOCR配置文件configs不存在，请检查文件路径是否正确。", configsPath)
+        except IOError:
+            print("【Error】PPOCR配置文件configs无法打开或读取。")
+
+        return {"language": {"optionsList": optionsList}}

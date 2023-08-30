@@ -13,3 +13,7 @@ class ApiOcr:
 
     def runBytes(self, imageBytes):  # 字节流
         print("未知引擎组件-字节流识图")
+
+    def getApiInfo(self):
+        print("未知引擎组件-获取额外信息")
+        return {}
