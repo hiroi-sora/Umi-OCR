@@ -18,7 +18,7 @@ QtObject {
         "btns": {
             "title": qsTr("操作"),
             "btnsList": [
-                // {"text":qsTr("终止任务"), "onClicked":()=>{}, "textColor":theme.noColor},
+                {"text":qsTr("强制终止任务"), "onClicked": stopAllMissions, "textColor":theme.noColor},
                 // {"text":qsTr("测试API"), "onClicked":()=>{}},
                 {"text":qsTr("应用修改"), "onClicked": applyConfigs, "textColor":theme.yesColor},
             ],
@@ -140,7 +140,7 @@ QtObject {
             let n = 0
             for(let k in pyStatus.missionListsLength)
                 n += pyStatus.missionListsLength[k]
-            const s = qsTr("当前已有%1组任务队列、共%2个任务正在执行。终止任务后才可以修改API。").arg(msnLen).arg(n)
+            const s = qsTr("当前已有%1组任务队列、共%2个任务正在执行。您可【强制终止任务】后修改API。").arg(msnLen).arg(n)
             qmlapp.popup.message(qsTr("无法修改 文字识别接口设置"), s, "warning")
             return
         }
@@ -166,6 +166,25 @@ QtObject {
         else {
             qmlapp.popup.message(qsTr("文字识别接口应用失败"), msg, "error")
         }
+    }
+
+    // 终止所有任务
+    function stopAllMissions() {
+        const pyStatus = qmlapp.msnConnector.callPy("ocr", "getStatus", [])
+        const msnLen = Object.keys(pyStatus.missionListsLength).length
+        if(msnLen == 0) { // 无任务
+            qmlapp.popup.simple(qsTr("当前没有运行中的任务"), "")
+            return
+        }
+
+        let n = 0
+        for(let k in pyStatus.missionListsLength)
+            n += pyStatus.missionListsLength[k]
+        const s = qsTr("当前已有%1组任务队列、共%2个任务正在执行。\n要强制终止全部任务吗？").arg(msnLen).arg(n)
+
+        const argd = {yesText: qsTr("强制终止任务")}
+        const callback = (flag)=>{ if(flag) qmlapp.msnConnector.callPy("ocr", "stopAllMissions", []) }
+        qmlapp.popup.dialog("", s, callback, "warning", argd)
     }
 
     // 部署进一个Configs的配置项里，可动态改变配置页。

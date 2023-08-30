@@ -25,7 +25,7 @@ Item {
     property real btnRadius: baseRadius
     // 面板圆角
     property real panelRadius: baseRadius * 1.7
-    
+
     // 水平标签栏高度
     property real hTabBarHeight: text * 1.8
     // 水平标签栏下方阴影分割线高度

@@ -52,6 +52,7 @@ class BatchOCR(Page):
             print(f"添加任务成功 {self.msnID}\n{argd}")
         else:  # 添加任务失败
             self.__onEnd(None, "[Error] Failed to add task.\n【错误】添加任务失败。")
+        return self.msnID
 
     def __preprocessArgd(self, argd, path0):  # 预处理参数字典，无异常返回True
         self.argd = None
@@ -176,4 +177,4 @@ class BatchOCR(Page):
 
     def __onEnd(self, msnInfo, msg):  # 任务队列完成或失败
         # msg: [Success] [Warning] [Error]
-        self.callQmlInMain("onOcrEnd", msg)
+        self.callQmlInMain("onOcrEnd", msg, self.msnID)

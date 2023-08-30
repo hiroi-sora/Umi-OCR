@@ -25,6 +25,8 @@ TabPage {
     property var missionInfo: {} // 当前任务信息，耗时等
     property string missionShow: "" // 当前任务信息展示字符串
 
+    property string msnID: "" // 当前任务ID
+
     Component.onCompleted: {
         setMsnState("none")
     }
@@ -35,26 +37,11 @@ TabPage {
         onTriggered: {
             addImages(
                 [
-                    "D:/Pictures/Screenshots/屏幕截图 2023-06-03 120958.png",
-                    "D:/Pictures/Screenshots/屏幕截图 2021-04-27 171637.png",
-                    "D:/Pictures/Screenshots/损坏的图片.png",
-                    "D:/Pictures/Screenshots/屏幕截图 2021-04-27 171639.png",
-                    "D:/Pictures/Screenshots/屏幕截图 2023-04-24 235542.png",
-                    "D:/Pictures/Screenshots/屏幕截图 2023-04-22 212147.png",
-                    "D:/Pictures/Screenshots/屏幕截图 2023-04-22 212204.png",
-                    "D:/Pictures/Screenshots/屏幕截图 2023-04-22 212207.png",
-                    "D:/Pictures/Screenshots/屏幕截图 2023-04-22 212310.png",
-                    "D:/Pictures/Screenshots/屏幕截图 2023-04-22 212813.png",
-                    "D:/Pictures/Screenshots/屏幕截图 2023-04-22 212854.png",
-                    "D:/Pictures/Screenshots/屏幕截图 2023-04-23 140303.png",
-                    "D:/Pictures/Screenshots/屏幕截图 2023-04-23 140829.png",
-                    "D:/Pictures/Screenshots/屏幕截图 2023-04-23 191053.png",
-                    "D:/图片/Screenshots/测试图片",
-                    "D:/图片/Screenshots/测试图片/_无文字.png"
+                    "D:/Pictures/Screenshots/test",
                 ]
             )
             console.log("自动添加！！！！！！！！！！！！！")
-            // ocrStart()
+            ocrStart()
         }
     }
 
@@ -129,7 +116,7 @@ TabPage {
         // 开始运行
         const paths = Object.keys(filesDict)
         const argd = batchOcrConfigs.getConfigValueDict()
-        tabPage.callPy("msnPaths", paths, argd)
+        msnID = tabPage.callPy("msnPaths", paths, argd)
         // 若tabPanel面板的下标没有变化过，则切换到记录页
         if(tabPanel.indexChangeNum < 2)
             tabPanel.currentIndex = 1
@@ -137,8 +124,13 @@ TabPage {
 
     // 停止OCR
     function ocrStop() {
-        setMsnState("stop")
+        _ocrStop()
         tabPage.callPy("msnStop")
+    }
+
+    function _ocrStop() {
+        msnID = "" // 清除任务ID
+        setMsnState("stop") // 设置结束中
         // 刷新表格，清空未执行的任务的状态
         for(let path in filesDict){
             const r = filesDict[path].index
@@ -151,7 +143,7 @@ TabPage {
                     })
             }
         }
-        setMsnState("none")
+        setMsnState("none") // 设置结束
     }
 
     // 关闭页面
@@ -258,24 +250,12 @@ TabPage {
     }
 
     // 任务队列完毕
-    function onOcrEnd(msg) {
+    function onOcrEnd(msg, thisMsnID) {
         // msg: [Success] [Warning] [Error]
-        // 如果是用户手动停止的，那么不管它。
-        if(msg.startsWith("[Warning] Task stop."))
+        if(msnID !== thisMsnID) { // 返回的任务ID不等于前端展示的任务ID，则不处理
             return
-        // 否则，刷新表格，清空未执行的任务的状态
-        for(let path in filesDict){
-            const r = filesDict[path].index
-            const row = filesModel.getRow(r)
-            if(row.time === "") {
-                filesModel.setRow(filesDict[path].index, {
-                        "filePath": path,
-                        "time": "",
-                        "state": "",
-                    })
-            }
         }
-        setMsnState("none") // 设置结束状态
+        _ocrStop()
         // 任务成功
         if(msg.startsWith("[Success]")) {
             qmlapp.popup.simple(qsTr("批量识别完成"), "")

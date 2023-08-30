@@ -32,7 +32,7 @@ class Mission:
     """
 
     def addMissionList(self, msnInfo, msnList):  # 添加一条任务队列，返回任务ID
-        msnID = uuid4()
+        msnID = str(uuid4())
         # 检查并补充回调函数
         # 队列开始，单个任务准备开始，单任务取得结果，队列结束
         cbKeys = ["onStart", "onReady", "onGet", "onEnd"]
@@ -59,7 +59,11 @@ class Mission:
             self.__msnInfoDict[msnID]["state"] = "stop"  # 设为停止状态
         self.__msnMutex.unlock()  # 解锁
 
-    # TODO: 停止全部
+    def stopAllMissions(self):  # 停止全部任务
+        self.__msnMutex.lock()  # 上锁
+        for msnID in self.__msnListDict:
+            self.__msnInfoDict[msnID]["state"] = "stop"
+        self.__msnMutex.unlock()  # 解锁
 
     def getMissionListsLength(self):  # 获取每一条任务队列长度
         lenDict = {}
