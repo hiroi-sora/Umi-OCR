@@ -278,7 +278,7 @@ class ApiPaddleOcr(ApiOcr):  # 公开接口
                 lines = content.split("\n")
                 for l in lines:
                     parts = l.split(" ", 1)
-                    optionsList.append(parts)
+                    optionsList.append([f"models/{parts[0]}", parts[1]])
         except FileNotFoundError:
             print("【Error】PPOCR配置文件configs不存在，请检查文件路径是否正确。", configsPath)
         except IOError:

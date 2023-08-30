@@ -147,6 +147,10 @@ Item {
                     config.type = "text"
                 }
                 else if (config.hasOwnProperty("optionsList")) { // 枚举
+                    if(config.optionsList.length==0) {
+                        qmlapp.popup.message("", qsTr("%1 处理配置项异常：\n%2枚举列表为空。").arg(category_).arg(key), "error")
+                        return
+                    }
                     config.type = "enum"
                     config.default = config.optionsList[0][0]
                 }
