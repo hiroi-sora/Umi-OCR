@@ -7,7 +7,11 @@ import QtQuick.Window 2.15
 
 Item {
     property var mainWin // 主窗口的引用
+    property var screens: Qt.application.screens // 屏幕属性的引用
     
+    property var mScreen: mainWin.screen
+    property int mx: mainWin.x
+    property int my: mainWin.y
     // ========================= 【保存量】 =========================
     
     // 主窗口属性初始化
@@ -18,6 +22,8 @@ Item {
         if(!visi) {
             qmlapp.popup.simple(qsTr("欢迎使用 Umi-OCR"), qsTr("已启用后台模式，可通过快捷键使用功能。"))
         }
+        // 检查屏幕位置，防止初始出界
+        checkScreen()
     }
 
     // ========================= 【接口】 =========================
@@ -60,6 +66,26 @@ Item {
         // 关闭
         else {
             Qt.quit()
+        }
+    }
+
+    // 检查主窗口初始化屏幕位置，防止出界及过大
+    function checkScreen() {
+        if(mainWin.width > mScreen.desktopAvailableWidth)
+            mainWin.width = mScreen.desktopAvailableWidth
+        if(mainWin.height > mScreen.desktopAvailableHeight)
+            mainWin.height = mScreen.desktopAvailableHeight
+        if(mx < mScreen.virtualX) {
+            mainWin.x = mScreen.virtualX
+        }
+        else if(mx > mScreen.virtualX+mScreen.desktopAvailableWidth-mainWin.width) {
+            mainWin.x = mScreen.virtualX+mScreen.desktopAvailableWidth-mainWin.width
+        }
+        if(my < mScreen.virtualY+30) {
+            mainWin.y = mScreen.virtualY+30
+        }
+        else if(my > mScreen.virtualY+mScreen.desktopAvailableHeight-mainWin.height) {
+            mainWin.y = mScreen.virtualY+mScreen.desktopAvailableHeight-mainWin.height
         }
     }
 }

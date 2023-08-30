@@ -24,7 +24,7 @@ Item {
         for(let i in grabList) {
             // if(i==0) continue
             const g = grabList[i]  // 截图属性
-            const screen = Qt.application.screens[i]  // 获取对应编号的
+            const screen = Qt.application.screens[i]  // 获取对应编号的屏幕
             if(screen.name !== g.screenName) {
                 qmlapp.popup.message(qsTr("截图窗口展开异常"), 
                 qsTr("屏幕设备名称不相同：\n%1\n%2").arg(screen.name).arg(g.screenName), "error")
