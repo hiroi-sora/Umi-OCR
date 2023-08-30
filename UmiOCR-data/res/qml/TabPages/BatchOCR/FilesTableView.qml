@@ -41,7 +41,7 @@ Item{
     property var filesDict: {}
     property alias filesModel: tableModel
     // 列宽。第一列随总体宽度自动变化（[0]表示最小值），剩余列为固定值。
-    property var columnsWidth: [theme.smallTextSize*6, theme.smallTextSize*4, theme.smallTextSize*4]
+    property var columnsWidth: [size_.smallText*6, size_.smallText*4, size_.smallText*4]
     property int othersWidth: 0 // 除第一列以外的列宽，初始时固定下来。
     Component.onCompleted: {
         if(filesDict==undefined){
@@ -96,7 +96,7 @@ Item{
                 anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.right: parent.right
-                height: theme.textSize * 2
+                height: size_.text * 2
 
                 // 左打开图片按钮
                 IconTextButton {
@@ -104,7 +104,7 @@ Item{
                     anchors.left: parent.left
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
-                    anchors.margins: theme.smallSpacing * 0.5
+                    anchors.margins: size_.smallSpacing * 0.5
                     icon_: "folder"
                     text_: qsTr("选择图片")
 
@@ -120,7 +120,7 @@ Item{
                     anchors.right: parent.right
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
-                    anchors.margins: theme.smallSpacing * 0.5
+                    anchors.margins: size_.smallSpacing * 0.5
                     icon_: "clear"
                     text_: qsTr("清空")
 
@@ -151,13 +151,13 @@ Item{
                 anchors.top: tableTopPanel.bottom
                 anchors.left: parent.left
                 anchors.right: parent.right
-                height: theme.smallTextSize * 2
+                height: size_.smallText * 2
                 model: headerModel // 模型
 
                 // 元素
                 delegate: Rectangle {
                     implicitWidth: 0
-                    implicitHeight: theme.smallTextSize * 2
+                    implicitHeight: size_.smallText * 2
                     border.width: 1
                     color: "#00000000"
                     border.color: theme.coverColor1
@@ -165,7 +165,7 @@ Item{
                     Text_ {
                         text: display
                         anchors.centerIn: parent
-                        font.pixelSize: theme.smallTextSize
+                        font.pixelSize: size_.smallText
                     }
                 }
             }
@@ -207,7 +207,7 @@ Item{
                     // 元素
                     delegate: Rectangle {
                         implicitWidth: 0
-                        implicitHeight: theme.smallTextSize * 1.5
+                        implicitHeight: size_.smallText * 1.5
                         border.width: 1
                         color: "#00000000"
                         border.color: theme.coverColor1
@@ -219,8 +219,8 @@ Item{
                             // 文件名左对齐，其它项居中对齐
                             anchors.horizontalCenter: column===0 ? undefined : parent.horizontalCenter
                             anchors.left: column===0 ? parent.left : undefined
-                            anchors.leftMargin: theme.smallTextSize * 0.5
-                            font.pixelSize: theme.smallTextSize
+                            anchors.leftMargin: size_.smallText * 0.5
+                            font.pixelSize: size_.smallText
                             font.family: theme.dataFontFamily
                         }
 
@@ -258,7 +258,7 @@ Item{
             maskSource: Rectangle {
                 width: tableContainer.width
                 height: tableContainer.height
-                radius: theme.btnRadius
+                radius: size_.btnRadius
             }
         }
     }

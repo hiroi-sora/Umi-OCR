@@ -11,7 +11,7 @@ Button {
     property string text_: ""
     property string toolTip: "" // 鼠标悬停提示
     property bool bold_: false
-    property int textSize: theme.textSize
+    property int textSize: size_.text
     property color textColor_: theme.textColor
 
     property color bgColor_: "#00000000"
@@ -39,7 +39,7 @@ Button {
 
     background: Rectangle {
         anchors.fill: parent
-        radius: theme.btnRadius
+        radius: size_.btnRadius
         color: parent.pressed ? parent.bgPressColor_ : (
             parent.hovered ? parent.bgHoverColor_ : parent.bgColor_
         )

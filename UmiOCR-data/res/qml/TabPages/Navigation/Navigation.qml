@@ -53,21 +53,21 @@ TabPage {
             ScrollView {
                 id: scrollView
                 anchors.fill: parent
-                anchors.margins: theme.spacing
+                anchors.margins: size_.spacing
                 clip: true
 
                 Column {
                     anchors.fill: parent
-                    spacing: theme.spacing * 0.5
+                    spacing: size_.spacing * 0.5
 
                     Text {
                         text: qsTr("功能页")
                         width: scrollView.width
-                        height: theme.textSize * 2.5
+                        height: size_.text * 2.5
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         color: theme.subTextColor
-                        font.pixelSize: theme.textSize
+                        font.pixelSize: size_.text
                         font.family: theme.fontFamily
                     }
 
@@ -76,7 +76,7 @@ TabPage {
                         Button_ {
                             text_: title
                             width: scrollView.width
-                            height: theme.textSize * 2.5
+                            height: size_.text * 2.5
 
                             onHoveredChanged: {
                                 naviPage.introText = intro
@@ -101,7 +101,7 @@ TabPage {
             ScrollView {
                 id: introView
                 anchors.fill: parent
-                anchors.margins: theme.spacing * 2
+                anchors.margins: size_.spacing * 2
                 contentWidth: width // 内容宽度
                 clip: true // 溢出隐藏
 
@@ -114,7 +114,7 @@ TabPage {
                     selectByMouse: true // 允许鼠标选择文本
                     selectByKeyboard: true // 允许键盘选择文本
                     color: theme.textColor
-                    font.pixelSize: theme.textSize
+                    font.pixelSize: size_.text
                     font.family: theme.fontFamily
                 }
             }

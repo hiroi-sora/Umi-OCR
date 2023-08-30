@@ -345,12 +345,12 @@ Item {
         Column {
             id: panelContainer
             anchors.fill: parent
-            spacing: theme.spacing
+            spacing: size_.spacing
 
             // 顶部控制栏
             Item {
                 id: ctrlBar
-                height: theme.textSize*1.5
+                height: size_.text*1.5
                 anchors.left: parent.left
                 anchors.right: parent.right
 
@@ -417,23 +417,23 @@ Item {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.top: groupText.bottom
-                anchors.topMargin: theme.smallSpacing
+                anchors.topMargin: size_.smallSpacing
                 color: theme.bgColor
-                radius: theme.panelRadius
-                height: childrenRect.height + theme.smallSpacing
+                radius: size_.panelRadius
+                height: childrenRect.height + size_.smallSpacing
                 
                 Column {
                     id: panelContainer
                     anchors.left: parent.left
                     anchors.right: parent.right
                     anchors.top: parent.top
-                    anchors.margins: theme.smallSpacing
-                    spacing: theme.smallSpacing
+                    anchors.margins: size_.smallSpacing
+                    spacing: size_.smallSpacing
                 }
 
                 Item { // 底部占位
                     anchors.top: panelContainer.bottom
-                    height: theme.smallSpacing
+                    height: size_.smallSpacing
                 }
             }
         }
@@ -483,8 +483,8 @@ Item {
                 id: groupText
                 text: title+"："
                 anchors.left: parent.left
-                anchors.leftMargin: theme.smallSpacing
-                height: theme.textSize+theme.smallSpacing*2
+                anchors.leftMargin: size_.smallSpacing
+                height: size_.text+size_.smallSpacing*2
                 verticalAlignment: Text.AlignVCenter
             }
             // 折叠按钮
@@ -492,10 +492,10 @@ Item {
                 id: foldBtn
                 visible: enabledFold
                 anchors.right: parent.right
-                anchors.rightMargin: theme.smallSpacing
+                anchors.rightMargin: size_.smallSpacing
                 anchors.verticalCenter: groupText.verticalCenter
                 height: groupText.height
-                textSize: theme.smallTextSize
+                textSize: size_.smallText
                 textColor_: theme.subTextColor
                 text_: fold ? qsTr("展开")+" 🔽" : qsTr("折叠")+" 🔼"
                 onClicked: {
@@ -509,7 +509,7 @@ Item {
                 anchors.left: panelLeftBorder.right
                 anchors.right: parent.right
                 anchors.top: groupText.bottom
-                anchors.leftMargin: theme.smallSpacing*0.5 // 子项右偏移
+                anchors.leftMargin: size_.smallSpacing*0.5 // 子项右偏移
             }
             // 内容左边的边框
             Rectangle {
@@ -517,8 +517,8 @@ Item {
                 anchors.left: parent.left
                 anchors.top: panelContainer.top
                 anchors.bottom: panelContainer.bottom
-                anchors.leftMargin: theme.smallSpacing*2
-                width: theme.smallSpacing*0.5
+                anchors.leftMargin: size_.smallSpacing*2
+                width: size_.smallSpacing*0.5
                 color: theme.coverColor1
             }
         }
@@ -565,7 +565,7 @@ Item {
             CheckBox_ {
                 id: switchBtn
                 anchors.right: parent.right
-                anchors.rightMargin: theme.smallSpacing
+                anchors.rightMargin: size_.smallSpacing
                 anchors.verticalCenter: parent.verticalCenter
                 checked: boolRoot.checked
                 enabledAnime: boolRoot.isInit
@@ -596,7 +596,7 @@ Item {
                 color: "#00000000"
                 border.width: 2
                 border.color: theme.coverColor2
-                radius: theme.btnRadius
+                radius: size_.btnRadius
 
                 TextInput_ {
                     id: textInput
@@ -655,9 +655,9 @@ Item {
                     text: parent.currentText
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left: parent.left
-                    anchors.leftMargin: theme.smallSpacing
+                    anchors.leftMargin: size_.smallSpacing
                     verticalAlignment: Text.AlignVCenter
-                    font.pixelSize: theme.textSize
+                    font.pixelSize: size_.text
                     font.family: theme.fontFamily
                     color: theme.subTextColor
                 }
@@ -665,9 +665,9 @@ Item {
                 indicator: Icon_ {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.right: parent.right
-                    anchors.margins: theme.smallSpacing
-                    height: theme.smallTextSize
-                    width: theme.smallTextSize
+                    anchors.margins: size_.smallSpacing
+                    height: size_.smallText
+                    width: size_.smallText
                     icon: "down"
                     color: theme.subTextColor
                 }
@@ -677,7 +677,7 @@ Item {
                     color: "#00000000"
                     border.width: 2
                     border.color: theme.coverColor2
-                    radius: theme.btnRadius
+                    radius: size_.btnRadius
                     
                     // 背景
                     MouseAreaBackgroud {
@@ -687,12 +687,12 @@ Item {
                 // 选项
                 delegate: ItemDelegate {
                     width: parent.width
-                    height: theme.textSize + theme.smallSpacing
+                    height: size_.text + size_.smallSpacing
                     Text {
                         text: modelData
                         anchors.left: parent.left
-                        anchors.leftMargin: theme.smallSpacing
-                        font.pixelSize: theme.textSize
+                        anchors.leftMargin: size_.smallSpacing
+                        font.pixelSize: size_.text
                         font.family: theme.fontFamily
                         color: comboBox.currentIndex===index? theme.textColor:theme.subTextColor
                     }
@@ -767,7 +767,7 @@ Item {
                     color: "#00000000"
                     border.width: 2
                     border.color: theme.coverColor2
-                    radius: theme.btnRadius
+                    radius: size_.btnRadius
 
                     TextInput_ {
                         id: textInput
@@ -791,10 +791,10 @@ Item {
 
             Row {
                 anchors.right: parent.right
-                anchors.rightMargin: theme.smallSpacing
+                anchors.rightMargin: size_.smallSpacing
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
-                spacing: theme.smallSpacing
+                spacing: size_.smallSpacing
 
                 Repeater {
                     model: origin.btnsList

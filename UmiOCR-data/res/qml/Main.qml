@@ -36,6 +36,8 @@ Window {
 
     // 全局样式，通过 theme 来访问
     property Theme theme: ThemeLight{}
+    // 全局尺寸，通过 size_ 来访问
+    property Size_ size_: Size_{}
 
     // 全局单例，通过 qmlapp. 来访问
     Item {
@@ -85,7 +87,7 @@ Window {
         id: mainContainer
         anchors.fill: parent
         color: "#00000000"
-        radius: theme.windowRadius // 窗口圆角
+        radius: size_.windowRadius // 窗口圆角
 
         // 为了防止主窗启动不显示时，内容的宽度初始值为0，先让内容挂到固定宽度的Item下
         Item {
@@ -104,7 +106,7 @@ Window {
                 anchors.margins: 0 // 透明边框宽度
 
                 color: theme.bgColor // 整个窗口的背景颜色
-                radius: theme.windowRadius // 窗口圆角
+                radius: size_.windowRadius // 窗口圆角
 
                 // 标签视图
                 TabView_ { }
@@ -115,7 +117,7 @@ Window {
                     maskSource: Rectangle {
                         width: mainUI.width
                         height: mainUI.height
-                        radius: theme.windowRadius
+                        radius: size_.windowRadius
                     }
                 }
             }

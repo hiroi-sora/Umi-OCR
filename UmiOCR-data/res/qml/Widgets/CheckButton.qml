@@ -12,13 +12,13 @@ Button_ {
     checked: false
 
     contentItem: Row {
-        spacing: theme.smallSpacing
+        spacing: size_.smallSpacing
 
         // 复选框
         CheckBox_ {
             id: checkBox
             anchors.verticalCenter: parent.verticalCenter
-            width: theme.textSize
+            width: size_.text
             checked: btn.checked
             enabledAnime: btn.enabledAnime
         }

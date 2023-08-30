@@ -19,7 +19,7 @@ Item {
     anchors.right: parent.right
     clip: true
     // 这个选项是高级选项，且设置页未开启高级模式，则高度为0隐藏
-    height: (advanced&&!configs.advanced) ? 0 : (theme.textSize + theme.spacing)
+    height: (advanced&&!configs.advanced) ? 0 : (size_.text + size_.spacing)
 
     // 初始化
     Component.onCompleted: {
@@ -49,7 +49,7 @@ Item {
     Text_ {
         text: title
         anchors.left: parent.left
-        anchors.leftMargin: theme.smallSpacing
+        anchors.leftMargin: size_.smallSpacing
         anchors.verticalCenter: parent.verticalCenter
     }
     // 背景

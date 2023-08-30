@@ -9,11 +9,11 @@ Rectangle {
     property bool checked: false // 选中/非选中
     property bool enabledAnime: false // true 启用动画
 
-    height: theme.textSize
-    width: theme.textSize*2
+    height: size_.text
+    width: size_.text*2
     clip: true
     color: theme.bgColor
-    radius: theme.btnRadius
+    radius: size_.btnRadius
     border.width: 2
     border.color: theme.coverColor4
 
@@ -32,7 +32,7 @@ Rectangle {
         height: parent.height
         width: parent.width
         color: theme.yesColor
-        radius: theme.btnRadius
+        radius: size_.btnRadius
         Icon_ {
             anchors.fill: parent
             icon: "yes"

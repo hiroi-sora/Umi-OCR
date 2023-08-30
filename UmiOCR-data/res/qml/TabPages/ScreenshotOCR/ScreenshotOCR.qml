@@ -174,14 +174,14 @@ TabPage {
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.bottom: parent.bottom
-        anchors.margins: theme.spacing
+        anchors.margins: size_.spacing
         width: 32
 
         Column {
             anchors.top: parent.top
             anchors.left: parent.left
             anchors.right: parent.right
-            spacing: theme.spacing
+            spacing: size_.spacing
 
             Item {
                 anchors.left: parent.left
@@ -244,7 +244,7 @@ TabPage {
             TabPanel {
                 id: tabPanel
                 anchors.fill: parent
-                anchors.margins: theme.spacing
+                anchors.margins: size_.spacing
 
                 // 结果面板
                 ResultsTableView {

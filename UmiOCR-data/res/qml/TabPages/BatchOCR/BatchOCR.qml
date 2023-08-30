@@ -326,8 +326,8 @@ TabPage {
                 anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.right: parent.right
-                anchors.margins: theme.spacing
-                height: theme.textSize * 2
+                anchors.margins: size_.spacing
+                height: size_.text * 2
                 clip: true
 
                 // 右边按钮
@@ -336,7 +336,7 @@ TabPage {
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
                     anchors.right: parent.right
-                    width: theme.textSize * 6
+                    width: size_.text * 6
                     bold_: true
 
                     bgColor_: theme.coverColor1
@@ -351,14 +351,14 @@ TabPage {
                     anchors.top: parent.top
                     anchors.left: parent.left
                     anchors.right: runBtn.left
-                    anchors.rightMargin: theme.smallSpacing
-                    height: theme.textSize * 1.3
+                    anchors.rightMargin: size_.smallSpacing
+                    height: size_.text * 1.3
                     clip: true
 
                     Text_ {
                         anchors.right: parent.right
                         anchors.bottom: parent.bottom
-                        // anchors.rightMargin: theme.smallSpacing
+                        // anchors.rightMargin: size_.smallSpacing
                         
                         text: missionShow
                         color: theme.subTextColor
@@ -372,8 +372,8 @@ TabPage {
                     anchors.left: parent.left
                     anchors.bottom: parent.bottom
                     anchors.right: runBtn.left
-                    anchors.rightMargin: theme.smallSpacing
-                    anchors.topMargin: theme.smallSpacing * 0.5
+                    anchors.rightMargin: size_.smallSpacing
+                    anchors.topMargin: size_.smallSpacing * 0.5
 
                     HProgressBar {
                         id: missionProgress
@@ -391,8 +391,8 @@ TabPage {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
-                anchors.margins: theme.spacing
-                anchors.topMargin: theme.smallSpacing
+                anchors.margins: size_.spacing
+                anchors.topMargin: size_.smallSpacing
                 msnState: tabPage.msnState
 
                 onAddImages: {
@@ -416,7 +416,7 @@ TabPage {
             TabPanel {
                 id: tabPanel
                 anchors.fill: parent
-                anchors.margins: theme.spacing
+                anchors.margins: size_.spacing
 
                 tabsModel: [
                     {

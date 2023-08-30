@@ -19,7 +19,7 @@ Rectangle {
     property var onClosed: undefined // 关闭函数，外部传入
     property string type: "" // 可选：""默认， "warning"警告， "error"错误
     // 定制参数
-    property int shadowWidth: theme.spacing * 3 // 边缘阴影宽度
+    property int shadowWidth: size_.spacing * 3 // 边缘阴影宽度
     property string icon: "bell" // 图标
     property color iconColor: theme.themeColor2 // 图标前景颜色
     property color iconBgColor: theme.coverColor1 // 图标背景颜色
@@ -49,16 +49,16 @@ Rectangle {
 
     // ===========================================================
 
-    width: theme.textSize * 20
+    width: size_.text * 20
     height: childrenRect.height
     color: theme.bgColor
-    radius: theme.panelRadius
+    radius: size_.panelRadius
 
     // 列布局
     Column {
         anchors.left: parent.left
         anchors.right: parent.right
-        spacing: theme.spacing
+        spacing: size_.spacing
         // 顶部占位
         Item {
             width: 1
@@ -66,8 +66,8 @@ Rectangle {
         }
         // 图标
         Rectangle {
-            width: theme.textSize*3
-            height: theme.textSize*3
+            width: size_.text*3
+            height: size_.text*3
             anchors.horizontalCenter: parent.horizontalCenter
             color: iconBgColor
             radius: 99999
@@ -84,7 +84,7 @@ Rectangle {
         Text_ {
             id: textTitle
             anchors.horizontalCenter: parent.horizontalCenter
-            font.pixelSize: theme.largeTextSize
+            font.pixelSize: size_.largeText
             visible: title!==""
             text: title
         }
@@ -93,7 +93,7 @@ Rectangle {
             id: textMsg
             anchors.left: parent.left
             anchors.right: parent.right
-            anchors.margins: theme.textSize
+            anchors.margins: size_.text
             wrapMode: TextEdit.Wrap // 尽量在单词边界处换行
             horizontalAlignment: Text.AlignHCenter // 水平居中
             visible: msg!==""
@@ -108,17 +108,17 @@ Rectangle {
         Rectangle {
             anchors.left: parent.left
             anchors.right: parent.right
-            height: theme.textSize*2+theme.spacing*2
+            height: size_.text*2+size_.spacing*2
             color: theme.coverColor1
         
             Row {
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
                 anchors.horizontalCenter: parent.horizontalCenter
-                anchors.margins: theme.spacing
+                anchors.margins: size_.spacing
 
-                property real lrMargin: theme.spacing*4
-                spacing: theme.spacing
+                property real lrMargin: size_.spacing*4
+                spacing: size_.spacing
                 property int childrenWidth: 10
                 Component.onCompleted: { // 计算子级宽度
                     const n = btnsList.length

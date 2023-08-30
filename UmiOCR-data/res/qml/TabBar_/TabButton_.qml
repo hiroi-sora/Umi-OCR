@@ -33,7 +33,7 @@ Button {
 
             // TODO: 图标
             Item {
-                width: theme.textSize*0.2 // 先占位
+                width: size_.text*0.2 // 先占位
                 height: btn.height // 适应整个按钮的高度
             }
 
@@ -53,9 +53,9 @@ Button {
                 // 未锁定，且主按钮悬停或选中时才显示
                 visible: !qmlapp.tab.barIsLock && (btn.hovered || btn.checked)
                 Layout.alignment: Qt.AlignRight
-                Layout.rightMargin: theme.hTabBarHeight * 0.2
+                Layout.rightMargin: size_.hTabBarHeight * 0.2
 
-                property real size: theme.hTabBarHeight * 0.7
+                property real size: size_.hTabBarHeight * 0.7
                 implicitWidth: size
                 implicitHeight: size
                 bgColor_: "#00000000"
@@ -92,7 +92,7 @@ Button {
         layer.effect: DropShadow {
             transparentBorder: true
             color: theme.coverColor3
-            samples: theme.hTabBarShadowHeight
+            samples: size_.hTabBarShadowHeight
         }
 
         // 点击和拖拽处理

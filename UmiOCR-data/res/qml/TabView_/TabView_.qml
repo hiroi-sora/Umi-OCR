@@ -16,7 +16,7 @@ Rectangle {
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        height: theme.hTabBarHeight
+        height: size_.hTabBarHeight
         color: theme.tabBarColor
 
         HTabBar { }

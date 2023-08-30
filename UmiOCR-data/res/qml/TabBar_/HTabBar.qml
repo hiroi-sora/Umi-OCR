@@ -15,7 +15,7 @@ RowLayout  {
 
     // 标签栏控制（左，置顶按钮）
     Item  {
-        width: theme.hTabBarHeight
+        width: size_.hTabBarHeight
         Layout.fillHeight: true
         // 图钉按钮
         Button {
@@ -35,7 +35,7 @@ RowLayout  {
 
             background: Rectangle {
                 anchors.fill: parent
-                radius: theme.btnRadius
+                radius: size_.btnRadius
                 color: parent.checked ? theme.coverColor4 : (
                     parent.hovered ? theme.coverColor2 : "#00000000"
                 )
@@ -62,7 +62,7 @@ RowLayout  {
             let w = hTabBarMain.width
             if(!qmlapp.tab.barIsLock) w -= tabBarControl.width // 无锁定时，减去+按钮宽度
             w = w / barManager.model.count
-            tabWidth = Math.min(w, theme.hTabMaxWidth)
+            tabWidth = Math.min(w, size_.hTabMaxWidth)
         }
         onWidthChanged: resetTabBtnWidth()  // 监听标签栏总宽度变化
         // 监听改变锁定，重设宽度
@@ -82,7 +82,7 @@ RowLayout  {
         Rectangle { // 标签按钮下方的阴影
             anchors.bottom: parent.bottom
             width: parent.width
-            height: theme.hTabBarShadowHeight
+            height: size_.hTabBarShadowHeight
             gradient: Gradient {
                 GradientStop { position: 0.0; color: "#00000000" }
                 GradientStop { position: 1.0; color: theme.coverColor2 }
@@ -93,7 +93,7 @@ RowLayout  {
             id: dragIndicator
             visible: false
             width: parent.tabWidth
-            height: theme.hTabBarHeight
+            height: size_.hTabBarHeight
             gradient: Gradient { // 水平渐变
                 orientation: Gradient.Horizontal
                 GradientStop { position: 1.0; color: "#00000000" }
@@ -115,7 +115,7 @@ RowLayout  {
                     checked: checked_ // 初始时是否选中
                     index: index_ // 初始位置
                     width: hTabBarMain.tabWidth
-                    height: theme.hTabBarHeight
+                    height: size_.hTabBarHeight
                 }
 
                 // 事件：创建新标签时（与父类的槽同时生效）
@@ -180,8 +180,8 @@ RowLayout  {
             Rectangle{
                 id: tabBarControl
                 color: "#00000000"
-                width: theme.hTabBarHeight
-                height: theme.hTabBarHeight
+                width: size_.hTabBarHeight
+                height: size_.hTabBarHeight
                 visible: !qmlapp.tab.barIsLock
 
                 // 添加“+”按钮
@@ -219,7 +219,7 @@ RowLayout  {
 
     // 标签栏控制（右，锁定按钮）
     Item{
-        width: theme.hTabBarHeight
+        width: size_.hTabBarHeight
         Layout.fillHeight: true
 
         // 锁定“🔒︎”按钮
@@ -240,7 +240,7 @@ RowLayout  {
 
             background: Rectangle {
                 anchors.fill: parent
-                radius: theme.btnRadius
+                radius: size_.btnRadius
                 color: parent.checked ? theme.coverColor4 : (
                     parent.hovered ? theme.coverColor2 : "#00000000"
                 )

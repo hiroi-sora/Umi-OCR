@@ -95,7 +95,7 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: bottomCtrl.top
-        anchors.margins: theme.spacing
+        anchors.margins: size_.spacing
         anchors.bottomMargin: 0
         color: theme.bgColor
 
@@ -174,8 +174,8 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        anchors.margins: theme.spacing
-        height: theme.textSize*1.5
+        anchors.margins: size_.spacing
+        height: size_.text*1.5
         clip: true
 
         // 左
@@ -187,7 +187,7 @@ Item {
             Button_ {
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
-                textSize: theme.smallTextSize
+                textSize: size_.smallText
                 text_: showTextBoxes ? qsTr("显示文本")+" 🔼" : qsTr("隐藏文本")+" 🔽"
                 onClicked: showTextBoxes = !showTextBoxes
                 visible: hasTextBoxes
@@ -237,7 +237,7 @@ Item {
                 horizontalAlignment: Text.AlignRight
                 text: (imageScale*100).toFixed(0) + "%"
                 color: theme.subTextColor
-                width: theme.textSize * 2.7
+                width: size_.text * 2.7
             }
         }
     }

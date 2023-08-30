@@ -15,13 +15,13 @@ ToolTip {
     contentItem: Text { // 前景文字
         text: rootToolTip.text
         font.family: theme.fontFamily
-        font.pixelSize: theme.smallTextSize
+        font.pixelSize: size_.smallText
         color: theme.textColor
     }
 
     background: Rectangle { // 背景矩形
         color: theme.bgColor
         border.color: theme.coverColor4
-        radius: theme.btnRadius
+        radius: size_.btnRadius
     }
 }

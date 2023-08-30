@@ -24,7 +24,7 @@ Item {
     Item {
         id: doubleColumn
         anchors.fill: parent
-        anchors.margins: theme.spacing
+        anchors.margins: size_.spacing
 
         property alias hideWidth: doubleColumnCon.hideWidth
         property int hideLR: 0 // 0为不隐藏，1为隐藏左边，2为隐藏右边
@@ -74,7 +74,7 @@ Item {
         // 去到初始位置
         function toInit() {
             if(parent.initSplitterX >= 0 && parent.initSplitterX <= 1)
-                splitterX = width * parent.initSplitterX - theme.spacing * 2
+                splitterX = width * parent.initSplitterX - size_.spacing * 2
             else
                 splitterX = parent.initSplitterX
         }
@@ -95,9 +95,9 @@ Item {
             id: splitter
             anchors.top: parent.top
             anchors.bottom: parent.bottom
-            anchors.topMargin: theme.spacing
-            anchors.bottomMargin: theme.spacing
-            width: theme.spacing
+            anchors.topMargin: size_.spacing
+            anchors.bottomMargin: size_.spacing
+            width: size_.spacing
             x: 0 // 位置可变换
             z: 1
             property bool isVisible: splitterMouseArea.containsMouse || btnsMouseArea.containsMouse || splitterMouseArea.drag.active || doubleColumn.hideLR!==0
@@ -127,7 +127,7 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
-                width: theme.spacing * 0.3
+                width: size_.spacing * 0.3
                 radius: width
                 color: splitterMouseArea.pressed ? theme.coverColor4 : theme.coverColor2
             }
@@ -139,21 +139,21 @@ Item {
                 anchors.bottom: parent.bottom
                 hoverEnabled: true
                 cursorShape: Qt.PointingHandCursor
-                width: containsMouse ? theme.textSize * 2 : parent.width 
-                height: theme.textSize * (doubleColumn.hideLR===0 ? 6 : 4)
+                width: containsMouse ? size_.text * 2 : parent.width 
+                height: size_.text * (doubleColumn.hideLR===0 ? 6 : 4)
                 property int selectIndex: -1
                 onExited: selectIndex = -1
                 onPositionChanged: {
                     if(doubleColumn.hideLR===0) {
-                        if(mouse.y < theme.textSize * 2)
+                        if(mouse.y < size_.text * 2)
                             selectIndex = 1
-                        else if(mouse.y < theme.textSize * 4)
+                        else if(mouse.y < size_.text * 4)
                             selectIndex = 2
                         else
                             selectIndex = 0
                     }
                     else {
-                        if(mouse.y < theme.textSize * 2)
+                        if(mouse.y < size_.text * 2)
                             selectIndex = doubleColumn.hideLR===1 ? 2 : 1
                         else
                             selectIndex = 0
@@ -168,8 +168,8 @@ Item {
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
-                    width: theme.textSize * 2
-                    radius: theme.panelRadius
+                    width: size_.text * 2
+                    radius: size_.panelRadius
 
                     Column {
                         width: parent.width

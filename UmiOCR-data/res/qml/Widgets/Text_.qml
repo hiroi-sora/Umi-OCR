@@ -8,7 +8,7 @@ Text {
     // 默认颜色
     color: theme.textColor
     // 默认大小
-    font.pixelSize: theme.textSize
+    font.pixelSize: size_.text
     // 默认字体
     font.family: theme.fontFamily
 }

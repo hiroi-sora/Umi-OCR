@@ -71,8 +71,8 @@ Item {
     TableView {
         id: tableView
         anchors.fill: parent
-        anchors.rightMargin: theme.smallSpacing
-        rowSpacing: theme.spacing // 行间隔
+        anchors.rightMargin: size_.smallSpacing
+        rowSpacing: size_.spacing // 行间隔
         contentWidth: parent.width // 内容宽度
         model: resultsModel // 模型
         flickableDirection: Flickable.VerticalFlick // 只允许垂直滚动
@@ -124,7 +124,7 @@ Item {
     // 外置控制栏
     Item {
         id: ctrlBar
-        height: theme.textSize*1.5
+        height: size_.text*1.5
         anchors.left: parent.left
         anchors.right: parent.right
 

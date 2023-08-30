@@ -12,11 +12,11 @@ TabPage {
     id: tabPage
     Panel {
         anchors.fill: parent
-        anchors.margins: theme.spacing
+        anchors.margins: size_.spacing
         
         Item {
             anchors.fill: parent
-            anchors.margins: theme.spacing
+            anchors.margins: size_.spacing
             Component.onCompleted: { // 将全局设置UI的父级重定向过来
                 // 就算本页面删除，全局UI也不会被删，只会丢失父级
                 qmlapp.globalConfigs.panelComponent.parent = this

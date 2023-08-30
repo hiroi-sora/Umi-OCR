@@ -29,7 +29,7 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
-        height: theme.textSize * 2
+        height: size_.text * 2
 
         // 左：选项栏
         TabBar {
@@ -50,7 +50,7 @@ Item {
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
                     checkable: true
-                    width: contentText.contentWidth + theme.textSize*2
+                    width: contentText.contentWidth + size_.text*2
 
                     contentItem: Text_ {
                         id: contentText
@@ -102,7 +102,7 @@ Item {
             layer.enabled: true
             layer.effect: OpacityMask {
                 maskSource: Rectangle {
-                    radius: theme.btnRadius
+                    radius: size_.btnRadius
                     width: bar.width
                     height: bar.height
                 }
@@ -148,7 +148,7 @@ Item {
         anchors.right: parent.right
         anchors.top: topContainer.bottom
         anchors.bottom: parent.bottom
-        anchors.topMargin: theme.smallSpacing
+        anchors.topMargin: size_.smallSpacing
         currentIndex: bar.currentIndex
         interactive: false // 禁止直接滑动视图本身
         Component.onCompleted:{

@@ -36,15 +36,15 @@ Popup {
     closePolicy: Popup.NoAutoClose
     parent: Overlay.overlay
     anchors.centerIn: parent
-    property int maxWidth: parent.width - theme.textSize*10
-    width: text.width + theme.spacing*2
-    height: text.height + theme.spacing*2
+    property int maxWidth: parent.width - size_.text*10
+    width: text.width + size_.spacing*2
+    height: text.height + size_.spacing*2
     
     // 背景
     background: Rectangle {
         visible: message!==""
         color: theme.bgColor
-        radius: theme.panelRadius
+        radius: size_.panelRadius
 
         Text_ {
             id: text
