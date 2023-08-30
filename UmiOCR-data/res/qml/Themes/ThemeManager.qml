@@ -25,11 +25,6 @@ Item {
             theme = themeDict[key]
         }
     }
-    // 切换动画特效 开true / 关false
-    function switchEnabledEffect(flag){
-        for(let k in themeDict)
-            themeDict[k].enabledEffect = flag
-    }
 
     // ========================= 【内部】 =========================
 

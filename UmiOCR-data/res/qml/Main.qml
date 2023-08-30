@@ -63,6 +63,7 @@ Window {
         property alias keyMouse: keyMouse
         property alias systemTray: systemTray
         property alias mainWin: mainWin
+        property bool enabledEffect: false // 全局是否启用动画
 
         Component.onCompleted: {
             // 延时加载标签页

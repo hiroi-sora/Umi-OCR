@@ -198,7 +198,7 @@ RowLayout  {
 
             // 动画
             add: Transition { // 添加子项
-                enabled: theme.enabledEffect
+                enabled: qmlapp.enabledEffect
                 NumberAnimation {
                     properties: "opacity, scale" // 透明度和大小从小到大
                     from: 0; to: 1.0
@@ -207,7 +207,7 @@ RowLayout  {
                 }
             }
             move: Transition { // 移动子项
-                enabled: theme.enabledEffect
+                enabled: qmlapp.enabledEffect
                 NumberAnimation {
                     properties: "x,y"
                     easing.type: Easing.OutBack

@@ -36,7 +36,7 @@ Item {
             }
             nscPopup.show(title, msg, time) // 传入信息
             open() // 开始
-            if(!theme.enabledEffect) { // 无动画时，瞬间出现
+            if(!qmlapp.enabledEffect) { // 无动画时，瞬间出现
                 nscPopup.y = showY
             }
         }
@@ -60,7 +60,7 @@ Item {
             y: notificationPopup.showY
         }
         // 进入动画
-        enter: theme.enabledEffect ? enterAnimePop : null
+        enter: qmlapp.enabledEffect ? enterAnimePop : null
         Transition {
             id: enterAnimePop
             NumberAnimation { 
@@ -73,7 +73,7 @@ Item {
             }
         }
         // 关闭动画
-        exit: theme.enabledEffect ? exitAnimePop : null
+        exit: qmlapp.enabledEffect ? exitAnimePop : null
         Transition {
             id: exitAnimePop
             NumberAnimation { 
@@ -104,7 +104,7 @@ Item {
             let screenHeight = Screen.height
             x = (screenWidth - width) / 2 // 水平居中
             nscWindow.show(title, msg, time) // 传入信息
-            if(theme.enabledEffect) { // 出现动画
+            if(qmlapp.enabledEffect) { // 出现动画
                 enterAnimeWin.start()
             }
             else { // 无动画时，y瞬间出现
@@ -115,7 +115,7 @@ Item {
         }
         // 隐藏通知弹窗
         function hide() {
-            if(theme.enabledEffect) { // 关闭动画
+            if(qmlapp.enabledEffect) { // 关闭动画
                 exitAnimeWin.start()
             }
             else { // 无动画时，瞬间关闭

@@ -149,7 +149,7 @@ Button {
         if(enabledAni) runAni = checked
     }
     SequentialAnimation{ // 串行动画
-        running: theme.enabledEffect && runAni
+        running: qmlapp.enabledEffect && runAni
         // 动画1：放大
         NumberAnimation{
             target: btn

@@ -163,7 +163,7 @@ Rectangle {
     }
 
     // 边缘阴影
-    layer.enabled: theme.enabledEffect && shadowWidth>0
+    layer.enabled: qmlapp.enabledEffect && shadowWidth>0
     layer.effect: DropShadow {
         transparentBorder: true
         color: theme.coverColor4

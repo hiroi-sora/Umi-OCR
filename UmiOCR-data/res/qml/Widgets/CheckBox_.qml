@@ -39,7 +39,7 @@ Rectangle {
             color: theme.bgColor
         }
         Behavior on x { // 位移动画
-            enabled: theme.enabledEffect && enabledAnime
+            enabled: qmlapp.enabledEffect && enabledAnime
             NumberAnimation {
                 duration: 200
                 easing.type: Easing.OutCirc

@@ -77,10 +77,4 @@ Item {
     property real spacing: 10
     // 小间距
     property real smallSpacing: spacing * 0.6
-
-
-    // ========================= 【特效】 =========================
-
-    // 是否全局启用美化特效
-    property bool enabledEffect: true
 }

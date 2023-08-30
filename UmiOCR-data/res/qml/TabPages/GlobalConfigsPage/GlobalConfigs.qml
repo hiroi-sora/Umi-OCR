@@ -58,7 +58,7 @@ Configs {
                 "default": false,
                 "toolTip": qsTr("在低配置机器上，禁用动画、阴影等效果可减少部分资源占用"),
                 "onChanged": (flag)=>{
-                    qmlapp.themeManager.switchEnabledEffect(!flag)
+                    qmlapp.enabledEffect = !flag
                 },
             },
         },
