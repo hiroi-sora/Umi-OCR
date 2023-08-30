@@ -12,6 +12,9 @@ Configs {
         // OCR参数
         "ocr": qmlapp.globalConfigs.ocrManager.deploy(this, "ocr"), 
 
+        // 后处理
+        "tbpu": qmlapp.globalConfigs.utilsDicts.getTbpu(),
+
         // 任务参数
         "mission": {
             "title": qsTr("批量任务"),

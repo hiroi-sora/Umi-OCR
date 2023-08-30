@@ -10,6 +10,10 @@
 
 from ..ocr.api import getApiOcr, isApiOcr
 from .mission import Mission
+from ..ocr.tbpu import Merge as tbpuMerge
+
+from PIL import Image
+from io import BytesIO
 
 
 class __MissionOcrClass(Mission):
@@ -19,6 +23,17 @@ class __MissionOcrClass(Mission):
         self.__api = None  # 当前引擎api对象
 
     # ========================= 【重载】 =========================
+
+    def addMissionList(self, msnInfo, msnList):  # 添加任务列表
+        # 实例化 tbpu 文本后处理模块
+        msnInfo["tbpu"] = []
+        argd = msnInfo["argd"]
+        if "tbpu.merge" in argd:
+            # 段落合并
+            if argd["tbpu.merge"] in tbpuMerge:
+                msnInfo["tbpu"].append(tbpuMerge[argd["tbpu.merge"]]())
+        print("== 创建 tbpu.merge ", msnInfo["tbpu"])
+        return super().addMissionList(msnInfo, msnList)
 
     def msnPreTask(self, msnInfo):  # 用于更新api和参数
         # 检查API对象
@@ -36,13 +51,29 @@ class __MissionOcrClass(Mission):
             res = self.__api.runPath(msn["path"])
         elif "bytes" in msn:
             res = self.__api.runBytes(msn["bytes"])
-        elif "clipboard" in msn:
-            res = self.__api.runClipboard()
+        # elif "clipboard" in msn:
+        #     res = self.__api.runClipboard()
         else:
             res = {
                 "code": 901,
                 "data": f"[Error] Unknown task type.\n【异常】未知的任务类型。\n{str(msn)[:100]}",
             }
+        # 执行 tbpu
+        if res["code"] == 100:
+            if msnInfo["tbpu"]:
+                imgInfo = {"w": 0, "h": 0}
+                if "path" in msn:
+                    with Image.open(msn["path"]) as image:
+                        width, height = image.size
+                        imgInfo = {"w": width, "h": height}
+                elif "bytes" in msn:
+                    imgFile = BytesIO(msn["bytes"])
+                    with Image.open(imgFile) as image:
+                        width, height = image.size
+                        imgInfo = {"w": width, "h": height}
+                for tbpu in msnInfo["tbpu"]:
+                    tbpu.run(res["data"], imgInfo)
+                print("执行tbpu！", imgInfo)
         return res
 
     # ========================= 【qml接口】 =========================
