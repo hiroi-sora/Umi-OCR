@@ -12,6 +12,9 @@ Configs {
         // OCR参数
         "ocr": qmlapp.globalConfigs.ocrManager.deploy(this, "ocr"), 
 
+        // 后处理
+        "tbpu": qmlapp.globalConfigs.utilsDicts.getTbpu(),
+
         "hotkey": {
             "title": qsTr("快捷键"),
             "type": "group",

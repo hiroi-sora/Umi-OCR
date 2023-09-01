@@ -2,6 +2,8 @@
 
 from .tbpu import Tbpu
 
+Punctuation = ".,;:!?"
+
 
 class MergeLineH(Tbpu):
     def __init__(self):
@@ -24,6 +26,15 @@ class MergeLineH(Tbpu):
         return False
 
     def merge2text(self, text1, text2):  # 合并两段文字
+        a, b = text1[-1], text2[0]  # 两段的开头/结尾字符
+        if (
+            a.isdigit()  # 数字
+            or b.isdigit()  # 字符
+            or a.isalpha()
+            or b.isalpha()
+            or a in Punctuation
+        ):
+            return text1 + " " + text2
         return text1 + text2
 
     def run(self, textBlocks, imgInfo):
