@@ -13,7 +13,7 @@ import "../../js/utils.js" as Utils
 TabPage {
     id: tabPage
     // 配置
-    BatchOcrConfigs { id: batchOcrConfigs } 
+    BatchOCRConfigs { id: batchOcrConfigs } 
     configsComp: batchOcrConfigs
 
     // ========================= 【逻辑】 =========================
@@ -41,7 +41,7 @@ TabPage {
                 ]
             )
             console.log("自动添加！！！！！！！！！！！！！")
-            ocrStart()
+            // ocrStart()
         }
     }
 
