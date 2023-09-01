@@ -71,9 +71,10 @@ class __MissionOcrClass(Mission):
                     with Image.open(imgFile) as image:
                         width, height = image.size
                         imgInfo = {"w": width, "h": height}
+                else:
+                    print("【Warning】tbpu未获得图片信息！")
                 for tbpu in msnInfo["tbpu"]:
-                    tbpu.run(res["data"], imgInfo)
-                print("执行tbpu！", imgInfo)
+                    res["data"] = tbpu.run(res["data"], imgInfo)
         return res
 
     # ========================= 【qml接口】 =========================
