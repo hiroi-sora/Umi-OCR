@@ -12,6 +12,10 @@ Item {
     // 设置图片源，展示一张图片
     function setSource(source) {
         hasTextBoxes = false
+        // 特殊字符#替换为%23
+        if(source.startsWith("file:///") && source.includes("#")) {
+            source = source.replace(new RegExp("#", "g"), "%23");
+        }
         showImage.source = source // 设置源
         if(showImage.source == "") {
             imageScale = 1.0
