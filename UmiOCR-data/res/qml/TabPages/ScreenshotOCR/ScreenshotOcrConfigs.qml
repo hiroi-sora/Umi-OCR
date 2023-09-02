@@ -47,6 +47,13 @@ Configs {
                 "title": qsTr("弹出通知"),
                 "default": true,
             },
-        }
+        },
+
+        "other": {
+            "title": qsTr("其它"),
+            "type": "group",
+
+            "simpleNotificationType": qmlapp.globalConfigs.utilsDicts.getSimpleNotificationType()
+        },
     }
 }

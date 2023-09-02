@@ -35,11 +35,7 @@ Configs {
                     [false, qsTr("退出应用")],
                 ],
             },
-            "disableExternalNotification": {
-                "title": qsTr("禁用外部通知"),
-                "default": false,
-                "toolTip": qsTr("不再发送窗口外部通知。当应用处于后台时，你可能错过信息"),
-            },
+            "simpleNotificationType": utilsDicts.getSimpleNotificationType(true),
         },
     
         "style": {
