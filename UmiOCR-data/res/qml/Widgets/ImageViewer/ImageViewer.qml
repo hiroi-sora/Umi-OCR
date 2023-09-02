@@ -50,13 +50,7 @@ Item {
 
     // ========================= 【处理】 =========================
 
-    // 根据中心位置，更新Image的图片实际位置
-    function updateImageXY() {
-        flickable.contentY =  - (flickable.height - showImageContainer.height)/2
-        flickable.contentX =  - (flickable.width - showImageContainer.width)/2
-    }
-
-    // 缩放，传入 flag>0 放大， <0 缩小 ，0回归100%
+    // 缩放，传入 flag>0 放大， <0 缩小 ，0回归100%。以相框中心为锚点。
     function imageScaleAddSub(flag, step=0.1) {
         if(showImage.source == "") return
         // 计算缩放比例
@@ -71,15 +65,34 @@ Item {
             s = (imageScale - step).toFixed(1)
             if(s < 0.1) s = 0.1
         }
-        imageScale = s
-        updateImageXY()
+
+        // 目标锚点
+        let gx = -flickable.width/2
+        let gy = -flickable.height/2
+        // 目标锚点在图片中的原比例
+        let s1x = (flickable.contentX-gx)/showImageContainer.width
+        let s1y = (flickable.contentY-gy)/showImageContainer.height
+        // 目标锚点在图片中的新比例，及差值
+        imageScale = s // 更新缩放
+        let s2x = (flickable.contentX-gx)/showImageContainer.width
+        let s2y = (flickable.contentY-gy)/showImageContainer.height
+        let sx = s2x-s1x
+        let sy = s2y-s1y
+        // 实际长度差值
+        let lx = sx*showImageContainer.width
+        let ly = sy*showImageContainer.height
+        // 偏移
+        flickable.contentX -= lx
+        flickable.contentY -= ly
     }
 
     // 图片填满组件
     function imageScaleFull() {
         if(showImage.source == "") return
         imageScale = Math.min(flickable.width/imageW, flickable.height/imageH)
-        updateImageXY()
+        // 图片中心对齐相框
+        flickable.contentY =  - (flickable.height - showImageContainer.height)/2
+        flickable.contentX =  - (flickable.width - showImageContainer.width)/2
     }
 
     
