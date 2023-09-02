@@ -37,14 +37,18 @@ Item {
                 const info = {
                     x: d.box[0][0],
                     y: d.box[0][1],
+                    x2: d.box[2][0],
+                    y2: d.box[2][1],
                     width: d.box[2][0] - d.box[0][0],
                     height: d.box[2][1] - d.box[0][1],
-                    text: d.text
+                    text: d.text,
+                    selected: false, // 是否选中
                 }
                 tbs.push(info)
             }
             textBoxes = tbs
             hasTextBoxes = true
+            retainSelected = false
         }
     }
 
@@ -95,6 +99,47 @@ Item {
         flickable.contentX =  - (flickable.width - showImageContainer.width)/2
     }
 
+    // 选中坐标处的文字
+    function lookTextBox(x, y, isAdd=false) {
+        let sText = "", sFlag = ""
+        for(let i=0, l=textBoxes.length; i<l; i++) {
+            const tb = textBoxes[i]
+            if(x >= tb.x && x <= tb.x2 && y >= tb.y && y <= tb.y2) {
+                if(tb.selected == false) {
+                    textBoxRepeater.itemAt(i).isSelected = true
+                    tb.selected = true
+                }
+                sText += tb.text
+                sFlag += i.toString()
+            }
+            else {
+                if(tb.selected == true) {
+                    if(isAdd) {
+                        sText += tb.text
+                        sFlag += i.toString()
+                    }
+                    else {
+                        tb.selected = false
+                        textBoxRepeater.itemAt(i).isSelected = false
+                    }
+                }
+            }
+        }
+        if(isAdd && sFlag=="") { // 增模式下为空，关闭选中保持
+            retainSelected = false
+            return
+        }
+        if(!isAdd && retainSelected) // 保持上一轮选中
+            return
+        if(isAdd) { // 增模式下不为空，启用选中保持
+            retainSelected = true
+        }
+        if(sText && sText!=selectedText) { // 刷新选中文字
+            selectedText=sText
+            console.log(sText)
+        }
+    }
+
     
     // ======================== 【布局】 =========================
 
@@ -104,6 +149,8 @@ Item {
     property bool hasTextBoxes: false // 当前有无文本块
     property bool showTextBoxes: true // 显示文本框
     property var textBoxes: [] // 文本框列表
+    property var selectedText: "" // 选中文本
+    property bool retainSelected: false // 保留选中状态
 
     // 图片区域
     Rectangle {
@@ -139,9 +186,11 @@ Item {
                         visible: hasTextBoxes && showTextBoxes
 
                         Repeater {
+                            id: textBoxRepeater
                             model: textBoxes
                             Rectangle {
                                 property var info: textBoxes[index]
+                                property bool isSelected: false
                                 x: info.x
                                 y: info.y
                                 width: info.width
@@ -150,7 +199,32 @@ Item {
                                 border.width: imageScale>1?1:1/imageScale
                                 border.color: "red"
                                 color: "#00000000"
+                                Rectangle { // 选中指示
+                                    visible: parent.isSelected
+                                    anchors.fill: parent
+                                    border.width: 5
+                                    border.color: "red"
+                                    color: "#00000000"
+                                }
                             }
+                        }
+                    }
+
+                    // 监听点击和拖拽
+                    MouseArea {
+                        id: inMouseArea
+                        anchors.fill: parent
+                        acceptedButtons: Qt.RightButton
+                        hoverEnabled: true
+                        onPositionChanged : {
+                            lookTextBox(mouse.x, mouse.y, pressed)
+                        }
+                        onPressed: {
+                            lookTextBox(mouse.x, mouse.y, pressed)
+                            flickable.interactive = false // 禁止移动
+                        }
+                        onReleased: {
+                            flickable.interactive = true
                         }
                     }
                 }
@@ -169,10 +243,10 @@ Item {
             border.color: theme.coverColor3
         }
 
-        // 监听更多鼠标事件
+        // 监听滚轮缩放
         MouseArea {
             anchors.fill: parent
-            acceptedButtons: Qt.RightButton
+            acceptedButtons: Qt.NoButton
             // 滚轮缩放
             onWheel: {
                 if (wheel.angleDelta.y > 0) {
