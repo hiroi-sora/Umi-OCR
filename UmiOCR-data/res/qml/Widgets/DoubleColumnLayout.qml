@@ -88,6 +88,9 @@ Item {
             anchors.left: parent.left
             anchors.top: parent.top
             anchors.bottom: parent.bottom
+            onVisibleChanged: {
+                leftItem.parent = visible?leftContainer:hideContainer
+            }
         }
 
         // 中间拖动条
@@ -205,6 +208,18 @@ Item {
             id: rightContainer
             anchors.left: splitter.right
             anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            onVisibleChanged: {
+                rightItem.parent = visible?rightContainer:hideContainer
+            }
+        }
+
+        // 隐藏容器
+        Item {
+            id: hideContainer
+            visible: false
+            width: 400
             anchors.top: parent.top
             anchors.bottom: parent.bottom
         }
