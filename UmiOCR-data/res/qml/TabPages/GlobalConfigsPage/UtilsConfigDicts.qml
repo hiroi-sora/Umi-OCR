@@ -55,7 +55,7 @@ QtObject {
             ["onlyOutside", qsTr("只允许外部")],
             ["none", qsTr("禁用所有通知")],
         ]
-        if(!flag) optionsList.unshift(["auto", qsTr("跟随全局设定")])
+        if(!flag) optionsList.unshift(["default", qsTr("跟随全局设定")])
         return {
             "title": qsTr("通知弹窗类型"),
             "optionsList": optionsList,

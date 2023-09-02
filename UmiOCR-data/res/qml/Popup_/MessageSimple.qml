@@ -14,7 +14,7 @@ Item {
     // ========================= 【对外接口】 =========================
 
     function show(title, msg, showType) {
-        if(showType=="auto") {
+        if(showType=="default") {
             showType = qmlapp.globalConfigs.getValue("ui.simpleNotificationType")
         }
         if(showType=="none") {
