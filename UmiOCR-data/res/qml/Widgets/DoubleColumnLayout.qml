@@ -66,9 +66,9 @@ Item {
             if(flag === 0)
                 toInit()
             else if(flag === 1)
-                splitterX = splitterX = 0
+                splitterX = hideWidth-1
             else if(flag === 2)
-                splitterX = splitterX = width - splitter.width
+                splitterX = width-splitter.width-hideWidth+1
             toHide()
         }
         // 去到初始位置
