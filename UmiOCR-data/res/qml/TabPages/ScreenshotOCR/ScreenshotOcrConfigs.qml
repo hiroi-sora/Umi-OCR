@@ -43,10 +43,6 @@ Configs {
                 "toolTip": qsTr("如果主窗口最小化或处于后台，则弹到前台"),
                 "default": true,
             },
-            "popSimple": {
-                "title": qsTr("弹出通知"),
-                "default": true,
-            },
         },
 
         "other": {
