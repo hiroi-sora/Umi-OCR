@@ -16,6 +16,14 @@ TabPage {
     configsComp: screenshotOcrConfigs
     property string msnState: "none" // OCR任务状态， none run
 
+    // TODO: 测试用
+    Timer {
+        interval: 200
+        running: true
+        onTriggered: {
+            imageViewer.setSource("file:///D:/Pictures/Screenshots/test/#.png")
+        }
+    }
     // ========================= 【逻辑】 =========================
 
     // 开始截图
@@ -130,7 +138,8 @@ TabPage {
         const popMainWindow = screenshotOcrConfigs.getValue("action.popMainWindow")
         const copy = screenshotOcrConfigs.getValue("action.copy")
         // 复制到剪贴板
-        if(copy && resText!="") callPy("copyText", resText)
+        if(copy && resText!="") 
+            qmlapp.utilsConnector.copyText(resText)
         // 弹出通知
         showSimple(res, resText, copy)
         // 升起主窗口

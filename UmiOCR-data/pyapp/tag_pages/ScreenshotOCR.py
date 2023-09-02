@@ -9,9 +9,7 @@ from ..utils.utils import findImages
 from ..event_bus.key_mouse.keyboard import HotkeyCtrl
 from ..event_bus.pubsub_service import PubSubService
 
-from PySide2.QtGui import QGuiApplication, QClipboard, QImage, QPixmap  # 截图 剪贴板
-
-Clipboard = QClipboard()  # 剪贴板
+from PySide2.QtGui import QGuiApplication, QImage, QPixmap  # 截图 剪贴板
 
 
 class ScreenshotOCR(Page):
@@ -101,10 +99,6 @@ class ScreenshotOCR(Page):
         self.showImgIDs = []
         PixmapProvider.delPixmap(self.ssImgIDs)
         self.ssImgIDs = []
-
-    # 将文本写入剪贴板
-    def copyText(self, text):
-        Clipboard.setText(text)
 
     # ========================= 【OCR 任务控制】 =========================
 

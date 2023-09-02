@@ -134,10 +134,9 @@ Item {
         if(isAdd) { // 增模式下不为空，启用选中保持
             retainSelected = true
         }
-        if(sText && sText!=selectedText) { // 刷新选中文字
+        if(sText) { // 刷新选中文字
             sText = sText.slice(0, -1) // 去除结尾换行
-            selectedText=sText
-            selectTextEdit.text = selectedText
+            selectTextEdit.text = sText
         }
     }
 
@@ -150,7 +149,6 @@ Item {
     property bool hasTextBoxes: false // 当前有无文本块
     property bool showTextBoxes: true // 显示文本框
     property var textBoxes: [] // 文本框列表
-    property string selectedText: "112233" // 选中文本
     property bool retainSelected: false // 保留选中状态
 
     // 图片区域
@@ -326,6 +324,20 @@ Item {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
 
+
+            // 复制文字
+            IconButton {
+                visible: hasTextBoxes && showTextBoxes
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                width: height
+                icon_: "paste"
+                color: theme.textColor
+                onClicked: {
+                    qmlapp.utilsConnector.copyText(selectTextEdit.text)
+                }
+                toolTip: qsTr("复制文本")
+            }
             // 保存
             // IconButton {
             //     anchors.top: parent.top
