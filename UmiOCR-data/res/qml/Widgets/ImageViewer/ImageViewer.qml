@@ -109,13 +109,13 @@ Item {
                     textBoxRepeater.itemAt(i).isSelected = true
                     tb.selected = true
                 }
-                sText += tb.text
+                sText += tb.text+"\n"
                 sFlag += i.toString()
             }
             else {
                 if(tb.selected == true) {
                     if(isAdd) {
-                        sText += tb.text
+                        sText += tb.text+"\n"
                         sFlag += i.toString()
                     }
                     else {
@@ -135,8 +135,9 @@ Item {
             retainSelected = true
         }
         if(sText && sText!=selectedText) { // 刷新选中文字
+            sText = sText.slice(0, -1) // 去除结尾换行
             selectedText=sText
-            console.log(sText)
+            selectTextEdit.text = selectedText
         }
     }
 
@@ -149,7 +150,7 @@ Item {
     property bool hasTextBoxes: false // 当前有无文本块
     property bool showTextBoxes: true // 显示文本框
     property var textBoxes: [] // 文本框列表
-    property var selectedText: "" // 选中文本
+    property string selectedText: "112233" // 选中文本
     property bool retainSelected: false // 保留选中状态
 
     // 图片区域
@@ -158,7 +159,7 @@ Item {
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.bottom: bottomCtrl.top
+        anchors.bottom: selectTextContainer.top
         anchors.margins: size_.spacing
         anchors.bottomMargin: 0
         color: theme.bgColor
@@ -255,6 +256,41 @@ Item {
                 else {
                     imageScaleAddSub(-1)  // 缩小
                 }
+            }
+        }
+    }
+
+    // 文本区域
+    Rectangle {
+        id: selectTextContainer
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: bottomCtrl.top
+        anchors.leftMargin: size_.spacing
+        anchors.rightMargin: size_.spacing
+        color: theme.bgColor
+        border.width: 1
+        border.color: theme.coverColor3
+        height: (hasTextBoxes && showTextBoxes) ? size_.smallText*5:0
+
+        ScrollView {
+            id: selectScrollView
+            anchors.fill: parent
+            anchors.margins: size_.smallSpacing
+            contentWidth: width // 内容宽度
+            clip: true // 溢出隐藏
+
+            TextEdit {
+                id: selectTextEdit
+                width: selectScrollView.width // 与内容宽度相同
+                textFormat: TextEdit.PlainText // 纯文本
+                wrapMode: TextEdit.Wrap // 尽量在单词边界处换行
+                readOnly: false // 可编辑
+                selectByMouse: true // 允许鼠标选择文本
+                selectByKeyboard: true // 允许键盘选择文本
+                color: theme.textColor
+                font.pixelSize: size_.smallText
+                font.family: theme.dataFontFamily
             }
         }
     }
