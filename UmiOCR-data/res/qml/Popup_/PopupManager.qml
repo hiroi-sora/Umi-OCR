@@ -15,8 +15,8 @@ Item {
     // ========================= 【对外接口】 =========================
 
     // 显示简单通知，无需确认，计时自动消失
-    function simple(title, msg) {
-        messageSimple.show(title, msg)
+    function simple(title, msg, showType="default") {
+        messageSimple.show(title, msg, showType)
     }
 
     // 显示带确认的通知弹窗

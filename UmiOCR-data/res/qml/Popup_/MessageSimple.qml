@@ -13,14 +13,30 @@ import "../Widgets"
 Item {
     // ========================= 【对外接口】 =========================
 
-    function show(title, msg, time=3000) {
-        if(!qmlapp.mainWin.getVisible() && !qmlapp.globalConfigs.getValue("ui.disableExternalNotification")) {
-            // 主窗口隐藏，没禁止外部通知时，发送外部通知
+    function show(title, msg, showType) {
+        if(showType=="default") {
+            showType = qmlapp.globalConfigs.getValue("ui.simpleNotificationType")
+        }
+        if(showType=="none") {
+            return // 不发送
+        }
+        const time = 3000
+        // 强制发送外部
+        if(showType=="onlyOutside") { 
             notificationWindow.show(title, msg, time)
         }
+        // 主窗口可见，发送内部
+        else if(qmlapp.mainWin.getVisible()) {
+            if(showType=="inside" || showType=="onlyInside") {
+                notificationPopup.show(title, msg, time)
+            }
+        }
+        // 主窗口不可见，发送外部
         else {
-            // 否则，发送内部通知
-            notificationPopup.show(title, msg, time)
+            if(showType=="inside") {
+                // 发送外部通知
+                notificationWindow.show(title, msg, time)
+            }
         }
     }
 

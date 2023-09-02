@@ -16,6 +16,14 @@ TabPage {
     configsComp: screenshotOcrConfigs
     property string msnState: "none" // OCR任务状态， none run
 
+    // TODO: 测试用
+    Timer {
+        interval: 200
+        running: true
+        onTriggered: {
+            imageViewer.setSource("file:///D:/Pictures/Screenshots/test/#.png")
+        }
+    }
     // ========================= 【逻辑】 =========================
 
     // 开始截图
@@ -43,12 +51,13 @@ TabPage {
     function paste() {
         const configDict = screenshotOcrConfigs.getConfigValueDict()
         const res = tabPage.callPy("paste", configDict)
+        const simpleType = configDict["other.simpleNotificationType"]
         if(res.error) {
             if(res.error.startsWith("[Error]")) {
                 qmlapp.popup.message(qsTr("获取剪贴板异常"), res.err, "error")
             }
             else if(res.error === "[Warning] No image.") {
-                qmlapp.popup.simple(qsTr("剪贴板中未找到图片"), "")
+                qmlapp.popup.simple(qsTr("剪贴板中未找到图片"), "", simpleType)
             }
             return
         }
@@ -57,7 +66,7 @@ TabPage {
             imageViewer.setSource("image://pixmapprovider/"+res.imgID)
         }
         else if(res.paths) { // 地址类型
-            qmlapp.popup.simple(qsTr("粘贴%1条图片路径").arg(res.paths.length), res.paths[0])
+            qmlapp.popup.simple(qsTr("粘贴%1条图片路径").arg(res.paths.length), res.paths[0], simpleType)
             imageViewer.setSource("")
         }
     }
@@ -127,12 +136,12 @@ TabPage {
             tabPanel.currentIndex = 1
         // 完成后的动作
         const popMainWindow = screenshotOcrConfigs.getValue("action.popMainWindow")
-        const popSimple = screenshotOcrConfigs.getValue("action.popSimple")
         const copy = screenshotOcrConfigs.getValue("action.copy")
         // 复制到剪贴板
-        if(copy && resText!="") callPy("copyText", resText)
+        if(copy && resText!="") 
+            qmlapp.utilsConnector.copyText(resText)
         // 弹出通知
-        if(popSimple) showSimple(res, resText, copy)
+        showSimple(res, resText, copy)
         // 升起主窗口
         if(popMainWindow) qmlapp.mainWin.setVisible(true)
     }
@@ -157,7 +166,8 @@ TabPage {
             title = qsTr("识别失败")
         }
         title += `  -  ${time}s`
-        qmlapp.popup.simple(title, resText)
+        const simpleType = screenshotOcrConfigs.getValue("other.simpleNotificationType")
+        qmlapp.popup.simple(title, resText, simpleType)
     }
 
     // ========================= 【布局】 =========================

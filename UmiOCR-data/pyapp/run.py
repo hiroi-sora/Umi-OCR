@@ -9,6 +9,7 @@ from .tag_pages.tag_pages_connector import TagPageConnector  # 页面连接器
 from .mission.mission_connector import MissionConnector  # 任务连接器
 from .event_bus.pubsub_connector import PubSubConnector  # 发布/订阅连接器
 from .event_bus.key_mouse.key_mouse_connector import KeyMouseConnector  # 键盘/鼠标连接器
+from .utils.utils_connector import UtilsConnector  # 通用连接器
 from .utils.image_provider import PixmapProvider  # 图片提供器
 
 
@@ -45,6 +46,8 @@ def main():
     qmlRegisterType(PubSubConnector, "PubSubConnector", 1, 0, "PubSubConnector")
     # 键盘/鼠标连接器
     qmlRegisterType(KeyMouseConnector, "KeyMouseConnector", 1, 0, "KeyMouseConnector")
+    # 通用连接器
+    qmlRegisterType(UtilsConnector, "UtilsConnector", 1, 0, "UtilsConnector")
 
     # 5. 启动翻译
     # trans = QTranslator()

@@ -46,4 +46,28 @@ QtObject {
             },
         }
     }
+
+    // 通知类型
+    function getSimpleNotificationType(flag=false) {
+        let optionsList = [
+            ["inside", qsTr("优先内部")],
+            ["onlyInside", qsTr("只允许内部")],
+            ["onlyOutside", qsTr("只允许外部")],
+            ["none", qsTr("禁用所有通知")],
+        ]
+        if(!flag) optionsList.unshift(["default", qsTr("跟随全局设定")])
+        return {
+            "title": qsTr("通知弹窗类型"),
+            "optionsList": optionsList,
+            "onChanged": (newVal, oldValal)=>{
+                let msg = ""
+                if(oldValal!==undefined) {
+                    for(let i in optionsList)
+                        if(optionsList[i][0]===newVal)
+                            msg = optionsList[i][1]
+                    qmlapp.popup.simple(qsTr("通知类型已更改"), msg, newVal)
+                }
+            },
+        }
+    }
 }

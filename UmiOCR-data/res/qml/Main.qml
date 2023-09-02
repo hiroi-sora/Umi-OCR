@@ -9,6 +9,7 @@ import QtGraphicalEffects 1.15
 import Qt.labs.settings 1.1
 import MissionConnector 1.0 // Python任务连接器
 import KeyMouseConnector 1.0 // 键盘/鼠标连接器
+import UtilsConnector 1.0 // 通用连接器
 
 import "Themes"
 import "TabView_"
@@ -48,6 +49,7 @@ Window {
         MissionConnector { id: msnConnector } // 任务连接器
         PubSub { id: pubSub } // 全局事件发布/订阅
         KeyMouseConnector { id:keyMouse } // 鼠标/键盘
+        UtilsConnector { id:utilsConnector } // 通用
 
         // 必须先初始化的单例，onCompleted顺序从下往上
         MainWindowManager { id:mainWin; mainWin:mainWindowRoot } // 5. 主窗管理
@@ -63,6 +65,7 @@ Window {
         property alias msnConnector: msnConnector
         property alias pubSub: pubSub
         property alias keyMouse: keyMouse
+        property alias utilsConnector: utilsConnector
         property alias systemTray: systemTray
         property alias mainWin: mainWin
         property bool enabledEffect: false // 全局是否启用动画

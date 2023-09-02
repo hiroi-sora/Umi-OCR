@@ -13,7 +13,7 @@ import "../../js/utils.js" as Utils
 TabPage {
     id: tabPage
     // 配置
-    BatchOCRConfigs { id: batchOcrConfigs } 
+    BatchOcrConfigs { id: batchOcrConfigs } 
     configsComp: batchOcrConfigs
 
     // ========================= 【逻辑】 =========================
@@ -198,7 +198,7 @@ TabPage {
     // 准备开始一个任务
     function onOcrReady(path) {
         if(!filesDict.hasOwnProperty(path)){
-            qmlapp.popup.simple(qsTr("函数 onOcrReady 异常"), qsTr("qml任务队列不存在路径")+path.toString())
+            qmlapp.popup.message(qsTr("函数 onOcrReady 异常"), qsTr("qml任务队列不存在路径")+path.toString(), "error")
             return
         }
         // 刷新文件表格显示
@@ -258,15 +258,16 @@ TabPage {
         _ocrStop()
         // 任务成功
         if(msg.startsWith("[Success]")) {
-            qmlapp.popup.simple(qsTr("批量识别完成"), "")
+            const simpleType = batchOcrConfigs.getValue("other.simpleNotificationType")
+            qmlapp.popup.simple(qsTr("批量识别完成"), "", simpleType)
             // 任务完成后续操作：打开文件/文件夹
             const openWhat = {
-                "openFile": batchOcrConfigs.getValue("mission.postTaskActions.openFile"),
-                "openFolder": batchOcrConfigs.getValue("mission.postTaskActions.openFolder"),
+                "openFile": batchOcrConfigs.getValue("postTaskActions.openFile"),
+                "openFolder": batchOcrConfigs.getValue("postTaskActions.openFolder"),
             }
             tabPage.callPy("postTaskActions", openWhat)
             // 任务完成后续操作：系统关机/待机
-            const actSys = batchOcrConfigs.getValue("mission.postTaskActions.system")
+            const actSys = batchOcrConfigs.getValue("postTaskActions.system")
             if(actSys) {
                 let actStr = ""
                 // 对话框：系统即将关机  继续关机 | 取消关机
