@@ -1,31 +1,46 @@
-# 合并：横排-单行
+# 合并：单行-横排
 
 from .tbpu import Tbpu
 
 from functools import cmp_to_key
 
-Punctuation = ".,;:!?"
-
 
 class MergeLineH(Tbpu):
     def __init__(self):
-        self.tbpuName = "横排-单行"
+        self.tbpuName = "单行-横排"
         # merge line limit multiple X/Y/H，单行合并时的水平/垂直/行高阈值系数，为行高的倍数
         self.mllhX = 2
         self.mllhY = 0.5
         self.mllhH = 0.5
 
-    def isMerge(self, b1, b2):  # 两个文块符合合并条件时，返回 True
-        b1x, b1y = b1[1][0], b1[1][1]  # 块1右上角xy
-        b1h = b1[3][1] - b1[0][1]  # 块1行高
-        b2x, b2y = b2[0][0], b2[0][1]  # 块2左上角xy
-        b2h = b2[3][1] - b2[0][1]  # 块2行高
-        lx = round(b1h * self.mllhX)  # 水平、垂直、行高 合并阈值
-        ly = round(b1h * self.mllhY)
-        lh = round(b1h * self.mllhH)
-        if abs(b2x - b1x) < lx and abs(b2y - b1y) < ly and abs(b2h - b1h) < lh:
+    def isSameLine(self, A, B):  # 两个文块属于同一行时，返回 True
+        Ax, Ay = A[1][0], A[1][1]  # 块A右上角xy
+        Ah = A[3][1] - A[0][1]  # 块A行高
+        Bx, By = B[0][0], B[0][1]  # 块B左上角xy
+        Bh = B[3][1] - B[0][1]  # 块B行高
+        lx = round(Ah * self.mllhX)  # 水平、垂直、行高 合并阈值
+        ly = round(Ah * self.mllhY)
+        lh = round(Ah * self.mllhH)
+        if abs(Bx - Ax) < lx and abs(By - Ay) < ly and abs(Bh - Ah) < lh:
             return True
         return False
+
+    def merge2tb(self, textBlocks, i1, i2):  # 在列表textBlocks中，将i2合并到i1中。
+        tb1 = textBlocks[i1]
+        tb2 = textBlocks[i2]
+        b1 = tb1["box"]
+        b2 = tb2["box"]
+        # 合并两个文块box
+        yTop = min(b1[0][1], b1[1][1], b2[0][1], b2[1][1])
+        yBottom = max(b1[2][1], b1[3][1], b2[2][1], b2[3][1])
+        b1[0][1] = b1[1][1] = yTop  # y上
+        b1[2][1] = b1[3][1] = yBottom  # y下
+        b1[0][0] = b1[3][0] = min(b1[0][0], b1[3][0])  # x左
+        b1[1][0] = b1[2][0] = max(b2[1][0], b2[2][0])  # x右
+        # 合并内容
+        tb1["score"] += tb2["score"]  # 合并置信度
+        tb1["text"] = tb1["text"] + " " + tb2["text"]  # 合并文本
+        textBlocks[i2] = None  # 置为空，标记删除
 
     def mergeLine(self, textBlocks):  # 单行合并
         # 所有文块，按左上角点的x坐标排序
@@ -33,32 +48,23 @@ class MergeLineH(Tbpu):
         # 遍历每个文块，寻找后续文块中与它接壤、且行高一致的项，合并两个文块
         resList = []
         listlen = len(textBlocks)
-        for index in range(listlen):
-            tb1 = textBlocks[index]
+        for i1 in range(listlen):
+            tb1 = textBlocks[i1]
             if not tb1:
                 continue
             b1 = tb1["box"]
             num = 1  # 合并个数
             # 遍历后续文块
-            for i in range(index + 1, listlen):
-                tb2 = textBlocks[i]
+            for i2 in range(i1 + 1, listlen):
+                tb2 = textBlocks[i2]
                 if not tb2:
                     continue
                 b2 = tb2["box"]
-                # 块1的右上角与块2的左上角接壤，且二者行高相近，则合并
-                if self.isMerge(b1, b2):
-                    num += 1
+                # 符合同一行，则合并
+                if self.isSameLine(b1, b2):
                     # 合并两个文块box
-                    yTop = min(b1[0][1], b1[1][1], b2[0][1], b2[1][1])
-                    yBottom = max(b1[2][1], b1[3][1], b2[2][1], b2[3][1])
-                    b1[0][1] = b1[1][1] = yTop  # y上
-                    b1[2][1] = b1[3][1] = yBottom  # y下
-                    b1[0][0] = b1[3][0] = min(b1[0][0], b1[3][0])  # x左
-                    b1[1][0] = b1[2][0] = max(b2[1][0], b2[2][0])  # x右
-                    # 合并内容
-                    tb1["score"] += tb2["score"]  # 合并置信度
-                    tb1["text"] = tb1["text"] + " " + tb2["text"]  # 合并文本
-                    textBlocks[i] = None  # 置为空，标记删除
+                    self.merge2tb(textBlocks, i1, i2)
+                    num += 1
             if num > 1:
                 tb1["score"] /= num  # 平均置信度
             resList.append(tb1)  # 装填入结果
