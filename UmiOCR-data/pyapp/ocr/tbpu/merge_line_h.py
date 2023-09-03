@@ -2,6 +2,8 @@
 
 from .tbpu import Tbpu
 
+from functools import cmp_to_key
+
 Punctuation = ".,;:!?"
 
 
@@ -36,6 +38,20 @@ class MergeLineH(Tbpu):
         # ):
         #     return text1 + " " + text2
         return text1 + " " + text2
+
+    def sortLines(self, resList):  # 对文块排序，从上到下，从左到右
+        def sortKey(A, B):
+            # 先比较两个文块的水平投影是否重叠
+            ay1, ay2 = A["box"][0][1], A["box"][3][1]
+            by1, by2 = B["box"][0][1], B["box"][3][1]
+            # 不重叠，则按左上角y排序
+            if ay2 < by1 or ay1 > by2:
+                return 0 if ay1 == by1 else (-1 if ay1 < by1 else 1)
+            # 重叠，则按左上角x排序
+            ax, bx = A["box"][0][0], B["box"][0][0]
+            return 0 if ax == bx else (-1 if ax < bx else 1)
+
+        resList.sort(key=cmp_to_key(sortKey))
 
     def run(self, textBlocks, imgInfo):
         # 所有文块，按左上角点的x坐标排序
@@ -72,7 +88,7 @@ class MergeLineH(Tbpu):
             if num > 1:
                 tb1["score"] /= num  # 平均置信度
             resList.append(tb1)  # 装填入结果
-        # 所有新文块，按左上角点的y坐标从高到低排序
-        resList.sort(key=lambda tb: tb["box"][0][1])
+        # 结果排序
+        self.sortLines(resList)
         # 返回新文块组和debug字符串
         return resList
