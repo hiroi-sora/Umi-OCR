@@ -105,7 +105,11 @@ Item {
                 return tableView.width
             }
         }
-        onWidthChanged: tableView.forceLayout()  // 组件宽度变化时重设列宽
+        onWidthChanged: {  // 组件宽度变化时重设列宽
+            Qt.callLater(()=>{ // 延迟调用
+                tableView.forceLayout() 
+            })
+        }
         // 元素
         delegate: ResultTextContainer {
             status_: status__
