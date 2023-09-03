@@ -1,5 +1,10 @@
+# 通用工具
+
 import re
 import os
+from PySide2.QtGui import QClipboard
+
+Clipboard = QClipboard()  # 剪贴板
 
 
 # 传入文件名，检测是否含非法字符。没问题返回True
@@ -49,3 +54,8 @@ def findImages(paths, isRecurrence):
     for i, p in enumerate(imgPaths):  # 规范化正斜杠
         imgPaths[i] = p.replace("\\", "/")
     return imgPaths
+
+
+# 复制文本到剪贴板
+def copyText(text):
+    Clipboard.setText(text)

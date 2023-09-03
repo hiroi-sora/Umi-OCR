@@ -1,9 +1,7 @@
 # 通用工具类
+from . import utils
 
 from PySide2.QtCore import QObject, Slot, Signal
-from PySide2.QtGui import QClipboard
-
-Clipboard = QClipboard()  # 剪贴板
 
 
 class UtilsConnector(QObject):
@@ -13,4 +11,4 @@ class UtilsConnector(QObject):
     # 将文本写入剪贴板
     @Slot(str)
     def copyText(self, text):
-        Clipboard.setText(text)
+        utils.copyText(text)

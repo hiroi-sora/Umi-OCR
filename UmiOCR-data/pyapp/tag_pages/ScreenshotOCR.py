@@ -6,10 +6,10 @@ from .page import Page  # 页基类
 from ..utils.image_provider import PixmapProvider  # 图片提供器
 from ..mission.mission_ocr import MissionOCR  # 任务管理器
 from ..utils.utils import findImages
-from ..event_bus.key_mouse.keyboard import HotkeyCtrl
-from ..event_bus.pubsub_service import PubSubService
 
-from PySide2.QtGui import QGuiApplication, QImage, QPixmap  # 截图 剪贴板
+from PySide2.QtGui import QGuiApplication, QClipboard, QImage, QPixmap  # 截图 剪贴板
+
+Clipboard = QClipboard()  # 剪贴板
 
 
 class ScreenshotOCR(Page):
