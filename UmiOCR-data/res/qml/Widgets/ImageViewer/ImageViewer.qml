@@ -17,13 +17,20 @@ Item {
             source = source.replace(new RegExp("#", "g"), "%23");
         }
         showImage.source = source // 设置源
-        if(showImage.source == "") {
-            imageScale = 1.0
-            return
+    }
+
+    // 图片组件的状态改变
+    function imageStatusChanged(s) {
+        // 已就绪
+        if(s == Image.Ready) {
+            imageW = showImage.sourceSize.width // 记录图片宽高
+            imageH = showImage.sourceSize.height
+            imageScaleFull() // 初始大小
         }
-        imageW = showImage.sourceSize.width // 记录图片宽高
-        imageH = showImage.sourceSize.height
-        imageScaleFull()
+        else {
+            imageW = imageH = 0
+            imageScale = 1 
+        }
     }
 
     // 展示图片及 OCR结果
@@ -32,6 +39,7 @@ Item {
         // 格式转换
         if(res.code == 100 && res.data.length > 0) {
             let tbs = []
+            let sText = "" 
             for(let i in res.data) {
                 const d = res.data[i]
                 const info = {
@@ -44,11 +52,16 @@ Item {
                     text: d.text,
                     selected: false, // 是否选中
                 }
+                sText += d.text + "\n"
                 tbs.push(info)
             }
             textBoxes = tbs
             hasTextBoxes = true
             retainSelected = false
+            if(sText) {
+                sText = sText.slice(0, -1) // 去除结尾换行
+                selectTextEdit.text = sText
+            }
         }
     }
 
@@ -56,7 +69,7 @@ Item {
 
     // 缩放，传入 flag>0 放大， <0 缩小 ，0回归100%。以相框中心为锚点。
     function imageScaleAddSub(flag, step=0.1) {
-        if(showImage.source == "") return
+        if(showImage.status != Image.Ready) return
         // 计算缩放比例
         let s = 1.0 // flag==0 时复原
         if (flag > 0) {  // 放大
@@ -147,7 +160,7 @@ Item {
     property int imageW: 0 // 图片宽高
     property int imageH: 0
     property bool hasTextBoxes: false // 当前有无文本块
-    property bool showTextBoxes: true // 显示文本框
+    property bool showTextBoxes: false // 显示文本框
     property var textBoxes: [] // 文本框列表
     property bool retainSelected: false // 保留选中状态
 
@@ -179,6 +192,7 @@ Item {
                     id: showImage
                     anchors.centerIn: parent
                     scale: imageScale
+                    onStatusChanged: imageStatusChanged(status)
 
                     // OCR 结果文本框容器
                     Item {
@@ -313,7 +327,7 @@ Item {
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
                 textSize: size_.smallText
-                text_: showTextBoxes ? qsTr("显示文本")+" 🔼" : qsTr("隐藏文本")+" 🔽"
+                text_: showTextBoxes ? qsTr("隐藏文本")+" 🔽" : qsTr("显示文本")+" 🔼"
                 onClicked: showTextBoxes = !showTextBoxes
                 visible: hasTextBoxes
             }
