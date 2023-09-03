@@ -226,6 +226,7 @@ Item {
                     // 监听点击和拖拽
                     MouseArea {
                         id: inMouseArea
+                        visible: hasTextBoxes && showTextBoxes
                         anchors.fill: parent
                         acceptedButtons: Qt.RightButton
                         hoverEnabled: true
