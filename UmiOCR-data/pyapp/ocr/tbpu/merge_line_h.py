@@ -9,7 +9,7 @@ class MergeLineH(Tbpu):
     def __init__(self):
         self.tbpuName = "横排-单行"
         # merge line limit multiple X/Y/H，单行合并时的水平/垂直/行高阈值系数，为行高的倍数
-        self.mllhX = 1.5
+        self.mllhX = 2
         self.mllhY = 0.5
         self.mllhH = 0.5
 
@@ -26,19 +26,18 @@ class MergeLineH(Tbpu):
         return False
 
     def merge2text(self, text1, text2):  # 合并两段文字
-        a, b = text1[-1], text2[0]  # 两段的开头/结尾字符
-        if (
-            a.isdigit()  # 数字
-            or b.isdigit()  # 字符
-            or a.isalpha()
-            or b.isalpha()
-            or a in Punctuation
-        ):
-            return text1 + " " + text2
-        return text1 + text2
+        # a, b = text1[-1], text2[0]  # 两段的开头/结尾字符
+        # if (
+        #     a.isdigit()  # 数字
+        #     or b.isdigit()  # 字符
+        #     or a.isalpha()
+        #     or b.isalpha()
+        #     or a in Punctuation
+        # ):
+        #     return text1 + " " + text2
+        return text1 + " " + text2
 
     def run(self, textBlocks, imgInfo):
-        print("合并单行", imgInfo)
         # 所有文块，按左上角点的x坐标排序
         textBlocks.sort(key=lambda tb: tb["box"][0][0])
         # 遍历每个文块，寻找后续文块中与它接壤、且行高一致的项，合并两个文块

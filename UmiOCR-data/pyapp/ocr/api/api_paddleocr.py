@@ -241,7 +241,6 @@ class ApiPaddleOcr(ApiOcr):  # 公开接口
         lArgd.update(self.gArgd)
         exePath = lArgd["exe_path"]
         del lArgd["exe_path"]
-        print("启动引擎：", lArgd)
         # 启动引擎
         try:
             self.api = PPOCR_pipe(exePath, lArgd)
