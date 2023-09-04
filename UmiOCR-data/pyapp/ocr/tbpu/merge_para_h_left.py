@@ -9,7 +9,18 @@ class MergeParaHLeft(MergeLineH):
         self.tbpuName = "段落-横排-左对齐"
 
     def isSameColumn(self, A, B):  # 两个文块属于同一栏时，返回 True
-        pass
+        # 获取A、B行高
+        if "lineHeight" in A:  # 已记录
+            Ah = round(A["lineHeight"] * self.mllhH)
+        else:  # 未记录，则写入记录
+            Ah = A["lineHeight"] = A["box"][3][1] - A["box"][0][1]
+        Bh = B["box"][3][1] - B["box"][0][1]
+        # AB行高不符，则False
+        if abs(Bh - Ah) < Ah * self.mllhH:
+            return False
+        # 行高相符，判断垂直投影是否重叠
+        # TODO
+        return False
 
     def isSamePara(self, A, B):  # 两个文块属于同一段落时，返回 True
         pass
@@ -26,18 +37,18 @@ class MergeParaHLeft(MergeLineH):
             tb1 = hList[i1]
             if not tb1:
                 continue
-            b1 = tb1["box"]
+            # b1 = tb1["box"]
             num = 1  # 合并个数
             # 遍历后续文块
             for i2 in range(i1 + 1, listlen):
                 tb2 = textBlocks[i2]
                 if not tb2:
                     continue
-                b2 = tb2["box"]
+                # b2 = tb2["box"]
                 # 符合同一栏
-                if self.isSameLine(b1, b2):
+                if self.isSameColumn(tb1, tb2):
                     # 符合同一段，合并两行
-                    if self.isSamePara(b1, b2):
+                    if self.isSamePara(tb1, tb2):
                         self.merge2tb(textBlocks, i1, i2)
                         num += 1
                     # 同栏、不同段，说明到了下一段，则退出内循环

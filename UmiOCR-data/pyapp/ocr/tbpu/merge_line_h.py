@@ -18,9 +18,9 @@ class MergeLineH(Tbpu):
         Ah = A[3][1] - A[0][1]  # 块A行高
         Bx, By = B[0][0], B[0][1]  # 块B左上角xy
         Bh = B[3][1] - B[0][1]  # 块B行高
-        lx = round(Ah * self.mllhX)  # 水平、垂直、行高 合并阈值
-        ly = round(Ah * self.mllhY)
-        lh = round(Ah * self.mllhH)
+        lx = Ah * self.mllhX  # 水平、垂直、行高 合并阈值
+        ly = Ah * self.mllhY
+        lh = Ah * self.mllhH
         if abs(Bx - Ax) < lx and abs(By - Ay) < ly and abs(Bh - Ah) < lh:
             return True
         return False
