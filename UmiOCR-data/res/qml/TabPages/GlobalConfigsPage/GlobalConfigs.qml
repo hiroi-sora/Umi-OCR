@@ -58,6 +58,37 @@ Configs {
                 },
             },
         },
+
+        "shortcut": {
+            "title": qsTr("添加快捷方式到"),
+            "type": "group",
+
+            "desktop": {
+                "title": qsTr("桌面"),
+                "default": false,
+                "onChanged": (newFlag, oldFlag)=>{
+                    if(oldFlag !== undefined)
+                        changeShortcut(newFlag, "desktop")
+                },
+            },
+            "startMenu": {
+                "title": qsTr("开始菜单"),
+                "default": false,
+                "onChanged": (newFlag, oldFlag)=>{
+                    if(oldFlag !== undefined)
+                        changeShortcut(newFlag, "startMenu")
+                },
+            },
+            "startup": {
+                "title": qsTr("开机自启项"),
+                "default": false,
+                "onChanged": (newFlag, oldFlag)=>{
+                    if(oldFlag !== undefined)
+                        changeShortcut(newFlag, "startup")
+                },
+            },
+        },
+
         // OCR接口全局设定
         "ocr": ocrManager.globalOptions
     }
@@ -73,5 +104,27 @@ Configs {
     Component.onCompleted: {
         ocrManager.init()
         console.log("% GlobalConfig 初始化全局配置完毕！")
+    }
+
+    // 添加/删除快捷方式
+    function changeShortcut(flag, position) {
+        if(flag) {
+            let res = qmlapp.utilsConnector.createShortcut(position)
+            if(res) {
+                qmlapp.popup.simple(qsTr("成功添加快捷方式"), "")
+            }
+            else {
+                qmlapp.popup.message(qsTr("添加快捷方式失败"), qsTr("请以管理员权限运行软件，重新操作。"), "error")
+            }
+        }
+        else {
+            let res = qmlapp.utilsConnector.deleteShortcut(position)
+            if(res > 0) {
+                qmlapp.popup.simple(qsTr("成功移除 %1 个快捷方式").arg(res), "")
+            }
+            else {
+                qmlapp.popup.message(qsTr("提示"), qsTr("没有找到可移除的快捷方式。"), "warning")
+            }
+        }
     }
 }
