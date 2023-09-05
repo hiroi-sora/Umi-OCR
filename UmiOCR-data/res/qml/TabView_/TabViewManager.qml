@@ -26,11 +26,8 @@ Item {
     Settings_ { 
         id: settings
         category: "TabPageManager" // 自定义类别名称
-
         property alias openPageList: tabViewManager.openPageList
         property alias showPageIndex: tabViewManager.showPageIndex
-        property alias barIsLock: tabViewManager.barIsLock
-
         property bool refresh: false // 用于刷新
         function save(){ // 手动刷新
             refresh=!refresh

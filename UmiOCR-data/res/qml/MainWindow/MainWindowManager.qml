@@ -45,18 +45,6 @@ Item {
         }
     }
 
-    // 设置置顶状态。 toConfig 为 true 表示需要同步到设置
-    function setTopping(flag, toConfig=false) {
-        mainWin.isMainWindowTop = flag
-        if(toConfig) {
-            qmlapp.globalConfigs.setValue("ui.topping", flag, true)
-        }
-    }
-    // 获取置顶状态
-    function getTopping() {
-        return mainWin.isMainWindowTop
-    }
-
     // 关闭主窗口
     function close() {
         // 隐藏

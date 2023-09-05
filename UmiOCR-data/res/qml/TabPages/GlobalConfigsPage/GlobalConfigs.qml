@@ -54,12 +54,20 @@ Configs {
                 "default": false,
                 "toolTip": qsTr("软件启动时，不弹出主窗口"),
             },
-            "topping": {
+            "isMainWindowTop": {
                 "title": qsTr("窗口置顶"),
                 "default": false,
-                "toolTip": qsTr("可点击窗口左上角图钉调整"),
+                "toolTip": qsTr("点击窗口左上角图钉可调整"),
                 "onChanged": (val)=>{
-                    qmlapp.mainWin.setTopping(val)
+                    mainWindowRoot.isMainWindowTop = val
+                },
+            },
+            "barIsLock": {
+                "title": qsTr("锁定标签栏"),
+                "default": false,
+                "toolTip": qsTr("点击窗口右上角小锁可调整"),
+                "onChanged": (val)=>{
+                    qmlapp.tab.barIsLock = val
                 },
             },
             "closeWin2Hide": {
