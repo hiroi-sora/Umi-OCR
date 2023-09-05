@@ -57,7 +57,7 @@ Configs {
             "isMainWindowTop": {
                 "title": qsTr("窗口置顶"),
                 "default": false,
-                "toolTip": qsTr("点击窗口左上角图钉可调整"),
+                "toolTip": qsTr("捷径：窗口左上角图钉"),
                 "onChanged": (val)=>{
                     mainWindowRoot.isMainWindowTop = val
                 },
@@ -65,7 +65,7 @@ Configs {
             "barIsLock": {
                 "title": qsTr("锁定标签栏"),
                 "default": false,
-                "toolTip": qsTr("点击窗口右上角小锁可调整"),
+                "toolTip": qsTr("捷径：窗口右上角小锁"),
                 "onChanged": (val)=>{
                     qmlapp.tab.barIsLock = val
                 },

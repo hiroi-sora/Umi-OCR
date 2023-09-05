@@ -6,7 +6,7 @@ import QtQuick 2.15
 
 Theme {
     // 名称
-    themeTitle: qsTr("深色")
+    themeTitle: qsTr("黑暗")
 
     // 背景颜色
     bgColor: "#444"

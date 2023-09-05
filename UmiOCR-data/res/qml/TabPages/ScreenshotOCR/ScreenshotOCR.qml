@@ -21,7 +21,7 @@ TabPage {
         interval: 200
         running: true
         onTriggered: {
-            imageViewer.setSource("file:///D:/Pictures/Screenshots/test/#.png")
+            // imageViewer.setSource("file:///D:/Pictures/Screenshots/test/#1.png")
         }
     }
     // ========================= 【逻辑】 =========================
