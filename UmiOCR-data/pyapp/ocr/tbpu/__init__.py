@@ -1,8 +1,8 @@
-from .merge_line_h import MergeLineH
-from .merge_para_h_left import MergeParaHLeft
+from .merge_line import MergeLine
+from .merge_para import MergePara
 
 
 Merge = {
-    "MergeLineH": MergeLineH,
-    "MergeParaHLeft": MergeParaHLeft,
+    "MergeLine": MergeLine,
+    "MergePara": MergePara,
 }

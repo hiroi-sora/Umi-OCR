@@ -1,29 +1,49 @@
-# 合并：段落-横排-左对齐
+# 合并：段落-横排-自然段
 
-from .merge_line_h import MergeLineH
+from .merge_line import MergeLine
 
 
-class MergeParaHLeft(MergeLineH):
+class MergePara(MergeLine):
     def __init__(self):
         super().__init__()
-        self.tbpuName = "段落-横排-左对齐"
+        self.tbpuName = "多行-自然段"
 
     def isSameColumn(self, A, B):  # 两个文块属于同一栏时，返回 True
         # 获取A、B行高
         if "lineHeight" in A:  # 已记录
-            Ah = round(A["lineHeight"] * self.mllhH)
+            Ah = A["lineHeight"]
         else:  # 未记录，则写入记录
             Ah = A["lineHeight"] = A["box"][3][1] - A["box"][0][1]
+            A["lineCount"] = 1  # 段落的行数
         Bh = B["box"][3][1] - B["box"][0][1]
-        # AB行高不符，则False
-        if abs(Bh - Ah) < Ah * self.mllhH:
-            return False
+        if abs(Bh - Ah) > Ah * self.mllhH:
+            return False  # AB行高不符
         # 行高相符，判断垂直投影是否重叠
-        # TODO
-        return False
+        ax1, ax2 = A["box"][0][0], A["box"][1][0]
+        bx1, bx2 = B["box"][0][0], B["box"][1][0]
+        if ax2 < bx1 or ax1 > bx2:
+            return False
+        return True  # AB垂直投影重叠
 
     def isSamePara(self, A, B):  # 两个文块属于同一段落时，返回 True
-        pass
+        ah = A["lineHeight"] * self.mllhH
+        # 判断垂直距离
+        ly = ah * self.mllhY
+        a, b = A["box"], B["box"]
+        ay, by = a[3][1], b[0][1]
+        if by < ay - ly or by > ay + ah * 2 + ly:
+            return False  # 垂直距离过大
+        # 判断水平距离
+        lx = ah * self.mllhX
+        ax, bx = a[0][0], b[0][0]
+        if A["lineCount"] == 1:  # 首行允许缩进2格
+            return ax - ah * 2.5 - lx <= bx <= ax + lx
+        else:
+            return abs(ax - bx) <= lx
+
+    def merge2line(self, textBlocks, i1, i2):  # 合并2行
+        self.merge2tb(textBlocks, i1, i2)
+        textBlocks[i1]["lineCount"] += 1  # 行数+1
 
     def mergePara(self, textBlocks):
         # 单行合并
@@ -37,19 +57,17 @@ class MergeParaHLeft(MergeLineH):
             tb1 = hList[i1]
             if not tb1:
                 continue
-            # b1 = tb1["box"]
             num = 1  # 合并个数
             # 遍历后续文块
             for i2 in range(i1 + 1, listlen):
-                tb2 = textBlocks[i2]
+                tb2 = hList[i2]
                 if not tb2:
                     continue
-                # b2 = tb2["box"]
                 # 符合同一栏
                 if self.isSameColumn(tb1, tb2):
                     # 符合同一段，合并两行
                     if self.isSamePara(tb1, tb2):
-                        self.merge2tb(textBlocks, i1, i2)
+                        self.merge2line(hList, i1, i2)
                         num += 1
                     # 同栏、不同段，说明到了下一段，则退出内循环
                     else:

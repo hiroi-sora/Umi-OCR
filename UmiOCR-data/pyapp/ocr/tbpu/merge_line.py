@@ -5,7 +5,7 @@ from .tbpu import Tbpu
 from functools import cmp_to_key
 
 
-class MergeLineH(Tbpu):
+class MergeLine(Tbpu):
     def __init__(self):
         self.tbpuName = "单行-横排"
         # merge line limit multiple X/Y/H，单行合并时的水平/垂直/行高阈值系数，为行高的倍数
@@ -25,7 +25,7 @@ class MergeLineH(Tbpu):
             return True
         return False
 
-    def merge2tb(self, textBlocks, i1, i2):  # 在列表textBlocks中，将i2合并到i1中。
+    def merge2tb(self, textBlocks, i1, i2):  # 合并2个tb，将i2合并到i1中。
         tb1 = textBlocks[i1]
         tb2 = textBlocks[i2]
         b1 = tb1["box"]
@@ -33,10 +33,12 @@ class MergeLineH(Tbpu):
         # 合并两个文块box
         yTop = min(b1[0][1], b1[1][1], b2[0][1], b2[1][1])
         yBottom = max(b1[2][1], b1[3][1], b2[2][1], b2[3][1])
+        xLeft = min(b1[0][0], b1[3][0], b2[0][0], b2[3][0])
+        xRight = max(b1[1][0], b1[2][0], b2[1][0], b2[2][0])
         b1[0][1] = b1[1][1] = yTop  # y上
         b1[2][1] = b1[3][1] = yBottom  # y下
-        b1[0][0] = b1[3][0] = min(b1[0][0], b1[3][0])  # x左
-        b1[1][0] = b1[2][0] = max(b2[1][0], b2[2][0])  # x右
+        b1[0][0] = b1[3][0] = xLeft  # x左
+        b1[1][0] = b1[2][0] = xRight  # x右
         # 合并内容
         tb1["score"] += tb2["score"]  # 合并置信度
         tb1["text"] = tb1["text"] + " " + tb2["text"]  # 合并文本
