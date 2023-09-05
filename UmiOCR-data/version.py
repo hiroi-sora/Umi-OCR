@@ -1,5 +1,4 @@
-APP_NAME = "Umi-OCR"
-AUTHOR = "hiroi-sora"
+WEBSITE = "https://github.com/hiroi-sora/Umi-OCR"
 
 # 主版本号
 MAJOR_VERSION = 2

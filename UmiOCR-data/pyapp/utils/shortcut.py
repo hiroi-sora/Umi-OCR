@@ -19,7 +19,7 @@ class ShortcutApi:
 
     @staticmethod  # 创建快捷方式，返回成功与否
     def createShortcut(position):
-        lnkName = os.environ["APP_NAME"] + ".lnk"
+        lnkName = "Umi-OCR.lnk"
         appPath = os.environ["APP_PATH"]
         lnkPath = ShortcutApi.__getPath(position)
         lnkPath = os.path.join(lnkPath, lnkName)
@@ -28,7 +28,7 @@ class ShortcutApi:
 
     @staticmethod  # 删除快捷方式
     def deleteShortcut(position):
-        appName = os.environ["APP_NAME"]
+        appName = "Umi-OCR"
         lnkDir = ShortcutApi.__getPath(position)
         num = 0
         for fileName in os.listdir(lnkDir):

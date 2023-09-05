@@ -32,6 +32,7 @@ Window {
     minimumWidth: 400
     minimumHeight: 400
     color: "#00000000"
+    title: `Umi-OCR v${APP_VERSION}`
     
     // ========================= 【控制】 =========================
 

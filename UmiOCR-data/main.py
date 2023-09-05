@@ -38,6 +38,7 @@ def initRuntimeEnvironment(startup_script):
     # 初始化工作目录和Python搜索路径
     script = os.path.abspath(startup_script)  # 启动脚本.py的路径
     working = os.path.dirname(script)  # 工作目录
+    os.environ["APP_WORKING"] = working
     os.chdir(working)  # 重新设定工作目录（不在最顶层，而在UmiOCR-data文件夹下）
     for n in [".", ".site-packages"]:  # 将模块目录添加到 Python 搜索路径中
         path = os.path.abspath(os.path.join(working, n))
@@ -53,27 +54,6 @@ def initRuntimeEnvironment(startup_script):
         print(e)
         os.MessageBox(f"Qt plugins 目录导入失败！\nQt plugins directory import failed!\n\n{e}")
         os._exit(1)
-
-    # 初始化环境变量
-    import version as V
-
-    APP_NAME = V.APP_NAME
-    APP_VERSION = f"{V.MAJOR_VERSION}.{V.MINOR_VERSION}.{V.PATCH_VERSION}"
-    if V.PRE_RELEASE:
-        APP_VERSION += f"-{V.PRE_RELEASE}.{V.PRE_RELEASE_VERSION}"
-    APP_PATH = os.environ.get("PYSTAND", "")
-    APP_HOME = os.environ.get("PYSTAND_HOME", "")
-    APP_WORKING = working
-    # 调试模式下，手动补充参数
-    if not APP_PATH:
-        APP_PATH = os.path.abspath("../Umi-OCR.exe")
-        APP_HOME = os.path.abspath("../")
-    # 注入环境变量
-    os.environ["APP_NAME"] = APP_NAME
-    os.environ["APP_VERSION"] = APP_VERSION
-    os.environ["APP_PATH"] = APP_PATH
-    os.environ["APP_HOME"] = APP_HOME
-    os.environ["APP_WORKING"] = APP_WORKING
 
     print("初始化Python运行环境完成！")
 
