@@ -42,7 +42,28 @@ class MergePara(MergeLine):
             return abs(ax - bx) <= lx
 
     def merge2line(self, textBlocks, i1, i2):  # 合并2行
-        self.merge2tb(textBlocks, i1, i2)
+        ranges = [
+            (0x4E00, 0x9FFF),  # 汉字
+            (0x3040, 0x30FF),  # 日文
+            (0xAC00, 0xD7AF),  # 韩文
+            (0xFF01, 0xFF5E),  # 全角字符
+        ]
+        # 判断两端文字的结尾和开头，是否属于汉藏语族
+        # 汉藏语族：行间无需分割符。印欧语族：则两行之间需加空格。
+        separator = " "
+        ta, tb = textBlocks[i1]["text"][-1], textBlocks[i2]["text"][0]
+        fa, fb = False, False
+        for l, r in ranges:
+            if l <= ord(ta) <= r:
+                fa = True
+            if l <= ord(tb) <= r:
+                fb = True
+        if fa and fb:
+            separator = ""
+            print(f"【{ta}】与【{tb}】是汉字集。")
+        else:
+            print(f"【{ta}】与【{tb}】是西文集。")
+        self.merge2tb(textBlocks, i1, i2, separator)
         textBlocks[i1]["lineCount"] += 1  # 行数+1
 
     def mergePara(self, textBlocks):

@@ -25,7 +25,7 @@ class MergeLine(Tbpu):
             return True
         return False
 
-    def merge2tb(self, textBlocks, i1, i2):  # 合并2个tb，将i2合并到i1中。
+    def merge2tb(self, textBlocks, i1, i2, separator):  # 合并2个tb，将i2合并到i1中。
         tb1 = textBlocks[i1]
         tb2 = textBlocks[i2]
         b1 = tb1["box"]
@@ -41,7 +41,7 @@ class MergeLine(Tbpu):
         b1[1][0] = b1[2][0] = xRight  # x右
         # 合并内容
         tb1["score"] += tb2["score"]  # 合并置信度
-        tb1["text"] = tb1["text"] + " " + tb2["text"]  # 合并文本
+        tb1["text"] = tb1["text"] + separator + tb2["text"]  # 合并文本
         textBlocks[i2] = None  # 置为空，标记删除
 
     def mergeLine(self, textBlocks):  # 单行合并
@@ -65,7 +65,7 @@ class MergeLine(Tbpu):
                 # 符合同一行，则合并
                 if self.isSameLine(b1, b2):
                     # 合并两个文块box
-                    self.merge2tb(textBlocks, i1, i2)
+                    self.merge2tb(textBlocks, i1, i2, " ")
                     num += 1
             if num > 1:
                 tb1["score"] /= num  # 平均置信度
