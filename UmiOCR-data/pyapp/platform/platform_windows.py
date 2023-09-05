@@ -52,7 +52,7 @@ class _StandardPaths:
     # 获取启动（开机自启）路径。
     @staticmethod
     def GetStartup(type="common"):
-        return _StandardPaths.GetStartMenu(type) + "\\Windows\\Start Menu"
+        return _StandardPaths.GetStartMenu(type) + "\\Programs\\Startup"
 
 
 _KTA = _KeyTranslatorApi()

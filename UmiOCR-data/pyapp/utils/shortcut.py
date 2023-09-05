@@ -7,7 +7,7 @@ import os
 from ..platform import Platform
 
 
-class _ShortcutApi:
+class ShortcutApi:
     @staticmethod  # 获取地址
     def __getPath(position):
         if position == "desktop":
@@ -17,24 +17,19 @@ class _ShortcutApi:
         elif position == "startup":
             return Platform.StandardPaths.GetStartup()
 
-    @staticmethod  # 创建快捷方式
+    @staticmethod  # 创建快捷方式，返回成功与否
     def createShortcut(position):
         lnkName = os.environ["APP_NAME"] + ".lnk"
         appPath = os.environ["APP_PATH"]
-        lnkPath = _ShortcutApi.__getPath(position)
+        lnkPath = ShortcutApi.__getPath(position)
         lnkPath = os.path.join(lnkPath, lnkName)
-        try:
-            fApp = QFile(appPath)
-            fApp.link(lnkPath)
-        except QFileDevice.PermissionError as e:
-            return f"[Error] Insufficient permissions, creating shortcut failed.\n【异常】权限不足，无法创建快捷方式。请以管理员权限打开软件进行操作。\n{e}"
-        except Exception as e:
-            return f"[Error] Failed to create shortcut.\n【异常】创建快捷方式失败。\n{e}"
+        res = QFile.link(appPath, lnkPath)
+        return res
 
     @staticmethod  # 删除快捷方式
     def deleteShortcut(position):
         appName = os.environ["APP_NAME"]
-        lnkDir = _ShortcutApi.__getPath(position)
+        lnkDir = ShortcutApi.__getPath(position)
         num = 0
         for fileName in os.listdir(lnkDir):
             lnkPath = os.path.join(lnkDir, fileName)
@@ -52,7 +47,3 @@ class _ShortcutApi:
                 print(f"[Error] 删除快捷方式失败 {lnkPath}: {e}")
                 continue
         return num
-
-
-print("== 创建快捷", _ShortcutApi.createShortcut("desktop"))
-print("== 删除快捷", _ShortcutApi.deleteShortcut("desktop"))
