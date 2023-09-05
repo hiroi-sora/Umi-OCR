@@ -4,6 +4,7 @@
 
 from pynput._util.win32 import KeyTranslator
 import os
+import winreg  # 注册表
 
 from .platform import PlatformBase
 
@@ -37,10 +38,37 @@ class _KeyTranslatorApi:
                 return str(key)
 
 
+# ==================== 标准路径 ====================
+# 获取系统的标准路径
+class _StandardPaths:
+    @property
+    def StartMenu(self, type="user"):
+        if type == "user":
+            key = winreg.HKEY_CURRENT_USER
+            name = "Start Menu"
+        elif type == "common":
+            key = winreg.HKEY_LOCAL_MACHINE
+            name = "Common Start Menu"
+        try:
+            reg_key = winreg.OpenKey(
+                key,
+                r"Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders",
+            )
+            start_menu_path = winreg.QueryValueEx(reg_key, name)[0]
+            winreg.CloseKey(reg_key)
+            return start_menu_path
+        except Exception as e:
+            print("[Error] 无法获取开始菜单路径。", e)
+            return ""
+
+
 _KTA = _KeyTranslatorApi()
 
 
+# ==================== 对外接口 ====================
 class PlatformWindows(PlatformBase):
+    StandardPaths = _StandardPaths()
+
     @staticmethod
     def shutdown():  # 关机
         os.system("shutdown /s /t 0")
