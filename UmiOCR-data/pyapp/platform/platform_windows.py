@@ -8,7 +8,8 @@ import os
 from .platform import PlatformBase
 
 
-# 按键转换器。封装 keyTranslator ，负责key、char、vk的转换
+# ==================== 按键转换器 ====================
+# 封装 keyTranslator ，负责key、char、vk的转换
 class _KeyTranslatorApi:
     def __init__(self):
         self._kt = KeyTranslator()
@@ -49,5 +50,5 @@ class PlatformWindows(PlatformBase):
         os.system("shutdown /h")
 
     @staticmethod
-    def getKeyName(key):
+    def getKeyName(key):  # 键值转键名
         return _KTA(key)

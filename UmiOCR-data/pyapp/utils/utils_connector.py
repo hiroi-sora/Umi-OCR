@@ -1,4 +1,5 @@
-# 通用工具类
+# 通用工具连接器
+
 from . import utils
 
 from PySide2.QtCore import QObject, Slot, Signal
