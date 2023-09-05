@@ -35,9 +35,12 @@ TabPage {
         }
     }
     // 动态变化的简介文本
-    property string introText: qsTr("# 欢迎使用 Umi-OCR\n\
-　  \n\
-请选择功能页。")
+    property string introText: qsTr("# 欢迎使用 Umi-OCR
+　  
+👈 请在左侧选择功能页。  
+　  
+当前版本：%1  
+[%2](%2)").arg(APP_VERSION).arg(APP_WEBSITE)
 
 
     // =============== 布局 ===============
