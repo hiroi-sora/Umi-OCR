@@ -61,6 +61,7 @@ configDict: {
     "toolTip": 可选，字符串，鼠标悬停时的提示,
     "advanced": 可选，填true时为高级选项，平时隐藏
     "onChanged": 可选，值变化时的回调函数，  (newVal, oldVal)=>{console.log(`值从 ${oldVal} 变为 ${newVal}`)}
+        onChanged可以有返回值。默认返回 undefined 表示允许变动，返回 true 表示阻止这次变动。
 }
 
 configDict为嵌套形式，而originDict与valueDict为展开形式的单层字典。例：
@@ -236,7 +237,11 @@ Item {
     function setValue(key, val, isupdateUI=false) {
         if(valueDict[key] === val) // 排除相同值
             return
-        onChangedFunc(key, val, valueDict[key]) // 触发函数，传入新值和旧值
+        let res = onChangedFunc(key, val, valueDict[key]) // 触发函数，传入新值和旧值
+        if(res !== undefined) { // 阻止这次变动
+            compDict[key].updateUI()
+            return
+        }
         valueDict[key] = val
         if(originDict[key].save) { // 需要保存值
             saveValue(key)
@@ -250,10 +255,10 @@ Item {
     // 触发函数
     function onChangedFunc(key, newVal, oldVal) {
         if(!isChangedInit) // 初始化期间。不执行触发函数
-            return
+            return undefined
         // 配置项存在触发函数，则执行
         if(originDict[key].hasOwnProperty("onChanged")) 
-            originDict[key].onChanged(newVal, oldVal)
+            return originDict[key].onChanged(newVal, oldVal)
     }
     // 初始化，执行全部触发函数
     function initChangedFuncs() {
