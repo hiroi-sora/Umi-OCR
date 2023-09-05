@@ -7,6 +7,8 @@ PyStand_for_UmiOCR/build
 
 # 排除一级目录
 UmiOCR-data/*
+!UmiOCR-data/main.py
+!UmiOCR-data/version.py
 # 允许二级目录
 !UmiOCR-data/**/
 # 排除运行环境目录
