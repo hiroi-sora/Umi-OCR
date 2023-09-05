@@ -42,6 +42,8 @@ QtObject {
                 "optionsList": [
                     ["MergeLineH", qsTr("单行")],
                     ["MergeParaHLeft", qsTr("多行-左对齐")],
+                    ["MergeLineVrl", qsTr("竖排-从右到左")],
+                    ["MergeLineVlr", qsTr("竖排-从左到右")],
                     ["None", qsTr("不做处理")],
                 ],
             },
