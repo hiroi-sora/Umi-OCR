@@ -12,8 +12,41 @@ Configs {
     // ========================= 【全局配置项】 =========================
 
     configDict: {
+
+        // 快捷方式
+        "shortcut": {
+            "title": qsTr("快捷方式"),
+            "type": "group",
+
+            "desktop": {
+                "title": qsTr("桌面"),
+                "default": false,
+                "onChanged": (newFlag, oldFlag)=>{
+                    if(oldFlag !== undefined)
+                        return changeShortcut(newFlag, "desktop")
+                },
+            },
+            "startMenu": {
+                "title": qsTr("开始菜单"),
+                "default": false,
+                "onChanged": (newFlag, oldFlag)=>{
+                    if(oldFlag !== undefined)
+                        return changeShortcut(newFlag, "startMenu")
+                },
+            },
+            "startup": {
+                "title": qsTr("开机自启"),
+                "default": false,
+                "onChanged": (newFlag, oldFlag)=>{
+                    if(oldFlag !== undefined)
+                        return changeShortcut(newFlag, "startup")
+                },
+            },
+        },
+
+        // 界面和外观
         "ui": {
-            "title": qsTr("界面"),
+            "title": qsTr("界面和外观"),
             "type": "group",
 
             "startupInvisible": {
@@ -24,6 +57,7 @@ Configs {
             "topping": {
                 "title": qsTr("窗口置顶"),
                 "default": false,
+                "toolTip": qsTr("可点击窗口左上角图钉调整"),
                 "onChanged": (val)=>{
                     qmlapp.mainWin.setTopping(val)
                 },
@@ -36,11 +70,6 @@ Configs {
                 ],
             },
             "simpleNotificationType": utilsDicts.getSimpleNotificationType(true),
-        },
-    
-        "style": {
-            "title": qsTr("外观"),
-            "type": "group",
 
             "theme": {
                 "title": qsTr("主题"),
@@ -55,36 +84,6 @@ Configs {
                 "toolTip": qsTr("在低配置机器上，禁用动画、阴影等效果可减少部分资源占用"),
                 "onChanged": (flag)=>{
                     qmlapp.enabledEffect = !flag
-                },
-            },
-        },
-
-        "shortcut": {
-            "title": qsTr("添加快捷方式到"),
-            "type": "group",
-
-            "desktop": {
-                "title": qsTr("桌面"),
-                "default": false,
-                "onChanged": (newFlag, oldFlag)=>{
-                    if(oldFlag !== undefined)
-                        changeShortcut(newFlag, "desktop")
-                },
-            },
-            "startMenu": {
-                "title": qsTr("开始菜单"),
-                "default": false,
-                "onChanged": (newFlag, oldFlag)=>{
-                    if(oldFlag !== undefined)
-                        changeShortcut(newFlag, "startMenu")
-                },
-            },
-            "startup": {
-                "title": qsTr("开机自启项"),
-                "default": false,
-                "onChanged": (newFlag, oldFlag)=>{
-                    if(oldFlag !== undefined)
-                        changeShortcut(newFlag, "startup")
                 },
             },
         },
@@ -115,6 +114,7 @@ Configs {
             }
             else {
                 qmlapp.popup.message(qsTr("添加快捷方式失败"), qsTr("请以管理员权限运行软件，重新操作。"), "error")
+                return true // 阻止变化
             }
         }
         else {
