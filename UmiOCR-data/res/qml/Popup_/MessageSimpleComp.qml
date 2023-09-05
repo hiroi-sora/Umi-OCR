@@ -44,15 +44,12 @@ Rectangle {
     }
 
     width: size_.text * 20
-    height: childrenRect.height+size_.spacing*2
+    height: textTitle.height + textMsg.height+size_.spacing*2
     color: theme.themeColor1
     radius: size_.panelRadius
     // 内容组件
     Item {
-        height: childrenRect.height
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.top: parent.top
+        anchors.fill: parent
         anchors.margins: size_.spacing
         // 倒计时 ▽按钮
         HProgressBar {
@@ -109,21 +106,23 @@ Rectangle {
             font.pixelSize: size_.smallText
             wrapMode: TextEdit.Wrap // 尽量在单词边界处换行
             maximumLineCount: 2 // 限制显示两行
+            height: text=="" ? 0:undefined // 无文字时高为0，有文字时自动高度
+
         }
-        MouseArea {
-            anchors.fill: parent
-            hoverEnabled: true
-            onEntered: {
-                btnHoverBg.visible = true
-            }
-            onExited: {
-                btnHoverBg.visible = false
-            }
-            onClicked: {
-                timer.stop() // 停止计时器
-                if(typeof onHided === "function")
-                    onHided() // 调用关闭函数
-            }
+    }
+    MouseArea {
+        anchors.fill: parent
+        hoverEnabled: true
+        onEntered: {
+            btnHoverBg.visible = true
+        }
+        onExited: {
+            btnHoverBg.visible = false
+        }
+        onClicked: {
+            timer.stop() // 停止计时器
+            if(typeof onHided === "function")
+                onHided() // 调用关闭函数
         }
     }
     // 边缘阴影
