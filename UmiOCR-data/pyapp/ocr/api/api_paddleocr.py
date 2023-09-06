@@ -3,6 +3,7 @@
 # https://github.com/hiroi-sora/PaddleOCR-json
 
 from .api_ocr import ApiOcr
+from ...utils.call_func import CallFunc
 
 import os
 import psutil  # 进程检查
@@ -223,7 +224,7 @@ class ApiPaddleOcr(ApiOcr):  # 公开接口
                 raise ValueError(f'[Error] global Key "{c[1]}" not in qml config dict.')
             self.gArgd[c[0]] = globalArgd[c[1]]
         # 内存清理参数
-        self.ramInfo = {"max": -1, "time": -1}
+        self.ramInfo = {"max": -1, "time": -1, "timerID": ""}
         if "ocr.PaddleOCR.ram_max" in globalArgd:
             m = globalArgd["ocr.PaddleOCR.ram_max"]
             if isinstance(m, (int, float)):
@@ -275,32 +276,41 @@ class ApiPaddleOcr(ApiOcr):  # 公开接口
         # 启动引擎
         try:
             self.api = PPOCR_pipe(exePath, lArgd)
+            print("重启引擎")
         except Exception as e:
             self.api = None
             print(f"[Error]重启引擎失败: {e}")
 
     def runPath(self, imgPath: str):  # 路径识图
+        self.__runBefore()
         res = self.api.run(imgPath)
         self.__ramClear()
         return res
 
     def runClipboard(self):  # 剪贴板识图
+        self.__runBefore()
         res = self.api.runClipboard()
         self.__ramClear()
         return res
 
     def runBytes(self, imageBytes):  # 字节流
+        self.__runBefore()
         res = self.api.runBytes(imageBytes)
         self.__ramClear()
         return res
 
-    def __ramClear(self):
+    def __runBefore(self):
+        CallFunc.delayStop(self.ramInfo["timerID"])  # 停止ram清理计时器
+
+    def __ramClear(self):  # 内存清理
         if self.ramInfo["max"] > 0:
             pid = self.api.ret.pid
             rss = psutil.Process(pid).memory_info().rss
             rss /= 1048576
             if rss > self.ramInfo["max"]:
                 self.restart()
+        if self.ramInfo["time"] > 0:
+            self.ramInfo["timerID"] = CallFunc.delay(self.restart, self.ramInfo["time"])
 
     def getApiInfo(self):  # 获取额外信息
         # 动态载入模型库
