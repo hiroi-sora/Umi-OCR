@@ -69,6 +69,11 @@ Configs {
                     "toolTip": qsTr("对每张图片，生成同名txt文件，仅输出识别文字"),
                     "default": false,
                 },
+                "md": {
+                    "title": qsTr("md 图文混排"),
+                    "toolTip": qsTr("Markdown图文混排格式，可用Markdown阅读器浏览文件"),
+                    "default": false,
+                },
                 "jsonl": {
                     "title": qsTr("jsonl 原始信息"),
                     "toolTip": qsTr("每行为一条json数据，便于第三方程序读取操作"),

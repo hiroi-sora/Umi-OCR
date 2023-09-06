@@ -11,6 +11,7 @@ from ..platform import Platform  # 跨平台
 from ..ocr.output.output_txt import OutputTxt
 from ..ocr.output.output_txt_plain import OutputTxtPlain
 from ..ocr.output.output_txt_individual import OutputTxtIndividual
+from ..ocr.output.output_md import OutputMD
 from ..ocr.output.output_jsonl import OutputJsonl
 
 import os
@@ -75,7 +76,8 @@ class BatchOCR(Page):
         print(f'转换\n{argd["mission.dir"]}\n{argd["mission.dirName"]}')
         startTimestamp = time.time()  # 开始时间戳
         argd["startTimestamp"] = startTimestamp
-        argd["startDatetime"] = time.strftime(  # 格式化日期时间（标准格式）
+        # 格式化日期时间（标准格式）
+        argd["startDatetime"] = time.strftime(
             r"%Y-%m-%d %H:%M:%S", time.localtime(startTimestamp)
         )
         # 添加格式化日期时间（用户指定格式）：先替换时间戳，再strftime
@@ -114,6 +116,8 @@ class BatchOCR(Page):
                 self.outputList.append(OutputTxtPlain(outputArgd))
             if argd["mission.filesType.txtIndividual"]:  # 单独txt
                 self.outputList.append(OutputTxtIndividual(outputArgd))
+            if argd["mission.filesType.md"]:  # jsonl
+                self.outputList.append(OutputMD(outputArgd))
             if argd["mission.filesType.jsonl"]:  # jsonl
                 self.outputList.append(OutputJsonl(outputArgd))
         except Exception as e:
