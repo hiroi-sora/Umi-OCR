@@ -11,6 +11,7 @@ from ..platform import Platform  # 跨平台
 from ..ocr.output.output_txt import OutputTxt
 from ..ocr.output.output_txt_plain import OutputTxtPlain
 from ..ocr.output.output_txt_individual import OutputTxtIndividual
+from ..ocr.output.output_jsonl import OutputJsonl
 
 import os
 import time
@@ -113,6 +114,8 @@ class BatchOCR(Page):
                 self.outputList.append(OutputTxtPlain(outputArgd))
             if argd["mission.filesType.txtIndividual"]:  # 单独txt
                 self.outputList.append(OutputTxtIndividual(outputArgd))
+            if argd["mission.filesType.jsonl"]:  # jsonl
+                self.outputList.append(OutputJsonl(outputArgd))
         except Exception as e:
             self.__onEnd(
                 None,
