@@ -7,11 +7,12 @@
 前端页面访问各种后端功能，必须靠这个控制器作为中转。
 """
 
-from PySide2.QtCore import QObject, Slot, Signal
+from PySide2.QtCore import QObject, Slot
 
 # 导入本模块内定义的控制器类
 from .BatchOCR import BatchOCR
 from .ScreenshotOCR import ScreenshotOCR
+from ..utils.call_func import CallFunc
 
 # 控制器类列表
 PageClass = [BatchOCR, ScreenshotOCR]
@@ -39,9 +40,6 @@ class TagPageConnector(QObject):
         # 当前已实例化的控制器
         self.page = {}
         self.keyIndex = 0  # 用于生成标识符
-        # 信号 在主线程中调用函数
-        self.__callFuncSignal = self.CallSignal()
-        self.__callFuncSignal.signal.connect(self.__callFunc)
 
     # ========================= 【增删改查】 =========================
 
@@ -119,12 +117,4 @@ class TagPageConnector(QObject):
 
     # 在子线程中调用，到主线程中调用python函数
     def callFunc(self, func, *args):
-        self.__callFuncSignal.signal.emit((func, args))
-
-    @Slot("QVariant")
-    def __callFunc(self, args):
-        args[0](*args[1])
-
-    # 信号类
-    class CallSignal(QObject):
-        signal = Signal("QVariant")
+        CallFunc.now(func, *args)
