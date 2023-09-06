@@ -24,6 +24,14 @@ configDict: {
         "title": ,
         "default": "文本",
     },
+    "数字 number （输入框）": {
+        "title": ,
+        "isInt": true 整数 / false 浮点数,
+        "default": 233,
+        "max": 可选，上限,
+        "min": 可选，下限,
+        "unit": 可选，单位。qsTr("秒"),
+    },
     "枚举 enum （下拉框）": {
         "title": ,
         "optionsList": [
@@ -153,7 +161,11 @@ Item {
                         return
                     }
                     config.type = "enum"
-                    config.default = config.optionsList[0][0]
+                    if(config.default == undefined)
+                        config.default = config.optionsList[0][0]
+                }
+                else if (typeof config.default === "number") { // 数字
+                    config.type = "number"
                 }
                 else if (config.hasOwnProperty("btnsList")) { // 按钮组
                     config.type = "buttons"
@@ -175,6 +187,15 @@ Item {
                         if(typeof val === "string")
                             val = val=="true"
                         flag = true
+                        break
+                    case "number": // 数字，字符串转数字
+                        if(typeof val === "string") {
+                            if(config.isInt)
+                                val = parseInt(val)
+                            else
+                                val = parseFloat(val)
+                        }
+                        flag = !(val==null || isNaN(val)) // 若非数字，则设为默认数值
                         break
                     case "enum": // 枚举，检查记录参数是否在列表内
                         for(let i in config.optionsList) {
@@ -538,6 +559,7 @@ Item {
         "enum": compEnum,
         "file": compFile,
         "text": compText,
+        "number": compNumber,
         "hotkey": compHotkey,
         "buttons": compBtns,
     }
@@ -620,6 +642,109 @@ Item {
             }
         }
     }
+    // 配置项：数字
+    Component {
+        id: compNumber
+
+        ConfigItemComp {
+            id: rootNumber
+            property string errTips: ""
+            // 更新UI
+            updateUI: ()=>{
+                textInput.text = value()
+            }
+            // 修改值
+            function set(t) {
+                let n = check(t)
+                value(n) // 设置值
+            }
+            // 检查值
+            function check(val) {
+                let n = Number(val);
+                if (!isNaN(n)) { // 是数字
+                    if(origin.isInt && !Number.isInteger(n)) {
+                        errTips = qsTr("必须为整数")
+                    }
+                    else {
+                        if(origin.max !== undefined && n > origin.max) {
+                            errTips = qsTr("不能超过")+origin.max
+                        }
+                        else if(origin.min !== undefined && n < origin.min) {
+                            errTips = qsTr("不能低于")+origin.min
+                        }
+                        else
+                            errTips = ""
+                    }
+                }
+                else {
+                    errTips = qsTr("必须为数字")
+                }
+                if(errTips==="")
+                    return n
+                return null
+            }
+            // 提示信息
+            Rectangle {
+                visible: errTips!==""
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.right: textInputContainer.left
+                anchors.margins: 3
+                color: theme.noColor
+                radius: size_.btnRadius
+                width: errTipsText.width+size_.smallSpacing*2
+                Text_ {
+                    id: errTipsText
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    anchors.left: parent.left
+                    anchors.leftMargin: size_.smallSpacing
+                    color: theme.bgColor
+                    text: errTips
+                }
+            }
+            // 输入框
+            Rectangle {
+                id: textInputContainer
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.right: parent.right
+                anchors.margins: 1
+                width: parent.width*0.25
+                color: "#00000000"
+                border.width: 2
+                border.color: theme.coverColor2
+                radius: size_.btnRadius
+
+                TextInput_ {
+                    id: textInput
+                    clip: true
+                    anchors.left: parent.left
+                    anchors.right: unitText.left
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    anchors.leftMargin: parent.border.width
+                    // anchors.rightMargin: parent.border.width
+                    onTextChanged: { // 对话框文本改变时设置值
+                        rootNumber.set(text)
+                    }
+                }
+                // 单位
+                Text_ {
+                    id: unitText
+                    visible: origin.unit!==undefined
+                    text: origin.unit
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    anchors.rightMargin: size_.smallSpacing
+                    verticalAlignment: Text.AlignVCenter // 垂直居中
+                    color: theme.subTextColor
+                    font.pixelSize: size_.smallText
+                }
+            }
+        }
+    }
     // 配置项：枚举
     Component {
         id: compEnum
@@ -698,7 +823,7 @@ Item {
                     width: parent.width
                     height: size_.text + size_.smallSpacing
                     Text {
-                        text: modelData
+                        text: modelData + (comboBox.currentIndex===index? " √":"")
                         anchors.left: parent.left
                         anchors.leftMargin: size_.smallSpacing
                         font.pixelSize: size_.text
