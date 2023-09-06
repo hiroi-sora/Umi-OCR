@@ -5,6 +5,7 @@
 from .api_ocr import ApiOcr
 
 import os
+import psutil  # 进程检查
 import socket  # 套接字
 import subprocess  # 进程，管道
 from json import loads as jsonLoads, dumps as jsonDumps
@@ -216,11 +217,21 @@ class ApiPaddleOcr(ApiOcr):  # 公开接口
         self.api = None  # api对象
         self.lArgs = None  # 局部参数
         self.gArgd = {}  # 全局参数
+        self.argd = None  # 最终参数字典
         for c in ConfigMap1:  # 加载全局参数
             if c[1] not in globalArgd:
                 raise ValueError(f'[Error] global Key "{c[1]}" not in qml config dict.')
             self.gArgd[c[0]] = globalArgd[c[1]]
-        print("获取全局参数：", self.gArgd)
+        # 内存清理参数
+        self.ramInfo = {"max": -1, "time": -1}
+        if "ocr.PaddleOCR.ram_max" in globalArgd:
+            m = globalArgd["ocr.PaddleOCR.ram_max"]
+            if isinstance(m, (int, float)):
+                self.ramInfo["max"] = m
+        if "ocr.PaddleOCR.ram_time" in globalArgd:
+            m = globalArgd["ocr.PaddleOCR.ram_time"]
+            if isinstance(m, (int, float)):
+                self.ramInfo["time"] = m
 
     def start(self, argd):  # 启动引擎。返回： "" 成功，"[Error] xxx" 失败
         # 加载局部参数
@@ -239,12 +250,14 @@ class ApiPaddleOcr(ApiOcr):  # 公开接口
         self.lArgs = set(lArgd.items())  # 记录局部参数
         # 拼合最终参数
         lArgd.update(self.gArgd)
+        self.argd = lArgd.copy()
         exePath = lArgd["exe_path"]
         del lArgd["exe_path"]
         # 启动引擎
         try:
             self.api = PPOCR_pipe(exePath, lArgd)
         except Exception as e:
+            self.api = None
             return f"[Error] OCR init fail. Argd: {lArgd}"
         return ""
 
@@ -254,14 +267,40 @@ class ApiPaddleOcr(ApiOcr):  # 公开接口
         self.api.exit()
         self.api = None
 
+    def restart(self):  # 重启引擎
+        self.stop()
+        lArgd = self.argd.copy()
+        exePath = lArgd["exe_path"]
+        del lArgd["exe_path"]
+        # 启动引擎
+        try:
+            self.api = PPOCR_pipe(exePath, lArgd)
+        except Exception as e:
+            self.api = None
+            print(f"[Error]重启引擎失败: {e}")
+
     def runPath(self, imgPath: str):  # 路径识图
-        return self.api.run(imgPath)
+        res = self.api.run(imgPath)
+        self.__ramClear()
+        return res
 
     def runClipboard(self):  # 剪贴板识图
-        return self.api.runClipboard()
+        res = self.api.runClipboard()
+        self.__ramClear()
+        return res
 
     def runBytes(self, imageBytes):  # 字节流
-        return self.api.runBytes(imageBytes)
+        res = self.api.runBytes(imageBytes)
+        self.__ramClear()
+        return res
+
+    def __ramClear(self):
+        if self.ramInfo["max"] > 0:
+            pid = self.api.ret.pid
+            rss = psutil.Process(pid).memory_info().rss
+            rss /= 1048576
+            if rss > self.ramInfo["max"]:
+                self.restart()
 
     def getApiInfo(self):  # 获取额外信息
         # 动态载入模型库
