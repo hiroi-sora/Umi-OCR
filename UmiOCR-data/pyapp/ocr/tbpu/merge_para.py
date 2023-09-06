@@ -60,9 +60,9 @@ class MergePara(MergeLine):
                 fb = True
         if fa and fb:
             separator = ""
-            print(f"【{ta}】与【{tb}】是汉字集。")
-        else:
-            print(f"【{ta}】与【{tb}】是西文集。")
+        #     print(f"【{ta}】与【{tb}】是汉字集。")
+        # else:
+        #     print(f"【{ta}】与【{tb}】是西文集。")
         self.merge2tb(textBlocks, i1, i2, separator)
         textBlocks[i1]["lineCount"] += 1  # 行数+1
 
