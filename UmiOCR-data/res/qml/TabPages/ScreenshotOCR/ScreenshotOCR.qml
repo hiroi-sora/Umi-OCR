@@ -17,13 +17,13 @@ TabPage {
     property string msnState: "none" // OCR任务状态， none run
 
     // TODO: 测试用
-    Timer {
-        interval: 200
-        running: true
-        onTriggered: {
-            // imageViewer.setSource("file:///D:/Pictures/Screenshots/test/#1.png")
-        }
-    }
+    // Timer {
+    //     interval: 200
+    //     running: true
+    //     onTriggered: {
+    //         imageViewer.setSource("file:///D:/Pictures/Screenshots/test/#1.png")
+    //     }
+    // }
     // ========================= 【逻辑】 =========================
 
     // 开始截图

@@ -40,8 +40,11 @@ QtObject {
             "merge": {
                 "title": qsTr("段落合并"),
                 "optionsList": [
-                    ["MergeLineH", qsTr("单行")],
-                    ["MergeParaHLeft", qsTr("多行-左对齐")],
+                    ["MergeLine", qsTr("单行")],
+                    ["MergePara", qsTr("多行-自然段")],
+                    ["MergeParaCode", qsTr("多行-代码段")],
+                    ["MergeLineVrl", qsTr("竖排-从右到左")],
+                    ["MergeLineVlr", qsTr("竖排-从左到右")],
                     ["None", qsTr("不做处理")],
                 ],
             },

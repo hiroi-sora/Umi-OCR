@@ -32,7 +32,8 @@ class __MissionOcrClass(Mission):
             # 段落合并
             if argd["tbpu.merge"] in tbpuMerge:
                 msnInfo["tbpu"].append(tbpuMerge[argd["tbpu.merge"]]())
-        print("== 创建 tbpu.merge ", msnInfo["tbpu"])
+            else:
+                print(f'[Error] 段落合并参数 {argd["tbpu.merge"]}')
         return super().addMissionList(msnInfo, msnList)
 
     def msnPreTask(self, msnInfo):  # 用于更新api和参数
