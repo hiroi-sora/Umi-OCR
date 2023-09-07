@@ -4,6 +4,7 @@
 Temp
 build
 PyStand_for_UmiOCR/build
+dev-tools
 
 # 排除一级目录
 UmiOCR-data/*
