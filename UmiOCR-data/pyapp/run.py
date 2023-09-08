@@ -12,6 +12,7 @@ from .event_bus.pubsub_connector import PubSubConnector  # 发布/订阅连接�
 from .event_bus.key_mouse.key_mouse_connector import KeyMouseConnector  # 键盘/鼠标连接器
 from .utils.utils_connector import UtilsConnector  # 通用连接器
 from .utils.image_provider import PixmapProvider  # 图片提供器
+from .utils.i18n import I18n  # 语言
 
 
 # 启动主qml
@@ -69,11 +70,8 @@ def main():
     qmlRegisterType(UtilsConnector, "UtilsConnector", 1, 0, "UtilsConnector")
 
     # 5. 启动翻译
-    # trans = QTranslator()
-    # if trans.load(r"翻译文1件.qm"):
-    #     qtApp.installTranslator(trans)  # 安装翻译器
-    # else:
-    #     print("翻译文件安装失败！")
+    trans = QTranslator()
+    I18n.init(qtApp, trans)
 
     # 6. 启动qml引擎
     engine = QQmlApplicationEngine()
