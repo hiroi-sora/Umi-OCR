@@ -4,7 +4,12 @@
 Temp
 build
 PyStand_for_UmiOCR/build
-dev-tools
+
+# 开发工具
+dev-tools/i18n/*.txt
+dev-tools/i18n/*.qm
+dev-tools/i18n/*.ts
+dev-tools/i18n/*.xml
 
 # 排除一级目录
 UmiOCR-data/*
