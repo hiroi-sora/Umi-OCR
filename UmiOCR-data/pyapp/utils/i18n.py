@@ -6,6 +6,7 @@ from PySide2.QtCore import QTranslator
 I18nDir = "i18n"
 I18nConfig = "_"
 I18nConfig = os.path.join(I18nDir, I18nConfig)
+DefaultLang = "zh_CN"
 LanguageCodes = {
     "zh_CN": "简体中文",
     "zh_TW": "繁體中文",
@@ -33,10 +34,10 @@ class _I18n:
     def init(self, qtApp, trans):
         # 获取信息
         self.__getLangPath()
-        if not self.language:
+        text, path = self.langDict[self.language]
+        if not path:
             print("翻译未加载。")
             return
-        path, text = self.langDict[self.language]
         if not trans.load(path):
             os.MessageBox(
                 f"[Error] Unable to load UI language: {path}\n【异常】无法加载UI语言！",
@@ -52,16 +53,16 @@ class _I18n:
         print(f"翻译加载完毕。{self.language} - {text}")
 
     # 切换语言
-    def changeLanguage(self, lang):
+    def setLanguage(self, lang):
         if lang in self.langDict:
             with open(I18nConfig, "w", encoding="utf-8") as file:
                 file.write(lang)
             return True
         return False
 
-    # 获取语言字典
-    def getLangDict(self):
-        return self.langDict
+    # 获取语言参数
+    def getInfos(self):
+        return [self.language, self.langDict]
 
     # 获取当前翻译文件路径，如果没有配置文件则初始化
     def __getLangPath(self):
@@ -72,7 +73,9 @@ class _I18n:
                 code = os.path.splitext(file)[0]
                 path = os.path.join(I18nDir, file)
                 text = LanguageCodes.get(code, code)
-                self.langDict[code] = (text, path)
+                self.langDict[code] = [text, path]
+        if DefaultLang not in self.langDict:
+            self.langDict[DefaultLang] = [LanguageCodes[DefaultLang], ""]
         print("qm列表：", self.langDict)
 
         # 存在配置文件
@@ -91,7 +94,8 @@ class _I18n:
                 with open(I18nConfig, "w", encoding="utf-8") as file:
                     file.write(l)
             else:
-                print(f"当前系统语言为{l}，无对应翻译文件。")
+                self.language = DefaultLang
+                print(f"当前系统语言为{l}，无对应翻译文件，使用默认语言：{DefaultLang}。")
 
 
 I18n = _I18n()
