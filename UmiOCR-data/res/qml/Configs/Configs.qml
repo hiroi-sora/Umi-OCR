@@ -152,9 +152,6 @@ Item {
                 if (typeof config.default === "boolean") { // 布尔
                     config.type = "boolean"
                 }
-                else if (typeof config.default === "string") { // 文本
-                    config.type = "text"
-                }
                 else if (config.hasOwnProperty("optionsList")) { // 枚举
                     if(config.optionsList.length==0) {
                         qmlapp.popup.message("", qsTr("%1 处理配置项异常：\n%2枚举列表为空。").arg(category_).arg(key), "error")
@@ -163,6 +160,9 @@ Item {
                     config.type = "enum"
                     if(config.default == undefined)
                         config.default = config.optionsList[0][0]
+                }
+                else if (typeof config.default === "string") { // 文本
+                    config.type = "text"
                 }
                 else if (typeof config.default === "number") { // 数字
                     config.type = "number"

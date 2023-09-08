@@ -50,7 +50,7 @@ Window {
         MissionConnector { id: msnConnector } // 任务连接器
         PubSub { id: pubSub } // 全局事件发布/订阅
         KeyMouseConnector { id:keyMouse } // 鼠标/键盘
-        UtilsConnector { id:utilsConnector } // 通用
+        UtilsConnector { id:utilsConnector } // 通用连接器
 
         // 必须先初始化的单例，onCompleted顺序从下往上
         MainWindowManager { id:mainWin; mainWin:mainWindowRoot } // 5. 主窗管理

@@ -77,6 +77,7 @@ Configs {
                     [false, qsTr("退出应用")],
                 ],
             },
+            "i18n": getI18n(),
             "simpleNotificationType": utilsDicts.getSimpleNotificationType(true),
 
             "theme": {
@@ -133,6 +134,41 @@ Configs {
             else {
                 qmlapp.popup.message(qsTr("提示"), qsTr("没有找到可移除的快捷方式。"), "warning")
             }
+        }
+    }
+    // 初始化i18n参数
+    function getI18n() {
+        const info = qmlapp.utilsConnector.i18nGetInfos()
+        const lang = info[0]
+        const langDict = info[1]
+        let optionsList = []
+        for(let code in langDict) {
+            const text = langDict[code][0]
+            optionsList.push([code, text])
+            console.log(code, text)
+        }
+        return {
+            "title": "语言 / Language",
+            "save": false,
+            "default": lang,
+            "optionsList": optionsList,
+            "onChanged": changeI18n,
+        }
+    }
+    // 改变i18n
+    function changeI18n(lang, old) {
+        if(old===undefined) return
+        const flag = qmlapp.utilsConnector.i18nSetLanguage(lang)
+        if(flag) {
+            const callback = (flag)=>{
+                if(flag) {
+                    Qt.quit()
+                }
+            }
+            const title = "Success"
+            const msg = "UI language has been modified. Please reload Umi-OCR to take effect.\n\n已修改界面语言，请重启软件生效。"
+            const argd = {yesText: "Exit Now", noText:"Later"}
+            qmlapp.popup.dialog(title, msg, callback, "", argd)
         }
     }
 }
