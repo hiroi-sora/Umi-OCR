@@ -59,26 +59,6 @@ def initRuntimeEnvironment(startup_script):
 
 
 def runScript():
-    # 从启动参数中，解析启动脚本
-    argv = sys.argv
-    # 指定启动脚本
-    if len(argv) == 3:
-        if argv[1] == "--import_module":
-            path = argv[2]
-            try:  # 启动传入路径的脚本
-                site.addsitedir(path)
-                import app
-            except ImportError as e:
-                os.MessageBox(
-                    f"Umi-OCR 无法从指定路径导入脚本！\nImportError: Unable to import script from path! \n{e}\n{path}"
-                )
-            except Exception as e:
-                os.MessageBox(
-                    f"Umi-OCR 无法从指定路径导入脚本！2\nException: Unable to import script from path! \n{e}\n{path}"
-                )
-            print
-            os._exit(0)
-
     # 默认启动脚本
     from pyapp.run import main
 
