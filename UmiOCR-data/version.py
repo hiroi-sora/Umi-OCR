@@ -9,6 +9,6 @@ PATCH_VERSION = 0
 # 预发布阶段
 PRE_RELEASE = "dev"
 # 预发布版本号
-PRE_RELEASE_VERSION = 3
+PRE_RELEASE_VERSION = 20230908
 
 # TODO: 补充更多信息
