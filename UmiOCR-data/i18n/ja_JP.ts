@@ -614,7 +614,12 @@
 &#x3000;  
 当前版本：%1  
 [%2](%2)</source>
-        <translation># Umi-OCR をご利用いただきありがとうございます\n&#x3000; \n👈 左側のページで機能を選択してください。\n&#x3000; \n現在のバージョン：%1 \n[%2](%2)</translation>
+        <translation># Umi-OCR をご利用いただきありがとうございます
+&#x3000;  
+👈 左側のページで機能を選択してください。
+&#x3000;  
+現在のバージョン：%1  
+[%2](%2)</translation>
     </message>
     <message>
         <location filename="../../UmiOCR-data/res/qml/TabPages/Navigation/Navigation.qml" line="67"/>
@@ -806,7 +811,9 @@
         <source># 截图OCR
 &#x3000;  
 屏幕截图，快捷转文字。也支持粘贴图片。</source>
-        <translation># スクリーンショットOCR\n&#x3000;  \nスクリーンショットを撮影し、テキストに変換します。また、画像の貼り付けもサポートしています。</translation>
+        <translation># スクリーンショットOCR
+&#x3000;  
+スクリーンショットを撮影し、テキストに変換します。また、画像の貼り付けもサポートしています。</translation>
     </message>
     <message>
         <location filename="../../UmiOCR-data/res/qml/TabPages/PagesManager.qml" line="38"/>
@@ -818,7 +825,9 @@
         <source># 批量OCR
 &#x3000;  
 导入本地图片或文件夹，批量转换文字。</source>
-        <translation># バッチOCR\n&#x3000;  \nローカルの画像またはフォルダをインポートして、テキストを一括変換します。</translation>
+        <translation># バッチOCR
+&#x3000;  
+ローカルの画像またはフォルダをインポートして、テキストを一括変換します。</translation>
     </message>
     <message>
         <location filename="../../UmiOCR-data/res/qml/TabPages/PagesManager.qml" line="46"/>
@@ -830,7 +839,9 @@
         <source># 全局设置
 &#x3000;  
 调节全局设置项，对所有页面生效。</source>
-        <translation># グローバル設定\n&#x3000;  \n全てのページに影響を与えるグローバル設定を調整します。</translation>
+        <translation># グローバル設定
+&#x3000;  
+全てのページに影響を与えるグローバル設定を調整します。</translation>
     </message>
 </context>
 <context>
