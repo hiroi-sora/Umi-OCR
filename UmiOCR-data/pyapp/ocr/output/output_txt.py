@@ -27,7 +27,7 @@ class OutputTxt(Output):
             for r in res["data"]:
                 textOut += r["text"] + "\n"
         elif res["code"] == 101:
-            textOut += "[Notice] No Text. \n【通知】图片中未找到文字。\n"
+            pass
         else:
             textOut += f'[Error] OCR failed. Code: {res["code"]}, Msg: {res["data"]}\n【异常】OCR识别失败。\n'
         textOut += "\n"  # 多空一行
