@@ -10,7 +10,6 @@ Configs {
     category_: "Global"
 
     // ========================= 【全局配置项】 =========================
-
     configDict: {
 
         // 快捷方式
@@ -77,7 +76,7 @@ Configs {
                     [false, qsTr("退出应用")],
                 ],
             },
-            "i18n": getI18n(),
+            "i18n": getI18n,
             "simpleNotificationType": utilsDicts.getSimpleNotificationType(true),
 
             "theme": {
@@ -98,7 +97,7 @@ Configs {
         },
 
         // OCR接口全局设定
-        "ocr": ocrManager.globalOptions
+        "ocr": ocrManager.globalOptions,
     }
 
     // ========================= 【全局单例，通过 qmlapp.globalConfigs.xxx 访问】 =========================
@@ -137,7 +136,8 @@ Configs {
         }
     }
     // 初始化i18n参数
-    function getI18n() {
+    property var getI18n: _getI18n() // 转为静态
+    function _getI18n() {
         const info = qmlapp.utilsConnector.i18nGetInfos()
         const lang = info[0]
         const langDict = info[1]
@@ -145,7 +145,6 @@ Configs {
         for(let code in langDict) {
             const text = langDict[code][0]
             optionsList.push([code, text])
-            console.log(code, text)
         }
         return {
             "title": "语言 / Language",
