@@ -28,25 +28,19 @@ Item {
             key: "ScreenshotOCR",
             needController: true,
             title: qsTr("截图OCR"),
-            intro: qsTr("# 截图OCR\n\
-　  \n\
-屏幕截图，快捷转文字。也支持粘贴图片。")
+            intro: qsTr("# 截图OCR\n\n　  \n\n屏幕截图，快捷转文字。也支持粘贴图片。")
         },
         {
             key: "BatchOCR",
             needController: true,
             title: qsTr("批量OCR"),
-            intro: qsTr("# 批量OCR\n\
-　  \n\
-导入本地图片或文件夹，批量转换文字。")
+            intro: qsTr("# 批量OCR\n\n　  \n\n导入本地图片或文件夹，批量转换文字。")
         },
         {
             key: "GlobalConfigsPage",
             needController: false,
             title: qsTr("全局设置"),
-            intro: qsTr("# 全局设置\n\
-　  \n\
-调节全局设置项，对所有页面生效。")
+            intro: qsTr("# 全局设置\n\n　  \n\n调节全局设置项，对所有页面生效。")
         },
     ]
 
@@ -100,6 +94,9 @@ Item {
                 return undefined
             }
         }
+        else { // 新增一个不带控制器的简单页
+            ctrlKey = connector.addSimplePage(info.key)
+        }
         // 检查组件
         const comp = info.comp
         if(!comp){
@@ -120,9 +117,7 @@ Item {
             ctrlKey: ctrlKey
         }
         // 向控制器传入页面对象
-        if(ctrlKey) {
-            connector.setPageQmlObj(ctrlKey, obj)
-        }
+        connector.setPageQmlObj(ctrlKey, obj)
         return dic
     }
 
@@ -163,12 +158,10 @@ Item {
     function delPage(index){
         const page = pageList[index]
         // 删除python逻辑控制器
-        if(page.ctrlKey){ 
-            const flag = connector.delPage(page.ctrlKey)
-            if(!flag){
-                console.error("【Warning】删除页面失败：控制器["+page.ctrlKey+"]删除失败！")
-                // return false // 暂时不管控制器删除失败
-            }
+        const flag = connector.delPage(page.ctrlKey)
+        if(!flag){
+            console.error("【Warning】删除页面失败：控制器["+page.ctrlKey+"]删除失败！")
+            // return false // 暂时不管控制器删除失败
         }
         page.obj.destroy()  // 页对象删除
         pageList.splice(index, 1)  // 列表删除
