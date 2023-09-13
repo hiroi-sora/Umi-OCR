@@ -36,8 +36,13 @@ class OutputMD(Output):
 
 """
         # 正文
-        for tb in res["data"]:
-            if tb["text"]:
-                textOut += f'> {tb["text"]}  \n'  # 每一行加引用号
+        if res["code"] == 100:
+            for tb in res["data"]:
+                if tb["text"]:
+                    textOut += f'> {tb["text"]}  \n'  # 每一行加引用号
+        elif res["code"] == 101:
+            pass
+        else:
+            textOut += f'> [Error] OCR failed. Code: {res["code"]}, Msg: {res["data"]}  \n> 【异常】OCR识别失败。  \n'
         with open(self.outputPath, "a", encoding="utf-8") as f:  # 追加写入本地文件
             f.write(textOut)
