@@ -44,7 +44,7 @@ def findFiles(dir):
 
 # 获取翻译指令
 def getTsCmd(tsPath):
-    tsCmd = f'{LUPDATE_EXE}'
+    tsCmd = f"{LUPDATE_EXE}"
     for s in fileList:
         tsCmd += f' "{s}"'
     tsCmd += f' -ts "{tsPath}"'
@@ -59,20 +59,21 @@ def main():
     codeDir = os.path.abspath(CODE_DIR)
     # 生成ts文件的路径
     tsPath = nowDir + "/" + TS_NAME
-    print(f"""    ==========================
+    print(
+        f"""    ==========================
 当前目录 {nowDir}
 翻译目录 {codeDir}
 提取器名称 {LUPDATE_EXE}
 生成路径 {tsPath}
-    ==========================""")
+    =========================="""
+    )
 
     findFiles(codeDir)
     print(f"搜索到{len(fileList)}个待翻译文件。")
     tsCmd = getTsCmd(tsPath)
     # print(f"{tsCmd}\n    ==========================")
     os.system(tsCmd)
-    print(
-        f"      生成为{TS_NAME}。\n      启动打包。没有报错就OKK\n    ==========================")
+    print(f"      生成为{TS_NAME}。\n      启动打包。没有报错就OKK\n    ==========================")
 
 
 main()
