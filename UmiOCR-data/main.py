@@ -2,6 +2,9 @@
 # ========== Umi-OCR 启动入口 ==========
 # =====================================
 
+# 耗时统计：
+# .runtime/python.exe -X importtime main.py
+
 import os
 import sys
 import site
