@@ -136,9 +136,11 @@ Item {
     // TODO: 当前仅允许没有python控制器的页面更换为别的页面，因为没有安全删除控制器的机制。
     function changePage(index, infoIndex){
         const page = pageList[index]
-        if(page.ctrlKey){ 
-            console.error("【Warning】不允许有控制器["+page.ctrlKey+"]的页面更换！")
-            return false
+        // 删除旧页的python逻辑控制器
+        const flag = connector.delPage(page.ctrlKey)
+        if(!flag){
+            console.error("【Warning】删除页面失败：控制器["+page.ctrlKey+"]删除失败！")
+            // return false // 暂时不管控制器删除失败
         }
         const dic = newPage(infoIndex)
         if(dic == undefined){
