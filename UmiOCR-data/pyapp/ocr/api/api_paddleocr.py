@@ -8,6 +8,7 @@ from ...utils.call_func import CallFunc
 import os
 import psutil  # 进程检查
 import socket  # 套接字
+import atexit  # 退出处理
 import subprocess  # 进程，管道
 from json import loads as jsonLoads, dumps as jsonDumps
 from sys import platform as sysPlatform  # popen静默模式
@@ -51,6 +52,7 @@ class PPOCR_pipe:  # 调用OCR（管道模式）
             initStr = self.ret.stdout.readline().decode("utf-8", errors="ignore")
             if "OCR init completed." in initStr:  # 初始化成功
                 break
+        atexit.register(self.exit)  # 注册程序终止时执行强制停止子进程
 
     def runDict(self, writeDict: dict):
         """传入指令字典，发送给引擎进程。\n
@@ -104,7 +106,9 @@ class PPOCR_pipe:  # 调用OCR（管道模式）
 
     def exit(self):
         """关闭引擎子进程"""
+        print("== 关闭子进程")
         self.ret.kill()  # 关闭子进程
+        atexit.unregister(self.exit)  # 移除退出处理
 
     @staticmethod
     def printResult(res: dict):

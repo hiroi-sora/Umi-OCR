@@ -84,7 +84,9 @@ def main():
     # engine.load(f"qrc:/qml/Main.qml")  # 通过qrc启动
     if not engine.rootObjects():
         sys.exit(0)
-    sys.exit(qtApp.exec_())
+    res = qtApp.exec_()
+    print("== APP退出！")
+    sys.exit(res)
 
 
 # OpenGL渲染模式
