@@ -1036,10 +1036,6 @@ Item {
                 // 改变快捷键
                 changeHotkey(kn)
             }
-            // 销毁时取注销快捷键
-            Component.onDestruction: {
-                changeHotkey("", false)
-            }
 
             Item {
                 anchors.top: parent.top
