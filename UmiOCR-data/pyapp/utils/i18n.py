@@ -2,10 +2,9 @@
 
 import os
 from PySide2.QtCore import QTranslator
+from . import pre_configs
 
 I18nDir = "i18n"  # 翻译文件 目录
-I18nConfig = "_"  # 配置文件名
-I18nConfig = os.path.join(I18nDir, I18nConfig)
 DefaultLang = "zh_CN"  # 默认语言
 # 语言表。每个语种只有第一个代号是有效代号，剩下的会映射到第一个。如zh_HK会映射到zh_TW。
 LanguageCodes = {
@@ -56,10 +55,10 @@ class _I18n:
         print(f"翻译加载完毕。{self.langCode} - {text}")
 
     # 切换语言
-    def setLanguage(self, lang):
-        if lang in self.langDict:
-            with open(I18nConfig, "w", encoding="utf-8") as file:
-                file.write(lang)
+    def setLanguage(self, code):
+        if code in self.langDict:
+            self.langCode = code
+            pre_configs.setValue("i18n", code)  # 写入预配置项
             return True
         return False
 
@@ -80,17 +79,15 @@ class _I18n:
                 self.langDict[code] = [text, path]
         if DefaultLang not in self.langDict:
             self.langDict[DefaultLang] = [LanguageCodes[DefaultLang], ""]
-        # 加载配置文件
-        if os.path.exists(I18nConfig):
-            with open(I18nConfig, "r", encoding="utf-8") as file:
-                text = file.read()
-                if text in self.langDict:
-                    self.langCode = text
-        # 不存在，则初始化配置文件
+        # 加载预配置项
+        code = pre_configs.getValue("i18n")
+        if code in self.langDict:
+            self.langCode = code
+        # 未能加载，则初始化预配置
         if not self.langCode:
             import locale
 
-            # 取得当前系统语言l
+            # 取得当前系统语言
             code, encoding = locale.getdefaultlocale()
             # 映射首位代号
             if code in LanguageCodes:
@@ -99,13 +96,10 @@ class _I18n:
                     if l == langStr:
                         code = c
                         break
-            # 检查是否存在对应翻译文件
-            if code in self.langDict:
-                self.langCode = code
-                with open(I18nConfig, "w", encoding="utf-8") as file:
-                    file.write(code)
-            else:
-                self.langCode = DefaultLang
+            # 尝试写入配置
+            if not self.setLanguage(code):
+                # 写入配置失败，则使用默认语言
+                self.setLanguage(DefaultLang)
                 print(f"当前系统语言为{code}，无对应翻译文件，使用默认语言：{DefaultLang}。")
 
 
