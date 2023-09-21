@@ -56,6 +56,20 @@ Configs {
                     qmlapp.themeManager.switchTheme(val)
                 },
             },
+            "opengl": {
+                "title": qsTr("渲染器"),
+                "save": false,
+                "default": getOpengl(),
+                "optionsList": [
+                    ["AA_UseSoftwareOpenGL", qsTr("关闭硬件加速")],
+                    ["AA_UseDesktopOpenGL", "Desktop OpenGL"],
+                    ["AA_UseOpenGLES", "OpenGL ES"],
+                ],
+                "toolTip": qsTr("若出现界面闪烁、元素错位等界面异常，尝试切换渲染器或者关闭硬件加速"),
+                "onChanged": (opt, old)=>{
+                    old!==undefined && setOpengl(opt)
+                },
+            },
             "disableEffect": {
                 "title": qsTr("禁用美化效果"),
                 "default": false,
@@ -66,7 +80,7 @@ Configs {
             },
         },
 
-        // 行为
+        // 窗口
         "window": {
             "title": qsTr("窗口"),
             "type": "group",
@@ -165,15 +179,22 @@ Configs {
         if(old===undefined) return
         const flag = qmlapp.utilsConnector.i18nSetLanguage(lang)
         if(flag) {
-            const callback = (flag)=>{
-                if(flag) {
-                    Qt.quit()
-                }
-            }
-            const title = "Success"
+            const callback = (flag)=>{ flag&&Qt.quit() }
             const msg = "UI language has been modified. Please reload Umi-OCR to take effect.\n\n已修改界面语言，请重启软件生效。"
             const argd = {yesText: "Exit Now", noText:"Later"}
-            qmlapp.popup.dialog(title, msg, callback, "", argd)
+            qmlapp.popup.dialog("Success", msg, callback, "", argd)
         }
+    }
+    // 获取渲染器
+    function getOpengl() {
+        return qmlapp.utilsConnector.getOpengl()
+    }
+    // 设置渲染器
+    function setOpengl(opt) {
+        qmlapp.utilsConnector.setOpengl(opt)
+        const callback = (flag)=>{ flag&&Qt.quit() }
+        const msg = qsTr("渲染器选项将在重启软件后生效")
+        const argd = {yesText: qsTr("立刻关闭软件")}
+        qmlapp.popup.dialog("", msg, callback, "", argd)
     }
 }

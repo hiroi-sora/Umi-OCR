@@ -8,7 +8,7 @@ _FileName = "./.pre_settings"
 
 _Configs = {
     "i18n": "",  # 界面语言
-    "opengl": "",  # 界面OpenGL渲染类型
+    "opengl": "AA_UseDesktopOpenGL",  # 界面OpenGL渲染类型
 }
 
 

@@ -314,8 +314,8 @@ Item {
     // 存储UI项
     Settings_ {
         id: uiSettings
-        category: category_+"-UI" // 类别名称-ui
-        property alias advanced: configs.advanced
+        category: category_
+        property alias configs_advanced: configs.advanced
     }
 
     // ========================= 【自动生成组件】 =========================

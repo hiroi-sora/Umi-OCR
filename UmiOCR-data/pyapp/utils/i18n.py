@@ -1,7 +1,6 @@
 # UI语言
 
 import os
-from PySide2.QtCore import QTranslator
 from . import pre_configs
 
 I18nDir = "i18n"  # 翻译文件 目录
