@@ -15,7 +15,7 @@ Item {
 
     function show(title, msg, showType) {
         if(showType=="default") {
-            showType = qmlapp.globalConfigs.getValue("ui.simpleNotificationType")
+            showType = qmlapp.globalConfigs.getValue("window.simpleNotificationType")
         }
         if(showType=="none") {
             return // 不发送

@@ -17,7 +17,7 @@ Item {
     // 主窗口属性初始化
     Component.onCompleted: {
         // 启动时可见
-        const visi = !qmlapp.globalConfigs.getValue("ui.startupInvisible")
+        const visi = !qmlapp.globalConfigs.getValue("window.startupInvisible")
         setVisible(visi)
         if(!visi) {
             qmlapp.popup.simple(qsTr("欢迎使用 Umi-OCR"), qsTr("已启用后台模式，可通过快捷键使用功能。"))
@@ -48,7 +48,7 @@ Item {
     // 关闭主窗口
     function close() {
         // 隐藏
-        if(qmlapp.globalConfigs.getValue("ui.closeWin2Hide")) {
+        if(qmlapp.globalConfigs.getValue("window.closeWin2Hide")) {
             setVisible(false)
         }
         // 关闭

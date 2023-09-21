@@ -48,6 +48,29 @@ Configs {
             "title": qsTr("界面和外观"),
             "type": "group",
 
+            "i18n": getI18n,
+            "theme": {
+                "title": qsTr("主题"),
+                "optionsList": qmlapp.themeManager.themeList, // 从全局主题管理器中取列表
+                "onChanged": (val)=>{
+                    qmlapp.themeManager.switchTheme(val)
+                },
+            },
+            "disableEffect": {
+                "title": qsTr("禁用美化效果"),
+                "default": false,
+                "toolTip": qsTr("在低配置机器上，禁用动画、阴影等效果可减少部分资源占用"),
+                "onChanged": (flag)=>{
+                    qmlapp.enabledEffect = !flag
+                },
+            },
+        },
+
+        // 行为
+        "window": {
+            "title": qsTr("窗口"),
+            "type": "group",
+
             "startupInvisible": {
                 "title": qsTr("启动时缩小到任务栏"),
                 "default": false,
@@ -76,24 +99,7 @@ Configs {
                     [false, qsTr("退出应用")],
                 ],
             },
-            "i18n": getI18n,
             "simpleNotificationType": utilsDicts.getSimpleNotificationType(true),
-
-            "theme": {
-                "title": qsTr("主题"),
-                "optionsList": qmlapp.themeManager.themeList, // 从全局主题管理器中取列表
-                "onChanged": (val)=>{
-                    qmlapp.themeManager.switchTheme(val)
-                },
-            },
-            "disableEffect": {
-                "title": qsTr("禁用美化效果"),
-                "default": false,
-                "toolTip": qsTr("在低配置机器上，禁用动画、阴影等效果可减少部分资源占用"),
-                "onChanged": (flag)=>{
-                    qmlapp.enabledEffect = !flag
-                },
-            },
         },
 
         // OCR接口全局设定

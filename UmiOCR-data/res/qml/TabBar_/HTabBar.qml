@@ -23,7 +23,7 @@ RowLayout  {
             checked: mainWindowRoot.isMainWindowTop
             onCheckedChanged: { // 双向绑定锁定标记
                 mainWindowRoot.isMainWindowTop = checked
-                qmlapp.globalConfigs.setValue("ui.isMainWindowTop", checked, true)
+                qmlapp.globalConfigs.setValue("window.isMainWindowTop", checked, true)
             }
             anchors.fill: parent
             anchors.margins: 4
@@ -229,7 +229,7 @@ RowLayout  {
             checked: qmlapp.tab.barIsLock
             onCheckedChanged: { // 双向绑定锁定标记
                 qmlapp.tab.barIsLock = checked
-                qmlapp.globalConfigs.setValue("ui.barIsLock", checked, true)
+                qmlapp.globalConfigs.setValue("window.barIsLock", checked, true)
             }
             anchors.fill: parent
             anchors.margins: 4
