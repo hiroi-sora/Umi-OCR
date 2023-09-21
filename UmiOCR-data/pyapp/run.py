@@ -1,22 +1,23 @@
 import os
 import sys
-
-from PySide2.QtCore import Qt, QTranslator
-from PySide2.QtGui import QGuiApplication, QOpenGLContext
-from PySide2.QtQml import QQmlApplicationEngine, qmlRegisterType
-
-import version as V
-from .tag_pages.tag_pages_connector import TagPageConnector  # 页面连接器
-from .mission.mission_connector import MissionConnector  # 任务连接器
-from .event_bus.pubsub_connector import PubSubConnector  # 发布/订阅连接器
-from .event_bus.key_mouse.key_mouse_connector import KeyMouseConnector  # 键盘/鼠标连接器
-from .utils.utils_connector import UtilsConnector  # 通用连接器
-from .utils.image_provider import PixmapProvider  # 图片提供器
-from .utils.i18n import I18n  # 语言
+from .utils import pre_configs
 
 
 # 启动主qml
-def main():
+def runQml():
+    from PySide2.QtCore import Qt, QTranslator
+    from PySide2.QtGui import QGuiApplication, QOpenGLContext
+    from PySide2.QtQml import QQmlApplicationEngine, qmlRegisterType
+
+    import version as V
+    from .tag_pages.tag_pages_connector import TagPageConnector  # 页面连接器
+    from .mission.mission_connector import MissionConnector  # 任务连接器
+    from .event_bus.pubsub_connector import PubSubConnector  # 发布/订阅连接器
+    from .event_bus.key_mouse.key_mouse_connector import KeyMouseConnector  # 键盘/鼠标连接器
+    from .utils.utils_connector import UtilsConnector  # 通用连接器
+    from .utils.image_provider import PixmapProvider  # 图片提供器
+    from .utils.i18n import I18n  # 语言
+
     # 0. 初始化环境变量。版本号，各路径。
     app_version = f"{V.MAJOR_VERSION}.{V.MINOR_VERSION}.{V.PATCH_VERSION}"
     if V.PRE_RELEASE:
@@ -34,6 +35,8 @@ def main():
     os.environ["APP_WEBSITE"] = app_website
     os.environ["APP_PATH"] = app_path
     os.environ["APP_HOME"] = app_home
+
+    # TODO: 用户自行选择渲染方式！！！
 
     # 1. 全局参数设置
     # 启用 OpenGL 上下文之间的资源共享
@@ -87,6 +90,11 @@ def main():
     res = qtApp.exec_()
     print("== APP退出！")
     sys.exit(res)
+
+
+def main():
+    pre_configs.readConfigs()  # 初始化预配置项
+    runQml()  # 启动qml
 
 
 # OpenGL渲染模式
