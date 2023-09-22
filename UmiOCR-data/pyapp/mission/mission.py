@@ -6,7 +6,6 @@
 from PySide2.QtCore import QMutex, QThreadPool, QRunnable
 from uuid import uuid4  # 唯一ID
 import time
-import threading  # TODO: 测试
 
 
 class Mission:
@@ -86,7 +85,7 @@ class Mission:
     # ========================= 【子线程 方法】 =========================
 
     def __taskRun(self):  # 异步执行任务字典的流程
-        print(f"线程{threading.current_thread().ident}，__taskRun 任务正在运行~~")
+        # print(f"线程{threading.current_thread().ident}，__taskRun 任务正在运行~~")
         dictIndex = 0  # 当前取任务字典中的第几个任务队列
         # 循环，直到任务队列的列表为空
         while True:

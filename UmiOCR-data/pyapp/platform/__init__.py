@@ -2,16 +2,16 @@
 import sys
 
 # 根据当前操作系统选择要导入的模块
-plat = sys.platform
-print(f"当前平台为：{plat}")
-if plat.startswith('win'):
-    from .platform_windows import PlatformWindows as Platform_
-elif plat.startswith('linux'):
+_plat = sys.platform
+print(f"当前平台为：{_plat}")
+if _plat.startswith("win"):
+    from .platform_windows import PlatformWindows as _Platform
+elif _plat.startswith("linux"):
     raise ImportError("尚未支持linux系统！")
-elif plat.startswith('darwin'):
+elif _plat.startswith("darwin"):
     raise ImportError("尚未支持macos系统！")
 else:
-    raise ImportError(f"未知系统：{plat}")
+    raise ImportError(f"未知系统：{_plat}")
 
 # 构造单例：平台对象
-Platform = Platform_()
+Platform = _Platform()

@@ -16,7 +16,10 @@
                 "PYDEVD_DISABLE_FILE_VALIDATION": "1", // 禁用验证
             },
             "python": "${workspaceFolder}/UmiOCR-data/.runtime/python.exe", // 解释器路径
-            "args": []
+            "args": [
+                "test",
+                "1"
+            ]
         },
         {
             "name": "翻译组件",

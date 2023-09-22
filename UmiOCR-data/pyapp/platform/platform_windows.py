@@ -4,7 +4,8 @@
 
 from pynput._util.win32 import KeyTranslator
 import os
-import winreg  # 注册表
+import re
+import subprocess
 
 from .platform import PlatformBase
 
@@ -73,3 +74,22 @@ class PlatformWindows(PlatformBase):
     @staticmethod
     def getKeyName(key):  # 键值转键名
         return _KTA(key)
+
+    @staticmethod
+    def getUsedPorts():  # 获取系统中所有已占用的TCP端口号
+        try:
+            res = subprocess.run(["netstat", "-ano"], capture_output=True, text=True)
+            if res.returncode == 0:
+                lines = res.stdout.split("\n")
+                ports = set()
+                pattern = r":(\d+)\s"  # 冒号端口号空格
+                for l in lines:
+                    if "TCP" in l:
+                        match = re.search(pattern, l)
+                        if match:
+                            p = match.group(1)
+                            ports.add(p)
+                return ports
+        except Exception as e:
+            print(f"[Error] 获取占用端口号失败：{e}")
+        return None
