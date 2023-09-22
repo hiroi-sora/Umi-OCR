@@ -3,7 +3,7 @@
 # ======= http接口可复用于跨进程命令行、防止多开等方面 ========
 # =========================================================
 
-from bottle import Bottle, ServerAdapter
+from bottle import Bottle, ServerAdapter, request
 from PySide2.QtCore import QThreadPool, QRunnable
 from wsgiref.simple_server import make_server, WSGIServer
 
@@ -21,12 +21,14 @@ UmiWeb = Bottle()
 @UmiWeb.route("/umiocr")
 def _umiocr():
     v = os.environ["APP_VERSION"]
-    print("1111111111")
     return f"Umi-OCR v{v}"
 
 
-@UmiWeb.route("/test")
-def _test():
+# 跨进程接收命令行参数
+@UmiWeb.route("/argv", method="POST")
+def _argv():
+    json_data = request.json
+    print("接收到参数：", json_data)
     return f"test!!!!!!!!!!!"
 
 
