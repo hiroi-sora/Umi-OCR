@@ -80,14 +80,15 @@ def runQml():
     engine.load(f"res/qml/Main.qml")  # 通过本地文件启动
     # engine.load(f"qrc:/qml/Main.qml")  # 通过qrc启动
     if not engine.rootObjects():
-        sys.exit(0)
+        return 0
     res = qtApp.exec_()
     print("###  QML引擎关闭！")
-    sys.exit(res)
+    return res
 
 
 def main():
     pre_configs.readConfigs()  # 初始化预配置项
     if not initCmd():  # 初始化命令行，如果已有Umi-OCR在运行则结束运行
         sys.exit(0)
-    runQml()  # 启动qml
+    res = runQml()  # 启动qml
+    sys.exit(res)

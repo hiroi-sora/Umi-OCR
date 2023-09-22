@@ -58,7 +58,7 @@ def initRuntimeEnvironment(startup_script):
         os.MessageBox(f"Qt plugins 目录导入失败！\nQt plugins directory import failed!\n\n{e}")
         os._exit(1)
 
-    print("初始化Python运行环境完成！")
+    print(f"初始化Python运行环境完成！PID：{os.getpid()}", file=sys.stderr)
 
 
 def runScript():

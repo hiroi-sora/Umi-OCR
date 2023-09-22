@@ -3,7 +3,7 @@ import sys
 
 # 根据当前操作系统选择要导入的模块
 _plat = sys.platform
-print(f"当前平台为：{_plat}")
+print(f"当前平台为：{_plat}", file=sys.stderr)
 if _plat.startswith("win"):
     from .platform_windows import PlatformWindows as _Platform
 elif _plat.startswith("linux"):

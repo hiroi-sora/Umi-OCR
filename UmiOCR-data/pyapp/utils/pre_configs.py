@@ -10,6 +10,8 @@ _Configs = {
     "i18n": "",  # 界面语言
     "opengl": "AA_UseDesktopOpenGL",  # 界面OpenGL渲染类型
     "server_port": 1224,  # 服务端口号
+    "last_pid": -1,  # 最后一次运行时的进程号
+    "last_ptime": -1,  # 最后一次运行时的进程创建时间
 }
 
 
