@@ -160,7 +160,13 @@ Configs {
             const port2 = getValue("server.port")
             if(port1 !== port2) {
                 setValue("server.port", port1, true)
-                qmlapp.popup.message("", qsTr("原端口号%1被占用\n使用新端口号%2").arg(port2).arg(port1), "")
+                if(advanced) {
+                    const msg = qsTr("原端口号%1被占用，\n切换为新端口号%2。\n\n若不想看到此通知，请关闭全局设置的高级模式。").arg(port2).arg(port1)
+                    qmlapp.popup.message("", msg, "")
+                }
+                else {
+                    console.log(`原端口号${port1}被占用，\n切换为新端口号${port2}。`)
+                }
             }
             portFlag = true
         })

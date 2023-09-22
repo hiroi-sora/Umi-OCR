@@ -39,8 +39,6 @@ def runQml():
     os.environ["APP_PATH"] = app_path
     os.environ["APP_HOME"] = app_home
 
-    # TODO: 用户自行选择渲染方式！！！
-
     # 1. 全局参数设置
     # 启用 OpenGL 上下文之间的资源共享
     QGuiApplication.setAttribute(Qt.AA_ShareOpenGLContexts, True)
@@ -84,7 +82,7 @@ def runQml():
     if not engine.rootObjects():
         sys.exit(0)
     res = qtApp.exec_()
-    print("== APP退出！")
+    print("###  QML引擎关闭！")
     sys.exit(res)
 
 

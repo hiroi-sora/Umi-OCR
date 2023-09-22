@@ -106,9 +106,9 @@ class PPOCR_pipe:  # 调用OCR（管道模式）
 
     def exit(self):
         """关闭引擎子进程"""
-        print("== 关闭子进程")
         self.ret.kill()  # 关闭子进程
         atexit.unregister(self.exit)  # 移除退出处理
+        print("###  PPOCR引擎子进程关闭！")
 
     @staticmethod
     def printResult(res: dict):
