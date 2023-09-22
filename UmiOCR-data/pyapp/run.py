@@ -1,7 +1,7 @@
 import os
 import sys
 from .utils import pre_configs
-from .server.cmd import initCmd
+from .server.cmd_client import initCmd
 
 
 # 启动主qml
