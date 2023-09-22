@@ -424,13 +424,20 @@ Item {
             property var origin: undefined // 起源参数（静态）
             property string title: "" // 标题
             property alias container: panelContainer // 容器
+            property bool advanced: false // true时是高级选项
             anchors.left: parent.left
             anchors.right: parent.right
-            height: childrenRect.height
+            // 高级模式，整组隐藏
+            height: (advanced&&!configs.advanced) ? 0 : childrenRect.height
+            visible: !(advanced&&!configs.advanced)
 
             Component.onCompleted: {
                 origin = configs.originDict[key]
                 title = origin.title
+                if(origin.advanced) {
+                    advanced = origin.advanced
+                    title = "* "+title
+                }
             }
 
 

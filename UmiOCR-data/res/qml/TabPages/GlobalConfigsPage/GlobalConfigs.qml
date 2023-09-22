@@ -3,6 +3,7 @@
 // =========================================
 
 import QtQuick 2.15
+import GlobalConfigsConnector 1.0
 import "../../Configs"
 import "../../ApiManager"
 
@@ -116,6 +117,26 @@ Configs {
             "simpleNotificationType": utilsDicts.getSimpleNotificationType(true),
         },
 
+        // 服务
+        "server": {
+            "title": qsTr("服务"),
+            "type": "group",
+            "advanced": true,
+
+            "port": {
+                "title": qsTr("端口"),
+                "isInt": true,
+                "default": 1224,
+                "max": 65535,
+                "min": 1,
+                // 保存数值，只是用于前端展示。实际端口号由pre_config保存。
+                "toolTip": qsTr("用于本地进程通信、命令行指令传输、http接口"),
+                "onChanged": (port, old)=>{
+                    old!==undefined && setServerPort(port)
+                },
+            },
+        },
+
         // OCR接口全局设定
         "ocr": ocrManager.globalOptions,
     }
@@ -124,19 +145,31 @@ Configs {
 
     OcrManager { id: ocrManager } // OCR管理器 qmlapp.globalConfigs.ocrManager
     UtilsConfigDicts { id: utilsDicts } // 通用配置项 qmlapp.globalConfigs.utilsDicts
+    GlobalConfigsConnector { id: globalConfigConn } // 全局设置连接器
 
     property alias ocrManager: ocrManager
     property alias utilsDicts: utilsDicts
+    property bool portFlag: false
 
     Component.onCompleted: {
         ocrManager.init()
         console.log("% GlobalConfig 初始化全局配置完毕！")
+        // 延时启动web服务
+        Qt.callLater(()=>{
+            const port1 = globalConfigConn.runUmiWeb()
+            const port2 = getValue("server.port")
+            if(port1 !== port2) {
+                setValue("server.port", port1, true)
+                qmlapp.popup.message("", qsTr("原端口号%1被占用\n使用新端口号%2").arg(port2).arg(port1), "")
+            }
+            portFlag = true
+        })
     }
 
     // 添加/删除快捷方式
     function changeShortcut(flag, position) {
         if(flag) {
-            let res = qmlapp.utilsConnector.createShortcut(position)
+            let res = globalConfigConn.createShortcut(position)
             if(res) {
                 qmlapp.popup.simple(qsTr("成功添加快捷方式"), "")
             }
@@ -146,7 +179,7 @@ Configs {
             }
         }
         else {
-            let res = qmlapp.utilsConnector.deleteShortcut(position)
+            let res = globalConfigConn.deleteShortcut(position)
             if(res > 0) {
                 qmlapp.popup.simple(qsTr("成功移除 %1 个快捷方式").arg(res), "")
             }
@@ -155,10 +188,18 @@ Configs {
             }
         }
     }
+
+    // 询问重启软件
+    function askRebootApp(msg) {
+        const callback = (flag)=>{ flag&&Qt.quit() }
+        const argd = {yesText: qsTr("立刻关闭软件"), noText: qsTr("稍后")}
+        qmlapp.popup.dialog("", msg, callback, "", argd)
+    }
+
     // 初始化i18n参数
     property var getI18n: _getI18n() // 转为静态
     function _getI18n() {
-        const info = qmlapp.utilsConnector.i18nGetInfos()
+        const info = globalConfigConn.i18nGetInfos()
         const lang = info[0]
         const langDict = info[1]
         let optionsList = []
@@ -177,24 +218,34 @@ Configs {
     // 改变i18n
     function changeI18n(lang, old) {
         if(old===undefined) return
-        const flag = qmlapp.utilsConnector.i18nSetLanguage(lang)
+        const flag = globalConfigConn.i18nSetLanguage(lang)
         if(flag) {
-            const callback = (flag)=>{ flag&&Qt.quit() }
             const msg = "UI language has been modified. Please reload Umi-OCR to take effect.\n\n已修改界面语言，请重启软件生效。"
-            const argd = {yesText: "Exit Now", noText:"Later"}
-            qmlapp.popup.dialog("Success", msg, callback, "", argd)
+            askRebootApp(msg)
         }
     }
+
     // 获取渲染器
     function getOpengl() {
-        return qmlapp.utilsConnector.getOpengl()
+        return globalConfigConn.getOpengl()
     }
     // 设置渲染器
     function setOpengl(opt) {
-        qmlapp.utilsConnector.setOpengl(opt)
-        const callback = (flag)=>{ flag&&Qt.quit() }
-        const msg = qsTr("渲染器选项将在重启软件后生效")
-        const argd = {yesText: qsTr("立刻关闭软件")}
-        qmlapp.popup.dialog("", msg, callback, "", argd)
+        globalConfigConn.setOpengl(opt)
+        const msg = qsTr("渲染器变更 将在重启软件后生效")
+        askRebootApp(msg)
+    }
+
+    // 设置服务端口号
+    function setServerPort(port) {
+        console.log("=== ", portFlag)
+        if(port!==null && port!==undefined) {
+            if(portFlag) { // 用户修改，忽略系统修改
+                globalConfigConn.setServerPort(port)
+                qmlapp.popup.simple(qsTr("端口号改为%1").arg(port), qsTr("将在重启软件后生效"))
+            }
+        }
+        else
+            qmlapp.popup.simple(qsTr("端口号不合法"), "")
     }
 }

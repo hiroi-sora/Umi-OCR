@@ -9,6 +9,7 @@ _FileName = "./.pre_settings"
 _Configs = {
     "i18n": "",  # 界面语言
     "opengl": "AA_UseDesktopOpenGL",  # 界面OpenGL渲染类型
+    "server_port": 1224,  # 服务端口号
 }
 
 

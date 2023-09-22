@@ -20,6 +20,7 @@ Item {
     clip: true
     // 这个选项是高级选项，且设置页未开启高级模式，则高度为0隐藏
     height: (advanced&&!configs.advanced) ? 0 : (size_.text + size_.spacing)
+    visible: !(advanced&&!configs.advanced)
 
     // 初始化
     Component.onCompleted: {

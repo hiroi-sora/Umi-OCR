@@ -88,7 +88,7 @@ class PlatformWindows(PlatformBase):
                         match = re.search(pattern, l)
                         if match:
                             p = match.group(1)
-                            ports.add(p)
+                            ports.add(int(p))
                 return ports
         except Exception as e:
             print(f"[Error] 获取占用端口号失败：{e}")

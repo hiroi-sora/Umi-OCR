@@ -3,7 +3,7 @@
 from . import app_opengl
 from .i18n import I18n
 from .shortcut import ShortcutApi
-from ..server.web_server import runUmiWeb
+from ..server import web_server
 
 from PySide2.QtCore import QObject, Slot, Signal
 
@@ -42,7 +42,12 @@ class GlobalConfigsConnector(QObject):
     def setOpengl(self, opt):
         app_opengl.setOpengl(opt)
 
-    # 启动web服务器，port端口
+    # 启动web服务器，返回实际端口
+    @Slot(result=int)
+    def runUmiWeb(self):
+        return web_server.runUmiWeb()
+
+    # 设置服务端口号
     @Slot(int)
-    def runUmiWeb(self, port):
-        runUmiWeb(port)
+    def setServerPort(self, port):
+        web_server.setPort(port)
