@@ -24,9 +24,8 @@ def initRuntimeEnvironment(startup_script):
         sys.stdout = fp
         sys.stderr = fp
 
-    def except_hook(cls, exception, traceback):
-        sys.__excepthook__(cls, exception, traceback)
-
+    # def except_hook(cls, exception, traceback):
+    #     sys.__excepthook__(cls, exception, traceback)
     # sys.excepthook = except_hook
 
     # 定义一个最简单的消息弹窗
@@ -47,17 +46,6 @@ def initRuntimeEnvironment(startup_script):
         path = os.path.abspath(os.path.join(working, n))
         if os.path.exists(path):
             site.addsitedir(path)
-
-    # 初始化Qt搜索路径，采用相对路径，避免中文路径编码问题
-    try:
-        from PySide2.QtCore import QCoreApplication
-
-        QCoreApplication.addLibraryPath("./.site-packages/PySide2/plugins")
-    except Exception as e:
-        print(e)
-        os.MessageBox(f"Qt plugins 目录导入失败！\nQt plugins directory import failed!\n\n{e}")
-        os._exit(1)
-
     print(f"初始化Python运行环境完成！PID：{os.getpid()}", file=sys.stderr)
 
 

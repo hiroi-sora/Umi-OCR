@@ -6,6 +6,16 @@ from .server.cmd_client import initCmd
 
 # 启动主qml
 def runQml():
+    # 初始化Qt搜索路径，采用相对路径，避免中文路径编码问题
+    try:
+        from PySide2.QtCore import QCoreApplication
+
+        QCoreApplication.addLibraryPath("./.site-packages/PySide2/plugins")
+    except Exception as e:
+        print(e)
+        os.MessageBox(f"Qt plugins 目录导入失败！\nQt plugins directory import failed!\n\n{e}")
+        return 1
+    # 导入包
     from PySide2.QtCore import Qt, QTranslator
     from PySide2.QtGui import QGuiApplication, QOpenGLContext
     from PySide2.QtQml import QQmlApplicationEngine, qmlRegisterType
@@ -80,7 +90,7 @@ def runQml():
     engine.load(f"res/qml/Main.qml")  # 通过本地文件启动
     # engine.load(f"qrc:/qml/Main.qml")  # 通过qrc启动
     if not engine.rootObjects():
-        return 0
+        return 1
     res = qtApp.exec_()
     print("###  QML引擎关闭！")
     return res
