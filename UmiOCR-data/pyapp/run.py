@@ -1,6 +1,7 @@
 import os
 import sys
 from .utils import pre_configs
+from .server.cmd import initCmd
 
 
 # 启动主qml
@@ -15,6 +16,7 @@ def runQml():
     from .event_bus.pubsub_connector import PubSubConnector  # 发布/订阅连接器
     from .event_bus.key_mouse.key_mouse_connector import KeyMouseConnector  # 键盘/鼠标连接器
     from .utils.utils_connector import UtilsConnector  # 通用连接器
+    from .utils.global_configs_connector import GlobalConfigsConnector  # 全局配置连接器
     from .utils.image_provider import PixmapProvider  # 图片提供器
     from .utils.i18n import I18n  # 语言
     from .utils import app_opengl  # 渲染器
@@ -56,17 +58,15 @@ def runQml():
     # 3. OpenGlES 兼容性检查
     app_opengl.checkOpengl()
 
-    # 4. 注册Python类
-    # 页面连接器
+    # 4. 注册连接器Python类
     qmlRegisterType(TagPageConnector, "TagPageConnector", 1, 0, "TagPageConnector")
-    # 任务连接器
     qmlRegisterType(MissionConnector, "MissionConnector", 1, 0, "MissionConnector")
-    # 发布/订阅连接器
     qmlRegisterType(PubSubConnector, "PubSubConnector", 1, 0, "PubSubConnector")
-    # 键盘/鼠标连接器
     qmlRegisterType(KeyMouseConnector, "KeyMouseConnector", 1, 0, "KeyMouseConnector")
-    # 通用连接器
     qmlRegisterType(UtilsConnector, "UtilsConnector", 1, 0, "UtilsConnector")
+    qmlRegisterType(
+        GlobalConfigsConnector, "GlobalConfigsConnector", 1, 0, "GlobalConfigsConnector"
+    )
 
     # 5. 启动翻译
     trans = QTranslator()
@@ -90,4 +90,6 @@ def runQml():
 
 def main():
     pre_configs.readConfigs()  # 初始化预配置项
+    if not initCmd():  # 初始化命令行，如果已有Umi-OCR在运行则结束运行
+        sys.exit(0)
     runQml()  # 启动qml
