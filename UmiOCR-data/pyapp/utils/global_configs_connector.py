@@ -4,6 +4,7 @@ from . import app_opengl
 from .i18n import I18n
 from .shortcut import ShortcutApi
 from ..server import web_server
+from ..server.cmd_server import CmdActuator
 
 from PySide2.QtCore import QObject, Slot, Signal
 
@@ -51,3 +52,8 @@ class GlobalConfigsConnector(QObject):
     @Slot(int)
     def setServerPort(self, port):
         web_server.setPort(port)
+
+    # 将qml模块字典传入cmd执行器
+    @Slot("QVariant")
+    def setQmlToCmd(self, moduleDict):
+        CmdActuator.initCollect(moduleDict)

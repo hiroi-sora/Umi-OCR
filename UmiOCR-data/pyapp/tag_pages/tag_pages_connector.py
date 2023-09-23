@@ -18,7 +18,7 @@ from ..utils.call_func import CallFunc
 PageClass = [BatchOCR, ScreenshotOCR]
 
 
-TagPageConObj = None  # 记录实例
+TagPageConnObj = None  # 记录实例
 # PySide2 没有 qmlRegisterSingletonType，PyQt5或者PySide6中才有。
 # 不过没关系，我们手动维护控制器的单例状态就是了
 
@@ -26,11 +26,11 @@ TagPageConObj = None  # 记录实例
 # 页面连接器类（手动单例）
 class TagPageConnector(QObject):
     def __init__(self):
-        global TagPageConObj
+        global TagPageConnObj
         # 1. 检查是否单例
-        if not TagPageConObj == None:
+        if not TagPageConnObj == None:
             raise Exception("【Error】TagPageConnector只允许创建一个实例！")
-        TagPageConObj = self
+        TagPageConnObj = self
         super().__init__()
         # 2. 收集所有已导入的控制器类，聚集为dict。   ["类名"]=类
         self.pageClass = {}
@@ -38,7 +38,7 @@ class TagPageConnector(QObject):
             self.pageClass[i.__name__] = i
         # 属性
         # 当前已实例化的控制器
-        self.page = {}
+        self.pages = {}
         self._keysNum = {}  # 记录每个key被生成了多少次
 
     # ========================= 【增删改查】 =========================
@@ -50,7 +50,7 @@ class TagPageConnector(QObject):
             return ""
         ctrlKey = self.__getCtrlKey(key)
         obj = self.pageClass[key](ctrlKey, self)  # 实例化 页控制器对象
-        self.page[ctrlKey] = {  # key为控制器id
+        self.pages[ctrlKey] = {  # key为控制器id
             "pyObj": obj,  # py对象
             "qmlObj": None,  # qml对象
             "pyCache": {},  # py方法缓存
@@ -62,7 +62,7 @@ class TagPageConnector(QObject):
     @Slot(str, result=str)
     def addSimplePage(self, key):
         ctrlKey = self.__getCtrlKey(key)
-        self.page[ctrlKey] = {
+        self.pages[ctrlKey] = {
             "pyObj": None,
             "qmlObj": None,
             "pyCache": {},
@@ -73,16 +73,16 @@ class TagPageConnector(QObject):
     # 增2： qml回调，设置标识符为ctrlKey的控制器，对应的qml页面对象
     @Slot(str, "QVariant")
     def setPageQmlObj(self, ctrlKey, qmlObj):
-        if ctrlKey not in self.page:
+        if ctrlKey not in self.pages:
             return False
-        self.page[ctrlKey]["qmlObj"] = qmlObj
+        self.pages[ctrlKey]["qmlObj"] = qmlObj
 
     # 删： 删除标识符为ctrlKey的控制器。成功返回true
     @Slot(str, result=bool)
     def delPage(self, ctrlKey):
-        if ctrlKey not in self.page:
+        if ctrlKey not in self.pages:
             return False
-        del self.page[ctrlKey]
+        del self.pages[ctrlKey]
         return True
 
     # ========================= 【与qml的通信】 =========================
@@ -91,10 +91,10 @@ class TagPageConnector(QObject):
     # qml调用ctrlKey的方法funcName，入参为列表（对应参数顺序），返回值为可变类型。
     @Slot(str, str, list, result="QVariant")
     def callPy(self, ctrlKey, funcName, args):
-        if ctrlKey not in self.page:
+        if ctrlKey not in self.pages:
             print(f"【Warning】调用py方法{funcName}，但{ctrlKey}不存在！")
             return None
-        page = self.page[ctrlKey]
+        page = self.pages[ctrlKey]
         # 获取方法的引用
         method = None
         if funcName in page["pyCache"]:  # 缓存中存在，直接取缓存
@@ -111,10 +111,10 @@ class TagPageConnector(QObject):
 
     # python调用qml的函数（同步）
     def callQml(self, ctrlKey, funcName, *args):
-        if ctrlKey not in self.page:
+        if ctrlKey not in self.pages:
             print(f"【Warning】调用qml方法{funcName}，但{ctrlKey}不存在！")
             return None
-        page = self.page[ctrlKey]
+        page = self.pages[ctrlKey]
         # 获取方法的引用
         method = None
         if funcName in page["qmlCache"]:  # 缓存中存在，直接取缓存

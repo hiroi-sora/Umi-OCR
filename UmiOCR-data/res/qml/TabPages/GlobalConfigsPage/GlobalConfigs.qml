@@ -154,8 +154,10 @@ Configs {
     Component.onCompleted: {
         ocrManager.init()
         console.log("% GlobalConfig 初始化全局配置完毕！")
-        // 延时启动web服务
+        // 延迟执行
         Qt.callLater(()=>{
+            setQmlToCmd()  // 将qml模块字典传入cmd执行模块
+            // 启动web服务
             globalConfigConn.runUmiWeb(this, "setRealPort")
         })
     }
@@ -255,5 +257,13 @@ Configs {
             }
         }
         isPortInit = true
+    }
+    // 将qml模块字典传入cmd执行模块
+    function setQmlToCmd() {
+        const moduleDict = {
+            "GlobalConfigs": this,
+            "MainWindow": qmlapp.mainWin,
+        }
+        globalConfigConn.setQmlToCmd(moduleDict)
     }
 }
