@@ -149,26 +149,14 @@ Configs {
 
     property alias ocrManager: ocrManager
     property alias utilsDicts: utilsDicts
-    property bool portFlag: false
+    property bool isPortInit: false // 标记端口号是否初始化完毕
 
     Component.onCompleted: {
         ocrManager.init()
         console.log("% GlobalConfig 初始化全局配置完毕！")
         // 延时启动web服务
         Qt.callLater(()=>{
-            const port1 = globalConfigConn.runUmiWeb()
-            const port2 = getValue("server.port")
-            if(port1 !== port2) {
-                setValue("server.port", port1, true)
-                if(advanced) {
-                    const msg = qsTr("原端口号%1被占用，\n切换为新端口号%2。\n\n若不想看到此通知，请关闭全局设置的高级模式。").arg(port2).arg(port1)
-                    qmlapp.popup.message("", msg, "")
-                }
-                else {
-                    console.log(`原端口号${port1}被占用，\n切换为新端口号${port2}。`)
-                }
-            }
-            portFlag = true
+            globalConfigConn.runUmiWeb(this, "setRealPort")
         })
     }
 
@@ -244,14 +232,28 @@ Configs {
 
     // 设置服务端口号
     function setServerPort(port) {
-        console.log("=== ", portFlag)
-        if(port!==null && port!==undefined) {
-            if(portFlag) { // 用户修改，忽略系统修改
-                globalConfigConn.setServerPort(port)
-                qmlapp.popup.simple(qsTr("端口号改为%1").arg(port), qsTr("将在重启软件后生效"))
+        if(port===null || port===undefined) {
+            qmlapp.popup.simple(qsTr("端口号不合法"), "")
+            return
+        }
+        if(isPortInit) { // 用户修改，忽略系统修改
+            globalConfigConn.setServerPort(port)
+            qmlapp.popup.simple(qsTr("端口号改为%1").arg(port), qsTr("将在重启软件后生效"))
+        }
+    }
+    // py回调，设置当前实际的端口号
+    function setRealPort(port1) {
+        const port2 = getValue("server.port")
+        if(port1 !== port2) {
+            setValue("server.port", port1, true)
+            if(advanced) {
+                const msg = qsTr("原端口号%1被占用，\n切换为新端口号%2。\n\n若不想看到此通知，请在全局设置关闭高级模式。").arg(port2).arg(port1)
+                qmlapp.popup.message("", msg, "")
+            }
+            else {
+                console.log(`原端口号${port1}被占用，\n切换为新端口号${port2}。`)
             }
         }
-        else
-            qmlapp.popup.simple(qsTr("端口号不合法"), "")
+        isPortInit = true
     }
 }

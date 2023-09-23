@@ -1,13 +1,13 @@
-# 处理命令行指令，向已在运行的进程发送指令
+# ============================================
+# =============== 命令行-客户端 ===============
+# ============================================
 
 from ..utils import pre_configs
 from ..platform import Platform
 
 import os
 import sys
-import time
 import psutil
-import subprocess
 
 
 # 检查软件多开
@@ -57,6 +57,7 @@ def _sendCmd():
         print(f"{errStr}\nerror: {e}")
 
 
+# 初始化命令行
 def initCmd():
     # 检查，发现软件多开，则向已在运行的进程发送初始指令
     if _isMultiOpen():

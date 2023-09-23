@@ -42,10 +42,10 @@ class GlobalConfigsConnector(QObject):
     def setOpengl(self, opt):
         app_opengl.setOpengl(opt)
 
-    # 启动web服务器，返回实际端口
-    @Slot(result=int)
-    def runUmiWeb(self):
-        return web_server.runUmiWeb()
+    # 启动web服务器，传入qml对象及回调函数名。
+    @Slot("QVariant", str, result=int)
+    def runUmiWeb(self, qmlObj, callback):
+        web_server.runUmiWeb(qmlObj, callback)
 
     # 设置服务端口号
     @Slot(int)
