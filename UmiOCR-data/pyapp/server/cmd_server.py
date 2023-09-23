@@ -3,6 +3,7 @@
 # ===============================================
 
 import argparse
+from ..utils.call_func import CallFunc
 
 
 # 命令执行器
@@ -11,6 +12,8 @@ class _Actuator:
         self.pyDict = {}  # python模块字典
         self.qmlDict = {}  # qml模块字典
         self.tagPageConn = None  # 页面连接器的引用
+
+    # ============================== 动态模块调用 ==============================
 
     # 初始化，并收集信息。传入qml模块字典
     def initCollect(self, qmlModuleDict):
@@ -46,20 +49,26 @@ class _Actuator:
         else:
             for name in d.keys():  # 若输入模块名的前几个字母，也可以匹配
                 if name.startswith(moduleName):
+                    moduleName = name
                     module = d[name]
                     break
-        return module
+        return module, moduleName
 
     # 返回所有可调用模块的帮助信息
     def getModulesHelp(self):
         modules = self.getModules()
-        help = f'Python modules: \n    {", ".join(modules["py"].keys())}\n\n'
-        help += f'Qml modules: \n    {", ".join(modules["qml"].keys())}'
+        help = "\nPython modules: (Usage: Umi-OCR --call_py [module name])\n"
+        for k in modules["py"].keys():
+            help += f"    {k}\n"
+        help += "\nQml modules: (Usage: Umi-OCR --call_qml [module name])\n"
+        for k in modules["qml"].keys():
+            help += f"    {k}\n"
+        help += f"\nTips: module name can only write the first letters, such as [ScreenshotOCR_1] → [Scr]"
         return help
 
-    # 返回一个模块的函数的帮助信息
+    # 返回一个模块的所有函数的帮助信息
     def getModuleFuncsHelp(self, moduleName, type_):
-        module = self.getModuleFromName(moduleName, type_)
+        module, moduleName = self.getModuleFromName(moduleName, type_)
         typeStr = "Python" if type_ == "py" else "qml"
         if not module:
             return f'[Error] {typeStr} module "{moduleName}" non-existent.'
@@ -68,17 +77,17 @@ class _Actuator:
             for func in vars(type(module)).keys()
             if callable(getattr(module, func))
         ]
-        help = f'All methods in {typeStr} module "{moduleName}":\n'
-        print("=======================")
+        help = f'All functions in {typeStr} module "{moduleName}":\n'
         for f in funcs:
             f = str(f)
             if not f.startswith("_"):
-                help += f + "\n"
+                help += f"    {f}\n"
+        help += f"Usage: Umi-OCR --call_qml {moduleName} --func [function name]\n"
         return help
 
     # 调用一个模块函数。type: py / qml
-    def call(self, moduleName, type_, funcName, *paras):
-        module = self.getModuleFromName(type_)
+    def call(self, moduleName, type_, funcName, thread, *paras):
+        module, moduleName = self.getModuleFromName(moduleName, type_)
         typeStr = "Python" if type_ == "py" else "qml"
         if not module:
             return f'[Error] {typeStr} module "{moduleName}" non-existent.'
@@ -86,8 +95,11 @@ class _Actuator:
         if not func:
             return f'[Error] func "{funcName}" not exist in {typeStr} module "{moduleName}".'
         try:
-            res = func(*paras)
-            return str(res)
+            if thread:  # 在子线程执行，返回结果
+                return func(*paras)
+            else:  # 在主线程执行，返回标志文本
+                CallFunc.now(func, *paras)  # 在主线程中调用回调函数
+                return f'Calling "{funcName}" in main thread.'
         except Exception as e:
             return f'[Error] calling {typeStr} module "{moduleName}" - "{funcName}" {paras}: {e}'
 
@@ -111,7 +123,7 @@ class _Cmd:
         self._parser.add_argument(
             "--all_modules",
             action="store_true",
-            help="Query all module names that can be called.",
+            help="Show all module names that can be called.",
         )
         self._parser.add_argument(
             "--call_py", help="Calling a function on a Python module."
@@ -119,7 +131,14 @@ class _Cmd:
         self._parser.add_argument(
             "--call_qml", help="Calling a function on a Qml module."
         )
-        self._parser.add_argument("--func", help="Tab page id.")
+        self._parser.add_argument(
+            "--func", help="The name of the function to be called."
+        )
+        self._parser.add_argument(
+            "--thread",
+            action="store_true",
+            help="The function will be called on the child thread and return the result, but it may be unstable or cause QML to crash.",
+        )
         self._parser.add_argument("paras", nargs="*", help="parameters of [--func].")
 
     # 分析指令，返回指令对象或报错字符串
@@ -131,7 +150,6 @@ class _Cmd:
         if len(argv) == 0:  # 空指令
             pass  # TODO
             return self._parser.format_help()
-        print("= 命令行接收参数：", argv)
         # 正常解析
         try:
             return self._parser.parse_args(argv)
@@ -147,7 +165,22 @@ class _Cmd:
             return args
         if args.all_modules:
             return CmdActuator.getModulesHelp()
+        print("=======", args.thread)
         print("= 命令行解析参数：", args)
+        if args.call_py:
+            if args.func:
+                return CmdActuator.call(
+                    args.call_py, "py", args.func, args.thread, *args.paras
+                )
+            else:
+                return CmdActuator.getModuleFuncsHelp(args.call_py, "py")
+        if args.call_qml:
+            if args.func:
+                return CmdActuator.call(
+                    args.call_qml, "qml", args.func, args.thread, *args.paras
+                )
+            else:
+                return CmdActuator.getModuleFuncsHelp(args.call_qml, "qml")
 
 
 CmdServer = _Cmd()
