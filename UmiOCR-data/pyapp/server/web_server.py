@@ -11,6 +11,7 @@ from ..platform import Platform
 from ..utils import pre_configs
 from ..utils.call_func import CallFunc
 from .bottle import Bottle, ServerAdapter, request
+from .cmd_server import CmdServer
 
 UmiWeb = Bottle()
 
@@ -28,9 +29,9 @@ def _umiocr():
 # 跨进程接收命令行参数
 @UmiWeb.route("/argv", method="POST")
 def _argv():
-    json_data = request.json
-    print("接收到参数：", json_data)
-    return f"test!!!!!!!!!!!"
+    data = request.json
+    res = CmdServer.execute(data)
+    return res
 
 
 # =============== 自定义服务器适配器，方便控制服务终止 ==============================

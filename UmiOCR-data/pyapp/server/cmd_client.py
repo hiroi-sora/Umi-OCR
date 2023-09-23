@@ -65,4 +65,5 @@ def initCmd():
         return False
     # 未多开，则正常启动
     else:
+        argv = sys.argv[1:]
         return True
