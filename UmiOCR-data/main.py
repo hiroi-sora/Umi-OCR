@@ -46,7 +46,6 @@ def initRuntimeEnvironment(startup_script):
         path = os.path.abspath(os.path.join(working, n))
         if os.path.exists(path):
             site.addsitedir(path)
-    print(f"初始化Python运行环境完成！PID：{os.getpid()}", file=sys.stderr)
 
 
 def runScript():

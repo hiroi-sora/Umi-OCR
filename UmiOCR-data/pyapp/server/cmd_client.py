@@ -63,7 +63,12 @@ def initCmd():
     if _isMultiOpen():
         _sendCmd()
         return False
-    # 未多开，则正常启动
+    # 未多开
     else:
-        argv = sys.argv[1:]
+        # 有命令行指令，不执行
+        if len(sys.argv) > 1:
+            errStr = "【调用错误】Umi-OCR 服务进程未在运行。请先启动Umi-OCR主程序，再使用命令行模式。\n[Error] The Umi-OCR service is not running. Please start the software first without adding command."
+            print(errStr)
+            os.MessageBox(errStr)
+            return False
         return True
