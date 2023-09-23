@@ -13,16 +13,19 @@ class _Actuator:
         self.tagPageConn = None  # 页面连接器的引用
 
     # 初始化，并收集信息。传入qml模块字典
-    def initCollect(self, qmlModelDict):
-        qmlModelDict = qmlModelDict.toVariant()
-        self.qmlDict.update(qmlModelDict)
+    def initCollect(self, qmlModuleDict):
+        qmlModuleDict = qmlModuleDict.toVariant()
+        self.qmlDict.update(qmlModuleDict)
         # 获取页面连接器实例
         from ..tag_pages.tag_pages_connector import TagPageConnObj
 
         self.tagPageConn = TagPageConnObj
 
+        print(self.getModulesHelp())
+        print(self.getModuleFuncsHelp("ScreenshotOCR", "py"))
+
     # 返回所有可调用模块
-    def getModels(self):
+    def getModules(self):
         pyd, qmld = {}, {}
         pages = self.tagPageConn.pages
         for p in pages:
@@ -34,60 +37,59 @@ class _Actuator:
         qmld.update(self.qmlDict)
         return {"py": pyd, "qml": qmld}
 
-    # 返回所有可调用模块的文本
-    def getModelsHelp(self):
-        modules = self.getModels()
+    # 传入模块名，搜索并返回模块实例。type: py / qml
+    def getModuleFromName(self, moduleName, type_):
+        d = self.getModules()[type_]
+        module = None
+        if moduleName in d:
+            module = d[moduleName]
+        else:
+            for name in d.keys():  # 若输入模块名的前几个字母，也可以匹配
+                if name.startswith(moduleName):
+                    module = d[name]
+                    break
+        return module
+
+    # 返回所有可调用模块的帮助信息
+    def getModulesHelp(self):
+        modules = self.getModules()
         help = f'Python modules: \n    {", ".join(modules["py"].keys())}\n\n'
         help += f'Qml modules: \n    {", ".join(modules["qml"].keys())}'
         return help
 
-    # 调用一个py函数
-    def callPy(self, moduleName, funcName, *paras):
-        pyd = self.getModels()["py"]
-        module = None
-        if moduleName in pyd:
-            module = pyd[moduleName]
-        else:
-            for name in pyd.keys():  # 若输入模块名的前几个字母，也可以匹配
-                if name.startswith(moduleName):
-                    moduleName = name
-                    module = pyd[name]
+    # 返回一个模块的函数的帮助信息
+    def getModuleFuncsHelp(self, moduleName, type_):
+        module = self.getModuleFromName(moduleName, type_)
+        typeStr = "Python" if type_ == "py" else "qml"
         if not module:
-            return f'[Error] Python model "{moduleName}" non-existent.'
-        func = getattr(module, funcName, None)
-        if not func:
-            return (
-                f'[Error] func "{funcName}" not exist in Python module "{moduleName}".'
-            )
-        try:
-            res = func(*paras)
-            return str(res)
-        except Exception as e:
-            return f'[Error] calling Python module "{moduleName}" - "{funcName}" {paras}: {e}'
+            return f'[Error] {typeStr} module "{moduleName}" non-existent.'
+        funcs = [
+            func
+            for func in vars(type(module)).keys()
+            if callable(getattr(module, func))
+        ]
+        help = f'All methods in {typeStr} module "{moduleName}":\n'
+        print("=======================")
+        for f in funcs:
+            f = str(f)
+            if not f.startswith("_"):
+                help += f + "\n"
+        return help
 
-    # 调用一个qml函数
-    def callQml(self, moduleName, funcName, *paras):
-        qmld = self.getModels()["qml"]
-        module = None
-        if moduleName in qmld:
-            module = qmld[moduleName]
-        else:
-            for name in qmld.keys():
-                if name.startswith(moduleName):
-                    moduleName = name
-                    module = qmld[name]
+    # 调用一个模块函数。type: py / qml
+    def call(self, moduleName, type_, funcName, *paras):
+        module = self.getModuleFromName(type_)
+        typeStr = "Python" if type_ == "py" else "qml"
         if not module:
-            return f'[Error] Qml model "{moduleName}" non-existent.'
+            return f'[Error] {typeStr} module "{moduleName}" non-existent.'
         func = getattr(module, funcName, None)
         if not func:
-            return f'[Error] func "{funcName}" not exist in Qml module "{moduleName}".'
+            return f'[Error] func "{funcName}" not exist in {typeStr} module "{moduleName}".'
         try:
             res = func(*paras)
             return str(res)
         except Exception as e:
-            return (
-                f'[Error] calling Qml module "{moduleName}" - "{funcName}" {paras}: {e}'
-            )
+            return f'[Error] calling {typeStr} module "{moduleName}" - "{funcName}" {paras}: {e}'
 
 
 CmdActuator = _Actuator()
@@ -144,7 +146,7 @@ class _Cmd:
         if type(args) == str:
             return args
         if args.all_modules:
-            return CmdActuator.getModelsHelp()
+            return CmdActuator.getModulesHelp()
         print("= 命令行解析参数：", args)
 
 
