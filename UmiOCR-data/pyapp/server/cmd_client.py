@@ -7,6 +7,7 @@ from ..platform import Platform
 
 import os
 import sys
+import time
 import psutil
 
 
@@ -35,7 +36,7 @@ def _sendCmd():
     argv = sys.argv[1:]  # 获取要发送的指令
     port = pre_configs.getValue("server_port")  # 记录的端口号
     url = f"http://127.0.0.1:{port}/argv"  # argv，指令列表接口
-    errStr = f"Umi-OCR 已在运行，HTTP跨进程传输指令失败。\nUmi-OCR is already running, HTTP cross process transmission instruction failed.\n{url}"
+    errStr = f"Umi-OCR 已在运行，HTTP跨进程传输指令失败。\n[Error] Umi-OCR is already running, HTTP cross process transmission instruction failed.\n{url}"
     import urllib.request
     import json
 
@@ -56,7 +57,18 @@ def _sendCmd():
 
 # 启动新进程，并发送指令
 def _newSend():
+    # 启动进程
     Platform.runNewProcess(os.environ["APP_PATH"])
+    # 等待并检查 服务进程初始化完毕
+    for i in range(30):  # 检测轮次
+        time.sleep(1)  # 每次等待时间
+        pre_configs.readConfigs()  # 重新读取预配置
+        if _isMultiOpen():  # 检测新进程是否启动
+            _sendCmd()  # 发送指令
+            return
+    print(
+        "服务进程初始化失败，等待时间超时。\n[Error] The service process initialization failed and the waiting time timed out."
+    )
 
 
 # 初始化命令行
