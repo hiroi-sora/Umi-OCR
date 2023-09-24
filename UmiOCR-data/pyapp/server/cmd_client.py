@@ -10,14 +10,16 @@ import sys
 import psutil
 
 
+# 获取进程的创建时间
+def getPidTime(pid):
+    try:
+        return str(psutil.Process(pid).create_time())
+    except psutil.NoSuchProcess as e:  # 虽然psutil.pid_exists验证pid存在，但 Process 无法生成对象
+        return ""
+
+
 # 检查软件多开
 def _isMultiOpen():
-    def getPidTime(pid):  # 获取进程的创建时间
-        try:
-            return str(psutil.Process(pid).create_time())
-        except psutil.NoSuchProcess as e:  # 虽然psutil.pid_exists验证pid存在，但 Process 无法生成对象
-            return ""
-
     # 检查上次记录的pid和key是否还在运行
     recordPID = pre_configs.getValue("last_pid")
     recordPTime = pre_configs.getValue("last_ptime")
@@ -25,11 +27,6 @@ def _isMultiOpen():
         processTime = getPidTime(recordPID)
         if recordPTime == processTime:  # 当前该进程启动时间与记录的相同，则为多开
             return True
-    # 未多开，则刷新pid和ptime
-    nowPid = os.getpid()
-    nowPTime = getPidTime(nowPid)
-    pre_configs.setValue("last_pid", nowPid)
-    pre_configs.setValue("last_ptime", nowPTime)
     return False
 
 
@@ -57,13 +54,25 @@ def _sendCmd():
         print(f"{errStr}\nerror: {e}")
 
 
+# 启动新进程，并发送指令
+def _newSend():
+    Platform.runNewProcess(os.environ["APP_PATH"])
+
+
 # 初始化命令行
 def initCmd():
     # 检查，发现软件多开，则向已在运行的进程发送初始指令
     if _isMultiOpen():
         _sendCmd()
         return False
-    # 未多开，则正常启动
+    # 未多开，则启动进程
     else:
-        argv = sys.argv[1:]
+        if len(sys.argv) > 1:  # 存在命令行参数
+            _newSend()  # 启动新进程，并发送指令
+            return False
+        # 无参数，则正常运行本进程，刷新pid和ptime
+        nowPid = os.getpid()
+        nowPTime = getPidTime(nowPid)
+        pre_configs.setValue("last_pid", nowPid)
+        pre_configs.setValue("last_ptime", nowPTime)
         return True
