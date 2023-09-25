@@ -56,7 +56,7 @@ TabPage {
             if(res.error.startsWith("[Error]")) {
                 qmlapp.popup.message(qsTr("获取剪贴板异常"), res.err, "error")
             }
-            else if(res.error === "[Warning] No image.") {
+            else if(res.error === "[Warning] No image in clipboard.") {
                 qmlapp.popup.simple(qsTr("剪贴板中未找到图片"), "", simpleType)
             }
             return

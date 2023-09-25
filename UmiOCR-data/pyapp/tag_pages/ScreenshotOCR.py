@@ -18,11 +18,13 @@ class ScreenshotOCR(Page):
         self.msnDict = {}
         self.ssImgIDs = []  # 缓存当前完整截屏id
         self.showImgIDs = []  # 缓存当前展示图片id
+        self.recentResult = None  # 缓存最后一次识别结果
 
     # ========================= 【qml调用python】 =========================
 
     # 开始截图，获取每个屏幕的完整截图，传给qml前端裁切
     def screenshot(self):
+        self.recentResult = None
         screensList = QGuiApplication.screens()
         grabList = []
         for screen in screensList:
@@ -58,6 +60,7 @@ class ScreenshotOCR(Page):
 
     # 开始粘贴
     def paste(self, configDict):
+        self.recentResult = None
         # 获取剪贴板数据
         mime_data = Clipboard.mimeData()
         res = {}  # 结果字典
@@ -79,14 +82,16 @@ class ScreenshotOCR(Page):
                     paths.append(p)
             paths = findImages(paths, False)  # 过滤，保留图片的路径
             if len(paths) == 0:  # 没有有效图片
-                res["error"] = "[Warning] No image."
+                res["error"] = "[Warning] No image in clipboard."
             else:  # 将有效图片地址传入OCR，返回地址列表
                 self.__msnPaths(paths, configDict)
                 res["paths"] = paths
         elif mime_data.hasText():
-            res["error"] = "[Warning] No image."
+            res["error"] = "[Warning] No image in clipboard."
         else:
-            res["error"] = "[Warning] No image."
+            res["error"] = "[Warning] No image in clipboard."
+        if res["error"]:
+            self.recentResult = {"code": 102, "data": res["error"]}
         return res  # 返回结果字典
 
     # 停止全部任务
@@ -151,6 +156,7 @@ class ScreenshotOCR(Page):
         # 通知qml更新UI
         imgID = msn.get("imgID", "")
         imgPath = msn.get("path", "")
+        self.recentResult = res  # 记录最后一次结果
         self.callQmlInMain("onOcrGet", res, imgID, imgPath)  # 在主线程中调用qml
 
     def __onEnd(self, msnInfo, msg):  # 任务队列完成或失败
@@ -169,3 +175,7 @@ class ScreenshotOCR(Page):
                 del self.showImgIDs[:-1]
 
         self.callFunc(update)  # 在主线程中执行
+
+    # 获取最近一次结果
+    def getRecentResult(self):
+        return self.recentResult

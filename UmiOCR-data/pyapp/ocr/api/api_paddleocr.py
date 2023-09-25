@@ -30,6 +30,7 @@ class PPOCR_pipe:  # 调用OCR（管道模式）
                 else:
                     exePath += f" --{key}={value}"
         # 设置子进程启用静默模式，不显示控制台窗口
+        self.ret = None
         startupinfo = None
         if "win32" in str(sysPlatform).lower():
             startupinfo = subprocess.STARTUPINFO()
@@ -59,8 +60,10 @@ class PPOCR_pipe:  # 调用OCR（管道模式）
         `writeDict`: 指令字典。\n
         `return`:  {"code": 识别码, "data": 内容列表或错误信息字符串}\n"""
         # 检查子进程
+        if not self.ret:
+            return {"code": 901, "data": f"引擎实例不存在。"}
         if not self.ret.poll() == None:
-            return {"code": 901, "data": f"子进程已崩溃。"}
+            return {"code": 902, "data": f"子进程已崩溃。"}
         # 输入信息
         writeStr = jsonDumps(writeDict, ensure_ascii=True, indent=None) + "\n"
         try:
@@ -106,7 +109,10 @@ class PPOCR_pipe:  # 调用OCR（管道模式）
 
     def exit(self):
         """关闭引擎子进程"""
+        if not self.ret:
+            return
         self.ret.kill()  # 关闭子进程
+        self.ret = None
         atexit.unregister(self.exit)  # 移除退出处理
         print("###  PPOCR引擎子进程关闭！")
 
@@ -162,8 +168,10 @@ class __PPOCR_socket(PPOCR_pipe):  # 调用OCR（套接字模式）
         `writeDict`: 指令字典。\n
         `return`:  {"code": 识别码, "data": 内容列表或错误信息字符串}\n"""
         # 检查子进程
+        if not self.ret:
+            return {"code": 901, "data": f"引擎实例不存在。"}
         if not self.ret.poll() == None:
-            return {"code": 901, "data": f"子进程已崩溃。"}
+            return {"code": 902, "data": f"子进程已崩溃。"}
         # 通信
         writeStr = jsonDumps(writeDict, ensure_ascii=True, indent=None) + "\n"
         try:

@@ -2,6 +2,7 @@
 # =============== 命令行-解析和执行 ===============
 # ===============================================
 
+import time
 import argparse
 from ..utils.call_func import CallFunc
 
@@ -89,7 +90,7 @@ class _Actuator:
         qmld.update(self.qmlDict)
         return {"py": pyd, "qml": qmld}
 
-    # 传入模块名，搜索并返回模块实例。type: py / qml
+    # 传入(不完整的)模块名，搜索并返回模块实例。type: py / qml
     def getModuleFromName(self, moduleName, type_):
         d = self.getModules()[type_]
         module = None
@@ -166,6 +167,51 @@ class _Actuator:
             self.call("MainWindow", "qml", "quit", False)
             return "Umi-OCR quit."
 
+    # 截图或粘贴，并获取返回结果
+    def screenshot_clipboard(self, ss, clip):
+        # 检查截图标签页，如果未创建则创建
+        module, moduleName = self.getModuleFromName("ScreenshotOCR", "py")
+        if module == None:
+            tvm = self.qmlDict["TabViewManager"]
+            infoList = tvm.getInfoList().toVariant()
+            f2 = False
+            for i, v in enumerate(infoList):
+                if v["key"] == "ScreenshotOCR":
+                    f2 = True
+                    self.addPage(i)
+                    break
+            if not f2:
+                return '[Error] Template "ScreenshotOCR" not found.'
+            for i in range(10):
+                time.sleep(0.5)
+                module, moduleName = self.getModuleFromName("ScreenshotOCR", "py")
+                if not module == None:
+                    break
+        if module == None:
+            return '[Error] Unable to create template "ScreenshotOCR".'
+        # 调用截图标签页的函数
+        if ss:
+            self.call(moduleName, "qml", "screenshot", False)
+        elif clip:
+            self.call(moduleName, "qml", "paste", False)
+        # 等待OCR完成
+        for i in range(60):
+            time.sleep(0.5)
+            res = self.call(moduleName, "py", "getRecentResult", True)
+            if res:
+                if res["code"] == 100:
+                    text = ""
+                    for r in res["data"]:
+                        text += r["text"] + "\n"
+                    return text
+                elif res["code"] == 101:
+                    return "[Message] No text in OCR result."
+                elif res["code"] == 102:
+                    return res["data"]
+                else:
+                    return f'[Error] Code: {res["code"]}\nMessage: {res["data"]}.'
+        return "[Error] OCR waiting timeout."
+
 
 CmdActuator = _Actuator()
 
@@ -187,6 +233,16 @@ class _Cmd:
             "--hide", action="store_true", help="Hide app in the background."
         )
         self._parser.add_argument("--quit", action="store_true", help="Quit app.")
+        self._parser.add_argument(
+            "--screenshot",
+            action="store_true",
+            help="Screenshot OCR and output the result.",
+        )
+        self._parser.add_argument(
+            "--clipboard",
+            action="store_true",
+            help="Clipboard OCR and output the result.",
+        )
         # 页面管理
         self._parser.add_argument(
             "--all_pages",
@@ -248,6 +304,8 @@ class _Cmd:
         # 便捷指令
         if args.show or args.hide or args.quit:  # 控制主窗
             return CmdActuator.ctrlWindow(args.show, args.hide, args.quit)
+        if args.screenshot or args.clipboard:  # 截图或粘贴
+            return CmdActuator.screenshot_clipboard(args.screenshot, args.clipboard)
         # 页面管理
         if args.all_pages:
             return CmdActuator.getAllPages()
