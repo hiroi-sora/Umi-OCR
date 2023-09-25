@@ -31,19 +31,19 @@ TabPage {
         setMsnState("none")
     }
     // TODO: 测试用
-    // Timer {
-    //     interval: 200
-    //     running: true
-    //     onTriggered: {
-    //         addImages(
-    //             [
-    //                 "D:/Pictures/Screenshots/test",
-    //             ]
-    //         )
-    //         console.log("自动添加！！！！！！！！！！！！！")
-    //         // ocrStart()
-    //     }
-    // }
+    Timer {
+        interval: 200
+        running: true
+        onTriggered: {
+            addImages(
+                [
+                    "D:/Pictures/Screenshots/test",
+                ]
+            )
+            console.log("自动添加！！！！！！！！！！！！！")
+            // ocrStart()
+        }
+    }
 
     // 将需要查询的图片路径列表paths发送给python。传入值是没有 file:/// 开头的纯字符串的列表。
     function addImages(paths) {
@@ -378,6 +378,10 @@ TabPage {
 
                 onAddImages: {
                     tabPage.addImages(paths)
+                }
+                onDoubleClickImage: {
+                    // 双击条目，用系统工具打开图片
+                    qmlapp.utilsConnector.startfile(path)
                 }
             }
         }
