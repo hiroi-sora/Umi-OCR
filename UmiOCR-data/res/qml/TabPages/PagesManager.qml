@@ -133,7 +133,6 @@ Item {
     }
 
     // 增改： 在 pageList 的 index 处，删除该页面，改为 infoIndex 页。
-    // TODO: 当前仅允许没有python控制器的页面更换为别的页面，因为没有安全删除控制器的机制。
     function changePage(index, infoIndex){
         const page = pageList[index]
         // 删除旧页的python逻辑控制器

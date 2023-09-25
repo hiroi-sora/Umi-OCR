@@ -13,8 +13,6 @@ class _Actuator:
         self.qmlDict = {}  # qml模块字典
         self.tagPageConn = None  # 页面连接器的引用
 
-    # ============================== 动态模块调用 ==============================
-
     # 初始化，并收集信息。传入qml模块字典
     def initCollect(self, qmlModuleDict):
         qmlModuleDict = qmlModuleDict.toVariant()
@@ -23,6 +21,62 @@ class _Actuator:
         from ..tag_pages.tag_pages_connector import TagPageConnObj
 
         self.tagPageConn = TagPageConnObj
+
+        print(self.getAllPages())
+
+    # ============================== 页面管理 ==============================
+
+    # 返回当前 [可创建的页面模板] 和 [已创建的页面] 的信息
+    def getAllPages(self):
+        TabViewManager = self.qmlDict["TabViewManager"]
+        pageList = TabViewManager.getPageList().toVariant()
+        infoStr = "All opened pages:\npage_index\tkey\ttitle\n"
+        for index, value in enumerate(pageList):
+            infoStr += f'{index}\t{value["ctrlKey"]}\t{value["info"]["title"]}\n'
+
+        infoList = TabViewManager.getInfoList().toVariant()
+        infoStr += (
+            "\nAll page templates that can be opened:\ntemplate_index\tkey\ttitle\n"
+        )
+        for index, value in enumerate(infoList):
+            infoStr += f'{index}\t{value["key"]}\t{value["title"]}\n'
+
+        infoStr += "\nUsage of create a page:\n"
+        infoStr += "    Umi-OCR --add_page [template_index]\n"
+        infoStr += "Usage of delete a page:\n"
+        infoStr += "    Umi-OCR --del_page [page_index]\n"
+        infoStr += "Usage of query the modules that can be called:\n"
+        infoStr += "    Umi-OCR --all_modules\n"
+
+        return infoStr
+
+    # 创建页面
+    def addPage(self, index):
+        try:
+            index = int(index)
+        except ValueError:
+            return f"[Error] template_index must be integer, not {index}."
+        TabViewManager = self.qmlDict["TabViewManager"]
+        infoList = TabViewManager.getInfoList().toVariant()
+        l = len(infoList) - 1
+        if index < 0 or index > l:
+            return f"[Error] template_index {index} out of range (0~{l})."
+        return self.call("TabViewManager", "qml", "addTabPage", False, -1, index)
+
+    # 删除页面
+    def delPage(self, index):
+        try:
+            index = int(index)
+        except ValueError:
+            return f"[Error] page_index must be integer, not {index}."
+        TabViewManager = self.qmlDict["TabViewManager"]
+        pageList = TabViewManager.getPageList().toVariant()
+        l = len(pageList) - 1
+        if index < 0 or index > l:
+            return f"[Error] page_index {index} out of range (0~{l})."
+        return self.call("TabViewManager", "qml", "delTabPage", False, index)
+
+    # ============================== 动态模块调用 ==============================
 
     # 返回所有可调用模块
     def getModules(self):
@@ -82,7 +136,7 @@ class _Actuator:
         help += f"Usage: Umi-OCR --call_qml {moduleName} --func [function name]\n"
         return help
 
-    # 调用一个模块函数。type: py / qml
+    # 调用一个模块函数。type: py / qml , thread: True 同步在子线程 / False 异步在主线程
     def call(self, moduleName, type_, funcName, thread, *paras):
         module, moduleName = self.getModuleFromName(moduleName, type_)
         typeStr = "Python" if type_ == "py" else "qml"
@@ -135,11 +189,23 @@ class _Cmd:
             "--hide", action="store_true", help="Hide app in the background."
         )
         self._parser.add_argument("--quit", action="store_true", help="Quit app.")
+        # 页面管理
+        self._parser.add_argument(
+            "--all_pages",
+            action="store_true",
+            help="Output all template and page information.",
+        )
+        self._parser.add_argument(
+            "--add_page", type=int, help="usage: Umi-OCR --all_pages"
+        )
+        self._parser.add_argument(
+            "--del_page", type=int, help="usage: Umi-OCR --all_pages"
+        )
         # 函数调用
         self._parser.add_argument(
             "--all_modules",
             action="store_true",
-            help="Show all module names that can be called.",
+            help="Output all module names that can be called.",
         )
         self._parser.add_argument(
             "--call_py", help="Calling a function on a Python module."
@@ -184,6 +250,13 @@ class _Cmd:
         # 便捷指令
         if args.show or args.hide or args.quit:  # 控制主窗
             return CmdActuator.ctrlWindow(args.show, args.hide, args.quit)
+        # 页面管理
+        if args.all_pages:
+            return CmdActuator.getAllPages()
+        if not args.add_page is None:
+            return CmdActuator.addPage(args.add_page)
+        if not args.del_page is None:
+            return CmdActuator.delPage(args.del_page)
         # 动态模块调用
         if args.call_py:
             if args.func:

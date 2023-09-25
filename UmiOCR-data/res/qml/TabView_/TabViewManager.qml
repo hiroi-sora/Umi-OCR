@@ -206,4 +206,13 @@ Item {
         }
         return true
     }
+
+    // 查： 返回 infoList
+    function getInfoList() {
+        return infoList
+    }
+    // 查： 返回 pageList
+    function getPageList() {
+        return pageList
+    }
 }

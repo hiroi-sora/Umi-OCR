@@ -263,6 +263,7 @@ Configs {
         const moduleDict = {
             "GlobalConfigs": this,
             "MainWindow": qmlapp.mainWin,
+            "TabViewManager": qmlapp.tab,
         }
         globalConfigConn.setQmlToCmd(moduleDict)
     }
