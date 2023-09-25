@@ -6,6 +6,20 @@
 
 <h1 align="center">Umi-OCR V2 文字识别工具</h1>
 
+<p align="center">
+  <a href="https://github.com/hiroi-sora/Umi-OCR_v2/releases/latest">
+    <img src="https://img.shields.io/github/v/release/hiroi-sora/Umi-OCR_v2?style=flat-square" alt="Umi-OCR_v2">
+  </a>
+  <a href="License">
+    <img src="https://img.shields.io/github/license/hiroi-sora/Umi-OCR_v2?style=flat-square" alt="LICENSE">
+  </a>
+</p>
+
+<div align="center">
+  <strong>免费，开源，可批量的离线OCR软件</strong><br>
+  <sub>适用于 Windows7 x64 及以上</sub>
+</div><br>
+
 这里是记录 [Umi-OCR](https://github.com/hiroi-sora/Umi-OCR) 全新重构版本v2.0的仓库。
 
 - **全新升级**：V2版本重构了绝大部分代码，提供焕然一新的界面和更强大的功能。
