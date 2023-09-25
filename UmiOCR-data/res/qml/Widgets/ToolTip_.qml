@@ -12,6 +12,13 @@ ToolTip {
     delay: 500
     timeout: 0 // 不自动关闭
 
+    MouseArea {
+        anchors.fill: parent
+        onEntered: {
+            rootToolTip.y = mouseY + 10
+        }
+    }
+
     contentItem: Text { // 前景文字
         text: rootToolTip.text
         font.family: theme.fontFamily

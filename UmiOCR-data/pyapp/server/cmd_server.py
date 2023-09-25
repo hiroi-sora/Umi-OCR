@@ -22,8 +22,6 @@ class _Actuator:
 
         self.tagPageConn = TagPageConnObj
 
-        print(self.getAllPages())
-
     # ============================== 页面管理 ==============================
 
     # 返回当前 [可创建的页面模板] 和 [已创建的页面] 的信息

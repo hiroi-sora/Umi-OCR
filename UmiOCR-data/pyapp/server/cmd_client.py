@@ -60,8 +60,8 @@ def _newSend():
     # 启动进程
     Platform.runNewProcess(os.environ["APP_PATH"])
     # 等待并检查 服务进程初始化完毕
-    for i in range(30):  # 检测轮次
-        time.sleep(1)  # 每次等待时间
+    for i in range(60):  # 检测轮次
+        time.sleep(0.5)  # 每次等待时间
         pre_configs.readConfigs()  # 重新读取预配置
         if _isMultiOpen():  # 检测新进程是否启动
             _sendCmd()  # 发送指令

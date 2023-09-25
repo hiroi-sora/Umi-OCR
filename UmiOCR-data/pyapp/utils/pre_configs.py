@@ -31,8 +31,11 @@ def setValue(key, value):
 
 
 def writeConfigs():
-    with open(_FileName, "w", encoding="utf-8") as file:
-        json.dump(_Configs, file, ensure_ascii=False, indent=4)
+    try:
+        with open(_FileName, "w", encoding="utf-8") as file:
+            json.dump(_Configs, file, ensure_ascii=False, indent=4)
+    except Exception as e:
+        print("[Error] 写入预配置项失败: ", e)
 
 
 def readConfigs():
@@ -41,5 +44,5 @@ def readConfigs():
             data = json.load(file)
         for key in _Configs:
             _Configs[key] = data[key]
-    except Exception:
-        pass
+    except Exception as e:
+        print("[Error] 读取预配置项失败: ", e)
