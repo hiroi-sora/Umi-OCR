@@ -3,10 +3,11 @@
 # ===========================================
 
 from .api_paddleocr import ApiPaddleOcr
+from .api_rapidocr import ApiRapidOcr
 from .api_ocr import ApiOcr
 
 # 控制器类字典，键与OcrManager.qml中一致
-ApiDict = {"PaddleOCR": ApiPaddleOcr}
+ApiDict = {"PaddleOCR": ApiPaddleOcr, "RapidOCR": ApiRapidOcr}
 
 
 # 判断一个值是否为OCR对象

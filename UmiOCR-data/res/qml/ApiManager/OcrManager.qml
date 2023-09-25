@@ -27,7 +27,7 @@ QtObject {
             "title": qsTr("当前接口"),
             "optionsList": [
                 ["PaddleOCR", qsTr("PaddleOCR（本地）")],
-                // ["RapidOCR", qsTr("RapidOCR（本地）")],
+                ["RapidOCR", qsTr("RapidOCR（本地）")],
             ],
         },
         "PaddleOCR": {
@@ -66,19 +66,19 @@ QtObject {
                 "toolTip": qsTr("值>0时启用。引擎空闲时间超过该值时，执行内存清理。"),
             },
         },
-        // "RapidOCR": {
-        //     "title": qsTr("RapidOCR（本地）"),
-        //     "type": "group",
+        "RapidOCR": {
+            "title": qsTr("RapidOCR（本地）"),
+            "type": "group",
 
-        //     "path": {
-        //         "title": qsTr("引擎exe路径"),
-        //         "type": "file",
-        //         "default": "lib/RapidOCR-json/RapidOCR-json.exe",
-        //         "selectExisting": true, // 选择现有
-        //         "selectFolder": false, // 选择文件
-        //         "dialogTitle": qsTr("RapidOCR 引擎exe路径"),
-        //     },
-        // },
+            "path": {
+                "title": qsTr("引擎exe路径"),
+                "type": "file",
+                "default": "lib/RapidOCR-json/RapidOCR-json.exe",
+                "selectExisting": true, // 选择现有
+                "selectFolder": false, // 选择文件
+                "dialogTitle": qsTr("RapidOCR 引擎exe路径"),
+            },
+        },
     }
 
     // 单独配置，每个页面的选项可以不同。都必须有 language 语言列表。
@@ -114,9 +114,12 @@ QtObject {
 
             "language": {
                 "title": qsTr("语言/模型库"),
-                "optionsList": [
-                    ["default", "默认"],
-                ],
+                "optionsList": [],
+            },
+            "angle": {
+                "title": qsTr("纠正文本方向"),
+                "default": false,
+                "toolTip": qsTr("启用方向分类，识别倾斜或倒置的文本。可能降低识别速度。")
             },
         },
     }

@@ -299,12 +299,6 @@ class ApiPaddleOcr(ApiOcr):  # 公开接口
         self.__ramClear()
         return res
 
-    def runClipboard(self):  # 剪贴板识图
-        self.__runBefore()
-        res = self.api.runClipboard()
-        self.__ramClear()
-        return res
-
     def runBytes(self, imageBytes):  # 字节流
         self.__runBefore()
         res = self.api.runBytes(imageBytes)
