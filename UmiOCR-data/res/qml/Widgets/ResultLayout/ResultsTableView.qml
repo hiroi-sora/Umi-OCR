@@ -53,12 +53,24 @@ Item {
             "title": res.title,
             "datetime": dateTimeString,
             "resText": resText,
+            "timestamp": res.timestamp,
         })
         // 自动滚动
         if(autoToBottom) {
             tableView.toBottom()
         }
         return resText
+    }
+
+    // 搜索一个结果。可传入 title 或 timestamp
+    function getResult(title="", timestamp=-1) {
+        for (let i = 0, l=resultsModel.count; i < l; i++) {
+            let item = resultsModel.get(i);
+            if (item.title === title || item.timestamp === timestamp) {
+                return item
+            }
+        }
+        return undefined
     }
     
     // ========================= 【布局】 =========================

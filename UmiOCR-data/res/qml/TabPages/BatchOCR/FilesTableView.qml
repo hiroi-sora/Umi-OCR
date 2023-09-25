@@ -62,6 +62,8 @@ Item{
 
     // 定义信号
     signal addImages(var paths) // 添加图片的信号
+    signal clickImage(var path) // 点击图片条目的信号
+    signal doubleClickImage(var path)
 
     // ========================= 【布局】 =========================
 
@@ -243,7 +245,10 @@ Item{
                                 tableView.hoveredY = -1
                             }
                             onClicked: {
-                                console.log("点击图片：", tableModel.getRow(row).filePath)
+                                clickImage(tableModel.getRow(row).filePath)
+                            }
+                            onDoubleClicked: {
+                                doubleClickImage(tableModel.getRow(row).filePath)
                             }
                         }
                     }
