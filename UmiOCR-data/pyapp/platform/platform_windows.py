@@ -2,8 +2,9 @@
 # =============== Windows系统API ===============
 # ==============================================
 
-from pynput._util.win32 import KeyTranslator
 import os
+import subprocess
+from pynput._util.win32 import KeyTranslator
 
 from .platform import PlatformBase
 
@@ -72,3 +73,8 @@ class PlatformWindows(PlatformBase):
     @staticmethod
     def getKeyName(key):  # 键值转键名
         return _KTA(key)
+
+    # 让系统运行一个程序，不堵塞当前进程
+    @staticmethod
+    def runNewProcess(path):
+        subprocess.Popen(f'start "" "{path}"', shell=True)

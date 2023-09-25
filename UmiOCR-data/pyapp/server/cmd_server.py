@@ -103,6 +103,12 @@ class _Actuator:
         except Exception as e:
             return f'[Error] calling {typeStr} module "{moduleName}" - "{funcName}" {paras}: {e}'
 
+    # ============================== 便捷指令 ==============================
+
+    # 展示主窗
+    def showWindow(self):
+        self.call("MainWindow", "qml", "setVisible", False, True)
+
 
 CmdActuator = _Actuator()
 
@@ -148,7 +154,7 @@ class _Cmd:
         if "-h" in argv or "--help" in argv:  # 帮助
             return self._parser.format_help()
         if len(argv) == 0:  # 空指令
-            pass  # TODO
+            CmdActuator.showWindow()  # 展示主窗
             return self._parser.format_help()
         # 正常解析
         try:
@@ -165,8 +171,11 @@ class _Cmd:
             return args
         if args.all_modules:
             return CmdActuator.getModulesHelp()
-        print("=======", args.thread)
-        print("= 命令行解析参数：", args)
+        # 便捷指令
+        if args.show:  # 展示主窗
+            CmdActuator.showWindow()
+            return
+        # 动态模块调用
         if args.call_py:
             if args.func:
                 return CmdActuator.call(
