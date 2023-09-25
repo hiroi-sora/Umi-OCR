@@ -740,7 +740,7 @@ Item {
                 Text_ {
                     id: unitText
                     visible: origin.unit!==undefined
-                    text: origin.unit
+                    text: origin.unit===undefined ? "" : origin.unit
                     anchors.right: parent.right
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom

@@ -143,7 +143,7 @@ TabPage {
         // 弹出通知
         showSimple(res, resText, copy)
         // 升起主窗口
-        if(popMainWindow) qmlapp.mainWin.setVisible(true)
+        if(popMainWindow) qmlapp.mainWin.setVisibility(true)
     }
 
     // ========================= 【后处理】 =========================

@@ -18,7 +18,7 @@ Item {
     Component.onCompleted: {
         // 启动时可见
         const visi = !qmlapp.globalConfigs.getValue("window.startupInvisible")
-        setVisible(visi)
+        setVisibility(visi)
         if(!visi) {
             qmlapp.popup.simple(qsTr("欢迎使用 Umi-OCR"), qsTr("已启用后台模式，可通过快捷键使用功能。"))
         }
@@ -29,12 +29,13 @@ Item {
     // ========================= 【接口】 =========================
 
     // 返回主窗口是否可见
-    function getVisible() {
+    function getVisibility() {
         return mainWin.visibility==2||mainWin.visibility==4||mainWin.visibility==5
     }
 
     // 设置主窗口可见性。 false 隐藏， true 恢复。
-    function setVisible(flag) {
+    function setVisibility(flag) {
+        console.log("=== set!!!!!!")
         if(flag) {
             mainWin.visibility = Window.Windowed // 状态为可见
             mainWin.requestActivate() // 激活窗口
@@ -49,7 +50,7 @@ Item {
     function close() {
         // 隐藏
         if(qmlapp.globalConfigs.getValue("window.closeWin2Hide")) {
-            setVisible(false)
+            setVisibility(false)
         }
         // 关闭
         else {

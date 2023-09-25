@@ -26,7 +26,7 @@ Item {
             notificationWindow.show(title, msg, time)
         }
         // 主窗口可见，发送内部
-        else if(qmlapp.mainWin.getVisible()) {
+        else if(qmlapp.mainWin.getVisibility()) {
             if(showType=="inside" || showType=="onlyInside") {
                 notificationPopup.show(title, msg, time)
             }

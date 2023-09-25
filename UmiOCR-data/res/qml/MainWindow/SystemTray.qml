@@ -103,6 +103,6 @@ SystemTrayIcon {
 
     onActivated: {
         if(reason == SystemTrayIcon.DoubleClick)
-            qmlapp.mainWin.setVisible(true) // 主窗可见
+            qmlapp.mainWin.setVisibility(true) // 主窗可见
     }
 }
