@@ -24,9 +24,6 @@ class _Actuator:
 
         self.tagPageConn = TagPageConnObj
 
-        print(self.getModulesHelp())
-        print(self.getModuleFuncsHelp("ScreenshotOCR", "py"))
-
     # 返回所有可调用模块
     def getModules(self):
         pyd, qmld = {}, {}
@@ -105,9 +102,17 @@ class _Actuator:
 
     # ============================== 便捷指令 ==============================
 
-    # 展示主窗
-    def showWindow(self):
-        self.call("MainWindow", "qml", "setVisible", False, True)
+    # 控制主窗口
+    def ctrlWindow(self, show, hide, quit):
+        if show:
+            self.call("MainWindow", "qml", "setVisibility", False, True)
+            return "Umi-OCR show."
+        elif hide:
+            self.call("MainWindow", "qml", "setVisibility", False, False)
+            return "Umi-OCR hide."
+        elif quit:
+            self.call("MainWindow", "qml", "quit", False)
+            return "Umi-OCR quit."
 
 
 CmdActuator = _Actuator()
@@ -122,9 +127,14 @@ class _Cmd:
         if self._parser:
             return
         self._parser = argparse.ArgumentParser(prog="Umi-OCR")
+        # 便捷指令
         self._parser.add_argument(
             "--show", action="store_true", help="Make the app appear in the foreground."
         )
+        self._parser.add_argument(
+            "--hide", action="store_true", help="Hide app in the background."
+        )
+        self._parser.add_argument("--quit", action="store_true", help="Quit app.")
         # 函数调用
         self._parser.add_argument(
             "--all_modules",
@@ -155,7 +165,7 @@ class _Cmd:
             return self._parser.format_help()
         if len(argv) == 0:  # 空指令
             CmdActuator.showWindow()  # 展示主窗
-            return self._parser.format_help()
+            return self._parser.format_help()  # 返回帮助
         # 正常解析
         try:
             return self._parser.parse_args(argv)
@@ -172,9 +182,8 @@ class _Cmd:
         if args.all_modules:
             return CmdActuator.getModulesHelp()
         # 便捷指令
-        if args.show:  # 展示主窗
-            CmdActuator.showWindow()
-            return
+        if args.show or args.hide or args.quit:  # 控制主窗
+            return CmdActuator.ctrlWindow(args.show, args.hide, args.quit)
         # 动态模块调用
         if args.call_py:
             if args.func:
@@ -193,10 +202,3 @@ class _Cmd:
 
 
 CmdServer = _Cmd()
-
-# res = CmdServer.execute([])
-# print("=====================")
-# print(res)
-# import sys
-
-# sys.exit(0)

@@ -35,7 +35,6 @@ Item {
 
     // 设置主窗口可见性。 false 隐藏， true 恢复。
     function setVisibility(flag) {
-        console.log("=== set!!!!!!")
         if(flag) {
             mainWin.visibility = Window.Windowed // 状态为可见
             mainWin.requestActivate() // 激活窗口
@@ -54,8 +53,13 @@ Item {
         }
         // 关闭
         else {
-            Qt.quit()
+            quit()
         }
+    }
+
+    // 退出主窗口
+    function quit() {
+        Qt.quit()
     }
 
     // 检查主窗口初始化屏幕位置，防止出界及过大
