@@ -1,5 +1,6 @@
 # OCR输出器的基类。按指定的格式，将传入的文本输出到指定地方。
 
+from ...platform import Platform
 import os
 
 
@@ -7,13 +8,15 @@ class Output:
     def __init__(self, argd):
         self.dir = argd["outputDir"]  # 输出路径（文件夹）
         self.fileName = argd["outputFileName"]  # 文件名
-        self.fileName = self.fileName.replace("%name", argd["outputDirName"]) # 文件名添加路径名
+        self.fileName = self.fileName.replace(
+            "%name", argd["outputDirName"]
+        )  # 文件名添加路径名
         self.outputPath = f"{self.dir}/{self.fileName}.txt"  # 输出路径
         self.ingoreBlank = argd["ingoreBlank"]  # 忽略空白文件
 
-    def print(self, res): # 输出图片信息
+    def print(self, res):  # 输出图片信息
         if not res["code"] == 100 and self.ingoreBlank:
-            return # 忽略空白图片
+            return  # 忽略空白图片
         textOut = f"图片路径：{res['path']}\n代码：{res['code']}\n"
         if res["code"] == 100:
             for r in res["data"]:
@@ -24,6 +27,6 @@ class Output:
             textOut += f"错误原因：{res['data']}"
         print(textOut)
 
-    def openOutputFile(self): # 打开输出文件
+    def openOutputFile(self):  # 打开输出文件
         if self.outputPath and os.path.exists(self.outputPath):
-            os.startfile(self.outputPath)
+            Platform.startfile(self.outputPath)

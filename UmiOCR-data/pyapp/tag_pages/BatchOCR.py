@@ -138,7 +138,7 @@ class BatchOCR(Page):
         # 打开目录
         openFolder = argd.get("openFolder", False)
         if openFolder and os.path.exists(self.argd["mission.dir"]):
-            os.startfile(self.argd["mission.dir"])
+            Platform.startfile(self.argd["mission.dir"])
         # 打开文件
         if argd.get("openFile", False):
             for o in self.outputList:
