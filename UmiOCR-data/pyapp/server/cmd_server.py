@@ -284,7 +284,7 @@ class _Cmd:
         if "-h" in argv or "--help" in argv:  # 帮助
             return self._parser.format_help()
         if len(argv) == 0:  # 空指令
-            CmdActuator.showWindow()  # 展示主窗
+            CmdActuator.ctrlWindow(True, False, False)  # 展示主窗
             return self._parser.format_help()  # 返回帮助
         # 正常解析
         try:
