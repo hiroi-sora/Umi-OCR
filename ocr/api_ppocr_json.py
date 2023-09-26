@@ -11,6 +11,7 @@ from psutil import Process as psutilProcess  # 内存监控
 from sys import platform as sysPlatform  # popen静默模式
 from json import loads as jsonLoads, dumps as jsonDumps
 
+
 class OcrAPI:
     """调用OCR"""
 
@@ -24,37 +25,42 @@ class OcrAPI:
         """
         cwd = os.path.abspath(os.path.join(exePath, os.pardir))  # 获取exe父文件夹
         # 处理启动参数
-        args = ' '
+        args = " "
         if argsStr:  # 添加用户指定的启动参数
-            args += f' {argsStr}'
-        if configPath and 'config_path' not in args:  # 指定配置文件
+            args += f" {argsStr}"
+        if configPath and "config_path" not in args:  # 指定配置文件
             args += f' --config_path="{configPath}"'
-        if 'use_debug' not in args:  # 关闭debug模式
-            args += ' --use_debug=0'
+        if "use_debug" not in args:  # 关闭debug模式
+            args += " --use_debug=0"
         # 设置子进程启用静默模式，不显示控制台窗口
         startupinfo = None
-        if 'win32' in str(sysPlatform).lower():
+        if "win32" in str(sysPlatform).lower():
             startupinfo = subprocess.STARTUPINFO()
-            startupinfo.dwFlags = subprocess.CREATE_NEW_CONSOLE | subprocess.STARTF_USESHOWWINDOW
+            startupinfo.dwFlags = (
+                subprocess.CREATE_NEW_CONSOLE | subprocess.STARTF_USESHOWWINDOW
+            )
             startupinfo.wShowWindow = subprocess.SW_HIDE
         self.ret = subprocess.Popen(  # 打开管道
-            exePath+args, cwd=cwd,
+            exePath + args,
+            cwd=cwd,
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
-            startupinfo=startupinfo  # 开启静默模式
+            stderr=subprocess.DEVNULL,  # 丢弃stderr的内容
+            startupinfo=startupinfo,  # 开启静默模式
         )
         atexit.register(self.stop)  # 注册程序终止时执行强制停止子进程
         self.psutilProcess = psutilProcess(self.ret.pid)  # 进程监控对象
 
-        self.initErrorMsg = f'OCR init fail.\n引擎路径：{exePath}\n启动参数：{args}'
+        self.initErrorMsg = f"OCR init fail.\n引擎路径：{exePath}\n启动参数：{args}"
 
         # 子线程检查超时
         def cancelTimeout():
             checkTimer.cancel()
 
         def checkTimeout():
-            self.initErrorMsg = f'OCR init timeout: {initTimeout}s.\n{exePath}'
+            self.initErrorMsg = f"OCR init timeout: {initTimeout}s.\n{exePath}"
             self.ret.kill()  # 关闭子进程
+
         checkTimer = threading.Timer(initTimeout, checkTimeout)
         checkTimer.start()
 
@@ -64,8 +70,8 @@ class OcrAPI:
                 cancelTimeout()
                 raise Exception(self.initErrorMsg)
             # 必须按行读，所以不能使用communicate()来规避超时问题
-            initStr = self.ret.stdout.readline().decode('ascii', errors='ignore')
-            if 'OCR init completed.' in initStr:  # 初始化成功
+            initStr = self.ret.stdout.readline().decode("ascii", errors="ignore")
+            if "OCR init completed." in initStr:  # 初始化成功
                 break
         cancelTimeout()
 
@@ -74,31 +80,36 @@ class OcrAPI:
         :exePath: 图片路径。\n
         :return:  {'code': 识别码, 'data': 内容列表或错误信息字符串}\n"""
         if not self.ret.poll() == None:
-            return {'code': 400, 'data': f'子进程已结束。'}
+            return {"code": 400, "data": f"子进程已结束。"}
         # wirteStr = imgPath if imgPath[-1] == '\n' else imgPath + '\n'
-        writeDict = {'image_dir': imgPath}
+        writeDict = {"image_dir": imgPath}
         try:  # 输入地址转为ascii转义的json字符串，规避编码问题
-            wirteStr = jsonDumps(
-                writeDict, ensure_ascii=True, indent=None)+"\n"
+            wirteStr = jsonDumps(writeDict, ensure_ascii=True, indent=None) + "\n"
         except Exception as e:
-            return {'code': 403, 'data': f'输入字典转json失败。字典：{writeDict} || 报错：[{e}]'}
+            return {"code": 403, "data": f"输入字典转json失败。字典：{writeDict} || 报错：[{e}]"}
         # 输入路径
         try:
-            self.ret.stdin.write(wirteStr.encode('ascii'))
+            self.ret.stdin.write(wirteStr.encode("ascii"))
             self.ret.stdin.flush()
         except Exception as e:
-            return {'code': 400, 'data': f'向识别器进程写入图片地址失败，疑似子进程已崩溃。{e}'}
-        if imgPath[-1] == '\n':
+            return {"code": 400, "data": f"向识别器进程写入图片地址失败，疑似子进程已崩溃。{e}"}
+        if imgPath[-1] == "\n":
             imgPath = imgPath[:-1]
         # 获取返回值
         try:
-            getStr = self.ret.stdout.readline().decode('utf-8', errors='ignore')
+            getStr = self.ret.stdout.readline().decode("utf-8", errors="ignore")
         except Exception as e:
-            return {'code': 401, 'data': f'读取识别器进程输出值失败，疑似传入了不存在或无法识别的图片 \"{imgPath}\" 。{e}'}
+            return {
+                "code": 401,
+                "data": f'读取识别器进程输出值失败，疑似传入了不存在或无法识别的图片 "{imgPath}" 。{e}',
+            }
         try:
             return jsonLoads(getStr)
         except Exception as e:
-            return {'code': 402, 'data': f'识别器输出值反序列化JSON失败，疑似传入了不存在或无法识别的图片 \"{imgPath}\" 。异常信息：{e}。原始内容：{getStr}'}
+            return {
+                "code": 402,
+                "data": f'识别器输出值反序列化JSON失败，疑似传入了不存在或无法识别的图片 "{imgPath}" 。异常信息：{e}。原始内容：{getStr}',
+            }
 
     def stop(self):
         self.ret.kill()  # 关闭子进程。误重复调用似乎不会有坏的影响
@@ -106,7 +117,7 @@ class OcrAPI:
     def getRam(self):
         """返回内存占用，数字，单位为MB"""
         try:
-            return int(self.psutilProcess.memory_info().rss/1048576)
+            return int(self.psutilProcess.memory_info().rss / 1048576)
         except Exception as e:
             return -1
 
