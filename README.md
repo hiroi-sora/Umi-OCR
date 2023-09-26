@@ -32,16 +32,15 @@
 ![Preview1.png](https://tupian.li/images/2023/09/25/65119e87d359c.png)
 ![i18n.png](https://tupian.li/images/2023/09/25/65119e87e8041.png)
 
-## 体验预览版本：
+## 下载：
 
-> 不同发布版本，除了内置不同引擎以外，没有别的区别。  
-> Rapid引擎支持 Win7 及以上系统。内存占用较低，性能压力较小。  
-> Paddle引擎支持 Win10 及以上系统。性能更高，识别速度更快。  
-> 均支持 简中/繁中/英/日/韩/俄 多国语言识别。  
-
-下载：
+#### v2.0.0 预览版本
 
 [Releases](https://github.com/hiroi-sora/Umi-OCR_v2/releases)
+
+#### v1.3.6 稳定版本
+
+[Umi-OCR 主仓库](https://github.com/hiroi-sora/Umi-OCR)
 
 ## 主要功能：
 
@@ -142,6 +141,8 @@ Umi-OCR 允许通过命令行调用每一个标签页（模块）上的任意函
 - [x] Win7兼容。
 - [ ] 忽略区域。
 - [ ] 截图联动/截图翻译。
+
+v2基础开发结束后，预计本仓库代码将迁移回[主仓库](https://github.com/hiroi-sora/Umi-OCR)。
 
 ## 构建项目：
 
