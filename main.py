@@ -4,11 +4,11 @@
 from utils.config import Umi
 from ui.win_main import MainWin
 
-Umi.ver = '1.3.5'
-Umi.pname = 'Umi-OCR'
-Umi.name = f'{Umi.pname} v{Umi.ver}'
-Umi.website = 'https://github.com/hiroi-sora/Umi-OCR'
-Umi.about = '免费、开源的离线OCR软件'
+Umi.ver = "1.3.6"
+Umi.pname = "Umi-OCR"
+Umi.name = f"{Umi.pname} v{Umi.ver}"
+Umi.website = "https://github.com/hiroi-sora/Umi-OCR"
+Umi.about = "免费、开源的离线OCR软件"
 
 
 def main():
