@@ -15,26 +15,25 @@
 
 
 from utils.config import Config
-from ocr.tbpu.merge_line_h import TbpuLineH
+from ocr.tbpu.merge_line import MergeLine
+from ocr.tbpu.merge_para import MergePara
+from ocr.tbpu.merge_para_code import MergeParaCode
+
 from ocr.tbpu.merge_line_h_fuzzy import TbpuLineHFuzzy
-from ocr.tbpu.merge_line_h_m_left import TbpuLineHMultiLeft
-from ocr.tbpu.merge_line_h_m_paragraph import TbpuLineHMultiParagraph
-from ocr.tbpu.merge_line_h_m_paragraph_english import TbpuLineHMultiParagraphEnglish
 from ocr.tbpu.merge_line_h_m_fuzzy import TbpuLineHMultiFuzzy
 from ocr.tbpu.merge_line_v_lr import TbpuLineVlr
 from ocr.tbpu.merge_line_v_rl import TbpuLineVrl
 
 
 Tbpus = {
-    '优化单行': TbpuLineH,
-    '合并多行-汉文自然段': TbpuLineHMultiParagraph,
-    '合并多行-西文自然段': TbpuLineHMultiParagraphEnglish,
-    '合并多行-左对齐': TbpuLineHMultiLeft,
-    '优化单行-模糊匹配': TbpuLineHFuzzy,
-    '合并多行-模糊匹配': TbpuLineHMultiFuzzy,
-    '竖排-从左到右-单行': TbpuLineVlr,
-    '竖排-从右至左-单行': TbpuLineVrl,
-    '不做处理': None,
+    "单行": MergeLine,
+    "多行-自然段": MergePara,
+    "多行-代码段": MergeParaCode,
+    "单行-模糊匹配": TbpuLineHFuzzy,
+    "多行-模糊匹配": TbpuLineHMultiFuzzy,
+    "竖排-从左到右-单行": TbpuLineVlr,
+    "竖排-从右至左-单行": TbpuLineVrl,
+    "不做处理": None,
 }
 
-Config.set('tbpu', Tbpus)
+Config.set("tbpu", Tbpus)
