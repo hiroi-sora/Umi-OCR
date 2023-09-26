@@ -18,9 +18,6 @@ from utils.config import Config
 from ocr.tbpu.merge_line import MergeLine
 from ocr.tbpu.merge_para import MergePara
 from ocr.tbpu.merge_para_code import MergeParaCode
-
-from ocr.tbpu.merge_line_h_fuzzy import TbpuLineHFuzzy
-from ocr.tbpu.merge_line_h_m_fuzzy import TbpuLineHMultiFuzzy
 from ocr.tbpu.merge_line_v_lr import TbpuLineVlr
 from ocr.tbpu.merge_line_v_rl import TbpuLineVrl
 
@@ -29,8 +26,6 @@ Tbpus = {
     "单行": MergeLine,
     "多行-自然段": MergePara,
     "多行-代码段": MergeParaCode,
-    "单行-模糊匹配": TbpuLineHFuzzy,
-    "多行-模糊匹配": TbpuLineHMultiFuzzy,
     "竖排-从左到右-单行": TbpuLineVlr,
     "竖排-从右至左-单行": TbpuLineVrl,
     "不做处理": None,
