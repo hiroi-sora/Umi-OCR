@@ -139,6 +139,17 @@ Umi-OCR 允许通过命令行调用每一个标签页（模块）上的任意函
 - 如：命令行 `Umi-OCR.exe --call_qml ScreenshotOCR`
 - 等价于： `POST /argv ["--call_qml", "ScreenshotOCR"]`
 
+## 关于项目依赖：
+
+支持的离线OCR引擎：
+
+- [PaddleOCR-json](https://github.com/hiroi-sora/PaddleOCR-json) 仅支持Win10 x64以上，性能更好，速度快。
+- [RapidOCR-json](https://github.com/hiroi-sora/RapidOCR-json) 兼容Win7 x64 ，内存占用低，适合低配机器。
+
+运行环境框架：
+
+- [PyStand](https://github.com/skywind3000/PyStand) 的定制版。
+
 ## V2版本开发进度：
 
 - [x] 标签页框架。
