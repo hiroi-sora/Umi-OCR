@@ -44,7 +44,7 @@ Configs {
             "datetimeFormat": {
                 "title": qsTr("日期时间格式"),
                 "toolTip": qsTr("文件名中 %date 的日期格式。支持插入以下占位符：\n%Y 年、 %m 月、 %d 日、 %H 小时、 \n%M 分钟、 %S 秒 、 %unix 时间戳 \n举例：%Y年%m月%d日_%H-%M\n生成：2023年09月01日_12-13.txt"),
-                "default": "%Y-%m-%d_%H-%M",
+                "default": "%Y%m%d_%H%M",
                 "advanced": true, // 高级选项
             },
 
@@ -72,6 +72,11 @@ Configs {
                 "md": {
                     "title": qsTr("md 图文混排"),
                     "toolTip": qsTr("Markdown图文混排格式，可用Markdown阅读器浏览文件"),
+                    "default": false,
+                },
+                "csv": {
+                    "title": qsTr("csv 表格文件(Excel)"),
+                    "toolTip": qsTr("将图片信息和识别内容写入csv表格文件。可用Excel打开，另存为xlsx格式。"),
                     "default": false,
                 },
                 "jsonl": {

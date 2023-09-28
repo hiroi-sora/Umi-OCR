@@ -13,6 +13,7 @@ from ..ocr.output.output_txt_plain import OutputTxtPlain
 from ..ocr.output.output_txt_individual import OutputTxtIndividual
 from ..ocr.output.output_md import OutputMD
 from ..ocr.output.output_jsonl import OutputJsonl
+from ..ocr.output.output_csv import OutputCsv
 
 import os
 import time
@@ -120,6 +121,8 @@ class BatchOCR(Page):
                 self.outputList.append(OutputMD(outputArgd))
             if argd["mission.filesType.jsonl"]:  # jsonl
                 self.outputList.append(OutputJsonl(outputArgd))
+            if argd["mission.filesType.csv"]:  # csv
+                self.outputList.append(OutputCsv(outputArgd))
         except Exception as e:
             self.__onEnd(
                 None,
