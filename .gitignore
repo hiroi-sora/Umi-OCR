@@ -18,8 +18,8 @@ UmiOCR-data/*
 # 允许二级目录
 !UmiOCR-data/**/
 # 排除运行环境目录
-UmiOCR-data/.site-packages*
-UmiOCR-data/.runtime
+UmiOCR-data/site-packages*
+UmiOCR-data/runtime
 UmiOCR-data/lib
 # 允许运行环境压缩包
 !UmiOCR-data/*.7z

@@ -3,7 +3,7 @@
 # =====================================
 
 # 耗时统计：
-# .runtime/python.exe -X importtime main.py
+# runtime/python.exe -X importtime main.py
 
 import os
 import sys
@@ -42,7 +42,7 @@ def initRuntimeEnvironment(startup_script):
     working = os.path.dirname(script)  # 工作目录
     os.environ["APP_WORKING"] = working
     os.chdir(working)  # 重新设定工作目录（不在最顶层，而在UmiOCR-data文件夹下）
-    for n in [".", ".site-packages"]:  # 将模块目录添加到 Python 搜索路径中
+    for n in [".", "site-packages"]:  # 将模块目录添加到 Python 搜索路径中
         path = os.path.abspath(os.path.join(working, n))
         if os.path.exists(path):
             site.addsitedir(path)
@@ -50,7 +50,7 @@ def initRuntimeEnvironment(startup_script):
 
 def runScript():
     # 默认启动脚本
-    from pyapp.run import main
+    from py_src.run import main
 
     main()
 

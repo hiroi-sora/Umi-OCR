@@ -11,7 +11,7 @@ def runQml():
     try:
         from PySide2.QtCore import QCoreApplication
 
-        QCoreApplication.addLibraryPath("./.site-packages/PySide2/plugins")
+        QCoreApplication.addLibraryPath("./site-packages/PySide2/plugins")
     except Exception as e:
         print(e)
         os.MessageBox(f"Qt plugins 目录导入失败！\nQt plugins directory import failed!\n\n{e}")
@@ -64,12 +64,12 @@ def runQml():
 
     # 6. 启动qml引擎
     engine = QQmlApplicationEngine()
-    engine.addImportPath("./.site-packages/PySide2/qml")  # 相对路径重新导入包
+    engine.addImportPath("./site-packages/PySide2/qml")  # 相对路径重新导入包
     engine.addImageProvider("pixmapprovider", PixmapProvider)  # 注册图片提供器
     rootContext = engine.rootContext()  # 注册常量
     rootContext.setContextProperty("APP_VERSION", os.environ["APP_VERSION"])
     rootContext.setContextProperty("APP_WEBSITE", os.environ["APP_WEBSITE"])
-    engine.load(f"res/qml/Main.qml")  # 通过本地文件启动
+    engine.load(f"qt_res/qml/Main.qml")  # 通过本地文件启动
     # engine.load(f"qrc:/qml/Main.qml")  # 通过qrc启动
     if not engine.rootObjects():
         return 1
