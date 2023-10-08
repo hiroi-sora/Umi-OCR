@@ -6,7 +6,7 @@
 
 import QtQuick 2.15
 
-QtObject {
+Item {
 
     // ========================= 【配置】 =========================
     
@@ -82,7 +82,7 @@ QtObject {
     }
 
     // 单独配置，每个页面的选项可以不同。都必须有 language 语言列表。
-    property var pageOptions: {
+    property var localOptions: {
         "PaddleOCR": {
             "title": qsTr("文字识别（PaddleOCR）"),
             "type": "group",
@@ -131,12 +131,12 @@ QtObject {
 
         // 成功应用修改之后的刷新函数
         function successUpdate() {
-            // 从python获取额外信息，填入pageOptions。主要为了动态刷新[language][optionsList]
+            // 从python获取额外信息，填入localOptions。主要为了动态刷新[language][optionsList]
             const info = qmlapp.msnConnector.callPy("ocr", "getApiInfo", [])
             for(let k1 in info) {
-                if(k1 in pageOptions[apiKey])
+                if(k1 in localOptions[apiKey])
                     for(let k2 in info[k1])
-                        pageOptions[apiKey][k1][k2] = info[k1][k2]
+                        localOptions[apiKey][k1][k2] = info[k1][k2]
             }
             // 刷新qml各个页面的独立配置
             for (let key in deployDict) {
@@ -146,14 +146,14 @@ QtObject {
                     continue
                 }
                 const k = deployDict[key].configKey
-                p.configDict[k] = pageOptions[apiKey] // 刷新页面设置
+                p.configDict[k] = localOptions[apiKey] // 刷新页面设置
                 p.reload() // 刷新页面UI
             }
         }
 
         // 获取当前全局 apiKey ，验证在本字典中的存在性
         const nowKey = qmlapp.globalConfigs.getValue("ocr.api")
-        if(!pageOptions.hasOwnProperty(nowKey)) {
+        if(!localOptions.hasOwnProperty(nowKey)) {
             const s = qsTr("OCR API 列表中不存在%1").arg(nowKey)
             qmlapp.popup.message("", s, "error")
             return
@@ -229,7 +229,7 @@ QtObject {
             }
         }
         else{ // apiKey已初始化，返回对应配置
-            return pageOptions[apiKey]
+            return localOptions[apiKey]
         }
     }
 

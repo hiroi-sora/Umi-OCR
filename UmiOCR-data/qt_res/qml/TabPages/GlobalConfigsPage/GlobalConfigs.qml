@@ -5,7 +5,7 @@
 import QtQuick 2.15
 import GlobalConfigsConnector 1.0
 import "../../Configs"
-import "../../ApiManager"
+import "../../ApiManager/OCR"
 
 Configs {
     category_: "Global"
