@@ -4,12 +4,13 @@
 
 import QtQuick 2.15
 import GlobalConfigsConnector 1.0
-import "../../Configs"
-import "../../ApiManager/OCR"
+import PluginsConnector 1.0
+import "../Configs"
+import "../ApiManager"
 
 Configs {
     category_: "Global"
-
+    autoLoad: false
     // ========================= 【全局配置项】 =========================
     configDict: {
 
@@ -138,7 +139,7 @@ Configs {
         },
 
         // OCR接口全局设定
-        "ocr": ocrManager.globalOptions,
+        "ocr": undefined,
     }
 
     // ========================= 【全局单例，通过 qmlapp.globalConfigs.xxx 访问】 =========================
@@ -146,13 +147,30 @@ Configs {
     OcrManager { id: ocrManager } // OCR管理器 qmlapp.globalConfigs.ocrManager
     UtilsConfigDicts { id: utilsDicts } // 通用配置项 qmlapp.globalConfigs.utilsDicts
     GlobalConfigsConnector { id: globalConfigConn } // 全局设置连接器
+    PluginsConnector { id: pluginsConnector } // 插件全局设置连接器
 
     property alias ocrManager: ocrManager
     property alias utilsDicts: utilsDicts
     property bool isPortInit: false // 标记端口号是否初始化完毕
 
     Component.onCompleted: {
-        ocrManager.init()
+        // 初始化插件
+        let pluginInfos = pluginsConnector.init()
+        // 初始化失败的插件
+        const errors = pluginInfos.errors
+        if(Object.keys(errors).length > 0) {
+            let msg = ""
+            for (var key in errors) {
+                msg += `${key}: ${errors[key]}\n`
+            }
+            qmlapp.popup.message(qsTr("插件加载失败"), msg, "error")
+        }
+        // 初始化成功的插件
+        // 导入OCR管理器
+        configDict.ocr = ocrManager.init1(pluginInfos.options.ocr)
+        // 初始化配置项
+        reload()
+        ocrManager.init2(pluginInfos.options.ocr)
         console.log("% GlobalConfig 初始化全局配置完毕！")
         // 延迟执行
         Qt.callLater(()=>{

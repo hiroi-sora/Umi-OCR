@@ -8,7 +8,7 @@
 标签页可以向任务管理器提交一组任务队列，其中包含了每一项任务的信息，及总体的参数和回调。
 """
 
-from ..ocr.api import getApiOcr, isApiOcr
+from ..ocr.api import getApiOcr
 from .mission import Mission
 from ..ocr.tbpu import Merge as tbpuMerge
 
@@ -41,7 +41,8 @@ class __MissionOcrClass(Mission):
         if not self.__api:
             return "[Error] MissionOCR: API object is None."
         # 检查参数更新
-        msg = self.__api.start(msnInfo["argd"])
+        startInfo = self._dictShortKey(msnInfo["argd"])
+        msg = self.__api.start(startInfo)
         if msg.startswith("[Error]"):
             return msg  # 更新失败，结束该队列
         else:
@@ -71,7 +72,7 @@ class __MissionOcrClass(Mission):
                         width, height = image.size
                         imgInfo = {"w": width, "h": height}
                 else:
-                    print("【Warning】tbpu未获得图片信息！")
+                    print("[Warning] tbpu未获得图片信息！")
                 for tbpu in msnInfo["tbpu"]:
                     res["data"] = tbpu.run(res["data"], imgInfo)
         return res
@@ -84,29 +85,37 @@ class __MissionOcrClass(Mission):
             "missionListsLength": self.getMissionListsLength(),
         }
 
-    def setApi(self, info):  # 设置api
+    def setApi(self, apiKey, info):  # 设置api
         # 成功返回 [Success] ，失败返回 [Error] 开头的字符串
-        apiKey = info["ocr.api"]
+        self.__apiKey = apiKey
+        info = self._dictShortKey(info)
         # 如果api对象已启动，则先停止
         if self.__api:
             self.__api.stop()
         # 获取新api对象
         res = getApiOcr(apiKey, info)
-        # 成功
-        if isApiOcr(res):
-            self.__api = res
-            self.__apiKey = apiKey
-            return "[Success]"
         # 失败
-        else:
+        if type(res) == str:
             self.__apiKey = ""
             self.__api = None
-            if type(res) == str:
-                return res
-            return "[Error] MissionOCR Failed to setApi, unknown reason."
+            return res
+        # 成功
+        else:
+            self.__api = res
+            return "[Success]"
 
-    def getApiInfo(self):  # 获取当前API的额外信息
-        return self.__api.getApiInfo()
+    # 将字典中配置项的长key转为短key
+    # 如： ocr.win32_PaddleOCR-json.path → path
+    def _dictShortKey(self, d):
+        newD = {}
+        key1 = "ocr."
+        key2 = key1 + self.__apiKey + "."
+        for k in d:
+            if key2 in k:
+                newD[k[len(key2) :]] = d[k]
+            elif key1 in k:
+                newD[k[len(key1) :]] = d[k]
+        return newD
 
 
 # 全局 OCR任务管理器

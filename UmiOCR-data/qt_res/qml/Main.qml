@@ -17,7 +17,6 @@ import "Configs"
 import "EventBus"
 import "Popup_"
 import "MainWindow"
-import "TabPages/GlobalConfigsPage"
 
 Window {
     id: mainWindowRoot

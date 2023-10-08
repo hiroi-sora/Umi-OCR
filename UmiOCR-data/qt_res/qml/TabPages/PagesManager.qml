@@ -10,12 +10,6 @@ Item {
 
     // ========================= 【列表】 =========================
 
-    /* 所有页面的静态信息
-            url:   页面qml文件路径
-            title: 页面标题
-            intro: 页面简介
-            comp:  页面组件（qml文件）
-    */
     property var infoList: [
         {
             key: "Navigation",         // 页面的唯一标识符。同时也是对应Python模块的名称。

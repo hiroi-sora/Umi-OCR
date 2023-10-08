@@ -148,10 +148,10 @@ class BatchOCR(Page):
                 o.openOutputFile()
         # 关机
         if argd.get("shutdown", False):
-            Platform.shutdown()
+            Platform.HardwareCtrl.shutdown()
         # 休眠
         elif argd.get("hibernate", False):
-            Platform.hibernate()
+            Platform.HardwareCtrl.hibernate()
 
     # ========================= 【任务控制器的异步回调】 =========================
 

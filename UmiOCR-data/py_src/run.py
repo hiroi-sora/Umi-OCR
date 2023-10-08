@@ -25,6 +25,7 @@ def runQml():
     from .mission.mission_connector import MissionConnector  # 任务连接器
     from .event_bus.pubsub_connector import PubSubConnector  # 发布/订阅连接器
     from .event_bus.key_mouse.key_mouse_connector import KeyMouseConnector  # 键盘/鼠标连接器
+    from .plugins_controller.plugins_connector import PluginsConnector  # 插件连接器
     from .utils.utils_connector import UtilsConnector  # 通用连接器
     from .utils.global_configs_connector import GlobalConfigsConnector  # 全局配置连接器
     from .utils.image_provider import PixmapProvider  # 图片提供器
@@ -54,6 +55,7 @@ def runQml():
     qmlRegisterType(PubSubConnector, "PubSubConnector", 1, 0, "PubSubConnector")
     qmlRegisterType(KeyMouseConnector, "KeyMouseConnector", 1, 0, "KeyMouseConnector")
     qmlRegisterType(UtilsConnector, "UtilsConnector", 1, 0, "UtilsConnector")
+    qmlRegisterType(PluginsConnector, "PluginsConnector", 1, 0, "PluginsConnector")
     qmlRegisterType(
         GlobalConfigsConnector, "GlobalConfigsConnector", 1, 0, "GlobalConfigsConnector"
     )

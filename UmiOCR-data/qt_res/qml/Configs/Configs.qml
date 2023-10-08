@@ -90,6 +90,7 @@ Item {
     property string category_: "" // 配置名
     property var configDict: { } // 定义字典，静态参数，key为嵌套
     property alias panelComponent: panelComponent // 自动生成的组件
+    property bool autoLoad: true // 自动加载设置项
 
     // 重置所有设置为默认值
     function reset() {
@@ -129,7 +130,7 @@ Item {
 
     // 初始化
     Component.onCompleted: { 
-        reload()
+        if(autoLoad) reload() // 自动加载设置项
     }
     // 初始化数值
     function initConfigDict() {
