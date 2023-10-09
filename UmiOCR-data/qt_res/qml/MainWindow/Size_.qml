@@ -34,7 +34,7 @@ Item {
     property real hTabMaxWidth: text * 8
 
     // 元素之间的常用间距
-    property real spacing: 10
+    property real spacing: 10 *scale
     // 小间距
     property real smallSpacing: spacing * 0.6
 }

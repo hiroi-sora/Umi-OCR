@@ -54,15 +54,19 @@
 ![Preview1.png](https://tupian.li/images/2023/09/25/65119e87d359c.png)
 ![i18n.png](https://tupian.li/images/2023/09/25/65119e87e8041.png)
 
+## 源码：
+
+开发者请务必阅读 [构建项目](#构建项目) 。
+
 ## 下载：
 
 #### v2.0.0 预览版本
 
 [Releases](https://github.com/hiroi-sora/Umi-OCR_v2/releases)
 
-#### v2 插件库
+<!-- #### v2 插件库
 
-[Umi-OCR_plugins](https://github.com/hiroi-sora/Umi-OCR_plugins)
+[Umi-OCR_plugins](https://github.com/hiroi-sora/Umi-OCR_plugins) -->
 
 #### v1.3.6 稳定版本
 
@@ -246,6 +250,8 @@ Umi-OCR 允许通过命令行调用每一个标签页（模块）上的任意函
 ```
 
 ### 运行环境
+
+根据下列文档，完成对应平台的开发/运行环境部署。
 
 - [Windows](https://github.com/hiroi-sora/Umi-OCR_runtime_windows)
 - 跨平台的支持筹备中
