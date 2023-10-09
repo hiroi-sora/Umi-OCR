@@ -140,7 +140,7 @@ Item {
     // 外置控制栏
     Item {
         id: ctrlBar
-        height: size_.text*1.5
+        height: size_.line*1.5
         anchors.left: parent.left
         anchors.right: parent.right
 

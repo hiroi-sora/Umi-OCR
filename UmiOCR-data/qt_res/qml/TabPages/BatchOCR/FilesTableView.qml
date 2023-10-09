@@ -41,7 +41,7 @@ Item{
     property var filesDict: {}
     property alias filesModel: tableModel
     // 列宽。第一列随总体宽度自动变化（[0]表示最小值），剩余列为固定值。
-    property var columnsWidth: [size_.smallText*6, size_.smallText*4, size_.smallText*4]
+    property var columnsWidth: [size_.smallLine*6, size_.smallLine*4, size_.smallLine*4]
     property int othersWidth: 0 // 除第一列以外的列宽，初始时固定下来。
     Component.onCompleted: {
         if(filesDict==undefined){
@@ -98,7 +98,7 @@ Item{
                 anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.right: parent.right
-                height: size_.text * 2
+                height: size_.line * 2
 
                 // 左打开图片按钮
                 IconTextButton {
@@ -153,13 +153,13 @@ Item{
                 anchors.top: tableTopPanel.bottom
                 anchors.left: parent.left
                 anchors.right: parent.right
-                height: size_.smallText * 2
+                height: size_.smallLine * 2
                 model: headerModel // 模型
 
                 // 元素
                 delegate: Rectangle {
                     implicitWidth: 0
-                    implicitHeight: size_.smallText * 2
+                    implicitHeight: size_.smallLine * 2
                     border.width: 1
                     color: "#00000000"
                     border.color: theme.coverColor1
@@ -209,7 +209,7 @@ Item{
                     // 元素
                     delegate: Rectangle {
                         implicitWidth: 0
-                        implicitHeight: size_.smallText * 1.5
+                        implicitHeight: size_.smallLine * 1.5
                         border.width: 1
                         color: "#00000000"
                         border.color: theme.coverColor1
@@ -221,7 +221,7 @@ Item{
                             // 文件名左对齐，其它项居中对齐
                             anchors.horizontalCenter: column===0 ? undefined : parent.horizontalCenter
                             anchors.left: column===0 ? parent.left : undefined
-                            anchors.leftMargin: size_.smallText * 0.5
+                            anchors.leftMargin: size_.smallLine * 0.5
                             font.pixelSize: size_.smallText
                             font.family: theme.dataFontFamily
                         }

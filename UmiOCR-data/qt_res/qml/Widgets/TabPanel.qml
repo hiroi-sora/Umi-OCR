@@ -29,7 +29,7 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
-        height: size_.text * 2
+        height: size_.line * 2
 
         // 左：选项栏
         TabBar {
@@ -50,7 +50,7 @@ Item {
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
                     checkable: true
-                    width: contentText.contentWidth + size_.text*2
+                    width: contentText.contentWidth + size_.line*2
 
                     contentItem: Text_ {
                         id: contentText

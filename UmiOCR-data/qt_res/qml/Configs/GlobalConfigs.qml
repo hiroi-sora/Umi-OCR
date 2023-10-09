@@ -80,6 +80,26 @@ Configs {
                     qmlapp.enabledEffect = !flag
                 },
             },
+            "scale": {
+                "title": qsTr("界面大小比例"),
+                "default": 1,
+                "optionsList": [
+                    [0.5, "50%"],
+                    [0.75, "75%"],
+                    [0.9, "90%"],
+                    [1, "100%"],
+                    [1.1, "110%"],
+                    [1.25, "125%"],
+                    [1.5, "150%"],
+                ],
+                "onChanged": (val)=>{
+                    size_.scale = val
+                    console.log("== 软件大小", val)
+                    console.log("== 软件大小", typeof val)
+                    console.log("== 当前大小", size_.scale)
+                    
+                },
+            },
         },
 
         // 窗口

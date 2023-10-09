@@ -17,6 +17,7 @@ Button {
     property int index: -1 // 在标签栏中的序号
 
     // 默认值
+    height: size_.hTabBarHeight
     checkable: false // 手动控制
     z: checked? 10 : 0 // 选中模式下弹到顶层
     // 信号
@@ -33,7 +34,7 @@ Button {
 
             // TODO: 图标
             Item {
-                width: size_.text*0.2 // 先占位
+                width: size_.line*0.2 // 先占位
                 height: btn.height // 适应整个按钮的高度
             }
 
@@ -92,7 +93,7 @@ Button {
         layer.effect: DropShadow {
             transparentBorder: true
             color: theme.coverColor3
-            samples: size_.hTabBarShadowHeight
+            samples: size_.hTabBarHeight
         }
 
         // 点击和拖拽处理

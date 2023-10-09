@@ -43,7 +43,7 @@ Rectangle {
         }
     }
 
-    width: size_.text * 20
+    width: size_.line * 20
     height: textTitle.height + textMsg.height+size_.spacing*2
     color: theme.themeColor1
     radius: size_.panelRadius
@@ -56,8 +56,8 @@ Rectangle {
             id: timerProgressBar
             anchors.top: parent.top
             anchors.right: parent.right
-            height: size_.smallText
-            width: size_.smallText*2
+            height: size_.smallLine
+            width: size_.smallLine*2
             color: theme.coverColor1
             highlightColor: theme.coverColor2
             radius: size_.btnRadius
@@ -83,16 +83,16 @@ Rectangle {
             anchors.top: parent.top
             anchors.left: parent.left
             color: theme.themeColor3
-            height: size_.text
-            width: size_.text
+            height: size_.line
+            width: size_.line
         }
         // 标题文字
         Text_ {
             id: textTitle
             anchors.top: parent.top
             anchors.left: iconComp.right
-            anchors.leftMargin: size_.text*0.5
-            height: size_.text
+            anchors.leftMargin: size_.line*0.5
+            height: size_.line
             verticalAlignment: Text.AlignVCenter // 垂直居中
         }
         // 内容文字

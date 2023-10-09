@@ -49,7 +49,7 @@ Rectangle {
 
     // ===========================================================
 
-    width: size_.text * 20
+    width: size_.line * 20
     height: childrenRect.height
     color: theme.bgColor
     radius: size_.panelRadius
@@ -66,8 +66,8 @@ Rectangle {
         }
         // 图标
         Rectangle {
-            width: size_.text*3
-            height: size_.text*3
+            width: size_.line*3
+            height: size_.line*3
             anchors.horizontalCenter: parent.horizontalCenter
             color: iconBgColor
             radius: 99999
@@ -93,7 +93,7 @@ Rectangle {
             id: textMsg
             anchors.left: parent.left
             anchors.right: parent.right
-            anchors.margins: size_.text
+            anchors.margins: size_.line
             wrapMode: TextEdit.Wrap // 尽量在单词边界处换行
             horizontalAlignment: Text.AlignHCenter // 水平居中
             visible: msg!==""
@@ -108,7 +108,7 @@ Rectangle {
         Rectangle {
             anchors.left: parent.left
             anchors.right: parent.right
-            height: size_.text*2+size_.spacing*2
+            height: size_.line*2+size_.spacing*2
             color: theme.coverColor1
         
             Row {

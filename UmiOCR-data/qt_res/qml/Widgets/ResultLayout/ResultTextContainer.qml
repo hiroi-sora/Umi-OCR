@@ -33,7 +33,7 @@ Item {
         anchors.right: parent.right
         anchors.leftMargin: size_.smallSpacing
         anchors.rightMargin: size_.smallSpacing
-        height: size_.smallText
+        height: size_.smallLine
 
         // 图片名称
         Text_ {

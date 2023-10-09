@@ -381,7 +381,7 @@ Item {
             // 顶部控制栏
             Item {
                 id: ctrlBar
-                height: size_.text*1.5
+                height: size_.line*1.5
                 anchors.left: parent.left
                 anchors.right: parent.right
 
@@ -522,7 +522,7 @@ Item {
                 text: title+"："
                 anchors.left: parent.left
                 anchors.leftMargin: size_.smallSpacing
-                height: size_.text+size_.smallSpacing*2
+                height: size_.line+size_.smallSpacing*2
                 verticalAlignment: Text.AlignVCenter
             }
             // 折叠按钮
@@ -533,7 +533,7 @@ Item {
                 anchors.rightMargin: size_.smallSpacing
                 anchors.verticalCenter: groupText.verticalCenter
                 height: groupText.height
-                textSize: size_.smallText
+                textSize: size_.smallLine
                 textColor_: theme.subTextColor
                 text_: fold ? qsTr("展开")+" 🔽" : qsTr("折叠")+" 🔼"
                 onClicked: {
@@ -808,8 +808,8 @@ Item {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.right: parent.right
                     anchors.margins: size_.smallSpacing
-                    height: size_.smallText
-                    width: size_.smallText
+                    height: size_.smallLine
+                    width: size_.smallLine
                     icon: "down"
                     color: theme.subTextColor
                 }
@@ -829,7 +829,7 @@ Item {
                 // 选项
                 delegate: ItemDelegate {
                     width: parent.width
-                    height: size_.text + size_.smallSpacing
+                    height: size_.line + size_.smallSpacing
                     Text {
                         text: modelData + (comboBox.currentIndex===index? " √":"")
                         anchors.left: parent.left

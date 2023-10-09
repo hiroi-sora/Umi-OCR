@@ -18,7 +18,7 @@ Button_ {
         CheckBox_ {
             id: checkBox
             anchors.verticalCenter: parent.verticalCenter
-            width: size_.text
+            width: size_.line
             checked: btn.checked
             enabledAnime: btn.enabledAnime
         }

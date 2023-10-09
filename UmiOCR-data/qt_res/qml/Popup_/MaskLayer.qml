@@ -36,7 +36,7 @@ Popup {
     closePolicy: Popup.NoAutoClose
     parent: Overlay.overlay
     anchors.centerIn: parent
-    property int maxWidth: parent.width - size_.text*10
+    property int maxWidth: parent.width - size_.line*10
     width: text.width + size_.spacing*2
     height: text.height + size_.spacing*2
     

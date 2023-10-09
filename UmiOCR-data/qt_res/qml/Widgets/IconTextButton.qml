@@ -16,8 +16,8 @@ Button_ {
         Icon_ {
             id: btnIcon
             icon: icon_
-            height: size_.text
-            width: size_.text
+            height: size_.line
+            width: size_.line
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
             anchors.leftMargin: size_.smallSpacing * 0.5

@@ -142,21 +142,21 @@ Item {
                 anchors.bottom: parent.bottom
                 hoverEnabled: true
                 cursorShape: Qt.PointingHandCursor
-                width: containsMouse ? size_.text * 2 : parent.width 
-                height: size_.text * (doubleColumn.hideLR===0 ? 6 : 4)
+                width: containsMouse ? size_.line * 2 : parent.width 
+                height: size_.line * (doubleColumn.hideLR===0 ? 6 : 4)
                 property int selectIndex: -1
                 onExited: selectIndex = -1
                 onPositionChanged: {
                     if(doubleColumn.hideLR===0) {
-                        if(mouse.y < size_.text * 2)
+                        if(mouse.y < size_.line * 2)
                             selectIndex = 1
-                        else if(mouse.y < size_.text * 4)
+                        else if(mouse.y < size_.line * 4)
                             selectIndex = 2
                         else
                             selectIndex = 0
                     }
                     else {
-                        if(mouse.y < size_.text * 2)
+                        if(mouse.y < size_.line * 2)
                             selectIndex = doubleColumn.hideLR===1 ? 2 : 1
                         else
                             selectIndex = 0
@@ -171,7 +171,7 @@ Item {
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
-                    width: size_.text * 2
+                    width: size_.line * 2
                     radius: size_.panelRadius
 
                     Column {

@@ -308,7 +308,7 @@ TabPage {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.margins: size_.spacing
-                height: size_.text * 2
+                height: size_.line * 2
                 clip: true
 
                 // 右边按钮
@@ -317,7 +317,7 @@ TabPage {
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
                     anchors.right: parent.right
-                    width: size_.text * 6
+                    width: size_.line * 6
                     bold_: true
 
                     bgColor_: theme.coverColor1
@@ -333,7 +333,7 @@ TabPage {
                     anchors.left: parent.left
                     anchors.right: runBtn.left
                     anchors.rightMargin: size_.smallSpacing
-                    height: size_.text * 1.3
+                    height: size_.line * 1.3
                     clip: true
 
                     Text_ {

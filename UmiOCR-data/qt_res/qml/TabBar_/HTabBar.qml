@@ -63,7 +63,7 @@ RowLayout  {
             let w = hTabBarMain.width
             if(!qmlapp.tab.barIsLock) w -= tabBarControl.width // 无锁定时，减去+按钮宽度
             w = w / barManager.model.count
-            tabWidth = Math.min(w, size_.hTabMaxWidth)
+            tabWidth = Math.min(w, size_.line * 8)
         }
         onWidthChanged: resetTabBtnWidth()  // 监听标签栏总宽度变化
         // 监听改变锁定，重设宽度
@@ -80,15 +80,15 @@ RowLayout  {
             }
         }
 
-        Rectangle { // 标签按钮下方的阴影
-            anchors.bottom: parent.bottom
-            width: parent.width
-            height: size_.hTabBarShadowHeight
-            gradient: Gradient {
-                GradientStop { position: 0.0; color: "#00000000" }
-                GradientStop { position: 1.0; color: theme.coverColor2 }
-            }
-        }
+        // Rectangle { // 标签按钮下方的阴影
+        //     anchors.bottom: parent.bottom
+        //     width: parent.width
+        //     height: size_.hTabBarHeight * 0.5
+        //     gradient: Gradient {
+        //         GradientStop { position: 0.0; color: "#00000000" }
+        //         GradientStop { position: 1.0; color: theme.coverColor2 }
+        //     }
+        // }
 
         Rectangle { // 拖拽时的位置指示器
             id: dragIndicator
@@ -116,7 +116,6 @@ RowLayout  {
                     checked: checked_ // 初始时是否选中
                     index: index_ // 初始位置
                     width: hTabBarMain.tabWidth
-                    height: size_.hTabBarHeight
                 }
 
                 // 事件：创建新标签时（与父类的槽同时生效）

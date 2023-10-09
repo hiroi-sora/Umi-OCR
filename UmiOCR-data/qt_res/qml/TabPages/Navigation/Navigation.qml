@@ -66,7 +66,7 @@ TabPage {
                     Text {
                         text: qsTr("功能页")
                         width: scrollView.width
-                        height: size_.text * 2.5
+                        height: size_.line * 2.5
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         color: theme.subTextColor
@@ -79,7 +79,7 @@ TabPage {
                         Button_ {
                             text_: title
                             width: scrollView.width
-                            height: size_.text * 2.5
+                            height: size_.line * 2.5
 
                             onHoveredChanged: {
                                 naviPage.introText = intro

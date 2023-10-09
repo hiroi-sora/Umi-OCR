@@ -284,7 +284,7 @@ Item {
         color: theme.bgColor
         border.width: 1
         border.color: theme.coverColor3
-        height: (hasTextBoxes && showTextBoxes) ? size_.smallText*5:0
+        height: (hasTextBoxes && showTextBoxes) ? size_.smallLine*5:0
 
         ScrollView {
             id: selectScrollView
@@ -315,7 +315,7 @@ Item {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         anchors.margins: size_.spacing
-        height: size_.text*1.5
+        height: size_.line*1.5
         clip: true
 
         // 左
@@ -327,7 +327,7 @@ Item {
             Button_ {
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
-                textSize: size_.smallText
+                textSize: size_.smallLine
                 text_: showTextBoxes ? qsTr("隐藏文本")+" 🔽" : qsTr("显示文本")+" 🔼"
                 onClicked: showTextBoxes = !showTextBoxes
                 visible: hasTextBoxes
@@ -391,7 +391,7 @@ Item {
                 horizontalAlignment: Text.AlignRight
                 text: (imageScale*100).toFixed(0) + "%"
                 color: theme.subTextColor
-                width: size_.text * 2.7
+                width: size_.line * 2.7
             }
         }
     }
