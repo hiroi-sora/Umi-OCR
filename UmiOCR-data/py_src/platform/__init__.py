@@ -3,7 +3,7 @@ import sys
 
 # 根据当前操作系统选择要导入的模块
 _plat = sys.platform
-if _plat.startswith("win"):
+if _plat.startswith("win32"):
     from .win32.win32_api import Api as _Platform
 elif _plat.startswith("linux"):
     raise ImportError("尚未支持linux系统！")

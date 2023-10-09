@@ -5,6 +5,7 @@ from PySide2.QtCore import Qt
 import os
 
 from . import pre_configs
+from ..platform import Platform
 
 _GLDict = {
     "AA_UseDesktopOpenGL": Qt.AA_UseDesktopOpenGL,
@@ -18,7 +19,7 @@ def initOpengl():
     global _Opt
     opt = getOpengl()
     if opt not in _GLDict:
-        opt = "AA_UseDesktopOpenGL"
+        opt = Platform.getOpenGLUse()
         setOpengl(opt)
     QGuiApplication.setAttribute(_GLDict[opt], True)
     _Opt = opt
@@ -29,7 +30,7 @@ def checkOpengl():
     if _Opt == "AA_UseOpenGLES":  # GLES需要检查，有些win7不支持
         if not QOpenGLContext.openGLModuleType() == QOpenGLContext.LibGLES:
             QGuiApplication.setAttribute(Qt.AA_UseOpenGLES, False)
-            _Opt = "AA_UseDesktopOpenGL"
+            _Opt = "AA_UseSoftwareOpenGL"  # 既然不支持opengl，那就软渲染吧
             setOpengl(_Opt)
             msg = "当前系统不支持OpenGLES，已禁用此渲染器。\n若本次运行中程序崩溃或报错，请重新启动程序。\n\n"
             msg += "The current system does not support OpenGLES and has disabled the program from using this renderer. \nIf there are crashes or errors during this run, please restarting the program."

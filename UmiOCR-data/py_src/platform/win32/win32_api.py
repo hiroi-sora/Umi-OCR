@@ -45,6 +45,19 @@ class Api:
     # 硬件控制。接口： shutdown hibernate
     HardwareCtrl = _HardwareCtrl()
 
+    # 根据系统及硬件，判断最适合的渲染器类型
+    @staticmethod
+    def getOpenGLUse():
+        import platform
+
+        # 判断系统版本，若 >win10 则使用 GLES ，否则使用软渲染
+        version = platform.version()
+        if "." in version:
+            ver = version.split(".")[0]
+            if ver.isdigit() and int(ver) >= 10:
+                return "AA_UseOpenGLES"
+        return "AA_UseSoftwareOpenGL"
+
     # 键值转键名
     @staticmethod
     def getKeyName(key):

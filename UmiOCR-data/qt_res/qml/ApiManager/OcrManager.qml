@@ -137,7 +137,6 @@ Item {
         for (var key in options) {
             const gOpt = options[key].global_options
             const lOpt = options[key].local_options
-            console.log("=== ", lOpt.title)
             globalOptions.api.optionsList.push([key, gOpt.title])
             globalOptions[key] = gOpt
             localOptions[key] = lOpt

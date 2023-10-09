@@ -94,10 +94,6 @@ Configs {
                 ],
                 "onChanged": (val)=>{
                     size_.scale = val
-                    console.log("== 软件大小", val)
-                    console.log("== 软件大小", typeof val)
-                    console.log("== 当前大小", size_.scale)
-                    
                 },
             },
         },
