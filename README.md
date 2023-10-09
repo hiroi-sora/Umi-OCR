@@ -237,5 +237,15 @@ Umi-OCR 允许通过命令行调用每一个标签页（模块）上的任意函
 
 ## 构建项目
 
+### clone
+
+强烈建议只 clone 主分支，因为某些分支含有体积很大的二进制库，会让你花费很长时间下载。
+
+```
+ git clone --branch main --single-branch git@github.com:hiroi-sora/Umi-OCR_v2.git
+```
+
+### 运行环境
+
 - [Windows](https://github.com/hiroi-sora/Umi-OCR_runtime_windows)
 - 跨平台的支持筹备中
