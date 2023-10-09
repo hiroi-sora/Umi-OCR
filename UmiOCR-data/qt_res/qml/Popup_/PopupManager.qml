@@ -61,7 +61,7 @@ Item {
 
     // ========================= 【内部】 =========================
 
-    MessageWin{ id: messageWin }
+    MessageBoxWin{ id: messageWin }
     MessageSimple { id: messageSimple }
     MaskLayer{ id: maskLayer }
 }

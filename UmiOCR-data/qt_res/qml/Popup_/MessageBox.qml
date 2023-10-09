@@ -19,7 +19,7 @@ Rectangle {
     property var onClosed: undefined // 关闭函数，外部传入
     property string type: "" // 可选：""默认， "warning"警告， "error"错误
     // 定制参数
-    property int shadowWidth: size_.spacing * 3 // 边缘阴影宽度
+    property int shadowWidth: qmlapp.enabledEffect ? size_.spacing*3 : 0 // 边缘阴影宽度
     property string icon: "bell" // 图标
     property color iconColor: theme.themeColor2 // 图标前景颜色
     property color iconBgColor: theme.coverColor1 // 图标背景颜色
@@ -52,7 +52,7 @@ Rectangle {
     width: size_.line * 20
     height: childrenRect.height
     color: theme.bgColor
-    radius: size_.panelRadius
+    radius: qmlapp.enabledEffect ? size_.panelRadius : 0
 
     // 列布局
     Column {
@@ -163,7 +163,7 @@ Rectangle {
     }
 
     // 边缘阴影
-    layer.enabled: qmlapp.enabledEffect && shadowWidth>0
+    layer.enabled: shadowWidth>0
     layer.effect: DropShadow {
         transparentBorder: true
         color: theme.coverColor4

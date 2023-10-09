@@ -41,6 +41,7 @@ Window {
 
     // 截图完毕，成功为true
     function ssEnd(okk) {
+        visible = false // 先隐藏窗口
         let argd = {}
         if(okk) { // 成功
             // 乘以屏幕缩放比

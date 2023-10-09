@@ -25,7 +25,7 @@ Rectangle {
     property int allTime: 1 // 总时间
     property int nowTime: 0 // 当前时间
     property int interval: 10 // 间隔刷新
-    property int shadowWidth: size_.spacing * 3 // 边缘阴影宽度
+    property int shadowWidth: qmlapp.enabledEffect ? size_.spacing*3 : 0 // 边缘阴影宽度
     Timer {
         id: timer
         interval: spMsg.interval // 间隔
@@ -46,7 +46,7 @@ Rectangle {
     width: size_.line * 20
     height: textTitle.height + textMsg.height+size_.spacing*2
     color: theme.themeColor1
-    radius: size_.panelRadius
+    radius: qmlapp.enabledEffect ? size_.panelRadius : 0
     // 内容组件
     Item {
         anchors.fill: parent
@@ -126,7 +126,7 @@ Rectangle {
         }
     }
     // 边缘阴影
-    layer.enabled: qmlapp.enabledEffect && shadowWidth>0
+    layer.enabled: shadowWidth>0
     layer.effect: DropShadow {
         transparentBorder: true
         color: theme.coverColor4
