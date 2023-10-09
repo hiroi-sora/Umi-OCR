@@ -16,6 +16,28 @@
 </p>
 
 <div align="center">
+  <h3>
+    <span> • </span>
+    <a href="#下载">
+      下载地址
+    </a>
+    <span> • </span>
+    <a href="#开发计划">
+      开发计划
+    </a>
+    <span> • </span>
+    <a href="#构建项目">
+      构建项目
+    </a>
+    <span> • </span>
+    <a href="https://github.com/hiroi-sora/Umi-OCR_v2/issues">
+      提交Bug
+    </a>
+  </h3>
+</div>
+<br>
+
+<div align="center">
   <strong>免费，开源，可批量的离线OCR软件</strong><br>
   <sub>适用于 Windows7 x64 及以上</sub>
 </div><br>
@@ -37,6 +59,10 @@
 #### v2.0.0 预览版本
 
 [Releases](https://github.com/hiroi-sora/Umi-OCR_v2/releases)
+
+#### v2 插件库
+
+[Umi-OCR_plugins](https://github.com/hiroi-sora/Umi-OCR_plugins)
 
 #### v1.3.6 稳定版本
 
@@ -150,7 +176,7 @@ Umi-OCR 允许通过命令行调用每一个标签页（模块）上的任意函
 
 - [PyStand](https://github.com/skywind3000/PyStand) 的定制版。
 
-## TODO List：
+## 开发计划
 
 ##### 基础开发计划
 
@@ -209,6 +235,7 @@ Umi-OCR 允许通过命令行调用每一个标签页（模块）上的任意函
 
 </details>
 
-## 构建项目：
+## 构建项目
 
-[项目开发指南](docs/项目开发指南.md)
+- [Windows](https://github.com/hiroi-sora/Umi-OCR_runtime_windows)
+- 跨平台的支持筹备中

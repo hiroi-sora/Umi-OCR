@@ -12,6 +12,7 @@
     "files.exclude": {
         "**/__pycache__": true,
         "**/.runtime": true,
+        "**/*.dll": true,
         // "**/**.exe": true
     },
     // 指定文件类型
