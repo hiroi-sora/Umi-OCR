@@ -178,14 +178,15 @@ TabPage {
         screenshotEnd: tabPage.screenshotEnd
     }
 
-    // 左控制栏
+    // 左侧栏。主区域左栏隐藏时，才显示左侧栏。
     Item {
         id: leftCtrlPanel
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.margins: size_.spacing
-        width: 32
+        width: doubleColumnLayout.hideLR===1 ? 32 : 0
+        visible: doubleColumnLayout.hideLR===1
 
         Column {
             anchors.top: parent.top
@@ -231,6 +232,7 @@ TabPage {
     }
     // 主区域：双栏面板
     DoubleColumnLayout {
+        id: doubleColumnLayout
         anchors.left: leftCtrlPanel.right
         anchors.top: parent.top
         anchors.bottom: parent.bottom
@@ -240,10 +242,48 @@ TabPage {
         // 左面板
         leftItem: Panel {
             anchors.fill: parent
+            // 顶部控制栏
+            Item  {
+                id: dLeftTop
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.topMargin: size_.smallSpacing
+                height: size_.line * 1.2
+                Row {
+                    anchors.fill: parent
+                    anchors.leftMargin: size_.spacing
+                    spacing: size_.spacing
 
+                    Button_ {
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        text_: qsTr("截图")
+                        onClicked: tabPage.screenshot()
+                    }
+                    Button_ {
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        text_: qsTr("粘贴")
+                        onClicked: tabPage.paste()
+                    }
+                    Button_ {
+                        visible: msnState==="run"
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        text_: qsTr("停止任务")
+                        textColor_: theme.noColor
+                        onClicked: tabPage.msnStop()
+                    }
+                }
+            }
+            // 图片预览区域
             ImageViewer {
                 id: imageViewer
-                anchors.fill: parent
+                anchors.top: dLeftTop.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
             }
         }
 

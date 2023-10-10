@@ -15,8 +15,11 @@ Item {
     property real hideWidth: 80 // 一个栏小于该值时隐藏
     property real initSplitterX: 0.5 // 分割线初始位置。>1时为像素，0~1为比例。
 
+    // 只读信息
+    property int hideLR: 0 // 0为不隐藏，1为隐藏左边，2为隐藏右边
+
     // ===============================================================
-    id: doubleColumnCon
+    id: doubleCC
     // 左右元素变化时，挂到容器下
     onLeftItemChanged: leftItem.parent = leftContainer
     onRightItemChanged: rightItem.parent = rightContainer
@@ -26,8 +29,7 @@ Item {
         anchors.fill: parent
         anchors.margins: size_.spacing
 
-        property alias hideWidth: doubleColumnCon.hideWidth
-        property int hideLR: 0 // 0为不隐藏，1为隐藏左边，2为隐藏右边
+        property alias hideWidth: doubleCC.hideWidth
         property alias splitterX: splitter.x // 分割线当前位置
         Component.onCompleted: { // 初始化分割线位置
             if(parent.initSplitterX <= 0)
@@ -38,26 +40,26 @@ Item {
 
         // 检查左右隐藏
         function toHide(isWidthChanged = false){
-            if(isWidthChanged && hideLR === 2) { // 总体宽度改变时右吸附
+            if(isWidthChanged && doubleCC.hideLR === 2) { // 总体宽度改变时右吸附
                 splitterX = width - splitter.width
                 return
             }
             if(splitterX+splitter.width > (width - hideWidth)){ // 隐藏右边
                 leftContainer.visible = true
                 rightContainer.visible = false
-                hideLR = 2
+                doubleCC.hideLR = 2
                 splitterX = width - splitter.width
             }
             else if(splitterX < hideWidth){ // 隐藏左边
                 leftContainer.visible = false
                 rightContainer.visible = true
-                hideLR = 1
+                doubleCC.hideLR = 1
                 splitterX = 0
             }
             else{
                 leftContainer.visible = true
                 rightContainer.visible = true
-                hideLR = 0
+                doubleCC.hideLR = 0
             }
 
         }
@@ -103,7 +105,7 @@ Item {
             width: size_.spacing
             x: 0 // 位置可变换
             z: 1
-            property bool isVisible: splitterMouseArea.containsMouse || btnsMouseArea.containsMouse || splitterMouseArea.drag.active || doubleColumn.hideLR!==0
+            property bool isVisible: splitterMouseArea.containsMouse || btnsMouseArea.containsMouse || splitterMouseArea.drag.active || doubleCC.hideLR!==0
 
             // 分割线 拖拽、悬停
             MouseArea {
@@ -143,11 +145,11 @@ Item {
                 hoverEnabled: true
                 cursorShape: Qt.PointingHandCursor
                 width: containsMouse ? size_.line * 2 : parent.width 
-                height: size_.line * (doubleColumn.hideLR===0 ? 6 : 4)
+                height: size_.line * (doubleCC.hideLR===0 ? 6 : 4)
                 property int selectIndex: -1
                 onExited: selectIndex = -1
                 onPositionChanged: {
-                    if(doubleColumn.hideLR===0) {
+                    if(doubleCC.hideLR===0) {
                         if(mouse.y < size_.line * 2)
                             selectIndex = 1
                         else if(mouse.y < size_.line * 4)
@@ -157,7 +159,7 @@ Item {
                     }
                     else {
                         if(mouse.y < size_.line * 2)
-                            selectIndex = doubleColumn.hideLR===1 ? 2 : 1
+                            selectIndex = doubleCC.hideLR===1 ? 2 : 1
                         else
                             selectIndex = 0
                     }
@@ -177,14 +179,14 @@ Item {
                     Column {
                         width: parent.width
                         Icon_ {
-                            visible: doubleColumn.hideLR!==1
+                            visible: doubleCC.hideLR!==1
                             width: parent.width
                             height: width
                             color: btnsMouseArea.selectIndex===1 ? theme.textColor:theme.themeColor3
                             icon: "arrow_to_left"
                         }
                         Icon_ {
-                            visible: doubleColumn.hideLR!==2
+                            visible: doubleCC.hideLR!==2
                             width: parent.width
                             height: width
                             color: btnsMouseArea.selectIndex===2 ? theme.textColor:theme.themeColor3
