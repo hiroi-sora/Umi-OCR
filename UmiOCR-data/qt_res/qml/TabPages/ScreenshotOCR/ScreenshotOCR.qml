@@ -150,11 +150,21 @@ TabPage {
 
     // 任务完成后发送通知
     function showSimple(res, resText, isCopy) {
+        // 获取弹窗类型
+        let simpleType = screenshotOcrConfigs.getValue("other.simpleNotificationType")
+        if(simpleType==="default") {
+            simpleType = qmlapp.globalConfigs.getValue("window.simpleNotificationType")
+        }
         const code = res.code
         const time = res.time.toFixed(2)
         let title = ""
         resText = resText.replace(/\n/g, " ") // 换行符替换空格
         if(code == 100) {
+            // 成功时，不发送内部弹窗
+            if(simpleType==="inside" || simpleType==="onlyInside") {
+                if(qmlapp.mainWin.getVisibility()) 
+                    return
+            }
             if(isCopy) title = qsTr("已复制到剪贴板")
             else title = qsTr("识图完成")
         }
@@ -166,7 +176,6 @@ TabPage {
             title = qsTr("识别失败")
         }
         title += `  -  ${time}s`
-        const simpleType = screenshotOcrConfigs.getValue("other.simpleNotificationType")
         qmlapp.popup.simple(title, resText, simpleType)
     }
 
