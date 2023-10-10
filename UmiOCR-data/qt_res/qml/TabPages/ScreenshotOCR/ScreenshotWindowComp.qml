@@ -133,6 +133,7 @@ Window {
         hoverEnabled: true
         acceptedButtons: Qt.LeftButton | Qt.RightButton // 捕获左右键
         cursorShape: Qt.CrossCursor // 十字光标
+        focus: true // 获取焦点
 
         // 按下
         onPressed: {
@@ -192,6 +193,10 @@ Window {
             if(mouseStatus == 1) {
                 ssEnd(true)
             }
+        }
+        // Esc 按下
+        Keys.onEscapePressed: {
+            ssEnd(false)
         }
     }
 }
