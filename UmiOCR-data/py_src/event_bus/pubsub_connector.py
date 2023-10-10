@@ -39,7 +39,7 @@ class PubSubConnector(QObject):
     def unsubscribe(self, title, item, funcName):
         fKey = title + funcName
         if fKey not in self.__funcDict:
-            print(f"[Error] qml取消订阅事件失败！fKey {fKey} 未在 __funcDict 中。")
+            print(f"[Warning] qml取消订阅事件失败！fKey {fKey} 未在 __funcDict 中。")
             return
         func = self.__funcDict[fKey]
         del self.__funcDict[fKey]
