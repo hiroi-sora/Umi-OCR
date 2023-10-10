@@ -15,13 +15,15 @@ dev-tools/i18n/*.xml
 UmiOCR-data/*
 !UmiOCR-data/main.py
 !UmiOCR-data/version.py
+!UmiOCR-data/test_run.bat
+!UmiOCR-data/test_speed.bat
 # 允许二级目录
 !UmiOCR-data/**/
 # 排除运行环境目录
 UmiOCR-data/site-packages*
 UmiOCR-data/runtime
 UmiOCR-data/lib
-UmiOCR-data/plugins/*
+UmiOCR-data/plugins/*/
 # 允许运行环境压缩包
 !UmiOCR-data/*.7z
 !UmiOCR-data/*.zip
