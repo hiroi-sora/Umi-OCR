@@ -77,15 +77,12 @@
 
 全新重构的v2预览版本已开放测试，[欢迎体验](https://github.com/hiroi-sora/Umi-OCR_v2)。
 
-#### v1.3.6
+#### v1.3.7
 
-使用v1稳定版本：
-
-Github下载：[Release v1.3.6](https://github.com/hiroi-sora/Umi-OCR/releases/tag/v1.3.6)
+Github下载：[Release v1.3.7](https://github.com/hiroi-sora/Umi-OCR/releases/tag/v1.3.7)
 
 蓝奏云下载：[https://hiroi-sora.lanzoul.com/s/umi-ocr](https://hiroi-sora.lanzoul.com/s/umi-ocr)
 
-> Umi-OCR 软件本体含 **简体中文&英文** 通用识别库。  
 > 配套 **多国语言识别扩展包** 可导入 `繁中,英,日,韩,俄,德,法` 识别库，请按需下载。
 
 #### 使用源代码
@@ -102,11 +99,11 @@ Github下载：[Release v1.3.6](https://github.com/hiroi-sora/Umi-OCR/releases/t
 
 </details>
 
-## 兼容性（Paddle引擎版本）
+## 兼容性（Paddle引擎）
 
-- 系统仅支持 Win10 x64 及以上版本。
+- 支持 Win7 x64 及以上系统。
 - CPU必须具有AVX指令集。（凌动、安腾、赛扬和奔腾处理器可能不兼容）
-- 若您的软硬件不符合以上条件，可使用 [Rapid引擎版本](https://github.com/hiroi-sora/Umi-OCR/tree/dev/rapid/1.3.4) 。
+- 若您的CPU不符合以上条件，请使用 [v2](https://github.com/hiroi-sora/Umi-OCR_v2) Rapid引擎版本。
 
 ## 前言
 
@@ -131,7 +128,7 @@ Github下载：[Release v1.3.6](https://github.com/hiroi-sora/Umi-OCR/releases/t
 
 ![](https://tupian.li/images/2022/09/29/1-w-.png)
 
-`v1.3.4` 还可以设置截图后生成一个预览窗口。预览窗口可以被钉在屏幕顶层，或调为半透明，方便对比查看。
+可以设置截图后生成一个预览窗口。预览窗口可以被钉在屏幕顶层，或调为半透明，方便对比查看。
 
 #### 粘贴图片到软件
 
@@ -249,7 +246,7 @@ OCR识别出的文本是按“块”划分的，通常一行文字分为一块�
 <details>
 <summary>展开</summary><BR>
 
-`v1.3.3` 后支持通过命令行调用Umi-OCR，执行部分识图任务。
+支持通过命令行调用Umi-OCR，执行部分识图任务。
 
 > 若软件未在运行，则命令行会启动软件并执行任务。若软件已在后台运行，则命令行会直接调用后台的软件执行任务。这样多次调用时可以节省初始化的时间。
 
@@ -572,6 +569,9 @@ OCR识别出的文本是按“块”划分的，通常一行文字分为一块�
 ## 更新日志
 
 点击版本号链接可前往对应备份分支。
+
+##### v1.3.7 `2023.10.10`
+- Paddle引擎兼容Win7 x64 。
 
 ##### [v1.3.6](https://github.com/hiroi-sora/Umi-OCR/tree/release/1.3.6) `2023.9.26`
 - 新功能：更强大的段落合并方案-`单行/多行自然段/多行代码段`。支持自动判断中/英文段落，采取对应的合并规则。
