@@ -119,10 +119,17 @@ Rectangle {
         onExited: {
             btnHoverBg.visible = false
         }
-        onClicked: {
+        function mouseClicked() {
             timer.stop() // 停止计时器
             if(typeof onHided === "function")
                 onHided() // 调用关闭函数
+        }
+        // 单击隐藏弹窗
+        onClicked: mouseClicked()
+        // 双击弹出主窗，隐藏弹窗
+        onDoubleClicked: {
+            qmlapp.mainWin.setVisibility(true) // 主窗可见
+            mouseClicked()
         }
     }
     // 边缘阴影
