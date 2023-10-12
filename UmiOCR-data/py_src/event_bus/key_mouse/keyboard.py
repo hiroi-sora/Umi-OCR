@@ -117,6 +117,8 @@ class __HotkeyController:
         self.__ttlDict = {}  # 存放当前已按下按键的超时时间
         self.__readRunningTitle = ""
         self.__readFinishTitle = ""
+        # 注册默认监听的热键
+        self.addHotkey("esc", "<<esc>>")
 
     # 第一次注册热键时，启动监听
     def __start(self):

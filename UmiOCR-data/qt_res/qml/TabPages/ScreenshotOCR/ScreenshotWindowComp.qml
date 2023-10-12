@@ -194,9 +194,5 @@ Window {
                 ssEnd(true)
             }
         }
-        // Esc 按下
-        Keys.onEscapePressed: {
-            ssEnd(false)
-        }
     }
 }

@@ -43,10 +43,31 @@ Item {
             const obj = ssWinComp.createObject(this, argd)
             winDict[g.imgID] = obj
         }
+        // 注册esc事件监听
+        qmlapp.pubSub.subscribeGroup("<<esc>>", this, "ssEsc", "ssEsc")
+    }
+
+    // Esc退出截图的回调
+    function ssEsc() {
+        if (Object.keys(winDict).length === 0) {
+            console.log("[Warning] 触发了ssEsc回调，但截图指示窗口为空！")
+            // 注销esc事件监听
+            qmlapp.pubSub.unsubscribeGroup("ssEsc")
+            return
+        }
+        const argd = {
+            clipX: -1, 
+            clipY: -1, 
+            clipW: -1, 
+            clipH: -1,
+        }
+        ssEnd(argd)
     }
 
     // 截图完毕的回调
     function ssEnd(argd) {
+        // 注销esc事件监听
+        qmlapp.pubSub.unsubscribeGroup("ssEsc")
         // 关闭所有覆盖窗口
         for (let key in winDict) {
             winDict[key].destroy()
