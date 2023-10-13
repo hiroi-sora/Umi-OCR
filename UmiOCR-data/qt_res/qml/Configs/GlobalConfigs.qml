@@ -54,8 +54,10 @@ Configs {
             "theme": {
                 "title": qsTr("主题"),
                 "optionsList": theme.manager.getOptionsList(), // 从全局主题管理器中取列表
-                "onChanged": (val)=>{
+                "onChanged": (val, old)=>{
                     theme.manager.switchTheme(val)
+                    if(old)
+                        qmlapp.popup.simple(qsTr("切换主题"), val)
                 },
             },
             "opengl": {

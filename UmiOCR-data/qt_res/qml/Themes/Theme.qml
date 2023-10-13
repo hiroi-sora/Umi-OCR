@@ -42,13 +42,15 @@ Item {
     ]
     // 主题名称，允许翻译
     property var titles: {
-        "Base Light": qsTr("珍珠白"),
-        "Base Dark": qsTr("云墨黑"),
+        "Default Light": qsTr("珍珠白"),
+        "Default Dark": qsTr("云墨黑"),
+        "Solarized Light": qsTr("舒适亮")+" (Solarized Light)",
+        "Solarized Dark": qsTr("舒适暗")+" (Solarized Dark)",
     }
     // 默认主题 / 当前读入的主题配置
     property var all: {
-        "Base Light": {
-            "themeTitle": titles["Base Light"],
+        "Default Light": {
+            "themeTitle": titles["Default Light"],
             "tabBarColor": "#F3F3F3",
             "bgColor": "#FFF",
             "textColor": "#000",
@@ -62,8 +64,8 @@ Item {
             "coverColor3": "#33000000",
             "coverColor4": "#55000000",
         },
-        "Base Dark": {
-            "themeTitle": titles["Base Dark"],
+        "Default Dark": {
+            "themeTitle": titles["Default Dark"],
             "tabBarColor": "#4A4A4A",
             "bgColor": "#444",
             "textColor": "#FFF",
