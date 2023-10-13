@@ -168,7 +168,7 @@ Item {
 
                 // 控制按钮 视觉
                 Rectangle {
-                    color: theme.themeColor2
+                    color: theme.specialBgColor
                     visible: (splitterMouseArea.containsMouse || btnsMouseArea.containsMouse) && !splitterMouseArea.drag.active
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.top: parent.top
@@ -182,21 +182,21 @@ Item {
                             visible: doubleCC.hideLR!==1
                             width: parent.width
                             height: width
-                            color: btnsMouseArea.selectIndex===1 ? theme.textColor:theme.themeColor3
+                            color: btnsMouseArea.selectIndex===1 ? theme.textColor:theme.specialTextColor
                             icon: "arrow_to_left"
                         }
                         Icon_ {
                             visible: doubleCC.hideLR!==2
                             width: parent.width
                             height: width
-                            color: btnsMouseArea.selectIndex===2 ? theme.textColor:theme.themeColor3
+                            color: btnsMouseArea.selectIndex===2 ? theme.textColor:theme.specialTextColor
                             icon: "arrow_to_left"
                             mirror: true
                         }
                         Icon_ {
                             width: parent.width
                             height: width
-                            color: btnsMouseArea.selectIndex===0 ? theme.textColor:theme.themeColor3
+                            color: btnsMouseArea.selectIndex===0 ? theme.textColor:theme.specialTextColor
                             icon: "arrow_to_center"
                         }
                     }

@@ -36,7 +36,7 @@ Window {
     // ========================= 【控制】 =========================
 
     // 全局样式，通过 theme 来访问
-    property Theme theme: ThemeLight{}
+    property Theme theme: Theme{}
     // 全局尺寸，通过 size_ 来访问
     property Size_ size_: Size_{}
 
@@ -52,14 +52,12 @@ Window {
         UtilsConnector { id:utilsConnector } // 通用连接器
 
         // 必须先初始化的单例，onCompleted顺序从下往上
-        MainWindowManager { id:mainWin; mainWin:mainWindowRoot } // 5. 主窗管理
-        SystemTray { id:systemTray } // 4. 系统托盘
-        PopupManager { id: popup }  // 3. 弹窗管理器
-        GlobalConfigs { id: globalConfigs }  // 2.全局设置
-        ThemeManager { id: themeManager } // 1. 主题管理器
+        MainWindowManager { id:mainWin; mainWin:mainWindowRoot } // 主窗管理
+        SystemTray { id:systemTray } // 系统托盘
+        PopupManager { id: popup }  // 弹窗管理器
+        GlobalConfigs { id: globalConfigs }  // 全局设置
 
         property alias globalConfigs: globalConfigs
-        property alias themeManager: themeManager
         property alias tab: tab
         property alias popup: popup
         property alias msnConnector: msnConnector

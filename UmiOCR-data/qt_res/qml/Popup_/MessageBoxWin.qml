@@ -46,7 +46,7 @@ Item {
             case "error":
                 return  theme.noColor
             default:
-                return theme.themeColor3
+                return theme.specialTextColor
         }
     }
 
@@ -97,7 +97,7 @@ Item {
                 msg: win.msg // 内容
                 type: win.type // 类型
                 btnsList: [ // 按钮列表
-                    {"text": qsTr("确定"), "textColor": theme.themeColor3, "bgColor": theme.themeColor1},
+                    {"text": qsTr("确定"), "textColor": theme.specialTextColor, "bgColor": theme.specialBgColor},
                 ]
                 onClosed: win.close // 关闭函数
             }
@@ -135,7 +135,7 @@ Item {
                 type: win.type // 类型
                 btnsList: [ // 按钮列表
                     // 确认
-                    {"text": yesText, "value": true, "textColor": messageRoot.getYesColor(win.type), "bgColor": theme.themeColor1},
+                    {"text": yesText, "value": true, "textColor": messageRoot.getYesColor(win.type), "bgColor": theme.specialBgColor},
                     // 取消
                     {"text": noText, "value": false, "textColor": theme.subTextColor, "bgColor": theme.bgColor},
                 ]
@@ -202,7 +202,7 @@ Item {
                 type: win.type // 类型
                 btnsList: [ // 按钮列表
                     // 确认
-                    {"text": yesTextTime, "value": true, "textColor": messageRoot.getYesColor(win.type), "bgColor": theme.themeColor1},
+                    {"text": yesTextTime, "value": true, "textColor": messageRoot.getYesColor(win.type), "bgColor": theme.specialBgColor},
                     // 取消
                     {"text": noText, "value": false, "textColor": theme.subTextColor, "bgColor": theme.bgColor},
                 ]
