@@ -6,32 +6,81 @@ import QtQuick 2.15
 
 Item {
     // 主题名称
-    property string themeTitle: "默认主题"
+    property string themeTitle: "Unknow theme"
 
     // ========================= 【颜色】 =========================
 
-    // 背景颜色
-    property color bgColor: "#FFF"
     // 主题颜色，不透明，由浅到深
-    property color themeColor1: "#FCF9BE" // 背景
-    property color themeColor2: "#FFDCA9" // 装饰性前景
-    property color themeColor3: "#C58940" // 文字
+    property color themeColor1 // 背景
+    property color themeColor2 // 装饰性前景
+    property color themeColor3 // 文字
     // 叠加层颜色，半透明，从浅到深
-    property color coverColor1: "#11000000" // 大部分需要突出的背景
-    property color coverColor2: "#22000000" // 按钮悬停
-    property color coverColor3: "#33000000" // 阴影
-    property color coverColor4: "#55000000" // 按钮按下
-    // 标签栏颜色
-    property color tabBarColor: "#F3F3F3"
-    // 主要文字颜色
-    property color textColor: "#000"
-    // 次要文字颜色
-    property color subTextColor: "#555"
-    // 以下警告色，不同主题都应该为红绿，但饱和度可以根据主题背景来微调
-    // 表示允许、成功的颜色
-    property color yesColor: "green"
-    // 表示禁止、失败的颜色
-    property color noColor: "red"
+    property color coverColor1 // 大部分需要突出的背景
+    property color coverColor2 // 按钮悬停
+    property color coverColor3 // 阴影
+    property color coverColor4 // 按钮按下
+
+    property color bgColor // 背景
+    property color tabBarColor // 标签栏
+    property color textColor // 主要文字
+    property color subTextColor // 次要文字
+    property color yesColor // 允许、成功
+    property color noColor // 禁止、失败
+
+    // 必要的键
+    property var keys: [
+        "themeTitle",
+        "themeColor1",
+        "themeColor2",
+        "themeColor3",
+        "coverColor1",
+        "coverColor2",
+        "coverColor3",
+        "coverColor4",
+        "bgColor",
+        "tabBarColor",
+        "textColor",
+        "subTextColor",
+        "yesColor",
+        "noColor",
+    ]
+    // 默认主题 / 当前读入的主题配置
+    property var all: {
+        "Light": {
+            "themeTitle": "明亮",
+            "bgColor": "#FFF",
+            "themeColor1": "#FCF9BE",
+            "themeColor2": "#FFDCA9",
+            "themeColor3": "#C58940",
+            "coverColor1": "#11000000",
+            "coverColor2": "#22000000",
+            "coverColor3": "#33000000",
+            "coverColor4": "#55000000",
+            "tabBarColor": "#F3F3F3",
+            "textColor": "#000",
+            "subTextColor": "#555",
+            "yesColor": "#00CC00",
+            "noColor": "#FF0000",
+        },
+        "Dark": {
+            "themeTitle": "黑暗",
+            "bgColor": "#444",
+            "themeColor1": "#005c99",
+            "themeColor2": "#009FFF",
+            "themeColor3": "#00BFFF",
+            "coverColor1": "#22FFFFFF",
+            "coverColor2": "#33FFFFFF",
+            "coverColor3": "#44FFFFFF",
+            "coverColor4": "#55FFFFFF",
+            "tabBarColor": "#4A4A4A",
+            "textColor": "#FFF",
+            "subTextColor": "#AAA",
+            "yesColor": "#6EFC39",
+            "noColor": "#FF2E2E",
+        },
+    }
+    // 主题控制器
+    property ThemeManager manager: ThemeManager{}
 
     // ========================= 【字体】 =========================
 
@@ -39,23 +88,4 @@ Item {
     property string fontFamily: "Microsoft YaHei"
     // 数据显示文字字体，内容不可控，用兼容性好的系统字体
     property string dataFontFamily: "Microsoft YaHei"
-
-    // ===========================================================
-    
-    Component.onCompleted: {
-        loadThemes()
-    }
-
-    // 加载主题
-    function loadThemes() {
-        let themesDict = qmlapp.utilsConnector.getThemes()
-        console.log("获取主题字典：", themesDict)
-        for(let k in themesDict) {
-            console.log(k)
-            for(let c in themesDict[k]) {
-                console.log(c ,": ",themesDict[k][c])
-            }
-        }
-    }
-    
 }

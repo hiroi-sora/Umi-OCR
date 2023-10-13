@@ -3,45 +3,96 @@
 // ================================================
 
 import QtQuick 2.15
+import ThemeConnector 1.0
 
 Item {
-    // 容纳主题组件
-    Item { 
+    // ==================== 【接口】 ====================
 
-        // =============== 所有主题列在下面 ===============
-        ThemeLight{}
-        ThemeDark{}
-        // ===============================================
-
-        id: themeComps
-        Component.onCompleted: init() // 初始化
+    // 初始化
+    function init() {
+        loadAll()
+        console.log("% 主题管理器初始化完毕！", this)
     }
 
-    // ========================= 【对外接口】 =========================
+    // 从配置文件中加载 theme.all
+    function loadAll() {
+        const tstr = tConn.loadThemeStr() // 文件读字符串
+        let f = strToAll(tstr) // 字符串写入all
+        if(!f) { // 写入失败，则初始化配置文件
+            console.log("% 初始化主题配置文件")
+            saveAll()
+        }
+    }
+
+    // 将 theme.all写入配置文件
+    function saveAll() {
+        const tstr = allToStr()
+        tConn.saveThemeStr(tstr)
+    }
 
     // 切换主题
-    function switchTheme(key){
-        if(themeDict.hasOwnProperty(key)) {
-            theme = themeDict[key]
+    function switchTheme(th) {
+        if(!theme.all.hasOwnProperty(th)) {
+            console.log("[Warning] 切换主题失败，theme.all 不存在主题", k)
+            return
+        }
+        const target = theme.all[th]
+        for(const k of theme.keys) {
+            theme[k] = target[k]
         }
     }
 
-    // ========================= 【内部】 =========================
-
-    // 主题字典和列表，自动加载
-    property var themeDict: {}
-    property var themeList: []
-    // 初始化两表
-    function init() {
-        themeDict = {}
-        themeList = []
-        // 遍历所有主题子组件
-        let tc = themeComps.children
-        for (let i = 0; i < tc.length; i++) {
-            let cname = tc[i].toString() // 取组件名称
-            cname = cname.substring(0, cname.indexOf("_")) // 取第一个下划线之前的内容
-            themeDict[cname] = tc[i]
-            themeList.push([cname, tc[i].themeTitle])
+    // 获取主题列表
+    function getOptionsList() {
+        let optList = []
+        for(let k in theme.all) {
+            optList.push([k, theme.all[k].themeTitle])
         }
+        return optList
     }
+
+    // =========================================================
+
+    // 连接器
+    ThemeConnector{id: tConn}
+
+    // 从json字符串加载主题配置，写入 theme.all 。返回是否成功
+    function strToAll(tstr) {
+        if(!tstr)
+            return false
+        try {
+            // 加载并检查主题字典
+            let all = JSON.parse(tstr)
+            for(let k in all) {
+                if(!checkThemeDict(all[k])) {
+                    console.log("[Warning] 加载单个主题失败：", k)
+                    delete all[k];
+                }
+            }
+            theme.all = all
+            return true
+        } catch (error) {
+            console.log("[Warning] 解析主题JSON字符串时出现异常:", error)
+        }
+        return false
+    }
+
+    // 将 theme.all 转为json字符串
+    function allToStr() {
+        return JSON.stringify(theme.all, null, "    ")
+    }
+
+    // 检测单个主题字典的合法性
+    function checkThemeDict(td) {
+        const tdKeys = Object.keys(td);
+        if (tdKeys.length !== theme.keys.length) {
+            return false // 长度不符
+        }
+        for (let k of theme.keys) {
+            if (!tdKeys.includes(k))
+                return false // 缺键
+        }
+        return true
+    }
+
 }

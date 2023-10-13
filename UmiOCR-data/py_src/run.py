@@ -28,6 +28,7 @@ def runQml():
     from .plugins_controller.plugins_connector import PluginsConnector  # 插件连接器
     from .utils.utils_connector import UtilsConnector  # 通用连接器
     from .utils.global_configs_connector import GlobalConfigsConnector  # 全局配置连接器
+    from .utils.theme_connector import ThemeConnector  # 主题连接器
     from .utils.image_provider import PixmapProvider  # 图片提供器
     from .utils.i18n import I18n  # 语言
     from .utils import app_opengl  # 渲染器
@@ -56,6 +57,7 @@ def runQml():
     qmlRegisterType(KeyMouseConnector, "KeyMouseConnector", 1, 0, "KeyMouseConnector")
     qmlRegisterType(UtilsConnector, "UtilsConnector", 1, 0, "UtilsConnector")
     qmlRegisterType(PluginsConnector, "PluginsConnector", 1, 0, "PluginsConnector")
+    qmlRegisterType(ThemeConnector, "ThemeConnector", 1, 0, "ThemeConnector")
     qmlRegisterType(
         GlobalConfigsConnector, "GlobalConfigsConnector", 1, 0, "GlobalConfigsConnector"
     )

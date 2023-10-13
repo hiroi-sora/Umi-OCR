@@ -53,9 +53,9 @@ Configs {
             "i18n": getI18n,
             "theme": {
                 "title": qsTr("主题"),
-                "optionsList": qmlapp.themeManager.themeList, // 从全局主题管理器中取列表
+                "optionsList": theme.manager.getOptionsList(), // 从全局主题管理器中取列表
                 "onChanged": (val)=>{
-                    qmlapp.themeManager.switchTheme(val)
+                    theme.manager.switchTheme(val)
                 },
             },
             "opengl": {
@@ -170,6 +170,8 @@ Configs {
     property bool isPortInit: false // 标记端口号是否初始化完毕
 
     Component.onCompleted: {
+        // 初始化主题
+        theme.manager.init()
         // 初始化插件
         let pluginInfos = pluginsConnector.init()
         // 初始化失败的插件

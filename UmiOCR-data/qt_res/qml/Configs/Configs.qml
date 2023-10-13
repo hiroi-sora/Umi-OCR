@@ -57,9 +57,10 @@ configDict: {
     "按钮组 buttons": {
         "title": ,
         "btnsList": [
-            {"text":"名称1", "onClicked":函数1, "textColor": 字体颜色}},
-            {"text":"名称2", "onClicked":函数2, "bgColor": 背景颜色}},
+            {"text":"名称1", "onClicked":函数1, "textColorKey": 字体颜色名}},
+            {"text":"名称2", "onClicked":函数2, "bgColorKey": 背景颜色名}},
         ],
+        // 颜色名 ColorKey 为 theme.keys 的值
     },
 
     通用配置元素：
@@ -945,8 +946,8 @@ Item {
                         text_: info.text
                         anchors.top: parent.top
                         anchors.bottom: parent.bottom
-                        bgColor_: info.bgColor?info.bgColor:theme.coverColor1
-                        textColor_: info.textColor?info.textColor:theme.textColor
+                        bgColor_: info.bgColorKey?theme[info.bgColorKey]:theme.coverColor1
+                        textColor_: info.textColorKey?theme[info.textColorKey]:theme.textColor
 
                         onClicked: {
                             info.onClicked()

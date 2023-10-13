@@ -17,9 +17,9 @@ Item {
         "btns": {
             "title": qsTr("操作"),
             "btnsList": [
-                {"text":qsTr("强制终止任务"), "onClicked": stopAllMissions, "textColor":theme.noColor},
+                {"text":qsTr("强制终止任务"), "onClicked": stopAllMissions, "textColorKey":"noColor"},
                 // {"text":qsTr("测试API"), "onClicked":()=>{}},
-                {"text":qsTr("应用修改"), "onClicked": applyConfigs, "textColor":theme.yesColor},
+                {"text":qsTr("应用修改"), "onClicked": applyConfigs, "textColorKey":"yesColor"},
             ],
         },
         "api": {
