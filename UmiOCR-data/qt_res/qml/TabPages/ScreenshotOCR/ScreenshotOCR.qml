@@ -28,7 +28,14 @@ TabPage {
 
     // 开始截图
     function screenshot() {
-        const grabList = tabPage.callPy("screenshot")
+        let wait = 0
+        if(screenshotOcrConfigs.getValue("action.hideWindow")){
+            if(qmlapp.mainWin.getVisibility()){
+                qmlapp.mainWin.setVisibility(false) // 隐藏主窗
+                wait = screenshotOcrConfigs.getValue("action.hideWindowTime")
+            }
+        }
+        const grabList = tabPage.callPy("screenshot", wait)
         ssWindowManager.create(grabList)
     }
 

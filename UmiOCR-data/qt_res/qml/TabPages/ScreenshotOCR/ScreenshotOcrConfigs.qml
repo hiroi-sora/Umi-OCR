@@ -34,16 +34,29 @@ Configs {
         },
 
         "action": {
-            "title": qsTr("识图完成后的操作"),
+            "title": qsTr("识图前后的操作"),
             "type": "group",
 
+            "hideWindow": {
+                "title": qsTr("隐藏主窗口"),
+                "toolTip": qsTr("截图前，如果主窗口处于前台，则隐藏主窗口\n将会延时等待主窗口关闭"),
+                "default": false,
+            },
+            "hideWindowTime": {
+                "title": qsTr("隐藏等待时间"),
+                "default": 0.2,
+                "min": 0,
+                "unit": qsTr("秒"),
+                "isInt": false,
+                "advanced": true,
+            },
             "copy": {
                 "title": qsTr("复制结果"),
                 "default": false,
             },
             "popMainWindow": {
                 "title": qsTr("弹出主窗口"),
-                "toolTip": qsTr("如果主窗口最小化或处于后台，则弹到前台"),
+                "toolTip": qsTr("识图后，如果主窗口最小化或处于后台，则弹到前台"),
                 "default": true,
             },
         },

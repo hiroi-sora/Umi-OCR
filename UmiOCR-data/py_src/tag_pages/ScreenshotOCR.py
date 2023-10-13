@@ -8,6 +8,7 @@ from ..mission.mission_ocr import MissionOCR  # 任务管理器
 from ..utils.utils import findImages
 
 from PySide2.QtGui import QGuiApplication, QClipboard, QImage, QPixmap  # 截图 剪贴板
+import time
 
 Clipboard = QClipboard()  # 剪贴板
 
@@ -22,8 +23,10 @@ class ScreenshotOCR(Page):
 
     # ========================= 【qml调用python】 =========================
 
-    # 开始截图，获取每个屏幕的完整截图，传给qml前端裁切
-    def screenshot(self):
+    # 开始截图，获取每个屏幕的完整截图，传给qml前端裁切。传入截图前的延时
+    def screenshot(self, wait=0):
+        if wait > 0:
+            time.sleep(wait)
         self.recentResult = None
         screensList = QGuiApplication.screens()
         grabList = []
