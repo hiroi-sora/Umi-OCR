@@ -45,7 +45,7 @@ Rectangle {
 
     width: size_.line * 20
     height: textTitle.height + textMsg.height+size_.spacing*2
-    color: theme.themeColor1
+    color: theme.specialBgColor
     radius: qmlapp.enabledEffect ? size_.panelRadius : 0
     // 内容组件
     Item {
@@ -82,7 +82,7 @@ Rectangle {
             id: iconComp
             anchors.top: parent.top
             anchors.left: parent.left
-            color: theme.themeColor3
+            color: theme.specialTextColor
             height: size_.line
             width: size_.line
         }

@@ -21,12 +21,12 @@ Rectangle {
     // 定制参数
     property int shadowWidth: qmlapp.enabledEffect ? size_.spacing*3 : 0 // 边缘阴影宽度
     property string icon: "bell" // 图标
-    property color iconColor: theme.themeColor2 // 图标前景颜色
+    property color iconColor: theme.specialTextColor // 图标前景颜色
     property color iconBgColor: theme.coverColor1 // 图标背景颜色
     property var btnsList: [ // 按钮列表
         // text 显示文本， value 点击返回的值， textColor 文本颜色， bgColor 背景颜色
         {"text":qsTr("取消"), "value": false, "textColor": theme.subTextColor, "bgColor": theme.bgColor},
-        {"text":qsTr("确定"), "value": true, "textColor": theme.themeColor3, "bgColor": theme.themeColor1},
+        {"text":qsTr("确定"), "value": true, "textColor": theme.specialTextColor, "bgColor": theme.specialBgColor},
     ]
     // 自动类型参数
     Component.onCompleted: {

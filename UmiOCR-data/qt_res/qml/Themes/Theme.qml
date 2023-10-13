@@ -10,74 +10,103 @@ Item {
 
     // ========================= 【颜色】 =========================
 
-    // 主题颜色，不透明，由浅到深
-    property color themeColor1 // 背景
-    property color themeColor2 // 装饰性前景
-    property color themeColor3 // 文字
+    property color tabBarColor // 标签栏
+    property color bgColor // 背景
+    property color textColor // 主要文字
+    property color subTextColor // 次要文字
+    property color yesColor // 允许、成功
+    property color noColor // 禁止、失败
+    property color specialBgColor // 特殊背景，弹窗确认按钮
+    property color specialTextColor // 特殊前景，文字、图标
     // 叠加层颜色，半透明，从浅到深
     property color coverColor1 // 大部分需要突出的背景
     property color coverColor2 // 按钮悬停
     property color coverColor3 // 阴影
     property color coverColor4 // 按钮按下
 
-    property color bgColor // 背景
-    property color tabBarColor // 标签栏
-    property color textColor // 主要文字
-    property color subTextColor // 次要文字
-    property color yesColor // 允许、成功
-    property color noColor // 禁止、失败
-
     // 必要的键
     property var keys: [
         "themeTitle",
-        "themeColor1",
-        "themeColor2",
-        "themeColor3",
-        "coverColor1",
-        "coverColor2",
-        "coverColor3",
-        "coverColor4",
-        "bgColor",
         "tabBarColor",
+        "bgColor",
         "textColor",
         "subTextColor",
         "yesColor",
         "noColor",
+        "specialBgColor",
+        "specialTextColor",
+        "coverColor1",
+        "coverColor2",
+        "coverColor3",
+        "coverColor4",
     ]
+    // 主题名称，允许翻译
+    property var titles: {
+        "Base Light": qsTr("珍珠白"),
+        "Base Dark": qsTr("云墨黑"),
+    }
     // 默认主题 / 当前读入的主题配置
     property var all: {
-        "Light": {
-            "themeTitle": "明亮",
-            "bgColor": "#FFF",
-            "themeColor1": "#FCF9BE",
-            "themeColor2": "#FFDCA9",
-            "themeColor3": "#C58940",
-            "coverColor1": "#11000000",
-            "coverColor2": "#22000000",
-            "coverColor3": "#33000000",
-            "coverColor4": "#55000000",
+        "Base Light": {
+            "themeTitle": titles["Base Light"],
             "tabBarColor": "#F3F3F3",
+            "bgColor": "#FFF",
             "textColor": "#000",
             "subTextColor": "#555",
             "yesColor": "#00CC00",
             "noColor": "#FF0000",
+            "specialBgColor": "#FCF9BE",
+            "specialTextColor": "#C58940",
+            "coverColor1": "#11000000",
+            "coverColor2": "#22000000",
+            "coverColor3": "#33000000",
+            "coverColor4": "#55000000",
         },
-        "Dark": {
-            "themeTitle": "黑暗",
-            "bgColor": "#444",
-            "themeColor1": "#005c99",
-            "themeColor2": "#009FFF",
-            "themeColor3": "#00BFFF",
-            "coverColor1": "#22FFFFFF",
-            "coverColor2": "#33FFFFFF",
-            "coverColor3": "#44FFFFFF",
-            "coverColor4": "#55FFFFFF",
+        "Base Dark": {
+            "themeTitle": titles["Base Dark"],
             "tabBarColor": "#4A4A4A",
+            "bgColor": "#444",
             "textColor": "#FFF",
             "subTextColor": "#AAA",
             "yesColor": "#6EFC39",
             "noColor": "#FF2E2E",
+            "specialBgColor": "#005c99",
+            "specialTextColor": "#00BFFF",
+            "coverColor1": "#22FFFFFF",
+            "coverColor2": "#33FFFFFF",
+            "coverColor3": "#44FFFFFF",
+            "coverColor4": "#55FFFFFF",
         },
+        "Solarized Light": {
+            "themeTitle": "Solarized Light",
+            "tabBarColor": "#d9d2c2",
+            "bgColor": "#fdf6e3",
+            "textColor": "#586e75",
+            "subTextColor": "#839496",
+            "yesColor": "#48985d",
+            "noColor": "#e51d09",
+            "specialBgColor": "#FCF9BE",
+            "specialTextColor": "#C58940",
+            "coverColor1": "#11000000",
+            "coverColor2": "#22000000",
+            "coverColor3": "#33000000",
+            "coverColor4": "#55000000"
+        },
+        "Solarized Dark": {
+            "themeTitle": "Solarized Dark",
+            "tabBarColor": "#004052",
+            "bgColor": "#002b36",
+            "textColor": "#93a1a1",
+            "subTextColor": "#657b83",
+            "yesColor": "#6EFC39",
+            "noColor": "#f14c4c",
+            "specialBgColor": "#00517D",
+            "specialTextColor": "#00BFFF",
+            "coverColor1": "#19FFFFFF",
+            "coverColor2": "#29FFFFFF",
+            "coverColor3": "#44FFFFFF",
+            "coverColor4": "#55FFFFFF"
+        }
     }
     // 主题控制器
     property ThemeManager manager: ThemeManager{}
