@@ -829,7 +829,7 @@ Item {
                 }
                 // 选项
                 delegate: ItemDelegate {
-                    width: parent.width
+                    width: comboBox.width
                     height: size_.line + size_.smallSpacing
                     Text {
                         text: modelData + (comboBox.currentIndex===index? " √":"")

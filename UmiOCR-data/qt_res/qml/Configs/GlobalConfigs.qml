@@ -60,27 +60,14 @@ Configs {
                         qmlapp.popup.simple(qsTr("切换主题"), val)
                 },
             },
-            "opengl": {
-                "title": qsTr("渲染器"),
-                "save": false,
-                "default": getOpengl(),
-                "optionsList": [
-                    ["AA_UseSoftwareOpenGL", qsTr("关闭硬件加速")],
-                    ["AA_UseDesktopOpenGL", "Desktop OpenGL"],
-                    ["AA_UseOpenGLES", "OpenGL ES"],
+            "fontBtn": {
+                "title": qsTr("界面字体"),
+                "btnsList": [
+                    {"text":qsTr("修改字体"), "onClicked": openFontPanel, "textColorKey":"specialTextColor"},
                 ],
-                "toolTip": qsTr("若出现界面闪烁、元素错位等界面异常，尝试切换渲染器或者关闭硬件加速"),
-                "onChanged": (opt, old)=>{
-                    old!==undefined && setOpengl(opt)
-                },
             },
-            "disableEffect": {
-                "title": qsTr("禁用美化效果"),
-                "default": false,
-                "toolTip": qsTr("在低配置机器上，禁用动画、阴影等效果可减少部分资源占用"),
-                "onChanged": (flag)=>{
-                    qmlapp.enabledEffect = !flag
-                },
+            "fontFamily": {
+                "default": "",
             },
             "scale": {
                 "title": qsTr("界面大小比例"),
@@ -96,6 +83,29 @@ Configs {
                 ],
                 "onChanged": (val)=>{
                     size_.scale = val
+                },
+            },
+            "opengl": {
+                "title": qsTr("渲染器"),
+                "save": false,
+                "default": getOpengl(),
+                "optionsList": [
+                    ["AA_UseSoftwareOpenGL", qsTr("关闭硬件加速")],
+                    ["AA_UseDesktopOpenGL", "Desktop OpenGL"],
+                    ["AA_UseOpenGLES", "OpenGL ES"],
+                ],
+                "toolTip": qsTr("若出现界面闪烁、元素错位等界面异常，尝试切换渲染器或者关闭硬件加速"),
+                "onChanged": (opt, old)=>{
+                    old!==undefined && setOpengl(opt)
+                },
+                "advanced": true,
+            },
+            "disableEffect": {
+                "title": qsTr("禁用美化效果"),
+                "default": false,
+                "toolTip": qsTr("在低配置机器上，禁用动画、阴影等效果可减少部分资源占用"),
+                "onChanged": (flag)=>{
+                    qmlapp.enabledEffect = !flag
                 },
             },
         },
@@ -170,6 +180,7 @@ Configs {
     property alias ocrManager: ocrManager
     property alias utilsDicts: utilsDicts
     property bool isPortInit: false // 标记端口号是否初始化完毕
+    property var fontPanel: undefined // 缓存字体控制面板组件引用
 
     Component.onCompleted: {
         // 初始化主题
@@ -304,5 +315,12 @@ Configs {
             "TabViewManager": qmlapp.tab,
         }
         globalConfigConn.setQmlToCmd(moduleDict)
+    }
+
+    // 打开字体控制板
+    function openFontPanel() {
+        if(fontPanel) {
+            fontPanel.visible = true
+        }
     }
 }

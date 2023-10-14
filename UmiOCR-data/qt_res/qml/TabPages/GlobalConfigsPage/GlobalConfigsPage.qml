@@ -7,9 +7,12 @@ import QtQuick.Controls 2.15
 
 import ".."
 import "../../Widgets"
+import "../../Themes"
 
 TabPage {
     id: tabPage
+
+    // 设置面板
     Panel {
         anchors.fill: parent
         anchors.margins: size_.spacing
@@ -22,5 +25,11 @@ TabPage {
                 qmlapp.globalConfigs.panelComponent.parent = this
             }
         }
+    }
+
+    // 字体设置面板
+    FontPanel {
+        anchors.fill: parent
+        z: 10
     }
 }

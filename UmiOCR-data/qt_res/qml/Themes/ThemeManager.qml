@@ -10,7 +10,7 @@ Item {
 
     // 初始化
     function init() {
-        loadAll()
+        loadAll() // 加载主题
         console.log("% 主题管理器初始化完毕！", this)
     }
 
