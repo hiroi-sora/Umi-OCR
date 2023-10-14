@@ -42,12 +42,15 @@ TabPage {
     // 截图完毕
     function screenshotEnd(argd) {
         const x = argd["clipX"], y = argd["clipY"], w = argd["clipW"], h = argd["clipH"]
-        if(x < 0 || y < 0 || w <= 0 || h <= 0) // 裁切区域无实际像素
+        if(x < 0 || y < 0 || w <= 0 || h <= 0) { // 裁切区域无实际像素
+            popMainWindow()
             return
+        }
         const configDict = screenshotOcrConfigs.getConfigValueDict()
         const clipID = tabPage.callPy("screenshotEnd", argd, configDict)
         if(clipID.startsWith("[Error]")) {
             qmlapp.popup.message(qsTr("截图裁切异常"), clipID, "error")
+            popMainWindow()
             return
         }
         qmlapp.tab.showTabPageObj(tabPage) // 切换标签页
@@ -102,6 +105,13 @@ TabPage {
         }
     }
 
+    // 弹出主窗口
+    function popMainWindow() {
+        // 等一回合再弹，防止与收回截图窗口相冲突
+        if(screenshotOcrConfigs.getValue("action.popMainWindow"))
+            Qt.callLater(()=>qmlapp.mainWin.setVisibility(true))
+    }
+
     // ========================= 【事件管理】 =========================
 
     Component.onCompleted: {
@@ -141,16 +151,14 @@ TabPage {
         // 若tabPanel面板的下标没有变化过，则切换到记录页
         if(tabPanel.indexChangeNum < 2)
             tabPanel.currentIndex = 1
-        // 完成后的动作
-        const popMainWindow = screenshotOcrConfigs.getValue("action.popMainWindow")
-        const copy = screenshotOcrConfigs.getValue("action.copy")
         // 复制到剪贴板
+        const copy = screenshotOcrConfigs.getValue("action.copy")
         if(copy && resText!="") 
             qmlapp.utilsConnector.copyText(resText)
         // 弹出通知
         showSimple(res, resText, copy)
         // 升起主窗口
-        if(popMainWindow) qmlapp.mainWin.setVisibility(true)
+        popMainWindow()
     }
 
     // ========================= 【后处理】 =========================

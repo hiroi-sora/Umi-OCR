@@ -137,6 +137,9 @@ Window {
 
         // 按下
         onPressed: {
+            if (mouse.button === Qt.RightButton) {
+                return
+            }
             if(mouseStatus == 0) {
                 mouseStatus = 1
                 win.mouseX = mouse.x
@@ -190,6 +193,10 @@ Window {
         }
         // 松开
         onReleased: {
+            if (mouse.button === Qt.RightButton) {
+                ssEnd(false)
+                return
+            }
             if(mouseStatus == 1) {
                 ssEnd(true)
             }
