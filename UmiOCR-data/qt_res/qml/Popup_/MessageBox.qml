@@ -21,8 +21,8 @@ Rectangle {
     // 定制参数
     property int shadowWidth: qmlapp.enabledEffect ? size_.spacing*3 : 0 // 边缘阴影宽度
     property string icon: "bell" // 图标
-    property color iconColor: theme.specialTextColor // 图标前景颜色
-    property color iconBgColor: theme.coverColor1 // 图标背景颜色
+    property string iconColorKey: "specialTextColor" // 图标前景颜色
+    property string iconBgColorKey: "coverColor1" // 图标背景颜色
     property var btnsList: [ // 按钮列表
         // text 显示文本， value 点击返回的值， textColor 文本颜色， bgColor 背景颜色
         {"text":qsTr("取消"), "value": false, "textColor": theme.subTextColor, "bgColor": theme.bgColor},
@@ -33,13 +33,13 @@ Rectangle {
         switch(type) {
             case "warning":
                 icon = "warning"
-                iconColor = theme.noColor
+                iconColorKey = "noColor"
                 if(title==="")
                     title=qsTr("警告")
                 break
             case "error":
                 icon = "no"
-                iconColor = theme.noColor
+                iconColorKey = "noColor"
                 if(title==="")
                     title=qsTr("发生了一点小问题")
                 break
@@ -69,14 +69,14 @@ Rectangle {
             width: size_.line*3
             height: size_.line*3
             anchors.horizontalCenter: parent.horizontalCenter
-            color: iconBgColor
+            color: theme[iconBgColorKey]
             radius: 99999
 
             Icon_ {
                 width: parent.height*0.6
                 height: parent.height*0.6
                 anchors.centerIn: parent
-                color: iconColor
+                color: theme[iconColorKey]
                 icon: msgRoot.icon
             }
         }
