@@ -61,12 +61,20 @@ Configs {
                 },
             },
             "fontBtn": {
-                "title": qsTr("界面字体"),
+                "title": qsTr("字体"),
                 "btnsList": [
-                    {"text":qsTr("修改字体"), "onClicked": openFontPanel, "textColorKey":"specialTextColor"},
+                    {
+                        "text":qsTr("修改字体"),
+                        "onClicked": openFontPanel,
+                        "bgColorKey":"specialBgColor",
+                        "textColorKey":"specialTextColor",
+                    },
                 ],
             },
             "fontFamily": {
+                "default": "",
+            },
+            "dataFontFamily": {
                 "default": "",
             },
             "scale": {

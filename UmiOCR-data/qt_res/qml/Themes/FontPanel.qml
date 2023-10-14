@@ -8,34 +8,38 @@ import QtQuick.Controls 2.15
 import "../Widgets"
 
 Rectangle {
-    id: fontPanelRoot
-    visible: false
+    id: fRoot
+    // visible: false
     color: theme.coverColor4
     property var fontsList: []
+    
+    // 主要UI文字字体，内容可控，可以用裁切的ttf
+    property string fontFamily: ""
+    // 数据显示文字字体，内容不可控，用兼容性好的系统字体
+    property string dataFontFamily: ""
+    // 不可加载的字体
+    property var illegalFonts: ["", "Terminal", "System", "Small Fonts", "Script", "Roman", "MS Serif", "MS Sans Serif", "Modern", "Fixedsys"]
     
     Component.onCompleted: {
         // 将此组件的引用传入全局设置
         qmlapp.globalConfigs.fontPanel = this
+        fontFamily = qmlapp.globalConfigs.getValue("ui.fontFamily")
+        dataFontFamily = qmlapp.globalConfigs.getValue("ui.dataFontFamily")
     }
     
     MouseArea {
         anchors.fill: parent
         onWheel: {} // 拦截滚轮事件
         hoverEnabled: true // 拦截悬停事件
-        onClicked: fontPanelRoot.visible = false // 单击关闭面板
+        onClicked: fRoot.visible = false // 单击关闭面板
     }
 
-    // 动态加载
-    property bool load: true
-    onVisibleChanged: {
-        if (load && visible) {
-            load = false
-            Qt.callLater(()=>{
-                panelLoader.sourceComponent = com
-            })
-        }
+    Loader {
+        id: panelLoader
+        asynchronous: true
+        sourceComponent: com
+        active: fRoot.visible
     }
-    Loader { id: panelLoader }
     Component {
         id: com
         Panel {
@@ -47,12 +51,25 @@ Rectangle {
                 })
                 // 补充剩余字体
                 for(let i in fList) {
+                    if(illegalFonts.includes(fList[i]))
+                        continue
                     if(!newList.includes(fList[i]))
                         newList.push(fList[i])
                 }
-                fontPanelRoot.fontsList = newList
+                // 将当前选中的移到最前面
+                const i1 = newList.indexOf(dataFontFamily)
+                if (i1 > -1) {
+                    newList.splice(i1, 1)
+                    newList.unshift(dataFontFamily)
+                }
+                const i2 = newList.indexOf(fontFamily)
+                if (i2 > -1 && i2 !== i1) {
+                    newList.splice(i2, 1)
+                    newList.unshift(fontFamily)
+                }
+                fRoot.fontsList = newList
             }
-            parent: fontPanelRoot
+            parent: fRoot
             anchors.fill: parent
             anchors.margins: size_.line * 2
             color: theme.bgColor
@@ -66,14 +83,52 @@ Rectangle {
                 initSplitterX: 0.5
                 leftItem: Panel {
                     anchors.fill: parent
+
+                    Row {
+                        id: leftTop
+                        anchors.top: parent.top
+                        anchors.right: parent.right
+                        anchors.margins: size_.spacing
+                        spacing: size_.spacing
+                        height: size_.line * 2
+
+                        Text_ {
+                            anchors.top: parent.top
+                            anchors.bottom: parent.bottom
+                            text: qsTr("将字体设置为：")
+                        }
+                        Text_ {
+                            anchors.top: parent.top
+                            anchors.bottom: parent.bottom
+                            width: size_.line * 3
+                            text: qsTr("界面")
+                        }
+                        Text_ {
+                            anchors.top: parent.top
+                            anchors.bottom: parent.bottom
+                            width: size_.line * 3
+                            text: qsTr("内容")
+                        }
+                    }
                     
                     Panel {
-                        anchors.fill: parent
+                        anchors.top: leftTop.bottom
+                        anchors.bottom: parent.bottom
+                        anchors.left: parent.left
+                        anchors.right: parent.right
                         anchors.margins: size_.spacing
+                        anchors.topMargin: 0
                         color: theme.bgColor
 
+                        Text_{
+                            anchors.centerIn: parent
+                            visible: panelLoader.status != Loader.Ready
+                            text: qsTr("加载字体中……")
+                        }
+
                         ScrollView {
-                            id: scrollView
+                            id: leftScroll
+                            visible: panelLoader.status == Loader.Ready
                             anchors.fill: parent
                             anchors.margins: size_.spacing
                             clip: true
@@ -83,10 +138,10 @@ Rectangle {
                                 spacing: size_.smallSpacing
 
                                 Repeater {
-                                    model: fontPanelRoot.fontsList
+                                    model: fRoot.fontsList
                                     Rectangle {
                                         height: size_.line * 2
-                                        width: scrollView.width
+                                        width: leftScroll.width
                                         color: fontMouseArea.containsMouse?theme.coverColor2:"#00000000"
 
                                         Text_ {
@@ -94,12 +149,42 @@ Rectangle {
                                             anchors.fill: parent
                                             anchors.leftMargin: size_.spacing
                                             verticalAlignment: Text.AlignVCenter
-                                            font.family: modelData
+                                            // font.family: modelData
+                                            font.family: index < 50 ? modelData : theme.fontFamily
                                         }
                                         MouseArea {
                                             id: fontMouseArea
                                             anchors.fill: parent
                                             hoverEnabled: true
+                                        }
+                                        IconButton {
+                                            id: btn2
+                                            anchors.top: parent.top
+                                            anchors.bottom: parent.bottom
+                                            anchors.right: parent.right
+                                            anchors.margins: size_.smallSpacing
+                                            color: theme.specialTextColor
+                                            bgColor_: theme.specialBgColor
+                                            width: size_.line * 3
+                                            borderWidth: 1
+                                            borderColor: theme.specialTextColor
+                                            icon_: fontFamily===modelData?"yes":""
+                                            onClicked: fontFamily=modelData
+                                        }
+                                        IconButton {
+                                            id: btn1
+                                            anchors.top: parent.top
+                                            anchors.bottom: parent.bottom
+                                            anchors.right: btn2.left
+                                            anchors.margins: size_.smallSpacing
+                                            anchors.rightMargin: size_.spacing
+                                            color: theme.specialTextColor
+                                            bgColor_: theme.specialBgColor
+                                            width: size_.line * 3
+                                            borderWidth: 1
+                                            borderColor: theme.specialTextColor
+                                            icon_: dataFontFamily===modelData?"yes":""
+                                            onClicked:  dataFontFamily=modelData
                                         }
                                     }
                                 }
