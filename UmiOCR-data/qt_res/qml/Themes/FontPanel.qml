@@ -9,7 +9,7 @@ import "../Widgets"
 
 Rectangle {
     id: fRoot
-    // visible: false
+    visible: false
     color: theme.coverColor4
     property var fontsList: []
     
@@ -20,6 +20,15 @@ Rectangle {
     // 不可加载的字体
     property var illegalFonts: ["", "Terminal", "System", "Small Fonts", "Script", "Roman", "MS Serif", "MS Sans Serif", "Modern", "Fixedsys"]
     
+    function setFontFamily(f) {
+        fontFamily = f
+        qmlapp.globalConfigs.setValue("ui.fontFamily", f)
+    }
+    function setDataFontFamily(f) {
+        dataFontFamily = f
+        qmlapp.globalConfigs.setValue("ui.dataFontFamily", f)
+    }
+
     Component.onCompleted: {
         // 将此组件的引用传入全局设置
         qmlapp.globalConfigs.fontPanel = this
@@ -32,6 +41,7 @@ Rectangle {
         onWheel: {} // 拦截滚轮事件
         hoverEnabled: true // 拦截悬停事件
         onClicked: fRoot.visible = false // 单击关闭面板
+        cursorShape: Qt.PointingHandCursor
     }
 
     Loader {
@@ -83,31 +93,53 @@ Rectangle {
                 initSplitterX: 0.5
                 leftItem: Panel {
                     anchors.fill: parent
+                    clip: true
+
+                    Button_ {
+                        anchors.left: parent.left
+                        anchors.verticalCenter: leftTop.verticalCenter
+                        anchors.margins: size_.spacing
+                        width: size_.line * 4 
+                        height: size_.line * 1.5
+                        z: 10
+                        bgColor_: theme.bgColor
+                        bgHoverColor_: theme.coverColor3
+                        text_: qsTr("返回")
+                        onClicked: { fRoot.visible=false }
+                    }
 
                     Row {
                         id: leftTop
                         anchors.top: parent.top
                         anchors.right: parent.right
                         anchors.margins: size_.spacing
+                        anchors.topMargin: 0
+                        anchors.rightMargin: size_.spacing * 3
                         spacing: size_.spacing
                         height: size_.line * 2
 
+                        // Text_ {
+                        //     anchors.top: parent.top
+                        //     anchors.bottom: parent.bottom
+                        //     verticalAlignment: Text.AlignVCenter
+                        //     text: qsTr("设置为：")
+                        // }
                         Text_ {
                             anchors.top: parent.top
                             anchors.bottom: parent.bottom
-                            text: qsTr("将字体设置为：")
-                        }
-                        Text_ {
-                            anchors.top: parent.top
-                            anchors.bottom: parent.bottom
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignHCenter
                             width: size_.line * 3
                             text: qsTr("界面")
                         }
                         Text_ {
                             anchors.top: parent.top
                             anchors.bottom: parent.bottom
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignHCenter
                             width: size_.line * 3
                             text: qsTr("内容")
+                            font.family: theme.dataFontFamily
                         }
                     }
                     
@@ -120,73 +152,67 @@ Rectangle {
                         anchors.topMargin: 0
                         color: theme.bgColor
 
-                        Text_{
-                            anchors.centerIn: parent
-                            visible: panelLoader.status != Loader.Ready
-                            text: qsTr("加载字体中……")
-                        }
-
-                        ScrollView {
-                            id: leftScroll
-                            visible: panelLoader.status == Loader.Ready
+                        TableView {
+                            id: leftTable
                             anchors.fill: parent
                             anchors.margins: size_.spacing
                             clip: true
+                            model: fRoot.fontsList
+                            contentWidth: width // 内容宽度
+                            rowSpacing: size_.spacing // 行间隔
+                            flickableDirection: Flickable.VerticalFlick // 只允许垂直滚动
+                            columnWidthProvider: ()=>leftTable.width
 
-                            Column {
-                                anchors.fill: parent
-                                spacing: size_.smallSpacing
+                            delegate: Rectangle {
+                                height: size_.line * 2
+                                implicitHeight: height
+                                width: leftTable.width
+                                color: fontMouseArea.containsMouse?theme.coverColor2:"#00000000"
 
-                                Repeater {
-                                    model: fRoot.fontsList
-                                    Rectangle {
-                                        height: size_.line * 2
-                                        width: leftScroll.width
-                                        color: fontMouseArea.containsMouse?theme.coverColor2:"#00000000"
-
-                                        Text_ {
-                                            text: modelData
-                                            anchors.fill: parent
-                                            anchors.leftMargin: size_.spacing
-                                            verticalAlignment: Text.AlignVCenter
-                                            // font.family: modelData
-                                            font.family: index < 50 ? modelData : theme.fontFamily
-                                        }
-                                        MouseArea {
-                                            id: fontMouseArea
-                                            anchors.fill: parent
-                                            hoverEnabled: true
-                                        }
-                                        IconButton {
-                                            id: btn2
-                                            anchors.top: parent.top
-                                            anchors.bottom: parent.bottom
-                                            anchors.right: parent.right
-                                            anchors.margins: size_.smallSpacing
-                                            color: theme.specialTextColor
-                                            bgColor_: theme.specialBgColor
-                                            width: size_.line * 3
-                                            borderWidth: 1
-                                            borderColor: theme.specialTextColor
-                                            icon_: fontFamily===modelData?"yes":""
-                                            onClicked: fontFamily=modelData
-                                        }
-                                        IconButton {
-                                            id: btn1
-                                            anchors.top: parent.top
-                                            anchors.bottom: parent.bottom
-                                            anchors.right: btn2.left
-                                            anchors.margins: size_.smallSpacing
-                                            anchors.rightMargin: size_.spacing
-                                            color: theme.specialTextColor
-                                            bgColor_: theme.specialBgColor
-                                            width: size_.line * 3
-                                            borderWidth: 1
-                                            borderColor: theme.specialTextColor
-                                            icon_: dataFontFamily===modelData?"yes":""
-                                            onClicked:  dataFontFamily=modelData
-                                        }
-                                    }
+                                Text_ {
+                                    text: modelData
+                                    anchors.fill: parent
+                                    anchors.leftMargin: size_.spacing
+                                    verticalAlignment: Text.AlignVCenter
+                                    font.family: modelData
+                                }
+                                MouseArea {
+                                    id: fontMouseArea
+                                    anchors.fill: parent
+                                    hoverEnabled: true
+                                }
+                                // 右边，内容字体
+                                IconButton {
+                                    id: btn2
+                                    anchors.top: parent.top
+                                    anchors.bottom: parent.bottom
+                                    anchors.right: parent.right
+                                    anchors.margins: size_.smallSpacing
+                                    color: theme.yesColor
+                                    bgColor_: theme.coverColor1
+                                    width: size_.line * 3
+                                    borderWidth: 1
+                                    borderColor: theme.specialTextColor
+                                    bgHoverColor_: theme.coverColor3
+                                    icon_: dataFontFamily===modelData?"yes":""
+                                    onClicked: setDataFontFamily(modelData)
+                                }
+                                // 左边，界面字体
+                                IconButton {
+                                    id: btn1
+                                    anchors.top: parent.top
+                                    anchors.bottom: parent.bottom
+                                    anchors.right: btn2.left
+                                    anchors.margins: size_.smallSpacing
+                                    anchors.rightMargin: size_.spacing
+                                    color: theme.yesColor
+                                    bgColor_: theme.coverColor1
+                                    width: size_.line * 3
+                                    borderWidth: 1
+                                    borderColor: theme.specialTextColor
+                                    bgHoverColor_: theme.coverColor3
+                                    icon_: fontFamily===modelData?"yes":""
+                                    onClicked: setFontFamily(modelData)
                                 }
                             }
                         }
@@ -195,8 +221,31 @@ Rectangle {
                 rightItem: Panel {
                     anchors.fill: parent
 
-                    Text_ {
-                        text: "切换字体功能，开发中…………"
+                    Item {
+                        anchors.fill: parent
+                        anchors.margins: size_.spacing * 3
+
+                        Column {
+                            anchors.fill: parent
+                            spacing: size_.line
+
+                            Text_ {
+                                anchors.left: parent.left
+                                anchors.right: parent.right
+                                wrapMode: Text.Wrap
+                                font.family: fontFamily
+                                text: qsTr("界面字体：\n软件中大部分UI的字体。")
+                            }
+
+                            Text_ {
+                                anchors.left: parent.left
+                                anchors.right: parent.right
+                                wrapMode: Text.Wrap
+                                font.family: dataFontFamily
+                                text: qsTr("内容字体：\n识别结果内容的字体。")
+                            }
+
+                        }
                     }
                 }
             }

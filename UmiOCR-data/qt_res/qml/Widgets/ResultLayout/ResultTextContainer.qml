@@ -43,6 +43,7 @@ Item {
             anchors.rightMargin: size_.spacing
             color: theme.subTextColor
             font.pixelSize: size_.smallText
+            font.family: theme.dataFontFamily
             clip: true
             elide: Text.ElideLeft
         }
@@ -79,7 +80,7 @@ Item {
             selectByKeyboard: true // 允许键盘选择文本
             color: status_==="error"? theme.noColor:theme.textColor
             font.pixelSize: size_.text
-            font.family: theme.fontFamily
+            font.family: theme.dataFontFamily
         }
     }
 }

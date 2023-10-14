@@ -66,16 +66,17 @@ Configs {
                     {
                         "text":qsTr("修改字体"),
                         "onClicked": openFontPanel,
-                        "bgColorKey":"specialBgColor",
                         "textColorKey":"specialTextColor",
                     },
                 ],
             },
             "fontFamily": {
-                "default": "",
+                "default": "Microsoft YaHei",
+                "onChanged": (val)=>{ theme.fontFamily = val },
             },
             "dataFontFamily": {
-                "default": "",
+                "default": "Microsoft YaHei",
+                "onChanged": (val)=>{ theme.dataFontFamily = val },
             },
             "scale": {
                 "title": qsTr("界面大小比例"),
