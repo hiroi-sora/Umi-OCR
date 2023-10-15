@@ -308,6 +308,11 @@ TabPage {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
+
+                // 加载中 动态图标
+                Loading {
+                    anchors.centerIn: parent
+                }
             }
         }
 
