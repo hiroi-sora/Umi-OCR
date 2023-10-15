@@ -311,6 +311,7 @@ TabPage {
 
                 // 加载中 动态图标
                 Loading {
+                    visible: msnState==="run"
                     anchors.centerIn: parent
                 }
             }

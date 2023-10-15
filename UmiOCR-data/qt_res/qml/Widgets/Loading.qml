@@ -17,6 +17,7 @@ Item {
     // 主体
     Panel {
         anchors.fill: parent
+        color: theme.coverColor3
         
         // 图标
         Item {
@@ -136,8 +137,6 @@ Item {
                         anchors.bottomMargin: size_.smallSpacing
                         height: size_.smallText
                         property real scaleMax: 1.4
-                        property real opacityMin: 0.4
-                        opacity: opacityMin
                         
                         onCharShowChanged: {
                             if(qmlapp.enabledEffect) {
@@ -152,13 +151,11 @@ Item {
                         ParallelAnimation {
                             id: caShow
                             running: false
-                            OpacityAnimator { target:charT; from:opacityMin; to:1; easing.type:Easing.InQuart; duration:cRoot.time }
                             ScaleAnimator { target:charT; from:1; to:scaleMax; easing.type:Easing.InQuart; duration:cRoot.time}
                         }
                         ParallelAnimation {
                             id: caHide
                             running: false
-                            OpacityAnimator { target:charT; from:1; to:opacityMin; easing.type:Easing.InQuart; duration:cRoot.time }
                             ScaleAnimator { target:charT; from:scaleMax; to:1; easing.type:Easing.InQuart; duration:cRoot.time}
                         }
                     }
