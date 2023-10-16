@@ -12,11 +12,12 @@ Item {
 
     property QtObject topItem // 上元素
     property QtObject bottomItem // 下元素
-    property real hideHeight: 80 // 一个栏小于该值时隐藏
+    property real hideHeight: 40 // 一个栏小于该值时隐藏
     property real initSplitterY: 0.5 // 分割线初始位置。>1时为像素，0~1为比例。
 
     // 只读信息
     property int hideTB: 0 // 0为不隐藏，1为隐藏上边，2为隐藏下边
+    property alias splitterY: splitter.y // 分割线当前位置
 
     // ===============================================================
     id: doubleCC
@@ -30,7 +31,6 @@ Item {
         anchors.margins: size_.spacing
 
         property alias hideHeight: doubleCC.hideHeight
-        property alias splitterY: splitter.y // 分割线当前位置
         Component.onCompleted: { // 初始化分割线位置
             if(parent.initSplitterY <= 0)
                 parent.initSplitterY = 0.5 // 默认值0.5
