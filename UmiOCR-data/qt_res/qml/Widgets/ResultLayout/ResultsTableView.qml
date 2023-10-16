@@ -61,6 +61,9 @@ Item {
             "datetime": dateTimeString,
             "resText": resText,
             "timestamp": res.timestamp,
+            "selectL_": -1,
+            "selectR_": -1,
+            "selectUpdate_": 0,
         })
         // 自动滚动
         if(autoToBottom) {
@@ -130,31 +133,16 @@ Item {
                 tableView.forceLayout() 
             })
         }
-        // ==================== 【跨文本块选取相关】 ====================
-        property var selectInfos: {
-            "startIndex": -1, // 开始块序号
-            "startTextIndex": -1, // 开始字符序号
-            "endIndex": -1, // 结束块序号
-            "endTextIndex": -1, // 结束字符序号
-        }
-        // tableView.onPooled: {
-        //     console.log("== onPooled " + children.length)
-        //     for ( var i in children) {
-        //         console.log("  == " +i + ": " + children[i].objectName)
-        //     }
-        // }
-        // onReused: {
-        //     console.log("== onReused " + children.length)
-        //     for ( var i in children) {
-        //         console.log("  == " +i + ": " + children[i].objectName)
-        //     }
-        // }
         // ==================== 【元素】 ====================
         delegate: ResultTextContainer {
             status_: status__
             textLeft: title
             textRight: datetime
             textMain: resText
+            selectL: selectL_
+            selectR: selectR_
+            selectUpdate: selectUpdate_
+            property int index_: index
             onTextHeightChanged: tableView.forceLayout // 文字高度改变时重设列宽
             onTextMainChanged: {
                 resultsModel.setProperty(index, "resText", textMain) // 文字改变时写入列表
@@ -163,8 +151,133 @@ Item {
         // 滚动条
         ScrollBar.vertical: ScrollBar { id:scrollBar }
     }
+    // ==================== 【跨文本框选取】 ====================
+    MouseArea {
+        id: tableMouseArea
+        z: 10
+        anchors.fill: parent
+        anchors.rightMargin: size_.smallSpacing
+        property var tableChi: tableView.children[0].children
+        hoverEnabled: true
+        property int startIndex: -1 // 拖拽开始时，文本框序号
+        property int startTextIndex: -1 // 拖拽开始时，字符序号
+        property int endIndex: -1 // 拖拽结束时，文本框序号
+        property int endTextIndex: -1 // 拖拽结束时，字符序号
+        property int selectUpdate: 0
+        // 查询鼠标坐标位于哪个表格组件内 ，位于什么地方
+        function getWhere() {
+            const mx=mouseX, my=mouseY
+            for(let i in tableChi) {
+                const c = tableChi[i]
+                const f = c.where(this, mx, my)
+                if(f !== undefined) {
+                    return {
+                        "obj": c,
+                        "index": c.index_, // 文本框序号
+                        "where": f, // undefined:不在组件中 | -1:顶部信息栏 | 0~N:所在字符的下标
+                    }
+                }
+            }
+            return undefined
+        }
+        // 根据 Index 的参数，选择对应文本。返回选取类型：
+        function selectIndex() {
+            let li, lt, ri, rt
+            if(startIndex < endIndex) {
+                li=startIndex; lt=startTextIndex; ri=endIndex; rt=endTextIndex;
+            }
+            else if(startIndex > endIndex) {
+                li=endIndex; lt=endTextIndex; ri=startIndex; rt=startTextIndex;
+            }
+            else {
+                li=ri=startIndex
+                if(startTextIndex < endTextIndex) {
+                    lt=startTextIndex; rt=endTextIndex;
+                }
+                else if(startTextIndex > endTextIndex) {
+                    lt=endTextIndex; rt=startTextIndex;
+                }
+                else {
+                    li=-1; lt=-1; ri=-1; rt=-1; // 单击，未选中
+                }
+            }
+            // 遍历每个文本框数据
+            for (let i = 0, l=resultsModel.count; i < l; i++) {
+                if( li<0 || ri<0 || i<li || i>ri ) { // 未被选中
+                    resultsModel.setProperty(i, "selectL_", -1)
+                    resultsModel.setProperty(i, "selectR_", -1)
+                }
+                else if(i === li && i === ri) { // 单个块
+                    resultsModel.setProperty(i, "selectL_", lt)
+                    resultsModel.setProperty(i, "selectR_", rt)
+                }
+                else if(i === li) { // 多个块的起始
+                    resultsModel.setProperty(i, "selectL_", lt)
+                    let item = resultsModel.get(i)
+                    resultsModel.setProperty(i, "selectR_", item.resText.length)
+                }
+                else if(i === ri) { // 多个块的结束
+                    resultsModel.setProperty(i, "selectL_", 0)
+                    resultsModel.setProperty(i, "selectR_", rt)
+                }
+                else { // 多个块的中间
+                    resultsModel.setProperty(i, "selectL_", 0)
+                    let item = resultsModel.get(i)
+                    resultsModel.setProperty(i, "selectR_", item.resText.length)
+                }
+                resultsModel.setProperty(i, "selectUpdate_", selectUpdate) // 开始刷新
+            }
+            selectUpdate++
+        }
+        // 按下
+        onPressed: {
+            const info = getWhere()
+            if(info===undefined || info.where<0) {
+                startIndex=startTextIndex=endIndex=endTextIndex-1
+                return
+            }
+            if(info.where >= 0) {
+                endIndex = startIndex = info.index
+                endTextIndex = startTextIndex = info.where
+            }
+        }
+        // 移动
+        onPositionChanged: {
+            const info = getWhere()
+            // 根据所在区域，调整光标
+            if(info===undefined) {
+                tableMouseArea.cursorShape = Qt.ArrowCursor
+                return
+            }
+            if(info.where >= 0) tableMouseArea.cursorShape = Qt.IBeamCursor
+            else tableMouseArea.cursorShape = Qt.ArrowCursor
+            // 拖拽中
+            if(pressed) {
+                endIndex = info.index
+                endTextIndex = info.where
+                selectIndex()
+            }
+        }
+        // 抬起
+        onReleased: {
+            const info = getWhere()
+            if(info===undefined || info.where<0) {
+                startIndex=startTextIndex=endIndex=endTextIndex-1
+                return
+            }
+            endIndex = info.index
+            endTextIndex = info.where
+            selectIndex() // 选中
+            if(startIndex===endIndex && startTextIndex===endTextIndex) {
+                info.obj.focus(info.where) // 单击移动光标
+            }
+            else if(startIndex===endIndex) {
+                info.obj.focus(-1) // 单块选中，激活焦点
+            }
+        }
+    }
 
-    // 外置控制栏
+    // ==================== 【外置控制栏】 ====================
     Item {
         id: ctrlBar
         height: size_.line*1.5

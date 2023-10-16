@@ -52,7 +52,7 @@ class BatchOCR(Page):
         self.msnID = MissionOCR.addMissionList(msnInfo, msnList)
         if self.msnID:  # 添加成功，通知前端刷新UI
             self.callQml("setMsnState", "run")
-            print(f"添加任务成功 {self.msnID}\n{argd}")
+            print(f"添加任务成功 {self.msnID}")
         else:  # 添加任务失败
             self.__onEnd(None, "[Error] Failed to add task.\n【错误】添加任务失败。")
         return self.msnID

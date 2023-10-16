@@ -11,9 +11,48 @@ Item {
     id: resultRoot
 
     property string status_: "" // 状态， text / noText / error
-    property alias textLeft: textLeft.text
-    property alias textRight: textRight.text
-    property alias textMain: textMain.text
+    property alias textLeft: textLeft_.text
+    property alias textRight: textRight_.text
+    property alias textMain: textMain_.text
+    // 选取文字
+    property int selectL: -1
+    property int selectR: -1
+    property int selectUpdate: 0 // 只要有变化，就刷新选中
+
+    // 传入一个相对于item的坐标，返回该坐标位于this组件的什么位置。
+    // undefined:不在组件中 | -1:顶部信息栏 | 0~N:所在字符的下标
+    function where(item, mx, my) {
+        const localPoint = this.mapFromItem(item, mx, my)
+        if(!this.contains(localPoint)) {
+            return undefined
+        }
+        if(resultTop.contains(localPoint)) {
+            return -1
+        }
+        else {
+            const textPoint = textMain_.mapFromItem(item, mx, my)
+            const textPos = textMain_.positionAt(textPoint.x, textPoint.y)
+            return textPos
+        }
+
+    }
+    // 将光标移到指定位置并激活焦点。
+    function focus(pos) {
+        if(pos > 0)
+            textMain_.cursorPosition = pos
+        textMain_.forceActiveFocus() // 获取焦点
+    }
+    function toUpdateSelect() {
+        if(selectL<0 || selectR<0)
+            textMain_.deselect()
+        else
+            textMain_.select(selectL, selectR)
+    }
+    onSelectUpdateChanged: toUpdateSelect()
+    TableView.onReused: toUpdateSelect()
+    Component.onCompleted: toUpdateSelect()
+    
+
     // 高度适应子组件
     implicitHeight: resultTop.height+resultBottom.height+size_.smallSpacing
     height: resultTop.height+resultBottom.height+size_.smallSpacing
@@ -21,7 +60,7 @@ Item {
 
     onHeightChanged: { // 高度改变时，通知父级
         // 必须文本框获得焦点时才触发
-        if(textMain.activeFocus && (typeof onTextHeightChanged === "function"))
+        if(textMain_.activeFocus && (typeof onTextHeightChanged === "function"))
             onTextHeightChanged()
     }
 
@@ -37,9 +76,9 @@ Item {
 
         // 图片名称
         Text_ {
-            id: textLeft
+            id: textLeft_
             anchors.left: parent.left
-            anchors.right: textRight.left
+            anchors.right: textRight_.left
             anchors.rightMargin: size_.spacing
             color: theme.subTextColor
             font.pixelSize: size_.smallText
@@ -49,7 +88,7 @@ Item {
         }
         // 日期时间
         Text_ {
-            id: textRight
+            id: textRight_
             anchors.right: parent.right
             color: theme.subTextColor
             font.pixelSize: size_.smallText
@@ -65,11 +104,10 @@ Item {
         anchors.right: parent.right
         anchors.topMargin: size_.smallSpacing
         radius: size_.baseRadius
-        height: textMain.height
+        height: textMain_.height
 
         TextEdit {
-            id: textMain
-            
+            id: textMain_
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.leftMargin: size_.smallSpacing
@@ -81,33 +119,6 @@ Item {
             color: status_==="error"? theme.noColor:theme.textColor
             font.pixelSize: size_.text
             font.family: theme.dataFontFamily
-
-            MouseArea {
-                anchors.fill: parent
-                cursorShape: Qt.IBeamCursor
-                property int startP: -1
-
-                onPressed: {
-                    const p = textMain.positionAt(mouse.x, mouse.y)
-                    startP = p
-                    // console.log("== 按下", p)
-                }
-                onPositionChanged: {
-                    const p = textMain.positionAt(mouse.x, mouse.y)
-                    // console.log("== 拖拽", p)
-                    textMain.select(startP, p)
-                }
-                onReleased: {
-                    const p = textMain.positionAt(mouse.x, mouse.y)
-                    if(p === startP) { // 点击无效
-                        textMain.deselect()
-                        startP = -1
-                        textMain.cursorPosition = p
-                    }
-                    textMain.forceActiveFocus() // 获取焦点
-                    // console.log("== 松开", p)
-                }
-            }
         }
     }
 }
