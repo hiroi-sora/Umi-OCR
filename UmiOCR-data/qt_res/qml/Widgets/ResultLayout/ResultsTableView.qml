@@ -45,8 +45,12 @@ Item {
                 resText = qsTr("异常状态码：%1\n异常信息：%2").arg(res.code).arg(res.data)
                 break
         }
-        if(res.title === undefined)
-            res.title = "" // 补充空白参数
+        // 补充空白标题
+        if(res.title === undefined) {
+            const t1 = res.time.toFixed(2)
+            const t2 = res.score.toFixed(2)
+            res.title = qsTr("耗时 %1 | 置信 %2").arg(t1).arg(t2)
+        }
         // 添加到列表模型
         resultsModel.append({
             "status__": status_,
