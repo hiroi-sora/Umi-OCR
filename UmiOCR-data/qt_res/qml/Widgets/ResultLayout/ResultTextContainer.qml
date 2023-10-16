@@ -18,6 +18,10 @@ Item {
     property int selectL: -1
     property int selectR: -1
     property int selectUpdate: 0 // 只要有变化，就刷新选中
+    // 全全选和全复制
+    property var copy: undefined
+    property var copyAll: undefined
+    property var selectAll: undefined
 
     // 传入一个相对于item的坐标，返回该坐标位于this组件的什么位置。
     // undefined:不在组件中 | -1:顶部信息栏 | 0~N:所在字符的下标
@@ -119,6 +123,36 @@ Item {
             color: status_==="error"? theme.noColor:theme.textColor
             font.pixelSize: size_.text
             font.family: theme.dataFontFamily
+
+            // 按键事件。响应并拦截：单双击 Ctrl+C ，双击 Ctrl+A
+            property int keyUpTime: -1 // 上次按键抬起的时间戳。需要截取后8位以免int放不下
+            property int keyDoubleTime: 300 // 双击毫秒
+            Keys.onPressed: {
+                if (event.modifiers & Qt.ControlModifier) {
+                    if (event.key === Qt.Key_C) {
+                        event.accepted = true // 拦截按键
+                        const t = Date.now() & 0xFFFFFFFF
+                        if(t - keyUpTime <= keyDoubleTime) { // 短时间内抬起按下，属于双击
+                            resultRoot.copyAll && resultRoot.copyAll()
+                        }
+                        else {
+                            resultRoot.copy && resultRoot.copy()
+                        }
+                    }
+                    else if(event.key === Qt.Key_A) {
+                        const t = Date.now() & 0xFFFFFFFF
+                        if(t - keyUpTime <= keyDoubleTime) {
+                            event.accepted = true
+                            resultRoot.selectAll && resultRoot.selectAll()
+                        }
+                    }
+                }
+            }
+            Keys.onReleased: {
+                if (event.key === Qt.Key_A || event.key === Qt.Key_C) {
+                    keyUpTime = Date.now() & 0xFFFFFFFF
+                }
+            }
         }
     }
 }

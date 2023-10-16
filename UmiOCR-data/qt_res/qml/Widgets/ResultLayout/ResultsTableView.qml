@@ -147,6 +147,9 @@ Item {
             onTextMainChanged: {
                 resultsModel.setProperty(index, "resText", textMain) // 文字改变时写入列表
             }
+            copy: tableMouseArea.selectCopy
+            copyAll: tableMouseArea.selectAllCopy
+            selectAll: tableMouseArea.selectAll
         } 
         // 滚动条
         ScrollBar.vertical: ScrollBar { id:scrollBar }
@@ -203,7 +206,7 @@ Item {
             }
             return [li, lt, ri, rt]
         }
-        // 根据 Index 的参数，选择对应文本。返回选取类型：
+        // 根据 Index 的参数，选择对应文本。
         function selectIndex() {
             const lr = getIndexes()
             const li=lr[0], lt=lr[1], ri=lr[2], rt=lr[3]
@@ -234,6 +237,40 @@ Item {
                 resultsModel.setProperty(i, "selectUpdate_", selectUpdate) // 开始刷新
             }
             selectUpdate++
+        }
+        // 全选
+        function selectAll() {
+            if(resultsModel.count === 0) return
+            startIndex = startTextIndex = 0
+            endIndex = resultsModel.count-1
+            endTextIndex = resultsModel.get(endIndex).resText.length
+            selectIndex()
+        }
+        // 复制已选中的内容
+        function selectCopy() {
+            const lr = getIndexes()
+            const li=lr[0], lt=lr[1], ri=lr[2], rt=lr[3]
+            if(li < 0 || ri < 0) return
+            let copyText = ""
+            for(let i = li; i <= ri; i++) {
+                let item = resultsModel.get(i)
+                if(i === li && i === ri) // 单个块
+                    copyText = item.resText.substring(lt, rt)
+                else if(i === li) // 多个块的起始
+                    copyText = item.resText.substring(lt)+"\n"
+                else if(i === ri) // 多个块的结束
+                    copyText += item.resText.substring(0, rt)
+                else // 多个块的中间
+                    copyText += item.resText+"\n"
+            }
+            if(copyText && copyText.length>0) {
+                qmlapp.utilsConnector.copyText(copyText)
+            }
+        }
+        // 复制所有
+        function selectAllCopy() {
+            selectAll()
+            selectCopy()
         }
         // 按下
         onPressed: {
@@ -270,48 +307,17 @@ Item {
         onReleased: {
             const info = getWhere()
             if(info===undefined || info.where<0) {
-                startIndex=startTextIndex=endIndex=endTextIndex-1
+                selectIndex()
                 return
             }
             endIndex = info.index
             endTextIndex = info.where
-            if(startIndex!==endIndex) { // 多块选中，预先激活本元素焦点，准备接收键盘事件
-                tableMouseArea.forceActiveFocus()
-            }
             selectIndex() // 选中
             if(startIndex===endIndex && startTextIndex===endTextIndex) {
                 info.obj.focus(info.where) // 单击移动光标
             }
-            else if(startIndex===endIndex) {
-                info.obj.focus(-1) // 单块选中，激活焦点
-            }
-        }
-        // 按键事件
-        Keys.onPressed: {
-            if (event.modifiers & Qt.ControlModifier) {
-                // 复制
-                if (event.key === Qt.Key_C) {
-                    console.log("== copy: ")
-                    const lr = getIndexes()
-                    const li=lr[0], lt=lr[1], ri=lr[2], rt=lr[3]
-                    if(li < 0 || ri < 0) return
-                    let copyText = ""
-                    for(let i = li; i <= ri; i++) {
-                        let item = resultsModel.get(i)
-                        if(i === li && i === ri) // 单个块
-                            copyText = item.resText.substring(lt, rt)
-                        else if(i === li) // 多个块的起始
-                            copyText = item.resText.substring(lt)+"\n"
-                        else if(i === ri) // 多个块的结束
-                            copyText += item.resText.substring(0, rt)
-                        else // 多个块的中间
-                            copyText += item.resText+"\n"
-                    }
-                    if(copyText && copyText.length>0) {
-                        console.log("== copy", copyText)
-                        qmlapp.utilsConnector.copyText(copyText)
-                    }
-                }
+            else {
+                info.obj.focus(-1) // 激活焦点
             }
         }
     }
@@ -334,10 +340,21 @@ Item {
                 resultsModel.clear()
             }
         }
-        CheckButton {
+        Button_ {
+            id: ctrlBtn2
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             anchors.right: ctrlBtn1.left
+            text_: qsTr("操作")
+            toolTip: qsTr("鼠标拖拽：可选中多个文本框的内容\nCtrl+A单击：全选单个文本框的内容\nCtrl+A双击：全选所有文本框的内容\nCtrl+C单击：复制选中的内容\nCtrl+C双击：全选所有文本框并复制")
+            onClicked: {
+                tableMouseArea.selectAllCopy()
+            }
+        }
+        CheckButton {
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.right: ctrlBtn2.left
             text_: qsTr("滚动")
             toolTip: qsTr("自动滚动到底部")
             textColor_: autoToBottom ? theme.textColor : theme.subTextColor
