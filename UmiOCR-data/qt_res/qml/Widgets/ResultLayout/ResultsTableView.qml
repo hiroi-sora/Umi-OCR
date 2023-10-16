@@ -180,8 +180,8 @@ Item {
             }
             return undefined
         }
-        // 根据 Index 的参数，选择对应文本。返回选取类型：
-        function selectIndex() {
+        // 获取Index正确顺序
+        function getIndexes() {
             let li, lt, ri, rt
             if(startIndex < endIndex) {
                 li=startIndex; lt=startTextIndex; ri=endIndex; rt=endTextIndex;
@@ -201,6 +201,12 @@ Item {
                     li=-1; lt=-1; ri=-1; rt=-1; // 单击，未选中
                 }
             }
+            return [li, lt, ri, rt]
+        }
+        // 根据 Index 的参数，选择对应文本。返回选取类型：
+        function selectIndex() {
+            const lr = getIndexes()
+            const li=lr[0], lt=lr[1], ri=lr[2], rt=lr[3]
             // 遍历每个文本框数据
             for (let i = 0, l=resultsModel.count; i < l; i++) {
                 if( li<0 || ri<0 || i<li || i>ri ) { // 未被选中
@@ -233,7 +239,7 @@ Item {
         onPressed: {
             const info = getWhere()
             if(info===undefined || info.where<0) {
-                startIndex=startTextIndex=endIndex=endTextIndex-1
+                startIndex=startTextIndex=endIndex=endTextIndex=-1
                 return
             }
             if(info.where >= 0) {
@@ -253,6 +259,8 @@ Item {
             else tableMouseArea.cursorShape = Qt.ArrowCursor
             // 拖拽中
             if(pressed) {
+                if(startIndex===startTextIndex && startIndex===-1)
+                    return
                 endIndex = info.index
                 endTextIndex = info.where
                 selectIndex()
@@ -267,12 +275,43 @@ Item {
             }
             endIndex = info.index
             endTextIndex = info.where
+            if(startIndex!==endIndex) { // 多块选中，预先激活本元素焦点，准备接收键盘事件
+                tableMouseArea.forceActiveFocus()
+            }
             selectIndex() // 选中
             if(startIndex===endIndex && startTextIndex===endTextIndex) {
                 info.obj.focus(info.where) // 单击移动光标
             }
             else if(startIndex===endIndex) {
                 info.obj.focus(-1) // 单块选中，激活焦点
+            }
+        }
+        // 按键事件
+        Keys.onPressed: {
+            if (event.modifiers & Qt.ControlModifier) {
+                // 复制
+                if (event.key === Qt.Key_C) {
+                    console.log("== copy: ")
+                    const lr = getIndexes()
+                    const li=lr[0], lt=lr[1], ri=lr[2], rt=lr[3]
+                    if(li < 0 || ri < 0) return
+                    let copyText = ""
+                    for(let i = li; i <= ri; i++) {
+                        let item = resultsModel.get(i)
+                        if(i === li && i === ri) // 单个块
+                            copyText = item.resText.substring(lt, rt)
+                        else if(i === li) // 多个块的起始
+                            copyText = item.resText.substring(lt)+"\n"
+                        else if(i === ri) // 多个块的结束
+                            copyText += item.resText.substring(0, rt)
+                        else // 多个块的中间
+                            copyText += item.resText+"\n"
+                    }
+                    if(copyText && copyText.length>0) {
+                        console.log("== copy", copyText)
+                        qmlapp.utilsConnector.copyText(copyText)
+                    }
+                }
             }
         }
     }
