@@ -81,6 +81,33 @@ Item {
             color: status_==="error"? theme.noColor:theme.textColor
             font.pixelSize: size_.text
             font.family: theme.dataFontFamily
+
+            MouseArea {
+                anchors.fill: parent
+                cursorShape: Qt.IBeamCursor
+                property int startP: -1
+
+                onPressed: {
+                    const p = textMain.positionAt(mouse.x, mouse.y)
+                    startP = p
+                    // console.log("== 按下", p)
+                }
+                onPositionChanged: {
+                    const p = textMain.positionAt(mouse.x, mouse.y)
+                    // console.log("== 拖拽", p)
+                    textMain.select(startP, p)
+                }
+                onReleased: {
+                    const p = textMain.positionAt(mouse.x, mouse.y)
+                    if(p === startP) { // 点击无效
+                        textMain.deselect()
+                        startP = -1
+                        textMain.cursorPosition = p
+                    }
+                    textMain.forceActiveFocus() // 获取焦点
+                    // console.log("== 松开", p)
+                }
+            }
         }
     }
 }

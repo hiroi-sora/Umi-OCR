@@ -97,6 +97,7 @@ Item {
         flickableDirection: Flickable.VerticalFlick // 只允许垂直滚动
         boundsBehavior: Flickable.StopAtBounds // 禁止flick过冲。不影响滚轮滚动的过冲
 
+        // ==================== 【滚动和视觉相关】 ====================
         // 滚动到底部
         function toBottom() {
             bottomTimer.running = true
@@ -129,7 +130,26 @@ Item {
                 tableView.forceLayout() 
             })
         }
-        // 元素
+        // ==================== 【跨文本块选取相关】 ====================
+        property var selectInfos: {
+            "startIndex": -1, // 开始块序号
+            "startTextIndex": -1, // 开始字符序号
+            "endIndex": -1, // 结束块序号
+            "endTextIndex": -1, // 结束字符序号
+        }
+        // tableView.onPooled: {
+        //     console.log("== onPooled " + children.length)
+        //     for ( var i in children) {
+        //         console.log("  == " +i + ": " + children[i].objectName)
+        //     }
+        // }
+        // onReused: {
+        //     console.log("== onReused " + children.length)
+        //     for ( var i in children) {
+        //         console.log("  == " +i + ": " + children[i].objectName)
+        //     }
+        // }
+        // ==================== 【元素】 ====================
         delegate: ResultTextContainer {
             status_: status__
             textLeft: title
@@ -183,3 +203,27 @@ Item {
         }
     }
 }
+
+/*
+跨文本块选取
+
+状态记忆：
+    开始的块序号
+        起始字符序号
+    结束的块序号
+        结束字符序号
+块的判断：
+    若为开始/结束块：
+        选取指定字符范围
+    若为中间块：
+        选取所有字符
+
+状态1：未选取
+    点击：插入光标
+    按住拖拽：选取
+    松开：提取选取
+    离开：进入多选状态
+
+状态2：已选取（按住）
+    进入：
+*/
