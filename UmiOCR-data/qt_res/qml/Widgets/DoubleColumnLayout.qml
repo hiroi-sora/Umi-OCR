@@ -114,7 +114,7 @@ Item {
                 anchors.top: parent.top
                 anchors.bottom: btnsMouseArea.top
                 // 平常宽度为分隔栏宽度，按下拖拽时宽度增加防止鼠标出界
-                width: pressed ? 500 : parent.width
+                width: pressed ? doubleCC.width : parent.width
                 hoverEnabled: true // 鼠标悬停时，分割线颜色变深
                 cursorShape: Qt.SizeHorCursor // 鼠标指针为双箭头
                 // 拖拽
