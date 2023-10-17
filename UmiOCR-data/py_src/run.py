@@ -1,5 +1,6 @@
 import os
 import sys
+import site
 import version as V
 from .utils import pre_configs
 from .server.cmd_client import initCmd
@@ -90,6 +91,7 @@ def main():
     app_website = V.WEBSITE  # 网站
     app_path = os.environ.get("PYSTAND", "")  # 程序入口路径
     app_home = os.environ.get("PYSTAND_HOME", "")  # 程序入口目录
+    site.addsitedir("py_src/imports")  # 自定义库添加到搜索路径
     # 调试模式下，手动补充参数
     if not app_path:
         app_path = os.path.abspath("../Umi-OCR.exe")

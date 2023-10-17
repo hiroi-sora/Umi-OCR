@@ -1,10 +1,12 @@
 {
     // 指定第三方库的代码提示和自动补全
     "python.autoComplete.extraPaths": [
-        "./UmiOCR-data/site-packages"
+        "./UmiOCR-data/site-packages",
+        "./UmiOCR-data/py_src/imports",
     ],
     "python.analysis.extraPaths": [
-        "./UmiOCR-data/site-packages"
+        "./UmiOCR-data/site-packages",
+        "./UmiOCR-data/py_src/imports",
     ],
     "editor.suggest.showWords": true,
     "cmake.configureOnOpen": false,

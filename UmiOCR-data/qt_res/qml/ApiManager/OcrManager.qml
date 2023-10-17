@@ -137,11 +137,20 @@ Item {
         for (var key in options) {
             const gOpt = options[key].global_options
             const lOpt = options[key].local_options
-            globalOptions.api.optionsList.push([key, gOpt.title])
-            globalOptions[key] = gOpt
-            localOptions[key] = lOpt
+            if(gOpt) { // 有全局配置
+                globalOptions.api.optionsList.push([key, gOpt.title])
+                globalOptions[key] = gOpt
+            }
+            else { // 无全局配置
+                globalOptions.api.optionsList.push([key, key])
+                globalOptions[key] = {"title":key, "type":"group"}
+            }
+            if(lOpt) // 有局部配置
+                localOptions[key] = lOpt
+            else // 无局部配置
+                localOptions[key] = {"title":key, "type":"group"}
         }
-        return globalOptions
+        qmlapp.globalConfigs.configDict.ocr = globalOptions // 写入全局预配置
     }
     // 初始化2：应用更改
     function init2() {

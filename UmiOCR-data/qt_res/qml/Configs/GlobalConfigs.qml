@@ -194,23 +194,13 @@ Configs {
     Component.onCompleted: {
         // 初始化主题
         theme.manager.init()
-        // 初始化插件
-        let pluginInfos = pluginsConnector.init()
-        // 初始化失败的插件
-        const errors = pluginInfos.errors
-        if(Object.keys(errors).length > 0) {
-            let msg = ""
-            for (var key in errors) {
-                msg += `${key}: ${errors[key]}\n`
-            }
-            qmlapp.popup.message(qsTr("插件加载失败"), msg, "error")
-        }
-        // 初始化成功的插件
-        // 导入OCR管理器
-        configDict.ocr = ocrManager.init1(pluginInfos.options.ocr)
+        // 加载插件
+        initPlugins()
         // 初始化配置项
         reload()
-        ocrManager.init2(pluginInfos.options.ocr)
+        // 应用OCR信息
+        if(configDict.ocr)
+            ocrManager.init2()
         console.log("% GlobalConfig 初始化全局配置完毕！")
         // 延迟执行
         Qt.callLater(()=>{
@@ -218,6 +208,28 @@ Configs {
             // 启动web服务
             globalConfigConn.runUmiWeb(this, "setRealPort")
         })
+    }
+
+    // 初始化插件
+    function initPlugins() {
+        // 初始化插件
+        let pluginInfos = pluginsConnector.init()
+        if(!pluginInfos) return false // 没有加载插件
+        // 记录失败信息
+        if(pluginInfos.errors && Object.keys(pluginInfos.errors).length > 0) {
+            const errs = pluginInfos.errors
+            let msg = ""
+            for (let key in errs) {
+                msg += `${key}: ${errs[key]}\n`
+            }
+            qmlapp.popup.message(qsTr("插件加载失败"), msg, "error")
+        }
+        // 成功的插件
+        if(pluginInfos.options) {
+            // 初始化OCR管理器
+            if(pluginInfos.options.ocr)
+                ocrManager.init1(pluginInfos.options.ocr)
+        }
     }
 
     // 添加/删除快捷方式
