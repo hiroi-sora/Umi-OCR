@@ -19,12 +19,15 @@ class ShortcutApi:
 
     @staticmethod  # 创建快捷方式，返回成功与否的字符串
     def createShortcut(position):
-        lnkName = "Umi-OCR.lnk"
+        lnkName = "Umi-OCR"
         appPath = os.environ["APP_PATH"]
-        lnkPath = ShortcutApi.__getPath(position)
-        lnkPath = os.path.join(lnkPath, lnkName)
-        if os.path.exists(lnkPath):  # 快捷方式已存在
-            ShortcutApi.deleteShortcut(position)  # 先删除
+        lnkPathBase = ShortcutApi.__getPath(position)
+        lnkPathBase = os.path.join(lnkPathBase, lnkName)
+        lnkPath = lnkPathBase + ".lnk"
+        i = 1
+        while os.path.exists(lnkPath):  # 快捷方式已存在
+            lnkPath = lnkPathBase + f" ({i}).lnk"  # 添加序号
+            i += 1
         appFile = QFile(appPath)
         res = appFile.link(lnkPath)
         if not res:
