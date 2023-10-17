@@ -17,7 +17,7 @@ Item {
     // 主体
     Panel {
         anchors.fill: parent
-        color: theme.coverColor3
+        color: theme.bgColor
         
         // 图标
         Item {
@@ -132,31 +132,52 @@ Item {
                         property bool charShow: textTimer.now===index
                         font.pixelSize: size_.smallText
                         text: modelData
-                        color: theme.textColor
+                        color: theme.specialTextColor
+                        property real minOpa: 0.5
+                        opacity: minOpa
+                        property real sp: size_.smallSpacing
+                        property real spMax: size_.smallSpacing * 1.5
                         anchors.bottom: parent.bottom
-                        anchors.bottomMargin: size_.smallSpacing
+                        anchors.bottomMargin: sp
                         height: size_.smallText
-                        property real scaleMax: 1.4
-                        
+
                         onCharShowChanged: {
                             if(qmlapp.enabledEffect) {
                                 if(charShow) caShow.running = true
                                 else caHide.running = true
                             }
                             else {
-                                color = charShow ? theme.textColor:theme.coverColor4
-                                scale = charShow ? scaleMax : 1
+                                anchors.bottomMargin = charShow ? spMax : sp
+                                opacity = charShow ? 1 : minOpa
                             }
                         }
                         ParallelAnimation {
                             id: caShow
                             running: false
-                            ScaleAnimator { target:charT; from:1; to:scaleMax; easing.type:Easing.InQuart; duration:cRoot.time}
+                            NumberAnimation {
+                                target:charT; properties: "anchors.bottomMargin";
+                                from: charT.sp; to: charT.spMax; duration:cRoot.time * 0.5;
+                                easing.type:Easing.OutCubic;
+                            }
+                            NumberAnimation {
+                                target:charT; properties: "opacity";
+                                from: minOpa; to: 1; duration:cRoot.time * 0.5;
+                                easing.type:Easing.OutCubic;
+                            }
                         }
                         ParallelAnimation {
                             id: caHide
                             running: false
-                            ScaleAnimator { target:charT; from:scaleMax; to:1; easing.type:Easing.InQuart; duration:cRoot.time}
+                            NumberAnimation {
+                                target:charT; properties: "anchors.bottomMargin";
+                                from: charT.spMax; to: charT.sp;
+                                easing.type:Easing.InQuart; duration:cRoot.time;
+                            }
+                            NumberAnimation {
+                                target:charT; properties: "opacity";
+                                from: 1; to: minOpa; duration:cRoot.time;
+                                easing.type:Easing.InQuart;
+                            }
                         }
                     }
                 }
