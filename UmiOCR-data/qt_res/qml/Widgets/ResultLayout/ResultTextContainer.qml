@@ -22,6 +22,7 @@ Item {
     // 外部函数
     property var copy: undefined // 复制选中
     property var copyAll: undefined // 复制全部
+    property var selectSingle: undefined // 选中单个文本框
     property var selectAll: undefined // 所有文本框全选
 
     // 传入一个相对于item的坐标，返回该坐标位于this组件的什么位置。
@@ -126,32 +127,30 @@ Item {
             font.family: theme.dataFontFamily
 
             // 按键事件。响应并拦截：单双击 Ctrl+C ，双击 Ctrl+A
-            property int keyUpTime: -1 // 上次按键抬起的时间戳。需要截取后8位以免int放不下
             property int keyDoubleTime: 300 // 双击毫秒
+            property int lastUpTime: -1 // 上次按键抬起的时间戳。需要截取后8位以免int放不下
+            property int lastKey: -1 // 上次按键的键值
             Keys.onPressed: {
                 if (event.modifiers & Qt.ControlModifier) {
-                    if (event.key === Qt.Key_C) {
+                    if (event.key === Qt.Key_A || event.key === Qt.Key_C) {
                         event.accepted = true // 拦截按键
                         const t = Date.now() & 0xFFFFFFFF
-                        if(t - keyUpTime <= keyDoubleTime) { // 短时间内抬起按下，属于双击
-                            resultRoot.copyAll && resultRoot.copyAll()
+                        // 双击
+                        if(t - lastUpTime <= keyDoubleTime && lastKey==event.key) {
+                            event.key===Qt.Key_A && resultRoot.selectAll && resultRoot.selectAll()
+                            event.key===Qt.Key_C && resultRoot.copyAll && resultRoot.copyAll()
                         }
-                        else {
-                            resultRoot.copy && resultRoot.copy()
-                        }
-                    }
-                    else if(event.key === Qt.Key_A) {
-                        const t = Date.now() & 0xFFFFFFFF
-                        if(t - keyUpTime <= keyDoubleTime) {
-                            event.accepted = true
-                            resultRoot.selectAll && resultRoot.selectAll()
+                        else { // 单击
+                            event.key===Qt.Key_A && resultRoot.selectSingle && resultRoot.selectSingle()
+                            event.key===Qt.Key_C && resultRoot.copy && resultRoot.copy()
                         }
                     }
                 }
             }
             Keys.onReleased: {
                 if (event.key === Qt.Key_A || event.key === Qt.Key_C) {
-                    keyUpTime = Date.now() & 0xFFFFFFFF
+                    lastUpTime = Date.now() & 0xFFFFFFFF
+                    lastKey = event.key
                 }
             }
             // 丢失焦点时，刷新一次选中

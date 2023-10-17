@@ -150,6 +150,7 @@ Item {
             copy: tableMouseArea.selectCopy
             copyAll: tableMouseArea.selectAllCopy
             selectAll: tableMouseArea.selectAll
+            selectSingle: tableMouseArea.selectSingle
         } 
         // 滚动条
         ScrollBar.vertical: ScrollBar { id:scrollBar }
@@ -240,6 +241,15 @@ Item {
             }
             selectUpdate++
         }
+        // 选中单个文本框
+        function selectSingle() {
+            if(endIndex < 0) return
+            let item = resultsModel.get(endIndex)
+            startTextIndex = 0
+            endTextIndex = item.resText.length
+            startIndex = endIndex
+            selectIndex()
+        }
         // 全选
         function selectAll() {
             if(resultsModel.count === 0) return
@@ -269,7 +279,11 @@ Item {
             }
             if(copyText && copyText.length>0) {
                 qmlapp.utilsConnector.copyText(copyText)
+                qmlapp.popup.simple(qsTr("已复制%1字").arg(copyText.length), "")
+                return copyText
             }
+            qmlapp.popup.simple(qsTr("未复制文字"), "")
+            return ""
         }
         // 复制所有
         function selectAllCopy() {
