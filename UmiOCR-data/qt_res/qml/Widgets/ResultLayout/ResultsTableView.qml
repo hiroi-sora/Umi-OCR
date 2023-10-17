@@ -201,8 +201,9 @@ Item {
                 else if(startTextIndex > endTextIndex) {
                     lt=endTextIndex; rt=startTextIndex;
                 }
-                else {
-                    li=-1; lt=-1; ri=-1; rt=-1; // 单击，未选中
+                else { // 单击，未选中
+                    li = ri = startIndex
+                    lt = rt = -1
                 }
             }
             return [li, lt, ri, rt]
@@ -255,14 +256,16 @@ Item {
             let copyText = ""
             for(let i = li; i <= ri; i++) {
                 let item = resultsModel.get(i)
-                if(i === li && i === ri) // 单个块
-                    copyText = item.resText.substring(lt, rt)
-                else if(i === li) // 多个块的起始
-                    copyText = item.resText.substring(lt)+"\n"
-                else if(i === ri) // 多个块的结束
-                    copyText += item.resText.substring(0, rt)
-                else // 多个块的中间
-                    copyText += item.resText+"\n"
+                if(item.resText) {
+                    if(i === li && i === ri) // 单个块
+                        copyText = item.resText.substring(lt, rt)
+                    else if(i === li) // 多个块的起始
+                        copyText = item.resText.substring(lt)+"\n"
+                    else if(i === ri) // 多个块的结束
+                        copyText += item.resText.substring(0, rt)
+                    else // 多个块的中间
+                        copyText += item.resText+"\n"
+                }
             }
             if(copyText && copyText.length>0) {
                 qmlapp.utilsConnector.copyText(copyText)
@@ -273,10 +276,17 @@ Item {
             selectAll()
             selectCopy()
         }
+        // 删除选中的文本框
+        function selectDel() {
+            const lr = getIndexes()
+            const li=lr[0], ri=lr[2]
+            if(li < 0 || ri < 0) return
+            resultsModel.remove(li, ri-li+1)
+        }
         // 按下
         onPressed: {
             if (mouse.button === Qt.RightButton) {
-                menu.popup()
+                selectMenu.popup()
                 return
             }
             const info = getWhere()
@@ -330,11 +340,13 @@ Item {
         }
         // 菜单
         Menu_ {
-            id: menu
+            id: selectMenu
             menuList: [
-                [tableMouseArea.selectCopy, qsTr("复制　　（Ctrl+C单击）")],
+                [tableMouseArea.selectCopy, qsTr("复制选中（Ctrl+C单击）")],
                 [tableMouseArea.selectAllCopy, qsTr("复制全部（Ctrl+C双击）")],
                 [tableMouseArea.selectAll, qsTr("全选所有文本框（Ctrl+A双击）")],
+                [tableMouseArea.selectDel, qsTr("删除选中的文本框")],
+                [resultsModel.clear(), qsTr("清空全部")],
             ]
         }
     }
@@ -346,44 +358,36 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
 
-        Button_ {
-            id: ctrlBtn1
+        Row {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             anchors.right: parent.right
-            text_: qsTr("清空")
-            textColor_: theme.noColor
-            onClicked: {
-                resultsModel.clear()
-            }
-        }
-        Button_ {
-            id: ctrlBtn2
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.right: ctrlBtn1.left
-            text_: qsTr("操作")
-            toolTip: qsTr("鼠标拖拽：可选中多个文本框的内容\nCtrl+A单击：全选单个文本框的内容\nCtrl+A双击：全选所有文本框的内容\nCtrl+C单击：复制选中的内容\nCtrl+C双击：全选所有文本框并复制")
-            onClicked: {
-                tableMouseArea.selectAllCopy()
-            }
-        }
-        CheckButton {
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.right: ctrlBtn2.left
-            text_: qsTr("滚动")
-            toolTip: qsTr("自动滚动到底部")
-            textColor_: autoToBottom ? theme.textColor : theme.subTextColor
-            checked: autoToBottom
-            enabledAnime: true
-            onCheckedChanged: {
-                autoToBottom = checked
-                if(checked) {
-                    tableView.toBottom()
+
+            CheckButton {
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                text_: qsTr("滚动")
+                toolTip: qsTr("自动滚动到底部")
+                textColor_: autoToBottom ? theme.textColor : theme.subTextColor
+                checked: autoToBottom
+                enabledAnime: true
+                onCheckedChanged: {
+                    autoToBottom = checked
+                    if(checked) {
+                        tableView.toBottom()
+                    }
+                    else {
+                        bottomTimer.running = false
+                    }
                 }
-                else {
-                    bottomTimer.running = false
+            }
+            Button_ {
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                text_: qsTr("菜单")
+                toolTip: qsTr("右键可打开菜单")
+                onClicked: {
+                    selectMenu.popup()
                 }
             }
         }

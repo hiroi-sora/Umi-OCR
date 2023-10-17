@@ -27,6 +27,7 @@ Menu {
                     anchors.left: parent.left
                     anchors.right: parent.right
                     radius: 0
+                    height: size_.line + size_.smallSpacing * 2
                     contentItem: Text_ {
                         text: modelData[1]
                         verticalAlignment: Text.AlignVCenter
