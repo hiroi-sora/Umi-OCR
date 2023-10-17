@@ -258,8 +258,12 @@ Item {
             endTextIndex = resultsModel.get(endIndex).resText.length
             selectIndex()
         }
-        // 复制已选中的内容
+        // 复制已选中的内容，或当前块的所有文本
         function selectCopy() {
+            // 若当前没有选中的内容，但指针放在一个块上，则选择该块
+            if(startIndex>0 && startIndex===endIndex && startTextIndex===endTextIndex) {
+                selectSingle()
+            }
             const lr = getIndexes()
             const li=lr[0], lt=lr[1], ri=lr[2], rt=lr[3]
             if(li >= 0 && ri >= 0) {
@@ -267,14 +271,22 @@ Item {
                 for(let i = li; i <= ri; i++) {
                     let item = resultsModel.get(i)
                     if(item.resText) {
+                        // 范围检查
+                        const text = item.resText
+                        const len = text.length
+                        if (li < 0) li = 0
+                        if (li > len) li = len
+                        if (ri < li) ri = li
+                        if (ri > len) ri = len
+                        // 获取文本
                         if(i === li && i === ri) // 单个块
-                            copyText = item.resText.substring(lt, rt)
+                            copyText = text.substring(lt, rt)
                         else if(i === li) // 多个块的起始
-                            copyText = item.resText.substring(lt)+"\n"
+                            copyText = text.substring(lt)+"\n"
                         else if(i === ri) // 多个块的结束
-                            copyText += item.resText.substring(0, rt)
+                            copyText += text.substring(0, rt)
                         else // 多个块的中间
-                            copyText += item.resText+"\n"
+                            copyText += text+"\n"
                     }
                 }
                 if(copyText && copyText.length>0) {
