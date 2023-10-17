@@ -153,6 +153,12 @@ Item {
                     keyUpTime = Date.now() & 0xFFFFFFFF
                 }
             }
+            // 丢失焦点时，刷新一次选中
+            onActiveFocusChanged: {
+                if(!activeFocus) {
+                    toUpdateSelect()
+                }
+            }
         }
     }
 }
