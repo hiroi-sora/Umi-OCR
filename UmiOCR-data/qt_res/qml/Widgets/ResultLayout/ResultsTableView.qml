@@ -345,8 +345,8 @@ Item {
                 [tableMouseArea.selectCopy, qsTr("复制选中（Ctrl+C单击）")],
                 [tableMouseArea.selectAllCopy, qsTr("复制全部（Ctrl+C双击）")],
                 [tableMouseArea.selectAll, qsTr("全选所有文本框（Ctrl+A双击）")],
-                [tableMouseArea.selectDel, qsTr("删除选中的文本框")],
-                [resultsModel.clear(), qsTr("清空全部")],
+                [tableMouseArea.selectDel, qsTr("删除选中文本框")],
+                [resultsModel.clear(), qsTr("清空全部文本框")],
             ]
         }
     }
@@ -393,27 +393,3 @@ Item {
         }
     }
 }
-
-/*
-跨文本块选取
-
-状态记忆：
-    开始的块序号
-        起始字符序号
-    结束的块序号
-        结束字符序号
-块的判断：
-    若为开始/结束块：
-        选取指定字符范围
-    若为中间块：
-        选取所有字符
-
-状态1：未选取
-    点击：插入光标
-    按住拖拽：选取
-    松开：提取选取
-    离开：进入多选状态
-
-状态2：已选取（按住）
-    进入：
-*/
