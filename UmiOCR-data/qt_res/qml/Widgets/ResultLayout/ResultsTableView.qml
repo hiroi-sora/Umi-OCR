@@ -262,27 +262,28 @@ Item {
         function selectCopy() {
             const lr = getIndexes()
             const li=lr[0], lt=lr[1], ri=lr[2], rt=lr[3]
-            if(li < 0 || ri < 0) return
-            let copyText = ""
-            for(let i = li; i <= ri; i++) {
-                let item = resultsModel.get(i)
-                if(item.resText) {
-                    if(i === li && i === ri) // 单个块
-                        copyText = item.resText.substring(lt, rt)
-                    else if(i === li) // 多个块的起始
-                        copyText = item.resText.substring(lt)+"\n"
-                    else if(i === ri) // 多个块的结束
-                        copyText += item.resText.substring(0, rt)
-                    else // 多个块的中间
-                        copyText += item.resText+"\n"
+            if(li >= 0 && ri >= 0) {
+                let copyText = ""
+                for(let i = li; i <= ri; i++) {
+                    let item = resultsModel.get(i)
+                    if(item.resText) {
+                        if(i === li && i === ri) // 单个块
+                            copyText = item.resText.substring(lt, rt)
+                        else if(i === li) // 多个块的起始
+                            copyText = item.resText.substring(lt)+"\n"
+                        else if(i === ri) // 多个块的结束
+                            copyText += item.resText.substring(0, rt)
+                        else // 多个块的中间
+                            copyText += item.resText+"\n"
+                    }
+                }
+                if(copyText && copyText.length>0) {
+                    qmlapp.utilsConnector.copyText(copyText)
+                    qmlapp.popup.simple(qsTr("复制%1字").arg(copyText.length), "")
+                    return copyText
                 }
             }
-            if(copyText && copyText.length>0) {
-                qmlapp.utilsConnector.copyText(copyText)
-                qmlapp.popup.simple(qsTr("已复制%1字").arg(copyText.length), "")
-                return copyText
-            }
-            qmlapp.popup.simple(qsTr("未复制文字"), "")
+            qmlapp.popup.simple(qsTr("无选中文字"), "")
             return ""
         }
         // 复制所有
@@ -295,7 +296,14 @@ Item {
             const lr = getIndexes()
             const li=lr[0], ri=lr[2]
             if(li < 0 || ri < 0) return
-            resultsModel.remove(li, ri-li+1)
+            const l = ri-li+1
+            resultsModel.remove(li, l)
+            qmlapp.popup.simple(qsTr("删除%1条记录").arg(l), "")
+        }
+        // 删除全部
+        function selectAllDel() {
+            resultsModel.clear()
+            qmlapp.popup.simple(qsTr("清空记录"), "")
         }
         // 按下
         onPressed: {
@@ -356,11 +364,12 @@ Item {
         Menu_ {
             id: selectMenu
             menuList: [
-                [tableMouseArea.selectCopy, qsTr("复制选中（Ctrl+C单击）")],
-                [tableMouseArea.selectAllCopy, qsTr("复制全部（Ctrl+C双击）")],
-                [tableMouseArea.selectAll, qsTr("全选所有文本框（Ctrl+A双击）")],
-                [tableMouseArea.selectDel, qsTr("删除选中文本框")],
-                [resultsModel.clear(), qsTr("清空全部文本框")],
+                [tableMouseArea.selectCopy, qsTr("复制选中　　（Ctrl+C 单击）")],
+                [tableMouseArea.selectAllCopy, qsTr("复制全部　　（Ctrl+C 双击）")],
+                [tableMouseArea.selectSingle, qsTr("选中单个记录（Ctrl+A 单击）")],
+                [tableMouseArea.selectAll, qsTr("选中全部记录（Ctrl+A 双击）")],
+                [tableMouseArea.selectDel, qsTr("删除选中记录"), "noColor"],
+                [tableMouseArea.selectAllDel, qsTr("清空全部记录"), "noColor"],
             ]
         }
     }

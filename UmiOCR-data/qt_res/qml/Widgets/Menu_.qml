@@ -11,7 +11,7 @@ Menu {
     property var menuList: []
     // [
     //     [func1, "菜单项1"],
-    //     [func2, "菜单项2"],
+    //     [func2, "菜单项2", "noColor"],
     // ]
     
     contentItem: Rectangle {
@@ -30,6 +30,7 @@ Menu {
                     height: size_.line + size_.smallSpacing * 2
                     contentItem: Text_ {
                         text: modelData[1]
+                        color: modelData.length>2 ? theme[modelData[2]] : theme.textColor
                         verticalAlignment: Text.AlignVCenter
                         Component.onCompleted: {
                             let w = width + size_.spacing * 2
