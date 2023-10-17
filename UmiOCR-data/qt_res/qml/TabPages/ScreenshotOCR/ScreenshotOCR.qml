@@ -161,6 +161,13 @@ TabPage {
         popMainWindow()
     }
 
+    // 一组OCR任务完毕
+    function onOcrEnd(msg) {
+        if(msg.startsWith("[Error]")) {
+            qmlapp.popup.message(qsTr("截图识别任务异常"), msg, "error")
+        }
+    }
+
     // ========================= 【后处理】 =========================
 
     // 任务完成后发送通知

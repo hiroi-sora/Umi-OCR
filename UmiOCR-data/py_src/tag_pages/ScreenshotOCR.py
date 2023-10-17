@@ -176,6 +176,7 @@ class ScreenshotOCR(Page):
                 # 删除缓存列表中除了最后一项以外的图片。最后一项可能正在展示中所以不能删
                 PixmapProvider.delPixmap(self.showImgIDs[:-1])
                 del self.showImgIDs[:-1]
+            self.callQml("onOcrEnd", msg)
 
         self.callFunc(update)  # 在主线程中执行
 

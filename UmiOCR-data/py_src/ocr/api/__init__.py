@@ -15,6 +15,13 @@ def initOcrPlugins(plugins):
 
 # 生成一个ocr api实例，成功返回对象，失败返回 [Error] 开头的字符串
 def getApiOcr(apiKey, argd):
+    # 检测argd，恢复int类型
+    for k in argd:
+        n = argd[k]
+        if isinstance(n, float):
+            rounded = round(n)
+            if abs(n - rounded) <= 1e-7:
+                argd[k] = rounded
     if apiKey in ApiDict:
         try:
             return ApiDict[apiKey](argd)  # 实例化后返回

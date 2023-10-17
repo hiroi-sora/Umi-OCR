@@ -44,6 +44,7 @@ class __MissionOcrClass(Mission):
         startInfo = self._dictShortKey(msnInfo["argd"])
         msg = self.__api.start(startInfo)
         if msg.startswith("[Error]"):
+            print(f"引擎启动失败！", msg)
             return msg  # 更新失败，结束该队列
         else:
             return ""  # 更新成功 TODO: continue
