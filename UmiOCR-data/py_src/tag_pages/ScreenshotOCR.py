@@ -93,7 +93,7 @@ class ScreenshotOCR(Page):
             res["error"] = "[Warning] No image in clipboard."
         else:
             res["error"] = "[Warning] No image in clipboard."
-        if res["error"]:
+        if "error" in res:
             self.recentResult = {"code": 102, "data": res["error"]}
         return res  # 返回结果字典
 
