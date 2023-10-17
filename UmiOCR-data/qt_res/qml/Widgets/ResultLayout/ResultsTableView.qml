@@ -88,12 +88,13 @@ Item {
     anchors.fill: parent
     clip: true // 溢出隐藏
     property bool autoToBottom: true // 自动滚动到底部
+    property real scrollBarWidth: size_.spacing * 1.5 // 滚动条区域宽度
 
     // 内容滚动组件
     TableView {
         id: tableView
         anchors.fill: parent
-        anchors.rightMargin: size_.smallSpacing
+        anchors.rightMargin: scrollBarWidth
         rowSpacing: size_.spacing // 行间隔
         contentWidth: parent.width // 内容宽度
         model: resultsModel // 模型
@@ -153,14 +154,14 @@ Item {
             selectSingle: tableMouseArea.selectSingle
         } 
         // 滚动条
-        ScrollBar.vertical: ScrollBar { id:scrollBar }
+        ScrollBar.vertical: scrollBar
     }
     // ==================== 【跨文本框选取】 ====================
     MouseArea {
         id: tableMouseArea
         z: 10
         anchors.fill: parent
-        anchors.rightMargin: size_.smallSpacing
+        anchors.rightMargin: scrollBarWidth
         acceptedButtons: Qt.LeftButton | Qt.RightButton
         property var tableChi: tableView.children[0].children
         hoverEnabled: true
@@ -261,11 +262,11 @@ Item {
         // 复制已选中的内容，或当前块的所有文本
         function selectCopy() {
             // 若当前没有选中的内容，但指针放在一个块上，则选择该块
-            if(startIndex>0 && startIndex===endIndex && startTextIndex===endTextIndex) {
+            if(startIndex>=0 && startIndex===endIndex && startTextIndex===endTextIndex) {
                 selectSingle()
             }
             const lr = getIndexes()
-            const li=lr[0], lt=lr[1], ri=lr[2], rt=lr[3]
+            let li=lr[0], lt=lr[1], ri=lr[2], rt=lr[3]
             if(li >= 0 && ri >= 0) {
                 let copyText = ""
                 for(let i = li; i <= ri; i++) {
@@ -300,8 +301,15 @@ Item {
         }
         // 复制所有
         function selectAllCopy() {
-            selectAll()
-            selectCopy()
+            let copyText = ""
+            for (let i = 0, l=resultsModel.count; i < l; i++) {
+                let item = resultsModel.get(i)
+                if(item.resText) {
+                    copyText += item.resText + "\n"
+                }
+            }
+            qmlapp.utilsConnector.copyText(copyText)
+            qmlapp.popup.simple(qsTr("复制全部%1字").arg(copyText.length), "")
         }
         // 删除选中的文本框
         function selectDel() {
@@ -384,6 +392,14 @@ Item {
                 [tableMouseArea.selectAllDel, qsTr("清空全部记录"), "noColor"],
             ]
         }
+    }
+    // ==================== 【滚动条】 ====================
+    ScrollBar {
+        id:scrollBar
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        width: scrollBarWidth 
     }
 
     // ==================== 【外置控制栏】 ====================
