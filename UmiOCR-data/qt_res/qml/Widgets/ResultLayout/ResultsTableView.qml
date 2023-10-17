@@ -142,7 +142,7 @@ Item {
             selectL: selectL_
             selectR: selectR_
             selectUpdate: selectUpdate_
-            property int index_: index
+            index_: index
             onTextHeightChanged: tableView.forceLayout // 文字高度改变时重设列宽
             onTextMainChanged: {
                 resultsModel.setProperty(index, "resText", textMain) // 文字改变时写入列表
@@ -160,6 +160,7 @@ Item {
         z: 10
         anchors.fill: parent
         anchors.rightMargin: size_.smallSpacing
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
         property var tableChi: tableView.children[0].children
         hoverEnabled: true
         property int startIndex: -1 // 拖拽开始时，文本框序号
@@ -274,6 +275,10 @@ Item {
         }
         // 按下
         onPressed: {
+            if (mouse.button === Qt.RightButton) {
+                menu.popup()
+                return
+            }
             const info = getWhere()
             if(info===undefined || info.where<0) {
                 startIndex=startTextIndex=endIndex=endTextIndex=-1
@@ -305,6 +310,9 @@ Item {
         }
         // 抬起
         onReleased: {
+            if (mouse.button === Qt.RightButton) {
+                return
+            }
             const info = getWhere()
             if(info===undefined || info.where<0) {
                 selectIndex()
@@ -319,6 +327,15 @@ Item {
             else {
                 info.obj.focus(-1) // 激活焦点
             }
+        }
+        // 菜单
+        Menu_ {
+            id: menu
+            menuList: [
+                [tableMouseArea.selectCopy, qsTr("复制　　（Ctrl+C单击）")],
+                [tableMouseArea.selectAllCopy, qsTr("复制全部（Ctrl+C双击）")],
+                [tableMouseArea.selectAll, qsTr("全选所有文本框（Ctrl+A双击）")],
+            ]
         }
     }
 

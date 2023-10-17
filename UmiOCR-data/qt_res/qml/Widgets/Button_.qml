@@ -20,6 +20,7 @@ Button {
 
     property int borderWidth: 0
     property color borderColor: theme.coverColor3
+    property real radius: size_.btnRadius
 
     Component.onCompleted: {
         // 如果设定了提示，则加载提示组件
@@ -39,7 +40,7 @@ Button {
 
     background: Rectangle {
         anchors.fill: parent
-        radius: size_.btnRadius
+        radius: btn.radius
         color: parent.pressed ? parent.bgPressColor_ : (
             parent.hovered ? parent.bgHoverColor_ : parent.bgColor_
         )

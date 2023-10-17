@@ -14,14 +14,15 @@ Item {
     property alias textLeft: textLeft_.text
     property alias textRight: textRight_.text
     property alias textMain: textMain_.text
+    property int index_
     // 选取文字
     property int selectL: -1
     property int selectR: -1
     property int selectUpdate: 0 // 只要有变化，就刷新选中
-    // 全全选和全复制
-    property var copy: undefined
-    property var copyAll: undefined
-    property var selectAll: undefined
+    // 外部函数
+    property var copy: undefined // 复制选中
+    property var copyAll: undefined // 复制全部
+    property var selectAll: undefined // 所有文本框全选
 
     // 传入一个相对于item的坐标，返回该坐标位于this组件的什么位置。
     // undefined:不在组件中 | -1:顶部信息栏 | 0~N:所在字符的下标
