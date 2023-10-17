@@ -14,7 +14,7 @@ class GlobalConfigsConnector(QObject):
         super().__init__()
 
     # 创建快捷方式
-    @Slot(str, result=bool)
+    @Slot(str, result=str)
     def createShortcut(self, position):
         return ShortcutApi.createShortcut(position)
 

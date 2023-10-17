@@ -235,12 +235,12 @@ Configs {
     // 添加/删除快捷方式
     function changeShortcut(flag, position) {
         if(flag) {
-            let res = globalConfigConn.createShortcut(position)
-            if(res) {
+            const res = globalConfigConn.createShortcut(position)
+            if(res === "[Success]") {
                 qmlapp.popup.simple(qsTr("成功添加快捷方式"), "")
             }
             else {
-                qmlapp.popup.message(qsTr("添加快捷方式失败"), qsTr("请以管理员权限运行软件，重新操作。"), "error")
+                qmlapp.popup.message(qsTr("添加快捷方式失败"), qsTr("请尝试以管理员权限运行软件。")+"\n"+res, "error")
                 return true // 阻止变化
             }
         }

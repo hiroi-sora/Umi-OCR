@@ -17,14 +17,19 @@ class ShortcutApi:
         elif position == "startup":
             return Platform.StandardPaths.GetStartup()
 
-    @staticmethod  # 创建快捷方式，返回成功与否
+    @staticmethod  # 创建快捷方式，返回成功与否的字符串
     def createShortcut(position):
         lnkName = "Umi-OCR.lnk"
         appPath = os.environ["APP_PATH"]
         lnkPath = ShortcutApi.__getPath(position)
         lnkPath = os.path.join(lnkPath, lnkName)
-        res = QFile.link(appPath, lnkPath)
-        return res
+        if os.path.exists(lnkPath):  # 快捷方式已存在
+            ShortcutApi.deleteShortcut(position)  # 先删除
+        appFile = QFile(appPath)
+        res = appFile.link(lnkPath)
+        if not res:
+            return f"[Error] {appFile.errorString()}\n{appPath}\n{lnkPath}"
+        return "[Success]"
 
     @staticmethod  # 删除快捷方式
     def deleteShortcut(position):
