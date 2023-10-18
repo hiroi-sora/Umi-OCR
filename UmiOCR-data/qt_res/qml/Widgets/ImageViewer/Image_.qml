@@ -5,17 +5,18 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
-Item {
+Rectangle {
+    id: iRoot
     // ========================= 【接口】 =========================
 
     // 可设置
     property real scaleMax: 2.0 // 比例上下限
     property real scaleMin: 0.1 // 比例上下限
+    property QtObject overlayLayer // 图片叠加层
     // 只读
     property real scale: 1.0 // 图片缩放比例
     property int imageSW: 0 // 图片原始宽高
     property int imageSH: 0
-    id: iRoot
 
     // 设置图片源，展示一张图片
     function setSource(source) {
@@ -28,13 +29,20 @@ Item {
 
     // ========================= 【处理】 =========================
 
+    Component.onCompleted: {
+        // 叠加层挂父级
+        if(overlayLayer && overlayLayer.hasOwnProperty("parent"))
+            overlayLayer.parent = showImage
+    }
+    
+
     // 图片组件的状态改变
     function imageStatusChanged(s) {
         // 已就绪
         if(s == Image.Ready) {
             imageSW = showImage.sourceSize.width // 记录图片原始宽高
             imageSH = showImage.sourceSize.height
-            imageScaleFull() // 初始大小
+            imageFullFit() // 初始大小
         }
         else {
             imageSW = imageSH = 0
@@ -49,13 +57,15 @@ Item {
         let s = 1.0 // flag==0 时复原
         if (flag > 0) {  // 放大
             s = (iRoot.scale + step).toFixed(1)
-            const imageFullScale = Math.max(flickable.width/imageSW, flickable.height/imageSH)
-            const max = Math.max(imageFullScale, scaleMax) // 禁止大于上限或图片填满大小
+            // 禁止大于上限 或 图片填满大小（裁切）
+            const max = Math.max(flickable.width/imageSW, flickable.height/imageSH, scaleMax)
             if(s > max) s = max
         }
         else if(flag < 0) {  // 缩小
             s = (iRoot.scale - step).toFixed(1)
-            if(s < 0.1) s = scaleMin // 禁止小于下限
+            // 禁止小于下限 或 图片填满大小（不裁切）
+            const min = Math.min(flickable.width/imageSW, flickable.height/imageSH, scaleMin)
+            if(s < min) s = min
         }
 
         // 目标锚点
@@ -78,8 +88,8 @@ Item {
         flickable.contentY -= ly
     }
 
-    // 图片填满组件
-    function imageScaleFull() {
+    // 图片填满组件，不裁切
+    function imageFullFit() {
         if(showImage.source == "") return
         iRoot.scale = Math.min(flickable.width/imageSW, flickable.height/imageSH)
         // 图片中心对齐相框
@@ -88,51 +98,46 @@ Item {
     }
     
     // ======================== 【布局】 =========================
+    color: theme.bgColor
 
-    // 图片区域
-    Rectangle {
-        id: flickableContainer
+
+    // 滑动区域，显示图片，监听左键拖拽
+    Flickable {
+        id: flickable
         anchors.fill: parent
-        color: theme.bgColor
-
-        // 滑动区域，自动监听左键拖拽
-        Flickable {
-            id: flickable
-            anchors.fill: parent
-            contentWidth: showImageContainer.width
-            contentHeight: showImageContainer.height
-            clip: true
-            
-            // 图片容器，大小不小于滑动区域
-            Item {
-                id: showImageContainer
-                width: Math.max( imageSW * iRoot.scale , flickable.width )
-                height: Math.max( imageSH * iRoot.scale , flickable.height )
-                Image {
-                    id: showImage
-                    anchors.centerIn: parent
-                    scale: iRoot.scale
-                    onStatusChanged: imageStatusChanged(status)
-                }
+        contentWidth: showImageContainer.width
+        contentHeight: showImageContainer.height
+        clip: true
+        
+        // 图片容器，大小不小于滑动区域
+        Item {
+            id: showImageContainer
+            width: Math.max( imageSW * iRoot.scale , flickable.width )
+            height: Math.max( imageSH * iRoot.scale , flickable.height )
+            Image {
+                id: showImage
+                anchors.centerIn: parent
+                scale: iRoot.scale
+                onStatusChanged: imageStatusChanged(status)
             }
-
-            // 滚动条
-            ScrollBar.vertical: ScrollBar { }
-            ScrollBar.horizontal: ScrollBar { }
         }
 
-        // 监听滚轮缩放
-        MouseArea {
-            anchors.fill: parent
-            acceptedButtons: Qt.NoButton
-            // 滚轮缩放
-            onWheel: {
-                if (wheel.angleDelta.y > 0) {
-                    imageScaleAddSub(1) // 放大
-                }
-                else {
-                    imageScaleAddSub(-1) // 缩小
-                }
+        // 滚动条
+        ScrollBar.vertical: ScrollBar { }
+        ScrollBar.horizontal: ScrollBar { }
+    }
+
+    // 监听滚轮缩放
+    MouseArea {
+        anchors.fill: parent
+        acceptedButtons: Qt.NoButton
+        // 滚轮缩放
+        onWheel: {
+            if (wheel.angleDelta.y > 0) {
+                imageScaleAddSub(1) // 放大
+            }
+            else {
+                imageScaleAddSub(-1) // 缩小
             }
         }
     }
