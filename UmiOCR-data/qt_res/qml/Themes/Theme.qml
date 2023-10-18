@@ -44,11 +44,11 @@ Item {
     property var titles: {
         "Default Light": qsTr("珍珠白"),
         "Default Dark": qsTr("云墨黑"),
-        "Solarized Light": qsTr("舒适亮")+" (Solarized Light)",
-        "Solarized Dark": qsTr("舒适暗")+" (Solarized Dark)",
+        "Cyberpunk": qsTr("赛博朋克"),
     }
     // 默认主题 / 当前读入的主题配置
     property var all: {
+        // 默认主题
         "Default Light": {
             "themeTitle": titles["Default Light"],
             "tabBarColor": "#F3F3F3",
@@ -79,6 +79,7 @@ Item {
             "coverColor3": "#44FFFFFF",
             "coverColor4": "#55FFFFFF",
         },
+        // 抄： https://github.com/altercation/solarized
         "Solarized Light": {
             "themeTitle": "Solarized Light",
             "tabBarColor": "#d9d2c2",
@@ -105,6 +106,22 @@ Item {
             "specialBgColor": "#00517D",
             "specialTextColor": "#00BFFF",
             "coverColor1": "#19FFFFFF",
+            "coverColor2": "#29FFFFFF",
+            "coverColor3": "#44FFFFFF",
+            "coverColor4": "#55FFFFFF"
+        },
+        // 抄： https://github.com/Fndroid/clash_for_windows_pkg
+        "Cyberpunk": {
+            "themeTitle": "Cyberpunk",
+            "tabBarColor": "#084A5A",
+            "bgColor": "#136377",
+            "textColor": "#FCEC0C",
+            "subTextColor": "#CF9F0F",
+            "yesColor": "#6EFC39",
+            "noColor": "#FF5E5E",
+            "specialBgColor": "#00517D",
+            "specialTextColor": "#00BFFF",
+            "coverColor1": "#33000000",
             "coverColor2": "#29FFFFFF",
             "coverColor3": "#44FFFFFF",
             "coverColor4": "#55FFFFFF"
