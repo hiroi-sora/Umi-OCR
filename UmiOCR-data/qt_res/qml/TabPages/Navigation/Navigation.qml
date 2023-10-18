@@ -108,17 +108,11 @@ TabPage {
                 contentWidth: width // 内容宽度
                 clip: true // 溢出隐藏
 
-                TextEdit {
+                TextEdit_ {
                     text: introText
                     width: introView.width // 与内容宽度相同
                     textFormat: TextEdit.MarkdownText // md格式
-                    wrapMode: TextEdit.Wrap // 尽量在单词边界处换行
                     readOnly: true // 只读
-                    selectByMouse: true // 允许鼠标选择文本
-                    selectByKeyboard: true // 允许键盘选择文本
-                    color: theme.textColor
-                    font.pixelSize: size_.text
-                    font.family: theme.fontFamily
                 }
             }
         }

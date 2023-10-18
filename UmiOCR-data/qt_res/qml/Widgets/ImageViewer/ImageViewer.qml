@@ -293,17 +293,11 @@ Item {
             contentWidth: width // 内容宽度
             clip: true // 溢出隐藏
 
-            TextEdit {
+            TextEdit_ {
                 id: selectTextEdit
                 width: selectScrollView.width // 与内容宽度相同
-                textFormat: TextEdit.PlainText // 纯文本
-                wrapMode: TextEdit.Wrap // 尽量在单词边界处换行
                 readOnly: false // 可编辑
-                selectByMouse: true // 允许鼠标选择文本
-                selectByKeyboard: true // 允许键盘选择文本
-                color: theme.textColor
                 font.pixelSize: size_.smallText
-                font.family: theme.dataFontFamily
             }
         }
     }

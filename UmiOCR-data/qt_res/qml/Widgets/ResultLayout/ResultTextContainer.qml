@@ -112,19 +112,15 @@ Item {
         radius: size_.baseRadius
         height: textMain_.height
 
-        TextEdit {
+        TextEdit_ {
             id: textMain_
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.leftMargin: size_.smallSpacing
             anchors.rightMargin: size_.smallSpacing
-            wrapMode: TextEdit.Wrap // 尽量在单词边界处换行
             readOnly: false // 可编辑
-            selectByMouse: true // 允许鼠标选择文本
-            selectByKeyboard: true // 允许键盘选择文本
+            persistentSelection: true // 丢失焦点时，保留选区
             color: status_==="error"? theme.noColor:theme.textColor
-            font.pixelSize: size_.text
-            font.family: theme.dataFontFamily
 
             // 按键事件。响应并拦截：单双击 Ctrl+C ，双击 Ctrl+A
             property int keyDoubleTime: 300 // 双击毫秒
@@ -151,12 +147,6 @@ Item {
                 if (event.key === Qt.Key_A || event.key === Qt.Key_C) {
                     lastUpTime = Date.now() & 0xFFFFFFFF
                     lastKey = event.key
-                }
-            }
-            // 丢失焦点时，刷新一次选中
-            onActiveFocusChanged: {
-                if(!activeFocus) {
-                    toUpdateSelect()
                 }
             }
         }
