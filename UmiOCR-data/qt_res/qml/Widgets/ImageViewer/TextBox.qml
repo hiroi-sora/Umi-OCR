@@ -16,6 +16,14 @@ Item {
 
     // 外部接口，重设字体和组件大小
     property var resetSize: textEdit.resetFontSize
+    property alias textEdit: textEdit // 文本组件
+
+    // 传入一个相对于item的坐标，返回该坐标的文本序号。
+    function where(item, mx, my) {
+        const textPoint = textEdit.mapFromItem(item, mx, my)
+        const textPos = textEdit.positionAt(textPoint.x, textPoint.y)
+        return textPos
+    }
 
     // 背景
     Rectangle {
@@ -29,6 +37,9 @@ Item {
         anchors.fill: parent
         color: textColor
         readOnly: true // 只读
+        selectByMouse: false // 禁止选择文本
+        selectByKeyboard: false
+        persistentSelection: true // 丢失焦点时，保留选区
         font.pixelSize: 10 // 初始：10像素
         
         // 重设字体大小，以适合组件大小

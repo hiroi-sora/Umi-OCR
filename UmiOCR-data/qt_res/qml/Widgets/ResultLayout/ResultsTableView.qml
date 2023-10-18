@@ -212,8 +212,7 @@ Item {
         }
         // 根据 Index 的参数，选择对应文本。
         function selectIndex() {
-            const lr = getIndexes()
-            const li=lr[0], lt=lr[1], ri=lr[2], rt=lr[3]
+            const [li, lt, ri, rt] = getIndexes()
             // 遍历每个文本框数据
             for (let i = 0, l=resultsModel.count; i < l; i++) {
                 if( li<0 || ri<0 || i<li || i>ri ) { // 未被选中
@@ -265,20 +264,19 @@ Item {
             if(startIndex>=0 && startIndex===endIndex && startTextIndex===endTextIndex) {
                 selectSingle()
             }
-            const lr = getIndexes()
-            let li=lr[0], lt=lr[1], ri=lr[2], rt=lr[3]
+            let [li, lt, ri, rt] = getIndexes()
             if(li >= 0 && ri >= 0) {
                 let copyText = ""
                 for(let i = li; i <= ri; i++) {
-                    let item = resultsModel.get(i)
+                    const item = resultsModel.get(i)
                     if(item.resText) {
                         // 范围检查
                         const text = item.resText
                         const len = text.length
-                        if (li < 0) li = 0
-                        if (li > len) li = len
-                        if (ri < li) ri = li
-                        if (ri > len) ri = len
+                        if (lt < 0) lt = 0
+                        if (lt > len) lt = len
+                        if (rt < lt) rt = lt
+                        if (rt > len) rt = len
                         // 获取文本
                         if(i === li && i === ri) // 单个块
                             copyText = text.substring(lt, rt)
@@ -292,11 +290,11 @@ Item {
                 }
                 if(copyText && copyText.length>0) {
                     qmlapp.utilsConnector.copyText(copyText)
-                    qmlapp.popup.simple(qsTr("复制%1字").arg(copyText.length), "")
+                    qmlapp.popup.simple(qsTr("记录：复制%1字").arg(copyText.length), "")
                     return copyText
                 }
             }
-            qmlapp.popup.simple(qsTr("无选中文字"), "")
+            qmlapp.popup.simple(qsTr("记录：无选中文字"), "")
             return ""
         }
         // 复制所有
@@ -305,16 +303,17 @@ Item {
             for (let i = 0, l=resultsModel.count; i < l; i++) {
                 let item = resultsModel.get(i)
                 if(item.resText) {
-                    copyText += item.resText + "\n"
+                    copyText += item.resText
+                    if(i < l-1) copyText += "\n"
                 }
             }
             qmlapp.utilsConnector.copyText(copyText)
-            qmlapp.popup.simple(qsTr("复制全部%1字").arg(copyText.length), "")
+            qmlapp.popup.simple(qsTr("记录：复制全部%1字").arg(copyText.length), "")
+            selectAll()
         }
         // 删除选中的文本框
         function selectDel() {
-            const lr = getIndexes()
-            const li=lr[0], ri=lr[2]
+            const [li, lt, ri, rt] = getIndexes()
             if(li < 0 || ri < 0) return
             const l = ri-li+1
             resultsModel.remove(li, l)

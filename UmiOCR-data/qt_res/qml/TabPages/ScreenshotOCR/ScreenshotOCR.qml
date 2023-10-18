@@ -309,7 +309,8 @@ TabPage {
                 }
             }
             // 图片预览区域
-            ImageViewer {
+            // ImageViewer {
+            ImageText {
                 id: imageViewer
                 anchors.top: dLeftTop.bottom
                 anchors.left: parent.left

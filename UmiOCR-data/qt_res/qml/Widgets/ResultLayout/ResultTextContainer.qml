@@ -40,7 +40,6 @@ Item {
             const textPos = textMain_.positionAt(textPoint.x, textPoint.y)
             return textPos
         }
-
     }
     // 将光标移到指定位置并激活焦点。
     function focus(pos) {
