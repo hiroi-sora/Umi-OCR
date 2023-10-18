@@ -7,6 +7,8 @@ import QtQuick.Controls 2.15
 import ".."
 
 Image_ {
+    id: iRoot
+    property bool showOverlay: true // 显示叠加层
 
     // 设置图片源，展示一张图片（覆盖父类方法）
     function setSource(source) {
@@ -47,6 +49,7 @@ Image_ {
     overlayLayer: Item {
         id: oRoot
         anchors.fill: parent
+        visible: showOverlay
 
         Repeater {
             id: textBoxRepeater
@@ -70,6 +73,8 @@ Image_ {
     
     MouseArea {
         id: mouseArea
+        visible: showOverlay
+        enabled: showOverlay
         anchors.fill: parent
         hoverEnabled: true
         property int startIndex: -1 // 拖拽开始时，文本框序号
@@ -250,9 +255,10 @@ Image_ {
         Menu_ {
             id: selectMenu
             menuList: [
-                [mouseArea.selectCopy, qsTr("复制　　（Ctrl+C 单击）")],
-                [mouseArea.selectAllCopy, qsTr("复制全部（Ctrl+C 双击）")],
-                [mouseArea.selectAll, qsTr("全选　　（Ctrl+A）")],
+                [mouseArea.selectCopy, qsTr("复制文本（Ctrl+C 单击）")],
+                [mouseArea.selectAllCopy, qsTr("复制全文（Ctrl+C 双击）")],
+                [mouseArea.selectAll, qsTr("全选文本（Ctrl+A 单击）")],
+                [iRoot.copyImage, qsTr("复制图片（Ctrl+A 双击）")],
             ]
         }
         // 按键事件
@@ -266,6 +272,7 @@ Image_ {
                     const t = Date.now() & 0xFFFFFFFF
                     // 双击
                     if(t - lastUpTime <= keyDoubleTime && lastKey==event.key) {
+                        event.key===Qt.Key_A && iRoot.copyImage()
                         event.key===Qt.Key_C && selectAllCopy()
                     }
                     else { // 单击

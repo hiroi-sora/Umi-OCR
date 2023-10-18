@@ -3,10 +3,13 @@
 # ==========================================================
 
 from PySide2.QtCore import Qt
-from PySide2.QtGui import QPixmap, QImage, QPainter
+from PySide2.QtGui import QPixmap, QImage, QPainter, QClipboard
 from PySide2.QtCore import QByteArray, QBuffer, QIODevice
 from PySide2.QtQuick import QQuickImageProvider
 from uuid import uuid4  # 唯一ID
+import os
+
+Clipboard = QClipboard()  # 剪贴板
 
 
 # Pixmap型图片提供器
@@ -67,3 +70,31 @@ class PixmapProviderClass(QQuickImageProvider):
 
 # 图片提供器 单例
 PixmapProvider = PixmapProviderClass()
+
+
+# 复制一张图片到剪贴板
+def copyImage(path):
+    if path.startswith("image://pixmapprovider/"):
+        path = path[23:]
+        if path in PixmapProvider.pixmapDict:
+            Clipboard.setPixmap(PixmapProvider.pixmapDict[path])
+            return "[Success]"
+        else:
+            return f"[Warning] ID {path} not in pixmapDict."
+    elif path.startswith("file:///"):
+        path = path[8:]
+        if os.path.exists(path):
+            image = QImage(path)
+            Clipboard.setImage(image)
+            return "[Success]"
+        else:
+            return f"[Warning] Path {path} not exists."
+
+    if path in PixmapProvider.pixmapDict:
+        Clipboard.setPixmap(PixmapProvider.pixmapDict[path])
+        return "[Success]"
+    if os.path.exists(path):
+        image = QImage(path)
+        Clipboard.setImage(image)
+        return "[Success]"
+    return f"[Warning] Unknow: {path}"
