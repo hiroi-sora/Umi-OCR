@@ -383,9 +383,9 @@ Item {
         Menu_ {
             id: selectMenu
             menuList: [
-                [tableMouseArea.selectCopy, qsTr("复制选中　　（Ctrl+C 单击）")],
+                [tableMouseArea.selectCopy, qsTr("复制　　　　（Ctrl+C）")],
                 [tableMouseArea.selectAllCopy, qsTr("复制全部　　（Ctrl+C 双击）")],
-                [tableMouseArea.selectSingle, qsTr("选中单个记录（Ctrl+A 单击）")],
+                [tableMouseArea.selectSingle, qsTr("选中单个　　（Ctrl+A）")],
                 [tableMouseArea.selectAll, qsTr("选中全部记录（Ctrl+A 双击）")],
                 [tableMouseArea.selectDel, qsTr("删除选中记录"), "noColor"],
                 [tableMouseArea.selectAllDel, qsTr("清空全部记录"), "noColor"],
@@ -431,14 +431,15 @@ Item {
                     }
                 }
             }
-            Button_ {
+            // 菜单
+            IconButton {
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
-                text_: qsTr("菜单")
-                toolTip: qsTr("右键可打开菜单")
-                onClicked: {
-                    selectMenu.popup()
-                }
+                width: height
+                icon_: "menu"
+                color: theme.textColor
+                onClicked: selectMenu.popup()
+                toolTip: qsTr("右键菜单")
             }
         }
     }

@@ -224,8 +224,9 @@ Image_ {
             selectAll()
         }
 
-        // 进入，获取焦点
-        onEntered: mouseArea.forceActiveFocus()
+        // 进入获取焦点，离开解除焦点
+        onEntered: mouseArea.focus = true
+        onExited: mouseArea.focus = false
         // 按下
         onPressed: {
             mouseArea.forceActiveFocus()
@@ -277,36 +278,18 @@ Image_ {
         Menu_ {
             id: selectMenu
             menuList: [
-                [mouseArea.selectCopy, qsTr("复制文本（Ctrl+C）")],
-                [mouseArea.selectAll, qsTr("全选文本（Ctrl+A）")],
-                [iRoot.copyImage, qsTr("复制图片（Ctrl+A 双击）")],
+                [mouseArea.selectCopy, qsTr("复制　　（Ctrl+C）")],
+                [mouseArea.selectAll, qsTr("全选　　（Ctrl+A）")],
+                [iRoot.copyImage, qsTr("复制图片（Ctrl+X）")],
                 [iRoot.switchOverlay, qsTr("显示/隐藏文本")],
             ]
         }
         // 按键事件
-        property int keyDoubleTime: 300 // 双击毫秒
-        property int lastUpTime: -1 // 上次按键抬起的时间戳。需要截取后8位以免int放不下
-        property int lastKey: -1 // 上次按键的键值
         Keys.onPressed: {
             if (event.modifiers & Qt.ControlModifier) {
-                if (event.key === Qt.Key_A || event.key === Qt.Key_C) {
-                    event.accepted = true // 拦截按键
-                    const t = Date.now() & 0xFFFFFFFF
-                    // 双击
-                    if(t - lastUpTime <= keyDoubleTime && lastKey==event.key) {
-                        event.key===Qt.Key_A && iRoot.copyImage()
-                    }
-                    else { // 单击
-                        event.key===Qt.Key_A && selectAll()
-                        event.key===Qt.Key_C && selectCopy()
-                    }
-                }
-            }
-        }
-        Keys.onReleased: {
-            if (event.key === Qt.Key_A || event.key === Qt.Key_C) {
-                lastUpTime = Date.now() & 0xFFFFFFFF
-                lastKey = event.key
+                event.key===Qt.Key_A && selectAll()
+                event.key===Qt.Key_C && selectCopy()
+                event.key===Qt.Key_X && iRoot.copyImage()
             }
         }
     }
