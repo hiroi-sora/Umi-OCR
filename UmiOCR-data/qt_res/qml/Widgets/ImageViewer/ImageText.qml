@@ -234,7 +234,10 @@ Image_ {
                 selectMenu.popup()
                 return
             }
-            if(!showOverlay) return
+            if(!showOverlay) {
+                mouse.accepted = false
+                return
+            }
             initIndex()
             const tbi = mouseInTextBox()
             cursorShape = tbi < 0 ? Qt.ClosedHandCursor : Qt.IBeamCursor
