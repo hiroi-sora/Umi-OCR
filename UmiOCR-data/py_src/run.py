@@ -31,7 +31,7 @@ def runQml():
     from .utils.global_configs_connector import GlobalConfigsConnector  # 全局配置连接器
     from .utils.theme_connector import ThemeConnector  # 主题连接器
     from .utils.image_provider import PixmapProvider  # 图片提供器
-    from .utils.i18n import I18n  # 语言
+    from .utils.i18n_configs import I18n  # 语言
     from .utils import app_opengl  # 渲染器
 
     # 1. 全局参数设置

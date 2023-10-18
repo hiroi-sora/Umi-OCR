@@ -1,7 +1,7 @@
 # 全局设置连接器
 
 from . import app_opengl
-from .i18n import I18n
+from .i18n_configs import I18n
 from .shortcut import ShortcutApi
 from ..server import web_server
 from ..server.cmd_server import CmdActuator

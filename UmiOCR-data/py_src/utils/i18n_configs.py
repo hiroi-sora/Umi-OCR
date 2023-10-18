@@ -1,4 +1,4 @@
-# UI语言
+# UI语言设置
 
 import os
 from . import pre_configs
