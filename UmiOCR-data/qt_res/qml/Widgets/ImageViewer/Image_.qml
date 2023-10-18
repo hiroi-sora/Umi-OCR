@@ -27,6 +27,18 @@ Rectangle {
                 source = source.replace(new RegExp("#", "g"), "%23");
             showImage.source = source // 设置源
         }
+        else
+            showImage.source = ""
+    }
+
+    // 复制当前图片
+    function copyImage() {
+        if(showImage.source == "") return
+        const res = qmlapp.utilsConnector.copyImage(showImage.source)
+        if(res=="[Success]")
+            qmlapp.popup.simple(qsTr("复制图片"), "")
+        else
+            qmlapp.popup.simple(qsTr("复制图片失败"), res)
     }
 
     // ========================= 【处理】 =========================
@@ -120,6 +132,7 @@ Rectangle {
                 id: showImage
                 anchors.centerIn: parent
                 scale: iRoot.scale
+                source: ""
                 onStatusChanged: imageStatusChanged(status)
             }
         }
