@@ -10,6 +10,17 @@ Image_ {
     id: iRoot
     property bool showOverlay: true // 显示叠加层
 
+    // 弹出菜单
+    function popupMenu() {
+        selectMenu.popup()
+    }
+    // 显示/隐藏叠加层
+    function switchOverlay() {
+        showOverlay = !showOverlay
+        if(!showOverlay)
+            mouseArea.cursorShape = Qt.OpenHandCursor
+    }
+
     // 设置图片源，展示一张图片（覆盖父类方法）
     function setSource(source) {
         mouseArea.initIndex() // 清空选字参数
@@ -73,8 +84,6 @@ Image_ {
     
     MouseArea {
         id: mouseArea
-        visible: showOverlay
-        enabled: showOverlay
         anchors.fill: parent
         hoverEnabled: true
         property int startIndex: -1 // 拖拽开始时，文本框序号
@@ -167,6 +176,12 @@ Image_ {
         }
         // 复制已选中的内容
         function selectCopy() {
+            // 没有有效选中，则复制全部
+            if(startIndex<0 || endIndex<0 || 
+                (startIndex==endIndex&&startTextIndex==endTextIndex)) {
+                selectAllCopy()
+                return
+            }
             let [li, lt, ri, rt] = getIndexes()
             if(li >= 0 && ri >= 0) {
                 let copyText = ""
@@ -209,13 +224,16 @@ Image_ {
             selectAll()
         }
 
+        // 进入，获取焦点
+        onEntered: mouseArea.forceActiveFocus()
         // 按下
         onPressed: {
-            mouseArea.forceActiveFocus() // 获取焦点
+            mouseArea.forceActiveFocus()
             if (mouse.button === Qt.RightButton) {
                 selectMenu.popup()
                 return
             }
+            if(!showOverlay) return
             initIndex()
             const tbi = mouseInTextBox()
             cursorShape = tbi < 0 ? Qt.ClosedHandCursor : Qt.IBeamCursor
@@ -229,6 +247,7 @@ Image_ {
         }
         // 移动
         onPositionChanged: {
+            if(!showOverlay) return
             const tbi = mouseInTextBox()
             if(pressed) { // 拖拽中
                 if(tbi >= 0) { // 选择文本
@@ -243,22 +262,25 @@ Image_ {
         }
         // 抬起
         onReleased: {
+            if(!showOverlay) return
             if (mouse.button === Qt.RightButton) return
             const tbi = mouseInTextBox()
             cursorShape = tbi < 0 ? Qt.OpenHandCursor : Qt.IBeamCursor
             if(startIndex === -1) return
-            endIndex = tbi
-            endTextIndex = mouseInTextIndex(tbi)
+            if(tbi >= 0) {
+                endIndex = tbi
+                endTextIndex = mouseInTextIndex(tbi)
+            }
             selectIndex()
         }
         // 菜单
         Menu_ {
             id: selectMenu
             menuList: [
-                [mouseArea.selectCopy, qsTr("复制文本（Ctrl+C 单击）")],
-                [mouseArea.selectAllCopy, qsTr("复制全文（Ctrl+C 双击）")],
-                [mouseArea.selectAll, qsTr("全选文本（Ctrl+A 单击）")],
+                [mouseArea.selectCopy, qsTr("复制文本（Ctrl+C）")],
+                [mouseArea.selectAll, qsTr("全选文本（Ctrl+A）")],
                 [iRoot.copyImage, qsTr("复制图片（Ctrl+A 双击）")],
+                [iRoot.switchOverlay, qsTr("显示/隐藏文本")],
             ]
         }
         // 按键事件
@@ -273,7 +295,6 @@ Image_ {
                     // 双击
                     if(t - lastUpTime <= keyDoubleTime && lastKey==event.key) {
                         event.key===Qt.Key_A && iRoot.copyImage()
-                        event.key===Qt.Key_C && selectAllCopy()
                     }
                     else { // 单击
                         event.key===Qt.Key_A && selectAll()

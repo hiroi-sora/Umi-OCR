@@ -280,22 +280,31 @@ TabPage {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.topMargin: size_.smallSpacing
-                height: size_.line * 1.2
+                height: size_.line * 1.5
+                // 靠左
                 Row {
-                    anchors.fill: parent
+                    anchors.left: parent.left
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
                     anchors.leftMargin: size_.spacing
-                    spacing: size_.spacing
+                    spacing: size_.smallSpacing
 
-                    Button_ {
+                    IconButton {
                         anchors.top: parent.top
                         anchors.bottom: parent.bottom
-                        text_: qsTr("截图")
+                        width: height
+                        icon_: "screenshot"
+                        color: theme.textColor
+                        toolTip: qsTr("屏幕截图")
                         onClicked: tabPage.screenshot()
                     }
-                    Button_ {
+                    IconButton {
                         anchors.top: parent.top
                         anchors.bottom: parent.bottom
-                        text_: qsTr("粘贴")
+                        width: height
+                        icon_: "paste"
+                        color: theme.textColor
+                        toolTip: qsTr("粘贴图片")
                         onClicked: tabPage.paste()
                     }
                     Button_ {
@@ -307,15 +316,75 @@ TabPage {
                         onClicked: tabPage.msnStop()
                     }
                 }
+                // 靠右
+                Row {
+                    anchors.top: parent.top
+                    anchors.right: parent.right
+                    anchors.bottom: parent.bottom
+                    anchors.rightMargin: size_.spacing
+                    spacing: size_.smallSpacing
+
+                    // 显示文字
+                    CheckButton {
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        text_: qsTr("文字")
+                        toolTip: qsTr("在图片上叠加显示识别文本")
+                        checked: imageViewer.showOverlay
+                        enabledAnime: true
+                        onCheckedChanged: imageViewer.showOverlay = checked
+                    }
+                    // 菜单
+                    IconButton {
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        width: height
+                        icon_: "menu"
+                        color: theme.subTextColor
+                        onClicked: imageViewer.popupMenu()
+                        toolTip: qsTr("右键菜单")
+                    }
+                    // 适合宽高
+                    IconButton {
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        width: height
+                        icon_: "full_screen"
+                        color: theme.subTextColor
+                        onClicked: imageViewer.imageFullFit()
+                        toolTip: qsTr("图片大小：适应窗口")
+                    }
+                    // 1:1
+                    IconButton {
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        width: height
+                        icon_: "one_to_one"
+                        color: theme.subTextColor
+                        onClicked: imageViewer.imageScaleAddSub(0)
+                        toolTip: qsTr("图片大小：实际")
+                    }
+                    // 百分比显示
+                    Text_ {
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        verticalAlignment: Text.AlignBottom
+                        horizontalAlignment: Text.AlignRight
+                        text: (imageViewer.scale*100).toFixed(0) + "%"
+                        color: theme.subTextColor
+                        width: size_.line * 2.5
+                    }
+                }
             }
             // 图片预览区域
-            // ImageViewer {
             ImageText {
                 id: imageViewer
                 anchors.top: dLeftTop.bottom
+                anchors.bottom: parent.bottom
                 anchors.left: parent.left
                 anchors.right: parent.right
-                anchors.bottom: parent.bottom
+                anchors.margins: size_.spacing
+                anchors.topMargin: size_.smallSpacing
 
                 // 加载中 动态图标
                 Loading {

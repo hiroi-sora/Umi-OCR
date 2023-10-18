@@ -13,6 +13,7 @@ Rectangle {
     property real scaleMax: 2.0 // 比例上下限
     property real scaleMin: 0.1 // 比例上下限
     property QtObject overlayLayer // 图片叠加层
+    property var border: bRect.border // 边框
     // 只读
     property alias showImage: showImage // 图片组件
     property real scale: 1.0 // 图片缩放比例
@@ -155,5 +156,14 @@ Rectangle {
                 imageScaleAddSub(-1) // 缩小
             }
         }
+    }
+
+    // 边框
+    Rectangle {
+        id: bRect
+        anchors.fill: parent
+        color: "#00000000"
+        border.width: 1
+        border.color: theme.coverColor4
     }
 }

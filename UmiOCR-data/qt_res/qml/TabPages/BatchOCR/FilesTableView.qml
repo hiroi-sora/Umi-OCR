@@ -114,7 +114,6 @@ Item{
                         if(msnState === "none")
                             fileDialog.open()
                     }
-                    
                 }
 
                 // 右清空按钮
