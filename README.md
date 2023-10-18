@@ -65,10 +65,6 @@
 
 [Releases](https://github.com/hiroi-sora/Umi-OCR_v2/releases)
 
-<!-- #### v2 插件库
-
-[Umi-OCR_plugins](https://github.com/hiroi-sora/Umi-OCR_plugins) -->
-
 #### v1.3 稳定版本
 
 [Umi-OCR 主仓库](https://github.com/hiroi-sora/Umi-OCR)
@@ -204,14 +200,19 @@ Umi-OCR 允许通过命令行调用每一个标签页（模块）上的任意函
 
 ## 关于项目依赖：
 
+
+插件库：
+
+- [Umi-OCR_plugins](https://github.com/hiroi-sora/Umi-OCR_plugins)
+
 支持的离线OCR引擎：
 
-- [PaddleOCR-json](https://github.com/hiroi-sora/PaddleOCR-json) 仅支持Win10 x64以上，性能更好，速度快。
-- [RapidOCR-json](https://github.com/hiroi-sora/RapidOCR-json) 兼容Win7 x64 ，内存占用低，适合低配机器。
+- [PaddleOCR-json](https://github.com/hiroi-sora/PaddleOCR-json)
+- [RapidOCR-json](https://github.com/hiroi-sora/RapidOCR-json)
 
 运行环境框架：
 
-- [PyStand](https://github.com/skywind3000/PyStand) 的定制版。
+- [PyStand](https://github.com/skywind3000/PyStand) 定制版
 
 ## 开发计划
 
