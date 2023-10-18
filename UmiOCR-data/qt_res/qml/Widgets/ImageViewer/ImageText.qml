@@ -13,8 +13,8 @@ Image_ {
         Rectangle {
             x: 100
             y: 50
-            width: 400
-            height: 100
+            width: 70
+            height: 300
             color: theme.coverColor4
 
             TextEdit_ {
@@ -34,7 +34,9 @@ Image_ {
                 function resetFontSize() {
                     console.log("================")
                     let s = getAreaScale()
-                    font.pixelSize *= s
+                    font.pixelSize *= Math.sqrt(s)
+                    // if(s > 1) font.pixelSize ++
+                    // else font.pixelSize --
                     console.log(width, height, contentWidth, contentHeight )
                     console.log(s, font.pixelSize)
                     console.log("================")
