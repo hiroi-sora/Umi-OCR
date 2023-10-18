@@ -293,7 +293,7 @@ TabPage {
     // ========================= 【布局】 =========================
 
     // 主区域：左右双栏面板。
-    DoubleColumnLayout {
+    DoubleRowLayout {
         anchors.fill: parent
         initSplitterX: 0.5
 

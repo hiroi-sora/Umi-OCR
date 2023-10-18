@@ -88,7 +88,7 @@ Rectangle {
                 onClicked: {}
             }
 
-            DoubleColumnLayout {
+            DoubleRowLayout {
                 anchors.fill: parent
                 initSplitterX: 0.5
                 leftItem: Panel {

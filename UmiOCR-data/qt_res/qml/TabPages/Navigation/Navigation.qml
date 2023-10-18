@@ -45,7 +45,7 @@ TabPage {
 
     // =============== 布局 ===============
 
-    DoubleColumnLayout {
+    DoubleRowLayout {
         anchors.fill: parent
         initSplitterX: 250
         

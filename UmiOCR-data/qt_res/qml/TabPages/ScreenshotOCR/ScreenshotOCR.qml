@@ -262,7 +262,7 @@ TabPage {
         }
     }
     // 主区域：双栏面板
-    DoubleColumnLayout {
+    DoubleRowLayout {
         id: doubleColumnLayout
         anchors.left: leftCtrlPanel.right
         anchors.top: parent.top
