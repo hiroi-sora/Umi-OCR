@@ -63,7 +63,6 @@ Item {
         try {
             // 加载并检查主题字典
             let all = JSON.parse(tstr)
-            console.log("加载主题长度1：", Object.keys(all).length)
             for(let k in all) {
                 if(!checkThemeDict(all[k])) {
                     console.log("[Warning] 加载单个主题失败：", k)
@@ -75,7 +74,6 @@ Item {
                     all[k].themeTitle = theme.titles[k]
                 }
             }
-            console.log("加载主题长度2：", Object.keys(all).length)
             if(Object.keys(all).length === 0) {
                 return false
             }

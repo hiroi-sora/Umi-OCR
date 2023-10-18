@@ -13,9 +13,11 @@ ToolTip {
     timeout: 0 // 不自动关闭
 
     MouseArea {
+        id: mouseArea
         anchors.fill: parent
-        onEntered: {
-            rootToolTip.y = mouseY + 10
+        hoverEnabled: true
+        onEntered: { // 遮挡鼠标时，下移
+            rootToolTip.y += size_.line
         }
     }
 
