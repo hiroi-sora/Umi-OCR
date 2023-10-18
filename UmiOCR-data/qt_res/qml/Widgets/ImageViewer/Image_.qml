@@ -14,17 +14,19 @@ Rectangle {
     property real scaleMin: 0.1 // 比例上下限
     property QtObject overlayLayer // 图片叠加层
     // 只读
+    property alias showImage: showImage // 图片组件
     property real scale: 1.0 // 图片缩放比例
     property int imageSW: 0 // 图片原始宽高
     property int imageSH: 0
 
     // 设置图片源，展示一张图片
     function setSource(source) {
-        // 特殊字符#替换为%23
-        if(source.startsWith("file:///") && source.includes("#")) {
-            source = source.replace(new RegExp("#", "g"), "%23");
+        if(source) {
+            // 特殊字符#替换为%23
+            if(source.startsWith("file:///") && source.includes("#"))
+                source = source.replace(new RegExp("#", "g"), "%23");
+            showImage.source = source // 设置源
         }
-        showImage.source = source // 设置源
     }
 
     // ========================= 【处理】 =========================

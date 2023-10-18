@@ -7,49 +7,62 @@ import QtQuick.Controls 2.15
 import ".."
 
 Image_ {
+
+    // 设置图片源，展示一张图片（覆盖父类方法）
+    function setSource(source) {
+        textBoxes = [] // 清空旧文本块
+        if(source) {
+            // 特殊字符#替换为%23
+            if(source.startsWith("file:///") && source.includes("#"))
+                source = source.replace(new RegExp("#", "g"), "%23");
+            showImage.source = source // 设置源
+        }
+    }
+
+    // 展示图片及 OCR文本块
+    function setSourceResult(source, res) {
+        setSource(source)
+        // 提取文本框
+        textBoxes = []
+        if(res.code == 100 && res.data.length > 0) {
+            let tbs = []
+            for(let i in res.data) {
+                const d = res.data[i]
+                const info = {
+                    x: d.box[0][0],
+                    y: d.box[0][1],
+                    width: d.box[2][0] - d.box[0][0],
+                    height: d.box[2][1] - d.box[0][1],
+                    text: d.text,
+                }
+                tbs.push(info)
+            }
+            textBoxes = tbs
+        }
+    }
+
+    property var textBoxes: [] // 文本块列表
+
+    // 文本块叠加层
     overlayLayer: Item {
         anchors.fill: parent
 
-        Rectangle {
-            x: 100
-            y: 50
-            width: 70
-            height: 300
-            color: theme.coverColor4
+        Repeater {
+            id: textBoxRepeater
+            model: textBoxes
+            TextBox {
+                text: modelData.text
+                x: modelData.x
+                y: modelData.y
 
-            TextEdit_ {
-                id: textEdit
-                text: "在这个例子中，globalMouseArea 是一个全局的 MouseArea，它捕获所有的鼠标事件。当鼠标在 m1 中被按下时，它会开始拖动 m1。当鼠标在 m2 中被释放时，它会停止拖动，并输出一条消息。"
-                anchors.fill: parent
-                readOnly: true // 只读
-                font.pixelSize: 10 // 初始：10像素
-                // onTextChanged: resetFontSize()
-                // 获取当前字体大小下，文字区域与组件区域的面积比例
-                function getAreaScale() {
-                    if(contentWidth===0 || contentHeight===0)
-                        return 0
-                    return (width * height) / (contentWidth * contentHeight)
-                }
-                // 重设字体大小，以适合组件大小
-                function resetFontSize() {
-                    console.log("================")
-                    let s = getAreaScale()
-                    font.pixelSize *= Math.sqrt(s)
-                    // if(s > 1) font.pixelSize ++
-                    // else font.pixelSize --
-                    console.log(width, height, contentWidth, contentHeight )
-                    console.log(s, font.pixelSize)
-                    console.log("================")
-                }
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: textEdit.resetFontSize()
+                Component.onCompleted: {
+                    width = modelData.width
+                    height = modelData.height
+                    resetSize() // 自适应字体和组件大小
+                    modelData.width = width // 记录修改后的组件大小
+                    modelData.height = height
                 }
             }
         }
-        Text_ {
-            text: "测试测试"
-        }
-        
     }
 }
