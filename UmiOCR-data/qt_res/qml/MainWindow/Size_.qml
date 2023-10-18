@@ -42,7 +42,7 @@ Item {
     // 常用间距
     property real spacing: 7 * scale
     // 小间距
-    property real smallSpacing: 5 * scale
+    property real smallSpacing: 4 * scale
 
     
     // Component.onCompleted: {

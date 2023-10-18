@@ -281,7 +281,7 @@ Image_ {
                 [mouseArea.selectCopy, qsTr("复制　　（Ctrl+C）")],
                 [mouseArea.selectAll, qsTr("全选　　（Ctrl+A）")],
                 [iRoot.copyImage, qsTr("复制图片（Ctrl+X）")],
-                [iRoot.switchOverlay, qsTr("显示/隐藏文本")],
+                [iRoot.switchOverlay, qsTr("显示/隐藏文字")],
             ]
         }
         // 按键事件

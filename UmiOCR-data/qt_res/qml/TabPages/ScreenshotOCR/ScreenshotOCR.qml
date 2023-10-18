@@ -273,6 +273,7 @@ TabPage {
         // 左面板
         leftItem: Panel {
             anchors.fill: parent
+            clip: true
             // 顶部控制栏
             Item  {
                 id: dLeftTop
@@ -283,6 +284,7 @@ TabPage {
                 height: size_.line * 1.5
                 // 靠左
                 Row {
+                    id: dLeftTopL
                     anchors.left: parent.left
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
@@ -318,18 +320,20 @@ TabPage {
                 }
                 // 靠右
                 Row {
+                    id: dLeftTopR
                     anchors.top: parent.top
                     anchors.right: parent.right
                     anchors.bottom: parent.bottom
                     anchors.rightMargin: size_.spacing
                     spacing: size_.smallSpacing
+                    visible: dLeftTop.width > dLeftTopL.width + dLeftTopR.width
 
                     // 显示文字
                     CheckButton {
                         anchors.top: parent.top
                         anchors.bottom: parent.bottom
                         text_: qsTr("文字")
-                        toolTip: qsTr("在图片上叠加显示识别文本")
+                        toolTip: qsTr("在图片上叠加显示识别文字")
                         checked: imageViewer.showOverlay
                         enabledAnime: true
                         onCheckedChanged: imageViewer.showOverlay = checked
