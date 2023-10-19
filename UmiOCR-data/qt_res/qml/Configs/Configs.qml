@@ -200,6 +200,7 @@ Item {
                         flag = !(val==null || isNaN(val)) // 若非数字，则设为默认数值
                         break
                     case "enum": // 枚举，检查记录参数是否在列表内
+                        val = str2var(val) // 尝试转为合适类型
                         for(let i in config.optionsList) {
                             if(config.optionsList[i][0] == val) {
                                 flag = true
@@ -244,6 +245,19 @@ Item {
             }
         }
         handleConfigGroup(configDict)
+    }
+    // 尝试将字符串类型的变量转为合适的类型
+    function str2var(str) {
+        // 非字符串
+        if(typeof str !== "string") return str
+        // 尝试转数字
+        const num = Number(str)
+        if(!isNaN(num)) return num
+        // 尝试转布尔
+        if(str === "true") return true
+        if(str === "false") return false
+        // 都不符合，保持为字符串
+        return str
     }
     // 补充空白参数
     function supplyDefaultParams(config) {
