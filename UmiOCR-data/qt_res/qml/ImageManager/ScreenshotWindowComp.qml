@@ -58,13 +58,7 @@ Window {
             }
         }
         else {
-            argd = {
-                imgID: imgID, 
-                clipX: -1, 
-                clipY: -1, 
-                clipW: -1, 
-                clipH: -1,
-            }
+            argd = {clipX:-1, clipY:-1, clipW:-1, clipH:-1}
         }
         // 向父级回报
         win.screenshotEnd(argd) 
@@ -79,7 +73,7 @@ Window {
     Rectangle {
         id: darkLayer
         anchors.fill: parent
-        color: "#88000000"
+        color: "#73000000"
         // 遮罩，拖拽时扣除框选区域
         layer.enabled: mouseStatus==1
         layer.effect: OpacityMask {

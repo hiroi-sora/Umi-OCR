@@ -8,6 +8,8 @@ import ImageConnector 1.0 // 图片连接器
 Item {
     // ========================= 【接口】 =========================
 
+    // 截图
+    property var screenshot: screenshotManager.screenshot
     // 复制图片
     property var copyImage: imageConnector.copyImage
 
@@ -15,4 +17,6 @@ Item {
 
     // 图片连接器
     property QtObject imageConnector: ImageConnector {}
+    // 截图管理器
+    property QtObject screenshotManager: ScreenshotManager {}
 }
