@@ -3,7 +3,7 @@
 # ========================================
 
 from .page import Page  # 页基类
-from ..utils.image_provider import PixmapProvider  # 图片提供器
+from ..img_controller.img_provider import PixmapProvider  # 图片提供器
 from ..mission.mission_ocr import MissionOCR  # 任务管理器
 from ..utils.utils import findImages
 

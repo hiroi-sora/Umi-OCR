@@ -4,6 +4,7 @@
 Temp
 build
 PyStand_for_UmiOCR/build
+*.exe
 
 # 开发工具
 dev-tools/i18n/*.txt
