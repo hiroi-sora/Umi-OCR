@@ -30,7 +30,7 @@ def runQml():
     from .utils.utils_connector import UtilsConnector  # 通用连接器
     from .utils.global_configs_connector import GlobalConfigsConnector  # 全局配置连接器
     from .utils.theme_connector import ThemeConnector  # 主题连接器
-    from .image_controller.image_connector import ImgConnector  # 图片处理连接器
+    from .image_controller.image_connector import ImageConnector  # 图片处理连接器
     from .image_controller.image_provider import PixmapProvider  # 图片提供器
     from .utils.i18n_configs import I18n  # 语言
     from .utils import app_opengl  # 渲染器
@@ -60,7 +60,7 @@ def runQml():
     qmlRegisterType(UtilsConnector, "UtilsConnector", 1, 0, "UtilsConnector")
     qmlRegisterType(PluginsConnector, "PluginsConnector", 1, 0, "PluginsConnector")
     qmlRegisterType(ThemeConnector, "ThemeConnector", 1, 0, "ThemeConnector")
-    qmlRegisterType(ImgConnector, "ImgConnector", 1, 0, "ImgConnector")
+    qmlRegisterType(ImageConnector, "ImageConnector", 1, 0, "ImageConnector")
     qmlRegisterType(
         GlobalConfigsConnector, "GlobalConfigsConnector", 1, 0, "GlobalConfigsConnector"
     )
@@ -108,4 +108,6 @@ def main():
     if not initCmd():  # 初始化命令行，如果已有Umi-OCR在运行则结束运行
         sys.exit(0)
     res = runQml()  # 启动qml
-    sys.exit(res)
+    if res != 0:
+        os.Messagebox(f"Umi-OCR 异常退出。代码：{res}", info="Umi-OCR Error")
+    sys.exit(0)

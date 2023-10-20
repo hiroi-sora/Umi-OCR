@@ -3,16 +3,16 @@
 // =========================================
 
 import QtQuick 2.15
-import ImgConnector 1.0 // 图片连接器
+import ImageConnector 1.0 // 图片连接器
 
 Item {
     // ========================= 【接口】 =========================
 
     // 复制图片
-    property var copyImage: imgConnector.copyImage
+    property var copyImage: imageConnector.copyImage
 
     // ===========================================================
 
     // 图片连接器
-    ImgConnector { id: imgConnector }
+    property QtObject imageConnector: ImageConnector {}
 }
