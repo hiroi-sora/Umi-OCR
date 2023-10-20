@@ -198,22 +198,6 @@ Umi-OCR 允许通过命令行调用每一个标签页（模块）上的任意函
 - 如：命令行 `Umi-OCR.exe --call_qml ScreenshotOCR`
 - 等价于： `POST /argv ["--call_qml", "ScreenshotOCR"]`
 
-## 关于项目依赖：
-
-
-插件库：
-
-- [Umi-OCR_plugins](https://github.com/hiroi-sora/Umi-OCR_plugins)
-
-支持的离线OCR引擎：
-
-- [PaddleOCR-json](https://github.com/hiroi-sora/PaddleOCR-json)
-- [RapidOCR-json](https://github.com/hiroi-sora/RapidOCR-json)
-
-运行环境框架：
-
-- [PyStand](https://github.com/skywind3000/PyStand) 定制版
-
 ## 开发计划
 
 <details>
@@ -275,6 +259,48 @@ Umi-OCR 允许通过命令行调用每一个标签页（模块）上的任意函
 - 兼容32位系统。
 
 </details>
+
+
+## 关于项目结构
+
+### 各仓库：
+
+- [主仓库](https://github.com/hiroi-sora/Umi-OCR_v2) 👈
+- [插件库](https://github.com/hiroi-sora/Umi-OCR_plugins)
+- [Win 运行库](https://github.com/hiroi-sora/Umi-OCR_runtime_windows)
+
+### 工程结构：
+
+`**` 后缀表示本仓库(`主仓库`)包含的内容。
+
+```
+Umi-OCR
+├─ Umi-OCR.exe
+└─ UmiOCR-data
+   ├─ main.py **
+   ├─ version.py **
+   ├─ site-packages
+   │  └─ python包
+   ├─ runtime
+   │  └─ python解释器
+   ├─ qt_res **
+   │  └─ 项目qt资源，包括图标和qml源码
+   ├─ py_src **
+   │  └─ 项目python源码
+   ├─ plugins
+   │  └─ 插件
+   └─ i18n **
+      └─ 翻译文件
+```
+
+支持的离线OCR引擎：
+
+- [PaddleOCR-json](https://github.com/hiroi-sora/PaddleOCR-json)
+- [RapidOCR-json](https://github.com/hiroi-sora/RapidOCR-json)
+
+运行环境框架：
+
+- [PyStand](https://github.com/skywind3000/PyStand) 定制版
 
 ## 构建项目
 
