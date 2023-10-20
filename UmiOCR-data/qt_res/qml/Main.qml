@@ -10,7 +10,6 @@ import Qt.labs.settings 1.1
 import MissionConnector 1.0 // Python任务连接器
 import KeyMouseConnector 1.0 // 键盘/鼠标连接器
 import UtilsConnector 1.0 // 通用连接器
-import ImgConnector 1.0 // 图片连接器
 
 import "Themes"
 import "TabView_"
@@ -18,6 +17,7 @@ import "Configs"
 import "EventBus"
 import "Popup_"
 import "MainWindow"
+import "ImageManager"
 
 Window {
     id: mainWindowRoot
@@ -47,7 +47,7 @@ Window {
 
         // 普通全局单例
         TabViewManager { id: tab }  // 标签页逻辑管理器
-        ImgConnector { id: imgConnector }  // 图片处理连接器
+        ImageManager { id: imageManager }  // 图片管理器
         MissionConnector { id: msnConnector } // 任务连接器
         PubSub { id: pubSub } // 全局事件发布/订阅
         KeyMouseConnector { id:keyMouse } // 鼠标/键盘
@@ -59,7 +59,7 @@ Window {
         PopupManager { id: popup }  // 弹窗管理器
         GlobalConfigs { id: globalConfigs }  // 全局设置
 
-        property alias imgConnector: imgConnector
+        property alias imageManager: imageManager
         property alias globalConfigs: globalConfigs
         property alias tab: tab
         property alias popup: popup

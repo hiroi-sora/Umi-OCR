@@ -35,7 +35,7 @@ Rectangle {
     // 复制当前图片
     function copyImage() {
         if(showImage.source == "") return
-        const res = qmlapp.imgConnector.copyImage(showImage.source)
+        const res = qmlapp.imageManager.copyImage(showImage.source)
         if(res=="[Success]")
             qmlapp.popup.simple(qsTr("复制图片"), "")
         else

@@ -1,6 +1,6 @@
 # 图片处理连接器
 
-from .img_provider import copyImage
+from .image_provider import copyImage
 
 from PySide2.QtCore import QObject, Slot, Signal
 

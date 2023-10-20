@@ -30,8 +30,8 @@ def runQml():
     from .utils.utils_connector import UtilsConnector  # 通用连接器
     from .utils.global_configs_connector import GlobalConfigsConnector  # 全局配置连接器
     from .utils.theme_connector import ThemeConnector  # 主题连接器
-    from .img_controller.img_connector import ImgConnector  # 图片处理连接器
-    from .img_controller.img_provider import PixmapProvider  # 图片提供器
+    from .image_controller.image_connector import ImgConnector  # 图片处理连接器
+    from .image_controller.image_provider import PixmapProvider  # 图片提供器
     from .utils.i18n_configs import I18n  # 语言
     from .utils import app_opengl  # 渲染器
 
