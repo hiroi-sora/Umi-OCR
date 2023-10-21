@@ -9,9 +9,11 @@ Item {
     // ========================= 【接口】 =========================
 
     // 截图，向回调函数传入裁切后的 clipImgID
-    property var screenshot: screenshotManager.screenshot
+    readonly property var screenshot: screenshotManager.screenshot
     // 复制图片
-    property var copyImage: imageConnector.copyImage
+    readonly property var copyImage: imageConnector.copyImage
+    // 获取剪贴板
+    readonly property var getPaste: imageConnector.getPaste
 
     // ===========================================================
 

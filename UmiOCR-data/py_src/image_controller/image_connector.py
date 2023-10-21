@@ -19,6 +19,11 @@ class ImageConnector(QObject):
     def getClipImgID(self, imgID, x, y, w, h):
         return ScreenshotController.getClipImgID(imgID, x, y, w, h)
 
+    # 获取当前剪贴板的内容，返回 {"type":"", "": ""}
+    @Slot(result="QVariant")
+    def getPaste(self):
+        return ScreenshotController.getPaste()
+
     # 将图片写入剪贴板，返回成功与否
     @Slot(str, result=str)
     def copyImage(self, path):

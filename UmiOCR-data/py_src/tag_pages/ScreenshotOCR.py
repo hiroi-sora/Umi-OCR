@@ -23,47 +23,18 @@ class ScreenshotOCR(Page):
 
     # 对一个imgID进行OCR
     def ocrImgID(self, imgID, configDict):
+        self.recentResult = None
         pixmap = PixmapProvider.getPixmap(imgID)
         if not pixmap:
             e = f'[Error] ScreenshotOCR: imgID "{imgID}" does not exist in the PixmapProvider dict.'
-            return e
+            print(e)
+            return
         self.__msnImage(pixmap, imgID, configDict)  # 开始OCR
-        return "[Success]"
 
-    # 开始粘贴
-    def paste(self, configDict):
+    # 对一批路径进行OCR
+    def ocrPaths(self, paths, configDict):
         self.recentResult = None
-        # 获取剪贴板数据
-        mime_data = Clipboard.mimeData()
-        res = {}  # 结果字典
-        # 检查剪贴板的内容，若是图片，则提取它并扔给OCR
-        if mime_data.hasImage():
-            image = Clipboard.image()
-            pixmap = QPixmap.fromImage(image)
-            pasteID = PixmapProvider.addPixmap(pixmap)  # 存入提供器
-            self.__msnImage(image, pasteID, configDict)
-            res["imgID"] = pasteID
-        # 若为URL
-        elif mime_data.hasUrls():
-            urlList = mime_data.urls()
-            paths = []
-            for url in urlList:  # 遍历URL列表，提取其中的文件
-                if url.isLocalFile():
-                    p = url.toLocalFile()
-                    paths.append(p)
-            paths = findImages(paths, False)  # 过滤，保留图片的路径
-            if len(paths) == 0:  # 没有有效图片
-                res["error"] = "[Warning] No image in clipboard."
-            else:  # 将有效图片地址传入OCR，返回地址列表
-                self.__msnPaths(paths, configDict)
-                res["paths"] = paths
-        elif mime_data.hasText():
-            res["error"] = "[Warning] No image in clipboard."
-        else:
-            res["error"] = "[Warning] No image in clipboard."
-        if "error" in res:
-            self.recentResult = {"code": 102, "data": res["error"]}
-        return res  # 返回结果字典
+        self.__msnPaths(paths, configDict)
 
     # 停止全部任务
     def msnStop(self):

@@ -32,15 +32,14 @@ TabPage {
 
     // 截图完毕
     function screenshotEnd(clipID) {
+        popMainWindow()
         if(!clipID) {
-            popMainWindow()
             return
         }
         const configDict = screenshotOcrConfigs.getConfigValueDict()
         const res = tabPage.callPy("ocrImgID", clipID, configDict)
         if(res.startsWith("[Error]")) {
             qmlapp.popup.message(qsTr("截图OCR异常"), res, "error")
-            popMainWindow()
             return
         }
         qmlapp.tab.showTabPageObj(tabPage) // 切换标签页
@@ -49,25 +48,27 @@ TabPage {
 
     // 开始粘贴
     function paste() {
-        const configDict = screenshotOcrConfigs.getConfigValueDict()
-        const res = tabPage.callPy("paste", configDict)
-        const simpleType = configDict["other.simpleNotificationType"]
+        popMainWindow()
+        const res = qmlapp.imageManager.getPaste()
         if(res.error) {
-            if(res.error.startsWith("[Error]")) {
-                qmlapp.popup.message(qsTr("获取剪贴板异常"), res.err, "error")
-            }
-            else if(res.error === "[Warning] No image in clipboard.") {
-                qmlapp.popup.simple(qsTr("剪贴板中未找到图片"), "", simpleType)
-            }
+            qmlapp.popup.message(qsTr("获取剪贴板异常"), res.error, "error")
             return
         }
-        qmlapp.tab.showTabPageObj(tabPage) // 切换标签页
-        if(res.imgID) { // 缓存图片类型
-            imageText.showImgID(res.imgID)
+        if(res.text) {
+            qmlapp.popup.simple(qsTr("剪贴板中为文本"), res.text)
+            return
         }
-        else if(res.paths) { // 地址类型
-            qmlapp.popup.simple(qsTr("粘贴%1条图片路径").arg(res.paths.length), res.paths[0], simpleType)
-            imageText.clear()
+        const configDict = screenshotOcrConfigs.getConfigValueDict()
+        const simpleType = configDict["other.simpleNotificationType"]
+        qmlapp.tab.showTabPageObj(tabPage) // 切换标签页
+        if(res.imgID) { // 图片
+            imageText.showImgID(res.imgID)
+            tabPage.callPy("ocrImgID", res.imgID, configDict)
+        }
+        else if(res.paths) { // 地址
+            imageText.showPath(res.paths[0])
+            tabPage.callPy("ocrPaths", res.paths, configDict)
+            qmlapp.popup.simple(qsTr("粘贴%1条图片路径").arg(res.paths.length), "", simpleType)
         }
     }
 
@@ -170,16 +171,16 @@ TabPage {
         const time = res.time.toFixed(2)
         let title = ""
         resText = resText.replace(/\n/g, " ") // 换行符替换空格
-        if(code == 100) {
-            // 成功时，不发送内部弹窗
-            if(simpleType==="inside" || simpleType==="onlyInside") {
+        if(code === 100 || code === 101) { // 成功时，不发送内部弹窗
+            if(simpleType==="inside" || simpleType==="onlyInside")
                 if(qmlapp.mainWin.getVisibility()) 
                     return
-            }
+        }
+        if(code === 100) {
             if(isCopy) title = qsTr("已复制到剪贴板")
             else title = qsTr("识图完成")
         }
-        else if(code == 101) {
+        else if(code === 101) {
             title = qsTr("无文字")
             resText = ""
         }
