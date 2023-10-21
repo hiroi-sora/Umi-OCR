@@ -32,6 +32,10 @@ TabPage {
 
     // 截图完毕
     function screenshotEnd(clipID) {
+        if(!clipID) {
+            popMainWindow()
+            return
+        }
         const configDict = screenshotOcrConfigs.getConfigValueDict()
         const res = tabPage.callPy("ocrImgID", clipID, configDict)
         if(res.startsWith("[Error]")) {

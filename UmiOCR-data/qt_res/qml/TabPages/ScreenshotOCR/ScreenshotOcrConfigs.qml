@@ -34,7 +34,7 @@ Configs {
         },
 
         "action": {
-            "title": qsTr("识图前后的操作"),
+            "title": qsTr("识图后的操作"),
             "type": "group",
 
             "hideWindow": {

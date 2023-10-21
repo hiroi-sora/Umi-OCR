@@ -10,7 +10,7 @@ from PySide2.QtCore import QObject, Slot, Signal
 
 class ImageConnector(QObject):
     # 对所有屏幕截图。传入延时时间。返回截图列表
-    @Slot(int, result="QVariant")
+    @Slot(float, result="QVariant")
     def getScreenshot(self, wait):
         return ScreenshotController.getScreenshot(wait)
 

@@ -21,8 +21,14 @@ Item {
         // 记录回调
         lastCallback = callback 
         if(winDict === undefined) winDict = {}
+        // 截图前等待时间
+        let wait = 0
+        if(qmlapp.globalConfigs.getValue("screenshot.hideWindow")) {
+            qmlapp.mainWin.setVisibility(false)
+            wait = qmlapp.globalConfigs.getValue("screenshot.hideWindowTime")
+        }
         // 获取所有屏幕的截图并验证
-        const grabList = imageConn.getScreenshot(0)
+        const grabList = imageConn.getScreenshot(wait)
         if(!grabList || grabList.length<1 || !grabList[0]) {
             qmlapp.popup.message(errorTitle,
                 qsTr("未知异常！"), "error")
@@ -79,11 +85,17 @@ Item {
         running = false
         // 检测是否有效
         if(argd.clipX<0 || argd.clipY<0 || argd.clipW<1 || argd.clipH<1 || !argd.imgID) {
+            runLastCallback()
             return
         }
         // 向py汇报，获取裁剪后的imgID
         const clipImgID = imageConn.getClipImgID(argd.imgID, argd.clipX, argd.clipY, argd.clipW, argd.clipH)
         // 调用回调
+        runLastCallback(clipImgID)
+    }
+
+    // 调用回调
+    function runLastCallback(clipImgID) {
         if (lastCallback && typeof lastCallback === 'function') {
             lastCallback(clipImgID)
         }

@@ -155,6 +155,26 @@ Configs {
             "simpleNotificationType": utilsDicts.getSimpleNotificationType(true),
         },
 
+        // 截图
+        "screenshot": {
+            "title": qsTr("截图"),
+            "type": "group",
+
+            "hideWindow": {
+                "title": qsTr("截图前隐藏主窗口"),
+                "toolTip": qsTr("截图前，如果主窗口处于前台，则隐藏主窗口\n将会延时等待主窗口关闭"),
+                "default": true,
+            },
+            "hideWindowTime": {
+                "title": qsTr("隐藏等待时间"),
+                "default": 0.2,
+                "min": 0,
+                "unit": qsTr("秒"),
+                "isInt": false,
+                "advanced": true,
+            },
+        },
+
         // 服务
         "server": {
             "title": qsTr("服务"),
