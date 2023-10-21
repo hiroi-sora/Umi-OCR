@@ -6,7 +6,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import ".."
 
-Image_ {
+ImageScale {
     id: iRoot
     property bool showOverlay: true // 显示叠加层
 
