@@ -1,9 +1,11 @@
-// ================================================
-// =============== 可缩放的Image组件 ===============
-// ================================================
+// ==================================================
+// =============== 可缩放的图片预览组件 ===============
+// ==================================================
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+
+import ".."
 
 Rectangle {
     id: iRoot
@@ -19,6 +21,8 @@ Rectangle {
     property real scale: 1.0 // 图片缩放比例
     property int imageSW: 0 // 图片原始宽高
     property int imageSH: 0
+    // 子类重写
+    property var beforeShow: undefined // 展示图片之前执行的操作
 
     // 设置图片源，展示一张图片
     function setSource(source) {
@@ -30,6 +34,24 @@ Rectangle {
         }
         else
             showImage.source = ""
+    }
+
+    // 传入路径，展示图片
+    function showPath(path) {
+        if(beforeShow) beforeShow()
+        showImage.showPath(path)
+    }
+
+    // 传入imgID，展示图片
+    function showImgID(imgID) {
+        if(beforeShow) beforeShow()
+        showImage.showImgID(imgID)
+    }
+
+    // 清空展示
+    function clear() {
+        if(beforeShow) beforeShow()
+        showImage.clear()
     }
 
     // 复制当前图片
@@ -129,11 +151,10 @@ Rectangle {
             id: showImageContainer
             width: Math.max( imageSW * iRoot.scale , flickable.width )
             height: Math.max( imageSH * iRoot.scale , flickable.height )
-            Image {
+            Image_ {
                 id: showImage
                 anchors.centerIn: parent
                 scale: iRoot.scale
-                source: ""
                 onStatusChanged: imageStatusChanged(status)
             }
         }

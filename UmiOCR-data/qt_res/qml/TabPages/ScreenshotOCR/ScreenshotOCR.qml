@@ -21,7 +21,6 @@ TabPage {
     //     interval: 200
     //     running: true
     //     onTriggered: {
-    //         imageViewer.setSource("file:///D:/Pictures/Screenshots/test/#1.png")
     //     }
     // }
     // ========================= 【逻辑】 =========================
@@ -54,7 +53,7 @@ TabPage {
             return
         }
         qmlapp.tab.showTabPageObj(tabPage) // 切换标签页
-        imageViewer.setSource("image://pixmapprovider/"+clipID)
+        imageText.showImgID(clipID)
     }
 
     // 开始粘贴
@@ -73,11 +72,11 @@ TabPage {
         }
         qmlapp.tab.showTabPageObj(tabPage) // 切换标签页
         if(res.imgID) { // 缓存图片类型
-            imageViewer.setSource("image://pixmapprovider/"+res.imgID)
+            imageText.showImgID(res.imgID)
         }
         else if(res.paths) { // 地址类型
             qmlapp.popup.simple(qsTr("粘贴%1条图片路径").arg(res.paths.length), res.paths[0], simpleType)
-            imageViewer.setSource("")
+            imageText.clear()
         }
     }
 
@@ -142,12 +141,11 @@ TabPage {
     function onOcrGet(res, imgID="", imgPath="") {
         // 添加到结果
         const resText = resultsTableView.addOcrResult(res)
-        let source = "" // 图片源
         if(imgID) // 图片类型
-            source = "image://pixmapprovider/"+imgID
+            imageText.showImgID(imgID)
         else if(imgPath) // 地址类型
-            source = "file:///"+imgPath
-        imageViewer.setSourceResult(source, res) // 将图片源及结果传入图片组件
+            imageText.showPath(imgPath)
+        imageText.showTextBoxes(res)
         // 若tabPanel面板的下标没有变化过，则切换到记录页
         if(tabPanel.indexChangeNum < 2)
             tabPanel.currentIndex = 1
@@ -334,9 +332,9 @@ TabPage {
                         anchors.bottom: parent.bottom
                         text_: qsTr("文字")
                         toolTip: qsTr("在图片上叠加显示识别文字")
-                        checked: imageViewer.showOverlay
+                        checked: imageText.showOverlay
                         enabledAnime: true
-                        onCheckedChanged: imageViewer.showOverlay = checked
+                        onCheckedChanged: imageText.showOverlay = checked
                     }
                     // 菜单
                     IconButton {
@@ -345,7 +343,7 @@ TabPage {
                         width: height
                         icon_: "menu"
                         color: theme.subTextColor
-                        onClicked: imageViewer.popupMenu()
+                        onClicked: imageText.popupMenu()
                         toolTip: qsTr("右键菜单")
                     }
                     // 适合宽高
@@ -355,7 +353,7 @@ TabPage {
                         width: height
                         icon_: "full_screen"
                         color: theme.subTextColor
-                        onClicked: imageViewer.imageFullFit()
+                        onClicked: imageText.imageFullFit()
                         toolTip: qsTr("图片大小：适应窗口")
                     }
                     // 1:1
@@ -365,7 +363,7 @@ TabPage {
                         width: height
                         icon_: "one_to_one"
                         color: theme.subTextColor
-                        onClicked: imageViewer.imageScaleAddSub(0)
+                        onClicked: imageText.imageScaleAddSub(0)
                         toolTip: qsTr("图片大小：实际")
                     }
                     // 百分比显示
@@ -374,7 +372,7 @@ TabPage {
                         anchors.bottom: parent.bottom
                         verticalAlignment: Text.AlignBottom
                         horizontalAlignment: Text.AlignRight
-                        text: (imageViewer.scale*100).toFixed(0) + "%"
+                        text: (imageText.scale*100).toFixed(0) + "%"
                         color: theme.subTextColor
                         width: size_.line * 2.5
                     }
@@ -382,7 +380,7 @@ TabPage {
             }
             // 图片预览区域
             ImageText {
-                id: imageViewer
+                id: imageText
                 anchors.top: dLeftTop.bottom
                 anchors.bottom: parent.bottom
                 anchors.left: parent.left

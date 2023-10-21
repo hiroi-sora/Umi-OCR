@@ -10,32 +10,14 @@ ImageScale {
     id: iRoot
     property bool showOverlay: true // 显示叠加层
 
-    // 弹出菜单
-    function popupMenu() {
-        selectMenu.popup()
-    }
-    // 显示/隐藏叠加层
-    function switchOverlay() {
-        showOverlay = !showOverlay
-        if(!showOverlay)
-            mouseArea.cursorShape = Qt.OpenHandCursor
-    }
-
-    // 设置图片源，展示一张图片（覆盖父类方法）
-    function setSource(source) {
+    beforeShow: () => {
         mouseArea.initIndex() // 清空选字参数
         textBoxes = [] // 清空旧文本块
-        if(source) {
-            // 特殊字符#替换为%23
-            if(source.startsWith("file:///") && source.includes("#"))
-                source = source.replace(new RegExp("#", "g"), "%23");
-            showImage.source = source // 设置源
-        }
     }
 
-    // 展示图片及 OCR文本块
-    function setSourceResult(source, res) {
-        setSource(source)
+    // 展示文本块
+    function showTextBoxes(res) {
+        beforeShow()
         // 提取文本框
         if(res.code == 100 && res.data.length > 0) {
             let tbs = []
@@ -52,6 +34,17 @@ ImageScale {
             }
             textBoxes = tbs
         }
+    }
+
+    // 弹出菜单
+    function popupMenu() {
+        selectMenu.popup()
+    }
+    // 显示/隐藏叠加层
+    function switchOverlay() {
+        showOverlay = !showOverlay
+        if(!showOverlay)
+            mouseArea.cursorShape = Qt.OpenHandCursor
     }
 
     property var textBoxes: [] // 文本块列表

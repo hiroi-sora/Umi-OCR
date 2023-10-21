@@ -17,19 +17,27 @@ class PixmapProviderClass(QQuickImageProvider):
     def __init__(self):
         super().__init__(QQuickImageProvider.Pixmap)
         self.pixmapDict = {}  # 缓存所有pixmap的字典
+        self.compDict = {}  # 缓存所有组件的字典
+
+    # 清空一个组件的缓存
+    def delCompCache(self, compID):
+        if compID in self.compDict:
+            last = self.compDict[compID]
+            if last in self.pixmapDict:
+                del self.pixmapDict[last]
+            del self.compDict[compID]
 
     # 向qml返回图片，imgID不存在时返回警告图
-    def requestPixmap(self, imgID, size=None, resSize=None):
-        if imgID not in self.pixmapDict:
-            print(f"【Error】请求Pixmap，传入不存在的imgID：{imgID}")
-            pixmap = QPixmap(1, 100)
-            pixmap.fill(Qt.blue)
-            painter = QPainter(pixmap)  # 绘制警告条纹
-            painter.setPen(Qt.red)
-            painter.drawLine(0, 0, 0, 5)
-            painter.drawLine(0, 95, 0, 100)
-            return pixmap
-        return self.pixmapDict[imgID]
+    def requestPixmap(self, path, size=None, resSize=None):
+        if "/" in path:
+            compID, imgID = path.split("/", 1)
+            self.delCompCache(compID)  # 先清缓存
+            if imgID in self.pixmapDict:
+                self.compDict[compID] = imgID  # 记录缓存
+                return self.pixmapDict[imgID]
+        else:  # 清空一个组件的缓存
+            self.delCompCache(path)
+        return QPixmap()
 
     # 添加一个Pixmap图片到提供器，返回imgID
     def addPixmap(self, pixmap):

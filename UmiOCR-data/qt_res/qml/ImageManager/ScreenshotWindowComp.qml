@@ -5,7 +5,7 @@
 import QtQuick 2.15
 import QtQuick.Window 2.15
 import QtGraphicalEffects 1.15
-
+import "../Widgets"
 
 Window {
     id: win
@@ -65,9 +65,9 @@ Window {
     }
 
     // 底层，图片
-    Image {
+    Image_ {
         anchors.fill: parent
-        source: "image://pixmapprovider/"+imgID
+        Component.onCompleted: showImgID(imgID)
     }
     // 深色叠加层
     Rectangle {
