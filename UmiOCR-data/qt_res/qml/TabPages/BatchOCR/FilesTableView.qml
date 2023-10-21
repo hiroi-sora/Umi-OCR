@@ -132,17 +132,13 @@ Item{
             }
 
             // 提示
-            Rectangle {
-                visible: tableModel.rowCount == 0
+            DefaultTips {
+                visibleFlag: tableModel.rowCount
                 anchors.top: tableTopPanel.bottom
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
-                color: tableArea.color
-                Text_ {
-                    anchors.centerIn: parent
-                    text: qsTr("请拖入或选择图片")
-                }
+                tips: qsTr("拖入或选择图片")
             }
 
             // 表头

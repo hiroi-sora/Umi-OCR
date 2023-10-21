@@ -49,7 +49,6 @@ TabPage {
         if(paths.length == 0){
             return
         }
-        console.log("== ", paths)
         // 调用Python方法
         const isRecurrence = batchOCRConfigs.getValue("mission.recurrence")
         const res = tabPage.callPy("findImages", paths, isRecurrence)
@@ -421,7 +420,6 @@ TabPage {
 
     // 鼠标拖入图片
     DropArea_ {
-        id: imgDropArea
         anchors.fill: parent
         callback: tabPage.addImages
     }

@@ -37,11 +37,7 @@ TabPage {
             return
         }
         const configDict = screenshotOcrConfigs.getConfigValueDict()
-        const res = tabPage.callPy("ocrImgID", clipID, configDict)
-        if(res.startsWith("[Error]")) {
-            qmlapp.popup.message(qsTr("截图OCR异常"), res, "error")
-            return
-        }
+        tabPage.callPy("ocrImgID", clipID, configDict)
         qmlapp.tab.showTabPageObj(tabPage) // 切换标签页
         imageText.showImgID(clipID) // 展示图片
     }
@@ -58,18 +54,24 @@ TabPage {
             qmlapp.popup.simple(qsTr("剪贴板中为文本"), res.text)
             return
         }
-        const configDict = screenshotOcrConfigs.getConfigValueDict()
-        const simpleType = configDict["other.simpleNotificationType"]
         qmlapp.tab.showTabPageObj(tabPage) // 切换标签页
         if(res.imgID) { // 图片
             imageText.showImgID(res.imgID)
+            const configDict = screenshotOcrConfigs.getConfigValueDict()
             tabPage.callPy("ocrImgID", res.imgID, configDict)
         }
         else if(res.paths) { // 地址
-            imageText.showPath(res.paths[0])
-            tabPage.callPy("ocrPaths", res.paths, configDict)
-            qmlapp.popup.simple(qsTr("粘贴%1条图片路径").arg(res.paths.length), "", simpleType)
+            ocrPaths(res.paths)
         }
+    }
+
+    // 对一批图片路径做OCR
+    function ocrPaths(paths) {
+        const configDict = screenshotOcrConfigs.getConfigValueDict()
+        const simpleType = configDict["other.simpleNotificationType"]
+        qmlapp.popup.simple(qsTr("导入%1条图片路径").arg(paths.length), "", simpleType)
+        imageText.showPath(paths[0])
+        tabPage.callPy("ocrPaths", paths, configDict)
     }
 
     // 停止所有任务
@@ -379,6 +381,13 @@ TabPage {
                     visible: msnState==="run"
                     anchors.centerIn: parent
                 }
+
+                // 提示
+                DefaultTips {
+                    visibleFlag: msnState
+                    anchors.fill: parent
+                    tips: qsTr("截图、拖入或粘贴图片")
+                }
             }
         }
 
@@ -412,5 +421,11 @@ TabPage {
                 ]
             }
         }
+    }
+
+    // 鼠标拖入图片
+    DropArea_ {
+        anchors.fill: parent
+        callback: tabPage.ocrPaths
     }
 }

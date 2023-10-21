@@ -69,8 +69,6 @@ def QUrl2String(urls):
     for url in urls:
         if url.isLocalFile():
             u = unquote(url.toLocalFile())  # 解码路径
-            print("解码后：", u)
             if QFileInfo(u).exists():  # 检查路径是否真的存在
                 resList.append(u)
-                print("存在！")
     return resList
