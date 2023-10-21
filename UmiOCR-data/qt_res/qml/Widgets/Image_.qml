@@ -11,8 +11,7 @@ Image {
 
     // 传入路径，展示图片
     function showPath(path) {
-        if(path.includes("#"))
-            path = path.replace(new RegExp("#", "g"), "%23");
+        path = encodeURIComponent(path) // URL编码
         source = `file:///${path}`
     }
 

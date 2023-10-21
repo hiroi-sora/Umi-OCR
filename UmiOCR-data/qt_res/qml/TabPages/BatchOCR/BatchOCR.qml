@@ -8,7 +8,6 @@ import QtQuick.Controls 2.15
 import ".."
 import "../../Widgets"
 import "../../Widgets/ResultLayout"
-import "../../js/utils.js" as Utils
 
 TabPage {
     id: tabPage
@@ -50,6 +49,7 @@ TabPage {
         if(paths.length == 0){
             return
         }
+        console.log("== ", paths)
         // 调用Python方法
         const isRecurrence = batchOCRConfigs.getValue("mission.recurrence")
         const res = tabPage.callPy("findImages", paths, isRecurrence)
@@ -420,21 +420,9 @@ TabPage {
     }
 
     // 鼠标拖入图片
-    DropArea {
+    DropArea_ {
         id: imgDropArea
         anchors.fill: parent
-        onEntered: {
-            qmlapp.popup.showMask(qsTr("松手放入图片"), "BatchOCR-DropImage")
-        }
-        onExited: {
-            qmlapp.popup.hideMask("BatchOCR-DropImage")
-        }
-        onDropped: {
-            qmlapp.popup.hideMask("BatchOCR-DropImage")
-            if(drop.hasUrls){
-                var urls = Utils.QUrl2String(drop.urls)
-                addImages(urls)
-            }
-        }
+        callback: tabPage.addImages
     }
 }

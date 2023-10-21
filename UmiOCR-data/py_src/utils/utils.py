@@ -3,6 +3,8 @@
 import re
 import os
 from PySide2.QtGui import QClipboard
+from PySide2.QtCore import QFileInfo
+from urllib.parse import unquote  # 路径解码
 
 Clipboard = QClipboard()  # 剪贴板
 
@@ -59,3 +61,16 @@ def findImages(paths, isRecurrence):
 # 复制文本到剪贴板
 def copyText(text):
     Clipboard.setText(text)
+
+
+# QUrl列表 转 String列表
+def QUrl2String(urls):
+    resList = []
+    for url in urls:
+        if url.isLocalFile():
+            u = unquote(url.toLocalFile())  # 解码路径
+            print("解码后：", u)
+            if QFileInfo(u).exists():  # 检查路径是否真的存在
+                resList.append(u)
+                print("存在！")
+    return resList

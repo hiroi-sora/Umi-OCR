@@ -19,3 +19,8 @@ class UtilsConnector(QObject):
     @Slot(str)
     def startfile(self, path):
         Platform.startfile(path)
+
+    # QUrl列表 转 String列表
+    @Slot("QVariant", result="QVariant")
+    def QUrl2String(self, fileUrls):
+        return utils.QUrl2String(fileUrls)
