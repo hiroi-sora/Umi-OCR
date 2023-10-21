@@ -27,33 +27,20 @@ TabPage {
 
     // 开始截图
     function screenshot() {
-        let wait = 0
-        if(screenshotOcrConfigs.getValue("action.hideWindow")){
-            if(qmlapp.mainWin.getVisibility()){
-                qmlapp.mainWin.setVisibility(false) // 隐藏主窗
-                wait = screenshotOcrConfigs.getValue("action.hideWindowTime")
-            }
-        }
-        const grabList = tabPage.callPy("screenshot", wait)
-        ssWindowManager.create(grabList)
+        qmlapp.imageManager.screenshot(screenshotEnd)
     }
 
     // 截图完毕
-    function screenshotEnd(argd) {
-        const x = argd["clipX"], y = argd["clipY"], w = argd["clipW"], h = argd["clipH"]
-        if(x < 0 || y < 0 || w <= 0 || h <= 0) { // 裁切区域无实际像素
-            popMainWindow()
-            return
-        }
+    function screenshotEnd(clipID) {
         const configDict = screenshotOcrConfigs.getConfigValueDict()
-        const clipID = tabPage.callPy("screenshotEnd", argd, configDict)
-        if(clipID.startsWith("[Error]")) {
-            qmlapp.popup.message(qsTr("截图裁切异常"), clipID, "error")
+        const res = tabPage.callPy("ocrImgID", clipID, configDict)
+        if(res.startsWith("[Error]")) {
+            qmlapp.popup.message(qsTr("截图OCR异常"), res, "error")
             popMainWindow()
             return
         }
         qmlapp.tab.showTabPageObj(tabPage) // 切换标签页
-        imageText.showImgID(clipID)
+        imageText.showImgID(clipID) // 展示图片
     }
 
     // 开始粘贴
@@ -200,12 +187,6 @@ TabPage {
     }
 
     // ========================= 【布局】 =========================
-
-    // 截图窗口管理器
-    ScreenshotWindowManager{
-        id: ssWindowManager
-        screenshotEnd: tabPage.screenshotEnd
-    }
 
     // 左侧栏。主区域左栏隐藏时，才显示左侧栏。
     Item {

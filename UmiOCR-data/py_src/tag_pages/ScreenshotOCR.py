@@ -17,49 +17,18 @@ class ScreenshotOCR(Page):
     def __init__(self, *args):
         super().__init__(*args)
         self.msnDict = {}
-        self.ssImgIDs = []  # 缓存当前完整截屏id
-        self.showImgIDs = []  # 缓存当前展示图片id
         self.recentResult = None  # 缓存最后一次识别结果
 
     # ========================= 【qml调用python】 =========================
 
-    # 开始截图，获取每个屏幕的完整截图，传给qml前端裁切。传入截图前的延时
-    def screenshot(self, wait=0):
-        if wait > 0:
-            time.sleep(wait)
-        self.recentResult = None
-        screensList = QGuiApplication.screens()
-        grabList = []
-        for screen in screensList:
-            pixmap = screen.grabWindow(0)  # 截图
-            imgID = PixmapProvider.addPixmap(pixmap)  # 存入提供器，获取imgID
-            grabList.append(
-                {  # 传递信息给qml
-                    "imgID": imgID,
-                    "screenName": screen.name(),
-                }
-            )
-            self.ssImgIDs.append(imgID)
-        return grabList
-
-    # 截图完毕，前端提供裁切数据，py裁切图片并提交OCR，返回裁切小图
-    def screenshotEnd(self, argd, configDict):
-        pixmap = PixmapProvider.getPixmap(argd["imgID"])
+    # 对一个imgID进行OCR
+    def ocrImgID(self, imgID, configDict):
+        pixmap = PixmapProvider.getPixmap(imgID)
         if not pixmap:
-            e = f'[Error] ScreenshotOCR: Key "{argd["imgID"]}" does not exist in the PixmapProvider dict.'
+            e = f'[Error] ScreenshotOCR: imgID "{imgID}" does not exist in the PixmapProvider dict.'
             return e
-        x, y, w, h = argd["clipX"], argd["clipY"], argd["clipW"], argd["clipH"]
-        if x < 0 or y < 0 or w <= 0 or h <= 0:
-            e = f"[Error] ScreenshotOCR: x/y/w/h value error. {x}/{y}/{w}/{h}"
-            return e
-        pixmap = pixmap.copy(x, y, w, h)  # 进行裁切
-        clipID = PixmapProvider.addPixmap(pixmap)  # 存入提供器，获取imgID
-        self.showImgIDs.append(clipID)
-        # 删除截屏图片的缓存
-        PixmapProvider.delPixmap(self.ssImgIDs)
-        self.ssImgIDs = []
-        self.__msnImage(pixmap, clipID, configDict)  # 开始OCR
-        return clipID
+        self.__msnImage(pixmap, imgID, configDict)  # 开始OCR
+        return "[Success]"
 
     # 开始粘贴
     def paste(self, configDict):
@@ -72,7 +41,6 @@ class ScreenshotOCR(Page):
             image = Clipboard.image()
             pixmap = QPixmap.fromImage(image)
             pasteID = PixmapProvider.addPixmap(pixmap)  # 存入提供器
-            self.showImgIDs.append(pasteID)
             self.__msnImage(image, pasteID, configDict)
             res["imgID"] = pasteID
         # 若为URL
@@ -103,10 +71,6 @@ class ScreenshotOCR(Page):
         for i in self.msnDict:
             MissionOCR.stopMissionList(i)
         self.msnDict = {}
-        PixmapProvider.delPixmap(self.showImgIDs)
-        self.showImgIDs = []
-        PixmapProvider.delPixmap(self.ssImgIDs)
-        self.ssImgIDs = []
 
     # ========================= 【OCR 任务控制】 =========================
 
@@ -173,9 +137,6 @@ class ScreenshotOCR(Page):
             if not self.msnDict:
                 # 停止前端显示
                 self.callQml("setMsnState", "none")
-                # 删除缓存列表中除了最后一项以外的图片。最后一项可能正在展示中所以不能删
-                PixmapProvider.delPixmap(self.showImgIDs[:-1])
-                del self.showImgIDs[:-1]
             self.callQml("onOcrEnd", msg)
 
         self.callFunc(update)  # 在主线程中执行

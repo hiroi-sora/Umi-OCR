@@ -33,6 +33,7 @@ Window {
     flags: Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint // 无边框+置顶
     
     Component.onCompleted: {
+        image.showImgID(imgID)
         visible = true // 窗口可见
         visibility = Window.Windowed
         raise() // 弹到最前层
@@ -66,8 +67,8 @@ Window {
 
     // 底层，图片
     Image_ {
+        id: image
         anchors.fill: parent
-        Component.onCompleted: showImgID(imgID)
     }
     // 深色叠加层
     Rectangle {

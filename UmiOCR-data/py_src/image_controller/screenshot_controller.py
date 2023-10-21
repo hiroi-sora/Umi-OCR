@@ -9,9 +9,6 @@ from PySide2.QtGui import QGuiApplication, QClipboard, QImage, QPixmap  # 截图
 
 
 class _ScreenshotControllerClass:
-    def __init__(self):
-        self._cacheIDs = []  # 缓存截图中的imgID
-
     # 延时wait秒后，获取所有屏幕的截图，返回imgID
     def getScreenshot(self, wait=0):
         if wait > 0:
@@ -22,7 +19,6 @@ class _ScreenshotControllerClass:
             for screen in screensList:
                 pixmap = screen.grabWindow(0)  # 截图
                 imgID = PixmapProvider.addPixmap(pixmap)  # 存入提供器，获取imgID
-                self._cacheIDs.append(imgID)  # 存入缓存
                 grabList.append(
                     {
                         "imgID": imgID,
@@ -44,13 +40,7 @@ class _ScreenshotControllerClass:
             return e
         pixmap = pixmap.copy(x, y, w, h)  # 进行裁切
         clipID = PixmapProvider.addPixmap(pixmap)  # 存入提供器，获取imgID
-        self.clearCache()  # 清缓存
         return clipID
-
-    # 清理缓存
-    def clearCache(self):
-        PixmapProvider.delPixmap(self._cacheIDs)
-        self._cacheIDs = []
 
 
 ScreenshotController = _ScreenshotControllerClass()

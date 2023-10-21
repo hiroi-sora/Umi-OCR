@@ -58,7 +58,7 @@ Item {
             winDict[g.imgID] = obj
         }
         // 注册esc事件监听
-        qmlapp.pubSub.subscribeGroup("<<esc>>", this, "ssEsc", "ssEsc")
+        qmlapp.pubSub.subscribeGroup("<<esc>>", ssWinRoot, "ssEsc", "ssEsc")
     }
 
     // Esc退出截图
@@ -76,6 +76,7 @@ Item {
             winDict[key].destroy()
         }
         winDict = {}
+        running = false
         // 检测是否有效
         if(argd.clipX<0 || argd.clipY<0 || argd.clipW<1 || argd.clipH<1 || !argd.imgID) {
             return

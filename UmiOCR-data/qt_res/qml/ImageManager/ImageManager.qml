@@ -8,7 +8,7 @@ import ImageConnector 1.0 // 图片连接器
 Item {
     // ========================= 【接口】 =========================
 
-    // 截图
+    // 截图，向回调函数传入裁切后的 clipImgID
     property var screenshot: screenshotManager.screenshot
     // 复制图片
     property var copyImage: imageConnector.copyImage
