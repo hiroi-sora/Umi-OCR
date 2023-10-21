@@ -31,6 +31,9 @@ class Mission:
     """
 
     def addMissionList(self, msnInfo, msnList):  # 添加一条任务队列，返回任务ID
+        if len(msnList) < 1:
+            print("[Error] len(msnList) < 1 !")
+            return
         msnID = str(uuid4())
         # 检查并补充回调函数
         # 队列开始，单个任务准备开始，单任务取得结果，队列结束

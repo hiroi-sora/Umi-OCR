@@ -17,7 +17,7 @@ DropArea {
         qmlapp.popup.hideMask("DropImage")
         if(drop.hasUrls){
             var urls = qmlapp.utilsConnector.QUrl2String(drop.urls)
-            if(callback)
+            if(urls.length > 0 && callback)
                 callback(urls)
         }
     }

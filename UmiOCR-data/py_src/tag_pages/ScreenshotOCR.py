@@ -102,7 +102,7 @@ class ScreenshotOCR(Page):
 
         def update():
             # 清除任务id
-            if msnInfo["msnID"] in self.msnDict:
+            if msnInfo and msnInfo["msnID"] in self.msnDict:
                 del self.msnDict[msnInfo["msnID"]]
             # 所有任务都完成了
             if not self.msnDict:

@@ -906,7 +906,6 @@ Item {
                         folder: shortcuts.desktop
                         onAccepted: {
                             if(fileDialog.fileUrls_.length > 0) {
-                                // rootFile.set(fileDialog.fileUrls_[0])
                                 textInput.text = fileDialog.fileUrls_[0] // 设置对话框文本
                             }
                         }
