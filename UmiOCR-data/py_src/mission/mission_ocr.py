@@ -42,6 +42,13 @@ class __MissionOcrClass(Mission):
             return "[Error] MissionOCR: API object is None."
         # 检查参数更新
         startInfo = self._dictShortKey(msnInfo["argd"])
+        # 恢复int类型
+        for k in startInfo:
+            n = startInfo[k]
+            if isinstance(n, float):
+                rounded = round(n)
+                if abs(n - rounded) <= 1e-7:
+                    startInfo[k] = rounded
         msg = self.__api.start(startInfo)
         if msg.startswith("[Error]"):
             print(f"引擎启动失败！", msg)
