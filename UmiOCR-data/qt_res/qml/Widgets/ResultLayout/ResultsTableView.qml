@@ -27,7 +27,8 @@ Item {
         let hours = ('0' + date.getHours()).slice(-2)
         let minutes = ('0' + date.getMinutes()).slice(-2)
         let seconds = ('0' + date.getSeconds()).slice(-2)
-        let dateTimeString = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
+        // let dateTimeString = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
+        let dateTimeString = `${hours}:${minutes}`
         // 提取结果文本和状态
         let status_ = ""
         let resText = ""
@@ -95,7 +96,7 @@ Item {
         id: tableView
         anchors.fill: parent
         anchors.rightMargin: scrollBarWidth
-        rowSpacing: size_.spacing // 行间隔
+        rowSpacing: size_.smallSpacing // 行间隔
         contentWidth: parent.width // 内容宽度
         model: resultsModel // 模型
         flickableDirection: Flickable.VerticalFlick // 只允许垂直滚动
@@ -174,13 +175,14 @@ Item {
         // 若 outside==true：则允许鼠标跑到组件以外，会计算鼠标离组件内最近的点。
         function getWhere(outside = false) {
             let mx=mouseX, my=mouseY
-            if(outside) {
+            if(outside) { // 允许出界时，将出界的x回归到界内
                 if(mx < 0) mx = 0
                 if(mx > tableMouseArea.width) mx = tableMouseArea.width
             }
             for(let i in tableChi) {
                 const c = tableChi[i]
-                const f = c.where(this, mx, my)
+                let f = c.where(this, mx, my)
+                if(outside && f===-1) f = 0 // 允许出界时，将标题栏视为首字符区域
                 if(f !== undefined) {
                     return {
                         "obj": c,
@@ -336,11 +338,16 @@ Item {
                 return
             }
             const info = getWhere()
-            if(info===undefined || info.where<0) {
+            if(info === undefined) { // 无效区域
                 startIndex=startTextIndex=endIndex=endTextIndex=-1
-                return
             }
-            if(info.where >= 0) {
+            else if(info.where === -1) { // 标题栏区域
+                endIndex = startIndex = info.index
+                startTextIndex = endTextIndex = -1
+                selectCopy()
+                startIndex = startTextIndex = -1 // 复制完后，将start归为-1
+            }
+            else if(info.where >= 0) { // 文本区域
                 endIndex = startIndex = info.index
                 endTextIndex = startTextIndex = info.where
                 info.obj.focus() // 赋予焦点
@@ -355,14 +362,14 @@ Item {
                 return
             }
             if(info.where >= 0) tableMouseArea.cursorShape = Qt.IBeamCursor
+            else if(info.where >= -1) tableMouseArea.cursorShape = Qt.PointingHandCursor
             else tableMouseArea.cursorShape = Qt.ArrowCursor
             // 拖拽中
             if(pressed) {
                 if(startIndex===startTextIndex && startIndex===-1)
                     return
                 endIndex = info.index
-                // 拖拽过程中，将标题栏 info.where<0 视为第一个字符 0
-                endTextIndex = info.where<0 ? 0 : info.where
+                endTextIndex = info.where
                 selectIndex()
             }
         }
@@ -373,7 +380,8 @@ Item {
             }
             const info = getWhere()
             if(info===undefined || info.where<0) {
-                selectIndex()
+                if(startIndex >= 0)
+                    selectIndex()
                 return
             }
             endIndex = info.index

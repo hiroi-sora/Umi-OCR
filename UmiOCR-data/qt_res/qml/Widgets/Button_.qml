@@ -11,7 +11,7 @@ Button {
     property string text_: ""
     property string toolTip: "" // 鼠标悬停提示
     property bool bold_: false
-    property int textSize: size_.line
+    property int textSize: size_.text
     property color textColor_: theme.textColor
 
     property color bgColor_: "#00000000"

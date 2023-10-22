@@ -12,7 +12,7 @@ Item {
 
     property string status_: "" // 状态， text / noText / error
     property alias textLeft: textLeft_.text
-    property alias textRight: textRight_.text
+    property string textRight: ""
     property alias textMain: textMain_.text
     property int index_
     // 选取文字
@@ -77,14 +77,16 @@ Item {
         anchors.right: parent.right
         anchors.leftMargin: size_.smallSpacing
         anchors.rightMargin: size_.smallSpacing
-        height: size_.smallLine
+        height: size_.smallLine + size_.spacing*2
 
         // 图片名称
         Text_ {
             id: textLeft_
             anchors.left: parent.left
             anchors.right: textRight_.left
+            anchors.bottom: parent.bottom
             anchors.rightMargin: size_.spacing
+            anchors.bottomMargin: size_.smallSpacing
             color: theme.subTextColor
             font.pixelSize: size_.smallText
             font.family: theme.dataFontFamily
@@ -94,9 +96,22 @@ Item {
         // 日期时间
         Text_ {
             id: textRight_
-            anchors.right: parent.right
+            anchors.right: btnRight.left
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: size_.smallSpacing
             color: theme.subTextColor
             font.pixelSize: size_.smallText
+            text: textRight + " | "
+        }
+        // 复制按钮
+        Text_ {
+            id: btnRight
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: size_.smallSpacing
+            color: theme.specialTextColor
+            font.pixelSize: size_.smallText
+            text: qsTr("复制")
         }
     }
 
@@ -107,7 +122,7 @@ Item {
         anchors.top: resultTop.bottom
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.topMargin: size_.smallSpacing
+        // anchors.topMargin: size_.smallSpacing
         radius: size_.baseRadius
         height: textMain_.height
 
