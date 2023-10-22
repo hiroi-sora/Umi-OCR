@@ -217,9 +217,6 @@ ImageScale {
             selectAll()
         }
 
-        // 进入获取焦点，离开解除焦点
-        onEntered: mouseArea.focus = true
-        onExited: mouseArea.focus = false
         // 按下
         onPressed: {
             mouseArea.forceActiveFocus()

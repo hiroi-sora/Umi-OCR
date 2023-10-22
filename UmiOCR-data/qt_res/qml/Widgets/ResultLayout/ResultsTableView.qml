@@ -171,8 +171,13 @@ Item {
         property int endTextIndex: -1 // 拖拽结束时，字符序号
         property int selectUpdate: 0
         // 查询鼠标坐标位于哪个表格组件内 ，位于什么地方
-        function getWhere() {
-            const mx=mouseX, my=mouseY
+        // 若 outside==true：则允许鼠标跑到组件以外，会计算鼠标离组件内最近的点。
+        function getWhere(outside = false) {
+            let mx=mouseX, my=mouseY
+            if(outside) {
+                if(mx < 0) mx = 0
+                if(mx > tableMouseArea.width) mx = tableMouseArea.width
+            }
             for(let i in tableChi) {
                 const c = tableChi[i]
                 const f = c.where(this, mx, my)
@@ -338,11 +343,12 @@ Item {
             if(info.where >= 0) {
                 endIndex = startIndex = info.index
                 endTextIndex = startTextIndex = info.where
+                info.obj.focus() // 赋予焦点
             }
         }
         // 移动
         onPositionChanged: {
-            const info = getWhere()
+            const info = getWhere(pressed)
             // 根据所在区域，调整光标
             if(info===undefined) {
                 tableMouseArea.cursorShape = Qt.ArrowCursor
@@ -355,7 +361,8 @@ Item {
                 if(startIndex===startTextIndex && startIndex===-1)
                     return
                 endIndex = info.index
-                endTextIndex = info.where
+                // 拖拽过程中，将标题栏 info.where<0 视为第一个字符 0
+                endTextIndex = info.where<0 ? 0 : info.where
                 selectIndex()
             }
         }
