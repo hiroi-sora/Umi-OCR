@@ -31,6 +31,12 @@ Item {
             intro: qsTr("# 批量OCR\n\n　  \n\n导入本地图片或文件夹，批量转换文字。")
         },
         {
+            key: "QRcode",
+            needController: true,
+            title: qsTr("二维码(开发中)"),
+            intro: qsTr("# 二维码\n\n　  \n\n截图扫码，识别二维码。")
+        },
+        {
             key: "GlobalConfigsPage",
             needController: false,
             title: qsTr("全局设置"),
