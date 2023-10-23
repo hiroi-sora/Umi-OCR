@@ -12,8 +12,7 @@ import "../../Widgets/ImageViewer"
 TabPage {
     id: tabPage
     // 配置
-    ScreenshotOcrConfigs { id: screenshotOcrConfigs } 
-    configsComp: screenshotOcrConfigs
+    configsComp: ScreenshotOcrConfigs {} 
     property string msnState: "none" // OCR任务状态， none run
 
     // TODO: 测试用
@@ -36,7 +35,7 @@ TabPage {
         if(!clipID) {
             return
         }
-        const configDict = screenshotOcrConfigs.getConfigValueDict()
+        const configDict = configsComp.getConfigValueDict()
         tabPage.callPy("ocrImgID", clipID, configDict)
         qmlapp.tab.showTabPageObj(tabPage) // 切换标签页
         imageText.showImgID(clipID) // 展示图片
@@ -57,7 +56,7 @@ TabPage {
         qmlapp.tab.showTabPageObj(tabPage) // 切换标签页
         if(res.imgID) { // 图片
             imageText.showImgID(res.imgID)
-            const configDict = screenshotOcrConfigs.getConfigValueDict()
+            const configDict = configsComp.getConfigValueDict()
             tabPage.callPy("ocrImgID", res.imgID, configDict)
         }
         else if(res.paths) { // 地址
@@ -67,7 +66,7 @@ TabPage {
 
     // 对一批图片路径做OCR
     function ocrPaths(paths) {
-        const configDict = screenshotOcrConfigs.getConfigValueDict()
+        const configDict = configsComp.getConfigValueDict()
         const simpleType = configDict["other.simpleNotificationType"]
         qmlapp.popup.simple(qsTr("导入%1条图片路径").arg(paths.length), "", simpleType)
         imageText.showPath(paths[0])
@@ -101,7 +100,7 @@ TabPage {
     // 弹出主窗口
     function popMainWindow() {
         // 等一回合再弹，防止与收回截图窗口相冲突
-        if(screenshotOcrConfigs.getValue("action.popMainWindow"))
+        if(configsComp.getValue("action.popMainWindow"))
             Qt.callLater(()=>qmlapp.mainWin.setVisibility(true))
     }
 
@@ -144,7 +143,7 @@ TabPage {
         if(tabPanel.indexChangeNum < 2)
             tabPanel.currentIndex = 1
         // 复制到剪贴板
-        const copy = screenshotOcrConfigs.getValue("action.copy")
+        const copy = configsComp.getValue("action.copy")
         if(copy && resText!="") 
             qmlapp.utilsConnector.copyText(resText)
         // 弹出通知
@@ -165,7 +164,7 @@ TabPage {
     // 任务完成后发送通知
     function showSimple(res, resText, isCopy) {
         // 获取弹窗类型
-        let simpleType = screenshotOcrConfigs.getValue("other.simpleNotificationType")
+        let simpleType = configsComp.getValue("other.simpleNotificationType")
         if(simpleType==="default") {
             simpleType = qmlapp.globalConfigs.getValue("window.simpleNotificationType")
         }
@@ -411,7 +410,7 @@ TabPage {
                     {
                         "key": "configs",
                         "title": qsTr("设置"),
-                        "component": screenshotOcrConfigs.panelComponent,
+                        "component": configsComp.panelComponent,
                     },
                     {
                         "key": "ocrResult",

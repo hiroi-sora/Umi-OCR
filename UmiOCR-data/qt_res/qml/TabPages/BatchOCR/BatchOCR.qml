@@ -12,8 +12,7 @@ import "../../Widgets/ResultLayout"
 TabPage {
     id: tabPage
     // 配置
-    BatchOCRConfigs { id: batchOCRConfigs } 
-    configsComp: batchOCRConfigs
+    configsComp: BatchOCRConfigs {} 
 
     // ========================= 【逻辑】 =========================
 
@@ -50,7 +49,7 @@ TabPage {
             return
         }
         // 调用Python方法
-        const isRecurrence = batchOCRConfigs.getValue("mission.recurrence")
+        const isRecurrence = configsComp.getValue("mission.recurrence")
         const res = tabPage.callPy("findImages", paths, isRecurrence)
         // 结果写入数据
         if(filesDict==undefined){
@@ -114,7 +113,7 @@ TabPage {
         missionShow = `0s  0/${msnLength}  0%` // 信息显示
         // 开始运行
         const paths = Object.keys(filesDict)
-        const argd = batchOCRConfigs.getConfigValueDict()
+        const argd = configsComp.getConfigValueDict()
         msnID = tabPage.callPy("msnPaths", paths, argd)
         // 若tabPanel面板的下标没有变化过，则切换到记录页
         if(tabPanel.indexChangeNum < 2)
@@ -257,16 +256,16 @@ TabPage {
         _ocrStop()
         // 任务成功
         if(msg.startsWith("[Success]")) {
-            const simpleType = batchOCRConfigs.getValue("other.simpleNotificationType")
+            const simpleType = configsComp.getValue("other.simpleNotificationType")
             qmlapp.popup.simple(qsTr("批量识别完成"), "", simpleType)
             // 任务完成后续操作：打开文件/文件夹
             const openWhat = {
-                "openFile": batchOCRConfigs.getValue("postTaskActions.openFile"),
-                "openFolder": batchOCRConfigs.getValue("postTaskActions.openFolder"),
+                "openFile": configsComp.getValue("postTaskActions.openFile"),
+                "openFolder": configsComp.getValue("postTaskActions.openFolder"),
             }
             tabPage.callPy("postTaskActions", openWhat)
             // 任务完成后续操作：系统关机/待机
-            const actSys = batchOCRConfigs.getValue("postTaskActions.system")
+            const actSys = configsComp.getValue("postTaskActions.system")
             if(actSys) {
                 let actStr = ""
                 // 对话框：系统即将关机  继续关机 | 取消关机
@@ -406,7 +405,7 @@ TabPage {
                     {
                         "key": "configs",
                         "title": qsTr("设置"),
-                        "component": batchOCRConfigs.panelComponent,
+                        "component": configsComp.panelComponent,
                     },
                     {
                         "key": "ocrResult",
