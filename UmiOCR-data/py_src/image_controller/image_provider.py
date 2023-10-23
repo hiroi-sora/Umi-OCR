@@ -128,9 +128,11 @@ PixmapProvider = PixmapProviderClass()
 def copyImage(path):
     if path.startswith("image://pixmapprovider/"):
         path = path[23:]
-        if path in PixmapProvider.pixmapDict:
-            Clipboard.setPixmap(PixmapProvider.pixmapDict[path])
-            return "[Success]"
+        if "/" in path:
+            compID, imgID = path.split("/", 1)
+            if imgID in PixmapProvider.pixmapDict:
+                Clipboard.setPixmap(PixmapProvider.pixmapDict[imgID])
+                return "[Success]"
         else:
             return f"[Warning] ID not in pixmapDict: {path}"
     elif path.startswith("file:///"):
