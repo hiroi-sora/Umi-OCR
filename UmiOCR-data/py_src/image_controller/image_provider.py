@@ -6,6 +6,8 @@ from PySide2.QtCore import Qt
 from PySide2.QtGui import QPixmap, QImage, QPainter, QClipboard
 from PySide2.QtCore import QByteArray, QBuffer, QIODevice
 from PySide2.QtQuick import QQuickImageProvider
+from io import BytesIO
+from PIL import Image
 from uuid import uuid4  # 唯一ID
 import os
 
@@ -42,6 +44,29 @@ class PixmapProviderClass(QQuickImageProvider):
     # 向py返回图片，相当于requestPixmap，但imgID不存在时返回None
     def getPixmap(self, imgID):
         return self.pixmapDict.get(imgID, None)
+
+    # 向py返回PIL对象
+    def getPilImage(self, imgID):
+        im = self.getPixmap(imgID)
+        if not im:
+            return None
+        try:
+            buffer = QBuffer()
+            qt_openmode = QIODevice
+            buffer.open(qt_openmode.ReadWrite)
+            # 若是png，则保留alpha通道。否则ppm兼容性更好。
+            if im.hasAlphaChannel():
+                im.save(buffer, "png")
+            else:
+                im.save(buffer, "ppm")
+            b = BytesIO()
+            b.write(buffer.data())
+            buffer.close()
+            b.seek(0)
+            return Image.open(b)
+        except Exception as e:
+            print(f"[Error] QPixmap 转 PIL 失败：{e}")
+            return None
 
     # 从pixmapDict缓存中删除一个或一批图片
     # 一般无需手动调用此函数！缓存会自动管理、清除。
