@@ -8,6 +8,18 @@ from urllib.parse import unquote  # 路径解码
 
 Clipboard = QClipboard()  # 剪贴板
 
+ImageSuf = [  # 合法图片后缀
+    ".jpg",
+    ".jpe",
+    ".jpeg",
+    ".jfif",
+    ".png",
+    ".webp",
+    ".bmp",
+    ".tif",
+    ".tiff",
+]
+
 
 # 传入文件名，检测是否含非法字符。没问题返回True
 def allowedFileName(fn):
@@ -18,24 +30,13 @@ def allowedFileName(fn):
         return True
 
 
+def isImg(path):  # 路径是图片返回true
+    return os.path.splitext(path)[-1].lower() in ImageSuf
+
+
 # 传入路径列表，在路径中搜索图片。isRecurrence=True时递归搜索。
 def findImages(paths, isRecurrence):
     # isRecurrence 递归读取
-    suf = [
-        ".jpg",
-        ".jpe",
-        ".jpeg",
-        ".jfif",
-        ".png",
-        ".webp",
-        ".bmp",
-        ".tif",
-        ".tiff",
-    ]
-
-    def isImg(path):  # 路径是图片返回true
-        return os.path.splitext(path)[-1].lower() in suf
-
     imgPaths = []
     for p in paths:
         if os.path.isfile(p) and isImg(p):  # 是文件，直接判断

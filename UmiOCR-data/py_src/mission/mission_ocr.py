@@ -11,6 +11,7 @@
 from ..ocr.api import getApiOcr
 from .mission import Mission
 from ..ocr.tbpu import Merge as tbpuMerge
+from ..utils.utils import isImg
 
 from PIL import Image
 from io import BytesIO
@@ -34,6 +35,10 @@ class __MissionOcrClass(Mission):
                 msnInfo["tbpu"].append(tbpuMerge[argd["tbpu.merge"]]())
             else:
                 print(f'[Error] 段落合并参数 {argd["tbpu.merge"]}')
+        # 检查任务合法性
+        for i in range(len(msnList) - 1, -1, -1):
+            if "path" in msnList[i] and not isImg(msnList[i]["path"]):
+                del msnList[i]
         return super().addMissionList(msnInfo, msnList)
 
     def msnPreTask(self, msnInfo):  # 用于更新api和参数

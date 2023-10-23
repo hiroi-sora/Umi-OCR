@@ -46,7 +46,7 @@ TabPage {
         popMainWindow()
         const res = qmlapp.imageManager.getPaste()
         if(res.error) {
-            qmlapp.popup.message(qsTr("获取剪贴板异常"), res.error, "error")
+            qmlapp.popup.simple(qsTr("获取剪贴板异常"), res.error)
             return
         }
         if(res.text) {
@@ -66,6 +66,11 @@ TabPage {
 
     // 对一批图片路径做OCR
     function ocrPaths(paths) {
+        paths = qmlapp.utilsConnector.findImages(paths, false)
+        if(!paths || paths.length < 1) {
+        qmlapp.popup.simple(qsTr("无有效图片"), "")
+            return
+        }
         const configDict = configsComp.getConfigValueDict()
         const simpleType = configDict["other.simpleNotificationType"]
         qmlapp.popup.simple(qsTr("导入%1条图片路径").arg(paths.length), "", simpleType)
