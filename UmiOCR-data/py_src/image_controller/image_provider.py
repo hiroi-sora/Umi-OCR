@@ -2,6 +2,8 @@
 # =============== Python向Qml传输 Pixmap 图像 ===============
 # ==========================================================
 
+from . import ImageQt
+
 from PySide2.QtCore import Qt
 from PySide2.QtGui import QPixmap, QImage, QPainter, QClipboard
 from PySide2.QtCore import QByteArray, QBuffer, QIODevice
@@ -51,22 +53,23 @@ class PixmapProviderClass(QQuickImageProvider):
         if not im:
             return None
         try:
-            buffer = QBuffer()
-            qt_openmode = QIODevice
-            buffer.open(qt_openmode.ReadWrite)
-            # 若是png，则保留alpha通道。否则ppm兼容性更好。
-            if im.hasAlphaChannel():
-                im.save(buffer, "png")
-            else:
-                im.save(buffer, "ppm")
-            b = BytesIO()
-            b.write(buffer.data())
-            buffer.close()
-            b.seek(0)
-            return Image.open(b)
+            return ImageQt.fromqimage(im)
         except Exception as e:
             print(f"[Error] QPixmap 转 PIL 失败：{e}")
             return None
+
+    # py将PIL对象写回pixmapDict。主要是记录预处理的图像
+    def setPilImage(self, img, imgID=""):
+        try:
+            pixmap = ImageQt.toqpixmap(img)
+        except Exception as e:
+            e = f"[Error] PIL 转 QPixmap 失败：{e}"
+            print(e)
+            return e
+        if not imgID:
+            imgID = str(uuid4())
+        self.pixmapDict[imgID] = pixmap
+        return imgID
 
     # 从pixmapDict缓存中删除一个或一批图片
     # 一般无需手动调用此函数！缓存会自动管理、清除。
@@ -129,7 +132,7 @@ def copyImage(path):
             Clipboard.setPixmap(PixmapProvider.pixmapDict[path])
             return "[Success]"
         else:
-            return f"[Warning] ID {path} not in pixmapDict."
+            return f"[Warning] ID not in pixmapDict: {path}"
     elif path.startswith("file:///"):
         path = path[8:]
         if os.path.exists(path):

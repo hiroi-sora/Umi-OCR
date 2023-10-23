@@ -30,7 +30,6 @@ TabPage {
         running = true
         tabPage.callPy("scanImgID", clipID, configDict)
         qmlapp.tab.showTabPageObj(tabPage) // 切换标签页
-        imageText.showImgID(clipID) // 展示图片
     }
 
     // 开始粘贴
