@@ -68,7 +68,7 @@ TabPage {
     function ocrPaths(paths) {
         paths = qmlapp.utilsConnector.findImages(paths, false)
         if(!paths || paths.length < 1) {
-        qmlapp.popup.simple(qsTr("无有效图片"), "")
+            qmlapp.popup.simple(qsTr("无有效图片"), "")
             return
         }
         const configDict = configsComp.getConfigValueDict()
