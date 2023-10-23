@@ -27,6 +27,7 @@ TabPage {
             return
         }
         const configDict = configsComp.getConfigValueDict()
+        running = true
         tabPage.callPy("scanImgID", clipID, configDict)
         qmlapp.tab.showTabPageObj(tabPage) // 切换标签页
         imageText.showImgID(clipID) // 展示图片
@@ -48,6 +49,7 @@ TabPage {
         if(res.imgID) { // 图片
             imageText.showImgID(res.imgID)
             const configDict = configsComp.getConfigValueDict()
+            running = true
             tabPage.callPy("scanImgID", res.imgID, configDict)
         }
         else if(res.paths) { // 地址
@@ -66,6 +68,7 @@ TabPage {
         const simpleType = configDict["other.simpleNotificationType"]
         qmlapp.popup.simple(qsTr("导入%1条图片路径").arg(paths.length), "", simpleType)
         imageText.showPath(paths[0])
+        running = true
         tabPage.callPy("scanPaths", paths, configDict)
     }
 
@@ -80,13 +83,15 @@ TabPage {
 
     // 获取一个扫码的返回值
     function onQRcodeGet(res, imgID="", imgPath="") {
+        running = false
         // 添加到结果
-        const resText = resultsTableView.addOcrResult(res)
         if(imgID) // 图片类型
             imageText.showImgID(imgID)
         else if(imgPath) // 地址类型
             imageText.showPath(imgPath)
+            res.title = res.fileName
         imageText.showTextBoxes(res)
+        const resText = resultsTableView.addOcrResult(res)
         // 若tabPanel面板的下标没有变化过，则切换到记录页
         if(tabPanel.indexChangeNum < 2)
             tabPanel.currentIndex = 1
@@ -132,7 +137,7 @@ TabPage {
     }
 
     // ========================= 【布局】 =========================
-
+    property bool running: false
     // 主区域：双栏面板
     DoubleRowLayout {
         id: doubleColumnLayout
@@ -233,7 +238,7 @@ TabPage {
 
                 // 提示
                 DefaultTips {
-                    // visibleFlag: msnState
+                    visibleFlag: running
                     anchors.fill: parent
                     tips: qsTr("截图、拖入或粘贴二维码图片")
                 }
