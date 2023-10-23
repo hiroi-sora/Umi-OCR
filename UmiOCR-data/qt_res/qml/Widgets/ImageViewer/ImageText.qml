@@ -274,7 +274,7 @@ ImageScale {
                 [mouseArea.selectCopy, qsTr("复制　　（Ctrl+C）")],
                 [mouseArea.selectAll, qsTr("全选　　（Ctrl+A）")],
                 [iRoot.copyImage, qsTr("复制图片（Ctrl+X）")],
-                [iRoot.switchOverlay, qsTr("显示/隐藏文字")],
+                [iRoot.switchOverlay, qsTr("显示/隐藏文字（Tab）")],
             ]
         }
         // 按键事件
@@ -283,6 +283,10 @@ ImageScale {
                 event.key===Qt.Key_A && selectAll()
                 event.key===Qt.Key_C && selectCopy()
                 event.key===Qt.Key_X && iRoot.copyImage()
+            }
+            if (event.key === Qt.Key_Tab) {
+                iRoot.switchOverlay()
+                Qt.callLater(mouseArea.forceActiveFocus)
             }
         }
     }
