@@ -4,7 +4,7 @@
 
 from .page import Page  # 页基类
 from ..mission.mission_ocr import MissionOCR  # 任务管理器
-from ..utils.utils import allowedFileName, findImages as findImages_
+from ..utils.utils import allowedFileName
 from ..platform import Platform  # 跨平台
 
 # 输出器
@@ -28,9 +28,6 @@ class BatchOCR(Page):
         self.outputList = []  # 输出器列表
 
     # ========================= 【qml调用python】 =========================
-
-    def findImages(self, paths, isRecurrence):  # 接收路径列表，在路径中搜索图片。
-        return findImages_(paths, isRecurrence)
 
     def msnPaths(self, paths, argd):  # 接收路径列表和配置参数字典，开始OCR任务
         # 任务信息

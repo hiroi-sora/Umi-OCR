@@ -20,6 +20,11 @@ class UtilsConnector(QObject):
     def startfile(self, path):
         Platform.startfile(path)
 
+    # 传入paths和是否递归，返回合法的图片路径
+    @Slot("QVariant", bool, result="QVariant")
+    def findImages(self, paths, isRecurrence):
+        return utils.findImages(paths, isRecurrence)
+
     # QUrl列表 转 String列表
     @Slot("QVariant", result="QVariant")
     def QUrl2String(self, fileUrls):

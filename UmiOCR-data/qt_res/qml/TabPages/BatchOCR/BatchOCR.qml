@@ -45,12 +45,12 @@ TabPage {
 
     // 将需要查询的图片路径列表paths发送给python。传入值是没有 file:/// 开头的纯字符串的列表。
     function addImages(paths) {
+        // 调用Python方法
+        const isRecurrence = configsComp.getValue("mission.recurrence")
+        const res = qmlapp.utilsConnector.findImages(paths, isRecurrence)
         if(paths.length == 0){
             return
         }
-        // 调用Python方法
-        const isRecurrence = configsComp.getValue("mission.recurrence")
-        const res = tabPage.callPy("findImages", paths, isRecurrence)
         // 结果写入数据
         if(filesDict==undefined){
             filesDict = {}
