@@ -29,7 +29,7 @@ Configs {
         },
 
         "preprocessing": {
-            "title": qsTr("二维码图像预处理"),
+            "title": qsTr("预处理（一般无需改动）"),
             "type": "group",
             "advanced": true,
 

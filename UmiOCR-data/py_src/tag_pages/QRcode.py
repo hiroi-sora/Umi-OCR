@@ -109,6 +109,6 @@ class QRcode(Page):
             if c["preprocessing.threshold"] > -1:
                 t = round(c["preprocessing.threshold"])
                 img = img.point(lambda p: p > t and 255)
-        if flag and imgID:  # 写回
-            PixmapProvider.setPilImage(img, imgID)
+        # if flag and imgID:  # 写回
+        #     PixmapProvider.setPilImage(img, imgID)
         return img
