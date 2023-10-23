@@ -51,7 +51,7 @@ Item {
             if(urlIndex == -1){
                 console.error("【Error】上次url历史中的 "+openPageList[i]+" 已经丢失！")
             }
-            else if(!infoList[urlIndex].comp){
+            else if(!page.getComp(urlIndex)){
                 console.error("【Error】上次url历史中的 "+openPageList[i]+" 页面组件类未初始化！")
             } else {
                 newPage.push(openPageList[i])

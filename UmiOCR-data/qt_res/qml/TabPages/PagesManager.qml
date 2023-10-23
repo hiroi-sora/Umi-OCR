@@ -50,29 +50,37 @@ Item {
     
     // ========================= 【增删改查】 =========================
 
-    // 初始化： 将 infoList 的 url 转换为可实例化的组件类 comp
+    // 初始化
     function initListUrl() {
         for(let i=infoList.length-1; i>=0; i--){
             const info = infoList[i]
             if(!info.url) {
                 info.url = `${info.key}/${info.key}.qml`
             }
-            const comp = Qt.createComponent(info.url)
-            if (comp.status === Component.Ready) { // 加载成功
-                info.comp = comp
-            } else{ // 加载失败
-                info.comp = undefined
-                if (comp.status === Component.Error) {  // 加载失败，提取错误信息
-                    let str = comp.errorString()
-                    const last = str.lastIndexOf(":")
-                    if(last < 0) last = -1
-                    str = str.substring(last+1).replace("\n","")
-                    console.error(`【Error】加载页面文件失败：【${info.url}】${str}`)
-                }
-                else{
-                    console.error(`【Error】加载页面文件异常：【${info.url}】`)
-                }
+        }
+    }
+
+    // 创建一个页面的组件类 comp
+    function getComp(infoIndex) {
+        const info = infoList[infoIndex]
+        if(info.comp) return info.comp
+        const url = info.url
+        const comp = Qt.createComponent(url)
+        if (comp.status === Component.Ready) { // 加载成功
+            infoList[infoIndex].comp = comp
+            return comp
+        } else{ // 加载失败
+            if (comp.status === Component.Error) {  // 加载失败，提取错误信息
+                let str = comp.errorString()
+                const last = str.lastIndexOf(":")
+                if(last < 0) last = -1
+                str = str.substring(last+1).replace("\n","")
+                console.error(`【Error】加载页面文件失败：【${url}】${str}`)
             }
+            else{
+                console.error(`【Error】加载页面文件异常：【${url}】`)
+            }
+            return undefined
         }
     }
 
@@ -92,9 +100,9 @@ Item {
             ctrlKey = connector.addSimplePage(info.key)
         }
         // 检查组件
-        const comp = info.comp
+        let comp = getComp(infoIndex)
         if(!comp){
-            console.error("【Error】添加页面失败：组件["+info.key+"]的comp不存在！")
+            console.error("【Error】添加页面失败：组件["+info.key+"]的comp无法创建！")
             return undefined
         }
         // 实例化页面，挂到巢下，写入自身参数
