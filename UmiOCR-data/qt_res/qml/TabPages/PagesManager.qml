@@ -33,8 +33,8 @@ Item {
         {
             key: "QRcode",
             needController: true,
-            title: qsTr("二维码(开发中)"),
-            intro: qsTr("# 二维码\n\n　  \n\n截图扫码，识别二维码。")
+            title: qsTr("二维码"),
+            intro: qsTr("# 二维码\n\n　  \n\n支持截图识别二维码。")
         },
         {
             key: "GlobalConfigsPage",

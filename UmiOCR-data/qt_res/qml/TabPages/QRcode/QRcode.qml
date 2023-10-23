@@ -135,6 +135,28 @@ TabPage {
         qmlapp.popup.simple(title, resText, simpleType)
     }
 
+    // ========================= 【事件管理】 =========================
+
+    Component.onCompleted: {
+        eventSub() // 订阅事件
+    }
+    // 关闭页面
+    function closePage() {
+        eventUnsub()
+        delPage()
+    }
+    // 订阅事件
+    function eventSub() {
+        qmlapp.pubSub.subscribeGroup("<<qrcode_screenshot>>", this, "screenshot", ctrlKey)
+        qmlapp.pubSub.subscribeGroup("<<qrcode_paste>>", this, "paste", ctrlKey)
+        qmlapp.systemTray.addMenuItem("<<qrcode_screenshot>>", qsTr("扫描二维码"), screenshot)
+    }
+    // 取消订阅事件
+    function eventUnsub() {
+        qmlapp.systemTray.delMenuItem("<<qrcode_screenshot>>")
+        qmlapp.pubSub.unsubscribeGroup(ctrlKey)
+    }
+
     // ========================= 【布局】 =========================
     property bool running: false
     // 主区域：双栏面板
