@@ -114,6 +114,7 @@ Rectangle {
                 width: size_.line * 10
 
                 Column {
+                    id: colTop
                     anchors.top: parent.top
                     anchors.left: parent.left
                     anchors.right: parent.right
@@ -125,20 +126,41 @@ Rectangle {
                         text_: qsTr("保存并返回")
                         onClicked: close()
                     }
-                    Text_ {
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        wrapMode: TextEdit.Wrap
-                        color: theme.subTextColor
-                        font.pixelSize: size_.smallText
-                        text: qsTr("拖入本地图片：OCR预览\n滚轮：缩放\n左键：拖拽\n右键：绘制忽略区域\n\n可绘制一个或多个忽略区域矩形框。在执行批量OCR时，完全位于忽略区域内的文本块将被排除。\n比如批量处理影视截图时，可在右上角水印处添加忽略区域，避免输出水印文本。")
-                    }
+                }
+                Text_ {
+                    anchors.top: colTop.bottom
+                    anchors.bottom: colBottom.top
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.topMargin: size_.spacing
+                    anchors.bottomMargin: size_.spacing
+                    clip: true
+                    wrapMode: TextEdit.Wrap
+                    color: theme.subTextColor
+                    font.pixelSize: size_.smallText
+                    elide: Text.ElideRight // 隐藏超出
+                    text: qsTr("拖入本地图片：OCR预览\n滚轮：缩放\n左键：拖拽\n右键：绘制忽略区域\n\n可绘制一个或多个忽略区域矩形框。在执行批量OCR时，完全位于忽略区域内的文本块将被排除。\n比如批量处理影视截图时，可在右上角水印处添加忽略区域，避免输出水印文本。")
                 }
                 Column {
+                    id: colBottom
                     anchors.bottom: parent.bottom
                     anchors.left: parent.left
                     anchors.right: parent.right
                     spacing: size_.spacing
+                    Text_ {
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        font.pixelSize: size_.smallText
+                        color: theme.subTextColor
+                        text: qsTr("图像尺寸：")+imageWithIgnore.imageSW+"×"+imageWithIgnore.imageSH
+                    }
+                    Text_ {
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        font.pixelSize: size_.smallText
+                        color: theme.subTextColor
+                        text: qsTr("区域数量：")+imageWithIgnore.ig1Boxes.length
+                    }
                     Button_ {
                         anchors.left: parent.left
                         anchors.right: parent.right

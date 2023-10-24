@@ -5,6 +5,7 @@ import os
 from PySide2.QtGui import QClipboard
 from PySide2.QtCore import QFileInfo
 from urllib.parse import unquote  # 路径解码
+from PySide2.QtQml import QJSValue
 
 Clipboard = QClipboard()  # 剪贴板
 
@@ -36,6 +37,11 @@ def isImg(path):  # 路径是图片返回true
 
 # 传入路径列表，在路径中搜索图片。isRecurrence=True时递归搜索。
 def findImages(paths, isRecurrence):
+    if type(paths) == QJSValue:
+        paths = paths.toVariant()
+    if type(paths) != list:
+        print(f"[Error] findImages 传入：{paths}, {type(paths)}")
+        return []
     # isRecurrence 递归读取
     imgPaths = []
     for p in paths:

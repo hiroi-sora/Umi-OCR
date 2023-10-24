@@ -52,6 +52,7 @@ Rectangle {
     function clear() {
         if(beforeShow) beforeShow()
         showImage.clear()
+        imageSW = imageSH = 0
     }
 
     // 复制当前图片

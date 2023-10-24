@@ -60,6 +60,7 @@ ImageScale {
         id: oRoot
         anchors.fill: parent
         visible: showOverlay
+        property real borderWidth: Math.max(1, 1/iRoot.scale)
 
         // 文本块
         Repeater {
@@ -70,8 +71,15 @@ ImageScale {
                 width: modelData.width
                 height: modelData.height
                 color: "#00000000"
-                border.width: Math.max(1, 2/iRoot.scale)
-                border.color: "red"
+                border.width: oRoot.borderWidth
+                border.color: "#000"
+                Rectangle {
+                    anchors.fill: parent
+                    anchors.margins: oRoot.borderWidth
+                    color: "#22000000"
+                    border.width: oRoot.borderWidth
+                    border.color: "#FFF"
+                }
             }
         }
 
@@ -83,9 +91,9 @@ ImageScale {
                 y: modelData.y
                 width: modelData.width
                 height: modelData.height
-                color: "#00000000"
-                border.width: 9 // Math.max(1, 2/iRoot.scale)
-                border.color: "blue"
+                color: "#99000000"
+                border.width: oRoot.borderWidth
+                border.color: "#FFFF00"
             }
         }
     }
@@ -159,6 +167,11 @@ ImageScale {
         // 按下
         onPressed: {
             cross.px = cross.py = cross.min
+            console.log(iRoot.imageSW, iRoot.imageSH)
+            if(iRoot.imageSW===0 || iRoot.imageSH===0) {
+                startX = startY = endX = endY = -1
+                return
+            }
             if (mouse.button === Qt.LeftButton) {
                 mouse.accepted = false
             }
@@ -170,6 +183,9 @@ ImageScale {
         }
         // 移动
         onPositionChanged: {
+            if(iRoot.imageSW===0 || iRoot.imageSH===0) {
+                return
+            }
             endX = mouseX
             endY = mouseY
             if(pressed) {
@@ -199,9 +215,13 @@ ImageScale {
         }
         // 抬起
         onReleased: {
-            mouseArea.addSelectBox()
+            if(iRoot.imageSW===0 || iRoot.imageSH===0) {
+                return
+            }
             cross.px = endX = mouseX
             cross.py = endY = mouseY
+            mouseArea.addSelectBox()
+            startX = startY = endX = endY = -1
         }
         // 离开
         onExited: {
