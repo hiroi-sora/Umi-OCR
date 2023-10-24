@@ -5,6 +5,7 @@
 import time
 import argparse
 from ..utils.call_func import CallFunc
+from ..utils.utils import findImages
 
 
 # 命令执行器
@@ -167,8 +168,8 @@ class _Actuator:
             self.call("MainWindow", "qml", "quit", False)
             return "Umi-OCR quit."
 
-    # 截图或粘贴，并获取返回结果
-    def screenshot_clipboard(self, ss, clip):
+    # 快捷OCR：截图/粘贴/路径，并获取返回结果
+    def quick_ocr(self, ss, clip, paras):
         # 检查截图标签页，如果未创建则创建
         module, moduleName = self.getModuleFromName("ScreenshotOCR", "py")
         if module == None:
@@ -190,10 +191,17 @@ class _Actuator:
         if module == None:
             return '[Error] Unable to create template "ScreenshotOCR".'
         # 调用截图标签页的函数
-        if ss:
+        if ss:  # 截图
             self.call(moduleName, "qml", "screenshot", False)
-        elif clip:
+        elif clip:  # 粘贴
             self.call(moduleName, "qml", "paste", False)
+        else:  # 粘贴
+            if not paras:
+                return "[Error] Paths is empty."
+            paths = findImages(paras, False)
+            if not paths:
+                return "[Error] No valid path."
+            self.call(moduleName, "qml", "ocrPaths", False, [paths[0]])
         # 等待OCR完成
         for i in range(60):
             time.sleep(0.5)
@@ -242,6 +250,11 @@ class _Cmd:
             "--clipboard",
             action="store_true",
             help="Clipboard OCR and output the result.",
+        )
+        self._parser.add_argument(
+            "--path",
+            action="store_true",
+            help="OCR the image in path and output the result.",
         )
         # 页面管理
         self._parser.add_argument(
@@ -304,8 +317,8 @@ class _Cmd:
         # 便捷指令
         if args.show or args.hide or args.quit:  # 控制主窗
             return CmdActuator.ctrlWindow(args.show, args.hide, args.quit)
-        if args.screenshot or args.clipboard:  # 截图或粘贴
-            return CmdActuator.screenshot_clipboard(args.screenshot, args.clipboard)
+        if args.screenshot or args.clipboard or args.path:  # 快捷识图
+            return CmdActuator.quick_ocr(args.screenshot, args.clipboard, args.paras)
         # 页面管理
         if args.all_pages:
             return CmdActuator.getAllPages()
