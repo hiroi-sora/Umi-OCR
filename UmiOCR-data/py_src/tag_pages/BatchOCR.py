@@ -150,6 +150,14 @@ class BatchOCR(Page):
         elif argd.get("hibernate", False):
             Platform.HardwareCtrl.hibernate()
 
+    def msnPreview(self, path, argd):  # 快速进行一次任务，主要用于预览
+        msnInfo = {
+            "onGet": self.__onPreview,
+            "argd": argd,
+        }
+        msnList = [{"path": path}]
+        self.msnID = MissionOCR.addMissionList(msnInfo, msnList)
+
     # ========================= 【任务控制器的异步回调】 =========================
 
     def __onStart(self, msnInfo):  # 任务队列开始
@@ -185,3 +193,6 @@ class BatchOCR(Page):
     def __onEnd(self, msnInfo, msg):  # 任务队列完成或失败
         # msg: [Success] [Warning] [Error]
         self.callQmlInMain("onOcrEnd", msg, self.msnID)
+
+    def __onPreview(self, msnInfo, msn, res):
+        self.callQmlInMain("onPreview", msn["path"], res)

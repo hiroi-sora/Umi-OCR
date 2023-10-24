@@ -8,6 +8,7 @@ import QtQuick.Controls 2.15
 import ".."
 import "../../Widgets"
 import "../../Widgets/ResultLayout"
+import "../../Widgets/IgnoreArea"
 
 TabPage {
     id: tabPage
@@ -161,6 +162,12 @@ TabPage {
         }
     }
 
+    // 预览
+    function msnPreview(path) {
+        const argd = configsComp.getConfigValueDict()
+        tabPage.callPy("msnPreview", path, argd)
+    }
+
     // ========================= 【python调用qml】 =========================
 
     /* 
@@ -286,6 +293,11 @@ TabPage {
         else if(msg.startsWith("[Error]")) {
             qmlapp.popup.message(qsTr("批量识别任务异常"), msg, "error")
         }
+    }
+
+    // 预览
+    function onPreview(path, res) {
+        ignoreArea.getPreview(res, path, "")
     }
 
     // ========================= 【布局】 =========================
@@ -421,5 +433,12 @@ TabPage {
     DropArea_ {
         anchors.fill: parent
         callback: tabPage.addImages
+    }
+
+    // 忽略区域编辑器
+    IgnoreArea {
+        id: ignoreArea
+        anchors.fill: parent
+        pathPreview: msnPreview
     }
 }
