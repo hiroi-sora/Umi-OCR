@@ -12,8 +12,6 @@ import "../../Widgets/IgnoreArea"
 
 TabPage {
     id: tabPage
-    // 配置
-    configsComp: BatchOCRConfigs {} 
 
     // ========================= 【逻辑】 =========================
 
@@ -302,6 +300,20 @@ TabPage {
 
     // ========================= 【布局】 =========================
 
+    // 配置
+    configsComp: BatchOCRConfigs {
+        // 点按钮打开忽略区域
+        onClickIgnoreArea: {
+            if(filesModel.rowCount > 0) {
+                const path = filesModel.getRow(0).filePath
+                console.log("打开路径", path)
+                ignoreArea.showPath(path)
+            }
+            else {
+                ignoreArea.show()
+            }
+        }
+    }
     // 主区域：左右双栏面板。
     DoubleRowLayout {
         anchors.fill: parent
@@ -440,5 +452,7 @@ TabPage {
         id: ignoreArea
         anchors.fill: parent
         pathPreview: msnPreview
+        configsComp: tabPage.configsComp
+        configKey: "tbpu.ignoreArea"
     }
 }

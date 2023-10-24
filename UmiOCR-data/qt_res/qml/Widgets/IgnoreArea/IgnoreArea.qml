@@ -12,13 +12,29 @@ Rectangle {
     color: theme.coverColor4
     property string previewPath: "" // 图片预览路径
     property string previewType: "" // 图片预览路径
-    property var imageWithIgnore: undefined // 存放图片组件
     property bool running: false
+    property var configsComp: undefined // 设置组件
+    property string configKey: "" // 设置组件中忽略区域的key
 
     // 显示面板
     function show() {
         running = false
         iRoot.visible = true
+        let initArea = configsComp.getValue(configKey)
+        if(initArea && initArea.length>0) {
+            // 读取设置，反格式化
+            let ig1 = []
+            for(let i=0,l=initArea.length; i<l; i++) {
+                const b = initArea[i]
+                ig1.push({
+                    "x": b[0][0],
+                    "y": b[0][1],
+                    "width": b[2][0] - b[0][0],
+                    "height": b[2][1] - b[0][1],
+                })
+            }
+            imageWithIgnore.ig1Boxes = ig1
+        }
     }
     function showPath(path) {
         show()
@@ -38,6 +54,16 @@ Rectangle {
     }
     // 关闭面板
     function close() {
+        if(imageWithIgnore.ig1Boxes.length > 0) {
+            // 格式化，存入设置
+            let ig1 = []
+            for(let i=0,l=imageWithIgnore.ig1Boxes.length; i<l; i++) {
+                const b = imageWithIgnore.ig1Boxes[i]
+                ig1.push([[b.x, b.y], [b.x+b.width, b.y],
+                    [b.x+b.width, b.y+b.height], [b.x, b.y+b.height]])
+            }
+            configsComp.setValue(configKey, ig1)
+        }
         running = false
         iRoot.visible = false
     }
@@ -66,6 +92,7 @@ Rectangle {
         active: iRoot.visible
     }
 
+    property var imageWithIgnore: undefined // 存放图片组件
     Component {
         id: com
         Panel {

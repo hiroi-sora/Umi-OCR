@@ -7,6 +7,7 @@ import "../../Configs"
 
 Configs {
     category_: "BatchOCR"
+    signal clickIgnoreArea() // 打开忽略区域
 
     configDict: {
         // OCR参数
@@ -18,6 +19,16 @@ Configs {
             "type": "group",
 
             "merge": qmlapp.globalConfigs.utilsDicts.getTbpuMerge(),
+            "btns": {
+                "title": qsTr("忽略区域"),
+                "btnsList": [
+                    {"text":qsTr("进入设置"), "onClicked": clickIgnoreArea},
+                ],
+            },
+            "ignoreArea": {
+                "type": "var",
+                "save": false,
+            },
         },
 
         // 任务参数

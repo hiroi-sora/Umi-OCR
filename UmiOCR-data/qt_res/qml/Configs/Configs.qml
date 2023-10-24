@@ -62,6 +62,10 @@ configDict: {
         ],
         // 颜色名 ColorKey 为 theme.keys 的值
     },
+    "任意变量 var": { // 程序缓存任意变量
+        "type": "var",
+        "save": false,
+    }
 
     通用配置元素：
     "title": 显示名称。不填（或undefined）时不生成组件。填写（包括空字符串""）时自动生成控件。
@@ -147,6 +151,10 @@ Item {
                     if(! config.hasOwnProperty("nameFilters")) {
                         config.nameFilters = []
                     }
+                }
+                else if(config.type === "var") { // 缓存任意类型
+                    if(!config.hasOwnProperty("default"))
+                        config.default = undefined
                 }
             }
             // 类型判断：省略type
@@ -391,6 +399,7 @@ Item {
         Column {
             id: panelContainer
             anchors.fill: parent
+            anchors.rightMargin: size_.spacing
             spacing: size_.spacing
 
             // 顶部控制栏
