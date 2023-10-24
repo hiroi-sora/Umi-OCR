@@ -91,6 +91,7 @@ Github下载：[Release v1.3.7](https://github.com/hiroi-sora/Umi-OCR/releases/t
 <summary>展开</summary>
 
 - main分支可能含有开发中的新功能。若您想使用稳定版本，建议切换到[最新的Release分支](https://github.com/hiroi-sora/Umi-OCR/branches)。
+- 确保python版本不低于 `3.8` 。建议使用 `3.8.10` ，具有最好的兼容性。
 - 安装依赖库：`pip install -r requirements.txt`
 - 运行 `main.py` 启动程序。测试无异常后，运行 `to_exe.py` 一键打包。
 - 打包后，请将引擎组件 [PaddleOCR-json 整个文件夹](PaddleOCR-json) 放置于exe同目录下！
