@@ -13,7 +13,12 @@ Configs {
         "ocr": qmlapp.globalConfigs.ocrManager.deploy(this, "ocr"), 
 
         // 后处理
-        "tbpu": qmlapp.globalConfigs.utilsDicts.getTbpu(),
+        "tbpu": {
+            "title": qsTr("OCR文本后处理"),
+            "type": "group",
+
+            "merge": qmlapp.globalConfigs.utilsDicts.getTbpuMerge(),
+        },
 
         "hotkey": {
             "title": qsTr("快捷键"),

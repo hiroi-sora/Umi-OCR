@@ -31,23 +31,18 @@ QtObject {
         }
     }
 
-    // OCR文本后处理
-    function getTbpu() {
+    // OCR文本后处理-段落合并
+    function getTbpuMerge() {
         return {
-            "title": qsTr("OCR文本后处理"),
-            "type": "group",
-
-            "merge": {
-                "title": qsTr("段落合并"),
-                "optionsList": [
-                    ["MergeLine", qsTr("单行")],
-                    ["MergePara", qsTr("多行-自然段")],
-                    ["MergeParaCode", qsTr("多行-代码段")],
-                    ["MergeLineVrl", qsTr("竖排-从右到左")],
-                    ["MergeLineVlr", qsTr("竖排-从左到右")],
-                    ["None", qsTr("不做处理")],
-                ],
-            },
+            "title": qsTr("段落合并"),
+            "optionsList": [
+                ["MergeLine", qsTr("单行")],
+                ["MergePara", qsTr("多行-自然段")],
+                ["MergeParaCode", qsTr("多行-代码段")],
+                ["MergeLineVrl", qsTr("竖排-从右到左")],
+                ["MergeLineVlr", qsTr("竖排-从左到右")],
+                ["None", qsTr("不做处理")],
+            ],
         }
     }
 
