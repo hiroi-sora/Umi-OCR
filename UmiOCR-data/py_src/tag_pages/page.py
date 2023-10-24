@@ -24,5 +24,11 @@ class Page(QObject):
     def callFunc(self, func, *args):  # 在主线程中调用py函数
         return self.controller.callFunc(func, *args)
 
-    def getQmlConfigValueDict(self):  # python获取qml配置字典
-        return self.controller.callQml(self.ctrlKey, "getConfigValueDict").toVariant()
+    def getQmlValueDict(self):  # python获取qml配置字典
+        return self.controller.callQml(self.ctrlKey, "getValueDict").toVariant()
+
+    def getQmlOriginDict(self):
+        return self.controller.callQml(self.ctrlKey, "getOriginDict").toVariant()
+
+    def setQmlValue(self, key, val):  # python获取qml配置字典
+        return self.controller.callQml(self.ctrlKey, "setValue", key, val).toVariant()

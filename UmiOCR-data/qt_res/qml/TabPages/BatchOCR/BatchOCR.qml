@@ -112,7 +112,7 @@ TabPage {
         missionShow = `0s  0/${msnLength}  0%` // 信息显示
         // 开始运行
         const paths = Object.keys(filesDict)
-        const argd = configsComp.getConfigValueDict()
+        const argd = configsComp.getValueDict()
         msnID = tabPage.callPy("msnPaths", paths, argd)
         // 若tabPanel面板的下标没有变化过，则切换到记录页
         if(tabPanel.indexChangeNum < 2)
@@ -162,7 +162,7 @@ TabPage {
 
     // 预览
     function msnPreview(path) {
-        const argd = configsComp.getConfigValueDict()
+        const argd = configsComp.getValueDict()
         tabPage.callPy("msnPreview", path, argd)
     }
 

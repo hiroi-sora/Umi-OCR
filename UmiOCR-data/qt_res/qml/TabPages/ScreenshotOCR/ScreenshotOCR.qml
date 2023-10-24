@@ -35,7 +35,7 @@ TabPage {
         if(!clipID) {
             return
         }
-        const configDict = configsComp.getConfigValueDict()
+        const configDict = configsComp.getValueDict()
         tabPage.callPy("ocrImgID", clipID, configDict)
         qmlapp.tab.showTabPageObj(tabPage) // 切换标签页
         imageText.showImgID(clipID) // 展示图片
@@ -56,7 +56,7 @@ TabPage {
         qmlapp.tab.showTabPageObj(tabPage) // 切换标签页
         if(res.imgID) { // 图片
             imageText.showImgID(res.imgID)
-            const configDict = configsComp.getConfigValueDict()
+            const configDict = configsComp.getValueDict()
             tabPage.callPy("ocrImgID", res.imgID, configDict)
         }
         else if(res.paths) { // 地址
@@ -71,7 +71,7 @@ TabPage {
             qmlapp.popup.simple(qsTr("无有效图片"), "")
             return
         }
-        const configDict = configsComp.getConfigValueDict()
+        const configDict = configsComp.getValueDict()
         const simpleType = configDict["other.simpleNotificationType"]
         qmlapp.popup.simple(qsTr("导入%1条图片路径").arg(paths.length), "", simpleType)
         imageText.showPath(paths[0])

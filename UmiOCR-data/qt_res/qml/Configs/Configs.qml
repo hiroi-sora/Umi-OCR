@@ -113,8 +113,12 @@ Item {
         // console.log(`% 加载配置 ${category_} ！: ${JSON.stringify(valueDict, null, 2)}`)
     }
     // 获取配置值字典
-    function getConfigValueDict() {
+    function getValueDict() {
         return valueDict
+    }
+    // 获取原始值字典
+    function getOriginDict() {
+        return originDict
     }
     
     // ========================= 【内部变量】 =========================
@@ -243,11 +247,15 @@ Item {
                 // 记录完整key
                 const fullKey = prefix+key
                 config.fullKey = fullKey
-                originDict[fullKey] = config
                 if(config.type==="group") { // 若是配置项组，递归遍历
                     handleConfigGroup(config, fullKey+".") // 前缀加深一层
+                    originDict[fullKey] = {
+                        "title": config.title,
+                        "type": "group"
+                    }
                 }
                 else { // 若是配置项
+                    originDict[fullKey] = config
                     handleConfigItem(config, fullKey)
                 }
             }

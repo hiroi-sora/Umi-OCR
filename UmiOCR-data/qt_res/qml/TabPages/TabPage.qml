@@ -27,13 +27,31 @@ Item {
         return connector.callPy(ctrlKey, funcName, args)
     }
     // 获取配置项值字典
-    function getConfigValueDict() {
-        // 控制组件存在，且有方法getConfigValueDict
-        if (typeof configsComp === "object" && typeof configsComp.getConfigValueDict === "function") {
-            return configsComp.getConfigValueDict()
+    function getValueDict() {
+        // 控制组件存在，且有方法getValueDict
+        if (typeof configsComp === "object" && typeof configsComp.getValueDict === "function") {
+            return configsComp.getValueDict()
         }
-        console.log("【Error】返回空配置项字典")
+        console.log("[Error] 返回空配置项字典")
         return {}
+    }
+    // 获取原始值字典
+    function getOriginDict() {
+        // 控制组件存在，且有方法getValueDict
+        if (typeof configsComp === "object" && typeof configsComp.getValueDict === "function") {
+            return configsComp.getOriginDict()
+        }
+        console.log("[Error] 返回空原始值字典")
+        return {}
+    }
+    // 设置配置项值
+    function setValue(key, val) {
+        // 控制组件存在，且有方法getValueDict
+        if (typeof configsComp === "object" && typeof configsComp.setValue === "function") {
+            configsComp.setValue(key, val, true)
+            return
+        }
+        console.log("[Error] 设置配置项失败", key, val)
     }
     
 }

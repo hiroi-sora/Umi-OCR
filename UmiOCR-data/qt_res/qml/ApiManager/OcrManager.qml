@@ -67,7 +67,7 @@ Item {
             return
         }
         // 从全局配置中，提取出目前apiKey对应的配置项
-        const allDict = qmlapp.globalConfigs.getConfigValueDict()
+        const allDict = qmlapp.globalConfigs.getValueDict()
         const ocrk = "ocr."+nowKey
         const info = {} // 汇聚为配置信息
         for(let k in allDict) { // 从全局配置中，提取以该api开头的键/值
