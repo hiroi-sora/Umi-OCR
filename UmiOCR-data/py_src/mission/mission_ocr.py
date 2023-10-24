@@ -8,7 +8,7 @@
 标签页可以向任务管理器提交一组任务队列，其中包含了每一项任务的信息，及总体的参数和回调。
 """
 
-from ..ocr.api import getApiOcr
+from ..ocr.api import getApiOcr, getLocalOptions
 from .mission import Mission
 from ..ocr.tbpu import Merge as tbpuMerge
 from ..ocr.tbpu import IgnoreArea
@@ -27,6 +27,7 @@ class __MissionOcrClass(Mission):
     # ========================= 【重载】 =========================
 
     def addMissionList(self, msnInfo, msnList):  # 添加任务列表
+        print("= ", msnInfo)
         # 实例化 tbpu 文本后处理模块
         msnInfo["tbpu"] = []
         argd = msnInfo["argd"]
@@ -60,6 +61,7 @@ class __MissionOcrClass(Mission):
                 rounded = round(n)
                 if abs(n - rounded) <= 1e-7:
                     startInfo[k] = rounded
+        print("== 启动参数：", startInfo)
         msg = self.__api.start(startInfo)
         if msg.startswith("[Error]"):
             print(f"引擎启动失败！", msg)
@@ -72,6 +74,8 @@ class __MissionOcrClass(Mission):
             res = self.__api.runPath(msn["path"])
         elif "bytes" in msn:
             res = self.__api.runBytes(msn["bytes"])
+        elif "base64" in msn:
+            res = self.__api.runBase64(msn["base64"])
         else:
             res = {
                 "code": 901,
@@ -135,6 +139,14 @@ class __MissionOcrClass(Mission):
             elif key1 in k:
                 newD[k[len(key1) :]] = d[k]
         return newD
+
+    # ========================= 【qml接口】 =========================
+
+    def getLocalOptions(self):
+        if self.__apiKey:
+            return getLocalOptions(self.__apiKey)
+        else:
+            return {}
 
 
 # 全局 OCR任务管理器

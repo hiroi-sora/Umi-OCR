@@ -9,6 +9,7 @@ import "../Configs"
 import "../ApiManager"
 
 Configs {
+    id: gRoot
     category_: "Global"
     autoLoad: false
     // ========================= 【全局配置项】 =========================
@@ -181,6 +182,27 @@ Configs {
             "type": "group",
             "advanced": true,
 
+            "enable": {
+                "title": qsTr("允许HTTP服务"),
+                "toolTip": qsTr("Umi-OCR依赖HTTP接口进行本机跨进程通信。如果禁用，将无法使用命令行模式、多开检测等功能。"),
+                "default": true,
+                "onChanged": (val, old)=>{
+                    old!==undefined && qmlapp.popup.simple(qsTr("重启软件后生效"), "")
+                },
+            },
+            "host": {
+                "title": qsTr("主机"),
+                "optionsList": [
+                    ["127.0.0.1", qsTr("仅本地")+" (127.0.0.1)"],
+                    ["0.0.0.0", qsTr("任何可用地址")],
+                ],
+                "onChanged": (val, old)=>{
+                    if(old!==undefined) {
+                        let msg = val==="0.0.0.0"?qsTr("将允许局域网访问。请开启对应防火墙权限！"):qsTr("将禁止局域网访问。")
+                        qmlapp.popup.simple(qsTr("重启软件后生效"), msg)
+                    }
+                },
+            },
             "port": {
                 "title": qsTr("端口"),
                 "isInt": true,
@@ -188,7 +210,6 @@ Configs {
                 "max": 65535,
                 "min": 1,
                 // 保存数值，只是用于前端展示。实际端口号由pre_config保存。
-                "toolTip": qsTr("用于本地进程通信、命令行指令传输、http接口"),
                 "onChanged": (port, old)=>{
                     old!==undefined && setServerPort(port)
                 },
@@ -226,7 +247,11 @@ Configs {
         Qt.callLater(()=>{
             setQmlToCmd()  // 将qml模块字典传入cmd执行模块
             // 启动web服务
-            globalConfigConn.runUmiWeb(this, "setRealPort")
+            const enab = getValue("server.enable")
+            if(enab) {
+                const host = getValue("server.host")
+                globalConfigConn.runUmiWeb(gRoot, "setRealPort", host)
+            }
         })
     }
 
@@ -330,7 +355,7 @@ Configs {
         }
         if(isPortInit) { // 用户修改，忽略系统修改
             globalConfigConn.setServerPort(port)
-            qmlapp.popup.simple(qsTr("端口号改为%1").arg(port), qsTr("将在重启软件后生效"))
+            qmlapp.popup.simple(qsTr("重启软件后生效"), qsTr("端口号改为%1").arg(port))
         }
     }
     // py回调，设置当前实际的端口号

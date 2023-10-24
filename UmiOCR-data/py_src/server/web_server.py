@@ -10,13 +10,14 @@ import os
 from ..platform import Platform
 from ..utils import pre_configs
 from ..utils.call_func import CallFunc
-from .bottle import Bottle, ServerAdapter, request
+from .bottle import Bottle, ServerAdapter, request, HTTPResponse
 from .cmd_server import CmdServer
+from . import ocr_server
 
 UmiWeb = Bottle()
+Host = "127.0.0.1"  # 由qml设置
 
-
-# ============================== 路由 ==============================
+# ============================== 基础路由 ==============================
 
 
 @UmiWeb.route("/")
@@ -29,10 +30,17 @@ def _umiocr():
 # 跨进程接收命令行参数
 @UmiWeb.route("/argv", method="POST")
 def _argv():
-    data = request.json
-    res = CmdServer.execute(data)
-    return res
+    addr = request.environ.get("REMOTE_ADDR")
+    if addr == "127.0.0.1":
+        data = request.json
+        res = CmdServer.execute(data)
+        return res
+    else:
+        msg = "Unauthorized access. Only local requests are allowed.\n此接口只允许本机访问。"
+        return HTTPResponse(msg, status=401)
 
+
+ocr_server.init(UmiWeb)
 
 # =============== 自定义服务器适配器，方便控制服务终止 ==============================
 QmlCallback = None  # qml回调函数
@@ -69,6 +77,7 @@ class _WSGIRefServer(ServerAdapter):
 
         atexit.register(self.stop)  # 注册程序终止时停止线程
         self.port = pre_configs.getValue("server_port")  # 提取记录的端口号
+        self.host = Host
         # 找到一个可用的端口号
         while True:
             try:
@@ -112,9 +121,10 @@ _Worker = _WorkerClass()
 # ============================== 控制接口 ==============================
 
 
-# 启动web服务。传入qml对象及回调函数名。
-def runUmiWeb(qmlObj, callback):
-    global QmlCallback
+# 启动web服务。传入qml对象，回调函数名，主机地址
+def runUmiWeb(qmlObj, callback, host):
+    global QmlCallback, Host
+    Host = host
     QmlCallback = getattr(qmlObj, callback, None)  # 提取qml回调函数
     threadPool = QThreadPool.globalInstance()  # 获取全局线程池
     threadPool.start(_Worker)  # 启动服务器线程

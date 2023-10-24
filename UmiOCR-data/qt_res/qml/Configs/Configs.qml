@@ -251,7 +251,8 @@ Item {
                     handleConfigGroup(config, fullKey+".") // 前缀加深一层
                     originDict[fullKey] = {
                         "title": config.title,
-                        "type": "group"
+                        "type": "group",
+                        "advanced": config.advanced,
                     }
                 }
                 else { // 若是配置项
