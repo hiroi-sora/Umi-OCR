@@ -167,7 +167,6 @@ ImageScale {
         // 按下
         onPressed: {
             cross.px = cross.py = cross.min
-            console.log(iRoot.imageSW, iRoot.imageSH)
             if(iRoot.imageSW===0 || iRoot.imageSH===0) {
                 startX = startY = endX = endY = -1
                 return

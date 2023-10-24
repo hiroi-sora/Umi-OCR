@@ -11,6 +11,7 @@
 from ..ocr.api import getApiOcr
 from .mission import Mission
 from ..ocr.tbpu import Merge as tbpuMerge
+from ..ocr.tbpu import IgnoreArea
 from ..utils.utils import isImg
 
 from PIL import Image
@@ -29,12 +30,17 @@ class __MissionOcrClass(Mission):
         # 实例化 tbpu 文本后处理模块
         msnInfo["tbpu"] = []
         argd = msnInfo["argd"]
+        # 段落合并
         if "tbpu.merge" in argd:
-            # 段落合并
             if argd["tbpu.merge"] in tbpuMerge:
                 msnInfo["tbpu"].append(tbpuMerge[argd["tbpu.merge"]]())
             else:
                 print(f'[Error] 段落合并参数 {argd["tbpu.merge"]}')
+        # 忽略区域
+        if "tbpu.ignoreArea" in argd:
+            iArea = argd["tbpu.ignoreArea"]
+            if type(iArea) == list and len(iArea) > 0:
+                msnInfo["tbpu"].append(IgnoreArea(iArea))
         # 检查任务合法性
         for i in range(len(msnList) - 1, -1, -1):
             if "path" in msnList[i] and not isImg(msnList[i]["path"]):

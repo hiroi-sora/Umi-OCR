@@ -59,8 +59,11 @@ Rectangle {
             let ig1 = []
             for(let i=0,l=imageWithIgnore.ig1Boxes.length; i<l; i++) {
                 const b = imageWithIgnore.ig1Boxes[i]
-                ig1.push([[b.x, b.y], [b.x+b.width, b.y],
-                    [b.x+b.width, b.y+b.height], [b.x, b.y+b.height]])
+                const x = Math.round(b.x)
+                const y = Math.round(b.y)
+                const w = Math.round(b.width)
+                const h = Math.round(b.height)
+                ig1.push([[x, y], [x+w, y], [x+w, y+h], [x, y+h]])
             }
             configsComp.setValue(configKey, ig1)
         }

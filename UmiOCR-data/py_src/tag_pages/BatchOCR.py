@@ -71,7 +71,6 @@ class BatchOCR(Page):
                     return False
             argd["mission.dir"] = d  # 写回字典
         argd["mission.dirName"] = os.path.basename(argd["mission.dir"])  # 提取最后一层文件夹名称
-        print(f'转换\n{argd["mission.dir"]}\n{argd["mission.dirName"]}')
         startTimestamp = time.time()  # 开始时间戳
         argd["startTimestamp"] = startTimestamp
         # 格式化日期时间（标准格式）
