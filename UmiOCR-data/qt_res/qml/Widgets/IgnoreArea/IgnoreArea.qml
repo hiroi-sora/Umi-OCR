@@ -67,6 +67,9 @@ Rectangle {
             }
             configsComp.setValue(configKey, ig1)
         }
+        else {
+            configsComp.setValue(configKey, undefined)
+        }
         running = false
         iRoot.visible = false
     }
