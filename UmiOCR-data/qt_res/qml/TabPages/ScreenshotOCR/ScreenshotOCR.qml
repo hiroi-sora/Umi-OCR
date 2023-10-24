@@ -371,7 +371,7 @@ TabPage {
                 }
             }
             // 图片预览区域
-            ImageText {
+            ImageWithText {
                 id: imageText
                 anchors.top: dLeftTop.bottom
                 anchors.bottom: parent.bottom

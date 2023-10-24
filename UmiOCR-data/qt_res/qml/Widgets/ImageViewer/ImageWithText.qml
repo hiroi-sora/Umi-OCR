@@ -74,7 +74,7 @@ ImageScale {
             }
         }
     }
-    
+
     MouseArea {
         id: mouseArea
         anchors.fill: parent
