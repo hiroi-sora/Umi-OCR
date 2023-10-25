@@ -95,8 +95,7 @@ def main():
     app_home = os.environ.get("PYSTAND_HOME", "")  # 程序入口目录
     site.addsitedir("py_src/imports")  # 自定义库添加到搜索路径
     # 调试模式下，手动补充参数
-    if not app_path:
-        app_path = os.path.abspath("../Umi-OCR.exe")
+    if not app_home:
         app_home = os.path.abspath("../")
     # 注入环境变量
     os.environ["APP_VERSION"] = app_version

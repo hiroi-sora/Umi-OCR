@@ -285,7 +285,7 @@ Configs {
                 qmlapp.popup.simple(qsTr("成功添加快捷方式"), "")
             }
             else {
-                qmlapp.popup.message(qsTr("添加快捷方式失败"), qsTr("请尝试以管理员权限运行软件。")+"\n"+res, "error")
+                qmlapp.popup.message(qsTr("添加快捷方式失败"), res, "error")
                 return true // 阻止变化
             }
         }
