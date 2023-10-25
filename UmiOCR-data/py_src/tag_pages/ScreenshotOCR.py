@@ -22,7 +22,6 @@ class ScreenshotOCR(Page):
 
     # 对一个imgID进行OCR
     def ocrImgID(self, imgID, configDict):
-        self.recentResult = None
         pixmap = PixmapProvider.getPixmap(imgID)
         if not pixmap:
             e = f'[Error] ScreenshotOCR: imgID "{imgID}" does not exist in the PixmapProvider dict.'
@@ -32,7 +31,6 @@ class ScreenshotOCR(Page):
 
     # 对一批路径进行OCR
     def ocrPaths(self, paths, configDict):
-        self.recentResult = None
         self.__msnPaths(paths, configDict)
 
     # 停止全部任务
@@ -111,6 +109,12 @@ class ScreenshotOCR(Page):
 
         self.callFunc(update)  # 在主线程中执行
 
+    # 清除最近一次结果
+    def clearRecentResult(self):
+        self.recentResult = None
+
     # 获取最近一次结果
     def getRecentResult(self):
-        return self.recentResult
+        res = self.recentResult
+        self.clearRecentResult()
+        return res

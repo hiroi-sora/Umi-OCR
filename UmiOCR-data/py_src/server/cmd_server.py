@@ -190,6 +190,8 @@ class _Actuator:
                     break
         if module == None:
             return '[Error] Unable to create template "ScreenshotOCR".'
+        # 清除最近一次结果
+        res = self.call(moduleName, "py", "clearRecentResult", True)
         # 调用截图标签页的函数
         if ss:  # 截图
             self.call(moduleName, "qml", "screenshot", False)
@@ -203,8 +205,8 @@ class _Actuator:
                 return "[Error] No valid path."
             self.call(moduleName, "qml", "ocrPaths", False, [paths[0]])
         # 等待OCR完成
-        for i in range(60):
-            time.sleep(0.5)
+        for i in range(100):
+            time.sleep(0.3)
             res = self.call(moduleName, "py", "getRecentResult", True)
             if res:
                 if res["code"] == 100:
