@@ -16,7 +16,9 @@ dev-tools/i18n/*.xml
 UmiOCR-data/*
 !UmiOCR-data/main.py
 !UmiOCR-data/version.py
-!UmiOCR-data/test_run.bat
+!UmiOCR-data/帮助.txt
+!UmiOCR-data/RUN_CLI.bat
+!UmiOCR-data/RUN_GUI.bat
 !UmiOCR-data/test_speed.bat
 # 允许二级目录
 !UmiOCR-data/**/

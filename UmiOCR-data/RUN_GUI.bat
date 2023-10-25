@@ -1,0 +1,1 @@
+start "" runtime/pythonw.exe main.py
