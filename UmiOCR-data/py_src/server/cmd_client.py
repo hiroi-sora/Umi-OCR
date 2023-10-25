@@ -32,8 +32,7 @@ def _isMultiOpen():
 
 
 # 跨进程发送指令
-def _sendCmd():
-    argv = sys.argv[1:]  # 获取要发送的指令
+def _sendCmd(argv):
     port = pre_configs.getValue("server_port")  # 记录的端口号
     url = f"http://127.0.0.1:{port}/argv"  # argv，指令列表接口
     errStr = f"Umi-OCR 已在运行，HTTP跨进程传输指令失败。\n[Error] Umi-OCR is already running, HTTP cross process transmission instruction failed.\n{url}"
@@ -56,15 +55,22 @@ def _sendCmd():
 
 
 # 启动新进程，并发送指令
-def _newSend():
-    # 启动进程
-    Platform.runNewProcess(os.environ["APP_PATH"])
+def _newSend(argv):
+    appPath = os.environ["APP_PATH"]
+    if not appPath:
+        os.MessageBox(
+            "Umi OCR.exe path not found, unable to start a new process.\n未找到 Umi-OCR.exe 的路径，无法启动新进程。请手动启动Umi-OCR后发送指令。",
+            info="Umi-OCR Error",
+        )
+        return
+    # 启动进程，传入强制参数，避免递归无限启动进程
+    Platform.runNewProcess(os.environ["APP_PATH"], " --force")
     # 等待并检查 服务进程初始化完毕
     for i in range(60):  # 检测轮次
         time.sleep(0.5)  # 每次等待时间
         pre_configs.readConfigs()  # 重新读取预配置
         if _isMultiOpen():  # 检测新进程是否启动
-            _sendCmd()  # 发送指令
+            _sendCmd(argv)  # 发送指令
             return
     print(
         "服务进程初始化失败，等待时间超时。\n[Error] The service process initialization failed and the waiting time timed out."
@@ -73,18 +79,24 @@ def _newSend():
 
 # 初始化命令行
 def initCmd():
+    argv = sys.argv[1:]
+    force = False
+    if "--force" in argv:
+        argv.remove("--force")
+        force = True
     # 检查，发现软件多开，则向已在运行的进程发送初始指令
     if _isMultiOpen():
-        _sendCmd()
+        _sendCmd(argv)
         return False
     # 未多开，则启动进程
     else:
-        if len(sys.argv) > 1:  # 存在命令行参数
-            _newSend()  # 启动新进程，并发送指令
+        # 无参数或强制启动，则正常运行本进程，刷新pid和ptime
+        if not argv or force:
+            nowPid = os.getpid()
+            nowPTime = getPidTime(nowPid)
+            pre_configs.setValue("last_pid", nowPid)
+            pre_configs.setValue("last_ptime", nowPTime)
+            return True
+        else:  # 有参数，则启动新进程并发送参数
+            _newSend(argv)
             return False
-        # 无参数，则正常运行本进程，刷新pid和ptime
-        nowPid = os.getpid()
-        nowPTime = getPidTime(nowPid)
-        pre_configs.setValue("last_pid", nowPid)
-        pre_configs.setValue("last_ptime", nowPTime)
-        return True

@@ -65,8 +65,8 @@ class Api:
 
     # 让系统运行一个程序，不堵塞当前进程
     @staticmethod
-    def runNewProcess(path):
-        subprocess.Popen(f'start "" "{path}"', shell=True)
+    def runNewProcess(path, args=""):
+        subprocess.Popen(f'start "" "{path}" {args}', shell=True)
 
     # 用系统默认应用打开一个文件或目录，不堵塞当前进程
     @staticmethod
