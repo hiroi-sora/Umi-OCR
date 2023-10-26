@@ -1,5 +1,6 @@
 # 单独txt文件
 
+import os
 from .output import Output
 
 
@@ -18,6 +19,7 @@ class OutputTxtIndividual(Output):
             pass
         else:
             textOut += f'[Error] OCR failed. Code: {res["code"]}, Msg: {res["data"]}\n【异常】OCR识别失败。\n'
-        path = res["path"] + ".txt"  # 同名路径+txt
+        path, extension = os.path.splitext(res["path"])  # 截取不含后缀的内容
+        path = path + ".txt"  # 同名路径+txt
         with open(path, "w", encoding="utf-8") as f:  # 追加写入同名本地文件
             f.write(textOut)
