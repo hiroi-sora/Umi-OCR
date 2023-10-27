@@ -6,13 +6,9 @@ from .page import Page  # 页基类
 from ..image_controller.image_provider import PixmapProvider  # 图片提供器
 from ..mission.simple_mission import SimpleMission
 
-from PySide2.QtGui import QGuiApplication, QClipboard  # 截图 剪贴板
 import os
 import time
-import pyzbar.pyzbar as pyzbar
 from PIL import Image, ImageEnhance, ImageFilter
-
-Clipboard = QClipboard()  # 剪贴板
 
 
 class QRcode(Page):
@@ -39,6 +35,19 @@ class QRcode(Page):
 
     # 扫码
     def _scanQRcode(self, msn):
+        try:
+            import pyzbar.pyzbar as pyzbar
+        except Exception as e:
+            e = str(e)
+            if "libiconv.dll" in e:
+                return {
+                    "code": 901,
+                    "data": f"【Error】二维码解析器 pyzbar 未能加载 libiconv.dll 。请尝试安装 Microsoft Visual C++运行库后重试。\n[Error] Pyzbar failed to load libiconv.dll. Please try installing the Microsoft Visual C++ runtime and try again.\n{e}",
+                }
+            return {
+                "code": 902,
+                "data": f"【Error】无法导入二维码解析器 pyzbar 。\n[Error] Unable to import pyzbar.\n{e}",
+            }
         t1 = time.time()
         imgID = imgPath = ""
         if "imgID" in msn:
@@ -81,7 +90,7 @@ class QRcode(Page):
                     res["data"] = data
         except Exception as e:
             res["code"] = 102
-            res["data"] = f"QRcode failed. {e}"
+            res["data"] = f"【Error】二维码解析失败。\n[Error] QRcode failed. {e}"
         t2 = time.time()
         res["time"] = t2 - t1
         res["timestamp"] = t2
