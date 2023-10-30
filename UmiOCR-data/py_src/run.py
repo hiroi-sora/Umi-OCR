@@ -108,5 +108,5 @@ def main():
         sys.exit(0)
     res = runQml()  # 启动qml
     if res != 0:
-        os.Messagebox(f"Umi-OCR 异常退出。代码：{res}", info="Umi-OCR Error")
+        os.MessageBox(f"Umi-OCR 异常退出。代码：{res}", info="Umi-OCR Error")
     sys.exit(0)
