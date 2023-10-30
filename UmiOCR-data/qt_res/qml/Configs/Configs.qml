@@ -421,17 +421,19 @@ Item {
         }
         // 滚到一个外层配置组的位置
         function scrollToGroup(index) {
-            const c = panelContainer.children
-            if(index < 0 || index >= c.length) {
+            const children = panelContainer.children
+            if(index < 0 || index >= children.length) {
                 console.log(`[Error] 无法滚动到${index}，超出范围！`)
                 return
             }
-            let y = c[index].y - size_.line
+            const c = children[index]
+            let y = c.y - size_.line
             let max = panelContainer.height - panelComponent.height
             if(y < 0) y = 0
             if(y > max) y = max
             y = y / panelContainer.height
             ScrollBar.vertical.position = y
+            c.kirakira && c.kirakira() // 闪烁
         }
 
         Column {
@@ -493,6 +495,11 @@ Item {
             // 高级模式，整组隐藏
             height: (advanced&&!configs.advanced) ? 0 : childrenRect.height
             visible: !(advanced&&!configs.advanced)
+            // 边框闪烁
+            function kirakira() {
+                if(qmlapp.enabledEffect)
+                    blinkAnimation.start()
+            }
 
             Component.onCompleted: {
                 origin = configs.originDict[key]
@@ -502,16 +509,17 @@ Item {
                     title = "* "+title
                 }
             }
-
-
+            // 标题
             Text_ {
                 id: groupText
                 text: title
                 anchors.left: parent.left
+                anchors.leftMargin: size_.spacing
                 // 显示标题时，自动高度；否则高度为0
                 height: (title) ? undefined:0
+                
             }
-            
+            // 内容
             Rectangle {
                 id: groupRectangle
                 anchors.left: parent.left
@@ -521,7 +529,7 @@ Item {
                 color: theme.bgColor
                 radius: size_.panelRadius
                 height: childrenRect.height + size_.smallSpacing
-                
+
                 Column {
                     id: panelContainer
                     anchors.left: parent.left
@@ -534,6 +542,34 @@ Item {
                 Item { // 底部占位
                     anchors.top: panelContainer.bottom
                     height: size_.smallSpacing
+                }
+            }
+            // 闪烁边框
+            Panel {
+                id: groupBorder
+                anchors.fill: parent
+                color: "#00000000"
+                border.width: 2
+                border.color: theme.specialTextColor
+                visible: false
+                opacity: 0
+                // 颜色闪烁动画
+                SequentialAnimation {
+                    id: blinkAnimation
+                    running: false
+                    loops: 3
+                    onStarted: groupBorder.visible = true
+                    NumberAnimation {
+                        target: groupBorder; property: "opacity"
+                        from: 0; to: 1; duration: 200
+                    }
+                    NumberAnimation {
+                        target: groupBorder; property: "opacity"
+                        from: 1; to: 0; duration: 200
+                    }
+                    onStopped: {
+                        groupBorder.visible = false
+                    }
                 }
             }
         }
