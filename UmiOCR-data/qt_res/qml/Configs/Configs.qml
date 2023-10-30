@@ -404,6 +404,35 @@ Item {
         contentWidth: width // 内容宽度
         clip: true // 溢出隐藏
         property alias ctrlBar: ctrlBar // 控制栏的引用
+        property alias advanced: configs.advanced // 高级标志的引用
+        // 获取所有外层配置组的信息
+        function getGroupList() {
+            const c = panelContainer.children
+            let itemList = []
+            for(let i in c) {
+                if(c[i].title===undefined)
+                    return
+                itemList.push({
+                    title: c[i].title,
+                    advanced: c[i].advanced
+                })
+            }
+            return itemList
+        }
+        // 滚到一个外层配置组的位置
+        function scrollToGroup(index) {
+            const c = panelContainer.children
+            if(index < 0 || index >= c.length) {
+                console.log(`[Error] 无法滚动到${index}，超出范围！`)
+                return
+            }
+            let y = c[index].y - size_.line
+            let max = panelContainer.height - panelComponent.height
+            if(y < 0) y = 0
+            if(y > max) y = max
+            y = y / panelContainer.height
+            ScrollBar.vertical.position = y
+        }
 
         Column {
             id: panelContainer
