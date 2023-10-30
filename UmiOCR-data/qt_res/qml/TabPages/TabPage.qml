@@ -10,6 +10,7 @@ Item {
     property string ctrlKey // Python连接器的key
     property var connector // Python连接器的引用
     property var configsComp: undefined // 该页面的配置组件
+    signal showPage // 页面展示时的信号，用 onShowPage 监听
 
     // ========================= 【页面控制】 =========================
 

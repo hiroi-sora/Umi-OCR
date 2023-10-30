@@ -184,6 +184,7 @@ Item {
             if(i==index){
                 pageList[i].obj.z = 0
                 pageList[i].obj.visible = true
+                pageList[i].obj.showPage()
             }else{
                 pageList[i].obj.z = -1
                 pageList[i].obj.visible = false
