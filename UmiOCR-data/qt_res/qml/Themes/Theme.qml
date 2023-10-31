@@ -40,17 +40,11 @@ Item {
         "coverColor3",
         "coverColor4",
     ]
-    // 主题名称，允许翻译
-    property var titles: {
-        "Default Light": qsTr("珍珠白"),
-        "Default Dark": qsTr("云墨黑"),
-        "Cyberpunk": qsTr("赛博朋克"),
-    }
     // 默认主题 / 当前读入的主题配置
     property var all: {
         // 默认主题
         "Default Light": {
-            "themeTitle": titles["Default Light"],
+            "themeTitle": qsTr("珍珠白"),
             "tabBarColor": "#F3F3F3",
             "bgColor": "#FFF",
             "textColor": "#000",
@@ -65,7 +59,7 @@ Item {
             "coverColor4": "#55000000",
         },
         "Default Dark": {
-            "themeTitle": titles["Default Dark"],
+            "themeTitle": qsTr("云墨黑"),
             "tabBarColor": "#4A4A4A",
             "bgColor": "#444",
             "textColor": "#FFF",
@@ -112,7 +106,7 @@ Item {
         },
         // 抄： https://github.com/Fndroid/clash_for_windows_pkg
         "Cyberpunk": {
-            "themeTitle": "Cyberpunk",
+            "themeTitle": qsTr("赛博朋克"),
             "tabBarColor": "#084A5A",
             "bgColor": "#136377",
             "textColor": "#FCEC0C",

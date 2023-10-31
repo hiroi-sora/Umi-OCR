@@ -70,8 +70,8 @@ Item {
                     continue
                 }
                 // 覆盖加载名称
-                if(theme.titles.hasOwnProperty(k)) {
-                    all[k].themeTitle = theme.titles[k]
+                if(theme.all.hasOwnProperty(k)) {
+                    all[k].themeTitle = theme.all[k].themeTitle
                 }
             }
             if(Object.keys(all).length === 0) {
