@@ -297,4 +297,10 @@ TabPage {
             }
         }
     }
+
+    // 鼠标拖入图片
+    DropArea_ {
+        anchors.fill: parent
+        callback: tabPage.scanPaths
+    }
 }
