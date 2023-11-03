@@ -102,8 +102,6 @@ class MergeParaCode(Tbpu):
         if num > 0:
             score /= num
         res = [{"text": text, "box": box, "score": score}]
-        # print("= 起始列表", leftList)
-        # print("= 层级列表", levelList)
 
         return res
 

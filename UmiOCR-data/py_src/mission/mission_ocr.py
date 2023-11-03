@@ -27,7 +27,6 @@ class __MissionOcrClass(Mission):
     # ========================= 【重载】 =========================
 
     def addMissionList(self, msnInfo, msnList):  # 添加任务列表
-        print("= ", msnInfo)
         # 实例化 tbpu 文本后处理模块
         msnInfo["tbpu"] = []
         argd = msnInfo["argd"]
