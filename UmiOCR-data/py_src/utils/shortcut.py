@@ -22,7 +22,7 @@ class ShortcutApi:
         lnkName = "Umi-OCR"
         appPath = os.environ["APP_PATH"]
         if not appPath:
-            return "[Error] Umi-OCR.exe APP_PATH not exist. Please try creating a shortcut manually.\n未找到 Umi-OCR.exe 。请尝试手动创建快捷方式。"
+            return "未找到 Umi-OCR.exe 。请尝试手动创建快捷方式。\n[Error] Umi-OCR.exe APP_PATH not exist. Please try creating a shortcut manually."
         lnkPathBase = ShortcutApi.__getPath(position)
         lnkPathBase = os.path.join(lnkPathBase, lnkName)
         lnkPath = lnkPathBase + ".lnk"
@@ -33,7 +33,7 @@ class ShortcutApi:
         appFile = QFile(appPath)
         res = appFile.link(lnkPath)
         if not res:
-            return f"[Error] {appFile.errorString()}\nPlease try starting the software as an administrator.\n请尝试以管理员权限启动软件。\nappPath: {appPath}\nlnkPath: {lnkPath}"
+            return f"[Error] {appFile.errorString()}\n请尝试以管理员权限启动软件。\nPlease try starting the software as an administrator.\nappPath: {appPath}\nlnkPath: {lnkPath}"
         return "[Success]"
 
     @staticmethod  # 删除快捷方式
