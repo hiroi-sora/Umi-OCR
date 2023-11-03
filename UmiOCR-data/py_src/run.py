@@ -15,7 +15,8 @@ def runQml():
         QCoreApplication.addLibraryPath("./site-packages/PySide2/plugins")
     except Exception as e:
         print(e)
-        os.MessageBox(f"Qt plugins 目录导入失败！\nQt plugins directory import failed!\n\n{e}")
+        msg = f"Qt plugins 目录导入失败！\nQt plugins directory import failed!\n\n{str(e)}"
+        os.MessageBox(msg)
         return 1
     # 导入包
     from PySide2.QtCore import Qt, QTranslator
@@ -108,5 +109,6 @@ def main():
         sys.exit(0)
     res = runQml()  # 启动qml
     if res != 0:
-        os.MessageBox(f"Umi-OCR 异常退出。代码：{res}", info="Umi-OCR Error")
+        msg = f"Umi-OCR 异常退出。代码：{str(res)}\nUmi-OCR exited abnormally. Code: {str(res)}"
+        os.MessageBox(msg)
     sys.exit(0)

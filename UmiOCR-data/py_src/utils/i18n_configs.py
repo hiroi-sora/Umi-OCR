@@ -40,16 +40,12 @@ class _I18n:
             print("翻译未加载。")
             return
         if not trans.load(path):
-            os.MessageBox(
-                f"[Error] Unable to load UI language: {path}\n【异常】无法加载UI语言！",
-                info="Umi-OCR Warning",
-            )
+            msg = f"无法加载UI语言！\n[Error] Unable to load UI language: {path}"
+            os.MessageBox(msg, type="warning")
             return
         if not qtApp.installTranslator(trans):  # 安装翻译器
-            os.MessageBox(
-                f"[Error] Unable to installTranslator: {path}\n【异常】无法加载翻译模块！",
-                info="Umi-OCR Warning",
-            )
+            msg = f"无法加载翻译模块！\n[Error] Unable to installTranslator: {path}"
+            os.MessageBox(msg, type="warning")
             return
         print(f"翻译加载完毕。{self.langCode} - {text}")
 

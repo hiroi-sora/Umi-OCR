@@ -29,9 +29,14 @@ def initRuntimeEnvironment(startup_script):
     # sys.excepthook = except_hook
 
     # 定义一个最简单的消息弹窗
-    def MessageBox(msg, info="Umi-OCR Message"):
+    def MessageBox(msg, type="error"):
         import ctypes
 
+        info = "Umi-OCR Message"
+        if type == "error":
+            info = "【错误】 Umi-OCR Error"
+        elif type == "warning":
+            info = "【警告】 Umi-OCR Warning"
         ctypes.windll.user32.MessageBoxW(None, str(msg), str(info), 0)
         return 0
 
