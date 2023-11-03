@@ -12,19 +12,91 @@ Item {
     property var mScreen: mainWin.screen
     property int mx: mainWin.x
     property int my: mainWin.y
+    property int mw: mainWin.width
+    property int mh: mainWin.height
+    // 最小宽高
+    property int minW: 400
+    property int minH: 400
+
     // ========================= 【保存量】 =========================
     
     // 主窗口属性初始化
     Component.onCompleted: {
+        loadGeometry() // 恢复上次大小位置
         // 启动时可见
         const visi = !qmlapp.globalConfigs.getValue("window.startupInvisible")
         setVisibility(visi)
         if(!visi) {
             qmlapp.popup.simple(qsTr("欢迎使用 Umi-OCR"), qsTr("已启用后台模式，可通过快捷键使用功能。"))
         }
-        // 检查屏幕位置，防止初始出界
-        checkScreen()
     }
+
+    // ========================= 【记录窗口位置大小】 =========================
+
+
+    Connections {
+        target: mainWin
+        function onClosing() {
+            saveGeometry()
+        }
+    }
+    // 保存
+    function saveGeometry() {
+        let xywh = checkGeometry(mx, my, mw, mh)
+        xywh = xywh.join(",")
+        qmlapp.globalConfigs.setValue("window.geometry", xywh, false, true)
+        console.log("% 保存窗口位置", xywh)
+    }
+    // 读取
+    function loadGeometry() {
+        let xywh = qmlapp.globalConfigs.getValue("window.geometry")
+        xywh = xywh.split(",")
+        if(xywh.length < 4) {
+            console.log("% 未能读取窗口位置", xywh)
+            return
+        }
+        for(let i=0; i<4; i++)
+            xywh[i] = parseInt(xywh[i])
+        let [x, y, w, h] = checkGeometry(xywh[0], xywh[1], xywh[2], xywh[3])
+        mainWin.x = x
+        mainWin.y = y
+        mainWin.width = w
+        mainWin.height = h
+        let screenIndex = 0
+        for(let i=0, l=Qt.application.screens.length; i<l; i++) {
+            let s = Qt.application.screens[i]
+            if(x >= s.virtualX && x <= s.virtualX+s.width
+                && y >= s.virtualY && y <= s.virtualY+s.height) {
+                    screenIndex = i
+                    break
+                }
+        }
+        mainWin.screen = Qt.application.screens[screenIndex]
+        console.log("% 读取窗口位置", x, y, w, h, screenIndex)
+    }
+    // 检查窗口位置，返回检查后的值
+    function checkGeometry(x, y, w, h) {
+        // 检查宽高
+        if(w > mScreen.desktopAvailableWidth)
+            w = mScreen.desktopAvailableWidth
+        else if(w < minW)
+            w = minW
+        if(h > mScreen.desktopAvailableHeight)
+            h = mScreen.desktopAvailableHeight
+        else if(h < minH)
+            h = minH
+        // 检查位置
+        if(x < mScreen.virtualX)
+            x = mScreen.virtualX
+        else if(x > mScreen.virtualX+mScreen.desktopAvailableWidth-w)
+            x = mScreen.virtualX+mScreen.desktopAvailableWidth-w
+        if(y < mScreen.virtualY+30) // +30防止标题栏出界
+            y = mScreen.virtualY+30
+        else if(y > mScreen.virtualY+mScreen.desktopAvailableHeight-h)
+            y = mScreen.virtualY+mScreen.desktopAvailableHeight-h
+        return [x, y, w, h]
+    }
+
 
     // ========================= 【接口】 =========================
 
@@ -59,15 +131,16 @@ Item {
 
     // 退出主窗口
     function quit() {
+        saveGeometry()
         Qt.quit()
     }
 
     // 检查主窗口初始化屏幕位置，防止出界及过大
     function checkScreen() {
-        if(mainWin.width > mScreen.desktopAvailableWidth)
-            mainWin.width = mScreen.desktopAvailableWidth
-        if(mainWin.height > mScreen.desktopAvailableHeight)
-            mainWin.height = mScreen.desktopAvailableHeight
+        if(mw > mScreen.desktopAvailableWidth)
+            mw = mScreen.desktopAvailableWidth
+        if(mh > mScreen.desktopAvailableHeight)
+            mh = mScreen.desktopAvailableHeight
         if(mx < mScreen.virtualX) {
             mainWin.x = mScreen.virtualX
         }

@@ -80,7 +80,7 @@ Configs {
                 "onChanged": (val)=>{ theme.dataFontFamily = val },
             },
             "scale": {
-                "title": qsTr("界面大小比例"),
+                "title": qsTr("界面与文字大小"),
                 "default": 1,
                 "optionsList": [
                     [0.5, "50%"],
@@ -154,6 +154,10 @@ Configs {
                 ],
             },
             "simpleNotificationType": utilsDicts.getSimpleNotificationType(true),
+            "geometry": { // 存放主窗位置大小，字符串格式 "x,y,w,h"
+                "type": "var",
+                "default": "", // 如： 300,20,500,300
+            },
         },
 
         // 截图

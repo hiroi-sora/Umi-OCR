@@ -97,7 +97,7 @@ SystemTrayIcon {
 
         MenuItem {
             text: qsTr("退出 Umi-OCR")
-            onTriggered: Qt.quit()
+            onTriggered: qmlapp.mainWin.quit()
         }
     }
 

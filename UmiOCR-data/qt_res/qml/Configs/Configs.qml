@@ -221,6 +221,7 @@ Item {
                         }
                         break
                     // 无需检查
+                    case "var": // 任意
                     case "file": // 文件
                     case "text": // 文本
                     case "hotkey": // 热键
@@ -287,8 +288,8 @@ Item {
     function getValue(key) {
         return valueDict[key]
     }
-    // 设置值
-    function setValue(key, val, isupdateUI=false) {
+    // 设置值  键, 值, 是否刷新UI, 是否立刻写入本地（还是缓存写入）
+    function setValue(key, val, isupdateUI=false, saveNow=false) {
         if(valueDict[key] === val) // 排除相同值
             return
         let res = onChangedFunc(key, val, valueDict[key]) // 触发函数，传入新值和旧值
@@ -298,7 +299,10 @@ Item {
         }
         valueDict[key] = val
         if(originDict[key].save) { // 需要保存值
-            saveValue(key)
+            if(saveNow) // 立刻保存
+                settings.setValue(key, val)
+            else // 缓存保存
+                saveValue(key)
         }
         if(isupdateUI && compDict.hasOwnProperty(key)) { // 刷新UI
             compDict[key].updateUI()
