@@ -239,7 +239,7 @@ TabPage {
                     Text_ {
                         anchors.top: parent.top
                         anchors.bottom: parent.bottom
-                        verticalAlignment: Text.AlignBottom
+                        verticalAlignment: Text.AlignVCenter
                         horizontalAlignment: Text.AlignRight
                         text: (imageText.scale*100).toFixed(0) + "%"
                         color: theme.subTextColor
