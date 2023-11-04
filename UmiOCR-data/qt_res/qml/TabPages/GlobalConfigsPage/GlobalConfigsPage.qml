@@ -7,7 +7,6 @@ import QtQuick.Controls 2.15
 
 import ".."
 import "../../Widgets"
-import "../../Themes"
 
 TabPage {
     id: tabPage
