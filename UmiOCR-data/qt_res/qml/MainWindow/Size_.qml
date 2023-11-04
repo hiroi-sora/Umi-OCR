@@ -19,7 +19,7 @@ Item {
     property int largeLine: 20 * scale
 
     // 文字缩放值
-    property real textScale: 1
+    property real textScale: 1 // 由下列 languageScale 控制
     // 主要文字大小
     property int text: line * textScale
     // 较小的文字大小
@@ -44,16 +44,18 @@ Item {
     // 小间距
     property real smallSpacing: 4 * scale
 
+    // 语言缩放系数
+    // 在相同的行高内，有些语言经过缩放可以表现更好。如英文可以比汉字的字号更小。
+    // 通过在翻译文件中定义 languageScale 可以单独修改这种语言的缩放。
+    property string languageScale: qsTr("1.0")
     
-    // Component.onCompleted: {
-    //     for(let i in Qt.application.screens) {
-    //         const screen = Qt.application.screens[i]
-    //         console.log("== 屏幕", i, screen)
-    //         for(let s in screen) {
-    //             if (typeof screen[s] === 'function')
-    //                 continue
-    //             console.log(s,screen[s])
-    //         }
-    //     }
-    // }
+    Component.onCompleted: {
+        const s = parseFloat(languageScale)
+        if(!isNaN(s)) {
+            textScale = s
+        }
+        else {
+            console.log("[Warning] 语言缩放系数无法应用：", languageScale)
+        }
+    }
 }

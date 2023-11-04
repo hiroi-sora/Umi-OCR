@@ -222,6 +222,26 @@ Configs {
 
         // OCR接口全局设定
         "ocr": undefined,
+
+        // 开发者工具
+        "developer": {
+            "title": "developer tools",
+            "type": "group",
+            "advanced": true,
+
+            "textScale": {
+                "title": "languageScale (textScale)",
+                "isInt": false,
+                "default": 1,
+                "max": 10,
+                "min": 0.1,
+                "save": false,
+                "onChanged": (val, old)=>{
+                    if(old!==undefined)
+                        size_.textScale = val
+                },
+            },
+        },
     }
 
     // ========================= 【全局单例，通过 qmlapp.globalConfigs.xxx 访问】 =========================
