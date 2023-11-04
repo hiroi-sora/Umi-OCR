@@ -12,19 +12,18 @@ root = tree.getroot()
 
 # 遍历页面
 data = []
+count = 0
 for page in root:
     for message in page:
         if message.tag == "name":
             data.append([])
         else:
-            location = message[0]
-            filename = location.get("filename")
-            source = message[1].text
-            translation = message[2]
-            if not source:
-                source = message[2].text
-                translation = message[3]
-            data[-1].append({"source": source})
+            for item in message:
+                if item.tag == "source":
+                    source = item.text
+                    data[-1].append({"source": source})
+                    count += 1
+                    print(count)
 s = ""
 for p in data:
     for d in p:
