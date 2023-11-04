@@ -18,7 +18,7 @@ TabPage {
 
     DoubleRowLayout {
         anchors.fill: parent
-        initSplitterX: size_.line * 10
+        initSplitterX: size_.line * 15
 
         // 左面板：设置标题列表
         leftItem: Panel {
