@@ -2,6 +2,7 @@
 
 import os
 from . import pre_configs
+from plugin_i18n import setLangCode
 
 I18nDir = "i18n"  # 翻译文件 目录
 DefaultLang = "zh_CN"  # 默认语言
@@ -36,6 +37,7 @@ class _I18n:
         # 获取信息
         self.__getLangPath()
         text, path = self.langDict[self.langCode]
+        setLangCode(self.langCode)  # 设置插件翻译
         if not path:
             print("翻译未加载。")
             return
