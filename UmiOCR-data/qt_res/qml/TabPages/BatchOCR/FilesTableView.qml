@@ -62,8 +62,8 @@ Item{
 
     // 定义信号
     signal addImages(var paths) // 添加图片的信号
-    signal clickImage(var path) // 点击图片条目的信号
-    signal doubleClickImage(var path)
+    signal clickImage(var info) // 点击图片条目的信号
+    signal doubleClickImage(var path) // 双击
 
     // ========================= 【布局】 =========================
 
@@ -240,7 +240,11 @@ Item{
                                 tableView.hoveredY = -1
                             }
                             onClicked: {
-                                clickImage(tableModel.getRow(row).filePath)
+                                const filePath = tableModel.getRow(row).filePath
+                                clickImage({
+                                    "filePath": filePath,
+                                    "fileName": getFileName(filePath),
+                                    })
                             }
                             onDoubleClicked: {
                                 doubleClickImage(tableModel.getRow(row).filePath)

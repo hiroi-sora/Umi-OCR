@@ -401,6 +401,19 @@ TabPage {
                 onAddImages: {
                     tabPage.addImages(paths)
                 }
+                // 单击打开预览
+                onClickImage: {
+                    let res = resultsTableView.getResult(info.fileName)
+                    let data = undefined, text = undefined
+                    if(res) {
+                        if(res.source)
+                            data = JSON.parse(res.source)
+                        if(res.resText)
+                            text = res.resText
+                    }
+                    previewPanel.show(info.filePath, data, text)
+                }
+                // 双击打开文件
                 onDoubleClickImage: {
                     // 双击条目，用系统工具打开图片
                     qmlapp.utilsConnector.startfile(path)
@@ -445,6 +458,12 @@ TabPage {
     DropArea_ {
         anchors.fill: parent
         callback: tabPage.addImages
+    }
+
+    // 预览面板
+    PreviewPanel {
+        id: previewPanel
+        anchors.fill: parent
     }
 
     // 忽略区域编辑器

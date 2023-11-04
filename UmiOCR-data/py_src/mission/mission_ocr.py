@@ -60,7 +60,6 @@ class __MissionOcrClass(Mission):
                 rounded = round(n)
                 if abs(n - rounded) <= 1e-7:
                     startInfo[k] = rounded
-        print("== 启动参数：", startInfo)
         msg = self.__api.start(startInfo)
         if msg.startswith("[Error]"):
             print(f"引擎启动失败！", msg)

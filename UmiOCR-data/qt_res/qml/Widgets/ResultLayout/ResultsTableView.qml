@@ -65,6 +65,7 @@ Item {
             "selectL_": -1,
             "selectR_": -1,
             "selectUpdate_": 0,
+            "source": JSON.stringify(res), // 保存原始数据
         })
         // 自动滚动
         if(autoToBottom) {
