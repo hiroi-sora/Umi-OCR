@@ -1,7 +1,8 @@
 import xml.etree.ElementTree as ET
+import sys
 
-inFile = "翻译源文件.xml"
-outFile = "翻译源.line.txt"
+inFile = sys.argv[1]
+outFile = inFile[:-2] + "txt"
 
 # 加载XML文件
 tree = ET.parse(inFile)
@@ -27,7 +28,7 @@ for page in root:
 s = ""
 for p in data:
     for d in p:
-        s += d["source"].replace("\n", r"\n") + "\n"
+        s += d["source"].replace("\n", r"\n") + "\n"  # 换行转\n
 with open(outFile, "w", encoding="utf-8") as f:
     f.write(s)
 

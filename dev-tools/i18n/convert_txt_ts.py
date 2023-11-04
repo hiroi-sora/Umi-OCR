@@ -1,11 +1,13 @@
 import xml.etree.ElementTree as ET
+import sys
 
-sourceFile = "翻译源文件.xml"
-inFile = "zh_TW.line.txt"
-outFile = "zh_TW.xml"
+inFile = sys.argv[1]
+outFile = inFile + ".ts"
+sourceFile = inFile[:-3] + "ts"
+
 tree = ET.parse(sourceFile)
-tran = open(inFile, encoding="utf-8").read()
-tran = tran.split("\n")
+txt = open(inFile, encoding="utf-8").read()
+txt = txt.split("\n")
 tranIndex = 0
 
 root = tree.getroot()
@@ -23,11 +25,11 @@ for page in root:
             if not source.text:
                 source = message[2]
                 translation = message[3]
-            t = tran[tranIndex]
+            t = txt[tranIndex].replace(r"\n", "\n")  # \n转换行
             print("原文：", source.text)
-            print("译文：", t)
+            print("  译文：", t)
             tranIndex += 1
-
-            translation.attrib.pop("type")
             translation.text = t
+            if translation.attrib.get("type") is not None:
+                translation.attrib.pop("type")
 tree.write(outFile)
