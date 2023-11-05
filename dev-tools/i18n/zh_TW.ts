@@ -645,7 +645,7 @@
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="194"/>
         <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="206"/>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="382"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="393"/>
         <source>重启软件后生效</source>
         <translation type="unfinished">重啟軟件後生效</translation>
     </message>
@@ -680,62 +680,72 @@
         <translation type="unfinished">端口</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="294"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="288"/>
+        <source>请尝试更换软件路径！</source>
+        <translation type="unfinished">請嘗試更換軟件路徑！</translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="289"/>
+        <source>配置文件读写异常</source>
+        <translation type="unfinished">設定檔讀寫异常</translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="305"/>
         <source>插件加载失败</source>
         <translation type="unfinished">插件加載失敗</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="309"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="320"/>
         <source>成功添加快捷方式</source>
         <translation type="unfinished">成功添加快捷方式</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="312"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="323"/>
         <source>添加快捷方式失败</source>
         <translation type="unfinished">添加快捷方式失敗</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="319"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="330"/>
         <source>成功移除 %1 个快捷方式</source>
         <translation type="unfinished">成功移除 %1 個快捷方式</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="322"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="333"/>
         <source>提示</source>
         <translation type="unfinished">提示</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="322"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="333"/>
         <source>没有找到可移除的快捷方式。</source>
         <translation type="unfinished">沒有找到可移除的快捷方式。</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="330"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="341"/>
         <source>立刻关闭软件</source>
         <translation type="unfinished">立刻關閉軟件</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="330"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="341"/>
         <source>稍后</source>
         <translation type="unfinished">稍後</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="370"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="381"/>
         <source>渲染器变更 将在重启软件后生效</source>
         <translation type="unfinished">渲染器變更 將在重啟軟件後生效</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="377"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="388"/>
         <source>端口号不合法</source>
         <translation type="unfinished">端口號不合法</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="382"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="393"/>
         <source>端口号改为%1</source>
         <translation type="unfinished">端口號改為%1</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="391"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="402"/>
         <source>原端口号%1被占用，
 切换为新端口号%2。
 
@@ -889,6 +899,21 @@
         <location filename="../../UmiOCR-data/qt_res/qml/Popup_/MessageBox.qml" line="44"/>
         <source>发生了一点小问题</source>
         <translation type="unfinished">發生了一點小問題</translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/Popup_/MessageBox.qml" line="117"/>
+        <source>复制</source>
+        <translation type="unfinished">複製</translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/Popup_/MessageBox.qml" line="122"/>
+        <source>已复制报错信息 %1</source>
+        <translation type="unfinished">已複製報錯資訊 %1</translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/Popup_/MessageBox.qml" line="122"/>
+        <source>请前往 Issues 页面寻找解答或反馈</source>
+        <translation type="unfinished">請前往Issues頁面尋找解答或回饋意見</translation>
     </message>
 </context>
 <context>

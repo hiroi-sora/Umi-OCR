@@ -645,7 +645,7 @@
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="194"/>
         <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="206"/>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="382"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="393"/>
         <source>重启软件后生效</source>
         <translation type="unfinished">ソフトウェアを再起動して有効にする</translation>
     </message>
@@ -680,62 +680,72 @@
         <translation type="unfinished">ポート</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="294"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="288"/>
+        <source>请尝试更换软件路径！</source>
+        <translation type="unfinished">ソフトウェアパスを交換してみてください！</translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="289"/>
+        <source>配置文件读写异常</source>
+        <translation type="unfinished">プロファイル読み書き例外</translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="305"/>
         <source>插件加载失败</source>
         <translation type="unfinished">プラグインの読み込みに失敗しました</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="309"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="320"/>
         <source>成功添加快捷方式</source>
         <translation type="unfinished">ショートカットが正常に追加されました</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="312"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="323"/>
         <source>添加快捷方式失败</source>
         <translation type="unfinished">ショートカットの追加に失敗しました</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="319"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="330"/>
         <source>成功移除 %1 个快捷方式</source>
         <translation type="unfinished">%1 個のショートカットが正常に削除されました</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="322"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="333"/>
         <source>提示</source>
         <translation type="unfinished">ヒント</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="322"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="333"/>
         <source>没有找到可移除的快捷方式。</source>
         <translation type="unfinished">ショートカットが見つかりませんでした。</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="330"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="341"/>
         <source>立刻关闭软件</source>
         <translation type="unfinished">ソフトウェアをすぐに終了する</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="330"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="341"/>
         <source>稍后</source>
         <translation type="unfinished">後で</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="370"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="381"/>
         <source>渲染器变更 将在重启软件后生效</source>
         <translation type="unfinished">レンダラーが変更されました。ソフトウェアの再起動後に有効になります</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="377"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="388"/>
         <source>端口号不合法</source>
         <translation type="unfinished">ポート番号が無効です</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="382"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="393"/>
         <source>端口号改为%1</source>
         <translation type="unfinished">ポート番号が%1に変更されました</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="391"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="402"/>
         <source>原端口号%1被占用，
 切换为新端口号%2。
 
@@ -889,6 +899,21 @@
         <location filename="../../UmiOCR-data/qt_res/qml/Popup_/MessageBox.qml" line="44"/>
         <source>发生了一点小问题</source>
         <translation type="unfinished">少し問題が発生しました</translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/Popup_/MessageBox.qml" line="117"/>
+        <source>复制</source>
+        <translation type="unfinished">コピー</translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/Popup_/MessageBox.qml" line="122"/>
+        <source>已复制报错信息 %1</source>
+        <translation type="unfinished">エラーメッセージがコピーされました %1</translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/Popup_/MessageBox.qml" line="122"/>
+        <source>请前往 Issues 页面寻找解答或反馈</source>
+        <translation type="unfinished">Issuesページに答えやフィードバックを探しに行ってください</translation>
     </message>
 </context>
 <context>

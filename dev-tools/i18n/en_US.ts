@@ -645,7 +645,7 @@ It will wait for the main window to close with a delay</translation>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="194"/>
         <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="206"/>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="382"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="393"/>
         <source>重启软件后生效</source>
         <translation type="unfinished">Takes effect after restarting the software</translation>
     </message>
@@ -680,62 +680,72 @@ It will wait for the main window to close with a delay</translation>
         <translation type="unfinished">Port</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="294"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="288"/>
+        <source>请尝试更换软件路径！</source>
+        <translation type="unfinished">Please try changing the software path!</translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="289"/>
+        <source>配置文件读写异常</source>
+        <translation type="unfinished">Configuration file read/write exception</translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="305"/>
         <source>插件加载失败</source>
         <translation type="unfinished">Plugin loading failed</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="309"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="320"/>
         <source>成功添加快捷方式</source>
         <translation type="unfinished">Shortcut added successfully</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="312"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="323"/>
         <source>添加快捷方式失败</source>
         <translation type="unfinished">Failed to add shortcut</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="319"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="330"/>
         <source>成功移除 %1 个快捷方式</source>
         <translation type="unfinished">Successfully removed %1 shortcuts</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="322"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="333"/>
         <source>提示</source>
         <translation type="unfinished">Tip</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="322"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="333"/>
         <source>没有找到可移除的快捷方式。</source>
         <translation type="unfinished">No removable shortcuts found.</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="330"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="341"/>
         <source>立刻关闭软件</source>
         <translation type="unfinished">Close the software now</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="330"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="341"/>
         <source>稍后</source>
         <translation type="unfinished">Later</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="370"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="381"/>
         <source>渲染器变更 将在重启软件后生效</source>
         <translation type="unfinished">Renderer change will take effect after restarting the software</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="377"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="388"/>
         <source>端口号不合法</source>
         <translation type="unfinished">Invalid port number</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="382"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="393"/>
         <source>端口号改为%1</source>
         <translation type="unfinished">The port number has been changed to %1</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="391"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="402"/>
         <source>原端口号%1被占用，
 切换为新端口号%2。
 
@@ -889,6 +899,21 @@ For example, when processing screenshots of movies and TV shows, you can add an 
         <location filename="../../UmiOCR-data/qt_res/qml/Popup_/MessageBox.qml" line="44"/>
         <source>发生了一点小问题</source>
         <translation type="unfinished">A small problem has occurred</translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/Popup_/MessageBox.qml" line="117"/>
+        <source>复制</source>
+        <translation type="unfinished">Copy</translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/Popup_/MessageBox.qml" line="122"/>
+        <source>已复制报错信息 %1</source>
+        <translation type="unfinished">Error message copied. %1</translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/Popup_/MessageBox.qml" line="122"/>
+        <source>请前往 Issues 页面寻找解答或反馈</source>
+        <translation type="unfinished">Please go to the Issues page to find answers or feedback.</translation>
     </message>
 </context>
 <context>

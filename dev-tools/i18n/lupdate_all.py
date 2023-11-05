@@ -1,7 +1,6 @@
 import os
 
 LangList = [
-    "zh_CN",
     "zh_TW",
     "en_US",
     "es_ES",
