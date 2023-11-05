@@ -81,7 +81,7 @@
 
 使用v1稳定版本：
 
-Github下载：[Release v1.3.6](https://github.com/hiroi-sora/Umi-OCR/releases/tag/v1.3.6)
+GitHub下载：[Release v1.3.6](https://github.com/hiroi-sora/Umi-OCR/releases/tag/v1.3.6)
 
 蓝奏云下载：[https://hiroi-sora.lanzoul.com/s/umi-ocr](https://hiroi-sora.lanzoul.com/s/umi-ocr)
 
