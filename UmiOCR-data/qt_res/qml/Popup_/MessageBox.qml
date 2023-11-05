@@ -49,7 +49,7 @@ Rectangle {
 
     // ===========================================================
 
-    width: size_.line * 20
+    width: size_.line * 25
     height: childrenRect.height
     color: theme.bgColor
     radius: qmlapp.enabledEffect ? size_.panelRadius : 0
@@ -99,10 +99,42 @@ Rectangle {
             visible: msg!==""
             text: msg
         }
-        // 底部占位
+        // 下层小按钮
         Item {
-            width: 1
-            height: 1
+            anchors.left: parent.left
+            anchors.right: parent.right
+            height: type==="error"?size_.line:1
+            // 错误
+            Row {
+                visible: type==="error"
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.right: parent.right
+                anchors.rightMargin: size_.spacing
+                Button_ {
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    text_: qsTr("复制")
+                    textSize: size_.smallText
+                    textColor_: theme.subTextColor
+                    onClicked: {
+                        qmlapp.utilsConnector.copyText(msg)
+                        qmlapp.popup.simple(qsTr("已复制报错信息 %1").arg(msg.length), qsTr("请前往 Issues 页面寻找解答或反馈"))
+                    }
+                }
+                Button_ {
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    property string issueUrl: APP_WEBSITE+"/issues"
+                    text_: "Issues"
+                    toolTip: issueUrl
+                    textSize: size_.smallText
+                    textColor_: theme.subTextColor
+                    onClicked: {
+                        Qt.openUrlExternally(issueUrl)
+                    }
+                }
+            }
         }
         // 底部按钮
         Rectangle {
