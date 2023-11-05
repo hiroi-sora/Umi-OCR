@@ -51,16 +51,25 @@ Item {
                 s = (width * height) / (contentWidth * contentHeight)
             let ps = font.pixelSize * Math.sqrt(s)
             font.pixelSize = ps
-            // 二次调整，如果文本比容器高出至少1行，则减小字体大小，直到不高于容器
+            // 二次调整：如果文本比容器高出至少1行，则减小字体大小，直到不高于容器
             if(contentHeight >= height+ps) {
                 // 为了保持性能，限定调整的最大次数
                 for(let i=0; i<10 && contentHeight > height; i++) {
                     font.pixelSize--
                 }
             }
-            // 最终让整体宽高与文本块相同
-            tRoot.width = contentWidth
-            tRoot.height = contentHeight
+            // 二次调整：如果当前只有一行，则优化字间距
+            if(lineCount === 1 && text.length > 0) {
+                const s = (tRoot.width - contentWidth) / text.length
+                if(s > 0) {
+                    font.letterSpacing = s
+                }
+            }
+            // 优化整体宽高
+            if(contentWidth > tRoot.width)
+                tRoot.width = contentWidth
+            if(contentHeight > tRoot.height)
+                tRoot.height = contentHeight
         }
     }
 }
