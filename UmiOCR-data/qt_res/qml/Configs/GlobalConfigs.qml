@@ -263,6 +263,8 @@ Configs {
         initPlugins()
         // 初始化配置项
         reload()
+        // 检查权限和异常情况
+        checkAccess()
         // 应用OCR信息
         if(configDict.ocr)
             ocrManager.init2()
@@ -277,6 +279,15 @@ Configs {
                 globalConfigConn.runUmiWeb(gRoot, "setRealPort", host)
             }
         })
+    }
+
+    // 检查权限和异常情况
+    function checkAccess() {
+        let msg = globalConfigConn.checkAccess()
+        if(msg.length > 0) {
+            msg += "\n" + qsTr("请尝试更换软件路径！")
+            qmlapp.popup.message(qsTr("配置文件读写异常"), msg, "error")
+        }
     }
 
     // 初始化插件

@@ -14,6 +14,8 @@ _Configs = {
     "last_ptime": -1,  # 最后一次运行时的进程创建时间
 }
 
+_Errors = {}  # 记录读写预配置文件的异常情况
+
 
 def getValue(key):
     if key in _Configs:
@@ -31,18 +33,44 @@ def setValue(key, value):
 
 
 def writeConfigs():
+    global _Errors
     try:
         with open(_FileName, "w", encoding="utf-8") as file:
             json.dump(_Configs, file, ensure_ascii=False, indent=4)
+    except PermissionError:
+        _Errors[
+            "Write PermissionError"
+        ] = "权限不足，无法写入配置文件。\nInsufficient permissions, unable to write to the configuration file."
     except Exception as e:
-        print("[Error] 写入预配置项失败: ", e)
+        _Errors[
+            "Write Error"
+        ] = f"无法写入配置文件。\nUnable to write to the configuration file: {e}"
 
 
 def readConfigs():
+    global _Errors
+    if not os.path.exists(_FileName):
+        return
     try:
         with open(_FileName, "r") as file:
             data = json.load(file)
         for key in _Configs:
             _Configs[key] = data[key]
+    except PermissionError:
+        _Errors[
+            "Write PermissionError"
+        ] = "权限不足，无法读取配置文件。\nInsufficient permissions, unable to read to the configuration file."
     except Exception as e:
-        print("[Error] 读取预配置项失败: ", e)
+        _Errors[
+            "Write Error"
+        ] = f"无法读取配置文件。\nUnable to read to the configuration file: {e}"
+
+
+# 返回异常情况字符串
+def getErrorStr():
+    global _Errors
+    err = ""
+    if _Errors:
+        for e in _Errors.values():
+            err += e + "\n"
+    return err

@@ -3,9 +3,11 @@
 from . import app_opengl
 from .i18n_configs import I18n
 from .shortcut import ShortcutApi
+from .pre_configs import getErrorStr
 from ..server import web_server
 from ..server.cmd_server import CmdActuator
 
+import os
 from PySide2.QtCore import QObject, Slot, Signal
 
 
@@ -57,3 +59,19 @@ class GlobalConfigsConnector(QObject):
     @Slot("QVariant")
     def setQmlToCmd(self, moduleDict):
         CmdActuator.initCollect(moduleDict)
+
+    # 检查权限，返回检查结果
+    @Slot(result=str)
+    def checkAccess(self):
+        cwd = os.getcwd()  # 当前工作路径
+        err = getErrorStr()  # 读写异常情况
+        if not err:  # 没有异常，则再检查一遍权限
+            if not os.access(cwd, os.R_OK):
+                err += "在当前路径不具有可读权限。\nDo not have read permission on the current path."
+            if not os.access(cwd, os.W_OK):
+                err += (
+                    "在当前路径不具有可写权限。\nDo not have write permission on the current path."
+                )
+        if err:
+            err = cwd + "\n" + err
+        return err
