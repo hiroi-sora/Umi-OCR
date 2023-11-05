@@ -40,7 +40,6 @@ def trLoad(file="", name=""):
                         index = 1  # 找不到对应语言，默认英文
                 for row in csv_reader:
                     TrDict[row[0]] = row[index]
-        print(TrDict)
     except Exception as e:
         print("[Error] 加载插件翻译失败：", file, name, e)
 
