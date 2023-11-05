@@ -47,7 +47,7 @@ TabPage {
 
     DoubleRowLayout {
         anchors.fill: parent
-        initSplitterX: 250
+        initSplitterX: size_.line * 15
         
         // =============== 左侧，展示所有标签页名称 ===============
         leftItem: Panel{
