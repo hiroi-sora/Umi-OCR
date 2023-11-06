@@ -51,8 +51,8 @@ Item {
                 s = (width * height) / (contentWidth * contentHeight)
             let ps = font.pixelSize * Math.sqrt(s)
             font.pixelSize = ps
-            // 二次调整：如果文本比容器高出至少1行，则减小字体大小，直到不高于容器
-            if(contentHeight >= height+ps) {
+            // 二次调整：如果文本比容器高出至少半行，则减小字体大小，直到不高于容器
+            if(contentHeight >= height+(ps*0.5)) {
                 // 为了保持性能，限定调整的最大次数
                 for(let i=0; i<10 && contentHeight > height; i++) {
                     font.pixelSize--
