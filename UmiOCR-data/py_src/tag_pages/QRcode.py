@@ -81,7 +81,7 @@ class QRcode(Page):
                     text += t
                 except UnicodeDecodeError:
                     # 如果无法直接转换为纯文本，则使用 Base64 编码输出结果
-                    t = base64.b64encode(data)
+                    t = base64.b64encode(c.bytes)
                     text += "[Base64]\n" + t.decode("utf-8")
                 d["text"] = text
             data.append(d)
