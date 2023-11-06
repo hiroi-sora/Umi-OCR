@@ -450,8 +450,8 @@ Item {
             Item {
                 id: ctrlBar
                 height: size_.line*1.5
-                anchors.left: parent.left
-                anchors.right: parent.right
+                anchors.left: parent ? parent.left : undefined
+                anchors.right: parent ? parent.right : undefined
 
                 Button_ {
                     id: ctrlBtn1
