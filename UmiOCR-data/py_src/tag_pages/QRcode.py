@@ -9,6 +9,13 @@ from ..mission.simple_mission import SimpleMission
 import os
 import time
 from PIL import Image, ImageEnhance, ImageFilter
+import base64
+
+try:
+    import zxingcpp
+except Exception as e:
+    zxingcpp = None
+    zxingcppErr = str(e)
 
 
 class QRcode(Page):
@@ -33,64 +40,117 @@ class QRcode(Page):
 
     # ========================= 【扫码处理】 =========================
 
+    # 解析 zxingcpp 库的返回结果，转为字典。此函数允许发生异常。
+    # 失败返回值： {"code":错误码, "data": "错误信息字符串"}
+    # 成功返回值： {"code":100, "data": [每个码的数据] }
+    # data: {"box":[包围盒], "score":1, "text": "文本"}
+    def _zxingcpp2dict(self, codes):
+        # 图中无码
+        if not codes:
+            return {
+                "code": 101,
+                "data": "QR code not found in the image.",
+            }
+        # 处理结果冲每一个二维码
+        data = []
+        for c in codes:
+            if not c.valid:  # 码无效
+                continue
+            d = {}
+            # 方向
+            d["orientation"] = c.orientation
+            # 位置
+            d["box"] = [
+                [c.position.top_left.x, c.position.top_left.y],
+                [c.position.top_right.x, c.position.top_right.y],
+                [c.position.bottom_right.x, c.position.bottom_right.y],
+                [c.position.bottom_left.x, c.position.bottom_left.y],
+            ]
+            d["score"] = 1  # 置信度，兼容OCR格式，无意义
+            # 内容为文本类型
+            if c.content_type.name == "Text":
+                d["text"] = c.text
+            # 内容为其它格式
+            # TODO: 现在是通用的处理方法，将二进制内容转为纯文本或base64
+            # 或许对于某些格式的码，有更好的转文本方式
+            else:
+                text = f"type: {c.content_type.name}\ndata: "
+                try:
+                    # 尝试将 bytes 转换为纯文本字符串
+                    t = c.bytes.decode("utf-8")
+                    text += t
+                except UnicodeDecodeError:
+                    # 如果无法直接转换为纯文本，则使用 Base64 编码输出结果
+                    t = base64.b64encode(data)
+                    text += "[Base64]\n" + t.decode("utf-8")
+                d["text"] = text
+            data.append(d)
+        if data:
+            return {
+                "code": 100,
+                "data": data,
+            }
+        else:
+            l = len(codes)
+            return {
+                "code": 102,
+                "data": f"【Error】{l}组二维码解码失败。\nFailed to decode {l} sets of QR codes.",
+            }
+
     # 扫码
     def _scanQRcode(self, msn):
-        try:
-            import pyzbar.pyzbar as pyzbar
-        except Exception as e:
-            e = str(e)
-            if "libiconv.dll" in e:
+        imgID = imgPath = ""
+        t1 = time.time()
+
+        def _run():
+            nonlocal imgID, imgPath
+            # 导入库失败
+            if not zxingcpp:
                 return {
                     "code": 901,
-                    "data": f"【Error】二维码解析器 pyzbar 未能加载 libiconv.dll 。请尝试安装 Microsoft Visual C++运行库后重试。\n[Error] Pyzbar failed to load libiconv.dll. Please try installing the Microsoft Visual C++ runtime and try again.\n{e}",
+                    "data": f"【Error】无法导入二维码解析器 zxingcpp 。\n[Error] Unable to import zxingcpp.\n{zxingcppErr}",
                 }
-            return {
-                "code": 902,
-                "data": f"【Error】无法导入二维码解析器 pyzbar 。\n[Error] Unable to import pyzbar.\n{e}",
-            }
-        t1 = time.time()
-        imgID = imgPath = ""
-        if "imgID" in msn:
-            imgID = msn["imgID"]
-        elif "path" in msn:
-            imgPath = msn["path"]
-        res = {
-            "code": 101,
-            "data": "QR code not recognized in the image.",
-        }
-        try:
-            img = None
-            # 读入路径或qpixmap，转为PIL对象
-            if "imgID" in msn:
-                img = PixmapProvider.getPilImage(imgID)
-            elif "path" in msn:
-                res["fileName"] = os.path.basename(imgPath)
-                img = Image.open(imgPath)
-            if img:
-                # 预处理
+            # 读入图片
+            try:
+                if "imgID" in msn:
+                    imgID = msn["imgID"]
+                    img = PixmapProvider.getPilImage(imgID)
+                elif "path" in msn:
+                    imgPath = msn["path"]
+                    img = Image.open(imgPath)
+            except Exception as e:
+                return {
+                    "code": 202,
+                    "data": f"【Error】图片读取失败。\n[Error] Image reading failed.\n {e}",
+                }
+            # 预处理
+            try:
                 img = self._preprocessing(img, imgID)
-                # 二维码识别
-                codes = pyzbar.decode(img)
-                if codes:
-                    data = []
-                    for c in codes:
-                        data.append(
-                            {
-                                "box": [
-                                    [c.polygon[0].x, c.polygon[0].y],
-                                    [c.polygon[3].x, c.polygon[3].y],
-                                    [c.polygon[2].x, c.polygon[2].y],
-                                    [c.polygon[1].x, c.polygon[1].y],
-                                ],
-                                "score": 1,
-                                "text": c.data.decode("utf-8"),
-                            }
-                        )
-                    res["code"] = 100
-                    res["data"] = data
-        except Exception as e:
-            res["code"] = 102
-            res["data"] = f"【Error】二维码解析失败。\n[Error] QRcode failed. {e}"
+            except Exception as e:
+                return {
+                    "code": 203,
+                    "data": f"【Error】图片预处理失败。\n[Error] Image preprocessing failed.\n {e}",
+                }
+            # 二维码解析
+            try:
+                codes = zxingcpp.read_barcodes(img)
+            except Exception as e:
+                return {
+                    "code": 204,
+                    "data": f"【Error】zxingcpp 二维码解析失败。\n[Error] zxingcpp read_barcodes failed.\n {e}",
+                }
+            # 结果解析
+            try:
+                return self._zxingcpp2dict(codes)
+            except Exception as e:
+                return {
+                    "code": 205,
+                    "data": f"【Error】zxingcpp 结果解析失败。\n[Error] zxingcpp resule to dict failed.\n {e}",
+                }
+
+        res = _run()
+        if imgPath:
+            res["fileName"] = os.path.basename(imgPath)
         t2 = time.time()
         res["time"] = t2 - t1
         res["timestamp"] = t2
@@ -121,3 +181,73 @@ class QRcode(Page):
         # if flag and imgID:  # 写回
         #     PixmapProvider.setPilImage(img, imgID)
         return img
+
+
+"""
+zxingcpp 返回值类型
+# 字节
+bytes <class 'bytes'>: b'testtesttesttest'
+# 内容类型
+content_type <class 'zxingcpp.ContentType'>: ContentType.Text
+    name <class 'str'>: Text
+    value <class 'int'>: 0
+    Binary <class 'zxingcpp.ContentType'>: ContentType.Binary
+    GS1 <class 'zxingcpp.ContentType'>: ContentType.GS1
+    ISO15434 <class 'zxingcpp.ContentType'>: ContentType.ISO15434
+    Mixed <class 'zxingcpp.ContentType'>: ContentType.Mixed
+    Text <class 'zxingcpp.ContentType'>: ContentType.Text
+    UnknownECI <class 'zxingcpp.ContentType'>: ContentType.UnknownECI
+ec_level <class 'str'>: M
+# 二维码格式
+format <class 'zxingcpp.BarcodeFormat'>: BarcodeFormat.QRCode
+    name <class 'str'>: QRCode
+    value <class 'int'>: 8192
+    Aztec <class 'zxingcpp.BarcodeFormat'>: BarcodeFormat.Aztec
+    Codabar <class 'zxingcpp.BarcodeFormat'>: BarcodeFormat.Codabar
+    Code128 <class 'zxingcpp.BarcodeFormat'>: BarcodeFormat.Code128
+    Code39 <class 'zxingcpp.BarcodeFormat'>: BarcodeFormat.Code39
+    Code93 <class 'zxingcpp.BarcodeFormat'>: BarcodeFormat.Code93
+    DataBar <class 'zxingcpp.BarcodeFormat'>: BarcodeFormat.DataBar
+    DataBarExpanded <class 'zxingcpp.BarcodeFormat'>: BarcodeFormat.DataBarExpanded
+    DataMatrix <class 'zxingcpp.BarcodeFormat'>: BarcodeFormat.DataMatrix      
+    EAN13 <class 'zxingcpp.BarcodeFormat'>: BarcodeFormat.EAN13
+    EAN8 <class 'zxingcpp.BarcodeFormat'>: BarcodeFormat.EAN8
+    ITF <class 'zxingcpp.BarcodeFormat'>: BarcodeFormat.ITF
+    LinearCodes <class 'zxingcpp.BarcodeFormat'>: BarcodeFormat.LinearCodes    
+    MatrixCodes <class 'zxingcpp.BarcodeFormat'>: BarcodeFormat.MatrixCodes    
+    MaxiCode <class 'zxingcpp.BarcodeFormat'>: BarcodeFormat.MaxiCode
+    MicroQRCode <class 'zxingcpp.BarcodeFormat'>: BarcodeFormat.MicroQRCode    
+    NONE <class 'zxingcpp.BarcodeFormat'>: BarcodeFormat.NONE
+    PDF417 <class 'zxingcpp.BarcodeFormat'>: BarcodeFormat.PDF417
+    QRCode <class 'zxingcpp.BarcodeFormat'>: BarcodeFormat.QRCode
+    UPCA <class 'zxingcpp.BarcodeFormat'>: BarcodeFormat.UPCA
+    UPCE <class 'zxingcpp.BarcodeFormat'>: BarcodeFormat.UPCE
+# 方向
+orientation <class 'int'>: 0
+# 位置
+position <class 'zxingcpp.Position'>: 16x16 116x16 116x116 16x116
+    bottom_left <class 'zxingcpp.Point'>: <zxingcpp.Point object at 0x00000222AEE5C370>
+    bottom_right <class 'zxingcpp.Point'>: <zxingcpp.Point object at 0x00000222C19D07B0>
+    top_left <class 'zxingcpp.Point'>: <zxingcpp.Point object at 0x00000222AEE5C370>
+    top_right <class 'zxingcpp.Point'>: <zxingcpp.Point object at 0x00000222C19D0770>
+symbology_identifier <class 'str'>: ]Q1
+text <class 'str'>: testtesttesttest
+valid <class 'bool'>: True
+
+
+            def print_all_attributes(obj, layer=0):
+                nonlocal last
+                for attr_name in dir(obj):
+                    if attr_name.startswith("__"):
+                        continue
+                    attr_value = getattr(obj, attr_name)
+                    if callable(attr_value):
+                        continue
+                    print(
+                        "   " * layer, f"{attr_name} {type(attr_value)}: {attr_value}"
+                    )
+                    last = attr_name
+                    l = ["content_type", "format", "position"]
+                    if attr_name in l:
+                        print_all_attributes(attr_value, layer + 1)
+"""
