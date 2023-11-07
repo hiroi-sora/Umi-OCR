@@ -10,12 +10,21 @@ import os
 from ..platform import Platform
 from ..utils import pre_configs
 from ..utils.call_func import CallFunc
-from .bottle import Bottle, ServerAdapter, request, HTTPResponse
+from .bottle import Bottle, ServerAdapter, request, HTTPResponse, response
 from .cmd_server import CmdServer
 from . import ocr_server
 
 UmiWeb = Bottle()
 Host = "127.0.0.1"  # 由qml设置
+
+
+# 设置响应头，允许跨域
+@UmiWeb.hook("after_request")
+def _enableCors():
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers["Access-Control-Allow-Headers"] = "*"
+    response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, OPTIONS"
+
 
 # ============================== 基础路由 ==============================
 
