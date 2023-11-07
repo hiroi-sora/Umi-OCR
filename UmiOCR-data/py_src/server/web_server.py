@@ -10,9 +10,11 @@ import os
 from ..platform import Platform
 from ..utils import pre_configs
 from ..utils.call_func import CallFunc
-from .bottle import Bottle, ServerAdapter, request, HTTPResponse, response
+from .bottle import Bottle, ServerAdapter, request, HTTPResponse, response, BaseRequest
 from .cmd_server import CmdServer
 from . import ocr_server
+
+BaseRequest.MEMFILE_MAX = 10485760  # 设置单次请求大小上限：10MB
 
 UmiWeb = Bottle()
 Host = "127.0.0.1"  # 由qml设置
