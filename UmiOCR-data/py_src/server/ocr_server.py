@@ -39,6 +39,8 @@ def init(UmiWeb):
                 condition.notify()
 
         data = request.json
+        if not data:
+            return json.dumps({"code": 800, "data": f"请求为空。"})
         if "base64" not in data:
             return json.dumps({"code": 801, "data": f"请求中缺少 base64 字段。"})
         if "options" not in data:

@@ -20,9 +20,17 @@ UmiWeb = Bottle()
 Host = "127.0.0.1"  # 由qml设置
 
 
-# 设置响应头，允许跨域
+# 允许跨域
+@UmiWeb.hook("before_request")
+def _validate_before():
+    re_method = request.environ.get("REQUEST_METHOD")
+    hacrm = request.environ.get("HTTP_ACCESS_CONTROL_REQUEST_METHOD")
+    if re_method == "OPTIONS" and hacrm:
+        request.environ["REQUEST_METHOD"] = hacrm
+
+
 @UmiWeb.hook("after_request")
-def _enableCors():
+def _validate_after():
     response.headers["Access-Control-Allow-Origin"] = "*"
     response.headers["Access-Control-Allow-Headers"] = "*"
     response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, OPTIONS"
