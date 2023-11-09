@@ -250,17 +250,21 @@ Umi-OCR
 
 ## 构建项目
 
+### 第零步：（可选）fork本项目
+
 ### 第一步：下载代码
 
-强烈建议只 clone 主分支，因为某些分支含有体积很大的二进制库，会让你花费很长时间下载。
+如果要拉取本仓库代码，强烈建议只 clone 主分支。因为某些备份分支含有体积很大的二进制库，会让你花费长时间下载。
 
 ```
  git clone --branch main --single-branch https://github.com/hiroi-sora/Umi-OCR_v2.git
 ```
 
-### 第二步：运行环境
+或，将你fork的仓库拉到本地。
 
-根据下列文档，完成对应平台的开发/运行环境部署。
+### 后续步骤：
+
+请跳转下列仓库，完成对应平台的开发/运行环境部署。
 
 - [Windows](https://github.com/hiroi-sora/Umi-OCR_runtime_windows)
 - 跨平台的支持筹备中
