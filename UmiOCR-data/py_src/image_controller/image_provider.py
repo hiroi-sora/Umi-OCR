@@ -3,6 +3,7 @@
 # ==========================================================
 
 from . import ImageQt
+from urllib.parse import unquote
 
 from PySide2.QtCore import Qt
 from PySide2.QtGui import QPixmap, QImage, QPainter, QClipboard
@@ -124,31 +125,50 @@ class PixmapProviderClass(QQuickImageProvider):
 PixmapProvider = PixmapProviderClass()
 
 
-# 复制一张图片到剪贴板
-def copyImage(path):
+# 读入一张图片，返回该图片
+# type: pixmap / qimage / error
+def _imread(path):
+    path = unquote(path)  # 做一次URL解码
     if path.startswith("image://pixmapprovider/"):
         path = path[23:]
         if "/" in path:
             compID, imgID = path.split("/", 1)
             if imgID in PixmapProvider.pixmapDict:
-                Clipboard.setPixmap(PixmapProvider.pixmapDict[imgID])
-                return "[Success]"
+                return {"type": "pixmap", "data": PixmapProvider.pixmapDict[imgID]}
         else:
-            return f"[Warning] ID not in pixmapDict: {path}"
+            return {"type": "error", "data": f"[Warning] ID not in pixmapDict: {path}"}
     elif path.startswith("file:///"):
         path = path[8:]
         if os.path.exists(path):
-            image = QImage(path)
-            Clipboard.setImage(image)
-            return "[Success]"
+            try:
+                image = QImage(path)
+                return {"type": "qimage", "data": image}
+            except Exception as e:
+                return {
+                    "type": "error",
+                    "data": f"[Error] QImage cannot read path: {path}",
+                }
         else:
-            return f"[Warning] Path {path} not exists."
+            return {"type": "error", "data": f"[Warning] Path {path} not exists."}
+    elif path in PixmapProvider.pixmapDict:
+        return {"type": "pixmap", "data": PixmapProvider.pixmapDict[path]}
+    elif os.path.exists(path):
+        try:
+            image = QImage(path)
+            return {"type": "qimage", "data": image}
+        except Exception as e:
+            return {"type": "error", "data": f"[Error] QImage cannot read path: {path}"}
+    return {"type": "error", "data": f"[Warning] Unknow: {path}"}
 
-    if path in PixmapProvider.pixmapDict:
-        Clipboard.setPixmap(PixmapProvider.pixmapDict[path])
-        return "[Success]"
-    if os.path.exists(path):
-        image = QImage(path)
-        Clipboard.setImage(image)
-        return "[Success]"
-    return f"[Warning] Unknow: {path}"
+
+# 复制一张图片到剪贴板
+def copyImage(path):
+    im = _imread(path)
+    typ, data = im["type"], im["data"]
+    if typ == "error":
+        return data
+    elif typ == "pixmap":
+        Clipboard.setPixmap(data)
+    elif typ == "qimage":
+        Clipboard.setImage(data)
+    return "[Success]"
