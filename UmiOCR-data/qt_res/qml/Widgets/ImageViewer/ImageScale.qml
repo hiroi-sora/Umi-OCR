@@ -59,10 +59,36 @@ Rectangle {
     function copyImage() {
         if(showImage.source == "") return
         const res = qmlapp.imageManager.copyImage(showImage.source)
-        if(res=="[Success]")
+        if(res === "[Success]")
             qmlapp.popup.simple(qsTr("复制图片"), "")
         else
             qmlapp.popup.simple(qsTr("复制图片失败"), res)
+    }
+
+    // 保存当前图片
+    function saveImage() {
+        if(showImage.source == "") return
+        saveDialog.open()
+    }
+
+    FileDialog_ {
+        id: saveDialog
+        title: qsTr("保存图片")
+        selectExisting: false
+        selectFolder: false
+        nameFilters: ["*.png", "*.jpg"]
+        onAccepted: {
+            if(!fileUrl) {
+                console.log("文件对话框：未选择任何文件")
+                return
+            }
+            let filePath = fileUrl
+            const res = qmlapp.imageManager.saveImage(showImage.source, filePath)
+            if(res.startsWith("[Success]"))
+                qmlapp.popup.simple(qsTr("保存图片"), res)
+            else
+                qmlapp.popup.simple(qsTr("保存图片失败"), res)
+        }
     }
 
     // ========================= 【处理】 =========================

@@ -179,6 +179,8 @@ def copyImage(path):
 
 # 保存一张图片
 def saveImage(fromPath, toPath):
+    if toPath.startswith("file:///"):
+        toPath = toPath[8:]
     im = _imread(fromPath)
     typ, data = im["type"], im["data"]
     if typ == "error":
@@ -188,6 +190,6 @@ def saveImage(fromPath, toPath):
             data.save(toPath)
         elif typ == "qimage":
             data.save(toPath)
-        return "[Success]"
+        return f"[Success] {toPath}"
     except Exception as e:
         return f"[Error] can't save: {e}\n{fromPath}\n{toPath}"

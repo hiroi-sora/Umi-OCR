@@ -2,7 +2,7 @@
 # =============== 图片处理连接器 ===============
 # =============================================
 
-from .image_provider import copyImage
+from .image_provider import copyImage, saveImage
 from .screenshot_controller import ScreenshotController
 
 from PySide2.QtCore import QObject, Slot, Signal
@@ -24,7 +24,12 @@ class ImageConnector(QObject):
     def getPaste(self):
         return ScreenshotController.getPaste()
 
-    # 将图片写入剪贴板，返回成功与否
+    # 将图片写入剪贴板
     @Slot(str, result=str)
     def copyImage(self, path):
         return copyImage(path)
+
+    # 将图片保存到本地
+    @Slot(str, str, result=str)
+    def saveImage(self, fromPath, toPath):
+        return saveImage(fromPath, toPath)
