@@ -60,6 +60,7 @@ class PixmapProviderClass(QQuickImageProvider):
             return None
 
     # py将PIL对象写回pixmapDict。主要是记录预处理的图像
+    # imgID可以已存在，也可以新添加
     def setPilImage(self, img, imgID=""):
         try:
             pixmap = ImageQt.toqpixmap(img)

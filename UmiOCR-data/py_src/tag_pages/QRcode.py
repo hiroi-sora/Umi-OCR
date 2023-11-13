@@ -38,6 +38,27 @@ class QRcode(Page):
         msnList = [{"path": x} for x in paths]
         self._simpleMission.addMissionList(msnList)
 
+    # 生成二维码
+    # format: "Aztec","Codabar","Code128","Code39","Code93","DataBar","DataBarExpanded","DataMatrix","EAN13","EAN8","ITF","LinearCodes","MatrixCodes","MaxiCode","MicroQRCode","NONE","PDF417","QRCode","UPCA","UPCE",
+    # quiet_zone: 四周的空闲区域
+    # ec_level：纠错等级，-1 - 自动, 1- L-7% , 0 - M-15%, 3 - Q-25%, 2 - H-30%
+    # 纠错仅用于Aztec、PDF417和QRCode
+    def writeBarcode(self, format, text, w, h, quiet_zone, ec_level):
+        bFormat = getattr(zxingcpp.BarcodeFormat, format, None)
+        if not bFormat:
+            return f"[Error] format {format} not in zxingcpp.BarcodeFormat!"
+        try:
+            bit = zxingcpp.write_barcode(bFormat, text, w, h, quiet_zone, ec_level)
+        except Exception as e:
+            return f"[Error] write_barcode: {e}"
+        try:
+            img = Image.fromarray(bit, "L")
+        except Exception as e:
+            return f"[Error] Image.fromarray: {e}"
+        imgID = PixmapProvider.setPilImage(img)
+        # 若 setPilImage 失败， imgID.startswith("[Error]")
+        return imgID
+
     # ========================= 【扫码处理】 =========================
 
     # 解析 zxingcpp 库的返回结果，转为字典。此函数允许发生异常。
