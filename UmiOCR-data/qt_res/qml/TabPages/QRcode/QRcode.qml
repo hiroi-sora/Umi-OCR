@@ -215,6 +215,16 @@ TabPage {
                     spacing: size_.smallSpacing
                     visible: dLeftTop.width > dLeftTopL.width + dLeftTopR.width
 
+                    // 保存图片
+                    IconButton {
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        width: height
+                        icon_: "save"
+                        color: theme.subTextColor
+                        onClicked: imageText.saveImage()
+                        toolTip: qsTr("保存图片")
+                    }
                     // 适合宽高
                     IconButton {
                         anchors.top: parent.top
