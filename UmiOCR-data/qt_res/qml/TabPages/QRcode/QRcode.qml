@@ -78,6 +78,32 @@ TabPage {
             Qt.callLater(()=>qmlapp.mainWin.setVisibility(true))
     }
 
+    // 生成二维码
+    function writeBarcode(text) {
+        if(!text || text.length===0)
+            return
+        running = true
+        const configDict = configsComp.getValueDict()
+        const format = configDict["writeBarcode.format"]
+        const w = configDict["writeBarcode.width"]
+        const h = configDict["writeBarcode.height"]
+        const quiet_zone = configDict["writeBarcode.quiet_zone"]
+        const ec_level = configDict["writeBarcode.ec_level"]
+        const imgID = tabPage.callPy("writeBarcode", format, text, w, h, quiet_zone, ec_level)
+        running = false
+        if(imgID.startsWith("[Error]") || imgID.startsWith("[Warning]")) {
+            if(imgID.startsWith("[Error] [")) {
+                const msg = qsTr("参数有误，或输入内容不合规定。请参照报错指示修改：") +"\n"+ imgID
+                qmlapp.popup.message(qsTr("生成二维码失败"), msg, "error")
+            }
+            else {
+                qmlapp.popup.message(qsTr("生成二维码失败"), imgID, "error")
+            }
+            return
+        }
+        imageText.showImgID(imgID)
+    }
+
     // ========================= 【python调用qml】 =========================
 
     // 获取一个扫码的返回值
@@ -215,6 +241,16 @@ TabPage {
                     spacing: size_.smallSpacing
                     visible: dLeftTop.width > dLeftTopL.width + dLeftTopR.width
 
+                    // 菜单
+                    IconButton {
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        width: height
+                        icon_: "menu"
+                        color: theme.subTextColor
+                        onClicked: imageText.popupMenu()
+                        toolTip: qsTr("右键菜单")
+                    }
                     // 保存图片
                     IconButton {
                         anchors.top: parent.top
@@ -292,6 +328,86 @@ TabPage {
                     visible: false
                 }
 
+                //生成面板
+                Item {
+                    id: writePanel
+                    anchors.fill: parent
+                    visible: false
+                    Item {
+                        id: writePanelTop
+                        anchors.top: parent.top
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        height: size_.line * 2 + size_.smallSpacing * 2
+                        Button_ {
+                            id: writePanelBtn1
+                            anchors.top: parent.top
+                            anchors.bottom: parent.bottom
+                            anchors.left: parent.left
+                            anchors.margins: size_.smallSpacing
+                            text_: qsTr("设置")
+                            onClicked: {
+                                tabPanel.currentIndex = 0 // 转到设置面板
+                                configsComp.panelComponent.scrollToGroup(3) // 滚动到生成设置
+                            }
+                        }
+                        Row {
+                            anchors.top: parent.top
+                            anchors.bottom: parent.bottom
+                            anchors.right: parent.right
+                            anchors.margins: size_.smallSpacing
+                            CheckButton {
+                                anchors.top: parent.top
+                                anchors.bottom: parent.bottom
+                                text_: qsTr("自动刷新")
+                                toolTip: qsTr("修改文字后，自动生成二维码/条形码")
+                                visible: writePanelTop.width > writePanelBtn1.width+writePanelBtn2.width+this.width
+                                textColor_: theme.textColor
+                                checked: writeEdit.autoUpdate
+                                enabledAnime: true
+                                onCheckedChanged: {
+                                    writeEdit.autoUpdate = checked
+                                }
+                            }
+                            Button_ {
+                                id: writePanelBtn2
+                                anchors.top: parent.top
+                                anchors.bottom: parent.bottom
+                                text_: qsTr("刷新")
+                                toolTip: qsTr("生成二维码/条形码")
+                                onClicked: writeBarcode(writeEdit.text)
+                            }
+                        }
+                    }
+                    Rectangle {
+                        anchors.top: writePanelTop.bottom
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.bottom: parent.bottom
+                        color: theme.bgColor
+                        border.width: 1
+                        border.color: theme.coverColor4
+                        TextEdit_ {
+                            id: writeEdit
+                            anchors.fill: parent
+                            anchors.margins: size_.spacing
+                            // 自动刷新
+                            property bool autoUpdate: true
+                            // 文字输入改变时，等待一段时间，自动刷新
+                            Timer {
+                                id: writeEditTimer
+                                interval: 500  // 0.5 秒
+                                repeat: false
+                                onTriggered: writeBarcode(writeEdit.text)
+                            }
+                            onTextChanged: {
+                                if(autoUpdate) // 重启计时器
+                                    writeEditTimer.restart()
+                            }
+                        }
+                    }
+                }
+
                 tabsModel: [
                     {
                         "key": "configs",
@@ -302,6 +418,11 @@ TabPage {
                         "key": "ocrResult",
                         "title": qsTr("记录"),
                         "component": resultsTableView,
+                    },
+                    {
+                        "key": "writePanel",
+                        "title": qsTr("生成"),
+                        "component": writePanel,
                     },
                 ]
             }
