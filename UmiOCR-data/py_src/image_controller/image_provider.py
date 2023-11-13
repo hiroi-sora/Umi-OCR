@@ -167,8 +167,27 @@ def copyImage(path):
     typ, data = im["type"], im["data"]
     if typ == "error":
         return data
-    elif typ == "pixmap":
-        Clipboard.setPixmap(data)
-    elif typ == "qimage":
-        Clipboard.setImage(data)
-    return "[Success]"
+    try:
+        if typ == "pixmap":
+            Clipboard.setPixmap(data)
+        elif typ == "qimage":
+            Clipboard.setImage(data)
+        return "[Success]"
+    except Exception as e:
+        return f"[Error] can't copy: {e}\n{path}"
+
+
+# 保存一张图片
+def saveImage(fromPath, toPath):
+    im = _imread(fromPath)
+    typ, data = im["type"], im["data"]
+    if typ == "error":
+        return data
+    try:
+        if typ == "pixmap":
+            data.save(toPath)
+        elif typ == "qimage":
+            data.save(toPath)
+        return "[Success]"
+    except Exception as e:
+        return f"[Error] can't save: {e}\n{fromPath}\n{toPath}"
