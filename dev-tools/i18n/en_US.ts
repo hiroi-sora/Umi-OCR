@@ -830,12 +830,12 @@ For example, when processing screenshots of watermarked images, you can add an i
         <location filename="../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageScale.qml" line="76"/>
         <location filename="../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageScale.qml" line="89"/>
         <source>保存图片</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Save Image</translation>
     </message>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageScale.qml" line="91"/>
         <source>保存图片失败</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Failed to save image</translation>
     </message>
 </context>
 <context>
@@ -873,7 +873,7 @@ For example, when processing screenshots of watermarked images, you can add an i
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageWithText.qml" line="277"/>
         <source>保存图片（Ctrl+S）</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Save Image (Ctrl+S)</translation>
     </message>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageWithText.qml" line="278"/>
@@ -929,7 +929,7 @@ For example, when processing screenshots of watermarked images, you can add an i
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/Popup_/MessageBox.qml" line="122"/>
         <source>请前往 Issues 页面寻找解答或反馈</source>
-        <translation>Please visit the Issues page for Q&amp;&amp;A or feedback.</translation>
+        <translation type="unfinished">Please visit the Issues page for Q&amp;&amp;A or feedback</translation>
     </message>
 </context>
 <context>
@@ -1148,7 +1148,7 @@ Adjust global settings. Applys to all pages.</translation>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/PreviewPanel.qml" line="113"/>
         <source>保存图片</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Save Image</translation>
     </message>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/PreviewPanel.qml" line="123"/>
@@ -1186,13 +1186,13 @@ Adjust global settings. Applys to all pages.</translation>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="96"/>
         <source>参数有误，或输入内容不合规定。请参照报错指示修改：</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">The parameters are incorrect or the input content does not comply with regulations. Please refer to the error instructions for modification:</translation>
     </message>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="97"/>
         <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="100"/>
         <source>生成二维码失败</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Failed to generate QR code</translation>
     </message>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="150"/>
@@ -1237,7 +1237,7 @@ Adjust global settings. Applys to all pages.</translation>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="262"/>
         <source>保存图片</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Save Image</translation>
     </message>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="272"/>
@@ -1263,22 +1263,22 @@ Adjust global settings. Applys to all pages.</translation>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="362"/>
         <source>自动刷新</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Auto refresh</translation>
     </message>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="363"/>
         <source>修改文字后，自动生成二维码/条形码</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Automatically generate QR code after modifying text</translation>
     </message>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="376"/>
         <source>刷新</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Refresh</translation>
     </message>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="377"/>
         <source>生成二维码/条形码</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Generate QR code</translation>
     </message>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="419"/>
@@ -1288,7 +1288,7 @@ Adjust global settings. Applys to all pages.</translation>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="424"/>
         <source>生成</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Generate</translation>
     </message>
 </context>
 <context>
@@ -1394,65 +1394,65 @@ Effective when grayscale is enabled and binarization &gt; -1. Can be filled with
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcodeConfigs.qml" line="91"/>
         <source>生成二维码/条形码</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Generate QR code</translation>
     </message>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcodeConfigs.qml" line="95"/>
         <source>类型</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Format</translation>
     </message>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcodeConfigs.qml" line="96"/>
         <source>默认二维码：</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Default:</translation>
     </message>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcodeConfigs.qml" line="121"/>
         <source>宽度</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Width</translation>
     </message>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcodeConfigs.qml" line="122"/>
         <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcodeConfigs.qml" line="130"/>
         <source>填0：自动选择</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">0: Automatic selection</translation>
     </message>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcodeConfigs.qml" line="126"/>
         <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcodeConfigs.qml" line="134"/>
         <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcodeConfigs.qml" line="142"/>
         <source>像素</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">pixel</translation>
     </message>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcodeConfigs.qml" line="129"/>
         <source>高度</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Height</translation>
     </message>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcodeConfigs.qml" line="137"/>
         <source>边缘空白</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Quiet zone</translation>
     </message>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcodeConfigs.qml" line="138"/>
         <source>填-1：自动选择</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">-1: Automatic selection</translation>
     </message>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcodeConfigs.qml" line="145"/>
         <source>纠错等级</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Error Correction Coding</translation>
     </message>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcodeConfigs.qml" line="146"/>
         <source>仅适用于：</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Only applicable to:</translation>
     </message>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcodeConfigs.qml" line="148"/>
         <source>自动</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Auto</translation>
     </message>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcodeConfigs.qml" line="158"/>
@@ -1682,7 +1682,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="349"/>
         <source>保存图片</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Save Image</translation>
     </message>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="359"/>
@@ -1763,7 +1763,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/MainWindow/Size_.qml" line="50"/>
         <source>1.0</source>
-        <translation>0.9</translation>
+        <translation type="unfinished">0.85</translation>
     </message>
 </context>
 <context>
