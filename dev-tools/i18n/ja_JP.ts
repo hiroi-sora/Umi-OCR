@@ -826,6 +826,17 @@
         <source>复制图片失败</source>
         <translation type="unfinished">画像のコピーに失敗しました</translation>
     </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageScale.qml" line="76"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageScale.qml" line="89"/>
+        <source>保存图片</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageScale.qml" line="91"/>
+        <source>保存图片失败</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ImageWithText</name>
@@ -861,6 +872,11 @@
     </message>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageWithText.qml" line="277"/>
+        <source>保存图片（Ctrl+S）</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageWithText.qml" line="278"/>
         <source>显示/隐藏文字（Tab）</source>
         <translation type="unfinished">表示/非表示（Tab）</translation>
     </message>
@@ -1136,11 +1152,16 @@
     </message>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/PreviewPanel.qml" line="113"/>
+        <source>保存图片</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/PreviewPanel.qml" line="123"/>
         <source>图片大小：适应窗口</source>
         <translation type="unfinished">画像サイズ：ウィンドウに合わせる</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/PreviewPanel.qml" line="123"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/PreviewPanel.qml" line="133"/>
         <source>图片大小：实际</source>
         <translation type="unfinished">画像サイズ：実際のサイズ</translation>
     </message>
@@ -1168,64 +1189,111 @@
         <translation type="unfinished">%1 個の画像パスをインポートしました</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="124"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="96"/>
+        <source>参数有误，或输入内容不合规定。请参照报错指示修改：</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="97"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="100"/>
+        <source>生成二维码失败</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="150"/>
         <source>已复制到剪贴板</source>
         <translation type="unfinished">クリップボードにコピーしました</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="125"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="151"/>
         <source>识图完成</source>
         <translation type="unfinished">認識が完了しました</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="128"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="154"/>
         <source>无文字</source>
         <translation type="unfinished">テキストなし</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="132"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="158"/>
         <source>识别失败</source>
         <translation type="unfinished">認識失敗</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="152"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="178"/>
         <source>扫描二维码</source>
         <translation type="unfinished">QRコードをスキャン</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="195"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="221"/>
         <source>屏幕截图</source>
         <translation type="unfinished">スクリーンショット</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="204"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="230"/>
         <source>粘贴图片</source>
         <translation type="unfinished">画像を貼り付け</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="226"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="252"/>
+        <source>右键菜单</source>
+        <translation type="unfinished">右クリックメニュー</translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="262"/>
+        <source>保存图片</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="272"/>
         <source>图片大小：适应窗口</source>
         <translation type="unfinished">画像のサイズ：ウィンドウに合わせる</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="236"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="282"/>
         <source>图片大小：实际</source>
         <translation type="unfinished">画像のサイズ：実際のサイズ</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="264"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="310"/>
         <source>截图、拖入或粘贴二维码图片</source>
         <translation type="unfinished">スクリーンショット、ドラッグ＆ドロップ、またはQRコード画像を貼り付け</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="288"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="348"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="414"/>
         <source>设置</source>
         <translation type="unfinished">設定</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="293"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="362"/>
+        <source>自动刷新</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="363"/>
+        <source>修改文字后，自动生成二维码/条形码</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="376"/>
+        <source>刷新</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="377"/>
+        <source>生成二维码/条形码</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="419"/>
         <source>记录</source>
         <translation type="unfinished">記録</translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="424"/>
+        <source>生成</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1330,6 +1398,69 @@
     </message>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcodeConfigs.qml" line="91"/>
+        <source>生成二维码/条形码</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcodeConfigs.qml" line="95"/>
+        <source>类型</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcodeConfigs.qml" line="96"/>
+        <source>默认二维码：</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcodeConfigs.qml" line="121"/>
+        <source>宽度</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcodeConfigs.qml" line="122"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcodeConfigs.qml" line="130"/>
+        <source>填0：自动选择</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcodeConfigs.qml" line="126"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcodeConfigs.qml" line="134"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcodeConfigs.qml" line="142"/>
+        <source>像素</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcodeConfigs.qml" line="129"/>
+        <source>高度</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcodeConfigs.qml" line="137"/>
+        <source>边缘空白</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcodeConfigs.qml" line="138"/>
+        <source>填-1：自动选择</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcodeConfigs.qml" line="145"/>
+        <source>纠错等级</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcodeConfigs.qml" line="146"/>
+        <source>仅适用于：</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcodeConfigs.qml" line="148"/>
+        <source>自动</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcodeConfigs.qml" line="158"/>
         <source>其它</source>
         <translation type="unfinished">その他</translation>
     </message>
@@ -1555,26 +1686,31 @@
     </message>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="349"/>
+        <source>保存图片</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="359"/>
         <source>图片大小：适应窗口</source>
         <translation type="unfinished">画像のサイズ：ウィンドウに合わせる</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="359"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="369"/>
         <source>图片大小：实际</source>
         <translation type="unfinished">画像のサイズ：実際のサイズ</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="393"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="403"/>
         <source>截图、拖入或粘贴图片</source>
         <translation type="unfinished">スクリーンショット、ドラッグ＆ドロップ、または画像を貼り付け</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="417"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="427"/>
         <source>设置</source>
         <translation type="unfinished">設定</translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="422"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="432"/>
         <source>记录</source>
         <translation type="unfinished">記録</translation>
     </message>
