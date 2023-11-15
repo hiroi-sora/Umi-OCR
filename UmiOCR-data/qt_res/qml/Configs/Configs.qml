@@ -931,13 +931,14 @@ Item {
                 // 选项
                 delegate: ItemDelegate {
                     width: comboBox.width
-                    height: size_.line + size_.smallSpacing
+                    height: size_.line + size_.spacing
                     Text {
                         text: modelData + (comboBox.currentIndex===index? " √":"")
                         anchors.left: parent.left
                         anchors.leftMargin: size_.smallSpacing
                         font.pixelSize: size_.text
                         font.family: theme.fontFamily
+                        font.bold: comboBox.currentIndex===index
                         color: comboBox.currentIndex===index? theme.textColor:theme.subTextColor
                     }
                     background: Rectangle {

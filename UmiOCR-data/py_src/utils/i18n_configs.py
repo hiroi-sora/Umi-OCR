@@ -75,7 +75,8 @@ class _I18n:
                 text = LanguageCodes.get(code, code)
                 self.langDict[code] = [text, path]
         if DefaultLang not in self.langDict:
-            self.langDict[DefaultLang] = [LanguageCodes[DefaultLang], ""]
+            text = LanguageCodes[DefaultLang]
+            self.langDict[DefaultLang] = [text, ""]
         # 加载预配置项
         code = pre_configs.getValue("i18n")
         if code in self.langDict:
