@@ -6,11 +6,17 @@ build
 PyStand_for_UmiOCR/build
 *.exe
 
+# 发布
+release
+release.py
+
 # 开发工具
 dev-tools/i18n/*.txt.ts
 dev-tools/i18n/*.txt
 dev-tools/i18n/*.qm
 dev-tools/i18n/*.xml
+dev-tools/7z
+dev-tools/*.zip
 
 # 排除一级目录
 UmiOCR-data/*

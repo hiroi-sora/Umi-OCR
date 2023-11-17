@@ -108,7 +108,6 @@ Configs {
                 "onChanged": (opt, old)=>{
                     old!==undefined && setOpengl(opt)
                 },
-                "advanced": true,
             },
             "disableEffect": {
                 "title": qsTr("禁用美化效果"),
