@@ -7,8 +7,6 @@ MINOR_VERSION = 0
 # 修订版本号
 PATCH_VERSION = 0
 # 预发布阶段
-PRE_RELEASE = "dev"
+PRE_RELEASE = None
 # 预发布版本号
-PRE_RELEASE_VERSION = 20231114
-
-# TODO: 补充更多信息
+PRE_RELEASE_VERSION = None
