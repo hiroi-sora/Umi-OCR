@@ -92,7 +92,7 @@
 
 - [GitHub-Releases](https://github.com/hiroi-sora/Umi-OCR/releases/latest)
 - [蓝奏云](https://hiroi-sora.lanzoul.com/s/umi-ocr)
-- [Source Forge](https://sourceforge.net/projects/umi-ocr)
+<!-- - [Source Forge](https://sourceforge.net/projects/umi-ocr) -->
 
 ## 开始使用
 
