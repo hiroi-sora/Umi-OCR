@@ -54,9 +54,9 @@ Developers should read [Building the Project](#building-the-project) before proc
 
 ## Download Releases:
 
-- [GitHub-Releases](https://github.com/hiroi-sora/Umi-OCR/releases/latest)
-- [Source Forge](https://sourceforge.net/projects/umi-ocr)
-- [Lanzou Yun / 蓝奏云](https://hiroi-sora.lanzoul.com/s/umi-ocr)
+- **GitHub** https://github.com/hiroi-sora/Umi-OCR/releases/latest
+- **Source Forge** https://sourceforge.net/projects/umi-ocr
+- **Lanzou (蓝奏云)** https://hiroi-sora.lanzoul.com/s/umi-ocr
 
 ## Getting Started
 
