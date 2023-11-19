@@ -7,6 +7,7 @@ class MergePara(MergeLine):
     def __init__(self):
         super().__init__()
         self.tbpuName = "多行-自然段"
+        self.mllhLine = 1.8  # 最大段间距
 
     def isSameColumn(self, A, B):  # 两个文块属于同一栏时，返回 True
         # 获取A、B行高
@@ -26,12 +27,15 @@ class MergePara(MergeLine):
         return True  # AB垂直投影重叠
 
     def isSamePara(self, A, B):  # 两个文块属于同一段落时，返回 True
-        ah = A["lineHeight"] * self.mllhH
+        ah = A["lineHeight"]
         # 判断垂直距离
         ly = ah * self.mllhY
+        lLine = ah * self.mllhLine
         a, b = A["box"], B["box"]
         ay, by = a[3][1], b[0][1]
-        if by < ay - ly or by > ay + ly:
+        if by < ay - ly or by > ay + lLine:
+            print("垂大", A["text"][:3], B["text"][:3])
+            print(ay, by, ly, lLine)
             return False  # 垂直距离过大
         # 判断水平距离
         lx = ah * self.mllhX
