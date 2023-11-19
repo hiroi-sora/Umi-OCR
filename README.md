@@ -311,12 +311,6 @@ Umi-OCR
 - 下载本仓库zip源码包
 - clone本仓库
 
-如果要clone，强烈建议只选择主分支。因为某些备份分支含有体积很大的二进制库，会让你花费长时间下载。
-
-```
- git clone --branch main --single-branch https://github.com/hiroi-sora/Umi-OCR.git
-```
-
 ### 后续步骤：
 
 请跳转下列仓库，完成对应平台的开发/运行环境部署。

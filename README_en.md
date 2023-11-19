@@ -187,12 +187,6 @@ Choose one of the following:
 - Download the zip source code package of this repository
 - Clone this repository
 
-If you choose to clone, it is strongly recommended to only select the main branch. This is because some backup branches contain large binary libraries that will take a long time to download.
-
-```
- git clone --branch main --single-branch https://github.com/hiroi-sora/Umi-OCR.git
-```
-
 ### Next Steps:
 
 Please go to the following repositories to complete the development/runtime environment deployment for the corresponding platform.
