@@ -2,8 +2,7 @@ import re
 import csv
 import sys
 
-inFile = r"D:\MyCode\PythonCode\Umi-OCR_v2_开发\Umi-OCR_v2\UmiOCR-data\plugins\win7_x64_RapidOCR-json\rapidocr_config.py"
-# inFile = sys.argv[1]
+inFile = sys.argv[1]
 outFile = "待翻译.csv"
 
 
@@ -30,3 +29,5 @@ with open(outFile, "w", encoding="utf-8", newline="") as f:
     writer = csv.writer(f)
     for i in lines:
         writer.writerow(i)
+
+print("插件翻译完成：\n", inFile)
