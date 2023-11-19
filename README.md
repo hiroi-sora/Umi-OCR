@@ -7,30 +7,38 @@
 <h1 align="center">Umi-OCR V2 文字识别工具</h1>
 
 <p align="center">
-  <a href="https://github.com/hiroi-sora/Umi-OCR_v2/releases/latest">
-    <img src="https://img.shields.io/github/v/release/hiroi-sora/Umi-OCR_v2?style=flat-square" alt="Umi-OCR_v2">
+  <a href="https://github.com/hiroi-sora/Umi-OCR/releases/latest">
+    <img src="https://img.shields.io/github/v/release/hiroi-sora/Umi-OCR?style=flat-square" alt="Umi-OCR">
   </a>
   <a href="License">
-    <img src="https://img.shields.io/github/license/hiroi-sora/Umi-OCR_v2?style=flat-square" alt="LICENSE">
+    <img src="https://img.shields.io/github/license/hiroi-sora/Umi-OCR?style=flat-square" alt="LICENSE">
+  </a>
+  <a href="#下载">
+    <img src="https://img.shields.io/github/downloads/hiroi-sora/Umi-OCR/total?style=flat-square" alt="forks">
+  </a>
+  <a href="https://star-history.com/#hiroi-sora/Umi-OCR">
+    <img src="https://img.shields.io/github/stars/hiroi-sora/Umi-OCR?style=flat-square" alt="stars">
+  </a>
+  <a href="https://github.com/hiroi-sora/Umi-OCR/forks">
+    <img src="https://img.shields.io/github/forks/hiroi-sora/Umi-OCR?style=flat-square" alt="forks">
   </a>
 </p>
 
 <div align="center">
   <h3>
+    <a href="#说明目录">
+      使用说明
+    </a>
     <span> • </span>
     <a href="#下载">
       下载地址
     </a>
     <span> • </span>
-    <a href="#开发计划">
-      开发计划
+    <a href="#更新日志">
+      更新日志
     </a>
     <span> • </span>
-    <a href="#构建项目">
-      构建项目
-    </a>
-    <span> • </span>
-    <a href="https://github.com/hiroi-sora/Umi-OCR_v2/issues">
+    <a href="https://github.com/hiroi-sora/Umi-OCR/issues">
       提交Bug
     </a>
   </h3>
@@ -42,23 +50,33 @@
   <sub>适用于 Windows7 x64 及以上</sub>
 </div><br>
 
-这里是记录 [Umi-OCR](https://github.com/hiroi-sora/Umi-OCR) 全新重构版本v2.0的仓库。
-
 - **全新升级**：V2版本重构了绝大部分代码，提供焕然一新的界面和更强大的功能。
 - **免费**：本项目所有代码开源，完全免费。
 - **方便**：解压即用，离线运行，无需网络。
 - **高效**：自带高效率离线OCR引擎。只要电脑性能足够，可以比在线OCR服务更快。
 - **灵活**：支持定制界面，支持命令行、HTTP接口等多种调用方式。
 
+<p align="center"><img src="https://tupian.li/images/2023/11/19/65599097ab5f4.png" alt="1-标题-1.png" style="width: 80%;"></p>
 
-![Umi-OCR-截图页2.png](https://tupian.li/images/2023/10/18/652fed59f21c8.png)
-![i18n.png](https://tupian.li/images/2023/09/25/65119e87e8041.png)
+![1-标题-2.png](https://tupian.li/images/2023/11/19/6559909fdeeba.png)
 
-## 源码：
+## 目录
+
+- [截图识别](#截图OCR)
+  - [段落合并](#段落合并) - 优化不同文字排版
+- [批量识别](#批量OCR)
+  - [忽略区域](#忽略区域) - 排除截图水印处的文字
+- [二维码](#二维码) 支持扫码或生成二维码图片
+- [全局设置](#全局设置) 添加更多PP-OCR支持的语言模型库！
+- [命令行调用](docs/README_CLI.md)
+- [HTTP接口](docs/README_HTTP.md)
+- [构建项目](#构建项目)
+
+## 使用源码：
 
 开发者请务必阅读 [构建项目](#构建项目) 。
 
-## 下载：
+## 下载发行版：
 
 #### v2.0.0 预览版本
 
@@ -68,24 +86,44 @@
 
 [Umi-OCR 主仓库](https://github.com/hiroi-sora/Umi-OCR)
 
+## 开始使用
+
+软件发布包下载为 `.7z` 压缩包或 `.7z.exe` 自解压包。自解压包可在没有安装压缩软件的电脑上，解压文件。
+
+本软件无需安装。解压后，点击 `Umi-OCR.exe` 即可启动程序。
+
+遇到任何问题，请提 [Issue](https://github.com/hiroi-sora/Umi-OCR/issues) ，我会尽可能帮助你。
+
 ## 标签页
 
-Umi-OCR v2 由一系列灵活好用的标签页组成。您可按照自己的喜好，打开需要的标签页，并锁定标签栏。
+Umi-OCR v2 由一系列灵活好用的**标签页**组成。您可按照自己的喜好，打开需要的标签页。
+
+标签栏左上角可以切换**窗口置顶**。右上角能够**锁定标签页**，以防止日常使用中误触关闭标签页。
 
 ### 截图OCR
 
-![Umi-OCR-截图页1.png](https://tupian.li/images/2023/10/18/652fea30b095b.png)
+<p align="center"><img src="https://tupian.li/images/2023/11/19/65599097aba8e.png" alt="2-截图-1.png" style="width: 80%;"></p>
 
 **截图OCR**：打开这一页后，就可以用快捷键唤起截图，识别图中的文字。
 - 左侧的图片预览栏，可直接用鼠标划选复制。
 - 右侧的识别记录栏，可以编辑文字，允许划选多个记录复制。
 - 也支持在别处复制图片，粘贴到Umi-OCR进行识别。
 
+#### 段落合并
+
+<p align="center"><img src="https://tupian.li/images/2023/11/19/6559909f3e378.png" alt="2-截图-2.png" style="width: 80%;"></p>
+
+关于 **OCR文本后处理 - 段落合并**： 可以整理OCR结果的排版和顺序，使文本更适合阅读和使用。预设方案：
+  - **单行**：合并同一行的文字，适合绝大部分情景。
+  - **多行-自然段**：智能识别、合并属于同一段落的文字，适合绝大部分情景，如上图所示。
+  - **多行-代码段**：尽可能还原原始排版的缩进与空格。适合识别代码片段，或需要保留空格的场景。
+  - **竖排**：适合竖排排版。需要与同样支持竖排识别的模型库配合使用。
+
 ---
 
 ### 批量OCR
 
-![Umi-OCR-批量页1.png](https://tupian.li/images/2023/10/18/652fefa69c9b8.png)
+<p align="center"><img src="https://tupian.li/images/2023/11/19/655990a2511e0.png" alt="3-批量-1.png" style="width: 80%;"></p>
 
 **批量OCR**：这一页支持批量导入本地图片并识别。
 - 识别内容可以保存为 txt / jsonl / md / csv(Excel) 等多种格式。
@@ -93,8 +131,11 @@ Umi-OCR v2 由一系列灵活好用的标签页组成。您可按照自己的喜
 - 没有数量上限，可一次性导入几百张图片进行任务。
 - 支持任务完成后自动关机/待机。
 
-![Umi-OCR-批量页-忽略区域.png](https://tupian.li/images/2023/10/25/653913ec41fe2.png)
-**忽略区域**：一种特殊功能，适用于排除图片中的不想要的文字。
+#### 忽略区域
+
+<p align="center"><img src="https://tupian.li/images/2023/11/19/6559911d28be7.png" alt="3-批量-2.png" style="width: 80%;"></p>
+
+关于 **OCR文本后处理 - 忽略区域**： 批量OCR中的一种特殊功能，适用于排除图片中的不想要的文字。
 - 在批量识别页的右栏设置中可进入忽略区域编辑器。
 - 如上方样例，图片顶部和右下角存在多个水印 / LOGO。如果批量识别这类图片，水印会对识别结果造成干扰。
 - 按住右键，绘制多个矩形框。这些区域内的文字将在任务中被忽略。
@@ -104,40 +145,36 @@ Umi-OCR v2 由一系列灵活好用的标签页组成。您可按照自己的喜
 
 ### 二维码
 
-![Umi-OCR-二维码页1.png](https://tupian.li/images/2023/10/25/653906ae27da1.png)
+<p align="center"><img src="https://tupian.li/images/2023/11/19/655991268d6b1.png" alt="4-二维码-1.png" style="width: 80%;"></p>
 
-**二维码**：这里可以扫码、生成二维码。
-- 支持多种格式的二维码、条形码。
+**扫码**：
+- 可截图/粘贴/拖入本地图片，读取其中的二维码、条形码。
 - 支持一图多码。
-- 可截图/粘贴/拖入本地图片。
-![Umi-OCR-二维码页2.png](https://tupian.li/images/2023/11/14/6553427936efc.png)
-- 支持输入文本，生成二维码。可切换19种格式、纠错等级等参数。
+- 支持19种协议，如下：
+
+`Aztec`,`Codabar`,`Code128`,`Code39`,`Code93`,`DataBar`,`DataBarExpanded`,`DataMatrix`,`EAN13`,`EAN8`,`ITF`,`LinearCodes`,`MatrixCodes`,`MaxiCode`,`MicroQRCode`,`PDF417`,`QRCode`,`UPCA`,`UPCE`,
+
+<p align="center"><img src="https://tupian.li/images/2023/11/19/6559911cda737.png" alt="4-二维码-2.png" style="width: 80%;"></p>
+
+**生成码**：
+- 输入文本，生成二维码图片。
+- 支持19种协议和**纠错等级**等参数。
 
 ---
 
 ### 全局设置
 
-![Umi-OCR-全局页1.png](https://tupian.li/images/2023/10/18/652ff116f0f15.png)
+<p align="center"><img src="https://tupian.li/images/2023/11/19/655991252e780.png" alt="5-全局设置-1.png" style="width: 80%;"></p>
 
-**全局设置**：在这里可以调整软件的全局参数。
-- 支持更改界面语言。（翻译校对工作将在第一个正式版发布后进行）
-- 支持切换界面主题。Umi-OCR拥有多个亮/暗主题。
-- 可以调整界面文字大小、文字字体。
+**全局设置**：在这里可以调整软件的全局参数。常用功能如下：
+- 一键添加快捷方式或设置开机自启。
+- 更改界面**语言**。Umi支持繁中、英 语、日语等语言。
+- 切换界面**主题**。Umi拥有多个亮/暗主题。
+- 调整界面**文字的大小**和**字体**。
 - 切换OCR插件。
+- **渲染器**：软件界面默认支持显卡加速渲染。如果在你的机器上出现截屏闪烁、UI错位的情况，请调整`界面和外观` → `渲染器` ，尝试切换到不同渲染方案，或关闭硬件加速。
 
 ---
-
-
-
-## 辅助功能说明：
-
-- **多国语言界面**：软件界面支持多国语言。目前预览阶段为AI翻译生成，可能词义和排版不好，或者有错漏的情况。正式发布时会进行人工校对。
-- **渲染器**：软件界面默认支持显卡加速渲染。但是如果在你的机器上出现截屏闪烁、UI错位的情况，请调整 `全局设置` → `界面和外观` → `渲染器` 。
-- **文本块后处理（段落合并）** 可以整理OCR结果的排版和顺序，使文本更适合阅读和使用。预设方案如下：
-  - **单行**：合并同一行的文字，适合绝大部分情景。
-  - **多行-自然段**：智能识别、合并属于同一段落的文字，适合绝大部分情景。
-  - **多行-代码段**：尽可能还原原始排版的缩进与空格。适合识别代码片段，或需要保留空格的场景。
-  - **竖排**：适合竖排排版。需要与同样支持竖排识别的模型库配合使用。
 
 ## 调用接口：
 
@@ -182,11 +219,8 @@ Umi-OCR v2 由一系列灵活好用的标签页组成。您可按照自己的喜
 
 近期准备进行的工作，将会在 v2 头几个版本内逐步上线。
 
-- [ ] 快捷键权限优化。
-- [ ] 允许隐藏托盘图标。
-- [ ] 截图联动/截图翻译。
-- [ ] PDF识别。
-- [ ] 高级截图（仿Snipaste，支持贴图）。
+- [ ] PDF识别
+- [ ] 图片翻译
 
 ##### 远期计划
 
