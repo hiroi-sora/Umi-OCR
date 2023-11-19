@@ -1,10 +1,20 @@
+<p align="left">
+    <span>
+        中文
+    </span>
+    <span> • </span>
+    <a href="README_en.md">
+        English
+    </a>
+</p>
+
 <p align="center">
   <a href="https://github.com/hiroi-sora/Umi-OCR">
     <img width="200" height="128" src="https://tupian.li/images/2022/10/27/icon---256.png" alt="Umi-OCR">
   </a>
 </p>
 
-<h1 align="center">Umi-OCR V2 文字识别工具</h1>
+<h1 align="center">Umi-OCR 文字识别工具</h1>
 
 <p align="center">
   <a href="https://github.com/hiroi-sora/Umi-OCR/releases/latest">
@@ -72,19 +82,17 @@
 - [HTTP接口](docs/README_HTTP.md)
 - [构建项目](#构建项目)
 
-## 使用源码：
+## 使用源码
 
 开发者请务必阅读 [构建项目](#构建项目) 。
 
-## 下载发行版：
+## 下载发行版
 
-#### v2.0.0 预览版本
+可选择以下方式下载：
 
-[Releases](https://github.com/hiroi-sora/Umi-OCR_v2/releases)
-
-#### v1.3 稳定版本
-
-[Umi-OCR 主仓库](https://github.com/hiroi-sora/Umi-OCR)
+- [GitHub-Releases](https://github.com/hiroi-sora/Umi-OCR/releases/latest)
+- [蓝奏云](https://hiroi-sora.lanzoul.com/s/umi-ocr)
+- [Source Forge](https://sourceforge.net/projects/umi-ocr)
 
 ## 开始使用
 
@@ -93,6 +101,14 @@
 本软件无需安装。解压后，点击 `Umi-OCR.exe` 即可启动程序。
 
 遇到任何问题，请提 [Issue](https://github.com/hiroi-sora/Umi-OCR/issues) ，我会尽可能帮助你。
+
+## 界面语言
+
+Umi-OCR 支持的界面多国语言。在第一次打开软件时，将会按照你的电脑的系统设置，自动切换语言。
+
+如果需要手动切换语言，请参考下图，`全局设置`→`语言/Language` 。
+
+<p align="center"><img src="https://tupian.li/images/2023/11/19/65599c3f9e600.png" alt="1-标题-1.png" style="width: 80%;"></p>
 
 ## 标签页
 
@@ -247,7 +263,7 @@ Umi-OCR v2 由一系列灵活好用的**标签页**组成。您可按照自己�
 
 ### 各仓库：
 
-- [主仓库](https://github.com/hiroi-sora/Umi-OCR_v2) 👈
+- [主仓库](https://github.com/hiroi-sora/Umi-OCR) 👈
 - [插件库](https://github.com/hiroi-sora/Umi-OCR_plugins)
 - [Win 运行库](https://github.com/hiroi-sora/Umi-OCR_runtime_windows)
 
@@ -290,22 +306,33 @@ Umi-OCR
 
 ### 第一步：下载代码
 
-如果要拉取本仓库代码，强烈建议只 clone 主分支。因为某些备份分支含有体积很大的二进制库，会让你花费长时间下载。
+以下三选一：
+- 将你fork的仓库拉到本地
+- 下载本仓库zip源码包
+- clone本仓库
+
+如果要clone，强烈建议只选择主分支。因为某些备份分支含有体积很大的二进制库，会让你花费长时间下载。
 
 ```
- git clone --branch main --single-branch https://github.com/hiroi-sora/Umi-OCR_v2.git
+ git clone --branch main --single-branch https://github.com/hiroi-sora/Umi-OCR.git
 ```
-
-或，将你fork的仓库拉到本地。
 
 ### 后续步骤：
 
 请跳转下列仓库，完成对应平台的开发/运行环境部署。
 
+本项目也拥有非常简易的一键打包脚本，在下列仓库中查看。
+
 - [Windows](https://github.com/hiroi-sora/Umi-OCR_runtime_windows)
 - 跨平台的支持筹备中
 
 ## 更新日志
+
+##### v2.0.0 `2023.11.19`
+
+- 优化：插件UI翻译机制。
+- 优化：下拉框UI。
+- 修复：段落合并-自然段合并的bug。
 
 ##### v2.0.0 dev `2023.11.14`
 
