@@ -201,3 +201,5 @@ This project also has a very simple one-click packaging script, which can be fou
 
 - [Windows](https://github.com/hiroi-sora/Umi-OCR_runtime_windows)
 - Cross-platform support is under development.
+
+## [CHANGE LOG](CHANGE_LOG.md)
