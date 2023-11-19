@@ -164,10 +164,6 @@ About **OCR Text Post-Processing - Ignore Regions**: This is a special function 
 - Command-line manual: [README_CLI.md](docs/README_CLI.md)
 - HTTP API manual: [README_HTTP.md](docs/README_HTTP.md)
 
-## Help Translate the Software Interface
-
-Refer to [dev-tools/i18n](dev-tools/i18n)
-
 ## About Project Structure
 
 ### Repositories:
