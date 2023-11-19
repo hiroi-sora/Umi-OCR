@@ -57,7 +57,6 @@ Paddle可选语言：(填写下列字符串)
 models/config_chinese.txt
 models/config_en.txt
 models/config_chinese_cht(v2).txt
-models/config_chinese_cht.txt
 models/config_japan.txt
 models/config_korean.txt
 models/config_cyrillic.txt
