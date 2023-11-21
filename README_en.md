@@ -50,7 +50,7 @@
 
 ## Using the Source Code:
 
-Developers should read [Building the Project](#building-the-project) before proceeding.
+Developers should read [Building the Project](#Build-the-Project) before proceeding.
 
 ## Download Releases:
 
