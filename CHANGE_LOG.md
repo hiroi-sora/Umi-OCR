@@ -1,8 +1,28 @@
+# 分支使用说明
+
+点击后续列表的版本号链接，可前往对应备份分支页面。
+
+部分备份分支含有体积较大的二进制库，会让你花费长时间下载。因此，建议只下载你需要用的分支。
+
+方法1：将所需的分支，fork到你自己的账号下，然后clone你自己仓库。
+
+方法2：在本仓库手动下载指定分支的zip源码包。
+
+方法3：使用以下命令手动clone指定分支：
+
+```
+git clone --single-branch --branch [分支名] https://github.com/hiroi-sora/Umi-OCR.git
+```
+
+`[分支名]` 可以是 `main` 、`release/2.0.0` 等，详见下方列表。
+
+`main`、`dev` 等分支，可能含有开发中的不稳定的新功能。如果用于研究学习或二次开发，建议选择 `release` 开头的分支。
+
 # 更新日志 CHANGE LOG
 
-点击版本号链接可前往对应备份分支。
+##### [v2.0.0](https://github.com/hiroi-sora/Umi-OCR/tree/release/2.0.0) `2023.11.19`
 
-##### v2.0.0 `2023.11.19`
+分支名：`release/2.0.0`
 
 - 优化：插件UI翻译机制。
 - 优化：下拉框UI。
@@ -12,68 +32,88 @@
 
 - 新增：生成二维码功能。
 - 新增：所有图片预览窗口（如截图、二维码页），允许保存图片到指定路径。
-- 优化：二维码解析库改用性能更好、功能更丰富的zxingcpp。 (#47) (感谢：@Byxs20)
+- 优化：二维码解析库改用性能更好、功能更丰富的zxingcpp。 ([v2 #47](https://github.com/hiroi-sora/Umi-OCR_v2/issues/47)) (感谢：@Byxs20)
 - 优化：截图预览面板中，文本框的位置更准确。
 - 修复：图片预览窗口，无法复制本地图片的Bug。
 - 修复：tbpu合并自然段时，垂直距离不准确的Bug。
-- 修复：HTTP API 的跨域问题。 (#52)
-- 修复：HTTP API 传base64的大小限制问题。 (#49)
+- 修复：HTTP API 的跨域问题。 [v2 #52](https://github.com/hiroi-sora/Umi-OCR_v2/issues/52)
+- 修复：HTTP API 传base64的大小限制问题。 [v2 #49](https://github.com/hiroi-sora/Umi-OCR_v2/issues/49)
 - 修复：其它少量报错。
 - 翻译：人工校对`繁体中文`和`英语`。 (贡献：@QZGao)
 
 ##### v2.0.0 dev `2023.11.5`
 
-- 新增：记忆窗口位置。 (#44)
-- 新增：批量识图页增加图片预览窗口，单击图片条目打开。 (#2)
-- 新增：检查软件是否有权限读写配置文件。 (#30)
+- 新增：记忆窗口位置。 [v2 #44](https://github.com/hiroi-sora/Umi-OCR_v2/issues/44)
+- 新增：批量识图页增加图片预览窗口，单击图片条目打开。 [v2 #2](https://github.com/hiroi-sora/Umi-OCR_v2/issues/2)
+- 新增：检查软件是否有权限读写配置文件。 [v2 #30](https://github.com/hiroi-sora/Umi-OCR_v2/issues/30)
 - 新增：报错弹窗提供一键复制及打开issues的功能。
 - 新增：全局设置页添加左侧目录栏。
 - 新增：插件的多国语言UI机制。
 - 优化：截图预览面板中，文本框的位置更准确。
 - 优化：调整部分UI布置。
-- 修复：扫码模块添加导入异常检查。 (#33)
-- 修复：补充扫码页的拖入图片功能。 (#43)
-- 修复：输出到单独文件txt时，文件名去除原后缀。 (#36)
+- 修复：扫码模块添加导入异常检查。 [v2 #33](https://github.com/hiroi-sora/Umi-OCR_v2/issues/33)
+- 修复：补充扫码页的拖入图片功能。 [v2 #43](https://github.com/hiroi-sora/Umi-OCR_v2/issues/43)
+- 修复：输出到单独文件txt时，文件名去除原后缀。 [v2 #36](https://github.com/hiroi-sora/Umi-OCR_v2/issues/36)
 - 修复：一些小Bug。
 
 ##### v2.0.0 dev `2023.10.25`
-- 新增：命令行支持传入图片路径。 (#28)
-- 新增：HTTP接口支持Base64传输图片。 (#28)
+- 新增：命令行支持传入图片路径。 [v2 #28](https://github.com/hiroi-sora/Umi-OCR_v2/issues/28)
+- 新增：HTTP接口支持Base64传输图片。 [v2 #28](https://github.com/hiroi-sora/Umi-OCR_v2/issues/28)
 - 新增：忽略区域功能。
 - 新增：二维码识别页。支持识别多种格式的二维码、条形码。 ([Umi-OCR #95](https://github.com/hiroi-sora/Umi-OCR/issues/95))
-- 新增：提供备选启动器`UmiOCR-data/RUN_GUI.bat`，供`Umi-OCR.exe`不兼容时使用。 (#21)
+- 新增：提供备选启动器`UmiOCR-data/RUN_GUI.bat`，供`Umi-OCR.exe`不兼容时使用。 [v2 #21](https://github.com/hiroi-sora/Umi-OCR_v2/issues/21)
 - 优化：图片预览窗口，支持用`Tab`切换显示/隐藏文本。
-- 优化：记录面板，每条记录顶部添加复制按钮。 (#32)
-- 优化：记录面板，拖拽过程中允许指针移出文本框区域。 (#32)
+- 优化：记录面板，每条记录顶部添加复制按钮。 [v2 #32](https://github.com/hiroi-sora/Umi-OCR_v2/issues/32)
+- 优化：记录面板，拖拽过程中允许指针移出文本框区域。 [v2 #32](https://github.com/hiroi-sora/Umi-OCR_v2/issues/32)
 - 优化：重新设计截图缓存机制，避免Image组件销毁时的内存泄露。
 - 优化：标签页应用动态解析机制，小幅提高加载速度。
 - 优化：运行环境转为64位包。（计划不再提供对32位的兼容）
-- 修正：配置项中布尔值解析不正确的问题。 (#30)
+- 修正：配置项中布尔值解析不正确的问题。 [v2 #30](https://github.com/hiroi-sora/Umi-OCR_v2/issues/30)
 - 修正：拖入非图片文件可能导致卡顿几秒的问题。
 - 修正：PaddleOCR插件的兼容性问题。 ([Umi-OCR #209](https://github.com/hiroi-sora/Umi-OCR/issues/209))
 
 ##### v2.0.0 dev `2023.10.18`
-- 新增：截图前自动隐藏窗口。 (#26)
-- 新增：更改字体功能。 (#25)
+- 新增：截图前自动隐藏窗口。 [v2 #26](https://github.com/hiroi-sora/Umi-OCR_v2/issues/26)
+- 新增：更改字体功能。 [v2 #25](https://github.com/hiroi-sora/Umi-OCR_v2/issues/25)
 - 新增：可爱的加载动画。
 - 新增：截图预览面板 支持显示结果文本、划选文本。
 - 新增：截图预览面板 支持将图片复制到剪贴板。
-- 新增：结果记录面板 支持跨文本框划选文本。 (#18)
-- 新增：结果记录面板 支持删除一条或多条记录。 (#10)
+- 新增：结果记录面板 支持跨文本框划选文本。 [v2 #18](https://github.com/hiroi-sora/Umi-OCR_v2/issues/18)
+- 新增：结果记录面板 支持删除一条或多条记录。 [v2 #10](https://github.com/hiroi-sora/Umi-OCR_v2/issues/10)
 - 新增：支持用Esc或右键中断截图。
 - 优化：更改插件目录结构和导入机制。
-- 修正：文件重复导致无法添加开机自启。 (#27)
+- 修正：文件重复导致无法添加开机自启。 [v2 #27](https://github.com/hiroi-sora/Umi-OCR_v2/issues/27)
 
 
 ##### v2.0.0 dev `2023.10.10`
-- 新功能：第一次启动软件时，根据系统情况，选择最恰当的渲染器。解决截图闪烁问题。 (#7)
+- 新功能：第一次启动软件时，根据系统情况，选择最恰当的渲染器。解决截图闪烁问题。 [v2 #7](https://github.com/hiroi-sora/Umi-OCR_v2/issues/7)
 - 新功能：初步实现插件机制，切换引擎等组件更加便捷。
 - 新功能：支持调整界面比例（文字大小）。
-- 优化：调整截图页UI，提高屏占比。优化标签栏阴影。 (#8)
-- 优化：双击通知弹窗可打开主窗口。 (#10)
-- 优化：截图完成后，如果主窗口在前台，则不弹出成功提示。 (#10)
-- 优化：禁用美化效果时，外部弹窗将不会渲染阴影区域。 (#14)
+- 优化：调整截图页UI，提高屏占比。优化标签栏阴影。 [v2 #8](https://github.com/hiroi-sora/Umi-OCR_v2/issues/8)
+- 优化：双击通知弹窗可打开主窗口。 [v2 #10](https://github.com/hiroi-sora/Umi-OCR_v2/issues/10)
+- 优化：截图完成后，如果主窗口在前台，则不弹出成功提示。 [v2 #10](https://github.com/hiroi-sora/Umi-OCR_v2/issues/10)
+- 优化：禁用美化效果时，外部弹窗将不会渲染阴影区域。 [v2 #14](https://github.com/hiroi-sora/Umi-OCR_v2/issues/14)
 - 优化：Paddle引擎也支持win7系统了。
+
+##### v2.0.0 dev `2023.9.25`
+
+##### v2.0.0 dev `2023.9.8`
+- 支持多种界面语言（实验性）
+
+##### v2.0.0 dev `2023.9.7`
+
+##### v2.0.0 dev `2023.8.9`
+- 截图OCR
+- 兼容高分辨率屏幕和多屏幕系统
+- 更准确、智能的段落合并
+
+##### v2.0.0 dev `2023.7.26`
+- 批量OCR
+- 现代化UI风格
+- 自定义标签页系统
+- 主题切换：明亮/深色
+
+---
 
 ##### [v1.3.7](https://github.com/hiroi-sora/Umi-OCR/tree/release/1.3.7) `2023.10.10`
 - Paddle引擎兼容Win7 x64 。
