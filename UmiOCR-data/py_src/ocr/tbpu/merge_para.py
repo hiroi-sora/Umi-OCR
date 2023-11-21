@@ -34,8 +34,6 @@ class MergePara(MergeLine):
         a, b = A["box"], B["box"]
         ay, by = a[3][1], b[0][1]
         if by < ay - ly or by > ay + lLine:
-            print("垂大", A["text"][:3], B["text"][:3])
-            print(ay, by, ly, lLine)
             return False  # 垂直距离过大
         # 判断水平距离
         lx = ah * self.mllhX
