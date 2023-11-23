@@ -41,7 +41,7 @@ Item {
     }
 
     // ========================= 【内部模式】 =========================
-   
+
     Popup {
         id: notificationPopup
 
@@ -136,6 +136,7 @@ Item {
             }
             else { // 无动画时，瞬间关闭
                 visible = false
+                visibility = Window.Hidden
             }
         }
         // 属性
@@ -170,6 +171,7 @@ Item {
             running: false
             onStopped: {
                 notificationWindow.visible = false
+                notificationWindow.visibility = Window.Hidden
             }
             NumberAnimation { 
                 target: notificationWindow
