@@ -7,6 +7,7 @@ import csv
 
 class OutputCsv(Output):
     def __init__(self, argd):
+        self.encoding = "ansi"  # 保存编码，要兼容Office
         self.dir = argd["outputDir"]  # 输出路径（文件夹）
         self.fileName = argd["outputFileName"]  # 文件名
         self.fileName = self.fileName.replace(
@@ -42,6 +43,8 @@ class OutputCsv(Output):
             textOut += f'[Error] OCR failed. Code: {res["code"]}, Msg: {res["data"]}  \n【异常】OCR识别失败。'
 
         writeList = [name, textOut, path]
-        with open(self.outputPath, "a", encoding="utf-8", newline="") as f:  # 追加写入本地文件
+        with open(
+            self.outputPath, "a", encoding=self.encoding, newline=""
+        ) as f:  # 追加写入本地文件
             writer = csv.writer(f)
             writer.writerow(writeList)
