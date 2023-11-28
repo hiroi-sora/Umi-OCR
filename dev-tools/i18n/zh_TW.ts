@@ -1488,8 +1488,8 @@
     </message>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/Widgets/ResultLayout/ResultsTableView.qml" line="55"/>
-        <source>置信 %1</source>
-        <translation>信賴 %1</translation>
+        <source>置信度 %1</source>
+        <translation>信賴度 %1</translation>
     </message>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/Widgets/ResultLayout/ResultsTableView.qml" line="301"/>

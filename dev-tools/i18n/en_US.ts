@@ -1484,7 +1484,7 @@ Exception message: %2</translation>
     </message>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/Widgets/ResultLayout/ResultsTableView.qml" line="55"/>
-        <source>置信 %1</source>
+        <source>置信度 %1</source>
         <translation>Confidence: %1</translation>
     </message>
     <message>

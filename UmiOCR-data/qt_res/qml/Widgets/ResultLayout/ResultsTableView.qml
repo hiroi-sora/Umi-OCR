@@ -52,7 +52,7 @@ Item {
             res.title = qsTr("耗时 %1").arg(t1)
             if(res.score > 0) {
                 const t2 = res.score.toFixed(2)
-                res.title += " | "+qsTr("置信 %1").arg(t2)
+                res.title += " | "+qsTr("置信度 %1").arg(t2)
             }
         }
         // 添加到列表模型
