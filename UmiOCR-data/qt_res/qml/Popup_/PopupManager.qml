@@ -25,6 +25,12 @@ Item {
         messageWin.showMessage(title, msg, type)
     }
 
+    // 带“不再提示”的通知弹窗
+    // mid: 唯一标识一个提示
+    function messageMemory(mid, title, msg, type="") {
+        messageWin.showMessageMemory(mid, title, msg, type)
+    }
+
     // 双选项对话窗（确定|取消）。需要传入回调函数，返回true/false
     // argd： {"yesText":"确定", "noText": "取消"}
     function dialog(title, msg, callback, type="", argd={}) {

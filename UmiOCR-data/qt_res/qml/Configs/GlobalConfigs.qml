@@ -157,6 +157,10 @@ Configs {
                 "type": "var",
                 "default": "", // 如： 300,20,500,300
             },
+            "messageMemory": { // 存放“不再弹出”的消息弹窗的mid
+                "type": "var",
+                "default": [], // 如： ["aaa", "bbb"]
+            },
         },
 
         // 截图

@@ -20,6 +20,19 @@ Item {
         createWin(winMsg, argd)
     }
 
+    // 带“不再提示”的消息
+    // mid: 唯一标识一个提示
+    function showMessageMemory(mid, title, msg, type) {
+        // 检查全局设置记忆列表中，是否已记录mid
+        const midList = qmlapp.globalConfigs.getValue("window.messageMemory")
+        if(midList.includes(mid)) // 已记录则不再弹出
+            return
+        const argd = {
+            mid: mid, title:title, msg:msg, type:type
+        }
+        createWin(winMsgMemory, argd)
+    }
+
     // 显示一个双选项对话窗
     function showDialog(title, msg, callback, yesText, noText, type) {
         const argd = {
@@ -104,6 +117,47 @@ Item {
 
             function close() {
                 messageRoot.close(winId)
+            }
+        }
+    }
+
+    // 带“不再提示”的记忆消息
+    Component {
+        id: winMsgMemory
+
+        FramelessWindow {
+            id: win
+            property string title: ""
+            property string msg: ""
+            property string type: ""
+            property string winId: ""
+            property string mid: ""
+
+            visible: true
+            width: msgComp.width+msgComp.shadowWidth
+            height: msgComp.height+msgComp.shadowWidth
+            color: "#00000000"
+
+            // 消息盒组件
+            MessageBox {
+                id: msgComp
+                anchors.centerIn: parent
+                title: win.title // 标题
+                msg: win.msg // 内容
+                type: win.type // 类型
+                btnsList: [ // 按钮列表
+                    {"text": qsTr("不再提示"), "value": true, "textColor": theme.specialTextColor, "bgColor": theme.specialBgColor},
+                    {"text": qsTr("知道了"), "value": false, "textColor": theme.subTextColor, "bgColor": theme.bgColor},
+                ]
+                onClosed: (value)=>{
+                    if(value) {
+                        // 将mid添加到全局设置记忆列表中
+                        let midList = qmlapp.globalConfigs.getValue("window.messageMemory")
+                        midList.push(mid)
+                        qmlapp.globalConfigs.setValue("window.messageMemory", midList)
+                    }
+                    messageRoot.close(winId) // 关闭窗口
+                }
             }
         }
     }
