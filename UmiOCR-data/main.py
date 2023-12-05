@@ -13,17 +13,17 @@ import site
 def initRuntimeEnvironment(startup_script):
     """初始化运行环境"""
 
-    # 重定向输出流到控制台窗口
+    # 尝试获取控制台的输出对象
     try:
         fd = os.open("CONOUT$", os.O_RDWR | os.O_BINARY)
         fp = os.fdopen(fd, "w")
-        sys.stdout = fp
-        sys.stderr = fp
     except Exception as e:
         fp = open(os.devnull, "w")
+    # 输出流不存在时，重定向到控制台
+    if not sys.stdout:
         sys.stdout = fp
+    if not sys.stderr:
         sys.stderr = fp
-
     # def except_hook(cls, exception, traceback):
     #     sys.__excepthook__(cls, exception, traceback)
     # sys.excepthook = except_hook
