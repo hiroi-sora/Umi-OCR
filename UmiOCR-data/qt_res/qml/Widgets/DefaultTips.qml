@@ -9,7 +9,7 @@ Item {
     property string tips: "" // 提示文本
     property var visibleFlag // 只要该变量改变，就永久隐藏该组件
 
-    onVisibleFlagChanged: if(visible) visible = false
+    onVisibleFlagChanged: visible = false
 
     TextEdit_ {
         anchors.centerIn: parent
