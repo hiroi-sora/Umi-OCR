@@ -41,6 +41,28 @@ OCR指令的参数（如识别语言，是否复制到剪贴板）等同于`截�
 
 ---
 
+### 结果输出
+
+
+
+- 将结果输出到文件：
+- ` | Out-File -FilePath 文件路径`
+
+```
+./Umi-OCR.exe --screenshot | Out-File -FilePath test.txt
+```
+> 注：由于运行环境的一些限制，暂时无法使用管道重定向符`>`。  
+> Out-File 指令仅能在PowerShell中使用。
+
+- 将结果复制到剪贴板：
+- ` | clip`
+
+```
+./Umi-OCR.exe --screenshot | clip
+```
+
+---
+
 ### 高级指令
 
 （仅供有经验的开发者使用）
