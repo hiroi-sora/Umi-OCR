@@ -290,6 +290,9 @@ class _Cmd:
             action="store_true",
             help="The function will be called on the child thread and return the result, but it may be unstable or cause QML to crash.",
         )
+        # 输出
+        self._parser.add_argument("-->", help="File path for CLI output. (overwrite)")
+        self._parser.add_argument("-->>", help="File path for CLI output. (append)")
         self._parser.add_argument("paras", nargs="*", help="parameters of [--func].")
 
     # 分析指令，返回指令对象或报错字符串

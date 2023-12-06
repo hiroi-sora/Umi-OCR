@@ -31,6 +31,35 @@ def _isMultiOpen():
     return False
 
 
+# 输出
+def _output(argv, argument, mode, text):
+    if argument not in argv:
+        return
+    path = ""
+    # 提取路径参数
+    try:
+        i = argv.index(argument)
+        path = argv[i + 1]
+        del argv[i : i + 2]
+    except Exception as e:
+        print(f"[Error] argument {argument} cannot be resolved. \n{e}")
+        return
+    # 相对路径转绝对路径
+    if not os.path.isabs(path):
+        # 获取当前工作目录的上一级目录
+        current_dir = os.getcwd()
+        parent_dir = os.path.abspath(os.path.join(current_dir, os.pardir))
+        # 将 path 转为绝对路径，且以上一级目录为基准
+        path = os.path.abspath(os.path.join(parent_dir, path))
+    try:
+        with open(path, mode, encoding="utf-8") as f:
+            f.write(text)
+        print(f"Success output to file: {path}")
+    except Exception as e:
+        print(f"[Error] failed to write file {path} : \n{e}")
+        return
+
+
 # 跨进程发送指令
 def _sendCmd(argv):
     port = pre_configs.getValue("server_port")  # 记录的端口号
@@ -39,6 +68,8 @@ def _sendCmd(argv):
     import urllib.request
     import json
 
+    # 向后台工作进程发送指令
+    res = ""
     try:
         data = json.dumps(argv, ensure_ascii=True).encode("utf-8")
         req = urllib.request.Request(
@@ -46,12 +77,15 @@ def _sendCmd(argv):
         )
         response = urllib.request.urlopen(req)
         if response.status == 200:
-            data = response.read().decode("utf-8")
-            print(data)
+            res = response.read().decode("utf-8")
         else:
-            print(f"{errStr}\nstatus_code: {response.status}")
+            res = f"{errStr}\nstatus_code: {response.status}"
     except Exception as e:
-        print(f"{errStr}\nerror: {e}")
+        res = f"{errStr}\nerror: {e}"
+    # 输出
+    print(res)
+    _output(argv, "-->", "w", res)
+    _output(argv, "-->>", "a", res)
 
 
 # 启动新进程，并发送指令
