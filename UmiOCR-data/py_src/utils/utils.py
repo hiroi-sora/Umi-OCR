@@ -79,3 +79,64 @@ def QUrl2String(urls):
             if QFileInfo(u).exists():  # 检查路径是否真的存在
                 resList.append(u)
     return resList
+
+
+# 初始化配置项字典数值，等同于 Configs.qml 的 function initConfigDict
+# 主要是为了补充type和default
+def initConfigDict(dic):
+    toDict = {}
+
+    def handleConfigItem(config, key):  # 处理一个配置项
+        # 类型：指定type
+        if not config["type"] == "":
+            if config["type"] == "file":  # 文件选择
+                config["default"] = "" if not config["default"] is None else None
+            elif config["type"] == "var":  # 缓存任意类型
+                config["default"] = "" if not config["default"] is None else None
+        # 类型：省略type
+        else:
+            if type(config["default"]) is bool:  # 布尔
+                config["type"] = "boolean"
+            elif "optionsList" in config:  # 枚举
+                config["type"] = "enum"
+                if len(config["optionsList"]) == 0:
+                    print(f"处理配置项异常：{key}枚举列表为空。")
+                    return
+                if config["default"] is None:
+                    config["default"] = config["optionsList"][0][0]
+            elif type(config["default"]) is str:  # 文本
+                config["type"] = "text"
+            elif isinstance(config["default"], (int, float)):  # 数字
+                config["type"] = "number"
+            elif "btnsList" in config:  # 按钮组
+                config["type"] = "buttons"
+                return
+            else:
+                print("【Error】未知类型的配置项：" + key)
+                return
+
+    def handleConfigGroup(group, prefix=""):  # 处理一个配置组
+        for key in group:
+            config = group[key]
+            if not type(config) is dict:
+                continue
+            # 补充空白参数
+            if "type" not in config:  # 类型
+                config["type"] = ""
+            if "default" not in config:  # 默认值
+                config["default"] = None
+            # 记录完整key
+            fullKey = prefix + key
+            if config["type"] == "group":  # 若是配置项组，递归遍历
+                handleConfigGroup(config, fullKey + ".")  # 前缀加深一层
+                toDict[fullKey] = {
+                    "title": config["title"],
+                    "type": "group",
+                    "advanced": config.advanced,
+                }
+            else:  # 若是配置项
+                toDict[fullKey] = config
+                handleConfigItem(config, fullKey)
+
+    handleConfigGroup(dic)
+    return toDict

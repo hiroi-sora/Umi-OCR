@@ -35,7 +35,7 @@ class __MissionOcrClass(Mission):
             if argd["tbpu.merge"] in tbpuMerge:
                 msnInfo["tbpu"].append(tbpuMerge[argd["tbpu.merge"]]())
             else:
-                print(f'[Error] 段落合并参数 {argd["tbpu.merge"]}')
+                print(f'[Error] 段落合并参数不存在： {argd["tbpu.merge"]}')
         # 忽略区域
         if "tbpu.ignoreArea" in argd:
             iArea = argd["tbpu.ignoreArea"]
