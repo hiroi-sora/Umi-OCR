@@ -67,7 +67,6 @@ def init(UmiWeb):
         try:
             data = request.json
         except Exception as e:
-            # 请求内容无法解析为JSON格式
             return json.dumps({"code": 800, "data": f"请求无法解析为json。"})
         if not data:
             return json.dumps({"code": 801, "data": f"请求为空。"})
@@ -79,13 +78,15 @@ def init(UmiWeb):
             return json.dumps({"code": 803, "data": f"请求中 options 字段必须为字典。"})
         msnList = [{"base64": data["base64"]}]
         # 补充缺失的默认参数
-        opt = data["options"]
-        default = _get_ocr_options()
-        for key in default:
-            print("key: ", key)
-            if key not in opt:
-                opt[key] = default[key]["default"]
-        msnInfo = {"onGet": onGet, "onEnd": onEnd, "argd": opt}
+        try:
+            opt = data["options"]
+            default = _get_ocr_options()
+            for key in default:
+                if key not in opt:
+                    opt[key] = default[key]["default"]
+            msnInfo = {"onGet": onGet, "onEnd": onEnd, "argd": opt}
+        except Exception as e:
+            return json.dumps({"code": 804, "data": f"options 解释失败。 {e}"})
         MissionOCR.addMissionList(msnInfo, msnList)
         with condition:
             condition.wait()
