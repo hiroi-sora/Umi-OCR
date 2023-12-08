@@ -20,6 +20,18 @@ git clone --single-branch --branch [分支名] https://github.com/hiroi-sora/Umi
 
 # 更新日志 CHANGE LOG
 
+##### v2.0.1 `2023.12.8`
+
+分支名：`main`
+
+- 更新：重新设计 HTTP OCR 接口的参数。
+- 更新：命令行增加指令`-->`，将结果输出到文件。
+- 优化：调整图像数据的内部编码，减少英文空格丢失的几率。
+- 优化：调整部分UI文本和布局。
+- 优化：csv默认保存为ansi编码，以兼容Office Excel。 (#237)
+- 修复：开启“禁用美化效果”后，外部通知弹窗无法关闭。 (#234)
+- 修复：别的程序通过命令行调用Umi-OCR时，无法获取stdout输出。
+
 ##### [v2.0.0](https://github.com/hiroi-sora/Umi-OCR/tree/release/2.0.0) `2023.11.19`
 
 分支名：`release/2.0.0`

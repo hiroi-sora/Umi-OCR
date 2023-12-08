@@ -33,52 +33,96 @@ http://127.0.0.1:1224/api/ocr
 
 参数：`json`
 
-> 注：所有参数均为必填！暂时不支持默认参数。
-
 | 参数名  | 类型   | 描述                                     |
 | ------- | ------ | ---------------------------------------- |
 | base64  | string | 待识别图像的 Base64 编码字符串，无需前缀 |
-| options | object | 配置选项对象                             |
+| options | object | 【可选】配置选项字典                     |
 
 `base64`无需`data:image/png;base64,`等前缀，直接放正文。
 
-`options` 的参数：
+`options` 是可选的，可以不传这个参数。如果传了，则内部的所有子参数也均为可选。注意，使用不同引擎插件时， `options` 的子参数可能不同，见下：
 
-Paddle引擎插件：
+#### Paddle引擎插件 选项：
 
-| 参数名         | 类型    | 描述                                      |
-| -------------- | ------- | ----------------------------------------- |
-| language       | string  | 识别语言，具体见下                        |
-| cls            | boolean | 是否进行图像旋转校正。`true/false`        |
-| limit_side_len | int     | 图像压缩边长。允许 `960/2880/4320/999999` |
+| options 子参数       | 类型    | 默认值                      | 描述                                      |
+| -------------------- | ------- | --------------------------- | ----------------------------------------- |
+| `ocr.language`       | string  | `models/config_chinese.txt` | 识别语言，具体见下                        |
+| `ocr.cls`            | boolean | `false`                     | 是否进行图像旋转校正。`true/false`        |
+| `ocr.limit_side_len` | int     | `960`                       | 图像压缩边长。允许 `960/2880/4320/999999` |
+| `tbpu.merge`         | string  | `MergeLine`                 | 段落合并方案，具体见下                    |
 
-Paddle可选语言：(填写下列字符串)
+Paddle专属 `ocr.language` 可选项：
+| 可选项（字符串）                    | 对应语言 |
+| ----------------------------------- | -------- |
+| `models/config_chinese.txt`         | 简体中文 |
+| `models/config_en.txt`              | English  |
+| `models/config_chinese_cht(v2).txt` | 繁體中文 |
+| `models/config_japan.txt`           | 日本語   |
+| `models/config_korean.txt`          | 한국어   |
+| `models/config_cyrillic.txt`        | Русский  |
+
+通用 `tbpu.merge` 可选项：
+| 可选项（字符串） | 对应方案      |
+| ---------------- | ------------- |
+| `MergeLine`      | 单行          |
+| `MergePara`      | 多行-自然段   |
+| `MergeParaCode`  | 多行-代码段   |
+| `MergeLineVrl`   | 竖排-从右到左 |
+| `MergeLineVlr`   | 竖排-从左到右 |
+| `None`           | 不做处理      |
+
+Paddle `options` 完整字典示例：
+```json
+    "options": {
+        "ocr.language": "models/config_chinese.txt",
+        "ocr.maxSideLen": 960,
+        "ocr.cls": false,
+        "tbpu.merge": "MergeLine",
+    }
 ```
-models/config_chinese.txt
-models/config_en.txt
-models/config_chinese_cht(v2).txt
-models/config_japan.txt
-models/config_korean.txt
-models/config_cyrillic.txt
+
+#### Rapid引擎插件 选项：
+
+| options 子参数   | 类型    | 默认值      | 描述                                       |
+| ---------------- | ------- | ----------- | ------------------------------------------ |
+| `ocr.language`   | string  | `简体中文`  | 识别语言，具体见下                         |
+| `ocr.angle`      | boolean | `false`     | 是否进行图像旋转校正。`true/false`         |
+| `ocr.maxSideLen` | int     | `1024`      | 图像压缩边长。允许 `1024/2048/4096/999999` |
+| `tbpu.merge`     | string  | `MergeLine` | 段落合并方案                               |
+
+Rapid专属 `ocr.language` 可选项：
+| 可选项（字符串） | 对应语言 |
+| ---------------- | -------- |
+| `简体中文`       | 简体中文 |
+| `English`        | English  |
+| `繁體中文`       | 繁體中文 |
+| `日本語`         | 日本語   |
+| `한국어`         | 한국어   |
+| `Русский`        | Русский  |
+
+Paddle `options` 完整字典示例：
+```json
+    "options": {
+        "ocr.language": "简体中文",
+        "ocr.maxSideLen": 1024,
+        "ocr.angle": false,
+        "tbpu.merge": "MergeLine",
+    }
 ```
 
-Rapid引擎插件：
+#### P2T引擎插件 选项：
 
-| 参数名     | 类型    | 描述                                       |
-| ---------- | ------- | ------------------------------------------ |
-| language   | string  | 识别语言，具体见下                         |
-| angle      | boolean | 是否进行图像旋转校正。`true/false`         |
-| maxSideLen | int     | 图像压缩边长。允许 `1024/2048/4096/999999` |
+> P2T暂时不可调整语言，支持 中文+英文+数学公式混合图片。
 
-Rapid可选语言：(填写下列字符串)
-```
-简体中文(V4)
-简体中文(V3)
-English
-繁體中文
-日本語
-한국어
-Русский
+| options 子参数 | 类型   | 默认值      | 描述         |
+| -------------- | ------ | ----------- | ------------ |
+| `tbpu.merge`   | string | `MergeLine` | 段落合并方案 |
+
+P2T `options` 完整字典示例：
+```json
+    "options": {
+        "tbpu.merge": "MergeLine",
+    }
 ```
 
 #### 响应
@@ -111,11 +155,18 @@ English
 
 例：
 ```json
-"data": {
-    "text": "识别文本",
-    "score": 0.99800001,
-    "box": [[x1,y1], [x2,y2], [x3,y3], [x4,y4]]
-}
+"data": [
+    {
+        "text": "识别文本111",
+        "score": 0.99800001,
+        "box": [[x1,y1], [x2,y2], [x3,y3], [x4,y4]]
+    },
+    {
+        "text": "识别文本222",
+        "score": 0.97513333,
+        "box": [[x1,y1], [x2,y2], [x3,y3], [x4,y4]]
+    },
+]
 ```
 
 ### Base64 接口示例
@@ -126,17 +177,20 @@ JavaScript 示例：
 const url = 'http://127.0.0.1:1224/api/ocr';
 const data = {
     base64: 'iVBORw0KGgoAAAANSUhEUgAAAC4AAAAXCAIAAAD7ruoFAAAACXBIWXMAABnWAAAZ1gEY0crtAAAAEXRFWHRTb2Z0d2FyZQBTbmlwYXN0ZV0Xzt0AAAHjSURBVEiJ7ZYrcsMwEEBXnR7FLuj0BPIJHJOi0DAZ2qSsMCxEgjYrDQqJdALrBJ2ASndRgeNI8ledutOCLrLl1e7T/mRkjIG/IXe/DWBldRTNEoQSpgNURe5puiiaJehrMuJSXSTgbaby0A1WzLrCCQCmyn0FwoN0V06QONWAt1nUxfnjHYA8p65GjhDKxcjedVH6JOejBPwYh21eE0Wzfe0tqIsEkGXcVcpoMH4CRZ+P0lsQp/pWJ4ripf1XFDFe8GHSHlYcSo9Es31t60RdFlN1RUmrma5oTzTVB8ZUaeeYEC9GmL6kNkDw9BANAQYo3xTNdqUkvHq+rYhDKW0Bj3RSEIpmyWyBaZaMTCrCK+tJ5Jsa07fs3E7esE66HzralRLgJKp0/BD6fJRSxvmDsb6joqkcFXGqMVVFFEHDL2gTxwCAaTabnkFUWhDCHTd9iYrGcAL1ZnqIp5Vpiqh7bCfua7FA4qN0INMcN1+cgCzj+UFxtbmvwdZvGIrI41JiqhZBWhhF8WxorkYPpQwJiWYJeA3rXE4hzcwJ+B96F9zCFHC0FcVegghvFul7oeEE8PvHeJqC0w0AUbbFIT8JnEwGbPKcS2OxU3HMTqD0r4wgEIuiKJ7i4MS16+og8/+bPZRPLa+6Ld2DSzcAAAAASUVORK5CYII=',
-    // Paddle引擎插件格式
-    options: {
-        cls: false,
-        language: "models/config_chinese.txt",
-        limit_side_len: 960
-    }
-    // Rapid引擎插件格式
-    // options: {
-    //     angle: false,
-    //     language: "简体中文(V4)",
-    //     maxSideLen: 1024
+    // 可选参数
+    // Paddle引擎模式
+    // "options": {
+    //     "ocr.language": "models/config_chinese.txt",
+    //     "ocr.cls": false,
+    //     "ocr.limit_side_len": 960,
+    //     "tbpu.merge": "MergeLine",
+    // }
+    // Rapid引擎模式
+    // "options": {
+    //     "ocr.language": "简体中文",
+    //     "ocr.angle": false,
+    //     "ocr.maxSideLen": 1024,
+    //     "tbpu.merge": "MergeLine",
     // }
 };
 
@@ -165,18 +219,21 @@ import json
 url = "http://127.0.0.1:1224/api/ocr"
 data = {
     "base64": "iVBORw0KGgoAAAANSUhEUgAAAC4AAAAXCAIAAAD7ruoFAAAACXBIWXMAABnWAAAZ1gEY0crtAAAAEXRFWHRTb2Z0d2FyZQBTbmlwYXN0ZV0Xzt0AAAHjSURBVEiJ7ZYrcsMwEEBXnR7FLuj0BPIJHJOi0DAZ2qSsMCxEgjYrDQqJdALrBJ2ASndRgeNI8ledutOCLrLl1e7T/mRkjIG/IXe/DWBldRTNEoQSpgNURe5puiiaJehrMuJSXSTgbaby0A1WzLrCCQCmyn0FwoN0V06QONWAt1nUxfnjHYA8p65GjhDKxcjedVH6JOejBPwYh21eE0Wzfe0tqIsEkGXcVcpoMH4CRZ+P0lsQp/pWJ4ripf1XFDFe8GHSHlYcSo9Es31t60RdFlN1RUmrma5oTzTVB8ZUaeeYEC9GmL6kNkDw9BANAQYo3xTNdqUkvHq+rYhDKW0Bj3RSEIpmyWyBaZaMTCrCK+tJ5Jsa07fs3E7esE66HzralRLgJKp0/BD6fJRSxvmDsb6joqkcFXGqMVVFFEHDL2gTxwCAaTabnkFUWhDCHTd9iYrGcAL1ZnqIp5Vpiqh7bCfua7FA4qN0INMcN1+cgCzj+UFxtbmvwdZvGIrI41JiqhZBWhhF8WxorkYPpQwJiWYJeA3rXE4hzcwJ+B96F9zCFHC0FcVegghvFul7oeEE8PvHeJqC0w0AUbbFIT8JnEwGbPKcS2OxU3HMTqD0r4wgEIuiKJ7i4MS16+og8/+bPZRPLa+6Ld2DSzcAAAAASUVORK5CYII=",
-    # Paddle引擎插件格式
-    "options": {
-        "cls": False,
-        "language": "models/config_chinese.txt",
-        "limit_side_len": 960,
-    },
-    # Rapid引擎插件格式
+    # 可选参数
+    # Paddle引擎模式
     # "options": {
-    #     "angle": False,
-    #     "language": "简体中文(V4)",
-    #     "maxSideLen": 1024,
-    # },
+    #     "ocr.language": "models/config_chinese.txt",
+    #     "ocr.cls": False,
+    #     "ocr.limit_side_len": 960,
+    #     "tbpu.merge": "MergeLine",
+    # }
+    # Rapid引擎模式
+    # "options": {
+    #     "ocr.language": "简体中文",
+    #     "ocr.angle": False,
+    #     "ocr.maxSideLen": 1024,
+    #     "tbpu.merge": "MergeLine",
+    # }
 }
 headers = {"Content-Type": "application/json"}
 data_str = json.dumps(data)
@@ -198,6 +255,19 @@ URL：`/api/ocr/get_options`
 http://127.0.0.1:1224/api/ocr/get_options
 ```
 
+JavaScript 示例：
+
+```javascript
+const url = "http://127.0.0.1:1224/api/ocr/get_options";
+fetch(url, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+    })
+    .then(response => response.json())
+    .then(data => { console.log(data); })
+    .catch(error => { console.error(error); });
+```
+
 #### 请求
 
 方法：`GET`
@@ -216,42 +286,57 @@ http://127.0.0.1:1224/api/ocr/get_options
 
 ```
 {
-    "title": "文字识别（PaddleOCR）",
-    "type": "group",
-    "language": {
-        "title": "语言/模型库",
-        "optionsList": [
-            ["models/config_chinese.txt","简体中文"],
-            ["models/config_en.txt","English"],
-            ["models/config_chinese_cht(v2).txt","繁體中文(V2)"],
-            ["models/config_chinese_cht.txt","繁體中文(V3)"],
-            ["models/config_japan.txt","日本語"],
-            ["models/config_korean.txt","한국어"],
-            ["models/config_cyrillic.txt","Русский"]
-        ]
-    },
-    "cls": {
-        "title": "纠正文本方向",
-        "default": false,
-        "toolTip": "启用方向分类，识别倾斜或倒置的文本。可能降低识别速度。"
-    },
-    "limit_side_len": {
-        "title": "限制图像边长",
-        "optionsList": [
-            [960,"960 （默认）"],
-            [2880,"2880"],
-            [4320,"4320"],
-            [999999,"无限制"]
-        ],
-        "toolTip": "将边长大于该值的图片进行压缩，可以提高识别速度。可能降低识别精度。",
-        "advanced": true
-    }
+  "ocr.language": {
+    "title": "语言/模型库",
+    "optionsList": [
+      ["models/config_chinese.txt","简体中文"],
+      ["models/config_en.txt","English"],
+      ["models/config_chinese_cht(v2).txt","繁體中文"],
+      ["models/config_japan.txt","日本語"],
+      ["models/config_korean.txt","한국어"],
+      ["models/config_cyrillic.txt","Русский"]
+    ],
+    "type": "enum",
+    "default": "models/config_chinese.txt"
+  },
+  "ocr.cls": {
+    "title": "纠正文本方向",
+    "default": false,
+    "toolTip": "启用方向分类，识别倾斜或倒置的文本。可能降低识别速度。",
+    "type": "boolean"
+  },
+  "ocr.limit_side_len": {
+    "title": "限制图像边长",
+    "optionsList": [
+      [ 960, "960 （默认）" ],
+      [ 2880, "2880" ],
+      [ 4320, "4320" ],
+      [ 999999, "无限制" ]
+    ],
+    "toolTip": "将边长大于该值的图片进行压缩，可以提高识别速度。可能降低识别精度。",
+    "type": "enum",
+    "default": 960
+  },
+  "tbpu.merge": {
+    "title": "段落合并",
+    "default": "MergeLine",
+    "optionsList": [
+      [ "MergeLine", "单行" ],
+      [ "MergePara", "多行-自然段" ],
+      [ "MergeParaCode", "多行-代码段" ],
+      [ "MergeLineVrl", "竖排-从右到左" ],
+      [ "MergeLineVlr", "竖排-从左到右" ],
+      [ "None", "不做处理" ]
+    ]
+  }
 }
 ```
 
-可以看到，当前引擎插件的名称为`文字识别（PaddleOCR）`，拥有3个配置参数：`language`、`cls`、`limit_side_len`。  
-其中`cls`是布尔值，`language`和`limit_side_len`是枚举。它们对应到UI面板中的开关和下拉栏。  
-对于枚举的`optionsList`，元素的第1位是key，第2位是显示文本。当使用HTTP接口时，应该传入key值。
+可以看到，当前引擎插件的名称为`文字识别（PaddleOCR）`，拥有4个配置参数：`ocr.language`、`ocr.cls`、`ocr.limit_side_len`、`tbpu.merge`。  
+
+其中`ocr.cls`是布尔值，对应到UI面板中的开关。
+
+`ocr.language`、`ocr.limit_side_len`、`tbpu.merge`是枚举，对应下拉栏UI。`optionsList`的元素的第0位是key，第1位是显示文本。当使用HTTP接口时，应该传入key值。
 
 
 ### 命令行 接口
