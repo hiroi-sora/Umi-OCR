@@ -16,7 +16,7 @@ def _get_ocr_options():
     for key in ocr_opts:
         opts[f"ocr.{key}"] = ocr_opts[key]
     # 段落合并的参数
-    opts[f"tbpu.{key}"] = {
+    opts[f"tbpu.merge"] = {
         "title": "段落合并",
         "default": "MergeLine",
         "optionsList": [
@@ -84,7 +84,7 @@ def init(UmiWeb):
         for key in default:
             print("key: ", key)
             if key not in opt:
-                opt[key] = default[key]
+                opt[key] = default[key]["default"]
         msnInfo = {"onGet": onGet, "onEnd": onEnd, "argd": opt}
         MissionOCR.addMissionList(msnInfo, msnList)
         with condition:
