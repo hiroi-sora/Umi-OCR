@@ -74,7 +74,9 @@ def init(UmiWeb):
         if "base64" not in data:
             return json.dumps({"code": 802, "data": f"请求中缺少 base64 字段。"})
         if "options" not in data:
-            return json.dumps({"code": 803, "data": f"请求中缺少 options 字段。"})
+            data["options"] = {}
+        elif not type(data["options"]) is dict:
+            return json.dumps({"code": 803, "data": f"请求中 options 字段必须为字典。"})
         msnList = [{"base64": data["base64"]}]
         # 补充缺失的默认参数
         opt = data["options"]
@@ -98,7 +100,7 @@ const data = {
     "base64": "iVBORw0KGgoAAAANSUhEUgAAAC4AAAAXCAIAAAD7ruoFAAAACXBIWXMAABnWAAAZ1gEY0crtAAAAEXRFWHRTb2Z0d2FyZQBTbmlwYXN0ZV0Xzt0AAAHjSURBVEiJ7ZYrcsMwEEBXnR7FLuj0BPIJHJOi0DAZ2qSsMCxEgjYrDQqJdALrBJ2ASndRgeNI8ledutOCLrLl1e7T/mRkjIG/IXe/DWBldRTNEoQSpgNURe5puiiaJehrMuJSXSTgbaby0A1WzLrCCQCmyn0FwoN0V06QONWAt1nUxfnjHYA8p65GjhDKxcjedVH6JOejBPwYh21eE0Wzfe0tqIsEkGXcVcpoMH4CRZ+P0lsQp/pWJ4ripf1XFDFe8GHSHlYcSo9Es31t60RdFlN1RUmrma5oTzTVB8ZUaeeYEC9GmL6kNkDw9BANAQYo3xTNdqUkvHq+rYhDKW0Bj3RSEIpmyWyBaZaMTCrCK+tJ5Jsa07fs3E7esE66HzralRLgJKp0/BD6fJRSxvmDsb6joqkcFXGqMVVFFEHDL2gTxwCAaTabnkFUWhDCHTd9iYrGcAL1ZnqIp5Vpiqh7bCfua7FA4qN0INMcN1+cgCzj+UFxtbmvwdZvGIrI41JiqhZBWhhF8WxorkYPpQwJiWYJeA3rXE4hzcwJ+B96F9zCFHC0FcVegghvFul7oeEE8PvHeJqC0w0AUbbFIT8JnEwGbPKcS2OxU3HMTqD0r4wgEIuiKJ7i4MS16+og8/+bPZRPLa+6Ld2DSzcAAAAASUVORK5CYII=",
     "options": {
         "ocr.angle": false,
-        "ocr.language": "简体中文(V4)",
+        "ocr.language": "简体中文",
         "ocr.maxSideLen": 1024,
         "tbpu.merge": "MergeLine",
     }
