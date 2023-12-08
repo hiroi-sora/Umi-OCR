@@ -338,42 +338,42 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1084"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1085"/>
         <source>已取消%1的快捷键。</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1094"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1095"/>
         <source>更新热键成功</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1094"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1095"/>
         <source>%1的快捷键为 %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1102"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1103"/>
         <source>%1 快捷键%2已被注册，请尝试另外的按键组合。</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1105"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1106"/>
         <source>%1 快捷键%2无法注册，请尝试另外的按键组合。</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1114"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1115"/>
         <source>请按下快捷键组合。按【Esc】退出。</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1127"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1128"/>
         <source>当前快捷键录制已在进行，不能同时录制！</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1129"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1130"/>
         <source>无法录制快捷键</source>
         <translation type="unfinished"></translation>
     </message>
@@ -527,214 +527,222 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="114"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="113"/>
         <source>禁用美化效果</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="116"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="115"/>
         <source>在低配置机器上，禁用动画、阴影等效果可减少部分资源占用</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="125"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="124"/>
         <source>窗口</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="129"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="128"/>
         <source>启动时缩小到任务栏</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="131"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="130"/>
         <source>软件启动时，不弹出主窗口</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="134"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="133"/>
         <source>窗口置顶</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="136"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="135"/>
         <source>捷径：窗口左上角图钉</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="142"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="141"/>
         <source>锁定标签栏</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="144"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="143"/>
         <source>捷径：窗口右上角小锁</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="150"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="149"/>
         <source>关闭主窗口时</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="152"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="151"/>
         <source>最小化到系统托盘</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="153"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="152"/>
         <source>退出应用</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="165"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="168"/>
         <source>截图</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="169"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="172"/>
         <source>截图前隐藏主窗口</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="170"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="173"/>
         <source>截图前，如果主窗口处于前台，则隐藏主窗口
 将会延时等待主窗口关闭</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="174"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="177"/>
         <source>隐藏等待时间</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="177"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="180"/>
         <source>秒</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="185"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="188"/>
         <source>服务</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="190"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="193"/>
         <source>允许HTTP服务</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="191"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="194"/>
         <source>Umi-OCR依赖HTTP接口进行本机跨进程通信。如果禁用，将无法使用命令行模式、多开检测等功能。</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="194"/>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="206"/>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="393"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="197"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="209"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="396"/>
         <source>重启软件后生效</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="198"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="201"/>
         <source>主机</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="200"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="203"/>
         <source>仅本地</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="201"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="204"/>
         <source>任何可用地址</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="205"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="208"/>
         <source>将允许局域网访问。请开启对应防火墙权限！</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="205"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="208"/>
         <source>将禁止局域网访问。</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="211"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="214"/>
         <source>端口</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="288"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="291"/>
         <source>请尝试更换软件路径！</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="289"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="292"/>
         <source>配置文件读写异常</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="305"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="308"/>
         <source>插件加载失败</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="320"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="323"/>
         <source>成功添加快捷方式</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="323"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="326"/>
         <source>添加快捷方式失败</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="330"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="333"/>
         <source>成功移除 %1 个快捷方式</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="333"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="336"/>
         <source>提示</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="333"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="336"/>
         <source>没有找到可移除的快捷方式。</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="341"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="344"/>
         <source>立刻关闭软件</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="341"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="344"/>
         <source>稍后</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="381"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="384"/>
         <source>渲染器变更 将在重启软件后生效</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="388"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="391"/>
         <source>端口号不合法</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="393"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="396"/>
         <source>端口号改为%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="402"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="405"/>
         <source>原端口号%1被占用，
 切换为新端口号%2。
 
 若不想看到此通知，请在全局设置关闭高级模式。</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>GlobalConfigsPage</name>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/TabPages/GlobalConfigsPage/GlobalConfigsPage.qml" line="20"/>
+        <source>截图快捷键、识别语言等选项，请在各个功能页中进行设置。</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -911,8 +919,18 @@
 <context>
     <name>MessageBoxWin</name>
     <message>
-        <location filename="../../UmiOCR-data/qt_res/qml/Popup_/MessageBoxWin.qml" line="100"/>
+        <location filename="../../UmiOCR-data/qt_res/qml/Popup_/MessageBoxWin.qml" line="113"/>
         <source>确定</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/Popup_/MessageBoxWin.qml" line="149"/>
+        <source>不再提示</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UmiOCR-data/qt_res/qml/Popup_/MessageBoxWin.qml" line="150"/>
+        <source>知道了</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
