@@ -24,8 +24,8 @@ git clone --single-branch --branch [分支名] https://github.com/hiroi-sora/Umi
 
 分支名：`main`
 
-- 更新：重新设计 HTTP OCR 接口的参数。
-- 更新：命令行增加指令`-->`，将结果输出到文件。
+- 更新：重新设计了OCR HTTP接口，允许省略参数，允许指定段落合并。
+- 更新：命令行增加指令`-->`和`-->>`，将结果输出到文件。
 - 优化：调整图像数据的内部编码，减少英文空格丢失的几率。
 - 优化：调整部分UI文本和布局。
 - 优化：csv默认保存为ansi编码，以兼容Office Excel。 (#237)
