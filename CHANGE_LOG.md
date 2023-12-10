@@ -22,7 +22,7 @@ git clone --single-branch --branch [分支名] https://github.com/hiroi-sora/Umi
 
 ##### v2.0.1 `2023.12.8`
 
-分支名：`main`
+分支名：`release/2.0.1`
 
 - 更新：重新设计了OCR HTTP接口，允许省略参数，允许指定段落合并。
 - 更新：命令行增加指令`-->`和`-->>`，将结果输出到文件。
