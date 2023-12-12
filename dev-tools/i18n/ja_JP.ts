@@ -1160,7 +1160,8 @@
     </message>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/PreviewPanel.qml" line="90"/>
-        <source>在图片上叠加显示识别文字</source>
+        <source>在图片上叠加显示识别文字
+可在全局设置中设为默认关闭</source>
         <translation type="unfinished">認識結果を画像に重ねて表示する</translation>
     </message>
     <message>
@@ -1694,7 +1695,8 @@
     </message>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="326"/>
-        <source>在图片上叠加显示识别文字</source>
+        <source>在图片上叠加显示识别文字
+可在全局设置中设为默认关闭</source>
         <translation type="unfinished">認識テキストを画像にオーバーレイ表示します</translation>
     </message>
     <message>

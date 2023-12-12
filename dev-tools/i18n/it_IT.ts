@@ -1113,7 +1113,8 @@
     </message>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/PreviewPanel.qml" line="90"/>
-        <source>在图片上叠加显示识别文字</source>
+        <source>在图片上叠加显示识别文字
+可在全局设置中设为默认关闭</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1639,7 +1640,8 @@
     </message>
     <message>
         <location filename="../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="326"/>
-        <source>在图片上叠加显示识别文字</source>
+        <source>在图片上叠加显示识别文字
+可在全局设置中设为默认关闭</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
