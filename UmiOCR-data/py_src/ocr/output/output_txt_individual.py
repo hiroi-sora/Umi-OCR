@@ -5,6 +5,11 @@ from .output import Output
 
 
 class OutputTxtIndividual(Output):
+    def __init__(self, argd):
+        super().__init__(argd)
+        # 是否输出到原目录
+        self.outputSource = argd["outputDirType"] == "source"
+
     def openOutputFile(self):
         pass  # 覆盖父类方法
 
@@ -19,7 +24,12 @@ class OutputTxtIndividual(Output):
             pass
         else:
             textOut += f'[Error] OCR failed. Code: {res["code"]}, Msg: {res["data"]}\n【异常】OCR识别失败。\n'
-        path, extension = os.path.splitext(res["path"])  # 截取不含后缀的内容
-        path = path + ".txt"  # 同名路径+txt
+        # 输出文件
+        if self.outputSource:  # 输出到原始路径
+            p, _ = os.path.splitext(res["path"])  # 原路径去除扩展名
+            path = p + ".txt"
+        else:  # 输出到指定路径
+            f, _ = os.path.splitext(res["fileName"])  # 原文件名去除扩展名
+            path = f"{self.dir}/{f}.txt"
         with open(path, "w", encoding="utf-8") as f:  # 追加写入同名本地文件
             f.write(textOut)

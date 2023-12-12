@@ -102,6 +102,7 @@ class BatchOCR(Page):
         outputArgd = {  # 数据转换，封装有需要的值
             "outputDir": argd["mission.dir"],  # 输出路径
             "outputDirName": argd["mission.dirName"],  # 输出文件夹名称
+            "outputDirType": argd["mission.dirType"],  # 输出目录类型，"source" 为原文件目录
             "outputFileName": argd["mission.fileName"],  # 输出文件名（前缀）
             "startDatetime": argd["startDatetime"],  # 开始日期
             "ingoreBlank": argd["mission.ingoreBlank"],  # 忽略空白文件
