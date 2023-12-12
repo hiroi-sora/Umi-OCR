@@ -43,8 +43,9 @@ Item {
     }
     // 将光标移到指定位置并激活焦点。
     function focus(pos=-1) {
-        if(pos && pos >= 0)
+        if(pos >= 0) {
             textMain_.cursorPosition = pos
+        }
         textMain_.forceActiveFocus() // 获取焦点
     }
     function toUpdateSelect() {
