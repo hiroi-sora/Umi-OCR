@@ -117,6 +117,11 @@ Configs {
                     qmlapp.enabledEffect = !flag
                 },
             },
+            "imgShowOverlay": {
+                "title": qsTr("图片预览默认显示叠加层"),
+                "default": true,
+                "toolTip": qsTr("默认开启/关闭叠加层显示\n对所有图片预览组件生效"),
+            }
         },
 
         // 窗口

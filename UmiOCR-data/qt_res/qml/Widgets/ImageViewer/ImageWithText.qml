@@ -10,6 +10,11 @@ ImageScale {
     id: iRoot
     property bool showOverlay: true // 显示叠加层
 
+    Component.onCompleted: {
+        // 默认显示/关闭叠加层
+        showOverlay = qmlapp.globalConfigs.getValue("ui.imgShowOverlay")
+    }
+
     beforeShow: () => {
         mouseArea.initIndex() // 清空选字参数
         textBoxes = [] // 清空旧文本块

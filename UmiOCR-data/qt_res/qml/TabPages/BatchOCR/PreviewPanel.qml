@@ -87,7 +87,7 @@ Rectangle {
                             anchors.top: parent.top
                             anchors.bottom: parent.bottom
                             text_: qsTr("文字")
-                            toolTip: qsTr("在图片上叠加显示识别文字")
+                            toolTip: qsTr("在图片上叠加显示识别文字\n可在全局设置中设为默认关闭")
                             checked: imageText.showOverlay
                             enabledAnime: true
                             onCheckedChanged: imageText.showOverlay = checked
