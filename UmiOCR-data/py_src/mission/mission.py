@@ -32,6 +32,8 @@ class Mission:
     """
 
     # 【异步】添加一条任务队列。成功返回任务ID，失败返回 startswith("[Error]")
+    # msnInfo: { 回调函数 "onStart", "onReady", "onGet", "onEnd"}
+    # msnList: [ 任务1, 任务2 ]
     def addMissionList(self, msnInfo, msnList):
         if len(msnList) < 1:
             return "[Error] no valid mission in msnList!"

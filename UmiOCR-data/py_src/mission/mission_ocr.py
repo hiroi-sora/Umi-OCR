@@ -27,6 +27,8 @@ class __MissionOcrClass(Mission):
 
     # ========================= 【重载】 =========================
 
+    # msnInfo: { 回调函数"onXX", 参数"argd":{"tbpu.xx", "ocr.xx"} }   }
+    # msnList: [ { "path", "bytes", "base64" } ]
     def addMissionList(self, msnInfo, msnList):  # 添加任务列表
         # 实例化 tbpu 文本后处理模块
         msnInfo["tbpu"] = []
