@@ -167,18 +167,7 @@ class BatchOCR(Page):
         self.callQmlInMain("onOcrReady", msn["path"])
 
     def __onGet(self, msnInfo, msn, res):  # 单个任务完成
-        # 计算平均置信度
-        score = 0
-        num = 0
-        if res["code"] == 100:
-            for r in res["data"]:
-                score += r["score"]
-                num += 1
-            if num > 0:
-                score /= num
         # 补充参数
-        res["score"] = score
-        res["path"] = msn["path"]
         res["fileName"] = os.path.basename(msn["path"])
         res["dir"] = os.path.dirname(msn["path"])
         # 输出器输出

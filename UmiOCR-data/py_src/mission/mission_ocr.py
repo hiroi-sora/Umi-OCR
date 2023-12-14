@@ -16,6 +16,7 @@ from ..utils.utils import isImg
 
 from PIL import Image
 from io import BytesIO
+import os
 
 
 class __MissionOcrClass(Mission):
@@ -70,6 +71,7 @@ class __MissionOcrClass(Mission):
     def msnTask(self, msnInfo, msn):  # 执行msn
         if "path" in msn:
             res = self.__api.runPath(msn["path"])
+            res["path"] = msn["path"]  # 结果字典中补充参数
         elif "bytes" in msn:
             res = self.__api.runBytes(msn["bytes"])
         elif "base64" in msn:
@@ -79,8 +81,17 @@ class __MissionOcrClass(Mission):
                 "code": 901,
                 "data": f"[Error] Unknown task type.\n【异常】未知的任务类型。\n{str(msn)[:100]}",
             }
-        # 执行 tbpu
+        # 任务成功时的后处理
         if res["code"] == 100:
+            # 计算平均置信度
+            score, num = 0, 0
+            for r in res["data"]:
+                score += r["score"]
+                num += 1
+            if num > 0:
+                score /= num
+            res["score"] = score
+            # 执行 tbpu
             if msnInfo["tbpu"]:
                 imgInfo = {"w": 0, "h": 0}
                 if "path" in msn:
