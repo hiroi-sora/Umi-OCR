@@ -30,7 +30,8 @@ class Mission:
     MissionOCR.addMissionList(mission, paths)
     """
 
-    def addMissionList(self, msnInfo, msnList):  # 添加一条任务队列，返回任务ID
+    # 【异步】添加一条任务队列，返回任务ID
+    def addMissionList(self, msnInfo, msnList):
         if len(msnList) < 1:
             print("[Error] len(msnList) < 1 !")
             return
@@ -55,25 +56,39 @@ class Mission:
         # 返回任务id
         return msnID
 
-    def stopMissionList(self, msnID):  # 停止一条任务队列
+    # 停止一条任务队列
+    def stopMissionList(self, msnID):
         self.__msnMutex.lock()  # 上锁
         if msnID in self.__msnListDict:
             self.__msnInfoDict[msnID]["state"] = "stop"  # 设为停止状态
         self.__msnMutex.unlock()  # 解锁
 
-    def stopAllMissions(self):  # 停止全部任务
+    # 停止全部任务
+    def stopAllMissions(self):
         self.__msnMutex.lock()  # 上锁
         for msnID in self.__msnListDict:
             self.__msnInfoDict[msnID]["state"] = "stop"
         self.__msnMutex.unlock()  # 解锁
 
-    def getMissionListsLength(self):  # 获取每一条任务队列长度
+    # 获取每一条任务队列长度
+    def getMissionListsLength(self):
         lenDict = {}
         self.__msnMutex.lock()
         for k in self.__msnListDict:
             lenDict[str(k)] = len(self.__msnListDict[k])
         self.__msnMutex.unlock()
         return lenDict
+
+    # 【同步】添加一个任务或队列，等待完成，返回任务结果
+    def addMissionWait(self, argd, msnList):
+        def _onGet(msnInfo, msn, res):
+            pass
+
+        def _onEnd(msnInfo, msg):
+            pass
+
+        msnInfo = {"onGet": _onGet, "onEnd": _onEnd, "argd": argd}
+        self.addMissionList(msnInfo, msnList)
 
     # ========================= 【主线程 方法】 =========================
 
