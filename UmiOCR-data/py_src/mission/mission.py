@@ -4,6 +4,7 @@
 
 
 from PySide2.QtCore import QMutex, QThreadPool, QRunnable
+from threading import Condition
 from uuid import uuid4  # 唯一ID
 import time
 
@@ -79,16 +80,36 @@ class Mission:
         self.__msnMutex.unlock()
         return lenDict
 
-    # 【同步】添加一个任务或队列，等待完成，返回任务结果
+    # 【同步】添加一个任务或队列，等待完成，返回任务结果列表。[i]["result"]为结果
     def addMissionWait(self, argd, msnList):
+        if not type(msnList) is list:
+            msnList = [msnList]
+        resList = msnList[:]  # 浅拷贝出一条结果列表
+        nowIndex = 0  # 当前处理的任务
+        msnLen = len(msnList)
+        condition = Condition()  # 线程同步器
+        endMsg = ""  # 任务结束的消息
+
         def _onGet(msnInfo, msn, res):
-            pass
+            nonlocal nowIndex
+            resList[nowIndex]["result"] = res
+            nowIndex += 1
 
         def _onEnd(msnInfo, msg):
-            pass
+            nonlocal endMsg
+            endMsg = msg
+            with condition:  # 释放线程阻塞
+                condition.notify()
 
         msnInfo = {"onGet": _onGet, "onEnd": _onEnd, "argd": argd}
         self.addMissionList(msnInfo, msnList)
+        with condition:  # 线程阻塞
+            condition.wait()
+        # 补充未完成的任务
+        for i in range(nowIndex, msnLen):
+            if "result" not in msnList[i]:
+                resList[i]["result"] = {"code": 803, "data": f"任务提前结束。{endMsg}"}
+        return resList
 
     # ========================= 【主线程 方法】 =========================
 
