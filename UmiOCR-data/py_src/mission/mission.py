@@ -215,7 +215,8 @@ class Mission:
         "continue" ：跳过本次任务
         "[Error] xxxx" ：终止这条任务队列，返回异常信息
         """
-        return "[Error] No overloaded msnPreTask. \n【异常】未重载msnPreTask。"
+        # return "[Error] No overloaded msnPreTask. \n【异常】未重载msnPreTask。"
+        return ""
 
     def msnTask(self, msnInfo, msn):  # 执行任务msn，返回结果字典。
         print("mission 父类 msnTask")
