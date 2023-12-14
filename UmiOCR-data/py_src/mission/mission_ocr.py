@@ -44,7 +44,12 @@ class __MissionOcrClass(Mission):
                 msnInfo["tbpu"].append(IgnoreArea(iArea))
         # 检查任务合法性
         for i in range(len(msnList) - 1, -1, -1):
-            if "path" in msnList[i] and not isImg(msnList[i]["path"]):
+            if "path" in msnList[i]:
+                if not isImg(msnList[i]["path"]):
+                    print(f"[Warning] 任务{i}的path不存在")
+                    del msnList[i]
+            elif "bytes" not in msnList[i] and "base64" not in msnList[i]:
+                print(f"[Warning] 任务{i}不含 path、bytes、base64")
                 del msnList[i]
         return super().addMissionList(msnInfo, msnList)
 
