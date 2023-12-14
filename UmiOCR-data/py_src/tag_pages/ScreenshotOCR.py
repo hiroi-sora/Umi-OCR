@@ -65,11 +65,11 @@ class ScreenshotOCR(Page):
             "argd": configDict,
         }
         msnID = MissionOCR.addMissionList(msnInfo, msnList)
-        if msnID or not msnID.startswith("[Error]"):  # 添加成功
+        if msnID.startswith("[Error]"):  # 添加任务失败
+            self.__onEnd(None, f"{self.msnID}\n添加任务失败。")
+        else:  # 添加成功
             self.msnDict[msnID] = None
             self.callQml("setMsnState", "run")
-        else:  # 添加任务失败
-            self.__onEnd(None, "[Error] Failed to add task.\n【错误】添加任务失败。")
 
     def __onStart(self, msnInfo):  # 任务队列开始
         pass

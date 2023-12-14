@@ -47,11 +47,11 @@ class BatchOCR(Page):
         # 路径转为任务列表格式，加载进任务管理器
         msnList = [{"path": x} for x in paths]
         self.msnID = MissionOCR.addMissionList(msnInfo, msnList)
-        if self.msnID:  # 添加成功，通知前端刷新UI
+        if self.msnID.startswith("[Error]"):  # 添加任务失败
+            self.__onEnd(None, f"{self.msnID}\n添加任务失败。")
+        else:  # 添加成功，通知前端刷新UI
             self.callQml("setMsnState", "run")
             print(f"添加任务成功 {self.msnID}")
-        else:  # 添加任务失败
-            self.__onEnd(None, "[Error] Failed to add task.\n【错误】添加任务失败。")
         return self.msnID
 
     def __preprocessArgd(self, argd, path0):  # 预处理参数字典，无异常返回True

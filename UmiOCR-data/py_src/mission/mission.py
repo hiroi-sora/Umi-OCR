@@ -31,11 +31,10 @@ class Mission:
     MissionOCR.addMissionList(mission, paths)
     """
 
-    # 【异步】添加一条任务队列，返回任务ID
+    # 【异步】添加一条任务队列。成功返回任务ID，失败返回 startswith("[Error]")
     def addMissionList(self, msnInfo, msnList):
         if len(msnList) < 1:
-            print("[Error] len(msnList) < 1 !")
-            return
+            return "[Error] no valid mission in msnList!"
         msnID = str(uuid4())
         # 检查并补充回调函数
         # 队列开始，单个任务准备开始，单任务取得结果，队列结束
@@ -102,12 +101,15 @@ class Mission:
                 condition.notify()
 
         msnInfo = {"onGet": _onGet, "onEnd": _onEnd, "argd": argd}
-        self.addMissionList(msnInfo, msnList)
-        with condition:  # 线程阻塞
-            condition.wait()
+        msnID = self.addMissionList(msnInfo, msnList)
+        if msnID.startswith("[Error]"):  # 添加任务失败
+            endMsg = msnID
+        else:  # 添加成功，线程阻塞，直到任务完成。
+            with condition:
+                condition.wait()
         # 补充未完成的任务
         for i in range(nowIndex, msnLen):
-            if "result" not in msnList[i]:
+            if "result" not in resList[i]:
                 resList[i]["result"] = {"code": 803, "data": f"任务提前结束。{endMsg}"}
         return resList
 
