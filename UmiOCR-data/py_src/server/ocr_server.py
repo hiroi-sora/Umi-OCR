@@ -1,6 +1,4 @@
 import json
-import time
-import threading
 
 from .bottle import request
 from ..mission.mission_ocr import MissionOCR
@@ -48,22 +46,6 @@ def init(UmiWeb):
 
     @UmiWeb.route("/api/ocr", method="POST")
     def _ocr():
-        condition = threading.Condition()
-        ocrData = None
-
-        def onGet(msnInfo, msn, res):
-            nonlocal ocrData
-            ocrData = res
-            with condition:
-                condition.notify()
-
-        def onEnd(msnInfo, msg):
-            nonlocal ocrData
-            if not ocrData:
-                ocrData = {"code": 803, "data": f"未知原因，未获取OCR返回值。{msg}"}
-            with condition:
-                condition.notify()
-
         try:
             data = request.json
         except Exception as e:
@@ -76,7 +58,6 @@ def init(UmiWeb):
             data["options"] = {}
         elif not type(data["options"]) is dict:
             return json.dumps({"code": 803, "data": f"请求中 options 字段必须为字典。"})
-        msnList = [{"base64": data["base64"]}]
         # 补充缺失的默认参数
         try:
             opt = data["options"]
@@ -84,13 +65,12 @@ def init(UmiWeb):
             for key in default:
                 if key not in opt:
                     opt[key] = default[key]["default"]
-            msnInfo = {"onGet": onGet, "onEnd": onEnd, "argd": opt}
         except Exception as e:
             return json.dumps({"code": 804, "data": f"options 解释失败。 {e}"})
-        MissionOCR.addMissionList(msnInfo, msnList)
-        with condition:
-            condition.wait()
-        res = json.dumps(ocrData)
+        # 同步执行
+        resList = MissionOCR.addMissionWait(opt, {"base64": data["base64"]})
+        res = resList[0]["result"]
+        res = json.dumps(res)
         return res
 
 
