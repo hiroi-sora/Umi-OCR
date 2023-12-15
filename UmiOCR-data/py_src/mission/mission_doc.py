@@ -1,5 +1,5 @@
 # ===============================================
-# =============== PDF - 任务管理器 ===============
+# =============== 文档 - 任务管理器 ===============
 # ===============================================
 
 from .mission import Mission
@@ -8,7 +8,7 @@ from .mission_ocr import MissionOCR
 import fitz  # PyMuPDF
 
 
-class __MissionPdfClass(Mission):
+class _MissionDocClass(Mission):
     # msnInfo: { 回调函数"onXX", 参数"argd":{"tbpu.xx", "ocr.xx"} }
     # msnFile: { 可选 "path", "bytes", "base64" }
     # pageRange 可选：
@@ -43,5 +43,5 @@ class __MissionPdfClass(Mission):
         return None
 
 
-# 全局 PDF 任务管理器
-MissionPDF = __MissionPdfClass()
+# 全局 DOC 任务管理器
+MissionDOC = _MissionDocClass()

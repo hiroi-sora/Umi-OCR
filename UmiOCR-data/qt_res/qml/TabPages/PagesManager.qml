@@ -31,6 +31,12 @@ Item {
             intro: qsTr("# 批量OCR\n\n　  \n\n导入本地图片或文件夹，批量转换文字。")
         },
         {
+            key: "BatchDOC",
+            needController: true,
+            title: "开发中",
+            intro: qsTr("# 批量文档识别\n\n　  \n\n支持格式：pdf xps epub mobi fb2 cbz\n\n批量导入文档，提取文字。")
+        },
+        {
             key: "QRcode",
             needController: true,
             title: qsTr("二维码"),
