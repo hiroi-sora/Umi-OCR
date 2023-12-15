@@ -15,7 +15,6 @@ TabPage {
 
     // ========================= 【逻辑】 =========================
 
-    // 文件表格模型
     property string msnState: "" // OCR任务状态， none init run stop
     property var missionInfo: {} // 当前任务信息，耗时等
     property string missionShow: "" // 当前任务信息展示字符串
@@ -255,7 +254,7 @@ TabPage {
         return parts[parts.length - 1]
     }
     // 文件表格中单击路径
-    property var onClickPath: (index)=>{
+    function onClickPath(index) {
         let info = filesTableView.get(index)
         let fileName = path2name(info.path)
         let res = resultsTableView.getResult(fileName)
