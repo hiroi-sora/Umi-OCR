@@ -359,7 +359,7 @@ TabPage {
             }
 
             // 下方文件表格
-            FilesTableView_ {
+            FilesTableView {
                 id: filesTableView
                 anchors.top: ctrlPanel.bottom
                 anchors.left: parent.left
