@@ -16,8 +16,6 @@ TabPage {
     // ========================= 【逻辑】 =========================
 
     // 文件表格模型
-    property alias filesModel: filesTableView.filesModel
-    property alias filesDict: filesTableView.filesDict
     property string msnState: "" // OCR任务状态， none init run stop
     property var missionInfo: {} // 当前任务信息，耗时等
     property string missionShow: "" // 当前任务信息展示字符串
@@ -47,28 +45,12 @@ TabPage {
         // 调用Python方法
         const isRecurrence = configsComp.getValue("mission.recurrence")
         const res = qmlapp.utilsConnector.findImages(paths, isRecurrence)
-        if(paths.length == 0){
+        if(res.length <= 0){
             return
         }
-        // 结果写入数据
-        if(filesDict==undefined){
-            filesDict = {}
-        }
-        for(let i in res){
-            // 检查重复
-            if(filesDict.hasOwnProperty(res[i])){
-                continue
-            }
-            // 添加到字典中
-            filesDict[res[i]] = {
-                index: filesModel.rowCount
-            }
-            // 添加到表格中
-            filesModel.appendRow({
-                "filePath": res[i],
-                "time": "",
-                "state": "",
-            })
+        // 加入表格
+        for(let i in res) {
+            filesTableView.add({ path: res[i], time: "", state: "" })
         }
     }
 
@@ -86,21 +68,14 @@ TabPage {
 
     // 运行OCR
     function ocrStart() {
-        let msnLength = Object.keys(filesDict).length
+        let msnLength = filesTableView.rowCount
         if(msnLength <= 0)
             return
         setMsnState("init") // 状态：初始化任务
         // 刷新表格
-        // 更改完 filesModel 后重新为 tableView 绑定模型，强制刷新表格UI渲染，避免格子丢失的问题
-        filesTableView.tableView.model = undefined
-        for(let path in filesDict){
-            filesModel.setRow(filesDict[path].index, {
-                    "filePath": path,
-                    "time": "",
-                    "state": qsTr("排队中"),
-                })
+        for(let i = 0; i < msnLength; i++) {
+            filesTableView.set(i, { time: "", state: qsTr("排队中") })
         }
-        filesTableView.tableView.model = filesModel
         // 刷新计数
         missionInfo = {
             startTime: new Date().getTime(), // 开始时间
@@ -111,7 +86,7 @@ TabPage {
         missionProgress.percent = 0 // 进度条显示
         missionShow = `0s  0/${msnLength}  0%` // 信息显示
         // 开始运行
-        const paths = Object.keys(filesDict)
+        const paths = filesTableView.getColumnsValue("path")
         const argd = configsComp.getValueDict()
         msnID = tabPage.callPy("msnPaths", paths, argd)
         // 若tabPanel面板的下标没有变化过，则切换到记录页
@@ -129,15 +104,11 @@ TabPage {
         msnID = "" // 清除任务ID
         setMsnState("stop") // 设置结束中
         // 刷新表格，清空未执行的任务的状态
-        for(let path in filesDict){
-            const r = filesDict[path].index
-            const row = filesModel.getRow(r)
+        let msnLength = filesTableView.rowCount
+        for(let i = 0; i < msnLength; i++) {
+            const row = filesTableView.get(i)
             if(row.time === "") {
-                filesModel.setRow(filesDict[path].index, {
-                        "filePath": path,
-                        "time": "",
-                        "state": "",
-                    })
+                filesTableView.setProperty(i, "state", "")
             }
         }
         setMsnState("none") // 设置结束
@@ -146,7 +117,7 @@ TabPage {
     // 关闭页面
     function closePage() {
         if(msnState !== "none") {
-            const argd = {yesText: qsTr("依然关闭")}
+            const argd = { yesText: qsTr("依然关闭") }
             const callback = (flag)=>{
                 if(flag) {
                     ocrStop()
@@ -200,26 +171,12 @@ TabPage {
 
     // 准备开始一个任务
     function onOcrReady(path) {
-        if(!filesDict.hasOwnProperty(path)){
-            qmlapp.popup.message(qsTr("函数 onOcrReady 异常"), qsTr("qml任务队列不存在路径")+path.toString(), "error")
-            return
-        }
-        // 刷新文件表格显示
-        const r = filesDict[path].index
-        const row = filesModel.getRow(r)
-        filesModel.setRow(r, {
-            "filePath": row.filePath,
-            "time": "",
-            "state": qsTr("处理中"),
-        })
+        // 刷新表格显示
+        filesTableView.setProperty(path, "state", qsTr("处理中"))
     }
 
     // 获取一个OCR的返回值
     function onOcrGet(path, res) {
-        if(!filesDict.hasOwnProperty(path)){
-            console.error("【Error】qml队列不存在路径！", path)
-            return
-        }
         // 刷新耗时显示
         const date = new Date();
         const currentTime = date.getTime()
@@ -230,7 +187,6 @@ TabPage {
         const percent = Math.floor(((nowNum/missionInfo.allNum)*100))
         missionProgress.percent = nowNum/missionInfo.allNum // 进度条显示
         missionShow = `${costTime}s  ${nowNum}/${missionInfo.allNum}  ${percent}%` // 信息显示
-        const index = filesDict[path].index
         const time = res.time.toFixed(2)
         let state = ""
         switch(res.code){
@@ -241,12 +197,8 @@ TabPage {
             default:
                 state = "× "+res.code;break
         }
-        // 刷新文件表格显示
-        filesModel.setRow(index, {
-            "filePath": path,
-            "time": time,
-            "state": state,
-        })
+        // 刷新表格显示
+        filesTableView.set(path, { "time": time, "state": state })
         // 提取文字，添加到结果表格
         res.title = res.fileName
         resultsTableView.addOcrResult(res)
@@ -297,6 +249,25 @@ TabPage {
     function onPreview(path, res) {
         ignoreArea.getPreview(res, path, "")
     }
+    // 路径转文件名
+    function path2name(path) {
+        const parts = path.split("/")
+        return parts[parts.length - 1]
+    }
+    // 文件表格中单击路径
+    property var onClickPath: (index)=>{
+        let info = filesTableView.get(index)
+        let fileName = path2name(info.path)
+        let res = resultsTableView.getResult(fileName)
+        let data = undefined, text = undefined
+        if(res) {
+            if(res.source)
+                data = JSON.parse(res.source)
+            if(res.resText)
+                text = res.resText
+        }
+        previewPanel.show(info.path, data, text)
+    }
 
     // ========================= 【布局】 =========================
 
@@ -304,8 +275,8 @@ TabPage {
     configsComp: BatchOCRConfigs {
         // 点按钮打开忽略区域
         onClickIgnoreArea: {
-            if(filesModel.rowCount > 0) {
-                const path = filesModel.getRow(0).filePath
+            if(filesTableView.rowCount > 0) {
+                const path = filesTableView.get(0).path
                 console.log("打开路径", path)
                 ignoreArea.showPath(path)
             }
@@ -388,7 +359,7 @@ TabPage {
             }
 
             // 下方文件表格
-            FilesTableView{
+            FilesTableView_ {
                 id: filesTableView
                 anchors.top: ctrlPanel.bottom
                 anchors.left: parent.left
@@ -396,27 +367,20 @@ TabPage {
                 anchors.bottom: parent.bottom
                 anchors.margins: size_.spacing
                 anchors.topMargin: size_.smallSpacing
-                msnState: tabPage.msnState
-
-                onAddImages: {
+                headers: [
+                    {key: "path", title: qsTr("图片"), left: true, display:path2name,
+                        btn: true, onClicked:onClickPath},
+                    {key: "time", title: qsTr("耗时"), },
+                    {key: "state", title: qsTr("状态"), },
+                ]
+                openBtnText: qsTr("选择图片")
+                clearBtnText: qsTr("清空")
+                defaultTips: qsTr("拖入或选择图片")
+                fileDialogTitle: qsTr("请选择图片")
+                fileDialogNameFilters: [qsTr("图片")+" (*.jpg *.jpe *.jpeg *.jfif *.png *.webp *.bmp *.tif *.tiff)"]
+                isLock: msnState !== "none"
+                onAddPaths: {
                     tabPage.addImages(paths)
-                }
-                // 单击打开预览
-                onClickImage: {
-                    let res = resultsTableView.getResult(info.fileName)
-                    let data = undefined, text = undefined
-                    if(res) {
-                        if(res.source)
-                            data = JSON.parse(res.source)
-                        if(res.resText)
-                            text = res.resText
-                    }
-                    previewPanel.show(info.filePath, data, text)
-                }
-                // 双击打开文件
-                onDoubleClickImage: {
-                    // 双击条目，用系统工具打开图片
-                    qmlapp.utilsConnector.startfile(path)
                 }
             }
         }

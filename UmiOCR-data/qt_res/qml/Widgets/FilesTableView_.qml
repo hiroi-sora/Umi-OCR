@@ -14,16 +14,21 @@ Item {
     // 表头。定义每一列。
     property var headers: [
         // 第一列也作为总key（tk），不允许重复。
-        {"key": "path", "title": "文件", },
-        {"key": "time", "title": "耗时", },
-        {"key": "state", "title": "状态", },
+        {key: "path", title: "文件", },
+        {key: "time", title: "耗时", },
+        {key: "state", title: "状态", },
+        // 可选项：
+        // btn:  true 启用按钮
+        // onClicked: 单击函数
+        // left: true 左对齐
+        // display: 显示函数，输入value，返回显示文本
     ]
     property string openBtnText: "选择文件"
     property string clearBtnText: "清空"
     property string defaultTips: "拖入或选择文件"
     property string fileDialogTitle: "请选择文件"
     property var fileDialogNameFilters: ["文件 (*.jpg *.jpe *.jpeg *.jfif *.png *.webp *.bmp *.tif *.tiff)"]
-    property int spacing: size_.spacing * 2 // 表项水平间隔
+    property int spacing: size_.smallLine // 表项水平间隔
     property int minWidth0: size_.smallLine * 5 // 第0列最小宽度
     property bool isLock: false // 是否锁定UI操作
 
@@ -169,14 +174,14 @@ Item {
         let ws = Array(columnCount).fill(1)
         // 表头
         for(let i = 1; i < columnCount; i++) {
-            let maxWidth = headerRepeater.itemAt(i).maxWidth + fTableRoot.spacing
+            let maxWidth = headerRepeater.itemAt(i).maxWidth + fTableRoot.spacing*2
             if(maxWidth > ws[i]) ws[i] = maxWidth
         }
         // 表体
         for(let y in tableView.items) {
             const repeater = tableView.items[y].repeater
             for(let x = 1; x < columnCount; x++) {
-                let maxWidth = repeater.itemAt(x).maxWidth + fTableRoot.spacing
+                let maxWidth = repeater.itemAt(x).maxWidth + fTableRoot.spacing*2
                 if(maxWidth > ws[x]) ws[x] = maxWidth
             }
         }
@@ -269,6 +274,7 @@ Item {
             // 表头
             Item {
                 id: tableHeaderContainer
+                visible: fTableRoot.rowCount > 0
                 anchors.top: tableTopPanel.bottom
                 anchors.left: parent.left
                 anchors.right: parent.right
@@ -339,16 +345,30 @@ Item {
                                 property alias maxWidth: hText.width
                                 property int columnIndex: index
                                 property string columnKey: model.key
+                                property var header: headers[columnIndex]
                                 clip: true
+                                Button_ {
+                                    visible: header.btn?true:false
+                                    anchors.fill: parent
+                                    radius: 0
+                                    onClicked: {
+                                        if(header.onClicked) {
+                                            header.onClicked(columnIndex)
+                                        }
+                                    }
+                                }
                                 Text_ {
                                     id: hText
+                                    property bool isLeft: headers[columnIndex].left?true:false
                                     anchors.top: parent.top
                                     anchors.bottom: parent.bottom
-                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    anchors.left: isLeft? parent.left : undefined
+                                    anchors.leftMargin: fTableRoot.spacing
+                                    anchors.horizontalCenter: isLeft? undefined : parent.horizontalCenter
                                     verticalAlignment: Text.AlignVCenter // 垂直居中
                                     font.pixelSize: size_.smallText
                                     color: theme.subTextColor
-                                    text: rowModel[columnKey]
+                                    text: header.display ? header.display(rowModel[columnKey]) : rowModel[columnKey]
                                 }
                             }
                         }
