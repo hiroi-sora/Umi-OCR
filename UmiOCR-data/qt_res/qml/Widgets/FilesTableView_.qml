@@ -32,32 +32,38 @@ Item {
     property int columnCount: 0 // 列数量， onCompleted 中初始化
     property int rowCount: dataModel.count // 行数量
 
-    // 增：添加一项
+    // 增：添加一项。 row：字典，key在headers中，如 { "path" "time" "state" }
     // ik：可以是表格行index（int），也可以是总key（string）
     function add(row, ik=-1) {
-        if(isLock) {
-            console.log("[Warning] 表格已锁定， add 操作无效")
-            return
+        const key = row[headerKey]
+        if(key in dataDict) {
+            console.log(`[Warning] add: ${key} 已在dataDict中！`)
+            return false
         }
-        // TODO
+        if(ik === -1 || ik === rowCount) {
+            dataDict[key] = rowCount
+            dataModel.append(row)
+        }
+        else {
+            const i = ik2i(ik)
+            if(i < 0) {
+                console.log(`[Warning] add: ik ${ik} ${i} < 0 ！`)
+                return false
+            }
+            dataDict[key] = i
+            dataModel.insert(i, row)
+        }
+        return true
     }
-    // 增：添加一个 tableKey
+    // 增：添加一个 tableKey ，自动初始化生成剩余列
     function addKey(tableKey, ik=-1) {
-        if(isLock) {
-            console.log("[Warning] 表格已锁定， addKey 操作无效")
-            return
-        }
         var row = preAddKey(tableKey)
-        add(row, ik)
+        return add(row, ik)
     }
-    // 增：添加多个 tableKey
-    function addKeys(tableKeys, ik=-1) {
-        if(isLock) {
-            console.log("[Warning] 表格已锁定， addKeys 操作无效")
-            return
-        }
+    // 增：末尾添加多个 tableKey
+    function addKeys(tableKeys) {
         for(let i in tableKeys)
-            addKey(row, tableKeys[i])
+            addKey(tableKeys[i], -1)
     }
     // 添加 tableKey 之前的预处理函数
     property var preAddKey: (tableKey) => {
@@ -67,36 +73,61 @@ Item {
     }
     // 删：删除一项
     function del(ik) {
-        if(isLock) {
-            console.log("[Warning] 表格已锁定， del 操作无效")
-            return
+        const i = ik2i(ik)
+        if(i < 0) {
+            console.log(`[Warning] del: ik ${ik} ${i} < 0 ！`)
+            return false
         }
-        // TODO
+        const key = dataModel.get(i)[headerKey]
+        delete dataDict[key]
+        dataModel.remove(i)
+        return true
     }
     // 删：清空
     function clear() {
-        if(isLock) {
-            console.log("[Warning] 表格已锁定， clear 操作无效")
-            return
+        dataModel.clear()
+        dataDict = {}
+    }
+    // 改：属性字典
+    function set(ik, columnDict) {
+        const i = ik2i(ik)
+        if(i < 0) {
+            console.log(`[Warning] set: ik ${ik} ${i} < 0 ！`)
+            return false
         }
-        // TODO
+        dataModel.set(i, columnDict)
+        return true
     }
-    // 改
-    function set(ik, columnIK, value) {
-        // TODO
+    // 改：单个属性
+    function setProperty(ik, columnKey, value) {
+        const i = ik2i(ik)
+        if(i < 0) {
+            console.log(`[Warning] setProperty: ik ${ik} ${i} < 0 ！`)
+            return false
+        }
+        dataModel.setProperty(i, columnKey, value)
+        return true
     }
-    // 查：ik转index
+    // 查：ik转index。返回-1表示失败。
     function ik2i(ik) {
-        // TODO
+        if (typeof ik === "number") {
+            if(ik >= 0 && ik < rowCount)
+                return ik
+        } else if (typeof ik === "string") {
+            if(ik in dataDict)
+                return dataDict[ik]
+        }
+        return -1
     }
 
-    // 表格锁定时，禁止增、删，允许改。
+    // 表格锁定时，禁止UI操作。
     function lock() { isLock = true }  // 锁定表格，禁止操作
     function unlock() { isLock = false }  // 解锁表格
     // 定义信号
     // signal click(var info) // 点击条目的信号
 
     Component.onCompleted: {
+        dataDict = {}
         columnCount = headers.length
         for(let i=0; i<columnCount; i++){
             headerModel.append({
@@ -105,28 +136,27 @@ Item {
                 "width": 1,
             })
         }
+        headerKey = headers[0].key
         // TODO 测试
-        dataModel.append({
-            "path": "111",
-            "time": "222",
-            "state": "333333",
-        })
         for(let i = 0;i < 50; i++)
-            dataModel.append({
-                "path": "44444",
+            add({
+                "path": "44444"+i,
                 "time": "55555555555555",
                 "state": "666",
             })
+        console.log(dataDict)
         updateWidth(true)
     }
 
     // ========================= 【逻辑】 =========================
 
+    property string headerKey: "" // 自动
     property bool isLock: false
     // 表头， key title width
     ListModel { id: headerModel }
     // 数据， 项为headers的key
     ListModel { id: dataModel }
+    property var dataDict: {} // 指向 dataModel 的 index
 
     // 宽度更新
     Timer {
@@ -143,7 +173,6 @@ Item {
             updateWidthTimer.restart()
             return
         }
-        console.log("#")
         let ws = Array(columnCount).fill(1)
         // 表头
         for(let i = 1; i < columnCount; i++) {
@@ -254,6 +283,7 @@ Item {
 
                 Row {
                     anchors.fill: parent
+                    spacing: -1
                     Repeater {
                         model: headerModel
                         id: headerRepeater
@@ -290,6 +320,7 @@ Item {
                 model: dataModel
                 clip: true
                 property var items: tableView.children[0].children
+                rowSpacing: -1
                 delegate: Item {
                     Component.onCompleted: updateWidth()
                     TableView.onReused: updateWidth()
@@ -300,6 +331,7 @@ Item {
                     property alias repeater: repeater
                     Row {
                         anchors.fill: parent
+                        spacing: -1
                         Repeater {
                             id: repeater
                             model: headerModel
@@ -327,6 +359,8 @@ Item {
                         }
                     }
                 }
+                // 滚动条
+                ScrollBar.vertical: ScrollBar { }
             }
         }
 
