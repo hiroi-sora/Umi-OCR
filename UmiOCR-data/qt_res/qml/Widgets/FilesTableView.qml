@@ -155,6 +155,9 @@ Item {
     // 数据， 项为headers的key
     ListModel { id: dataModel }
     property var dataDict: {} // 指向 dataModel 的 index
+    onRowCountChanged: {
+        headerModel.setProperty(0, "title", headers[0].title + ` (${rowCount})`)
+    }
 
     // 宽度更新
     Timer {
@@ -353,7 +356,7 @@ Item {
                                     radius: 0
                                     onClicked: {
                                         if(header.onClicked) {
-                                            header.onClicked(columnIndex)
+                                            header.onClicked(rowIndex)
                                         }
                                     }
                                 }
@@ -363,7 +366,7 @@ Item {
                                     anchors.top: parent.top
                                     anchors.bottom: parent.bottom
                                     anchors.left: isLeft? parent.left : undefined
-                                    anchors.leftMargin: fTableRoot.spacing
+                                    anchors.leftMargin: fTableRoot.spacing * 0.5
                                     anchors.horizontalCenter: isLeft? undefined : parent.horizontalCenter
                                     verticalAlignment: Text.AlignVCenter // 垂直居中
                                     font.pixelSize: size_.smallText
