@@ -25,6 +25,11 @@ class UtilsConnector(QObject):
     def findImages(self, paths, isRecurrence):
         return utils.findImages(paths, isRecurrence)
 
+    # 传入paths和是否递归，返回合法的文档路径
+    @Slot("QVariant", bool, result="QVariant")
+    def findDocs(self, paths, isRecurrence):
+        return utils.findDocs(paths, isRecurrence)
+
     # QUrl列表 转 String列表
     @Slot("QVariant", result="QVariant")
     def QUrl2String(self, fileUrls):

@@ -20,6 +20,14 @@ ImageSuf = [  # 合法图片后缀
     ".tif",
     ".tiff",
 ]
+DocSuf = [  # 合法文档后缀
+    ".pdf",
+    ".xps",
+    ".epub",
+    ".mobi",
+    ".fb2",
+    ".cbz",
+]
 
 
 # 传入文件名，检测是否含非法字符。没问题返回True
@@ -35,34 +43,46 @@ def isImg(path):  # 路径是图片返回true
     return os.path.splitext(path)[-1].lower() in ImageSuf
 
 
-# 传入路径列表，在路径中搜索图片。isRecurrence=True时递归搜索。
-def findImages(paths, isRecurrence):
+def isDoc(path):  # 路径是文档返回true
+    return os.path.splitext(path)[-1].lower() in DocSuf
+
+
+def _findFiles(func, paths, isRecurrence):
     if type(paths) == QJSValue:
         paths = paths.toVariant()
     if type(paths) != list:
-        print(f"[Error] findImages 传入：{paths}, {type(paths)}")
+        print(f"[Error] _findFiles 传入：{paths}, {type(paths)}")
         return []
-    # isRecurrence 递归读取
-    imgPaths = []
+    filePaths = []
     for p in paths:
-        if os.path.isfile(p) and isImg(p):  # 是文件，直接判断
-            imgPaths.append(os.path.abspath(p))
-        elif os.path.isdir(p):  # 是路径
+        if os.path.isfile(p) and func(p):  # 是文件，直接判断
+            filePaths.append(os.path.abspath(p))
+        elif os.path.isdir(p):  # 是目录
             if isRecurrence:  # 需要递归
                 for root, dirs, files in os.walk(p):
                     print("dirs: ", dirs)
                     for file in files:
-                        if isImg(file):  # 收集子文件
-                            imgPaths.append(
+                        if func(file):  # 收集子文件
+                            filePaths.append(
                                 os.path.abspath(os.path.join(root, file))
                             )  # 将路径转换为绝对路径
             else:  # 不递归读取子文件夹
                 for file in os.listdir(p):
-                    if os.path.isfile(os.path.join(p, file)) and isImg(file):
-                        imgPaths.append(os.path.abspath(os.path.join(p, file)))
-    for i, p in enumerate(imgPaths):  # 规范化正斜杠
-        imgPaths[i] = p.replace("\\", "/")
-    return imgPaths
+                    if os.path.isfile(os.path.join(p, file)) and func(file):
+                        filePaths.append(os.path.abspath(os.path.join(p, file)))
+    for i, p in enumerate(filePaths):  # 规范化正斜杠
+        filePaths[i] = p.replace("\\", "/")
+    return filePaths
+
+
+# 传入路径列表，在路径中搜索图片。isRecurrence=True时递归搜索。
+def findImages(paths, isRecurrence):
+    return _findFiles(isImg, paths, isRecurrence)
+
+
+# 传 入路径列表，在路径中搜索文档。isRecurrence=True时递归搜索。
+def findDocs(paths, isRecurrence):
+    return _findFiles(isDoc, paths, isRecurrence)
 
 
 # 复制文本到剪贴板
