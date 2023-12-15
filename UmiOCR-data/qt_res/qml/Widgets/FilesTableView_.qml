@@ -18,19 +18,17 @@ Item {
         {"key": "time", "title": "耗时", },
         {"key": "state", "title": "状态", },
     ]
-    property string openBtnText: qsTr("选择文件")
-    property string clearBtnText: qsTr("清空")
-    property string defaultTips: qsTr("拖入或选择文件")
-    property string fileDialogTitle: qsTr("请选择文件")
-    property var fileDialogNameFilters: [qsTr("文件")+" (*.jpg *.jpe *.jpeg *.jfif *.png *.webp *.bmp *.tif *.tiff)"]
+    property string openBtnText: "选择文件"
+    property string clearBtnText: "清空"
+    property string defaultTips: "拖入或选择文件"
+    property string fileDialogTitle: "请选择文件"
+    property var fileDialogNameFilters: ["文件 (*.jpg *.jpe *.jpeg *.jfif *.png *.webp *.bmp *.tif *.tiff)"]
     property int spacing: size_.spacing * 2 // 表项水平间隔
     property int minWidth0: size_.smallLine * 5 // 第0列最小宽度
+    property bool isLock: false // 是否锁定UI操作
 
 
     // ========================= 【调用接口】 =========================
-
-    property int columnCount: 0 // 列数量， onCompleted 中初始化
-    property int rowCount: dataModel.count // 行数量
 
     // 增：添加一项。 row：字典，key在headers中，如 { "path" "time" "state" }
     // ik：可以是表格行index（int），也可以是总key（string）
@@ -53,23 +51,8 @@ Item {
             dataDict[key] = i
             dataModel.insert(i, row)
         }
+        updateWidth()
         return true
-    }
-    // 增：添加一个 tableKey ，自动初始化生成剩余列
-    function addKey(tableKey, ik=-1) {
-        var row = preAddKey(tableKey)
-        return add(row, ik)
-    }
-    // 增：末尾添加多个 tableKey
-    function addKeys(tableKeys) {
-        for(let i in tableKeys)
-            addKey(tableKeys[i], -1)
-    }
-    // 添加 tableKey 之前的预处理函数
-    property var preAddKey: (tableKey) => {
-        var row = Array(columnCount).fill("")
-        row[0] = tableKey
-        return row
     }
     // 删：删除一项
     function del(ik) {
@@ -96,6 +79,7 @@ Item {
             return false
         }
         dataModel.set(i, columnDict)
+        updateWidth()
         return true
     }
     // 改：单个属性
@@ -106,6 +90,7 @@ Item {
             return false
         }
         dataModel.setProperty(i, columnKey, value)
+        updateWidth()
         return true
     }
     // 查：ik转index。返回-1表示失败。
@@ -119,12 +104,27 @@ Item {
         }
         return -1
     }
+    // 查：获取单个行的字典
+    function get(ik) {
+        const i = ik2i(ik)
+        if(i < 0) {
+            console.log(`[Warning] get: ik ${ik} ${i} < 0 ！`)
+            return {}
+        }
+        return dataModel.get(i)
+    }
+    // 查：获取key列的所有数据
+    function getColumnsValue(key) {
+        let list = []
+        for(let y = 0; y < rowCount; y++) {
+            list.push( dataModel.get(y)[key] )
+        }
+        return list
+    }
 
-    // 表格锁定时，禁止UI操作。
-    function lock() { isLock = true }  // 锁定表格，禁止操作
-    function unlock() { isLock = false }  // 解锁表格
     // 定义信号
-    // signal click(var info) // 点击条目的信号
+    signal addPaths(var paths) // 添加文件的信号
+    signal click(var info) // 点击条目的信号
 
     Component.onCompleted: {
         dataDict = {}
@@ -137,21 +137,14 @@ Item {
             })
         }
         headerKey = headers[0].key
-        // TODO 测试
-        for(let i = 0;i < 50; i++)
-            add({
-                "path": "44444"+i,
-                "time": "55555555555555",
-                "state": "666",
-            })
-        console.log(dataDict)
         updateWidth(true)
     }
 
     // ========================= 【逻辑】 =========================
 
+    property int columnCount: 0 // 列数量， onCompleted 中初始化
+    property int rowCount: dataModel.count // 行数量
     property string headerKey: "" // 自动
-    property bool isLock: false
     // 表头， key title width
     ListModel { id: headerModel }
     // 数据， 项为headers的key
@@ -204,6 +197,7 @@ Item {
             for(let i = 1; i < columnCount; i++)
                 w0 -= headerModel.get(i).width
         }
+        w0 += columnCount-10 // 避让右侧滚动条空间
         if(w0 < minWidth0) w0 = minWidth0
         headerModel.setProperty(0, "width", w0)
     }
@@ -345,6 +339,7 @@ Item {
                                 property alias maxWidth: hText.width
                                 property int columnIndex: index
                                 property string columnKey: model.key
+                                clip: true
                                 Text_ {
                                     id: hText
                                     anchors.top: parent.top
@@ -386,7 +381,7 @@ Item {
         folder: shortcuts.pictures
         selectMultiple: true // 多选
         onAccepted: {
-            addKeys(fileDialog.fileUrls_)
+            addPaths(fileDialog.fileUrls_)
         }
     }
 }
