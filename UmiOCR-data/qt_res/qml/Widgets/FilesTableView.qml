@@ -118,11 +118,29 @@ Item {
         }
         return dataModel.get(i)
     }
-    // 查：获取key列的所有数据
+    // 查：获取key列的所有数据，返回每项为value
     function getColumnsValue(key) {
         let list = []
         for(let y = 0; y < rowCount; y++) {
             list.push( dataModel.get(y)[key] )
+        }
+        return list
+    }
+    // 查：获取多个列的数据，返回每项为字典
+    function getColumnsValues(keys=[]) {
+        let list = []
+        if(keys.length > 0) {
+            for(let y = 0; y < rowCount; y++) {
+                const data = dataModel.get(y)
+                const d = {}
+                for(let i in keys)
+                    d[keys[i]] = data[keys[i]]
+                list.push(d)
+            }
+        }
+        else {
+            for(let y = 0; y < rowCount; y++)
+                list.push(dataModel.get(y))
         }
         return list
     }

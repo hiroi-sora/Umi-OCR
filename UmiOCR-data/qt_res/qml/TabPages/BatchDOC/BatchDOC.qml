@@ -16,8 +16,14 @@ TabPage {
     // ========================= 【逻辑】 =========================
 
     property string msnState: "" // 任务状态， none init run stop
-    property var missionInfo: {} // 当前任务信息，耗时等
     property string missionShow: "" // 当前任务信息展示字符串
+    property var missionInfo: {} // 当前任务信息，耗时等
+    /*
+        startTime: new Date().getTime(), // 开始时间
+        allNum: msnLength, // 总长度
+        costTime: 0, // 当前耗时
+        nowNum: 0, // 当前执行长度
+    */
 
     property string msnID: "" // 当前任务ID
 
@@ -42,7 +48,8 @@ TabPage {
                 path: info.path, state: "", pages: `1-${info.page_count}`,
                 // 数据
                 page_count: info.page_count,
-                page_range:[1, info.page_count],
+                range_start: 1,
+                range_end: info.page_count,
             })
         }
     }
@@ -61,7 +68,37 @@ TabPage {
 
     // 运行文档任务
     function docStart() {
-        console.log("docStart")
+        const fileCount = filesTableView.rowCount
+        if(fileCount <= 0)
+            return
+        setMsnState("init") // 状态：初始化任务
+        // 刷新表格
+        for(let i = 0; i < fileCount; i++) {
+            filesTableView.setProperty(i, "state", qsTr("排队中"))
+        }
+        // 获取信息
+        let allPages = 0 // 页总数
+        const argd = configsComp.getValueDict()
+        const docs = filesTableView.getColumnsValues(
+            ["path", "range_start", "range_end"])
+        for(let i = 0; i < fileCount; i++) {
+            const d = docs[i]
+            allPages += d.range_end - d.range_start + 1
+        }
+        // 刷新计数
+        missionInfo = {
+            startTime: new Date().getTime(), // 开始时间
+            allNum: allPages, // 总长度
+            costTime: 0, // 当前耗时
+            nowNum: 0, // 当前执行长度
+        }
+        missionProgress.percent = 0 // 进度条显示
+        missionShow = `0s  0/${allPages}  0%` // 信息显示
+        // 提交任务
+        msnID = tabPage.callPy("msnDocs", docs, argd)
+        // 若tabPanel面板的下标没有变化过，则切换到记录页
+        if(tabPanel.indexChangeNum < 2)
+            tabPanel.currentIndex = 1
     }
 
     // 停止文档任务

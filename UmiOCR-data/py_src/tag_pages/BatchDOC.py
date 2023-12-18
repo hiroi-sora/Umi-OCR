@@ -24,3 +24,7 @@ class BatchDOC(Page):
             docs.append(info)
         # 返回：{ "path" , "page_count" }
         return docs
+
+    def msnDocs(self, docs, argd):
+        print("py文档任务", docs)
+        return ""
