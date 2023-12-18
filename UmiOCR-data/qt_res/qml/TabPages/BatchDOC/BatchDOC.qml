@@ -30,13 +30,20 @@ TabPage {
     function addDocs(paths) {
         // 调用Python方法
         const isRecurrence = configsComp.getValue("mission.recurrence")
-        const res = qmlapp.utilsConnector.findDocs(paths, isRecurrence)
+        const res = tabPage.callPy("addDocs", paths, isRecurrence)
         if(res.length <= 0){
             return
         }
         // 加入表格
         for(let i in res) {
-            filesTableView.add({ path: res[i], time: "", state: "" })
+            const info = res[i]
+            filesTableView.add({
+                // 显示：路径，状态，页范围
+                path: info.path, state: "", pages: `1-${info.page_count}`,
+                // 数据
+                page_count: info.page_count,
+                page_range:[1, info.page_count],
+            })
         }
     }
 
@@ -209,8 +216,8 @@ TabPage {
                 anchors.topMargin: size_.smallSpacing
                 headers: [
                     {key: "path", title: qsTr("文档"), left: true, display: path2name },
-                    {key: "time", title: qsTr("耗时"), },
                     {key: "state", title: qsTr("状态"), },
+                    {key: "pages", title: qsTr("页数"), },
                 ]
                 openBtnText: qsTr("选择文档")
                 clearBtnText: qsTr("清空")
