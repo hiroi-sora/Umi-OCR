@@ -59,6 +59,15 @@ Item {
         anchors.top: parent.top
         height: size_.line * 2
 
+        Rectangle { // 背景色
+            anchors.fill: parent
+            color: theme.bgColor
+            Rectangle {
+                anchors.fill: parent
+                color: theme.coverColor1
+            }
+        }
+
         // 左：选项栏
         TabBar {
             id: bar
