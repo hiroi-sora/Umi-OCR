@@ -37,6 +37,12 @@ class OutputCsv(Output):
             for tb in res["data"]:
                 if tb["text"]:
                     textOut += tb["text"] + self.lineBreak
+            if len(textOut) > 0:
+                textOut = (
+                    textOut[:-1]  # 删除结尾换行
+                    .encode(self.encoding, errors="replace")  # 编码纠错
+                    .decode(self.encoding)
+                )
         elif res["code"] == 101:
             pass
         else:
