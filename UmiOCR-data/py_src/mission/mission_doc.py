@@ -8,6 +8,19 @@ from .mission_ocr import MissionOCR
 import fitz  # PyMuPDF
 
 
+class FitzOpen:
+    def __init__(self, path):
+        self._path = path
+        self._doc = None
+
+    def __enter__(self):
+        self._doc = fitz.open(self._path)
+        return self._doc
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self._doc.close()
+
+
 class _MissionDocClass(Mission):
     # msnInfo: { 回调函数"onXX", 参数"argd":{"tbpu.xx", "ocr.xx"} }
     # msnFile: { 可选 "path", "bytes", "base64" }
@@ -41,6 +54,18 @@ class _MissionDocClass(Mission):
         for res in resList:
             print(res["result"])
         return None
+
+    # 获取一个文档的信息，如页数
+    def getDocInfo(self, path):
+        try:
+            with FitzOpen(path) as doc:
+                info = {
+                    "path": path,
+                    "page_count": doc.page_count,
+                }
+                return info
+        except Exception as e:
+            return {"path": path, "error": e}
 
 
 # 全局 DOC 任务管理器

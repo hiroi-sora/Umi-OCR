@@ -21,7 +21,35 @@ Item {
          }  */
     property var tabsModel: []
     clip: true
-    
+
+    // 下方 选项页
+    SwipeView {
+        id: swipeView
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: topContainer.bottom
+        anchors.bottom: parent.bottom
+        anchors.topMargin: size_.smallSpacing
+        currentIndex: bar.currentIndex
+        interactive: false // 禁止直接滑动视图本身
+        Component.onCompleted:{
+            if(!qmlapp.enabledEffect) // 关闭动画
+                contentItem.highlightMoveDuration = 0
+        }
+
+        Repeater {
+            model: tabsModel
+
+            Item {
+                visible: SwipeView.isCurrentItem
+                Component.onCompleted: {
+                    modelData.component.parent = this
+                    modelData.component.visible = true
+                }
+            }
+        }
+    }
+
     // 上方 选项栏
     Item {
         id: topContainer
@@ -30,6 +58,15 @@ Item {
         anchors.right: parent.right
         anchors.top: parent.top
         height: size_.line * 2
+
+        Rectangle { // 背景色
+            anchors.fill: parent
+            color: theme.bgColor
+            Rectangle {
+                anchors.fill: parent
+                color: theme.coverColor1
+            }
+        }
 
         // 左：选项栏
         TabBar {
@@ -139,33 +176,5 @@ Item {
             }
         }
 
-    }
-
-    // 下方 选项页
-    SwipeView {
-        id: swipeView
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.top: topContainer.bottom
-        anchors.bottom: parent.bottom
-        anchors.topMargin: size_.smallSpacing
-        currentIndex: bar.currentIndex
-        interactive: false // 禁止直接滑动视图本身
-        Component.onCompleted:{
-            if(!qmlapp.enabledEffect) // 关闭动画
-                contentItem.highlightMoveDuration = 0
-        }
-        
-        Repeater {
-            model: tabsModel
-
-            Item {
-                visible: SwipeView.isCurrentItem
-                Component.onCompleted: {
-                    modelData.component.parent = this
-                    modelData.component.visible = true
-                }
-            }
-        }
     }
 }
