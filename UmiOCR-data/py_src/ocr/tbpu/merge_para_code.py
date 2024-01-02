@@ -99,10 +99,11 @@ class MergeParaCode(Tbpu):
                 box = tb["box"]
             else:
                 self.merge2box(box, tb["box"])
+        if len(text) > 0:
+            text = text[:-1]  # 去除尾部换行
         if num > 0:
             score /= num
         res = [{"text": text, "box": box, "score": score}]
-
         return res
 
     def run(self, textBlocks, imgInfo):
