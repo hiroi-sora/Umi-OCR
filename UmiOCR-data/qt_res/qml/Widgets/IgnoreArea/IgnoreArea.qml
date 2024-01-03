@@ -6,10 +6,8 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import ".."
 
-Rectangle {
+ModalLayer {
     id: iRoot
-    visible: false
-    color: theme.coverColor4
     property string previewPath: "" // 图片预览路径
     property string previewType: "" // 图片预览路径
     property bool running: false
@@ -52,8 +50,9 @@ Rectangle {
             running = true
         }
     }
-    // 关闭面板
-    function close() {
+    // 关闭面板时触发
+    onVisibleChanged: {
+        if(visible) return
         if(imageWithIgnore.ig1Boxes.length > 0) {
             // 格式化，存入设置
             let ig1 = []
@@ -84,12 +83,9 @@ Rectangle {
         imageWithIgnore.showTextBoxes(res)
     }
 
-    MouseArea {
+    contentItem: Item {
+        id: content
         anchors.fill: parent
-        onWheel: {} // 拦截滚轮事件
-        hoverEnabled: true // 拦截悬停事件
-        onClicked: close() // 单击关闭面板
-        cursorShape: Qt.PointingHandCursor
     }
     Loader {
         id: panelLoader
@@ -97,19 +93,12 @@ Rectangle {
         sourceComponent: com
         active: iRoot.visible
     }
-
     property var imageWithIgnore: undefined // 存放图片组件
     Component {
         id: com
-        Panel {
-            parent: iRoot
+        Item {
+            parent: content
             anchors.fill: parent
-            anchors.margins: size_.line * 2
-            color: theme.bgColor
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {}
-            }
             // 左控制栏
             Item {
                 id: lCtrl
@@ -130,7 +119,7 @@ Rectangle {
                         anchors.right: parent.right
                         bgColor_: theme.coverColor1
                         text_: qsTr("保存并返回")
-                        onClicked: close()
+                        onClicked: iRoot.visible = false
                     }
                 }
                 Text_ {
