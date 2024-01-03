@@ -13,8 +13,10 @@ TextInput {
     verticalAlignment: Text.AlignVCenter // 垂直居中
     focus: true // 键盘聚焦
     selectByMouse: true // 允许鼠标选中
+    property alias bgColor: mouseAreaBackgroud.color_
 
     MouseAreaBackgroud {
+        id: mouseAreaBackgroud
         cursorShape: Qt.IBeamCursor
     }
 }

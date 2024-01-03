@@ -33,7 +33,7 @@ MouseArea {
         id: bgRectangle
         visible: false
         anchors.fill: parent
-        color: theme.coverColor1
+        color: color_
         radius: radius_
     }
 }
