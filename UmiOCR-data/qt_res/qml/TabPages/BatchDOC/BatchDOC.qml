@@ -43,6 +43,7 @@ TabPage {
             )
             console.log("自动添加！！！！！！！！！！！！！")
             // ocrStart()
+            onClickDoc(0)
         }
     }
 
@@ -127,7 +128,7 @@ TabPage {
     // 文件表格中单击文档
     function onClickDoc(index) {
         const info = filesTableView.get(index)
-        console.log("单击文档：", info.path)
+        previewDoc.show(info)
     }
 
     // 关闭页面
@@ -326,5 +327,11 @@ TabPage {
     DropArea_ {
         anchors.fill: parent
         callback: tabPage.addDocs
+    }
+
+    // 预览面板
+    PreviewDoc {
+        id: previewDoc
+        anchors.fill: parent
     }
 }
