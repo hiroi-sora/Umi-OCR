@@ -20,17 +20,26 @@ class DocPreviewConnector(QObject):
         self._previewDoc = None  # 当前预览的对象
         self._previewPath = ""
 
-    @Slot(str, int)
-    def preview(self, path, page):
+    @Slot(str, int, str)
+    def preview(self, path, page, password):
         page -= 1
-        self._previewMission.addMissionList([(path, page)])
+        self._previewMission.addMissionList([(path, page, password)])
 
     def _previewTask(self, msn):
-        path, page = msn
+        path, page, password = msn
         if path == self._previewPath:  # 已经加载了
             doc = self._previewDoc
         else:  # 新加载
-            doc = fitz.open(path)
+            try:
+                doc = fitz.open(path)
+                if doc.isEncrypted and not doc.authenticate(password):
+                    msg = "[Warning] isEncrypted"
+                    self.previewImg.emit(msg)
+                    return
+            except Exception as e:
+                msg = f"[Error] 打开文档失败：{path} {e}"
+                self.previewImg.emit(msg)
+                return
             self._previewDoc = doc
             self._previewPath = path
         page_count = doc.page_count

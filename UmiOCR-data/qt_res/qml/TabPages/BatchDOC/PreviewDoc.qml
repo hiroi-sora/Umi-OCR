@@ -13,21 +13,44 @@ ModalLayer {
     id: pRoot
     property bool running: false
     property string previewPath: ""
-    property int previewPage: 1
+    property string password: ""
+    property int previewPage: -1
+    property int pageCount: -1
+    property int rangeStart: -1
+    property int rangeEnd: -1
 
     // 展示文档
-    // info: path, range_start, range_end
+    // info: path, page_count, range_start, range_end
     function show(info) {
         visible = true
-        previewPage = info.range_start
         previewPath = info.path
+        pageCount = info.page_count
+        previewPage = info.range_start
+        rangeStart = info.range_start
+        rangeEnd = info.range_end
         toPreview()
+    }
+
+    // 翻页。to直接翻页，flag加减页。
+    function changePage(to, flag=0) {
+        if (typeof to === "string") {
+            to = parseInt(to, 10)
+        }
+        if(flag != 0) {
+            to = previewPage + flag
+        }
+        if(previewPage != to && to > 0 && to <= pageCount) {
+            previewPage = to
+            toPreview()
+        }
     }
 
     // 预览一页文档
     function toPreview() {
         running = true
-        prevConn.preview(previewPath, previewPage)
+        if(previewPage < 1) previewPage = 1
+        if(previewPage > pageCount) previewPage = pageCount
+        prevConn.preview(previewPath, previewPage, password)
     }
     // 预览连接器
     DocPreviewConnector {
@@ -35,8 +58,137 @@ ModalLayer {
         // 图片渲染的回调
         onPreviewImg: function(imgID) {
             console.log("==", imgID)
-            imgViewer.showImgID(imgID)
+            const title = qsTr("打开文档失败")
+            if(imgID === "[Warning] isEncrypted") {
+                qmlapp.popup.simple(title, qsTr("请填写正确的密码"))
+            }
+            else if(imgID.startsWith("[Error]")) {
+                qmlapp.popup.message(title, imgID, "error")
+            }
+            else
+                imgViewer.showImgID(imgID)
         }
+    }
+
+    // 左：控制面板
+    Item {
+        id: fileInfoItem
+        anchors.fill: parent
+        Column {
+            anchors.fill: parent
+            spacing: size_.spacing
+            // ===== 文件名 =====
+            Text_ {
+                text: previewPath
+                anchors.left: parent.left
+                anchors.right: parent.right
+                wrapMode: TextEdit.WrapAnywhere // 任意换行
+                maximumLineCount: 4 // 限制行数
+                color: theme.subTextColor
+                font.pixelSize: size_.smallText
+            }
+            // ===== 页数 =====
+            Text_ {
+                text: qsTr("页数：")
+            }
+            Row {
+                spacing: size_.spacing
+                height: size_.line + size_.spacing * 2
+                Button_ {
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    text_: "<"
+                    onClicked: changePage(0, -1)
+                }
+                Button_ {
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    text_: ">"
+                    onClicked: changePage(0, 1)
+                }
+                Rectangle {
+                    width: size_.line * 3
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    color: theme.bgColor
+                    TextInput_ {
+                        clip: true
+                        anchors.fill: parent
+                        bgColor: "#00000000"
+                        text: previewPage
+                        onTextChanged: changePage(text)
+                    }
+                }
+                Text_ {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: "/ "+pageCount
+                }
+            }
+            // ===== OCR范围 =====
+            Text_ {
+                text: qsTr("OCR范围：")
+            }
+            Row {
+                height: size_.line + size_.spacing * 2
+                Rectangle {
+                    width: size_.line * 3
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    color: theme.bgColor
+                    TextInput_ {
+                        clip: true
+                        anchors.fill: parent
+                        bgColor: "#00000000"
+                        text: rangeStart
+                        onTextChanged: rangeStart = text
+                    }
+                }
+                Text_ {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: " - "
+                }
+                Rectangle {
+                    width: size_.line * 3
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    color: theme.bgColor
+                    TextInput_ {
+                        clip: true
+                        anchors.fill: parent
+                        bgColor: "#00000000"
+                        text: rangeEnd
+                        onTextChanged: rangeEnd = text
+                    }
+                }
+            }
+            // ===== 密码 =====
+            Row {
+                spacing: size_.spacing
+                height: size_.line + size_.spacing * 2
+                Text_ {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: qsTr("密码：")
+                }
+                Rectangle {
+                    width: size_.line * 6
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    color: theme.bgColor
+                    TextInput_ {
+                        clip: true
+                        anchors.fill: parent
+                        bgColor: "#00000000"
+                        text: password
+                        onTextChanged: password = text
+                    }
+                }
+            }
+        }
+    }
+
+    // 右：忽略区域
+    Item {
+        id: ignoreAreaItem
     }
 
     contentItem: DoubleRowLayout {
@@ -45,31 +197,28 @@ ModalLayer {
         // 左：控制面板
         leftItem: Panel {
             anchors.fill: parent
-            // TabPanel {
-            //     id: tabPanel
-            //     anchors.fill: parent
-            //     anchors.margins: size_.spacing
-            //     tabsModel: [
-            //         {
-            //             "key": "configs",
-            //             "title": qsTr("文档属性"),
-            //             "component": undefined,
-            //         },
-            //         {
-            //             "key": "ignoreArea",
-            //             "title": qsTr("忽略区域"),
-            //             "component": undefined,
-            //         },
-            //     ]
-            // }
+            TabPanel {
+                id: tabPanel
+                anchors.fill: parent
+                anchors.margins: size_.spacing
+                tabsModel: [
+                    {
+                        "key": "fileInfo",
+                        "title": qsTr("文档属性"),
+                        "component": fileInfoItem,
+                    },
+                    {
+                        "key": "ignoreArea",
+                        "title": qsTr("忽略区域"),
+                        "component": ignoreAreaItem,
+                    },
+                ]
+            }
         }
         // 右：图片查看面板
-        rightItem: Panel {
+        rightItem: ImageScale {
+            id: imgViewer
             anchors.fill: parent
-            ImageScale {
-                id: imgViewer
-                anchors.fill: parent
-            }
         }
     }
 }
