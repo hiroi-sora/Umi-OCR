@@ -31,6 +31,20 @@ TabPage {
         missionInfo = {}
         setMsnState("none")
     }
+    // TODO: 测试用
+    Timer {
+        interval: 200
+        running: true
+        onTriggered: {
+            addDocs(
+                [
+                    "D:/Pictures/Screenshots/test",
+                ]
+            )
+            console.log("自动添加！！！！！！！！！！！！！")
+            // ocrStart()
+        }
+    }
 
     // 添加一批文档。传入值是没有 file:/// 开头的纯字符串的列表。
     function addDocs(paths) {
@@ -108,6 +122,12 @@ TabPage {
     }
     function _docStop() {
         console.log("_docStop")
+    }
+
+    // 文件表格中单击文档
+    function onClickDoc(index) {
+        const info = filesTableView.get(index)
+        console.log("单击文档：", info.path)
     }
 
     // 关闭页面
@@ -252,9 +272,10 @@ TabPage {
                 anchors.margins: size_.spacing
                 anchors.topMargin: size_.smallSpacing
                 headers: [
-                    {key: "path", title: qsTr("文档"), left: true, display: path2name },
+                    {key: "path", title: qsTr("文档"), left: true, display: path2name,
+                        btn: true, onClicked:onClickDoc},
                     {key: "state", title: qsTr("状态"), },
-                    {key: "pages", title: qsTr("页数"), },
+                    {key: "pages", title: qsTr("页数"), btn: true, onClicked:onClickDoc},
                 ]
                 openBtnText: qsTr("选择文档")
                 clearBtnText: qsTr("清空")
