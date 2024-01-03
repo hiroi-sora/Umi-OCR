@@ -265,7 +265,7 @@ TabPage {
             if(res.resText)
                 text = res.resText
         }
-        previewPanel.show(info.path, data, text)
+        previewImage.show(info.path, data, text)
     }
 
     // ========================= 【布局】 =========================
@@ -424,8 +424,8 @@ TabPage {
     }
 
     // 预览面板
-    PreviewPanel {
-        id: previewPanel
+    PreviewImage {
+        id: previewImage
         anchors.fill: parent
     }
 
