@@ -11,6 +11,7 @@ import "../../Widgets/ImageViewer"
 
 ModalLayer {
     id: pRoot
+    property var updateInfo // 更新信息函数
     property bool running: false
     property string previewPath: ""
     property string password: ""
@@ -20,7 +21,7 @@ ModalLayer {
     property int rangeEnd: -1
 
     // 展示文档
-    // info: path, page_count, range_start, range_end
+    // info: path, page_count, range_start, range_end, is_encrypted, password
     function show(info) {
         visible = true
         previewPath = info.path
@@ -28,7 +29,26 @@ ModalLayer {
         previewPage = info.range_start
         rangeStart = info.range_start
         rangeEnd = info.range_end
+        password = info.password
         toPreview()
+    }
+
+    onVisibleChanged: {
+        if(visible) return
+        if(rangeStart < 1) rangeStart = 1
+        if(rangeStart > pageCount) rangeStart = pageCount
+        if(rangeEnd < rangeStart) rangeEnd = rangeStart
+        if(rangeEnd > pageCount) rangeEnd = pageCount
+        if(updateInfo) {
+            updateInfo(previewPath, {
+                pages: `${rangeStart}-${rangeEnd}`,
+                state: "",
+                range_start: rangeStart,
+                range_end: rangeEnd,
+                password: password,
+            })
+        }
+        qmlapp.popup.simple(qsTr("文档信息已更新"), previewPath)
     }
 
     // 翻页。to直接翻页，flag加减页。
@@ -57,7 +77,6 @@ ModalLayer {
         id: prevConn
         // 图片渲染的回调
         onPreviewImg: function(imgID) {
-            console.log("==", imgID)
             const title = qsTr("打开文档失败")
             if(imgID === "[Warning] isEncrypted") {
                 qmlapp.popup.simple(title, qsTr("请填写正确的密码"))

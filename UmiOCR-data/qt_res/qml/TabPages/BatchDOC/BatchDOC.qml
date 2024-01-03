@@ -60,11 +60,14 @@ TabPage {
             const info = res[i]
             filesTableView.add({
                 // 显示：路径，状态，页范围
-                path: info.path, state: "", pages: `1-${info.page_count}`,
+                path: info.path, pages: `1-${info.page_count}`,
+                state: info.is_encrypted ? qsTr("加密") : "" ,
                 // 数据
                 page_count: info.page_count,
                 range_start: 1,
                 range_end: info.page_count,
+                is_encrypted: info.is_encrypted,
+                password: "",
             })
         }
     }
@@ -333,5 +336,10 @@ TabPage {
     PreviewDoc {
         id: previewDoc
         anchors.fill: parent
+        updateInfo: (path, info) => {
+            let infoA = filesTableView.get(path)
+            Object.assign(infoA, info)
+            filesTableView.set(path, infoA)
+        }
     }
 }

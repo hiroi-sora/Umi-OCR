@@ -64,6 +64,7 @@ class _MissionDocClass(Mission):
                 info = {
                     "path": path,
                     "page_count": doc.page_count,
+                    "is_encrypted": doc.isEncrypted,
                 }
                 return info
         except Exception as e:
