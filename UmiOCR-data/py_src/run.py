@@ -25,6 +25,7 @@ def runQml():
 
     from .tag_pages.tag_pages_connector import TagPageConnector  # 页面连接器
     from .mission.mission_connector import MissionConnector  # 任务连接器
+    from .mission.doc_preview_connector import DocPreviewConnector  # 文档预览连接器
     from .event_bus.pubsub_connector import PubSubConnector  # 发布/订阅连接器
     from .event_bus.key_mouse.key_mouse_connector import KeyMouseConnector  # 键盘/鼠标连接器
     from .plugins_controller.plugins_connector import PluginsConnector  # 插件连接器
@@ -64,6 +65,9 @@ def runQml():
     qmlRegisterType(ImageConnector, "ImageConnector", 1, 0, "ImageConnector")
     qmlRegisterType(
         GlobalConfigsConnector, "GlobalConfigsConnector", 1, 0, "GlobalConfigsConnector"
+    )
+    qmlRegisterType(
+        DocPreviewConnector, "DocPreviewConnector", 1, 0, "DocPreviewConnector"
     )
 
     # 5. 启动翻译

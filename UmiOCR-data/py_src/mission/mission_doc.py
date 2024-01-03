@@ -2,6 +2,8 @@
 # =============== 文档 - 任务管理器 ===============
 # ===============================================
 
+# API所有页数page 均为1开始
+
 from .mission import Mission
 from .mission_ocr import MissionOCR
 
