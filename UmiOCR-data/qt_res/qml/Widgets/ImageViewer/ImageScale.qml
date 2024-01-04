@@ -51,7 +51,8 @@ Rectangle {
     // 清空展示
     function clear() {
         if(beforeShow) beforeShow()
-        showImage.clear()
+        // showImage.clear()
+        showImage.source = ""
         imageSW = imageSH = 0
     }
 
