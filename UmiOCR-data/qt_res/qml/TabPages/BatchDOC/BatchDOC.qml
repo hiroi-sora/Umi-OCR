@@ -10,6 +10,18 @@ import "../../Widgets"
 import "../../Widgets/ResultLayout"
 import "../../Widgets/IgnoreArea"
 
+/* 文档参数：
+    path 路径
+    pages 页数显示
+    state 状态显示
+    page_count 页数
+    range_start 范围开始
+    range_end 范围结束
+    is_encrypted 需要密码
+    is_authenticate 密码正确
+    password 密码
+*/
+
 TabPage {
     id: tabPage
 
@@ -43,7 +55,7 @@ TabPage {
             )
             console.log("自动添加！！！！！！！！！！！！！")
             // ocrStart()
-            onClickDoc(0)
+            // onClickDoc(0)
         }
     }
 
@@ -96,19 +108,22 @@ TabPage {
         const fileCount = filesTableView.rowCount
         if(fileCount <= 0)
             return
+        // 获取信息
+        let allPages = 0 // 页总数
+        const docs = filesTableView.getColumnsValues()
+        for(let i = 0; i < fileCount; i++) {
+            const d = docs[i]
+            if(d.is_encrypted && !d.is_authenticate) {
+                qmlapp.popup.message(qsTr("文档已加密"), qsTr("请点击文档名，设置密码"), "warning")
+                return
+            }
+            allPages += d.range_end - d.range_start + 1
+        }
+        const argd = configsComp.getValueDict()
         setMsnState("init") // 状态：初始化任务
         // 刷新表格
         for(let i = 0; i < fileCount; i++) {
             filesTableView.setProperty(i, "state", qsTr("排队中"))
-        }
-        // 获取信息
-        let allPages = 0 // 页总数
-        const argd = configsComp.getValueDict()
-        const docs = filesTableView.getColumnsValues(
-            ["path", "range_start", "range_end"])
-        for(let i = 0; i < fileCount; i++) {
-            const d = docs[i]
-            allPages += d.range_end - d.range_start + 1
         }
         // 刷新计数
         missionInfo = {
@@ -137,6 +152,7 @@ TabPage {
 
     // 文件表格中单击文档
     function onClickDoc(index) {
+        if(msnState !== "none") return
         const info = filesTableView.get(index)
         previewDoc.show(info)
     }
