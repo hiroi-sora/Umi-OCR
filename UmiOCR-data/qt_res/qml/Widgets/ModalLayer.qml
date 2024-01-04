@@ -11,16 +11,17 @@ Rectangle {
     visible: false
     color: theme.coverColor4
     property alias contentItem: mPanel.data
+    property string closeText: qsTr("保存并返回") // 右上角关闭提示文本
 
     // 模糊效果
-    GaussianBlur {
-        anchors.fill: parent
-        source: mRoot.parent
-        visible: qmlapp.enabledEffect
-        cached: true
-        radius: 8
-        samples: 16
-    }
+    // GaussianBlur {
+    //     anchors.fill: parent
+    //     source: mRoot.parent
+    //     visible: qmlapp.enabledEffect
+    //     cached: true
+    //     radius: 8
+    //     samples: 16
+    // }
     // 底层鼠标事件
     MouseArea {
         id: bottomArea
@@ -37,17 +38,27 @@ Rectangle {
         anchors.right: parent.right
         anchors.rightMargin: size_.line * 2
         anchors.topMargin: size_.line * 0.25
-        width: size_.line * 1.5
-        height: size_.line * 1.5
         Rectangle {
-            anchors.fill: parent
+            id: closeIconRect
+            anchors.right: parent.right
+            width: size_.line * 1.5
+            height: size_.line * 1.5
             radius: size_.btnRadius
             color: theme.bgColor
+            Icon_ {
+                anchors.fill: parent
+                color: theme.noColor
+                icon: "no"
+            }
         }
-        Icon_ {
-            anchors.fill: parent
-            color: theme.noColor
-            icon: "no"
+        Text_ {
+            visible: closeText
+            anchors.right: closeIconRect.left
+            anchors.rightMargin: size_.spacing
+            anchors.verticalCenter: closeIconRect.verticalCenter
+            text: closeText
+            color: theme.bgColor
+            font.pixelSize: size_.smallText
         }
     }
 

@@ -9,6 +9,7 @@ import "../../Widgets"
 
 ModalLayer {
     id: fRoot
+    closeText: ""
     property var fontsList: []
     
     // 主要UI文字字体，内容可控，可以用裁切的ttf

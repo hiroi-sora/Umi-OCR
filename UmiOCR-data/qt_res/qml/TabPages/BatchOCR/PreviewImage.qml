@@ -10,6 +10,7 @@ import "../../Widgets/ImageViewer"
 
 ModalLayer {
     id: pRoot
+    closeText: ""
 
     // 展示图片/文本
     function show(path, data, text) {

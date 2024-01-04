@@ -114,13 +114,6 @@ ModalLayer {
                     anchors.left: parent.left
                     anchors.right: parent.right
                     spacing: size_.spacing
-                    Button_ {
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        bgColor_: theme.coverColor1
-                        text_: qsTr("保存并返回")
-                        onClicked: iRoot.visible = false
-                    }
                 }
                 Text_ {
                     anchors.top: colTop.bottom
