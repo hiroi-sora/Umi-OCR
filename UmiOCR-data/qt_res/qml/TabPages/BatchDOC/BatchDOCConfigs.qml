@@ -11,6 +11,22 @@ Configs {
 
     configDict: {
 
+        // 后处理
+        "tbpu": {
+            "title": qsTr("OCR文本后处理"),
+            "type": "group",
+
+            "merge": qmlapp.globalConfigs.utilsDicts.getTbpuMerge(),
+            "btns": {
+                "title": qsTr("忽略区域（点击文档名进入设置）"),
+                "btnsList": [],
+            },
+            "ignoreArea": {
+                "type": "var",
+                "save": false,
+            },
+        },
+
         // 任务参数
         "mission": {
             "title": qsTr("批量任务"),

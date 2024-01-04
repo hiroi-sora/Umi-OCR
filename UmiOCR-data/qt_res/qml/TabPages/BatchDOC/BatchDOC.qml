@@ -43,7 +43,7 @@ TabPage {
             )
             console.log("自动添加！！！！！！！！！！！！！")
             // ocrStart()
-            // onClickDoc(0)
+            onClickDoc(0)
         }
     }
 
@@ -343,6 +343,8 @@ TabPage {
     PreviewDoc {
         id: previewDoc
         anchors.fill: parent
+        configsComp: tabPage.configsComp
+        ignoreAreaKey: "tbpu.ignoreArea"
         updateInfo: (path, info) => {
             let infoA = filesTableView.get(path)
             Object.assign(infoA, info)
