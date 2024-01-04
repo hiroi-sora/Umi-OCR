@@ -110,7 +110,8 @@ TabPage {
             return
         // 获取信息
         let allPages = 0 // 页总数
-        const docs = filesTableView.getColumnsValues()
+        const docs = filesTableView.getColumnsValues([
+            "path","range_start", "range_end", "is_encrypted", "is_authenticate", "password"])
         for(let i = 0; i < fileCount; i++) {
             const d = docs[i]
             if(d.is_encrypted && !d.is_authenticate) {
