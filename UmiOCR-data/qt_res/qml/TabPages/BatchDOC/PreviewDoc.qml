@@ -15,13 +15,15 @@ ModalLayer {
     property bool running: false
     property string previewPath: ""
     property string password: ""
+    property bool isEncrypted: false // 已加密
+    property bool isAuthenticate: false // 密码正确
     property int previewPage: -1
     property int pageCount: -1
     property int rangeStart: -1
     property int rangeEnd: -1
 
     // 展示文档
-    // info: path, page_count, range_start, range_end, is_encrypted, password
+    // info: path, page_count, range_start, range_end, is_encrypted, password, is_authenticate
     function show(info) {
         visible = true
         previewPath = info.path
@@ -30,9 +32,12 @@ ModalLayer {
         rangeStart = info.range_start
         rangeEnd = info.range_end
         password = info.password
+        isEncrypted = info.is_encrypted
+        isAuthenticate = info.is_authenticate
         toPreview()
     }
 
+    // 返回，更新信息
     onVisibleChanged: {
         if(visible) return
         if(rangeStart < 1) rangeStart = 1
@@ -42,10 +47,11 @@ ModalLayer {
         if(updateInfo) {
             updateInfo(previewPath, {
                 pages: `${rangeStart}-${rangeEnd}`,
-                state: "",
+                state: isAuthenticate ? "" : qsTr("密码错误"),
                 range_start: rangeStart,
                 range_end: rangeEnd,
                 password: password,
+                is_authenticate: isAuthenticate,
             })
         }
         qmlapp.popup.simple(qsTr("文档信息已更新"), previewPath)
@@ -80,12 +86,18 @@ ModalLayer {
             const title = qsTr("打开文档失败")
             if(imgID === "[Warning] isEncrypted") {
                 qmlapp.popup.simple(title, qsTr("请填写正确的密码"))
+                isAuthenticate = false
             }
             else if(imgID.startsWith("[Error]")) {
                 qmlapp.popup.message(title, imgID, "error")
             }
-            else
+            else {
                 imgViewer.showImgID(imgID)
+                if(!isAuthenticate) {
+                    qmlapp.popup.simple(qsTr("密码正确"), password)
+                    isAuthenticate = true
+                }
+            }
         }
     }
 
@@ -106,85 +118,13 @@ ModalLayer {
                 color: theme.subTextColor
                 font.pixelSize: size_.smallText
             }
-            // ===== 页数 =====
-            Text_ {
-                text: qsTr("页数：")
-            }
-            Row {
-                spacing: size_.spacing
-                height: size_.line + size_.spacing * 2
-                Button_ {
-                    anchors.top: parent.top
-                    anchors.bottom: parent.bottom
-                    text_: "<"
-                    onClicked: changePage(0, -1)
-                }
-                Button_ {
-                    anchors.top: parent.top
-                    anchors.bottom: parent.bottom
-                    text_: ">"
-                    onClicked: changePage(0, 1)
-                }
-                Rectangle {
-                    width: size_.line * 3
-                    anchors.top: parent.top
-                    anchors.bottom: parent.bottom
-                    color: theme.bgColor
-                    TextInput_ {
-                        clip: true
-                        anchors.fill: parent
-                        bgColor: "#00000000"
-                        text: previewPage
-                        onTextChanged: changePage(text)
-                    }
-                }
-                Text_ {
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "/ "+pageCount
-                }
-            }
-            // ===== OCR范围 =====
-            Text_ {
-                text: qsTr("OCR范围：")
-            }
-            Row {
-                height: size_.line + size_.spacing * 2
-                Rectangle {
-                    width: size_.line * 3
-                    anchors.top: parent.top
-                    anchors.bottom: parent.bottom
-                    color: theme.bgColor
-                    TextInput_ {
-                        clip: true
-                        anchors.fill: parent
-                        bgColor: "#00000000"
-                        text: rangeStart
-                        onTextChanged: rangeStart = text
-                    }
-                }
-                Text_ {
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: " - "
-                }
-                Rectangle {
-                    width: size_.line * 3
-                    anchors.top: parent.top
-                    anchors.bottom: parent.bottom
-                    color: theme.bgColor
-                    TextInput_ {
-                        clip: true
-                        anchors.fill: parent
-                        bgColor: "#00000000"
-                        text: rangeEnd
-                        onTextChanged: rangeEnd = text
-                    }
-                }
-            }
             // ===== 密码 =====
             Row {
+                visible: isEncrypted && !isAuthenticate // 已加密，未填密码，才显示
                 spacing: size_.spacing
                 height: size_.line + size_.spacing * 2
                 Text_ {
+                    color: theme.noColor
                     anchors.verticalCenter: parent.verticalCenter
                     text: qsTr("密码：")
                 }
@@ -199,6 +139,91 @@ ModalLayer {
                         bgColor: "#00000000"
                         text: password
                         onTextChanged: password = text
+                    }
+                }
+                IconButton {
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    width: height
+                    icon_: "yes"
+                    onClicked: toPreview()
+                }
+            }
+            // 控制项
+            Column {
+                visible: !isEncrypted || isAuthenticate
+                // ===== 页数 =====
+                Text_ {
+                    text: qsTr("预览页面")
+                }
+                Row {
+                    spacing: size_.spacing
+                    height: size_.line + size_.spacing * 2
+                    Button_ {
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        text_: "<"
+                        onClicked: changePage(0, -1)
+                    }
+                    Button_ {
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        text_: ">"
+                        onClicked: changePage(0, 1)
+                    }
+                    Rectangle {
+                        width: size_.line * 3
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        color: theme.bgColor
+                        TextInput_ {
+                            clip: true
+                            anchors.fill: parent
+                            bgColor: "#00000000"
+                            text: previewPage
+                            onTextChanged: changePage(text)
+                        }
+                    }
+                    Text_ {
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: "/ "+pageCount
+                    }
+                }
+                // ===== OCR范围 =====
+                Text_ {
+                    text: qsTr("OCR范围")
+                }
+                Row {
+                    height: size_.line + size_.spacing * 2
+                    Rectangle {
+                        width: size_.line * 3
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        color: theme.bgColor
+                        TextInput_ {
+                            clip: true
+                            anchors.fill: parent
+                            bgColor: "#00000000"
+                            text: rangeStart
+                            onTextChanged: rangeStart = text
+                        }
+                    }
+                    Text_ {
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: " - "
+                    }
+                    Rectangle {
+                        width: size_.line * 3
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        color: theme.bgColor
+                        TextInput_ {
+                            clip: true
+                            anchors.fill: parent
+                            bgColor: "#00000000"
+                            text: rangeEnd
+                            onTextChanged: rangeEnd = text
+                        }
                     }
                 }
             }

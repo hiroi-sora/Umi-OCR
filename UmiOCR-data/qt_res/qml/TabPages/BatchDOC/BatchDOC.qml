@@ -43,7 +43,7 @@ TabPage {
             )
             console.log("自动添加！！！！！！！！！！！！！")
             // ocrStart()
-            onClickDoc(0)
+            // onClickDoc(0)
         }
     }
 
@@ -56,6 +56,7 @@ TabPage {
             return
         }
         // 加入表格
+        let encryptedCount = 0
         for(let i in res) {
             const info = res[i]
             filesTableView.add({
@@ -66,9 +67,15 @@ TabPage {
                 page_count: info.page_count,
                 range_start: 1,
                 range_end: info.page_count,
-                is_encrypted: info.is_encrypted,
+                is_encrypted: info.is_encrypted, // 有密码
+                is_authenticate: !info.is_encrypted, // 已解密（密码正确）
                 password: "",
             })
+            if(info.is_encrypted) encryptedCount++
+        }
+        if(encryptedCount > 0) {
+            qmlapp.popup.simple(qsTr("%1个加密文档").arg(encryptedCount),
+                qsTr("请点击文件名填写密码"))
         }
     }
 
@@ -278,7 +285,7 @@ TabPage {
                 headers: [
                     {key: "path", title: qsTr("文档"), left: true, display: path2name,
                         btn: true, onClicked:onClickDoc},
-                    {key: "state", title: qsTr("状态"), },
+                    {key: "state", title: qsTr("状态"), btn: true, onClicked:onClickDoc},
                     {key: "pages", title: qsTr("页数"), btn: true, onClicked:onClickDoc},
                 ]
                 openBtnText: qsTr("选择文档")
