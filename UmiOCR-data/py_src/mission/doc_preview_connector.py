@@ -53,3 +53,9 @@ class DocPreviewConnector(QObject):
         qpixmap = QPixmap.fromImage(qimage)
         imgID = PixmapProvider.addPixmap(qpixmap)
         self.previewImg.emit(imgID)
+
+    # 清空缓存
+    @Slot()
+    def clear(self):
+        self._previewDoc = None
+        self._previewPath = ""

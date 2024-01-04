@@ -92,6 +92,7 @@ ModalLayer {
             configsComp.setValue(ignoreAreaKey, undefined)
         }
         imgViewer.clear()
+        prevConn.clear() // 清除文档缓存
         qmlapp.popup.simple(qsTr("文档信息已更新"), previewPath)
     }
 
