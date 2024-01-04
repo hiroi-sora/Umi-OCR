@@ -32,29 +32,29 @@ class BatchOCR(Page):
     def msnPaths(self, paths, argd):  # 接收路径列表和配置参数字典，开始OCR任务
         # 任务信息
         msnInfo = {
-            "onStart": self.__onStart,
-            "onReady": self.__onReady,
-            "onGet": self.__onGet,
-            "onEnd": self.__onEnd,
+            "onStart": self._onStart,
+            "onReady": self._onReady,
+            "onGet": self._onGet,
+            "onEnd": self._onEnd,
             "argd": argd,
         }
         # 预处理参数字典
-        if not self.__preprocessArgd(argd, paths[0]):
+        if not self._preprocessArgd(argd, paths[0]):
             return
         # 构造输出器
-        if not self.__initOutputList(argd):
+        if not self._initOutputList(argd):
             return
         # 路径转为任务列表格式，加载进任务管理器
         msnList = [{"path": x} for x in paths]
         self.msnID = MissionOCR.addMissionList(msnInfo, msnList)
         if self.msnID.startswith("[Error]"):  # 添加任务失败
-            self.__onEnd(None, f"{self.msnID}\n添加任务失败。")
+            self._onEnd(None, f"{self.msnID}\n添加任务失败。")
         else:  # 添加成功，通知前端刷新UI
             self.callQml("setMsnState", "run")
             print(f"添加任务成功 {self.msnID}")
         return self.msnID
 
-    def __preprocessArgd(self, argd, path0):  # 预处理参数字典，无异常返回True
+    def _preprocessArgd(self, argd, path0):  # 预处理参数字典，无异常返回True
         self.argd = None
         if argd["mission.dirType"] == "source":  # 若保存到原目录
             argd["mission.dir"] = os.path.dirname(path0)  # 则保存路径设为第1张图片的目录
@@ -64,7 +64,7 @@ class BatchOCR(Page):
                 try:  # 不存在，尝试创建地址
                     os.makedirs(d)
                 except OSError as e:  # 创建地址失败，报错
-                    self.__onEnd(
+                    self._onEnd(
                         None,
                         f'[Error] Failed to create directory: "{d}"\n【异常】无法创建路径。',
                     )
@@ -88,7 +88,7 @@ class BatchOCR(Page):
         fileName = argd["mission.fileNameFormat"]
         fileName = fileName.replace(r"%date", startDatetimeUser)  # 替换时间
         if not allowedFileName(fileName):  # 文件名不合法
-            self.__onEnd(
+            self._onEnd(
                 None,
                 f'[Error] The file name is illegal.\n【错误】文件名【{fileName}】含有不允许的字符。\n不允许含有下列字符： \  /  :  *  ?  "  <  >  |',
             )
@@ -97,7 +97,7 @@ class BatchOCR(Page):
         self.argd = argd
         return True
 
-    def __initOutputList(self, argd):  # 初始化输出器列表，无异常返回True
+    def _initOutputList(self, argd):  # 初始化输出器列表，无异常返回True
         self.outputList = []
         outputArgd = {  # 数据转换，封装有需要的值
             "outputDir": argd["mission.dir"],  # 输出路径
@@ -121,7 +121,7 @@ class BatchOCR(Page):
             if argd["mission.filesType.csv"]:  # csv
                 self.outputList.append(OutputCsv(outputArgd))
         except Exception as e:
-            self.__onEnd(
+            self._onEnd(
                 None,
                 f"[Error] Failed to initialize output file.\n【错误】初始化输出文件失败。\n{e}",
             )
@@ -152,7 +152,7 @@ class BatchOCR(Page):
 
     def msnPreview(self, path, argd):  # 快速进行一次任务，主要用于预览
         msnInfo = {
-            "onGet": self.__onPreview,
+            "onGet": self._onPreview,
             "argd": argd,
         }
         msnList = [{"path": path}]
@@ -160,13 +160,13 @@ class BatchOCR(Page):
 
     # ========================= 【任务控制器的异步回调】 =========================
 
-    def __onStart(self, msnInfo):  # 任务队列开始
+    def _onStart(self, msnInfo):  # 任务队列开始
         pass
 
-    def __onReady(self, msnInfo, msn):  # 单个任务准备
+    def _onReady(self, msnInfo, msn):  # 单个任务准备
         self.callQmlInMain("onOcrReady", msn["path"])
 
-    def __onGet(self, msnInfo, msn, res):  # 单个任务完成
+    def _onGet(self, msnInfo, msn, res):  # 单个任务完成
         # 补充参数
         res["fileName"] = os.path.basename(msn["path"])
         res["dir"] = os.path.dirname(msn["path"])
@@ -179,9 +179,9 @@ class BatchOCR(Page):
         # 通知qml更新UI
         self.callQmlInMain("onOcrGet", msn["path"], res)  # 在主线程中调用qml
 
-    def __onEnd(self, msnInfo, msg):  # 任务队列完成或失败
+    def _onEnd(self, msnInfo, msg):  # 任务队列完成或失败
         # msg: [Success] [Warning] [Error]
         self.callQmlInMain("onOcrEnd", msg, self.msnID)
 
-    def __onPreview(self, msnInfo, msn, res):
+    def _onPreview(self, msnInfo, msn, res):
         self.callQmlInMain("onPreview", msn["path"], res)
