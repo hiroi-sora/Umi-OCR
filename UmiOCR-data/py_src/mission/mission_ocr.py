@@ -34,7 +34,7 @@ class __MissionOcrClass(Mission):
         msnInfo["tbpu"] = []
         argd = msnInfo["argd"]
         # 段落合并
-        if "tbpu.merge" in argd:
+        if "tbpu.merge" in argd and argd["tbpu.merge"] != "None":
             if argd["tbpu.merge"] in tbpuMerge:
                 msnInfo["tbpu"].append(tbpuMerge[argd["tbpu.merge"]]())
             else:
