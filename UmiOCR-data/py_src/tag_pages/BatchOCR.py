@@ -164,9 +164,17 @@ class BatchOCR(Page):
         pass
 
     def _onReady(self, msnInfo, msn):  # 单个任务准备
+        msnID = msnInfo["msnID"]
+        if msnID != self.msnID:
+            print(f"[Warning] _onReady 任务ID未在记录。{msnID}")
+            return
         self.callQmlInMain("onOcrReady", msn["path"])
 
     def _onGet(self, msnInfo, msn, res):  # 单个任务完成
+        msnID = msnInfo["msnID"]
+        if msnID != self.msnID:
+            print(f"[Warning] _onGet 任务ID未在记录。{msnID}")
+            return
         # 补充参数
         res["fileName"] = os.path.basename(msn["path"])
         res["dir"] = os.path.dirname(msn["path"])
@@ -180,6 +188,10 @@ class BatchOCR(Page):
         self.callQmlInMain("onOcrGet", msn["path"], res)  # 在主线程中调用qml
 
     def _onEnd(self, msnInfo, msg):  # 任务队列完成或失败
+        msnID = msnInfo["msnID"]
+        if msnID != self.msnID:
+            print(f"[Warning] _onEnd 任务ID未在记录。{msnID}")
+            return
         # msg: [Success] [Warning] [Error]
         self.callQmlInMain("onOcrEnd", msg, self.msnID)
 
