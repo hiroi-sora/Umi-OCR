@@ -170,11 +170,17 @@ TabPage {
 
     // 停止文档任务
     function docStop() {
-        _docStop()
-        // tabPage.callPy("msnStop")
-    }
-    function _docStop() {
-        console.log("_docStop")
+        setMsnState("stop") // 设置结束中
+        tabPage.callPy("msnStop")
+        // 刷新表格，清空未执行的任务的状态
+        let msnLength = filesTableView.rowCount
+        for(let i = 0; i < msnLength; i++) {
+            const row = filesTableView.get(i)
+            if(row.state !== "√") {
+                filesTableView.setProperty(i, "state", "")
+            }
+        }
+        setMsnState("none") // 设置结束
     }
 
     // 文件表格中单击文档
@@ -374,7 +380,7 @@ TabPage {
                     {key: "path", title: qsTr("文档"), left: true, display: path2name,
                         btn: true, onClicked:onClickDoc},
                     {key: "state", title: qsTr("状态"), btn: true, onClicked:onClickDoc},
-                    {key: "pages", title: qsTr("页数"), btn: true, onClicked:onClickDoc},
+                    {key: "pages", title: qsTr("范围"), btn: true, onClicked:onClickDoc},
                 ]
                 openBtnText: qsTr("选择文档")
                 clearBtnText: qsTr("清空")

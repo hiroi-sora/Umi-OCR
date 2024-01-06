@@ -51,22 +51,30 @@ class BatchDOC(Page):
             resList.append(res)
         return resList
 
+    # 停止当前所有任务
+    def msnStop(self):
+        for msnID in self._msnIdPath:
+            MissionDOC.stopMissionList(msnID)
+        self._msnIdPath = {}
+
     # ========================= 【任务控制器的异步回调】 =========================
 
     def _onStart(self, msnInfo):  # 一个文档 开始
         msnID = msnInfo["msnID"]
         if msnID not in self._msnIdPath:
-            print(f"[Error] _onStart 任务ID未在记录。{msnID}")
+            print(f"[Warning] _onStart 任务ID未在记录。{msnID}")
             return
         self.callQmlInMain("onDocStart", msnInfo["path"])
 
     def _onReady(self, msnInfo, page):  # 一个文档的一页 准备开始
+        page += 1
         pass
 
     def _onGet(self, msnInfo, page, res):  # 一个文档的一页 获取结果
+        page += 1
         msnID = msnInfo["msnID"]
         if msnID not in self._msnIdPath:
-            print(f"[Error] _onGet 任务ID未在记录。{msnID}")
+            print(f"[Warning] _onGet 任务ID未在记录。{msnID}")
             return
         self.callQmlInMain("onDocGet", msnInfo["path"], page, res)
 
@@ -74,7 +82,7 @@ class BatchDOC(Page):
         # msg: [Success] [Warning] [Error]
         msnID = msnInfo["msnID"]
         if msnID not in self._msnIdPath:
-            print(f"[Error] _onEnd 任务ID未在记录。{msnID}")
+            print(f"[Warning] _onEnd 任务ID未在记录。{msnID}")
             return
         del self._msnIdPath[msnID]
         if not self._msnIdPath:  # 全部完成
