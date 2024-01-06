@@ -11,12 +11,16 @@ import time
 
 class Mission:
     def __init__(self):
-        self.__msnInfoDict = {}  # 任务信息的字典
-        self.__msnListDict = {}  # 任务队列的字典
-        self.__msnMutex = QMutex()  # 任务队列的锁
-        self.__task = None  # 异步任务对象
-        self.__taskMutex = QMutex()  # 任务对象的锁
-        self.__threadPool = QThreadPool.globalInstance()  # 全局线程池
+        self._msnInfoDict = {}  # 任务信息的字典
+        self._msnListDict = {}  # 任务队列的字典
+        self._msnMutex = QMutex()  # 任务队列的锁
+        self._task = None  # 异步任务对象
+        self._taskMutex = QMutex()  # 任务对象的锁
+        self._threadPool = QThreadPool.globalInstance()  # 全局线程池
+        # 任务队列调度方式
+        # 1111 : 轮询调度，轮流取每个队列的第1个任务
+        # 1234 : 顺序调度，将首个队列所有任务处理完，再进入下一个队列
+        self._schedulingMode = "1111"
 
     # ========================= 【调用接口】 =========================
 
@@ -49,36 +53,36 @@ class Mission:
         msnInfo["state"] = "waiting"
         msnInfo["msnID"] = msnID
         # 添加到任务队列
-        self.__msnMutex.lock()  # 上锁
-        self.__msnInfoDict[msnID] = msnInfo  # 添加任务信息
-        self.__msnListDict[msnID] = msnList  # 添加任务队列
-        self.__msnMutex.unlock()  # 解锁
+        self._msnMutex.lock()  # 上锁
+        self._msnInfoDict[msnID] = msnInfo  # 添加任务信息
+        self._msnListDict[msnID] = msnList  # 添加任务队列
+        self._msnMutex.unlock()  # 解锁
         # 启动任务
-        self.__startMsns()
+        self._startMsns()
         # 返回任务id
         return msnID
 
     # 停止一条任务队列
     def stopMissionList(self, msnID):
-        self.__msnMutex.lock()  # 上锁
-        if msnID in self.__msnListDict:
-            self.__msnInfoDict[msnID]["state"] = "stop"  # 设为停止状态
-        self.__msnMutex.unlock()  # 解锁
+        self._msnMutex.lock()  # 上锁
+        if msnID in self._msnListDict:
+            self._msnInfoDict[msnID]["state"] = "stop"  # 设为停止状态
+        self._msnMutex.unlock()  # 解锁
 
     # 停止全部任务
     def stopAllMissions(self):
-        self.__msnMutex.lock()  # 上锁
-        for msnID in self.__msnListDict:
-            self.__msnInfoDict[msnID]["state"] = "stop"
-        self.__msnMutex.unlock()  # 解锁
+        self._msnMutex.lock()  # 上锁
+        for msnID in self._msnListDict:
+            self._msnInfoDict[msnID]["state"] = "stop"
+        self._msnMutex.unlock()  # 解锁
 
     # 获取每一条任务队列长度
     def getMissionListsLength(self):
         lenDict = {}
-        self.__msnMutex.lock()
-        for k in self.__msnListDict:
-            lenDict[str(k)] = len(self.__msnListDict[k])
-        self.__msnMutex.unlock()
+        self._msnMutex.lock()
+        for k in self._msnListDict:
+            lenDict[str(k)] = len(self._msnListDict[k])
+        self._msnMutex.unlock()
         return lenDict
 
     # 【同步】添加一个任务或队列，等待完成，返回任务结果列表。[i]["result"]为结果
@@ -117,38 +121,40 @@ class Mission:
 
     # ========================= 【主线程 方法】 =========================
 
-    def __startMsns(self):  # 启动异步任务，执行所有任务列表
+    def _startMsns(self):  # 启动异步任务，执行所有任务列表
         # 若当前异步任务对象为空，则创建工作线程
-        self.__taskMutex.lock()  # 上锁
-        if self.__task == None:
-            self.__task = self.__Task(self.__taskRun)
-            self.__threadPool.start(self.__task)
-        self.__taskMutex.unlock()  # 解锁
+        self._taskMutex.lock()  # 上锁
+        if self._task == None:
+            self._task = self._Task(self._taskRun)
+            self._threadPool.start(self._task)
+        self._taskMutex.unlock()  # 解锁
 
     # ========================= 【子线程 方法】 =========================
 
-    def __taskRun(self):  # 异步执行任务字典的流程
-        # print(f"线程{threading.current_thread().ident}，__taskRun 任务正在运行~~")
+    def _taskRun(self):  # 异步执行任务字典的流程
         dictIndex = 0  # 当前取任务字典中的第几个任务队列
         # 循环，直到任务队列的列表为空
         while True:
             # 1. 检查api和任务字典是否为空
-            self.__msnMutex.lock()  # 上锁
-            dl = len(self.__msnInfoDict)  # 任务字典长度
+            self._msnMutex.lock()  # 上锁
+            dl = len(self._msnInfoDict)  # 任务字典长度
             if dl == 0:  # 任务字典已空
-                self.__msnMutex.unlock()  # 解锁
+                self._msnMutex.unlock()  # 解锁
                 break
 
-            # 2. 取一个任务队列
-            dictIndex = (dictIndex + 1) % dl
-            dictKey = tuple(self.__msnInfoDict.keys())[dictIndex]
-            msnInfo = self.__msnInfoDict[dictKey]
-            msnList = self.__msnListDict[dictKey]
-            self.__msnMutex.unlock()  # 解锁
+            # 2. 任务调度，取一个任务
+            if self._schedulingMode == "1111":  # 轮询
+                dictIndex = (dictIndex + 1) % dl
+            elif self._schedulingMode == "1234":  # 顺序
+                dictIndex = 0  # 始终为首个队列
+            dictKey = tuple(self._msnInfoDict.keys())[dictIndex]
+            msnInfo = self._msnInfoDict[dictKey]
+            msnList = self._msnListDict[dictKey]
+            self._msnMutex.unlock()  # 解锁
 
             # 3. 检查任务是否要求停止
             if msnInfo["state"] == "stop":
-                self.__msnDictDel(dictKey)
+                self._msnDictDel(dictKey)
                 msnInfo["onEnd"](msnInfo, "[Warning] Task stop.")
                 continue
 
@@ -159,7 +165,7 @@ class Mission:
                 continue
             elif preFlag.startswith("[Error]"):  # 异常，结束该队列
                 msnInfo["onEnd"](msnInfo, preFlag)
-                self.__msnDictDel(dictKey)
+                self._msnDictDel(dictKey)
                 dictIndex -= 1  # 字典下标回退1位，下次执行正确的下一项
                 continue
 
@@ -180,7 +186,7 @@ class Mission:
 
             # 7. 再次检查任务是否要求停止
             if msnInfo["state"] == "stop":
-                self.__msnDictDel(dictKey)
+                self._msnDictDel(dictKey)
                 msnInfo["onEnd"](msnInfo, "[Warning] Task stop.")
                 continue
 
@@ -191,21 +197,21 @@ class Mission:
             # 9. 这条任务队列完成
             if len(msnList) == 0:
                 msnInfo["onEnd"](msnInfo, "[Success]")
-                self.__msnDictDel(dictKey)
+                self._msnDictDel(dictKey)
                 dictIndex -= 1  # 字典下标回退1位，下次执行正确的下一项
 
         # 完成
-        self.__taskFinish()
+        self._taskFinish()
 
-    def __msnDictDel(self, dictKey):  # 停止一组任务队列
+    def _msnDictDel(self, dictKey):  # 停止一组任务队列
         print(f"停止任务字典{dictKey}")
-        del self.__msnInfoDict[dictKey]
-        del self.__msnListDict[dictKey]
+        del self._msnInfoDict[dictKey]
+        del self._msnListDict[dictKey]
 
-    def __taskFinish(self):  # 任务结束
-        self.__taskMutex.lock()  # 上锁
-        self.__task = None
-        self.__taskMutex.unlock()  # 解锁
+    def _taskFinish(self):  # 任务结束
+        self._taskMutex.lock()  # 上锁
+        self._task = None
+        self._taskMutex.unlock()  # 解锁
 
     # ========================= 【继承重载】 =========================
 
@@ -227,10 +233,10 @@ class Mission:
 
     # ========================= 【异步类】 =========================
 
-    class __Task(QRunnable):
+    class _Task(QRunnable):
         def __init__(self, taskFunc):
             super().__init__()
-            self.__taskFunc = taskFunc
+            self._taskFunc = taskFunc
 
         def run(self):
-            self.__taskFunc()
+            self._taskFunc()
