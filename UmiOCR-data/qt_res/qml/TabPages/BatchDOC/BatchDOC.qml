@@ -108,38 +108,64 @@ TabPage {
         const fileCount = filesTableView.rowCount
         if(fileCount <= 0)
             return
+        setMsnState("init") // 状态：初始化任务
+        missionShow = ""
         // 获取信息
-        let allPages = 0 // 页总数
         const docs = filesTableView.getColumnsValues([
             "path","range_start", "range_end", "is_encrypted", "is_authenticate", "password"])
+        let pathIndex = {} // 缓存路径到下标的映射
         for(let i = 0; i < fileCount; i++) {
             const d = docs[i]
+            pathIndex[d.path] = i
             if(d.is_encrypted && !d.is_authenticate) {
-                qmlapp.popup.message(qsTr("文档已加密"), qsTr("请点击文档名，设置密码"), "warning")
+                qmlapp.popup.message(qsTr("文档已加密"), qsTr("【%1】\n请点击文档名，设置密码").arg(d.path), "warning")
+                setMsnState("none") // 状态：不在运行
                 return
             }
-            allPages += d.range_end - d.range_start + 1
         }
         const argd = configsComp.getValueDict()
-        setMsnState("init") // 状态：初始化任务
-        // 刷新表格
-        for(let i = 0; i < fileCount; i++) {
-            filesTableView.setProperty(i, "state", qsTr("排队中"))
-        }
-        // 刷新计数
-        missionInfo = {
-            startTime: new Date().getTime(), // 开始时间
-            allNum: allPages, // 总长度
-            costTime: 0, // 当前耗时
-            nowNum: 0, // 当前执行长度
+        // 提交任务，获取任务信息
+        const resList = tabPage.callPy("msnDocs", docs, argd)
+        let errMsg = "" // 错误信息
+        let allPages = 0 // 页总数
+        // 判断任务添加结果，刷新表格
+        for(let i in resList) {
+            const res = resList[i]
+            const path = res.path, msnID = res.msnID
+            if(msnID.startsWith("[")) { // 添加任务失败
+                filesTableView.setProperty(path, "state", qsTr("失败"))
+                errMsg += `${path} - ${msnID}\n`
+            }
+            else { // 添加任务成果，增加计数
+                filesTableView.setProperty(path, "state", qsTr("排队"))
+                const d = docs[pathIndex[path]]
+                allPages += d.range_end - d.range_start + 1
+            }
         }
         missionProgress.percent = 0 // 进度条显示
-        missionShow = `0s  0/${allPages}  0%` // 信息显示
-        // 提交任务
-        msnID = tabPage.callPy("msnDocs", docs, argd)
-        // 若tabPanel面板的下标没有变化过，则切换到记录页
-        if(tabPanel.indexChangeNum < 2)
-            tabPanel.currentIndex = 1
+        if(allPages > 0) { // 有成功的任务
+            // 刷新计数
+            missionInfo = {
+                startTime: new Date().getTime(), // 开始时间
+                allNum: allPages, // 总长度
+                costTime: 0, // 当前耗时
+                nowNum: 0, // 当前执行长度
+            }
+            missionShow = `0s  0/${allPages}  0%` // 信息显示
+            // 若tabPanel面板的下标没有变化过，则切换到记录页
+            if(tabPanel.indexChangeNum < 2)
+                tabPanel.currentIndex = 1
+            setMsnState("run") // 状态：运行中
+        }
+        else {
+            missionInfo = {}
+            missionShow = qsTr("任务失败")
+            setMsnState("none") // 状态：不在运行
+        }
+        // 错误信息显示
+        if(errMsg) {
+            qmlapp.popup.message(qsTr("部分文档异常"), errMsg, "error")
+        }
     }
 
     // 停止文档任务
