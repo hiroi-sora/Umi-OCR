@@ -256,7 +256,8 @@ TabPage {
         let state = `${page - d.range_start}/${d.page_count}`
         filesTableView.setProperty(path, "state", state)
         // 提取文字，添加到结果表格
-        res.title = ` - ${page}`
+        let title = path2name(path)
+        res.title = `${title} - ${page}`
         resultsTableView.addOcrResult(res)
     }
 
