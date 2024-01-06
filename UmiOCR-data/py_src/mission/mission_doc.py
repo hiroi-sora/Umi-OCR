@@ -70,26 +70,30 @@ class _MissionDocClass(Mission):
     def msnTask(self, msnInfo, pno):  # 执行msn。pno为当前页数
         doc = msnInfo["doc"]
         page = doc[pno]
-        # 获取元素
+        # 获取元素 https://pymupdf.readthedocs.io/en/latest/_images/img-textpage.png
         p = page.get_text("dict")
         imgs = []
-        print(f"= 页 {pno}")
+        tbList = []  # text box 文本块列表
         for t in p["blocks"]:
             if t["type"] == 1:  # 图片
                 imgs.append({"bytes": t["image"]})
+            elif t["type"] == 0:  # 文本
+                for line in t["lines"]:
+                    for span in line["spans"]:
+                        tb = {"box": span["bbox"], "text": span["text"]}
+                        tbList.append(tb)
         argd = msnInfo["argd"]
         ocrList = MissionOCR.addMissionWait(argd, imgs)
-        dataList = []
         errMsg = ""
         for o in ocrList:
             res = o["result"]
             if res["code"] == 100:
-                dataList += res["data"]
+                tbList += res["data"]
             elif res["code"] != 101:
                 errMsg += res["data"] + "\n"
-        if dataList:  # 有文本
-            resDict = {"code": 100, "data": dataList}
-        elif errMsg:  # 有异常
+        if tbList:  # 有文本
+            resDict = {"code": 100, "data": tbList}
+        elif errMsg:  # 无文本，有异常
             resDict = {"code": 102, "data": errMsg}
         else:  # 无文本
             resDict = {"code": 101, "data": ""}
