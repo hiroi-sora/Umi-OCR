@@ -27,7 +27,7 @@ class BatchDOC(Page):
         return docs
 
     # 进行任务。
-    # docs为列表，每一项为： {path:文档路径, range_start:范围起始, range_end: 范围结束}
+    # docs为列表，每一项为： {path:文档路径, range_start:范围起始, range_end: 范围结束, password:密码}
     # 返回一个列表，每项为： {path:文档路径, msnID:任务ID。若[Error]开头则为失败。}
     def msnDocs(self, docs, argd):
         if self._msnIdPath:
@@ -43,7 +43,8 @@ class BatchDOC(Page):
             }
             path = d["path"]
             pageRange = [int(d["range_start"]), int(d["range_end"])]
-            msnID = MissionDOC.addMission(msnInfo, path, pageRange)
+            password = d["password"]
+            msnID = MissionDOC.addMission(msnInfo, path, pageRange, password=password)
             if not msnID.startswith("["):  # 添加任务成果才记录到 _msnIdPath
                 self._msnIdPath[msnID] = path
             res = {"path": path, "msnID": msnID}

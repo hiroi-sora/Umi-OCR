@@ -33,8 +33,18 @@ class _MissionDocClass(Mission):
     # msnPath: 单个文档路径
     # pageRange: 页数范围。可选： None 全部页 , [1,3] 页面范围（含开头结束）。
     # pageList: 指定多个页数。可选： [] 使用pageRange设置 , [1,2,3] 指定页数
-    def addMission(self, msnInfo, msnPath, pageRange=None, pageList=[]):
-        doc = fitz.open(msnPath)
+    # password: 密码（非必填）
+    def addMission(self, msnInfo, msnPath, pageRange=None, pageList=[], password=""):
+        try:
+            doc = fitz.open(msnPath)
+        except Exception as e:
+            return f"[Error] fitz.open error: {msnPath} {e}"
+        if doc.isEncrypted and not doc.authenticate(password):
+            if password:
+                msg = f"[Error] Incorrect password. 文档已加密，密码错误。 [{password}]"
+            else:
+                msg = "[Error] Doc encrypted. 文档已加密，请提供密码。"
+            return msg
         msnInfo["doc"] = doc
         msnInfo["path"] = msnPath
         # 使用 pageRange 的页面范围
