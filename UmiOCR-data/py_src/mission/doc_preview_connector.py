@@ -8,6 +8,7 @@ import fitz  # PyMuPDF
 
 from .simple_mission import SimpleMission
 from ..image_controller.image_provider import PixmapProvider
+from ..utils.call_func import CallFunc
 
 
 # 文档预览连接器
@@ -50,9 +51,14 @@ class DocPreviewConnector(QObject):
         # 必须先使用变量提取出图像 https://github.com/pymupdf/PyMuPDF/issues/1210
         samples = pix.samples
         qimage = QImage(samples, pix.width, pix.height, QImage.Format_RGB888)
+        # qpixmap = QPixmap()
+        # r = qpixmap.loadFromData(samples)
+        # print(r)
+        print(qimage)
         qpixmap = QPixmap.fromImage(qimage)
         imgID = PixmapProvider.addPixmap(qpixmap)
         self.previewImg.emit(imgID)
+        # TODO fromImage 崩溃问题！！！！ 线程安全？
 
     # 清空缓存
     @Slot()
