@@ -10,6 +10,8 @@ Configs {
     signal clickIgnoreArea() // 打开忽略区域
 
     configDict: {
+        // OCR参数
+        "ocr": qmlapp.globalConfigs.ocrManager.deploy(this, "ocr"), 
 
         // 后处理
         "tbpu": {
