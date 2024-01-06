@@ -106,7 +106,16 @@ class Mission:
             with condition:  # 释放线程阻塞
                 condition.notify()
 
-        msnInfo = {"onGet": _onGet, "onEnd": _onEnd, "argd": argd}
+        def _pass(*x):
+            pass
+
+        msnInfo = {
+            "onStart": _pass,
+            "onReady": _pass,
+            "onGet": _onGet,
+            "onEnd": _onEnd,
+            "argd": argd,
+        }
         msnID = self.addMissionList(msnInfo, msnList)
         if msnID.startswith("[Error]"):  # 添加任务失败
             endMsg = msnID
