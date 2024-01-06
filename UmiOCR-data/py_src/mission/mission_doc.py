@@ -31,7 +31,7 @@ class _MissionDocClass(Mission):
     # 添加一个文档任务
     # msnInfo: { 回调函数"onXX", 参数"argd":{"tbpu.xx", "ocr.xx"} }
     # msnPath: 单个文档路径
-    # pageRange: 页数范围。可选： None 全部页 , [1,3] 页面范围
+    # pageRange: 页数范围。可选： None 全部页 , [1,3] 页面范围（含开头结束）。
     # pageList: 指定多个页数。可选： [] 使用pageRange设置 , [1,2,3] 指定页数
     def addMission(self, msnInfo, msnPath, pageRange=None, pageList=[]):
         doc = fitz.open(msnPath)
@@ -40,9 +40,16 @@ class _MissionDocClass(Mission):
         # 使用 pageRange 的页面范围
         if len(pageList) == 0:
             if isinstance(pageRange, (tuple, list)) and len(pageRange) == 2:
-                pageList = list(range(pageRange[0], pageRange[1] + 1))
+                a, b = pageRange[0], pageRange[1]
+                if a < 1:
+                    return f"[Error] pageRange {pageRange} 范围起始不能小于1"
+                if b > doc.page_count:
+                    return f"[Error] pageRange {pageRange} 范围结束不能大于页数 {doc.page_count}"
+                if a > b:
+                    return f"[Error] pageRange {pageRange} 范围错误"
+                pageList = list(range(a - 1, b))
             else:
-                pageList = list(range(1, doc.page_count + 1))
+                pageList = list(range(0, doc.page_count))
         # 检查页数列表合法性
         if len(pageList) == 0:
             return "[Error] 页数列表为空"
