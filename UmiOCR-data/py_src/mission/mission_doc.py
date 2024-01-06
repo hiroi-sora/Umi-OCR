@@ -78,11 +78,22 @@ class _MissionDocClass(Mission):
             if t["type"] == 1:  # 图片
                 imgs.append({"bytes": t["image"]})
         argd = msnInfo["argd"]
-        resList = MissionOCR.addMissionWait(argd, imgs)
-        print(f"# {pno}")
-        for res in resList:
-            print(res["result"])
-        return None
+        ocrList = MissionOCR.addMissionWait(argd, imgs)
+        dataList = []
+        errMsg = ""
+        for o in ocrList:
+            res = o["result"]
+            if res["code"] == 100:
+                dataList += res["data"]
+            elif res["code"] != 101:
+                errMsg += res["data"] + "\n"
+        if dataList:  # 有文本
+            resDict = {"code": 100, "data": dataList}
+        elif errMsg:  # 有异常
+            resDict = {"code": 102, "data": errMsg}
+        else:  # 无文本
+            resDict = {"code": 101, "data": ""}
+        return resDict
 
     # 获取一个文档的信息，如页数
     def getDocInfo(self, path):

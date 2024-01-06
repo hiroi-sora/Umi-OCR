@@ -14,7 +14,7 @@ import "../../Widgets/IgnoreArea"
     path 路径
     pages 页数显示
     state 状态显示
-    page_count 页数
+    page_count 总页数
     range_start 范围开始
     range_end 范围结束
     is_encrypted 需要密码
@@ -231,6 +231,50 @@ TabPage {
                 break;
         }
         console.log("set mission state:  ", flag)
+    }
+
+    // 准备开始处理一个文档
+    function onDocStart(path) {
+        // 刷新表格显示
+        filesTableView.setProperty(path, "state", qsTr("处理"))
+    }
+
+    // 获取一个文档的一页的结果
+    function onDocGet(path, page, res) {
+        // 刷新总体 耗时显示
+        const date = new Date();
+        const currentTime = date.getTime()
+        missionInfo.costTime = currentTime - missionInfo.startTime
+        missionInfo.nowNum = missionInfo.nowNum + 1
+        const costTime = (missionInfo.costTime/1000).toFixed(1)
+        const nowNum = missionInfo.nowNum
+        const percent = Math.floor(((nowNum/missionInfo.allNum)*100))
+        missionProgress.percent = nowNum/missionInfo.allNum // 进度条显示
+        missionShow = `${costTime}s  ${nowNum}/${missionInfo.allNum}  ${percent}%` // 信息显示
+        // 刷新单个文档的信息
+        const d = filesTableView.get(path)
+        let state = `${page - d.range_start}/${d.page_count}`
+        filesTableView.setProperty(path, "state", state)
+        // 提取文字，添加到结果表格
+        res.title = ` - ${page}`
+        resultsTableView.addOcrResult(res)
+    }
+
+    // 一个文档处理完毕
+    function onDocEnd(path, msg) {
+        filesTableView.setProperty(path, "state", "√")
+        // 任务成功
+        if(msg.startsWith("[Success]")) {
+            // TODO
+            // 所有文档处理完毕
+            if(msg === "[Success] All completed.") {
+                setMsnState("none") // 状态：不在运行
+            }
+        }
+        // 任务失败
+        else if(msg.startsWith("[Error]")) {
+            qmlapp.popup.message(qsTr("批量识别任务异常"), msg, "error")
+        }
     }
 
     // 路径转文件名
