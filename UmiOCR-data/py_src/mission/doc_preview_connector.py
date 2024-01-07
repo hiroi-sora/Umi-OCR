@@ -47,18 +47,19 @@ class DocPreviewConnector(QObject):
         if page < 0 or page > page_count:
             print(f"[Error] 页数{page}超出范围 0-{page_count} 。")
             return
-        pix = doc[page].get_pixmap()
+        p = doc[page].get_pixmap()
+        # 方法1：通过 QImage fromImage 转换
         # 必须先使用变量提取出图像 https://github.com/pymupdf/PyMuPDF/issues/1210
-        samples = pix.samples
-        qimage = QImage(samples, pix.width, pix.height, QImage.Format_RGB888)
-        # qpixmap = QPixmap()
-        # r = qpixmap.loadFromData(samples)
-        # print(r)
-        print(qimage)
+        samples = p.samples
+        # 必须传入 pix.stride ，否则部分格式的图像会导致崩溃
+        qimage = QImage(samples, p.width, p.height, p.stride, QImage.Format_RGB888)
         qpixmap = QPixmap.fromImage(qimage)
+        # 方法2：编码后传入QPixmap（性能低）
+        # imgBytes = p.tobytes("ppm")
+        # qpixmap = QPixmap()
+        # qpixmap.loadFromData(imgBytes)
         imgID = PixmapProvider.addPixmap(qpixmap)
         self.previewImg.emit(imgID)
-        # TODO fromImage 崩溃问题！！！！ 线程安全？
 
     # 清空缓存
     @Slot()
