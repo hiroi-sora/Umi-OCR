@@ -73,7 +73,7 @@ TabPage {
         setMsnState("init") // 状态：初始化任务
         // 刷新表格
         for(let i = 0; i < msnLength; i++) {
-            filesTableView.set(i, { time: "", state: qsTr("排队中") })
+            filesTableView.set(i, { time: "", state: qsTr("排队") })
         }
         // 刷新计数
         missionInfo = {
@@ -171,7 +171,7 @@ TabPage {
     // 准备开始一个任务
     function onOcrReady(path) {
         // 刷新表格显示
-        filesTableView.setProperty(path, "state", qsTr("处理中"))
+        filesTableView.setProperty(path, "state", qsTr("处理"))
     }
 
     // 获取一个OCR的返回值

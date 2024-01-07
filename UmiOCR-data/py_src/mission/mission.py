@@ -213,7 +213,7 @@ class Mission:
         self._taskFinish()
 
     def _msnDictDel(self, dictKey):  # 停止一组任务队列
-        print(f"停止任务字典{dictKey}")
+        # print(f"停止任务字典{dictKey}")
         del self._msnInfoDict[dictKey]
         del self._msnListDict[dictKey]
 

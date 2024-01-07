@@ -242,7 +242,9 @@ TabPage {
     // 准备开始处理一个文档
     function onDocStart(path) {
         // 刷新表格显示
-        filesTableView.setProperty(path, "state", qsTr("处理"))
+        const d = filesTableView.get(path)
+        let state = `0/${d.range_end - d.range_start + 1}`
+        filesTableView.setProperty(path, "state", state)
     }
 
     // 获取一个文档的一页的结果
@@ -259,7 +261,7 @@ TabPage {
         missionShow = `${costTime}s  ${nowNum}/${missionInfo.allNum}  ${percent}%` // 信息显示
         // 刷新单个文档的信息
         const d = filesTableView.get(path)
-        let state = `${page - d.range_start}/${d.page_count}`
+        let state = `${page - d.range_start}/${d.range_end - d.range_start + 1}`
         filesTableView.setProperty(path, "state", state)
         // 提取文字，添加到结果表格
         let title = path2name(path)
