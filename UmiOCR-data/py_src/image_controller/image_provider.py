@@ -30,7 +30,7 @@ class PixmapProviderClass(QQuickImageProvider):
     def requestPixmap(self, path, size=None, resSize=None):
         if "/" in path:
             compID, imgID = path.split("/", 1)
-            self._delCompCache(compID)  # 先清缓存
+            self._delCompCache(compID, imgID)  # 先清缓存
             if imgID in self.pixmapDict:
                 self.compDict[compID] = imgID  # 记录缓存
                 return self.pixmapDict[imgID]
@@ -100,10 +100,13 @@ class PixmapProviderClass(QQuickImageProvider):
         bytesData = byteArray.data()  # 获取字节数组的内容
         return bytesData
 
-    # 清空一个组件的缓存
-    def _delCompCache(self, compID):
+    # 清空一个组件的缓存。imgID可选该组件下一次更新的图片ID。
+    def _delCompCache(self, compID, imgID=""):
         if compID in self.compDict:
             last = self.compDict[compID]
+            if imgID and imgID == last:
+                print(f"[Warning] 图片组件异常清理： {compID} {imgID}")
+                return  # 如果下一次更新的ID等于当前ID，则为异常，不进行清理
             if last in self.pixmapDict:
                 del self.pixmapDict[last]
             del self.compDict[compID]
