@@ -8,6 +8,7 @@ from .mission import Mission
 from .mission_ocr import MissionOCR
 
 import fitz  # PyMuPDF
+import time
 
 
 class FitzOpen:
@@ -98,6 +99,9 @@ class _MissionDocClass(Mission):
                         for span in line["spans"]:
                             tb = {"box": span["bbox"], "text": span["text"], "score": 1}
                             tbs.append(tb)
+        # 仅提取文本时任务速度过快，频繁回调会导致UI卡死，因此故意引入延迟
+        if ocrMode == "textOnly":
+            time.sleep(0.01)
 
         # =============== 调用OCR，将 imgs 的内容提取出来放入 tbs ===============
         if imgs:
