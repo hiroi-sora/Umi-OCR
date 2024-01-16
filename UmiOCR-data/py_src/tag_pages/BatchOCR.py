@@ -8,12 +8,7 @@ from ..utils.utils import allowedFileName
 from ..platform import Platform  # 跨平台
 
 # 输出器
-from ..ocr.output.output_txt import OutputTxt
-from ..ocr.output.output_txt_plain import OutputTxtPlain
-from ..ocr.output.output_txt_individual import OutputTxtIndividual
-from ..ocr.output.output_md import OutputMD
-from ..ocr.output.output_jsonl import OutputJsonl
-from ..ocr.output.output_csv import OutputCsv
+from ..ocr.output import Output
 
 import os
 import time
@@ -40,10 +35,10 @@ class BatchOCR(Page):
         }
         # 预处理参数字典
         if not self._preprocessArgd(argd, paths[0]):
-            return
+            return ""
         # 构造输出器
         if not self._initOutputList(argd):
-            return
+            return ""
         # 路径转为任务列表格式，加载进任务管理器
         msnList = [{"path": x} for x in paths]
         self.msnID = MissionOCR.addMissionList(msnInfo, msnList)
@@ -108,18 +103,9 @@ class BatchOCR(Page):
             "ingoreBlank": argd["mission.ingoreBlank"],  # 忽略空白文件
         }
         try:
-            if argd["mission.filesType.txt"]:  # 标准txt
-                self.outputList.append(OutputTxt(outputArgd))
-            if argd["mission.filesType.txtPlain"]:  # 纯文本txt
-                self.outputList.append(OutputTxtPlain(outputArgd))
-            if argd["mission.filesType.txtIndividual"]:  # 单独txt
-                self.outputList.append(OutputTxtIndividual(outputArgd))
-            if argd["mission.filesType.md"]:  # jsonl
-                self.outputList.append(OutputMD(outputArgd))
-            if argd["mission.filesType.jsonl"]:  # jsonl
-                self.outputList.append(OutputJsonl(outputArgd))
-            if argd["mission.filesType.csv"]:  # csv
-                self.outputList.append(OutputCsv(outputArgd))
+            for key in argd.keys():
+                if "mission.filesType" in key and argd[key]:
+                    self.outputList.append(Output[key[18:]](outputArgd))
         except Exception as e:
             self._onEnd(
                 None,
@@ -188,12 +174,15 @@ class BatchOCR(Page):
         self.callQmlInMain("onOcrGet", msn["path"], res)  # 在主线程中调用qml
 
     def _onEnd(self, msnInfo, msg):  # 任务队列完成或失败
-        msnID = msnInfo["msnID"]
-        if msnID != self.msnID:
-            print(f"[Warning] _onEnd 任务ID未在记录。{msnID}")
-            return
+        if msnInfo:
+            msnID = msnInfo["msnID"]
+            if msnID != self.msnID:
+                print(f"[Warning] _onEnd 任务ID未在记录。{msnID}")
+                return
+        else:
+            msnID = ""
         # msg: [Success] [Warning] [Error]
-        self.callQmlInMain("onOcrEnd", msg, self.msnID)
+        self.callQmlInMain("onOcrEnd", msg, msnID)
 
     def _onPreview(self, msnInfo, msn, res):
         self.callQmlInMain("onPreview", msn["path"], res)
