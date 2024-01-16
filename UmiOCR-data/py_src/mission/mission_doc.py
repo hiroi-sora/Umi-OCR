@@ -6,6 +6,8 @@
 
 from .mission import Mission
 from .mission_ocr import MissionOCR
+from ..ocr.tbpu import Merge as tbpuMerge
+from ..ocr.tbpu import IgnoreArea
 
 import fitz  # PyMuPDF
 import time
@@ -36,6 +38,7 @@ class _MissionDocClass(Mission):
     # pageList: 指定多个页数。可选： [] 使用pageRange设置 , [1,2,3] 指定页数
     # password: 密码（非必填）
     def addMission(self, msnInfo, msnPath, pageRange=None, pageList=[], password=""):
+        # =============== 加载文档，获取文档操作对象 ===============
         try:
             doc = fitz.open(msnPath)
         except Exception as e:
@@ -48,7 +51,7 @@ class _MissionDocClass(Mission):
             return msg
         msnInfo["doc"] = doc
         msnInfo["path"] = msnPath
-        # 使用 pageRange 的页面范围
+        # =============== pageRange 页面范围 ===============
         if len(pageList) == 0:
             if isinstance(pageRange, (tuple, list)) and len(pageRange) == 2:
                 a, b = pageRange[0], pageRange[1]
@@ -66,6 +69,19 @@ class _MissionDocClass(Mission):
             return "[Error] 页数列表为空"
         if not all(isinstance(item, int) for item in pageList):
             return "[Error] 页数列表内容非整数"
+        # =============== 段落合并 ===============
+        argd = msnInfo["argd"]  # 参数
+        msnInfo["tbpu"] = []
+        if "tbpu.merge" in argd and argd["tbpu.merge"] != "None":
+            if argd["tbpu.merge"] in tbpuMerge:
+                msnInfo["tbpu"].append(tbpuMerge[argd["tbpu.merge"]]())
+            else:
+                print(f'[Error] 段落合并参数不存在： {argd["tbpu.merge"]}')
+        # =============== 忽略区域 ===============
+        if "tbpu.ignoreArea" in argd:
+            iArea = argd["tbpu.ignoreArea"]
+            if type(iArea) == list and len(iArea) > 0:
+                msnInfo["tbpu"].append(IgnoreArea(iArea))
         return self.addMissionList(msnInfo, pageList)
 
     def msnTask(self, msnInfo, pno):  # 执行msn。pno为当前页数
