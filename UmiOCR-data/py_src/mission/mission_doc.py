@@ -133,7 +133,7 @@ class _MissionDocClass(Mission):
             # 提取 "ocr." 开头的参数，组装OCR参数字典
             ocrArgd = {}
             for k in argd:
-                if "ocr." in k:
+                if k.startswith("ocr."):
                     ocrArgd[k] = argd[k]
             # 调用OCR，堵塞等待任务完成
             ocrList = MissionOCR.addMissionWait(ocrArgd, imgs)

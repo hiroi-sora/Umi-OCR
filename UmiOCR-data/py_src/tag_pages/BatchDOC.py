@@ -33,13 +33,20 @@ class BatchDOC(Page):
         if self._msnIdPath:
             return "[Error] 有任务进行中，不允许提交新任务。"
         resList = []
+        # 组装参数字典
+        docArgd = {"tbpu.ignoreArea": argd["tbpu.ignoreArea"]}
+        for k in argd:
+            if k.startswith("ocr.") or k.startswith("doc."):
+                docArgd[k] = argd[k]
+        print("文档参数：", docArgd)
+        # 对每个文档发起一个任务
         for d in docs:
             msnInfo = {
                 "onStart": self._onStart,
                 "onReady": self._onReady,
                 "onGet": self._onGet,
                 "onEnd": self._onEnd,
-                "argd": argd,
+                "argd": docArgd,
             }
             path = d["path"]
             pageRange = [int(d["range_start"]), int(d["range_end"])]

@@ -150,9 +150,9 @@ class __MissionOcrClass(Mission):
         key1 = "ocr."
         key2 = key1 + self.__apiKey + "."
         for k in d:
-            if key2 in k:
+            if k.startswith(key2):
                 newD[k[len(key2) :]] = d[k]
-            elif key1 in k:
+            elif k.startswith(key1):
                 newD[k[len(key1) :]] = d[k]
         return newD
 
