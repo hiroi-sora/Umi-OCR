@@ -68,7 +68,7 @@ Configs {
             },
             "fileNameFormat": {
                 "title": qsTr("文件名格式"),
-                "toolTip": qsTr("无需填写拓展名。支持插入以下占位符：\n%date 日期时间\n%name 原文件夹名/文件名\n举例：[OCR]_%name_%date\n生成：[OCR]_文档A_20230901_1213.txt\n添加占位符可以避免旧文件被新文件覆盖。"),
+                "toolTip": qsTr("无需填写拓展名。支持插入以下占位符：\n%date 日期时间\n%name 原文档名\n举例：[OCR]_%name_%date\n生成：[OCR]_文档A_20230901_1213.txt\n添加占位符可以避免旧文件被新文件覆盖。"),
                 "default": "[OCR]_%name_%date",
                 "advanced": true,
             },
@@ -103,11 +103,6 @@ Configs {
                 "txtPlain": {
                     "title": qsTr("p.txt 纯文字格式"),
                     "toolTip": qsTr("输出所有识别文字"),
-                    "default": false,
-                },
-                "txtIndividual": {
-                    "title": qsTr("txt 单独文件"),
-                    "toolTip": qsTr("对每页文档，生成一个对应的txt文件"),
                     "default": false,
                 },
                 "csv": {
