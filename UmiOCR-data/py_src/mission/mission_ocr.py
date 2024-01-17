@@ -12,7 +12,7 @@ from ..ocr.api import getApiOcr, getLocalOptions
 from .mission import Mission
 from ..ocr.tbpu import Merge as tbpuMerge
 from ..ocr.tbpu import IgnoreArea
-from ..utils.utils import isImg
+from ..utils.utils import isImg, argdIntConvert
 
 from PIL import Image
 from io import BytesIO
@@ -62,12 +62,7 @@ class __MissionOcrClass(Mission):
         # 检查参数更新
         startInfo = self._dictShortKey(msnInfo["argd"])
         # 恢复int类型
-        for k in startInfo:
-            n = startInfo[k]
-            if isinstance(n, float):
-                rounded = round(n)
-                if abs(n - rounded) <= 1e-7:
-                    startInfo[k] = rounded
+        argdIntConvert(startInfo)
         msg = self.__api.start(startInfo)
         if msg.startswith("[Error]"):
             print(f"引擎启动失败！", msg)

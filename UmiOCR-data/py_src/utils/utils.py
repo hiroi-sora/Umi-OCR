@@ -39,11 +39,13 @@ def allowedFileName(fn):
         return True
 
 
-def isImg(path):  # 路径是图片返回true
+# 路径是图片返回true
+def isImg(path):
     return os.path.splitext(path)[-1].lower() in ImageSuf
 
 
-def isDoc(path):  # 路径是文档返回true
+# 路径是文档返回true
+def isDoc(path):
     return os.path.splitext(path)[-1].lower() in DocSuf
 
 
@@ -160,3 +162,11 @@ def initConfigDict(dic):
 
     handleConfigGroup(dic)
     return toDict
+
+
+# 整理 argd 参数字典，将 float 恢复 int 类型，如 12.0 → 12
+def argdIntConvert(argd):
+    for k, v in argd.items():
+        if isinstance(v, float) and v.is_integer():
+            argd[k] = int(v)
+            print("整数格式化：", k)
