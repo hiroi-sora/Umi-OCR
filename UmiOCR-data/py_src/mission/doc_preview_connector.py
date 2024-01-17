@@ -9,11 +9,14 @@ import fitz  # PyMuPDF
 from .simple_mission import SimpleMission
 from ..image_controller.image_provider import PixmapProvider
 from ..utils.call_func import CallFunc
+from .mission_doc import MissionDOC
 
 
 # 文档预览连接器
 class DocPreviewConnector(QObject):
-    previewImg = Signal(str)
+    previewImg = Signal(str)  # imgID
+    previewOcr = Signal("QVariant")  # [path, page, res]
+    # 注：信号中含多个变量可能导致崩溃？
 
     def __init__(self, *args):
         super().__init__(*args)
@@ -21,6 +24,7 @@ class DocPreviewConnector(QObject):
         self._previewDoc = None  # 当前预览的对象
         self._previewPath = ""
 
+    # 预览PDF画面
     @Slot(str, int, str)
     def preview(self, path, page, password):
         page -= 1
@@ -60,6 +64,27 @@ class DocPreviewConnector(QObject):
         # qpixmap.loadFromData(imgBytes)
         imgID = PixmapProvider.addPixmap(qpixmap)
         self.previewImg.emit(imgID)
+
+    # 预览一页OCR内容
+    @Slot(str, int, str, "QVariant")
+    def ocr(self, path, page, password, argd):
+        argd = argd.toVariant()  # qml对象转python字典
+
+        def _onGet(msnInfo, page_, res):
+            page_ += 1
+            self.previewOcr.emit([path, page_, res])
+
+        def _onEnd(msnInfo, msg):
+            if not msg.startswith("[Success]"):
+                res = {"code": 103, "data": msg}
+                self.previewOcr.emit([path, -1, res])
+
+        msnInfo = {
+            "argd": argd,
+            "onGet": _onGet,
+            "onEnd": _onEnd,
+        }
+        MissionDOC.addMission(msnInfo, path, (page, page), password=password)
 
     # 清空缓存
     @Slot()

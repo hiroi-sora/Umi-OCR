@@ -15,7 +15,6 @@ ModalLayer {
     property var configsComp: undefined // 设置组件
     property string ignoreAreaKey: "" // 设置组件中忽略区域的key
 
-    property bool running: false
     property string previewPath: ""
     property string password: ""
     property bool isEncrypted: false // 已加密
@@ -24,6 +23,8 @@ ModalLayer {
     property int pageCount: -1
     property int rangeStart: -1
     property int rangeEnd: -1
+    property bool previewOCR: false // 是否预览OCR
+    property bool ocrRunning: false // 是否预览OCR正在执行
 
     // 展示文档
     // info: path, page_count, range_start, range_end, is_encrypted, password, is_authenticate
@@ -94,6 +95,7 @@ ModalLayer {
         imgViewer.clear()
         prevConn.clear() // 清除文档缓存
         qmlapp.popup.simple(qsTr("文档信息已更新"), previewPath)
+        previewPath = ""
     }
 
     // 翻页。to直接翻页，flag加减页。
@@ -112,10 +114,16 @@ ModalLayer {
 
     // 预览一页文档
     function toPreview() {
-        running = true
+        if(!previewPath) return
         if(previewPage < 1) previewPage = 1
         if(previewPage > pageCount) previewPage = pageCount
         prevConn.preview(previewPath, previewPage, password)
+        if(previewOCR) { // 预览OCR
+            ocrRunning = true
+            const argd = configsComp.getValueDict()
+            argd["tbpu.merge"] = "None" // 去除段落合并
+            prevConn.ocr(previewPath, previewPage, password, argd)
+        }
     }
     // 预览连接器
     DocPreviewConnector {
@@ -137,6 +145,20 @@ ModalLayer {
                     isAuthenticate = true
                 }
             }
+        }
+        // ocr预览的回调
+        onPreviewOcr: function(info) {
+            let path = info[0], page = info[1], res = info[2]
+            if(res.code!=100&&res.code!=101) { // 遇到异常
+                qmlapp.popup.message(qsTr("文档预览异常"), res.data, "error")
+                return
+            }
+            if(path != previewPath || page != previewPage) {
+                console.log("[Warning] 文档OCR预览回调不匹配")
+                return
+            }
+            ocrRunning = false
+            imgViewer.showTextBoxes(res)
         }
     }
 
@@ -205,8 +227,30 @@ ModalLayer {
                         height: 1
                         color: theme.coverColor4
                     }
-                    Text_ {
-                        text: qsTr("预览页面")
+                    Row {
+                        spacing: size_.spacing
+                        height: size_.line
+                        Text_ {
+                            text: qsTr("预览页面")
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+                        CheckButton {
+                            anchors.verticalCenter: parent.verticalCenter
+                            height: size_.line
+                            enabledAnime: true
+                            checked: previewOCR
+                            onCheckedChanged: {
+                                if(!previewOCR&&checked) {
+                                    previewOCR = true
+                                    toPreview()
+                                }
+                                else {
+                                    previewOCR = ocrRunning = false
+                                }
+                            }
+                            text_: "OCR"
+                            toolTip: qsTr("预览PDF时，是否预览OCR结果")
+                        }
                     }
                     Row {
                         spacing: size_.spacing
@@ -332,6 +376,11 @@ ModalLayer {
         rightItem: ImageWithIgnore {
             id: imgViewer
             anchors.fill: parent
+            // 加载中 动态图标
+            Loading {
+                visible: ocrRunning
+                anchors.centerIn: parent
+            }
         }
     }
 }
