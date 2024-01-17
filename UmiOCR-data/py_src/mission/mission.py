@@ -47,8 +47,9 @@ class Mission:
         cbKeys = ["onStart", "onReady", "onGet", "onEnd"]
         for k in cbKeys:
             if k not in msnInfo or not callable(msnInfo[k]):
-                print(f"补充空回调函数{k}")
-                msnInfo[k] = (lambda key: lambda *e: print(f"空回调 {key}"))(k)
+                # print(f"补充空回调函数{k}")
+                # msnInfo[k] = (lambda key: lambda *e: print(f"空回调 {key}"))(k)
+                msnInfo[k] = lambda *e: None
         # 任务状态state:  waiting 等待开始， running 进行中， stop 要求停止
         msnInfo["state"] = "waiting"
         msnInfo["msnID"] = msnID

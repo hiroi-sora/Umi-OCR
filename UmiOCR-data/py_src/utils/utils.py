@@ -169,4 +169,3 @@ def argdIntConvert(argd):
     for k, v in argd.items():
         if isinstance(v, float) and v.is_integer():
             argd[k] = int(v)
-            print("整数格式化：", k)
