@@ -103,7 +103,7 @@ class BatchDOC(Page):
         # 处理文件名
         outputFileName = argd["mission.fileNameFormat"]
         outputFileName = outputFileName.replace(r"%date", startDatetimeUser)  # 替换时间
-        fileNameEle = os.path.basename(path)
+        fileNameEle = os.path.splitext(os.path.basename(path))[0]
         outputFileName = outputFileName.replace("%name", fileNameEle)  # 替换名称元素
         if not utils.allowedFileName(outputFileName):  # 文件名不合法
             return (
