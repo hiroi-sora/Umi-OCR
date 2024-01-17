@@ -65,7 +65,6 @@ class BatchOCR(Page):
                     )
                     return False
             argd["mission.dir"] = d  # 写回字典
-        argd["mission.dirName"] = os.path.basename(argd["mission.dir"])  # 提取最后一层文件夹名称
         startTimestamp = time.time()  # 开始时间戳
         argd["startTimestamp"] = startTimestamp
         # 格式化日期时间（标准格式）
@@ -82,6 +81,8 @@ class BatchOCR(Page):
         # 处理文件名
         fileName = argd["mission.fileNameFormat"]
         fileName = fileName.replace(r"%date", startDatetimeUser)  # 替换时间
+        fileNameEle = os.path.basename(os.path.dirname(path0))
+        fileName = fileName.replace("%name", fileNameEle)  # 替换名称元素
         if not allowedFileName(fileName):  # 文件名不合法
             self._onEnd(
                 None,
@@ -95,8 +96,7 @@ class BatchOCR(Page):
     def _initOutputList(self, argd):  # 初始化输出器列表，无异常返回True
         self.outputList = []
         outputArgd = {  # 数据转换，封装有需要的值
-            "outputDir": argd["mission.dir"],  # 输出路径
-            "outputDirName": argd["mission.dirName"],  # 输出文件夹名称
+            "outputDir": argd["mission.dir"],  # 输出目录
             "outputDirType": argd["mission.dirType"],  # 输出目录类型，"source" 为原文件目录
             "outputFileName": argd["mission.fileName"],  # 输出文件名（前缀）
             "startDatetime": argd["startDatetime"],  # 开始日期

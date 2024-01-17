@@ -10,9 +10,6 @@ class OutputCsv(Output):
         self.encoding = "ansi"  # 保存编码，要兼容Office
         self.dir = argd["outputDir"]  # 输出路径（文件夹）
         self.fileName = argd["outputFileName"]  # 文件名
-        self.fileName = self.fileName.replace(
-            "%name", argd["outputDirName"]
-        )  # 文件名添加路径名
         self.outputPath = f"{self.dir}/{self.fileName}.csv"  # 输出路径
         self.ingoreBlank = argd["ingoreBlank"]  # 忽略空白文件
         self.headers = ["Image Name", "OCR", "Image Path"]  # 表头

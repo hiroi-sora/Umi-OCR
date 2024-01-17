@@ -7,9 +7,6 @@ class OutputTxt(Output):
     def __init__(self, argd):
         self.dir = argd["outputDir"]  # 输出路径（文件夹）
         self.fileName = argd["outputFileName"]  # 文件名
-        self.fileName = self.fileName.replace(
-            "%name", argd["outputDirName"]
-        )  # 文件名添加路径名
         self.outputPath = f"{self.dir}/{self.fileName}.txt"  # 输出路径
         self.ingoreBlank = argd["ingoreBlank"]  # 忽略空白文件
         # 创建输出文件
