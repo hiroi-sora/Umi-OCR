@@ -11,6 +11,8 @@ from ..ocr.tbpu import IgnoreArea
 
 import fitz  # PyMuPDF
 import time
+from PIL import Image
+from io import BytesIO
 
 
 class FitzOpen:
@@ -110,7 +112,16 @@ class _MissionDocClass(Mission):
                 # 图片
                 if t["type"] == 1 and (ocrMode == "imageOnly" or ocrMode == "mixed"):
                     bbox = t["bbox"]
-                    imgs.append({"bytes": t["image"], "xy": (bbox[0], bbox[1])})
+                    # 图片视觉大小
+                    w1, h1 = bbox[2] - bbox[0], bbox[3] - bbox[1]
+                    # 图片实际大小
+                    with Image.open(BytesIO(t["image"])) as pimg:
+                        w2, h2 = pimg.size
+                    scale = w1 / w2  # 图片缩放比例
+
+                    imgs.append(
+                        {"bytes": t["image"], "xy": (bbox[0], bbox[1]), "scale": scale}
+                    )
                 # 文本
                 elif t["type"] == 0 and (ocrMode == "textOnly" or ocrMode == "mixed"):
                     for line in t["lines"]:
@@ -142,11 +153,12 @@ class _MissionDocClass(Mission):
                 res = o["result"]
                 if res["code"] == 100:
                     x, y = o["xy"]
+                    scale = o["scale"]
                     for r in res["data"]:
                         # 将图片相对坐标 转为 页面绝对坐标
                         for bi in range(4):
-                            r["box"][bi][0] += x
-                            r["box"][bi][1] += y
+                            r["box"][bi][0] = r["box"][bi][0] * scale + x
+                            r["box"][bi][1] = r["box"][bi][1] * scale + y
                         tbs.append(r)
                 elif res["code"] != 101:
                     errMsg += f'[Error] OCR code:{res["code"]} msg:{res["data"]}\n'
