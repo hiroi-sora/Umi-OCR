@@ -6,6 +6,7 @@ from .page import Page  # 页基类
 from ..mission.mission_doc import MissionDOC  # 任务管理器
 from ..utils import utils
 from ..ocr.output import Output
+from ..ocr.tbpu import Merge as tbpuMerge
 
 import os
 import time
@@ -36,11 +37,18 @@ class BatchDOC(Page):
         if self._msnIdPath:
             return "[Error] 有任务进行中，不允许提交新任务。"
         resList = []
-        # 组装参数字典
+        # 组装参数字典。tbpu分两部分，在MissionDOC中执行ignoreArea，本文件执行merge
         docArgd = {"tbpu.ignoreArea": argd["tbpu.ignoreArea"]}
         for k in argd:
             if k.startswith("ocr.") or k.startswith("doc."):
                 docArgd[k] = argd[k]
+        # 段落合并
+        tbpuList = []
+        if "tbpu.merge" in argd and argd["tbpu.merge"] != "None":
+            if argd["tbpu.merge"] in tbpuMerge:
+                tbpuList.append(tbpuMerge[argd["tbpu.merge"]]())
+            else:
+                print(f'[Error] 段落合并参数不存在： {argd["tbpu.merge"]}')
         # 对每个文档发起一个任务
         for d in docs:
             path = d["path"]
@@ -56,8 +64,10 @@ class BatchDOC(Page):
                 "onGet": self._onGet,
                 "onEnd": self._onEnd,
                 "argd": docArgd,
-                "output1": output1,
-                "output2": output2,
+                # 交给 self._onGet 的参数
+                "get_output1": output1,
+                "get_output2": output2,
+                "get_tbpu": tbpuList,
             }
             pageRange = [int(d["range_start"]), int(d["range_end"])]
             password = d["password"]
@@ -154,9 +164,6 @@ class BatchDOC(Page):
             print(f"[Warning] _onGet 任务ID未在记录。{msnID}")
             return
 
-        # 输出器
-        output1, output2 = msnInfo["output1"], msnInfo["output2"]
-
         def runOutput(output):
             if output:
                 for o in output:
@@ -165,12 +172,22 @@ class BatchDOC(Page):
                     except Exception as e:
                         print(f"文档结果输出失败：{o}\n{e}")
 
+        # 提取信息
+        output1, output2 = msnInfo["get_output1"], msnInfo["get_output2"]
+        tbpuList = msnInfo["get_tbpu"]
+
         # 为 res 添加信息
         res["fileName"] = f"{page}"
         res["path"] = msnInfo["path"]
 
-        runOutput(output1)
-        runOutput(output2)
+        runOutput(output1)  # 输出第1部分
+        if tbpuList and res["code"] == 100:  # 执行tbpu
+            size = {"w": msnInfo["pageInfo"]["w"], "h": msnInfo["pageInfo"]["h"]}
+            data = res["data"]
+            for tbpu in tbpuList:
+                data = tbpu.run(data, size)
+            res["data"] = data
+        runOutput(output2)  # 输出第2部分
 
         self.callQmlInMain("onDocGet", msnInfo["path"], page, res)
 

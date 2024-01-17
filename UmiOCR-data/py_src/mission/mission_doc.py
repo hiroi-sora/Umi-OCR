@@ -152,10 +152,12 @@ class _MissionDocClass(Mission):
                     errMsg += f'[Error] OCR code:{res["code"]} msg:{res["data"]}\n'
 
         # =============== tbpu文本块后处理 ===============
+        size = {"w": round(page.rect.width), "h": round(page.rect.height)}
         if msnInfo["tbpu"]:
-            size = {"w": round(page.rect.width), "h": round(page.rect.height)}
             for tbpu in msnInfo["tbpu"]:
                 tbs = tbpu.run(tbs, size)
+        # 将本页信息填入 msnInfo
+        msnInfo["pageInfo"] = size
 
         # =============== 组装结果字典 resDict ===============
         if errMsg:
