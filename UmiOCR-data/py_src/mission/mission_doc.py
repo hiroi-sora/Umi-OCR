@@ -130,7 +130,14 @@ class _MissionDocClass(Mission):
 
         # =============== 调用OCR，将 imgs 的内容提取出来放入 tbs ===============
         if imgs:
-            ocrList = MissionOCR.addMissionWait(argd, imgs)
+            # 提取 "ocr." 开头的参数，组装OCR参数字典
+            ocrArgd = {}
+            for k in argd:
+                if "ocr." in k:
+                    ocrArgd[k] = argd[k]
+            # 调用OCR，堵塞等待任务完成
+            ocrList = MissionOCR.addMissionWait(ocrArgd, imgs)
+            # 整理OCR结果
             for o in ocrList:
                 res = o["result"]
                 if res["code"] == 100:
