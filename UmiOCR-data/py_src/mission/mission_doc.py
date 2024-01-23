@@ -91,7 +91,7 @@ class _MissionDocClass(Mission):
         doc = msnInfo["doc"]  # 文档对象
         page = doc[pno]  # 页面对象
         argd = msnInfo["argd"]  # 参数
-        ocrMode = argd["doc.ocrMode"]  # OCR内容模式
+        extractionMode = argd["doc.extractionMode"]  # OCR内容模式
         """ mixed - 混合OCR/拷贝文本
             fullPage - 整页强制OCR
             imageOnly - 仅OCR图片
@@ -101,16 +101,18 @@ class _MissionDocClass(Mission):
         # =============== 提取图片和原文本 ===============
         imgs = []  # 待OCR的图片列表
         tbs = []  # text box 文本块列表
-        if ocrMode == "fullPage":  # 模式：整页强制OCR
+        if extractionMode == "fullPage":  # 模式：整页强制OCR
             p = page.get_pixmap()
             bytes = p.tobytes("png")
-            imgs.append({"bytes": bytes, "xy": (0, 0)})
+            imgs.append({"bytes": bytes, "xy": (0, 0), "scale": 1})
         else:
             # 获取元素 https://pymupdf.readthedocs.io/en/latest/_images/img-textpage.png
             p = page.get_text("dict")
             for t in p["blocks"]:
                 # 图片
-                if t["type"] == 1 and (ocrMode == "imageOnly" or ocrMode == "mixed"):
+                if t["type"] == 1 and (
+                    extractionMode == "imageOnly" or extractionMode == "mixed"
+                ):
                     bbox = t["bbox"]
                     # 图片视觉大小
                     w1, h1 = bbox[2] - bbox[0], bbox[3] - bbox[1]
@@ -123,7 +125,9 @@ class _MissionDocClass(Mission):
                         {"bytes": t["image"], "xy": (bbox[0], bbox[1]), "scale": scale}
                     )
                 # 文本
-                elif t["type"] == 0 and (ocrMode == "textOnly" or ocrMode == "mixed"):
+                elif t["type"] == 0 and (
+                    extractionMode == "textOnly" or extractionMode == "mixed"
+                ):
                     for line in t["lines"]:
                         for span in line["spans"]:
                             b = span["bbox"]
@@ -136,7 +140,8 @@ class _MissionDocClass(Mission):
                             tb = {"box": box, "text": span["text"], "score": 1}
                             tbs.append(tb)
         # 仅提取文本时任务速度过快，频繁回调会导致UI卡死，因此故意引入延迟
-        if ocrMode == "textOnly":
+        # TODO: 计算上一次调用间隔
+        if extractionMode == "textOnly":
             time.sleep(0.01)
 
         # =============== 调用OCR，将 imgs 的内容提取出来放入 tbs ===============

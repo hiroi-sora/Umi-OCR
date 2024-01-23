@@ -34,8 +34,8 @@ Configs {
             "title": qsTr("文档处理"),
             "type": "group",
 
-            "ocrMode": {
-                "title": qsTr("提取内容"),
+            "extractionMode": {
+                "title": qsTr("内容提取模式"),
                 "toolTip": qsTr("若一页文档既存在图片又存在文本，如何进行处理"),
                 "optionsList": [
                     ["mixed", qsTr("混合OCR/原文本")],
@@ -86,7 +86,7 @@ Configs {
                 "fold": false,
 
                 "pdfLayered": {
-                    "title": qsTr("pdf 双层可搜索"),
+                    "title": qsTr("layered.pdf 双层可搜索文档"),
                     "toolTip": qsTr("拷贝原文档内容，并叠加一层透明文字，可以搜索和复制"),
                     "default": true,
                 },
