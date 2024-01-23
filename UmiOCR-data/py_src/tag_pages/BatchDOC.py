@@ -52,7 +52,7 @@ class BatchDOC(Page):
         # 对每个文档发起一个任务
         for d in docs:
             path = d["path"]
-            # 构造输出器，output1为tbpu之前，output2为之后。
+            # 构造输出器，output1为PDF型输出器，output2为普通文本型输出器。
             output1, output2 = self._initOutputList(argd, path)
             if type(output1) == str:  # 创建输出器失败
                 resList.append({"path": path, "msnID": output1})
@@ -111,10 +111,10 @@ class BatchDOC(Page):
             startDatetimeUser, time.localtime(startTimestamp)
         )
         # 处理文件名
-        outputFileName = argd["mission.fileNameFormat"]
-        outputFileName = outputFileName.replace(r"%date", startDatetimeUser)  # 替换时间
+        nameTemplate = argd["mission.fileNameFormat"]
+        nameTemplate = nameTemplate.replace(r"%date", startDatetimeUser)  # 替换时间
         fileNameEle = os.path.splitext(os.path.basename(path))[0]
-        outputFileName = outputFileName.replace("%name", fileNameEle)  # 替换名称元素
+        outputFileName = nameTemplate.replace("%name", fileNameEle)  # 替换名称元素
         if not utils.allowedFileName(outputFileName):  # 文件名不合法
             return (
                 f'[Error] 文件名【{outputFileName}】含有不允许的字符。\n不允许含有下列字符： \  /  :  *  ?  "  <  >  |',
@@ -128,6 +128,7 @@ class BatchDOC(Page):
             "outputFileName": outputFileName,  # 输出文件名（前缀）
             "startDatetime": startDatetime,  # 开始日期
             "ingoreBlank": argd["mission.ingoreBlank"],  # 忽略空白文件
+            "originPath": path,  # 原始文件名
         }
 
         # =============== 实例化输出器对象 ===============
@@ -137,7 +138,7 @@ class BatchDOC(Page):
                 # 列表1，输出为PDF格式，需要在tbpu之前输出
                 if "mission.filesType.pdf" in key and argd[key]:
                     output1.append(Output[key[18:]](outputArgd))
-                # 列表2，其它输出格式，在tbpu之后输出
+                # 列表2，输出为文本格式，在tbpu之后输出
                 elif "mission.filesType" in key and argd[key]:
                     output2.append(Output[key[18:]](outputArgd))
         except Exception as e:
@@ -165,18 +166,18 @@ class BatchDOC(Page):
             return
 
         def runOutput(output):
-            if output:
-                for o in output:
-                    try:
-                        o.print(res)
-                    except Exception as e:
-                        print(f"文档结果输出失败：{o}\n{e}")
+            for o in output:
+                try:
+                    o.print(res)
+                except Exception as e:
+                    print(f"文档结果输出失败：{o}\n{e}")
 
         # 提取信息
         output1, output2 = msnInfo["get_output1"], msnInfo["get_output2"]
         tbpuList = msnInfo["get_tbpu"]
 
         # 为 res 添加信息
+        res["page"] = page
         res["fileName"] = f"{page}"
         res["path"] = msnInfo["path"]
 
@@ -198,6 +199,15 @@ class BatchDOC(Page):
             print(f"[Warning] _onEnd 任务ID未在记录。{msnID}")
             return
         del self._msnIdPath[msnID]
+
         if not self._msnIdPath:  # 全部完成
             msg = "[Success] All completed."
+        # 结束输出器，保存文件。
+        output1, output2 = msnInfo["get_output1"], msnInfo["get_output2"]
+        for outputs in (output1, output2):
+            for o in outputs:
+                try:
+                    o.onEnd()
+                except Exception as e:
+                    msg = f"[Error] 输出器异常：{e}" + msg
         self.callQmlInMain("onDocEnd", msnInfo["path"], msg)
