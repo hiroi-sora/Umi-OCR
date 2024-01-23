@@ -131,11 +131,12 @@ class _MissionDocClass(Mission):
                     for line in t["lines"]:
                         for span in line["spans"]:
                             b = span["bbox"]
+                            size = span["size"]  # 字体大小
                             box = [
                                 [b[0], b[1]],
                                 [b[2], b[1]],
-                                [b[2], b[3]],
-                                [b[0], b[3]],
+                                [b[2], b[1] + size],  # 使用字体大小作为行高，而不是 b[3]
+                                [b[0], b[1] + size],
                             ]
                             tb = {"box": box, "text": span["text"], "score": 1}
                             tbs.append(tb)
