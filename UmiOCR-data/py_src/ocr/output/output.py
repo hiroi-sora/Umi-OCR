@@ -27,3 +27,6 @@ class Output:
     def openOutputFile(self):  # 打开输出文件
         if self.outputPath and os.path.exists(self.outputPath):
             Platform.startfile(self.outputPath)
+
+    def onEnd(self):  # 结束输出。
+        pass
