@@ -250,11 +250,7 @@ Item {
                 config.fullKey = fullKey
                 if(config.type==="group") { // 若是配置项组，递归遍历
                     handleConfigGroup(config, fullKey+".") // 前缀加深一层
-                    originDict[fullKey] = {
-                        "title": config.title,
-                        "type": "group",
-                        "advanced": config.advanced,
-                    }
+                    originDict[fullKey] = config
                 }
                 else { // 若是配置项
                     originDict[fullKey] = config
@@ -497,7 +493,7 @@ Item {
             anchors.left: parent.left
             anchors.right: parent.right
             // 高级模式，整组隐藏
-            height: (advanced&&!configs.advanced) ? 0 : childrenRect.height
+            height: (advanced&&!configs.advanced) ? 0 : groupText.height+groupRectangle.height
             visible: !(advanced&&!configs.advanced)
             // 边框闪烁
             function kirakira() {
