@@ -34,6 +34,7 @@ ImageScale {
                     width: d.box[2][0] - d.box[0][0],
                     height: d.box[2][1] - d.box[0][1],
                     text: d.text,
+                    end: d.end, // 行尾间隔符
                 }
                 tbs.push(info)
             }
@@ -185,6 +186,7 @@ ImageScale {
                 let copyText = ""
                 for(let i = li; i <= ri; i++) {
                     const text = textBoxes[i].text
+                    const end = textBoxes[i].end
                     // 范围检查
                     const len = text.length
                     if (lt < 0) lt = 0
@@ -195,11 +197,11 @@ ImageScale {
                     if(i === li && i === ri) // 单个块
                         copyText = text.substring(lt, rt)
                     else if(i === li) // 多个块的起始
-                        copyText = text.substring(lt)+"\n"
+                        copyText = text.substring(lt)+end
                     else if(i === ri) // 多个块的结束
                         copyText += text.substring(0, rt)
                     else // 多个块的中间
-                        copyText += text+"\n"
+                        copyText += text+end
                 }
                 if(copyText && copyText.length>0) {
                     qmlapp.utilsConnector.copyText(copyText)
@@ -215,7 +217,7 @@ ImageScale {
             let copyText = ""
             for (let i = 0, l=textBoxes.length; i < l; i++) {
                 copyText += textBoxes[i].text
-                if(i < l-1) copyText += "\n"
+                if(i < l-1) copyText += textBoxes[i].end
             }
             qmlapp.utilsConnector.copyText(copyText)
             qmlapp.popup.simple(qsTr("图片：复制全部%1字").arg(copyText.length), "")

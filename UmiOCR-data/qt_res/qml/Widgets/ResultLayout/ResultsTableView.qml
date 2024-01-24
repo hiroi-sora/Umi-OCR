@@ -35,8 +35,12 @@ Item {
         switch(res.code){
             case 100: // 成功
                 status_ = "text"
-                const textArray = res.data.map(item => item.text);
-                resText = textArray.join('\n');
+                const l = res.data.length
+                for(let i=0; i<l; i++) {
+                    resText += res.data[i].text
+                    if(i<l-1)
+                        resText += res.data[i].end // 行尾分隔符
+                }
                 break
             case 101: // 无文字
                 status_ = "noText"
