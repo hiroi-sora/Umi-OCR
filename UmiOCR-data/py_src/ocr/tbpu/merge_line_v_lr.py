@@ -9,7 +9,7 @@ class MergeLineVlr(Tbpu):
         self.tbpuName = "单行-竖排-从左到右"
         self.rl = False  # T为从右到左，F为从左到右
 
-    def run(self, textBlocks, imgInfo):
+    def run(self, textBlocks):
         """传入 文块组、图片信息。返回文块组、debug信息字符串。"""
         # 所有文块，按左上角点的y坐标排序
         textBlocks.sort(key=lambda tb: tb["box"][0][1])

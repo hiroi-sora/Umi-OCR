@@ -86,7 +86,7 @@ class MergeLine(Tbpu):
 
         resList.sort(key=cmp_to_key(sortKey))
 
-    def run(self, textBlocks, imgInfo):
+    def run(self, textBlocks):
         # 单行合并
         resList = self.mergeLine(textBlocks)
         # 结果排序

@@ -106,7 +106,7 @@ class MergeParaCode(Tbpu):
         res = [{"text": text, "box": box, "score": score}]
         return res
 
-    def run(self, textBlocks, imgInfo):
+    def run(self, textBlocks):
         # 段落合并
         resList = self.mergePara(textBlocks)
         # 返回新文块列表

@@ -50,7 +50,8 @@ TabPage {
         onTriggered: {
             addDocs(
                 [
-                    "D:/Pictures/Screenshots/test",
+                    // "D:/Pictures/Screenshots/test",
+                    "../../PDF测试",
                 ]
             )
             console.log("自动添加！！！！！！！！！！！！！")

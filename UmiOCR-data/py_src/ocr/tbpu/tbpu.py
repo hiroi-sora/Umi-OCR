@@ -10,7 +10,9 @@ class Tbpu:
     def __init__(self):
         self.tbpuName = "文块处理单元-未知"
 
-    def run(self, textBlocks, img):
-        """输入：textBlocks文块 , img图片信息\n
-        输出：textBlocks文块"""
+    def run(self, textBlocks):
+        """输入：textBlocks文块列表\n
+        输出：排序后的textBlocks文块列表，每个块增加键：
+        'end' 结尾间隔符
+        """
         return textBlocks

@@ -1,3 +1,5 @@
+# tbpu : text block processing unit 文本块后处理
+
 from .merge_line import MergeLine
 from .merge_para import MergePara
 from .merge_para_code import MergeParaCode

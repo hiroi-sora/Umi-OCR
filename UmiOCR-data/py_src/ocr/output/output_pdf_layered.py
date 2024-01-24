@@ -74,6 +74,6 @@ class OutputPdfLayered(Output):
     def onEnd(self):  # 结束时保存。
         print("保存PDF：", self.outputPath)
         if self.pdf:
-            self.pdf.subset_fonts()  # 构建字体子集，减小文件大小。需要fontTools库
+            self.pdf.subset_fonts()  # 构建字体子集，减小文件大小。需要 fontTools 库
             # ez_save默认启用压缩和垃圾回收 deflate=True, garbage=3
             self.pdf.ez_save(self.outputPath)

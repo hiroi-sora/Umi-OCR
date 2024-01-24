@@ -100,7 +100,7 @@ class MergePara(MergeLine):
             resList.append(tb1)  # 装填入结果
         return resList
 
-    def run(self, textBlocks, imgInfo):
+    def run(self, textBlocks):
         # 段落合并
         resList = self.mergePara(textBlocks)
         # 返回新文块列表

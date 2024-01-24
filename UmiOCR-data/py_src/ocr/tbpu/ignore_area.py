@@ -8,7 +8,7 @@ class IgnoreArea(Tbpu):
         self.tbpuName = "忽略区域"
         self.areaList = areaList
 
-    def run(self, textBlocks, imgInfo):
+    def run(self, textBlocks):
         # 返回是否矩形框 a 包含 b
         def isInBox(a, b):
             return (
