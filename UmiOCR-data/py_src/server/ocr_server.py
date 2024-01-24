@@ -13,9 +13,9 @@ def _get_ocr_options():
     ocr_opts = initConfigDict(ocr_opts)
     for key in ocr_opts:
         opts[f"ocr.{key}"] = ocr_opts[key]
-    # 布局解析的参数
+    # 排版解析的参数
     opts[f"tbpu.parser"] = {
-        "title": "布局解析",
+        "title": "排版解析",
         "default": "MergeLine",
         "optionsList": [
             ["MergeLine", "单行"],

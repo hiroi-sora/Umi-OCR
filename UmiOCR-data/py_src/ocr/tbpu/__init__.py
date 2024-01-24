@@ -1,17 +1,13 @@
 # tbpu : text block processing unit 文本块后处理
 
-from .merge_line import MergeLine
-from .merge_para import MergePara
-from .merge_para_code import MergeParaCode
-from .merge_line_v_lr import MergeLineVlr
-from .merge_line_v_rl import MergeLineVrl
+from .parser_multi_para import MultiPara
 from .ignore_area import IgnoreArea
 
-# 布局解析
+# 排版解析
 Parser = {
-    "MergeLine": MergeLine,
-    "MergePara": MergePara,
-    "MergeParaCode": MergeParaCode,
-    "MergeLineVlr": MergeLineVlr,
-    "MergeLineVrl": MergeLineVrl,
+    "multi_para": MultiPara,  # 多栏-自然段
+    "multi_line": MultiPara,  # 多栏-单行
+    "single_para": MultiPara,  # 单栏-自然段
+    "single_line": MultiPara,  # 单栏-单行
+    "single_code": MultiPara,  # 单栏-代码段
 }

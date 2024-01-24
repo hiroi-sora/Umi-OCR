@@ -42,13 +42,13 @@ class BatchDOC(Page):
         for k in argd:
             if k.startswith("ocr.") or k.startswith("doc."):
                 docArgd[k] = argd[k]
-        # 布局解析
+        # 排版解析
         tbpuList = []
-        if "tbpu.parser" in argd and argd["tbpu.parser"] != "None":
+        if "tbpu.parser" in argd and argd["tbpu.parser"]:
             if argd["tbpu.parser"] in tbpuParser:
                 tbpuList.append(tbpuParser[argd["tbpu.parser"]]())
             else:
-                print(f'[Error] 布局解析参数不存在： {argd["tbpu.parser"]}')
+                print(f'[Error] 排版解析参数不存在： {argd["tbpu.parser"]}')
         # 对每个文档发起一个任务
         for d in docs:
             path = d["path"]

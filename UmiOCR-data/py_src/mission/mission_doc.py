@@ -79,12 +79,12 @@ class _MissionDocClass(Mission):
             iArea = argd["tbpu.ignoreArea"]
             if type(iArea) == list and len(iArea) > 0:
                 msnInfo["tbpu"].append(IgnoreArea(iArea))
-        # 布局解析
-        if "tbpu.parser" in argd and argd["tbpu.parser"] != "None":
+        # 排版解析
+        if "tbpu.parser" in argd and argd["tbpu.parser"]:
             if argd["tbpu.parser"] in tbpuParser:
                 msnInfo["tbpu"].append(tbpuParser[argd["tbpu.parser"]]())
             else:
-                print(f'[Error] 布局解析参数不存在： {argd["tbpu.parser"]}')
+                print(f'[Error] 排版解析参数不存在： {argd["tbpu.parser"]}')
         return self.addMissionList(msnInfo, pageList)
 
     def msnTask(self, msnInfo, pno):  # 执行msn。pno为当前页数

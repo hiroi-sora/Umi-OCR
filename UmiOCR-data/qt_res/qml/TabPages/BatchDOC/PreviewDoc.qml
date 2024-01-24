@@ -121,7 +121,7 @@ ModalLayer {
         if(previewOCR) { // 预览OCR
             ocrRunning = true
             const argd = configsComp.getValueDict()
-            argd["tbpu.parser"] = "None" // 去除布局解析
+            argd["tbpu.parser"] = "None" // 去除排版解析
             prevConn.ocr(previewPath, previewPage, password, argd)
         }
     }

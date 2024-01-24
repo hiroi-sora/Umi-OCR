@@ -33,12 +33,12 @@ class __MissionOcrClass(Mission):
         # 实例化 tbpu 文本后处理模块
         msnInfo["tbpu"] = []
         argd = msnInfo["argd"]
-        # 布局解析
-        if "tbpu.parser" in argd and argd["tbpu.parser"] != "None":
+        # 排版解析
+        if "tbpu.parser" in argd and argd["tbpu.parser"]:
             if argd["tbpu.parser"] in tbpuParser:
                 msnInfo["tbpu"].append(tbpuParser[argd["tbpu.parser"]]())
             else:
-                print(f'[Error] 布局解析参数不存在： {argd["tbpu.parser"]}')
+                print(f'[Error] 排版解析参数不存在： {argd["tbpu.parser"]}')
         # 忽略区域
         if "tbpu.ignoreArea" in argd:
             iArea = argd["tbpu.ignoreArea"]

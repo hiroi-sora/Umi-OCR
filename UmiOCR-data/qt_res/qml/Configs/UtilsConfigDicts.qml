@@ -31,18 +31,19 @@ QtObject {
         }
     }
 
-    // OCR文本后处理-布局解析
+    // OCR文本后处理-排版解析
     function getTbpuParser(d=undefined) {
         return {
-            "title": qsTr("布局解析"),
+            "title": qsTr("排版解析方案"),
+            "toolTip": qsTr("按什么方式，解析和排序图片中的文字块"),
             "default": d,
             "optionsList": [
-                ["MergeLine", qsTr("单行")],
-                ["MergePara", qsTr("多行-自然段")],
-                ["MergeParaCode", qsTr("多行-代码段")],
-                ["MergeLineVrl", qsTr("竖排-从右到左")],
-                ["MergeLineVlr", qsTr("竖排-从左到右")],
-                ["None", qsTr("不做处理")],
+                ["multi_para", qsTr("多栏-自然段")],
+                ["multi_line", qsTr("多栏-单行")],
+                ["single_para", qsTr("单栏-自然段")],
+                ["single_line", qsTr("单栏-单行")],
+                ["single_code", qsTr("单栏-代码段")],
+                ["", qsTr("不做处理")],
             ],
         }
     }
