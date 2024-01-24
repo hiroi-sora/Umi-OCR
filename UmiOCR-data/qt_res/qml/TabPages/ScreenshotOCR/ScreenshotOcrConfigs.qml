@@ -17,7 +17,7 @@ Configs {
             "title": qsTr("OCR文本后处理"),
             "type": "group",
 
-            "merge": qmlapp.globalConfigs.utilsDicts.getTbpuMerge(),
+            "parser": qmlapp.globalConfigs.utilsDicts.getTbpuParser(),
         },
 
         "hotkey": {

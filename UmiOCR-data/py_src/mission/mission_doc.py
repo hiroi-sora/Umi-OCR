@@ -6,7 +6,7 @@
 
 from .mission import Mission
 from .mission_ocr import MissionOCR
-from ..ocr.tbpu import Merge as tbpuMerge
+from ..ocr.tbpu import Parser as tbpuParser
 from ..ocr.tbpu import IgnoreArea
 
 import fitz  # PyMuPDF
@@ -79,12 +79,12 @@ class _MissionDocClass(Mission):
             iArea = argd["tbpu.ignoreArea"]
             if type(iArea) == list and len(iArea) > 0:
                 msnInfo["tbpu"].append(IgnoreArea(iArea))
-        # 段落合并
-        if "tbpu.merge" in argd and argd["tbpu.merge"] != "None":
-            if argd["tbpu.merge"] in tbpuMerge:
-                msnInfo["tbpu"].append(tbpuMerge[argd["tbpu.merge"]]())
+        # 布局解析
+        if "tbpu.parser" in argd and argd["tbpu.parser"] != "None":
+            if argd["tbpu.parser"] in tbpuParser:
+                msnInfo["tbpu"].append(tbpuParser[argd["tbpu.parser"]]())
             else:
-                print(f'[Error] 段落合并参数不存在： {argd["tbpu.merge"]}')
+                print(f'[Error] 布局解析参数不存在： {argd["tbpu.parser"]}')
         return self.addMissionList(msnInfo, pageList)
 
     def msnTask(self, msnInfo, pno):  # 执行msn。pno为当前页数
@@ -176,12 +176,9 @@ class _MissionDocClass(Mission):
                     errMsg += f'[Error] OCR code:{res["code"]} msg:{res["data"]}\n'
 
         # =============== tbpu文本块后处理 ===============
-        size = {"w": round(page.rect.width), "h": round(page.rect.height)}
         if msnInfo["tbpu"]:
             for tbpu in msnInfo["tbpu"]:
-                tbs = tbpu.run(tbs, size)
-        # 将本页信息填入 msnInfo
-        msnInfo["pageInfo"] = size
+                tbs = tbpu.run(tbs)
 
         # =============== 组装结果字典 resDict ===============
         if errMsg:

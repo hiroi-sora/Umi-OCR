@@ -10,7 +10,7 @@
 
 from ..ocr.api import getApiOcr, getLocalOptions
 from .mission import Mission
-from ..ocr.tbpu import Merge as tbpuMerge
+from ..ocr.tbpu import Parser as tbpuParser
 from ..ocr.tbpu import IgnoreArea
 from ..utils.utils import isImg, argdIntConvert
 
@@ -33,12 +33,12 @@ class __MissionOcrClass(Mission):
         # 实例化 tbpu 文本后处理模块
         msnInfo["tbpu"] = []
         argd = msnInfo["argd"]
-        # 段落合并
-        if "tbpu.merge" in argd and argd["tbpu.merge"] != "None":
-            if argd["tbpu.merge"] in tbpuMerge:
-                msnInfo["tbpu"].append(tbpuMerge[argd["tbpu.merge"]]())
+        # 布局解析
+        if "tbpu.parser" in argd and argd["tbpu.parser"] != "None":
+            if argd["tbpu.parser"] in tbpuParser:
+                msnInfo["tbpu"].append(tbpuParser[argd["tbpu.parser"]]())
             else:
-                print(f'[Error] 段落合并参数不存在： {argd["tbpu.merge"]}')
+                print(f'[Error] 布局解析参数不存在： {argd["tbpu.parser"]}')
         # 忽略区域
         if "tbpu.ignoreArea" in argd:
             iArea = argd["tbpu.ignoreArea"]
@@ -95,20 +95,8 @@ class __MissionOcrClass(Mission):
             res["score"] = score
             # 执行 tbpu
             if msnInfo["tbpu"]:
-                imgInfo = {"w": 0, "h": 0}
-                if "path" in msn:
-                    with Image.open(msn["path"]) as image:
-                        width, height = image.size
-                        imgInfo = {"w": width, "h": height}
-                elif "bytes" in msn:
-                    imgFile = BytesIO(msn["bytes"])
-                    with Image.open(imgFile) as image:
-                        width, height = image.size
-                        imgInfo = {"w": width, "h": height}
-                else:
-                    print("[Warning] tbpu未获得图片信息！")
                 for tbpu in msnInfo["tbpu"]:
-                    res["data"] = tbpu.run(res["data"], imgInfo)
+                    res["data"] = tbpu.run(res["data"])
         return res
 
     # ========================= 【qml接口】 =========================

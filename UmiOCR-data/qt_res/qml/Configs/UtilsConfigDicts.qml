@@ -31,10 +31,10 @@ QtObject {
         }
     }
 
-    // OCR文本后处理-段落合并
-    function getTbpuMerge(d=undefined) {
+    // OCR文本后处理-布局解析
+    function getTbpuParser(d=undefined) {
         return {
-            "title": qsTr("段落合并"),
+            "title": qsTr("布局解析"),
             "default": d,
             "optionsList": [
                 ["MergeLine", qsTr("单行")],

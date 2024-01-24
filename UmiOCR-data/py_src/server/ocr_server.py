@@ -13,9 +13,9 @@ def _get_ocr_options():
     ocr_opts = initConfigDict(ocr_opts)
     for key in ocr_opts:
         opts[f"ocr.{key}"] = ocr_opts[key]
-    # 段落合并的参数
-    opts[f"tbpu.merge"] = {
-        "title": "段落合并",
+    # 布局解析的参数
+    opts[f"tbpu.parser"] = {
+        "title": "布局解析",
         "default": "MergeLine",
         "optionsList": [
             ["MergeLine", "单行"],
@@ -83,7 +83,7 @@ const data = {
         "ocr.angle": false,
         "ocr.language": "简体中文",
         "ocr.maxSideLen": 1024,
-        "tbpu.merge": "MergeLine",
+        "tbpu.parser": "MergeLine",
     }
 };
 

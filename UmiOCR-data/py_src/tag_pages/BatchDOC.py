@@ -6,7 +6,7 @@ from .page import Page  # 页基类
 from ..mission.mission_doc import MissionDOC  # 任务管理器
 from ..utils import utils
 from ..ocr.output import Output
-from ..ocr.tbpu import Merge as tbpuMerge
+from ..ocr.tbpu import Parser as tbpuParser
 
 import os
 import time
@@ -37,18 +37,18 @@ class BatchDOC(Page):
         if self._msnIdPath:
             return "[Error] 有任务进行中，不允许提交新任务。"
         resList = []
-        # 组装参数字典。tbpu分两部分，在MissionDOC中执行ignoreArea，本文件执行merge
+        # 组装参数字典。tbpu分两部分，在MissionDOC中执行ignoreArea，本文件执行parser
         docArgd = {"tbpu.ignoreArea": argd["tbpu.ignoreArea"]}
         for k in argd:
             if k.startswith("ocr.") or k.startswith("doc."):
                 docArgd[k] = argd[k]
-        # 段落合并
+        # 布局解析
         tbpuList = []
-        if "tbpu.merge" in argd and argd["tbpu.merge"] != "None":
-            if argd["tbpu.merge"] in tbpuMerge:
-                tbpuList.append(tbpuMerge[argd["tbpu.merge"]]())
+        if "tbpu.parser" in argd and argd["tbpu.parser"] != "None":
+            if argd["tbpu.parser"] in tbpuParser:
+                tbpuList.append(tbpuParser[argd["tbpu.parser"]]())
             else:
-                print(f'[Error] 段落合并参数不存在： {argd["tbpu.merge"]}')
+                print(f'[Error] 布局解析参数不存在： {argd["tbpu.parser"]}')
         # 对每个文档发起一个任务
         for d in docs:
             path = d["path"]
@@ -183,10 +183,9 @@ class BatchDOC(Page):
 
         runOutput(output1)  # 输出第1部分
         if tbpuList and res["code"] == 100:  # 执行tbpu
-            size = {"w": msnInfo["pageInfo"]["w"], "h": msnInfo["pageInfo"]["h"]}
             data = res["data"]
             for tbpu in tbpuList:
-                data = tbpu.run(data, size)
+                data = tbpu.run(data)
             res["data"] = data
         runOutput(output2)  # 输出第2部分
 

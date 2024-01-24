@@ -77,7 +77,7 @@ Paddle `options` 完整字典示例：
         "ocr.language": "models/config_chinese.txt",
         "ocr.maxSideLen": 960,
         "ocr.cls": false,
-        "tbpu.merge": "MergeLine",
+        "tbpu.parser": "MergeLine",
     }
 ```
 
@@ -106,7 +106,7 @@ Paddle `options` 完整字典示例：
         "ocr.language": "简体中文",
         "ocr.maxSideLen": 1024,
         "ocr.angle": false,
-        "tbpu.merge": "MergeLine",
+        "tbpu.parser": "MergeLine",
     }
 ```
 
@@ -121,7 +121,7 @@ Paddle `options` 完整字典示例：
 P2T `options` 完整字典示例：
 ```json
     "options": {
-        "tbpu.merge": "MergeLine",
+        "tbpu.parser": "MergeLine",
     }
 ```
 
@@ -183,14 +183,14 @@ const data = {
     //     "ocr.language": "models/config_chinese.txt",
     //     "ocr.cls": false,
     //     "ocr.limit_side_len": 960,
-    //     "tbpu.merge": "MergeLine",
+    //     "tbpu.parser": "MergeLine",
     // }
     // Rapid引擎模式
     // "options": {
     //     "ocr.language": "简体中文",
     //     "ocr.angle": false,
     //     "ocr.maxSideLen": 1024,
-    //     "tbpu.merge": "MergeLine",
+    //     "tbpu.parser": "MergeLine",
     // }
 };
 
@@ -225,14 +225,14 @@ data = {
     #     "ocr.language": "models/config_chinese.txt",
     #     "ocr.cls": False,
     #     "ocr.limit_side_len": 960,
-    #     "tbpu.merge": "MergeLine",
+    #     "tbpu.parser": "MergeLine",
     # }
     # Rapid引擎模式
     # "options": {
     #     "ocr.language": "简体中文",
     #     "ocr.angle": False,
     #     "ocr.maxSideLen": 1024,
-    #     "tbpu.merge": "MergeLine",
+    #     "tbpu.parser": "MergeLine",
     # }
 }
 headers = {"Content-Type": "application/json"}
@@ -317,7 +317,7 @@ fetch(url, {
     "type": "enum",
     "default": 960
   },
-  "tbpu.merge": {
+  "tbpu.parser": {
     "title": "段落合并",
     "default": "MergeLine",
     "optionsList": [

@@ -101,7 +101,6 @@ class MergePara(MergeLine):
         return resList
 
     def run(self, textBlocks):
-        # 段落合并
         resList = self.mergePara(textBlocks)
         # 返回新文块列表
         return resList

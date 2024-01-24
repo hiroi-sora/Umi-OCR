@@ -7,8 +7,8 @@ from .merge_line_v_lr import MergeLineVlr
 from .merge_line_v_rl import MergeLineVrl
 from .ignore_area import IgnoreArea
 
-
-Merge = {
+# 布局解析
+Parser = {
     "MergeLine": MergeLine,
     "MergePara": MergePara,
     "MergeParaCode": MergeParaCode,

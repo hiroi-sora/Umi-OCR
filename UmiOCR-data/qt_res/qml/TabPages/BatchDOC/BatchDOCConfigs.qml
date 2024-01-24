@@ -18,7 +18,7 @@ Configs {
             "title": qsTr("OCR文本后处理"),
             "type": "group",
 
-            "merge": qmlapp.globalConfigs.utilsDicts.getTbpuMerge("MergePara"),
+            "parser": qmlapp.globalConfigs.utilsDicts.getTbpuParser("MergePara"),
             "btns": {
                 "title": qsTr("忽略区域（点击文档名进入设置）"),
                 "btnsList": [],
