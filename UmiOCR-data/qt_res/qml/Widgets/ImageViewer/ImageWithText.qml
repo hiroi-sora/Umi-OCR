@@ -34,7 +34,7 @@ ImageScale {
                     width: d.box[2][0] - d.box[0][0],
                     height: d.box[2][1] - d.box[0][1],
                     text: d.text,
-                    end: d.end, // 行尾间隔符
+                    end: d.end || "", // 行尾间隔符
                 }
                 tbs.push(info)
             }

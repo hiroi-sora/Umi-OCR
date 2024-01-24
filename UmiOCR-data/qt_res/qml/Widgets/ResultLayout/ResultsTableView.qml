@@ -39,7 +39,7 @@ Item {
                 for(let i=0; i<l; i++) {
                     resText += res.data[i].text
                     if(i<l-1)
-                        resText += res.data[i].end // 行尾分隔符
+                        resText += res.data[i].end || "" // 行尾分隔符
                 }
                 break
             case 101: // 无文字
