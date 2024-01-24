@@ -138,7 +138,12 @@ class _MissionDocClass(Mission):
                                 [b[2], b[1] + size],  # 使用字体大小作为行高，而不是 b[3]
                                 [b[0], b[1] + size],
                             ]
-                            tb = {"box": box, "text": span["text"], "score": 1}
+                            tb = {
+                                "box": box,
+                                "text": span["text"],
+                                "score": 1,
+                                "from": "text",  # 来源：直接提取文本
+                            }
                             tbs.append(tb)
         # 仅提取文本时任务速度过快，频繁回调会导致UI卡死，因此故意引入延迟
         # TODO: 计算上一次调用间隔
@@ -165,6 +170,7 @@ class _MissionDocClass(Mission):
                         for bi in range(4):
                             r["box"][bi][0] = r["box"][bi][0] * scale + x
                             r["box"][bi][1] = r["box"][bi][1] * scale + y
+                        r["from"] = "ocr"  # 来源：OCR
                         tbs.append(r)
                 elif res["code"] != 101:
                     errMsg += f'[Error] OCR code:{res["code"]} msg:{res["data"]}\n'
