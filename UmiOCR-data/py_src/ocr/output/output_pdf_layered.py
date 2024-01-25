@@ -30,11 +30,12 @@ class OutputPdfLayered(Output):
         fontsize = round(h)  # 字体大小初值，假设为行高
         minSize = 5  # 大小下限
         getLen = lambda text, s: self.font.text_length(text, fontsize=s)
-        while getLen(text, fontsize) < w:
-            fontsize += 1  # 尝试增大字体，直到行宽刚好超过界限
-        fontsize -= 1
         while getLen(text, fontsize) > w and fontsize >= minSize:
             fontsize -= 1  # 尝试减小字体，直到行宽刚好小于界限
+        while getLen(text, fontsize) < w:
+            fontsize += 1  # 尝试增大字体，直到行宽刚好超过界限
+        while getLen(text, fontsize) > w and fontsize >= minSize:
+            fontsize -= 0.1  # 再次减小字体，将精度提升到 0.1
         return fontsize
 
     def print(self, res):  # 输出图片结果
