@@ -21,6 +21,7 @@ class OutputTxt(Output):
             return  # 忽略空白图片
         textOut = f'≦ {res["fileName"]} ≧\n'
         if res["code"] == 100:
+            # TODO: 优化逻辑，抽象出文本拼合函数
             datas = res["data"]
             last = len(datas) - 1
             for i, tb in enumerate(datas):

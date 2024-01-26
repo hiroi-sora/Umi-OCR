@@ -15,7 +15,9 @@ class OutputPdfLayered(Output):
         self.outputPath = f"{self.dir}/{self.fileName}.layered.pdf"  # 输出路径
         try:
             self.pdf = fitz.open(self.originPath)  # 加载pymupdf对象
-            # TODO ：原文件不是PDF怎么办？
+            # TODO ：原文件不是PDF时，手动创建新PDF。
+            if not self.pdf.is_pdf:
+                raise Exception(f"原文档不是PDF格式，暂不支持转为双层可搜索PDF。")
             self.font = fitz.Font("cjk")  # 字体
         except Exception as e:
             self.pdf = None

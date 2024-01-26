@@ -43,7 +43,7 @@ class OutputCsv(Output):
 
         writeList = [name, textOut, path]
         with open(
-            self.outputPath, "a", encoding=self.encoding, newline=""
+            self.outputPath, "a", encoding=self.encoding, newline="", errors="ignore"
         ) as f:  # 追加写入本地文件
             writer = csv.writer(f)
             writer.writerow(writeList)

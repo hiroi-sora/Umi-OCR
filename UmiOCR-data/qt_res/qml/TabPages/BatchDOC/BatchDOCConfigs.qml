@@ -91,7 +91,7 @@ Configs {
                     "default": true,
                 },
                 "pdfText": {
-                    "title": qsTr("pdf 纯文本还原排版"),
+                    // "title": qsTr("pdf 纯文本还原排版"), // TODO
                     "toolTip": qsTr("创建一个新的PDF文档，只含OCR文本，排版尽量还原原文档"),
                     "default": false,
                 },
