@@ -71,29 +71,69 @@ class ParagraphParse:
     # 执行分析
     def _parse(self, units):
         units.sort(key=lambda a: a[0][1])  # 确保从上到下有序
-        for i1 in range(len(units) - 1):
-            i2 = i1 + 1  # i1为当前行，i2为下一行
-            l1, top1, r1, bottom1 = units[i1][0]  # 上下左右边缘
-            h1 = bottom1 - top1  # 行高
-            l2, top2, r2, bottom2 = units[i2][0]
-            h2 = bottom2 - top2
-            hp = (h1 + h2) * 0.5  # 平均行高
-            # 若垂直距离大于2倍行高，则为下一段
-            # TODO: 计算平均行间距，大于平均的是换段。
-            if top2 > bottom1 + hp * 2:
-                self.set_end(units[i1][2], "\n")
-                continue
-            # 行1的左边缘接近行2，或行1缩进2格，则两行可能在同一段内
-            if l1 - 3 * hp <= l2 <= l1 + hp:
-                # 行1右边缘内缩，则不是同一段
-                if r1 < r2 - hp * 2:
-                    self.set_end(units[i1][2], "\n")
+        para_l, top, para_r, bottom = units[0][0]  # 当前段的左右
+        para_line_h = bottom - top  # 当前段行高
+        now_para = [units[0]]  # 当前段的块
+        paras = []  # 总的段
+        # 取 左右相等为一个自然段的主体
+        for i in range(1, len(units)):
+            l, top, r, bottom = units[i][0]  # 当前块上下左右边缘
+            h = bottom - top
+            # 左右边缘都相等，为同一段
+            if abs(para_l - l) <= para_line_h and abs(para_r - r) <= para_line_h:
+                # 更新数据
+                para_l = (para_l + l) / 2
+                para_r = (para_r + r) / 2
+                para_line_h = (para_line_h + h) / 2
+                # 添加到当前段
+                now_para.append(units[i])
+            else:  # 非同一段，归档上一段，创建新一段
+                paras.append(now_para)
+                now_para = [units[i]]
+                para_l, para_r = l, r
+                para_line_h = bottom - top
+        # 归档最后一段
+        paras.append(now_para)
+
+        # 合并只有1行的段，添加到上/下段作为首/尾句
+        # TODO: 精简逻辑
+        for i1 in reversed(range(len(paras))):
+            para = paras[i1]
+            if len(para) == 1:
+                l, top, r, bottom = para[0][0]
+                flag_l = False
+                # 检查作为上一段结尾的可行性
+                if i1 > 0:
+                    i2 = i1 - 1
+                    para_l, top, para_r, bottom = paras[i2][-1][0]
+                    para_line_h = bottom - top
+                    if abs(para_l - l) <= para_line_h:
+                        flag_l = True
+                # 检查作为下一段开头的可行性
+                if i1 < len(paras) - 1:
+                    i2 = i1 + 1
+                    para_l, top, para_r, bottom = paras[i2][0][0]
+                    para_line_h = bottom - top
+                    if abs(para_r - r) <= para_line_h:
+                        # 两头都匹配，取最小值
+                        if flag_l and abs(para_l - l) < abs(para_r - r):
+                            paras[i2].append(para[0])
+                            del paras[i1]
+                            continue
+                        else:
+                            paras[i2].insert(0, para[0])
+                            del paras[i1]
+                            continue
+                if flag_l:
+                    i2 = i1 - 1
+                    paras[i2].append(para[0])
+                    del paras[i1]
                     continue
-                else:
-                    sep = self._word_separator(units[i1], units[i2])
-                    self.set_end(units[i1][2], sep)
-                    continue
-            self.set_end(units[i1][2], "\n")
-        # 区块末加上换行
-        self.set_end(units[-1][2], "\n")
+        # 刷新所有段，添加end
+        for para in paras:
+            for i1 in range(len(para) - 1):
+                i2 = i1 + 1
+                sep = self._word_separator(para[i1], para[i2])
+                self.set_end(para[i1][2], sep)
+            self.set_end(para[-1][2], "\n")
         return units
