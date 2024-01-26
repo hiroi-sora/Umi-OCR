@@ -90,4 +90,6 @@ def linePreprocessing(textBlocks):
     # 写入tb
     for i, tb in enumerate(textBlocks):
         tb["normalized_bbox"] = bboxes[i]
+    # 按y排序
+    textBlocks.sort(key=lambda tb: tb["normalized_bbox"][1])
     return textBlocks
