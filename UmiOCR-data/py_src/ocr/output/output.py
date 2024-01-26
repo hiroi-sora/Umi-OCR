@@ -16,8 +16,12 @@ class Output:
             return  # 忽略空白图片
         textOut = f"图片路径：{res['path']}\n代码：{res['code']}\n"
         if res["code"] == 100:
-            for r in res["data"]:
-                textOut += r["text"]
+            datas = res["data"]
+            last = len(datas) - 1
+            for i, tb in enumerate(datas):
+                textOut += tb["text"]
+                if i < last:
+                    textOut += tb["end"]
         elif res["code"] == 101:
             textOut += "无文字"
         else:

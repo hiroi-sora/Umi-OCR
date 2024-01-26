@@ -34,9 +34,17 @@ class OutputMD(Output):
 """
         # 正文
         if res["code"] == 100:
-            for tb in res["data"]:
-                if tb["text"]:
-                    textOut += f'> {tb["text"]}  \n'  # 每一行加引用号
+            texts = [""]
+            datas = res["data"]
+            for i, tb in enumerate(datas):
+                if tb["end"] == "\n":
+                    texts[-1] += tb["text"]
+                    texts.append("")
+                else:
+                    texts[-1] += tb["text"] + tb["end"]
+            print(f"原本{len(datas)}，处理后 {len(texts)}")
+            for t in texts:
+                textOut += f"> {t}  \n"
         elif res["code"] == 101:
             pass
         else:

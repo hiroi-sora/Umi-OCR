@@ -18,7 +18,11 @@ class OutputTxtPlain(Output):
         if not res["code"] == 100:
             return  # 强制忽略空白图片
         textOut = ""
-        for r in res["data"]:
-            textOut += r["text"] + "\n"
+        datas = res["data"]
+        last = len(datas) - 1
+        for i, tb in enumerate(datas):
+            textOut += tb["text"]
+            if i < last:
+                textOut += tb["end"]
         with open(self.outputPath, "a", encoding="utf-8") as f:  # 追加写入本地文件
             f.write(textOut)

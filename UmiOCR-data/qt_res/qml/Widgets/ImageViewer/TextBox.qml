@@ -39,7 +39,7 @@ Item {
         anchors.left: parent.right
         anchors.bottom: parent.bottom
         anchors.leftMargin: 1
-        height: Math.min(tRoot.height * 0.8 , size_.line * 2)
+        height: Math.min(tRoot.height * 0.8 ,tRoot.width * 0.8 , size_.line * 2)
         width: height
         color: theme.subTextColor
     }

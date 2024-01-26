@@ -18,8 +18,12 @@ class OutputTxtIndividual(Output):
             return  # 忽略空白图片
         textOut = ""
         if res["code"] == 100:
-            for r in res["data"]:
-                textOut += r["text"] + "\n"
+            datas = res["data"]
+            last = len(datas) - 1
+            for i, tb in enumerate(datas):
+                textOut += tb["text"]
+                if i < last:
+                    textOut += tb["end"]
         elif res["code"] == 101:
             pass
         else:

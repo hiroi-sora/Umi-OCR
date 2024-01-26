@@ -13,7 +13,6 @@ class OutputCsv(Output):
         self.outputPath = f"{self.dir}/{self.fileName}.csv"  # 输出路径
         self.ingoreBlank = argd["ingoreBlank"]  # 忽略空白文件
         self.headers = ["Image Name", "OCR", "Image Path"]  # 表头
-        self.lineBreak = "\n"  # 换行符
         # 创建输出文件
         try:
             with open(
@@ -31,15 +30,12 @@ class OutputCsv(Output):
         path = res["path"]
         textOut = ""
         if res["code"] == 100:
-            for tb in res["data"]:
-                if tb["text"]:
-                    textOut += tb["text"] + self.lineBreak
-            if len(textOut) > 0:
-                textOut = (
-                    textOut[:-1]  # 删除结尾换行
-                    .encode(self.encoding, errors="replace")  # 编码纠错
-                    .decode(self.encoding)
-                )
+            datas = res["data"]
+            last = len(datas) - 1
+            for i, tb in enumerate(datas):
+                textOut += tb["text"]
+                if i < last:
+                    textOut += tb["end"]
         elif res["code"] == 101:
             pass
         else:
