@@ -68,6 +68,7 @@ ImageScale {
                 text: modelData.text
                 x: modelData.x
                 y: modelData.y
+                end: modelData.end // 结尾间隔符
 
                 Component.onCompleted: {
                     width = modelData.width

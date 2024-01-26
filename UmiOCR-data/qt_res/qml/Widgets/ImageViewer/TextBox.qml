@@ -17,6 +17,7 @@ Item {
     // 外部接口，重设字体和组件大小
     property var resetSize: textEdit.resetFontSize
     property alias textEdit: textEdit // 文本组件
+    property string end: "" // 结尾间隔符
 
     // 传入一个相对于item的坐标，返回该坐标的文本序号。
     function where(item, mx, my) {
@@ -30,6 +31,17 @@ Item {
         id: bgRect 
         anchors.fill: parent
         color: bgColor
+    }
+    // 结尾标识
+    Icon_ {
+        icon: "line_feed"
+        visible: end == "\n" // 标记换行符
+        anchors.left: parent.right
+        anchors.bottom: parent.bottom
+        anchors.leftMargin: 1
+        height: Math.min(tRoot.height * 0.8 , size_.line * 2)
+        width: height
+        color: theme.subTextColor
     }
     // 文本
     TextEdit_ {
