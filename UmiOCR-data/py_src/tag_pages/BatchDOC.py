@@ -6,7 +6,7 @@ from .page import Page  # 页基类
 from ..mission.mission_doc import MissionDOC  # 任务管理器
 from ..utils import utils
 from ..ocr.output import Output
-from ..ocr.tbpu import Parser as tbpuParser
+from ..ocr.tbpu import getParser
 
 import os
 import time
@@ -42,13 +42,9 @@ class BatchDOC(Page):
         for k in argd:
             if k.startswith("ocr.") or k.startswith("doc."):
                 docArgd[k] = argd[k]
-        # 排版解析
-        tbpuList = []
-        if "tbpu.parser" in argd and argd["tbpu.parser"]:
-            if argd["tbpu.parser"] in tbpuParser:
-                tbpuList.append(tbpuParser[argd["tbpu.parser"]]())
-            else:
-                print(f'[Error] 排版解析参数不存在： {argd["tbpu.parser"]}')
+        # 获取排版解析器对象
+        if "tbpu.parser" in argd:
+            msnInfo["tbpu"].append(getParser(argd["tbpu.parser"]))
         # 对每个文档发起一个任务
         for d in docs:
             path = d["path"]

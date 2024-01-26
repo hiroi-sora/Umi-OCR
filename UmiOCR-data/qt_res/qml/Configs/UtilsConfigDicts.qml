@@ -43,7 +43,7 @@ QtObject {
                 ["single_para", qsTr("单栏-自然段")],
                 ["single_line", qsTr("单栏-单行")],
                 ["single_code", qsTr("单栏-代码段")],
-                ["", qsTr("不做处理")],
+                ["none", qsTr("不做处理")],
             ],
         }
     }
