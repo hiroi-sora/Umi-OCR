@@ -43,15 +43,16 @@ class BatchDOC(Page):
             if k.startswith("ocr.") or k.startswith("doc."):
                 docArgd[k] = argd[k]
         # 获取排版解析器对象
+        tbpuList = []
         if "tbpu.parser" in argd:
-            msnInfo["tbpu"].append(getParser(argd["tbpu.parser"]))
+            tbpuList.append(getParser(argd["tbpu.parser"]))
         # 对每个文档发起一个任务
         for d in docs:
             path = d["path"]
-            # 构造输出器，output1为PDF型输出器，output2为普通文本型输出器。
-            output1, output2 = self._initOutputList(argd, path)
-            if type(output1) == str:  # 创建输出器失败
-                resList.append({"path": path, "msnID": output1})
+            # 构造输出器
+            output = self._initOutputList(argd, path)
+            if type(output) == str:  # 创建输出器失败
+                resList.append({"path": path, "msnID": output})
                 continue
             # 任务信息
             msnInfo = {
@@ -61,8 +62,7 @@ class BatchDOC(Page):
                 "onEnd": self._onEnd,
                 "argd": docArgd,
                 # 交给 self._onGet 的参数
-                "get_output1": output1,
-                "get_output2": output2,
+                "get_output": output,
                 "get_tbpu": tbpuList,
             }
             pageRange = [int(d["range_start"]), int(d["range_end"])]
@@ -128,18 +128,14 @@ class BatchDOC(Page):
         }
 
         # =============== 实例化输出器对象 ===============
-        output1, output2 = [], []
+        output = []
         try:
             for key in argd.keys():
-                # 列表1，输出为PDF格式，需要在tbpu之前输出
-                if "mission.filesType.pdf" in key and argd[key]:
-                    output1.append(Output[key[18:]](outputArgd))
-                # 列表2，输出为文本格式，在tbpu之后输出
-                elif "mission.filesType" in key and argd[key]:
-                    output2.append(Output[key[18:]](outputArgd))
+                if "mission.filesType" in key and argd[key]:
+                    output.append(Output[key[18:]](outputArgd))
         except Exception as e:
-            return (f"[Error] 初始化输出器失败。{e}", None)
-        return output1, output2
+            return f"[Error] 初始化输出器失败。{e}"
+        return output
 
     # ========================= 【任务控制器的异步回调】 =========================
 
@@ -161,15 +157,8 @@ class BatchDOC(Page):
             print(f"[Warning] _onGet 任务ID未在记录。{msnID}")
             return
 
-        def runOutput(output):
-            for o in output:
-                try:
-                    o.print(res)
-                except Exception as e:
-                    print(f"文档结果输出失败：{o}\n{e}")
-
         # 提取信息
-        output1, output2 = msnInfo["get_output1"], msnInfo["get_output2"]
+        output = msnInfo["get_output"]
         tbpuList = msnInfo["get_tbpu"]
 
         # 为 res 添加信息
@@ -177,13 +166,16 @@ class BatchDOC(Page):
         res["fileName"] = f"{page}"
         res["path"] = msnInfo["path"]
 
-        runOutput(output1)  # 输出第1部分
         if tbpuList and res["code"] == 100:  # 执行tbpu
             data = res["data"]
             for tbpu in tbpuList:
                 data = tbpu.run(data)
             res["data"] = data
-        runOutput(output2)  # 输出第2部分
+        for o in output:  # 输出
+            try:
+                o.print(res)
+            except Exception as e:
+                print(f"文档结果输出失败：{o}\n{e}")
 
         self.callQmlInMain("onDocGet", msnInfo["path"], page, res)
 
@@ -198,11 +190,10 @@ class BatchDOC(Page):
         if not self._msnIdPath:  # 全部完成
             msg = "[Success] All completed."
         # 结束输出器，保存文件。
-        output1, output2 = msnInfo["get_output1"], msnInfo["get_output2"]
-        for outputs in (output1, output2):
-            for o in outputs:
-                try:
-                    o.onEnd()
-                except Exception as e:
-                    msg = f"[Error] 输出器异常：{e}" + msg
+        output = msnInfo["get_output"]
+        for o in output:
+            try:
+                o.onEnd()
+            except Exception as e:
+                msg = f"[Error] 输出器异常：{e}" + msg
         self.callQmlInMain("onDocEnd", msnInfo["path"], msg)
