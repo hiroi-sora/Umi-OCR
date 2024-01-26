@@ -7,6 +7,6 @@ MINOR_VERSION = 1
 # 修订版本号
 PATCH_VERSION = 0
 # 预发布阶段
-PRE_RELEASE = "dev"
+PRE_RELEASE = "alpha"
 # 预发布版本号
 PRE_RELEASE_VERSION = 1
