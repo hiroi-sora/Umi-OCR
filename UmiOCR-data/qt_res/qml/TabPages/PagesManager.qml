@@ -33,8 +33,8 @@ Item {
         {
             key: "BatchDOC",
             needController: true,
-            title: "开发中",
-            intro: qsTr("# 批量文档识别\n\n　  \n\n支持格式：pdf xps epub mobi fb2 cbz\n\n批量导入文档，提取文字。")
+            title: qsTr("批量文档"),
+            intro: qsTr("# 批量文档识别\n\n　  \n\n支持格式： pdf, xps, epub, mobi, fb2, cbz\n\n批量导入文档，提取文字，或生成双层可搜索PDF。")
         },
         {
             key: "QRcode",

@@ -14,7 +14,7 @@ def _get_ocr_options():
     for key in ocr_opts:
         opts[f"ocr.{key}"] = ocr_opts[key]
     # 排版解析的参数
-    opts[f"tbpu.parser"] = {
+    opts[f"tbpu.parser"] = {  # TODO: 新排版解析的HTTP接口数据
         "title": "排版解析",
         "default": "MergeLine",
         "optionsList": [
