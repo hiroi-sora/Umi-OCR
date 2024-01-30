@@ -77,6 +77,9 @@ class OutputPdfLayered(Output):
     def onEnd(self):  # 结束时保存。
         print("保存PDF：", self.outputPath)
         if self.pdf:
-            self.pdf.subset_fonts()  # 构建字体子集，减小文件大小。需要 fontTools 库
+            try:  # 对于部分PDF，如用txt直接打印的，构建字体子集会失败。
+                self.pdf.subset_fonts()  # 构建字体子集，减小文件大小。需要 fontTools 库
+            except Exception as e:  # TODO: 失败原因？可能文件中实际并没有字体？
+                print("[Warning] 构建字体子集失败：", e)
             # ez_save默认启用压缩和垃圾回收 deflate=True, garbage=3
             self.pdf.ez_save(self.outputPath)
