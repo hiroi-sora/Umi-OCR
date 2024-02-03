@@ -58,7 +58,7 @@ Rectangle {
 
     // 复制当前图片
     function copyImage() {
-        if(showImage.source == "" || showImage.status != Image.Ready) return
+        if(showImage.source == "") return
         const res = qmlapp.imageManager.copyImage(showImage.source)
         if(res === "[Success]")
             qmlapp.popup.simple(qsTr("复制图片"), "")
@@ -68,7 +68,7 @@ Rectangle {
 
     // 保存当前图片
     function saveImage() {
-        if(showImage.source == "" || showImage.status != Image.Ready) return
+        if(showImage.source == "") return
         saveDialog.open()
     }
 
@@ -156,7 +156,7 @@ Rectangle {
 
     // 图片填满组件，不裁切
     function imageFullFit() {
-        if(showImage.source == "" || showImage.status != Image.Ready) return
+        if(showImage.source == "" || imageSW <= 0) return
         iRoot.scale = Math.min(flickable.width/imageSW, flickable.height/imageSH)
         // 图片中心对齐相框
         flickable.contentY =  - (flickable.height - showImageContainer.height)/2
