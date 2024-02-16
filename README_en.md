@@ -12,6 +12,12 @@
     </span>
 </p>
 
+<p align="center">
+  <a href="https://github.com/hiroi-sora/Umi-OCR">
+    <img width="200" height="128" src="https://tupian.li/images/2022/10/27/icon---256.png" alt="Umi-OCR">
+  </a>
+</p>
+
 
 <h1 align="center">Umi-OCR</h1>
 
@@ -75,7 +81,7 @@ If you need to manually switch languages, please refer to the following figure, 
 
 ### Help us translate / 帮助我们翻译！
 - Translate `Readme_en.md` 文档
-- Translate [Software Interface](dev-tools/i18n)
+- Translate [Software Interface / 软件界面](dev-tools/i18n)
 
 ## Tabbed Interface
 
