@@ -3,14 +3,15 @@
         中文
     </a>
     <span> • </span>
-    <a href="README_jp.md">
-        日本語
-    </a>
-    <span> • </span>
     <span>
-        英語
+        日本語
     </span>
+    <span> • </span>
+    <a href="README.md">
+        English
+    </a>
 </p>
+
 
 
 
