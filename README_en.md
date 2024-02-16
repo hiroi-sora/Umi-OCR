@@ -3,16 +3,15 @@
         中文
     </a>
     <span> • </span>
+    <a href="README_jp.md">
+        日本語
+    </a>
+    <span> • </span>
     <span>
-        English
+        英語
     </span>
 </p>
 
-<p align="center">
-  <a href="https://github.com/hiroi-sora/Umi-OCR">
-    <img width="200" height="128" src="https://tupian.li/images/2022/10/27/icon---256.png" alt="Umi-OCR">
-  </a>
-</p>
 
 <h1 align="center">Umi-OCR</h1>
 
