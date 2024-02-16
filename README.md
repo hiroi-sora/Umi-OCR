@@ -1,12 +1,17 @@
 <p align="left">
     <span>
+        中文
+    </span>
+    <span> • </span>
+    <span>
         日本語
     </span>
     <span> • </span>
-    <a href="README_jp.md">
+    <a href="README.md">
         English
     </a>
 </p>
+
 
 
 <p align="center">
