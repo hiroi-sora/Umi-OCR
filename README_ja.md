@@ -4,7 +4,7 @@
     </a>
     <span> • </span>
     <span>
-        English
+        英語
     </span>
 </p>
 
@@ -23,173 +23,173 @@
   <a href="License">
     <img src="https://img.shields.io/github/license/hiroi-sora/Umi-OCR?style=flat-square" alt="LICENSE">
   </a>
-  <a href="#下载">
-    <img src="https://img.shields.io/github/downloads/hiroi-sora/Umi-OCR/total?style=flat-square" alt="forks">
+  <a href="#ダウンロード">
+    <img src="https://img.shields.io/github/downloads/hiroi-sora/Umi-OCR/total?style=flat-square" alt="ダウンロード">
   </a>
   <a href="https://star-history.com/#hiroi-sora/Umi-OCR">
-    <img src="https://img.shields.io/github/stars/hiroi-sora/Umi-OCR?style=flat-square" alt="stars">
+    <img src="https://img.shields.io/github/stars/hiroi-sora/Umi-OCR?style=flat-square" alt="スター">
   </a>
   <a href="https://github.com/hiroi-sora/Umi-OCR/forks">
-    <img src="https://img.shields.io/github/forks/hiroi-sora/Umi-OCR?style=flat-square" alt="forks">
+    <img src="https://img.shields.io/github/forks/hiroi-sora/Umi-OCR?style=flat-square" alt="フォーク">
   </a>
 </p>
 
 <div align="center">
-  <strong>Free, Open-source, Batch Offline OCR Software</strong><br>
-  <sub>Compatible with Windows7 x64 and above</sub>
+  <strong>無料、オープンソース、バッチオフラインOCRソフトウェア</strong><br>
+  <sub>Windows7 x64以上と互換性があります</sub>
 </div><br>
 
-- **Free**: All the code of this project is open-source and completely free.
-- **Convenient**: Unzip and use, run offline, no need for network.
-- **Efficient**: Comes with a highly efficient offline OCR engine. As long as the computer performance is sufficient, it can be faster than online OCR services.
-- **Flexible**: Supports customizable interface, and supports multiple calling methods such as command-line and HTTP API.
+- **無料**: このプロジェクトのすべてのコードはオープンソースで完全に無料です。
+- **便利**: 解凍して使用し、オフラインで実行し、ネットワークは必要ありません。
+- **効率的**: 高効率のオフラインOCRエンジンが付属しています。コンピュータのパフォーマンスが十分であれば、オンラインOCRサービスよりも速くなることがあります。
+- **柔軟**: カスタマイズ可能なインターフェースをサポートし、コマンドラインやHTTP APIなど、複数の呼び出し方法をサポートします。
 
-<p align="center"><img src="https://tupian.li/images/2023/11/19/65599097ab5f4.png" alt="1-标题-1.png" style="width: 80%;"></p>
+<p align="center"><img src="https://tupian.li/images/2023/11/19/65599097ab5f4.png" alt="1-タイトル-1.png" style="width: 80%;"></p>
 
-![1-标题-2.png](https://tupian.li/images/2023/11/19/6559909fdeeba.png)
+![1-タイトル-2.png](https://tupian.li/images/2023/11/19/6559909fdeeba.png)
 
-## Using the Source Code:
+## ソースコードの使用:
 
-Developers should read [Building the Project](#Build-the-Project) before proceeding.
+開発者は、進む前に[プロジェクトのビルド](#プロジェクトのビルド)を読むべきです。
 
-## Download Releases:
+## リリースのダウンロード:
 
 - **GitHub** https://github.com/hiroi-sora/Umi-OCR/releases/latest
 - **Source Forge** https://sourceforge.net/projects/umi-ocr
 - **Lanzou (蓝奏云)** https://hiroi-sora.lanzoul.com/s/umi-ocr
 
-## Getting Started
+## はじめに
 
-The software release package is available in `.7z` compressed format or as a self-extracting `.7z.exe` package. The self-extracting package can be used to extract files on a computer without compression software installed.
+ソフトウェアリリースパッケージは、`.7z`圧縮形式または自己解凍`.7z.exe`パッケージで利用可能です。自己解凍パッケージは、圧縮ソフトウェアがインストールされていないコンピューターでファイルを抽出するために使用できます。
 
-This software does not require installation. After extraction, simply click on `Umi-OCR.exe` to start the program.
+このソフトウェアはインストールを必要としません。抽出後、`Umi-OCR.exe`をクリックしてプログラムを開始します。
 
-If you encounter any problems, please submit an [Issue](https://github.com/hiroi-sora/Umi-OCR/issues) and I will do my best to assist you.
+問題が発生した場合は、[Issue](https://github.com/hiroi-sora/Umi-OCR/issues)を提出してください。最善を尽くしてサポートします。
 
-## Interface Language
+## インターフェース言語
 
-Umi-OCR supports multiple languages for its interface. When you open the software for the first time, it will automatically switch to the language based on your computer's system settings.
+Umi-OCRは、インターフェースの複数の言語をサポートしています。ソフトウェアを初めて開くと、コンピューターのシステム設定に基づいて自動的に言語が切り替わります。
 
-If you need to manually switch languages, please refer to the following figure, `全局设置`→`语言/Language` .
+言語を手動で切り替える必要がある場合は、以下の図を参照してください。`全局设置`→`语言/Language`。
 
-<p align="center"><img src="https://tupian.li/images/2023/11/19/65599c3f9e600.png" alt="1-标题-1.png" style="width: 80%;"></p>
+<p align="center"><img src="https://tupian.li/images/2023/11/19/65599c3f9e600.png" alt="1-タイトル-1.png" style="width: 80%;"></p>
 
-### Help us translate / 帮助我们翻译！
-- 翻译 `Readme_en.md` 文档
-- 翻译 [软件界面](dev-tools/i18n)
+### 翻訳を手伝ってください / 翻訳を手伝う！
+- `Readme_en.md`ドキュメントの翻訳
+- [ソフトウェアインターフェース](dev-tools/i18n)の翻訳
 
-## Tabbed Interface
+## タブインターフェース
 
-Umi-OCR v2 is composed of a series of flexible and easy-to-use **tabbed interfaces**. You can open the required tabbed interface according to your preferences.
+Umi-OCR v2は、一連の柔軟で使いやすい**タブインターフェース**で構成されています。好みに応じて必要なタブインターフェースを開くことができます。
 
-The top left corner of the tab bar can be used to switch **window always on top**. The top right corner can be used to **lock the tabbed interface** to prevent accidental closure during daily use.
+タブバーの左上隅を使用して**ウィンドウ常に最前面**を切り替えることができます。右上隅は、日常使用中の偶発的な閉鎖を防ぐために**タブインターフェースをロック**するために使用できます。
 
-### Screenshot OCR
+### スクリーンショットOCR
 
-<p align="center"><img src="https://tupian.li/images/2023/11/19/65599097aba8e.png" alt="2-截图-1.png" style="width: 80%;"></p>
+<p align="center"><img src="https://tupian.li/images/2023/11/19/65599097aba8e.png" alt="2-スクリーンショット-1.png" style="width: 80%;"></p>
 
-**Screenshot OCR**: After opening this page, you can use a keyboard shortcut to capture a screenshot and recognize the text in the image.
-- The left-side image preview panel allows you to select and copy text with your mouse.
-- The right-side recognition record panel allows you to edit text and select and copy multiple records.
-- It also supports copying images from elsewhere and pasting them into Umi-OCR for recognition.
+**スクリーンショットOCR**: このページを開いた後、キーボードショートカットを使用してスクリーンショットをキャプチャし、画像内のテキストを認識することができます。
+- 左側の画像プレビューパネルを使用して、マウスでテキストを選択してコピーすることができます。
+- 右側の認識レコードパネルを使用して、テキストを編集し、複数のレコードを選択してコピーすることができます。
+- 他の場所から画像をコピーしてUmi-OCRに貼り付け、認識することもサポートしています。
 
-#### Paragraph Merge
+#### 段落マージ
 
-<p align="center"><img src="https://tupian.li/images/2023/11/19/6559909f3e378.png" alt="2-截图-2.png" style="width: 80%;"></p>
+<p align="center"><img src="https://tupian.li/images/2023/11/19/6559909f3e378.png" alt="2-スクリーンショット-2.png" style="width: 80%;"></p>
 
-About **OCR Text Post-Processing - Paragraph Merge**: This feature can organize the layout and order of OCR results to make the text more suitable for reading and use. The preset schemes are:
-  - **Single line**: Merge text on the same line, suitable for most scenarios.
-  - **Multiple lines - natural paragraphs**: Intelligently recognize and merge text belonging to the same paragraph, suitable for most scenarios, as shown in the figure above.
-  - **Multiple lines - code block**: Try to restore the original indentation and spacing of the text. Suitable for recognizing code snippets or scenes that require retaining spaces.
-  - **Vertical layout**: Suitable for vertical layout. Needs to be used in conjunction with a model library that also supports vertical layout recognition.
+**OCRテキスト後処理 - 段落マージ**について: この機能は、OCR結果のレイアウトと順序を整理し、テキストを読みやすく使用しやすくすることができます。プリセットスキームは以下の通りです。
+  - **単一行**: 同じ行上のテキストをマージします。ほとんどのシナリオに適しています。
+  - **複数行 - 自然な段落**: 同じ段落に属するテキストを知的に認識してマージします。ほとんどのシナリオに適しており、上記の図に示されています。
+  - **複数行 - コードブロック**: テキストの元のインデントとスペーシングを復元しようとします。コードスニペットやスペースを保持する必要があるシーンを認識するのに適しています。
+  - **縦書きレイアウト**: 縦書きレイアウトに適しています。縦書き認識もサポートするモデルライブラリと併用する必要があります。
 
 ---
 
-### Batch OCR
+### バッチOCR
 
-<p align="center"><img src="https://tupian.li/images/2023/11/19/655990a2511e0.png" alt="3-批量-1.png" style="width: 80%;"></p>
+<p align="center"><img src="https://tupian.li/images/2023/11/19/655990a2511e0.png" alt="3-バッチ-1.png" style="width: 80%;"></p>
 
-**Batch OCR**: This page supports batch importing local images for recognition.
-- The recognized content can be saved in various formats such as txt/jsonl/md/csv(Excel).
-- Supports `text post-processing` technology, which can recognize text belonging to the same natural paragraph and merge it. It also supports multiple processing schemes such as code blocks and vertical text.
-- There is no limit on the number of images that can be imported for processing at one time, and the software can automatically shut down or sleep after completing the task.
+**バッチOCR**: このページでは、ローカル画像をバッチでインポートして認識することがサポートされています。
+- 認識されたコンテンツは、txt/jsonl/md/csv(Excel)などのさまざまな形式で保存できます。
+- `テキスト後処理`技術をサポートし、同じ自然な段落に属するテキストを認識してマージすることができます。また、コードブロックや縦書きテキストなど、複数の処理スキームもサポートしています。
+- 一度に処理できる画像の数に制限はなく、タスクを完了した後、ソフトウェアは自動的にシャットダウンまたはスリープすることができます。
  
-#### Ignore Regions
+#### 無視領域
 
-<p align="center"><img src="https://tupian.li/images/2023/11/19/6559911d28be7.png" alt="3-批量-2.png" style="width: 80%;"></p>
+<p align="center"><img src="https://tupian.li/images/2023/11/19/6559911d28be7.png" alt="3-バッチ-2.png" style="width: 80%;"></p>
 
-About **OCR Text Post-Processing - Ignore Regions**: This is a special function in batch OCR that is used to exclude unwanted text in images.
-- The ignore region editor can be accessed in the right column of the batch recognition page settings.
-- As shown in the example above, there are multiple watermarks/LOGOs at the top and bottom right corner of the image. If these images are recognized in batches, the watermarks will interfere with the recognition results.
-- Hold down the right mouse button to draw multiple rectangular boxes. The text inside these areas will be ignored during the task.
-- Please try to draw the rectangular boxes larger, completely wrapping all possible positions of the watermark.
+**OCRテキスト後処理 - 無視領域**について: これは、バッチOCRの特別な機能で、画像内の望ましくないテキストを除外するために使用されます。
+- 無視領域エディタは、バッチ認識ページ設定の右側の列でアクセスできます。
+- 上記の例のように、画像の上部と右下隅に複数の透かし/LOGOがあります。これらの画像がバッチで認識される場合、透かしは認識結果に干渉します。
+- 右マウスボタンを押し続けて、複数の長方形ボックスを描画します。これらのエリア内のテキストは、タスク中に無視されます。
+- 長方形ボックスをできるだけ大きく描画し、透かしのすべての可能な位置を完全に包むようにしてください。
 
 ---
 
-### QR Code
+### QRコード
 
-<p align="center"><img src="https://tupian.li/images/2023/11/19/655991268d6b1.png" alt="4-二维码-1.png" style="width: 80%;"></p>
+<p align="center"><img src="https://tupian.li/images/2023/11/19/655991268d6b1.png" alt="4-QRコード-1.png" style="width: 80%;"></p>
 
-**Scan Code**:
-- You can capture screenshots, paste, or drag local images to read QR codes and barcodes.
-- Supports multiple codes in one image.
-- Supports 19 protocols, as follows:
+**スキャンコード**:
+- スクリーンショットをキャプチャしたり、貼り付けたり、ローカル画像をドラッグして、QRコードやバーコードを読み取ることができます。
+- 1つの画像で複数のコードをサポートします。
+- 以下の19のプロトコルをサポートします:
 
 `Aztec`,`Codabar`,`Code128`,`Code39`,`Code93`,`DataBar`,`DataBarExpanded`,`DataMatrix`,`EAN13`,`EAN8`,`ITF`,`LinearCodes`,`MatrixCodes`,`MaxiCode`,`MicroQRCode`,`PDF417`,`QRCode`,`UPCA`,`UPCE`,
 
-<p align="center"><img src="https://tupian.li/images/2023/11/19/6559911cda737.png" alt="4-二维码-2.png" style="width: 80%;"></p>
+<p align="center"><img src="https://tupian.li/images/2023/11/19/6559911cda737.png" alt="4-QRコード-2.png" style="width: 80%;"></p>
 
-**Generate Code**:
-- Enter text to generate a QR code image.
-- Supports 19 protocols and parameters such as **error correction level**.
-
----
-
-### Global Settings
-
-<p align="center"><img src="https://tupian.li/images/2023/11/19/655991252e780.png" alt="5-全局设置-1.png" style="width: 80%;"></p>
-
-**Global Settings**: Here you can adjust the global parameters of the software. Common features include:
-- One-click to add shortcuts or set auto-startup.
-- Change the interface **language**. Umi supports traditional Chinese, English, Japanese, and other languages.
-- Switch interface **themes**. Umi has multiple light/dark themes.
-- Adjust the **font size** and **font** of the interface text.
-- Switch OCR plugins.
-- **Renderer**: The software interface defaults to support GPU-accelerated rendering. If you encounter screen flickering or UI misalignment on your machine, please adjust `Interface and Appearance` → `Renderer`, try switching to different rendering schemes, or turn off hardware acceleration.
+**コード生成**:
+- テキストを入力してQRコード画像を生成します。
+- **誤り訂正レベル**などのパラメータを含む19のプロトコルをサポートします。
 
 ---
 
-## API Usage:
+### グローバル設定
 
-- Command-line manual: [README_CLI.md](docs/README_CLI.md)
-- HTTP API manual: [README_HTTP.md](docs/README_HTTP.md)
+<p align="center"><img src="https://tupian.li/images/2023/11/19/655991252e780.png" alt="5-グローバル設定-1.png" style="width: 80%;"></p>
 
-## About Project Structure
+**グローバル設定**: ここでは、ソフトウェアのグローバルパラメータを調整できます。一般的な機能には、以下が含まれます:
+- ショートカットを一度に追加するか、自動起動を設定します。
+- インターフェースの**言語**を変更します。Umiは繁体字中国語、英語、日本語などの言語をサポートしています。
+- インターフェースの**テーマ**を切り替えます。Umiには複数のライト/ダークテーマがあります。
+- インターフェーステキストの**フォントサイズ**と**フォント**を調整します。
+- OCRプラグインを切り替えます。
+- **レンダラー**: ソフトウェアインターフェースは、デフォルトでGPU加速レンダリングをサポートしています。画面のちらつきやUIの位置ずれが発生する場合は、`インターフェースと外観` → `レンダラー`に移動して、異なるレンダリングスキームに切り替えるか、ハードウェアアクセラレーションをオフにしてみてください。
 
-### Repositories:
+---
 
-- [Main Repository](https://github.com/hiroi-sora/Umi-OCR) 👈
-- [Plugin Repository](https://github.com/hiroi-sora/Umi-OCR_plugins)
-- [Win Runtime Library](https://github.com/hiroi-sora/Umi-OCR_runtime_windows)
+## APIの使用:
 
-## Build the Project
+- コマンドラインマニュアル: [README_CLI.md](docs/README_CLI.md)
+- HTTP APIマニュアル: [README_HTTP.md](docs/README_HTTP.md)
 
-### Step 0: (Optional) Fork this project
+## プロジェクト構造について
 
-### Step 1: Download the code
+### リポジトリ:
 
-Choose one of the following:
-- Pull your forked repository to your local machine
-- Download the zip source code package of this repository
-- Clone this repository
+- [メインリポジトリ](https://github.com/hiroi-sora/Umi-OCR) 👈
+- [プラグインリポジトリ](https://github.com/hiroi-sora/Umi-OCR_plugins)
+- [Winランタイムライブラリ](https://github.com/hiroi-sora/Umi-OCR_runtime_windows)
 
-### Next Steps:
+## プロジェクトのビルド
 
-Please go to the following repositories to complete the development/runtime environment deployment for the corresponding platform.
+### ステップ0: (オプション) このプロジェクトをフォークする
 
-This project also has a very simple one-click packaging script, which can be found in the following repositories.
+### ステップ1: コードをダウンロードする
+
+以下のいずれかを選択してください:
+- フォークしたリポジトリをローカルマシンにプルする
+- このリポジトリのzipソースコードパッケージをダウンロードする
+- このリポジトリをクローンする
+
+### 次のステップ:
+
+対応するプラットフォームの開発/ランタイム環境デプロイメントを完了するには、以下のリポジトリに進んでください。
+
+このプロジェクトには、非常にシンプルなワンクリックパッケージングスクリプトもあり、以下のリポジトリで見つけることができます。
 
 - [Windows](https://github.com/hiroi-sora/Umi-OCR_runtime_windows)
-- Cross-platform support is under development.
+- クロスプラットフォームサポートは開発中です。
 
-## [CHANGE LOG](CHANGE_LOG.md)
+## [変更ログ](CHANGE_LOG.md)
