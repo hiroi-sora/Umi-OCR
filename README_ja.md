@@ -83,7 +83,7 @@ Umi-OCRは、インターフェースの複数の言語をサポートしてい�
 <p align="center"><img src="https://tupian.li/images/2023/11/19/65599c3f9e600.png" alt="1-タイトル-1.png" style="width: 80%;"></p>
 
 ### 翻訳を手伝ってください / 翻訳を手伝う！
-- `Readme_en.md`ドキュメントの翻訳
+- `Readme_ja.md`ドキュメントの翻訳
 - [ソフトウェアインターフェース](dev-tools/i18n)の翻訳
 
 ## タブインターフェース
