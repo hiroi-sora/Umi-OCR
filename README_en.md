@@ -8,7 +8,7 @@
     </a>
     <span> • </span>
     <span>
-        英語
+        English
     </span>
 </p>
 
