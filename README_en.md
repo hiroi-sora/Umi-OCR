@@ -75,7 +75,7 @@ If you need to manually switch languages, please refer to the following figure, 
 
 ### Help us translate / 帮助我们翻译！
 - Translate `Readme_en.md` 文档
-- Translate [软件界面](dev-tools/i18n)
+- Translate [Software Interface](dev-tools/i18n)
 
 ## Tabbed Interface
 
