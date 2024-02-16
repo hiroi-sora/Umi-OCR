@@ -3,10 +3,17 @@
         中文
     </span>
     <span> • </span>
+    <a href="README_ja.md">
+        日本語
+    </a>
+    <span> • </span>
     <a href="README_en.md">
         English
     </a>
 </p>
+
+
+
 
 <p align="center">
   <a href="https://github.com/hiroi-sora/Umi-OCR">

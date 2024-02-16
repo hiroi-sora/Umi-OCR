@@ -3,6 +3,10 @@
         中文
     </a>
     <span> • </span>
+    <a href="README_jp.md">
+        日本語
+    </a>
+    <span> • </span>
     <span>
         English
     </span>
@@ -13,6 +17,7 @@
     <img width="200" height="128" src="https://tupian.li/images/2022/10/27/icon---256.png" alt="Umi-OCR">
   </a>
 </p>
+
 
 <h1 align="center">Umi-OCR</h1>
 
@@ -75,8 +80,8 @@ If you need to manually switch languages, please refer to the following figure, 
 <p align="center"><img src="https://tupian.li/images/2023/11/19/65599c3f9e600.png" alt="1-标题-1.png" style="width: 80%;"></p>
 
 ### Help us translate / 帮助我们翻译！
-- 翻译 `Readme_en.md` 文档
-- 翻译 [软件界面](dev-tools/i18n)
+- Translate `Readme_en.md` 文档
+- Translate [Software Interface / 软件界面](dev-tools/i18n)
 
 ## Tabbed Interface
 
