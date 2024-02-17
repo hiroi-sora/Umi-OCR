@@ -3,7 +3,7 @@
         中文
     </a>
     <span> • </span>
-    <a href="README_jp.md">
+    <a href="README_ja.md">
         日本語
     </a>
     <span> • </span>
