@@ -7,7 +7,7 @@
         日本語
     </span>
     <span> • </span>
-    <a href="README.md">
+    <a href="README_en.md">
         English
     </a>
 </p>
