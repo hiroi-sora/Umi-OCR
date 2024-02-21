@@ -212,23 +212,23 @@ TabPage {
                     anchors.leftMargin: size_.spacing
                     spacing: size_.smallSpacing
 
-                    IconButton {
+                    IconButtonBar {
                         anchors.top: parent.top
                         anchors.bottom: parent.bottom
-                        width: height
-                        icon_: "screenshot"
-                        color: theme.textColor
-                        toolTip: qsTr("屏幕截图")
-                        onClicked: tabPage.screenshot()
-                    }
-                    IconButton {
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
-                        width: height
-                        icon_: "paste"
-                        color: theme.textColor
-                        toolTip: qsTr("粘贴图片")
-                        onClicked: tabPage.paste()
+                        btnList: [
+                            {
+                                icon: "screenshot",
+                                onClicked: tabPage.screenshot,
+                                color: theme.textColor,
+                                toolTip: tr("屏幕截图"),
+                            },
+                            {
+                                icon: "paste",
+                                onClicked: tabPage.paste,
+                                color: theme.textColor,
+                                toolTip: tr("粘贴图片"),
+                            },
+                        ]
                     }
                 }
                 // 靠右
@@ -241,45 +241,31 @@ TabPage {
                     spacing: size_.smallSpacing
                     visible: dLeftTop.width > dLeftTopL.width + dLeftTopR.width
 
-                    // 菜单
-                    IconButton {
+                    IconButtonBar {
                         anchors.top: parent.top
                         anchors.bottom: parent.bottom
-                        width: height
-                        icon_: "menu"
-                        color: theme.subTextColor
-                        onClicked: imageText.popupMenu()
-                        toolTip: qsTr("右键菜单")
-                    }
-                    // 保存图片
-                    IconButton {
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
-                        width: height
-                        icon_: "save"
-                        color: theme.subTextColor
-                        onClicked: imageText.saveImage()
-                        toolTip: qsTr("保存图片")
-                    }
-                    // 适合宽高
-                    IconButton {
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
-                        width: height
-                        icon_: "full_screen"
-                        color: theme.subTextColor
-                        onClicked: imageText.imageFullFit()
-                        toolTip: qsTr("图片大小：适应窗口")
-                    }
-                    // 1:1
-                    IconButton {
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
-                        width: height
-                        icon_: "one_to_one"
-                        color: theme.subTextColor
-                        onClicked: imageText.imageScaleAddSub(0)
-                        toolTip: qsTr("图片大小：实际")
+                        btnList: [
+                            {
+                                icon: "menu",
+                                onClicked: imageText.popupMenu,
+                                toolTip: tr("右键菜单"),
+                            },
+                            {
+                                icon: "save",
+                                onClicked: imageText.saveImage,
+                                toolTip: tr("保存图片"),
+                            },
+                            {
+                                icon: "full_screen",
+                                onClicked: imageText.imageFullFit,
+                                toolTip: tr("图片大小：适应窗口"),
+                            },
+                            {
+                                icon: "one_to_one",
+                                onClicked: imageText.imageScaleAddSub,
+                                toolTip: tr("图片大小：实际"),
+                            },
+                        ]
                     }
                     // 百分比显示
                     Text_ {
