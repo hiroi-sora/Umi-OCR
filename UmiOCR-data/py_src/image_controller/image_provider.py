@@ -4,13 +4,11 @@
 
 from . import ImageQt
 from urllib.parse import unquote
+from ..platform import Platform
 
-from PySide2.QtCore import Qt
+from PySide2.QtCore import Qt, QByteArray, QBuffer
 from PySide2.QtGui import QPixmap, QImage, QPainter, QClipboard
-from PySide2.QtCore import QByteArray, QBuffer, QIODevice
 from PySide2.QtQuick import QQuickImageProvider
-from io import BytesIO
-from PIL import Image
 from uuid import uuid4  # 唯一ID
 import os
 
@@ -146,7 +144,7 @@ def _imread(path):
         if os.path.exists(path):
             try:
                 image = QImage(path)
-                return {"type": "qimage", "data": image}
+                return {"type": "qimage", "data": image, "path": path}
             except Exception as e:
                 return {
                     "type": "error",
@@ -159,7 +157,7 @@ def _imread(path):
     elif os.path.exists(path):
         try:
             image = QImage(path)
-            return {"type": "qimage", "data": image}
+            return {"type": "qimage", "data": image, "path": path}
         except Exception as e:
             return {"type": "error", "data": f"[Error] QImage cannot read path: {path}"}
     return {"type": "error", "data": f"[Warning] Unknow: {path}"}
@@ -179,6 +177,33 @@ def copyImage(path):
         return "[Success]"
     except Exception as e:
         return f"[Error] can't copy: {e}\n{path}"
+
+
+# 用系统默认应用打开图片
+def openImage(path):
+    im = _imread(path)
+    typ, data = im["type"], im["data"]
+    if typ == "error":
+        return data
+    # 若原本为本地图片，则直接打开
+    if "path" in im:
+        path = im["path"]
+    # 若为内存数据，则创建缓存文件
+    else:
+        path = f"umi_temp_image.png"
+        try:
+            if typ == "pixmap":
+                data = data.toImage()
+            data.save(path)
+            print("== 保存临时文件")
+        except Exception as e:
+            return f"[Error] can't save to temp file: {e}\n{path}"
+    # 打开文件
+    try:
+        Platform.startfile(path)
+        return "[Success]"
+    except Exception as e:
+        return f"[Error] can't open image: {e}\n{path}"
 
 
 # 保存一张图片

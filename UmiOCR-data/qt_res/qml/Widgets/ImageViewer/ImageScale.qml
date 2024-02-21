@@ -66,6 +66,16 @@ Rectangle {
             qmlapp.popup.simple(qsTr("复制图片失败"), res)
     }
 
+    // 用系统默认应用打开图片
+    function openImage() {
+        if(showImage.source == "") return
+        const res = qmlapp.imageManager.openImage(showImage.source)
+        if(res === "[Success]")
+            qmlapp.popup.simple(qsTr("打开图片"), "")
+        else
+            qmlapp.popup.simple(qsTr("打开图片失败"), res)
+    }
+
     // 保存当前图片
     function saveImage() {
         if(showImage.source == "") return

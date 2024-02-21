@@ -78,6 +78,11 @@ ModalLayer {
                                 toolTip: tr("保存图片"),
                             },
                             {
+                                icon: "open_image",
+                                onClicked: imageText.openImage,
+                                toolTip: tr("用默认应用打开图片"),
+                            },
+                            {
                                 icon: "full_screen",
                                 onClicked: imageText.imageFullFit,
                                 toolTip: tr("图片大小：适应窗口"),

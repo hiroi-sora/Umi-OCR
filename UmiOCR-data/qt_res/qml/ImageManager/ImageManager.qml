@@ -12,6 +12,8 @@ Item {
     readonly property var screenshot: screenshotManager.screenshot
     // 复制图片
     readonly property var copyImage: imageConnector.copyImage
+    // 用系统默认应用打开图片
+    readonly property var openImage: imageConnector.openImage
     // 保存图片
     readonly property var saveImage: imageConnector.saveImage
     // 获取剪贴板
