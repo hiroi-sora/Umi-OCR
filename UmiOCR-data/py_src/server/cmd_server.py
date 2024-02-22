@@ -2,10 +2,11 @@
 # =============== 命令行-解析和执行 ===============
 # ===============================================
 
-import time
 import argparse
+import time
+
 from ..utils.call_func import CallFunc
-from ..utils.utils import findImages
+from ..utils.utils import findImages, findDocs
 
 
 # 命令执行器
@@ -202,7 +203,14 @@ class _Actuator:
                 return "[Error] Paths is empty."
             paths = findImages(paras, False)
             if not paths:
-                return "[Error] No valid path."
+                paths = findDocs(paras, False)
+                if not paths:
+                  # Todo 参数传递问题，不清楚参数 msnInfo 应该怎样传递
+                  # msnID = MissionDOC.addMission(msnInfo, path, pageRange, password=password)
+                  pass
+                else:
+                    return "[Error] No valid path."
+
             self.call(moduleName, "qml", "ocrPaths", False, [paths[0]])
         # 等待OCR完成
         for i in range(100):

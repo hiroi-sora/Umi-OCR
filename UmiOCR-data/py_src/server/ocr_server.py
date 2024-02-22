@@ -1,8 +1,12 @@
 import json
+import os
+
+import unicodedata
 
 from .bottle import request
+from ..mission.mission_doc import MissionDOC
 from ..mission.mission_ocr import MissionOCR
-from ..utils.utils import initConfigDict
+from ..utils.utils import initConfigDict, DocSuf
 
 
 # 获取ocr配置字典
@@ -72,6 +76,121 @@ def init(UmiWeb):
         res = resList[0]["result"]
         res = json.dumps(res)
         return res
+
+    # 设置文件保存目录（请替换为您自己的路径）
+    UPLOAD_FOLDER = '/var/www/uploads'
+
+    # 配置上传目录
+    UmiWeb.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+    # 检查文件扩展名是否被允许
+    def allowed_file(filename):
+        return '.' in filename and \
+            filename.rsplit('.', 1)[1].lower() in DocSuf
+
+    def secure_filename(filename):
+        r"""Pass it a filename and it will return a secure version of it.  This
+        filename can then safely be used for any operation, for example as a target
+        for storing the file.  The filename returned is an ASCII only string for
+        maximum portability.
+
+        On windows systems the function also makes sure that the file is not named
+        after one of the special device files.
+
+        >>> secure_filename("My cool movie.mov")
+        'My_cool_movie.mov'
+        >>> secure_filename("../../../etc/passwd")
+        'etc_passwd'
+        >>> secure_filename(u'i contain cool \xfcml\xe4uts.txt')
+        'i_contain_cool_umlauts.txt'
+
+        The function might return an empty filename.  It's your responsibility
+        to ensure that the filename is unique and that you abort or
+        mitigate the effects of collisions.
+        """
+        if isinstance(filename, str):
+            from warnings import warn
+            warn(DeprecationWarning('Using safe_join with bytestrings may lead '
+                                    'to unexpected results on certain '
+                                    'filesystems.'), stacklevel=2)
+            filename = filename.encode('utf-8')
+        elif isinstance(filename, bytes):
+            pass
+        else:
+            raise TypeError('filename must be a str or bytes')
+
+        # 给文件名进行 Unicode 正规化，并移除非字母数字字符
+        filename = (unicodedata.normalize('NFKD', filename)
+                    .encode('ascii', 'ignore').decode('ascii'))
+
+        for sep in os.path.sep, os.path.altsep:
+            if sep:
+                filename = filename.replace(sep, '_')
+
+        # Windows系统中过滤掉设备文件名称
+        if os.name == 'nt' and filename and filename[1:3] == ':\\':
+            filename = filename[0] + '_' + filename[2:]
+
+        return filename.translate({ord(c): None for c in '\\/:*?"<>|'})
+
+    @UmiWeb.route("/api/doc", method="POST")
+    def _doc():
+        try:
+            data = request.json
+        except Exception as e:
+            return json.dumps({"code": 800, "data": f"请求无法解析为json。"})
+        if not data:
+            return json.dumps({"code": 801, "data": f"请求为空。"})
+        if "path" not in data:
+            return json.dumps({"code": 802, "data": f"请求中缺少 path 字段。"})
+        if "options" not in data:
+            data["options"] = {}
+        elif not type(data["options"]) is dict:
+            return json.dumps({"code": 803, "data": f"请求中 options 字段必须为字典。"})
+        # 补充缺失的默认参数
+        try:
+            opt = data["options"]
+            default = _get_ocr_options()
+            for key in default:
+                if key not in opt:
+                    opt[key] = default[key]["default"]
+        except Exception as e:
+            return json.dumps({"code": 804, "data": f"options 解释失败。 {e}"})
+
+        # 获取文件
+        file = request.files['file']
+        # 检查文件是否存在且合法
+        if file and allowed_file(file.filename):
+            # 生成安全文件名并保存文件
+            filename = secure_filename(file.filename)
+            file_path = os.path.join(UmiWeb.config['UPLOAD_FOLDER'], filename)
+            file.save(file_path)
+
+        pageRange = [int(data["range_start"]), int(data["range_end"])]
+        password = data["password"]
+        # 任务信息
+        msnInfo = { #TODO
+            # "onStart": _onStart,
+            # "onReady": _onReady,
+            # "onGet": _onGet,
+            # "onEnd": _onEnd,
+            # "argd": docArgd,
+            # # 交给 self._onGet 的参数
+            # "get_output": output,
+            # "get_tbpu": tbpuList,
+        }
+        msnID = MissionDOC.addMission(msnInfo, file_path, pageRange,
+                                      password=password)
+        # TODO 文档OCR后路径在哪里
+
+        # 想要将文件返回前台
+        # 设置合适的 HTTP 头部（如Content-Disposition），以便浏览器知道这是一个需要下载的文件
+        return send_file( # TODO 需引入flask
+            file_path,
+            as_attachment=True,  # 强制作为附件下载
+            attachment_filename=filename,  # 可选：设置下载时显示的文件名
+            mimetype='application/octet-stream'  # 根据实际文件类型设置 MIME 类型
+        )
 
 
 """
