@@ -8,19 +8,17 @@ import QtQuick.Window 2.15
 Item {
     id: ssWinRoot
 
-    // 开始一次截图。传入回调函数。
-    function screenshot(callback) {
+    property string errorTitle: qsTr("截图失败")
+
+    // 获取所有屏幕的截图
+    function getGrabList() {
         // 重复调用验证
-        const errorTitle = qsTr("截图失败")
         if(running) {
             qmlapp.popup.message(errorTitle,
                 qsTr("上次截图操作未结束，不能进行新的截图！"), "error")
-            return
+            return undefined
         }
         running = true
-        // 记录回调
-        lastCallback = callback 
-        if(winDict === undefined) winDict = {}
         // 截图前等待时间
         let wait = 0
         if(qmlapp.globalConfigs.getValue("screenshot.hideWindow")) {
@@ -33,13 +31,24 @@ Item {
             qmlapp.popup.message(errorTitle,
                 qsTr("未知异常！"), "error")
             running = false
-            return
+            return undefined
         }
         if(typeof grabList[0] === "string") {
             qmlapp.popup.message(errorTitle, grabList[0], "error")
             running = false
-            return
+            return undefined
         }
+        return grabList
+    }
+
+
+    // 开始一次截图。传入回调函数。
+    function screenshot(callback) {
+        const grabList = getGrabList()
+        if(!grabList) return
+        // 记录回调
+        lastCallback = callback 
+        if(winDict === undefined) winDict = {}
         // 遍历截图列表，生成数量一致的覆盖窗口
         for(let i in grabList) {
             const g = grabList[i]  // 截图属性
@@ -96,7 +105,7 @@ Item {
 
     // 调用回调
     function runLastCallback(clipImgID) {
-        if (lastCallback && typeof lastCallback === 'function') {
+        if (lastCallback && typeof lastCallback === "function") {
             lastCallback(clipImgID)
         }
     }
