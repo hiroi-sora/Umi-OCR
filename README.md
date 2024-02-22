@@ -257,8 +257,8 @@ Umi-OCR v2 由一系列灵活好用的**标签页**组成。您可按照自己�
 近期正在进行的工作，将会在 v2.1.0 中发布。
 
 - [x] PDF识别
+- [x] 调用本地图片浏览器打开图片 [#335](https://github.com/hiroi-sora/Umi-OCR/issues/335)
 - [ ] 重复上一次截图 [#357](https://github.com/hiroi-sora/Umi-OCR/issues/357)
-- [ ] 调用本地图片浏览器打开图片 [#335](https://github.com/hiroi-sora/Umi-OCR/issues/335)
 - [ ] 完善输出器
 - [ ] 完善段落分析器，优化代码逻辑
 - [ ] 更新HTTP接口及文档
