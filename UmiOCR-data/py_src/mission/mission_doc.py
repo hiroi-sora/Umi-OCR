@@ -32,6 +32,8 @@ class _MissionDocClass(Mission):
     def __init__(self):
         super().__init__()
         self._schedulingMode = "1234"  # 调度方式：顺序
+        self._minInterval = 0.1  # msnTask最短调用间隔
+        self._lastCallTime = 0  # 上一次调用时间
 
     # 添加一个文档任务
     # msnInfo: { 回调函数"onXX", 参数"argd":{"tbpu.xx", "ocr.xx"} }
@@ -132,7 +134,10 @@ class _MissionDocClass(Mission):
                             box = [
                                 [b[0], b[1]],
                                 [b[2], b[1]],
-                                [b[2], b[1] + size],  # 使用字体大小作为行高，而不是 b[3]
+                                [
+                                    b[2],
+                                    b[1] + size,
+                                ],  # 使用字体大小作为行高，而不是 b[3]
                                 [b[0], b[1] + size],
                             ]
                             tb = {
@@ -142,10 +147,16 @@ class _MissionDocClass(Mission):
                                 "from": "text",  # 来源：直接提取文本
                             }
                             tbs.append(tb)
+
         # 仅提取文本时任务速度过快，频繁回调会导致UI卡死，因此故意引入延迟
-        # TODO: 计算上一次调用间隔
-        if extractionMode == "textOnly":
-            time.sleep(0.01)
+        currentTime = time.time()
+        elapsedTime = currentTime - self._lastCallTime
+        # 如果与上一次调用的时间差小于最短间隔，则睡至满足最短间隔
+        if elapsedTime < self._minInterval:
+            t = self._minInterval - elapsedTime
+            print(f"调用间隔太短，等待 {t} 秒")
+            time.sleep(t)
+        self._lastCallTime = currentTime
 
         # =============== 调用OCR，将 imgs 的内容提取出来放入 tbs ===============
         if imgs:
