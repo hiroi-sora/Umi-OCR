@@ -154,7 +154,6 @@ class _MissionDocClass(Mission):
         # 如果与上一次调用的时间差小于最短间隔，则睡至满足最短间隔
         if elapsedTime < self._minInterval:
             t = self._minInterval - elapsedTime
-            print(f"调用间隔太短，等待 {t} 秒")
             time.sleep(t)
         self._lastCallTime = currentTime
 
