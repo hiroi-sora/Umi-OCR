@@ -11,6 +11,7 @@ Window {
     id: win
 
     property string imgID: "" // 图片id
+    property string screenName: "" // 显示器名称
     property var screenRatio: 1 // 屏幕缩放比
     property var screenshotEnd // 关闭函数，外部传入
 
@@ -51,6 +52,7 @@ Window {
                 clipW*=screenRatio; clipH*=screenRatio;
             }
             argd = {
+                screenName: screenName,
                 imgID: imgID, 
                 clipX: clipX, 
                 clipY: clipY, 

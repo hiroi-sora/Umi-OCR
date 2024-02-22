@@ -10,6 +10,8 @@ Item {
 
     // 截图，向回调函数传入裁切后的 clipImgID
     readonly property var screenshot: screenshotManager.screenshot
+    // 重复截图
+    readonly property var reScreenshot: screenshotManager.reScreenshot
     // 复制图片
     readonly property var copyImage: imageConnector.copyImage
     // 用系统默认应用打开图片

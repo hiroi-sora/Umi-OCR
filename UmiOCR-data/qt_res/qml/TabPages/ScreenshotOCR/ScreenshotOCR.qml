@@ -24,6 +24,11 @@ TabPage {
     // }
     // ========================= 【逻辑】 =========================
 
+    // 重复截图
+    function reScreenshot() {
+        qmlapp.imageManager.reScreenshot(screenshotEnd)
+    }
+
     // 开始截图
     function screenshot() {
         qmlapp.imageManager.screenshot(screenshotEnd)
@@ -116,6 +121,7 @@ TabPage {
     }
     // 订阅事件
     function eventSub() {
+        qmlapp.pubSub.subscribeGroup("<<reScreenshot>>", this, "reScreenshot", ctrlKey)
         qmlapp.pubSub.subscribeGroup("<<screenshot>>", this, "screenshot", ctrlKey)
         qmlapp.pubSub.subscribeGroup("<<paste>>", this, "paste", ctrlKey)
         qmlapp.systemTray.addMenuItem("<<screenshot>>", qsTr("屏幕截图"), screenshot)

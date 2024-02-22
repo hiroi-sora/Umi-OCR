@@ -36,6 +36,13 @@ Configs {
                 "default": "win+alt+v",
                 "eventTitle": "<<paste>>",
             },
+            "reScreenshot": {
+                "title": qsTr("重复截图"),
+                "toolTip": qsTr("重新截取上一次截图的范围"),
+                "type": "hotkey",
+                "default": "",
+                "eventTitle": "<<reScreenshot>>",
+            },
         },
 
         "action": {
