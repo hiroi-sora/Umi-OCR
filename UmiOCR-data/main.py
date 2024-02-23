@@ -43,6 +43,9 @@ def initRuntimeEnvironment(startup_script):
     #     sys.__excepthook__(cls, exception, traceback)
     # sys.excepthook = except_hook
 
+    # 安装某些软件时可能在系统中写入 QMLSCENE_DEVICE 环境变量，影响本软件的渲染方式，因此屏蔽该环境变量
+    if "QMLSCENE_DEVICE" in os.environ:
+        del os.environ["QMLSCENE_DEVICE"]
     # 初始化工作目录和Python搜索路径
     script = os.path.abspath(startup_script)  # 启动脚本.py的路径
     working = os.path.dirname(script)  # 工作目录
