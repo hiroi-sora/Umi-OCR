@@ -1,8 +1,8 @@
 # 排版解析-单栏-自然段
 
 from .tbpu import Tbpu
-from .line_preprocessing import linePreprocessing  # 行预处理
-from .paragraph_parse import ParagraphParse  # 段内分析器
+from .parser_tools.line_preprocessing import linePreprocessing  # 行预处理
+from .parser_tools.paragraph_parse import ParagraphParse  # 段内分析器
 
 
 class SinglePara(Tbpu):

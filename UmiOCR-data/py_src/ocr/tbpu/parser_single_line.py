@@ -1,8 +1,7 @@
 # 排版解析-单栏-单行
 
 from .tbpu import Tbpu
-from .line_preprocessing import linePreprocessing  # 行预处理
-from .paragraph_parse import ParagraphParse  # 段内分析器
+from .parser_tools.line_preprocessing import linePreprocessing  # 行预处理
 
 
 class SingleLine(Tbpu):

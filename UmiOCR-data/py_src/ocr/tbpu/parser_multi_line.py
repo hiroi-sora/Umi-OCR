@@ -1,20 +1,16 @@
 # 排版解析-多栏-单行
 
 from .tbpu import Tbpu
-from .line_preprocessing import linePreprocessing  # 行预处理
-from .gap_tree import GapTree  # 间隙树排序算法
+from .parser_tools.line_preprocessing import linePreprocessing  # 行预处理
+from .parser_tools.gap_tree import GapTree  # 间隙树排序算法
 
 
 class MultiLine(Tbpu):
     def __init__(self):
         self.tbpuName = "排版解析-多栏-单行"
 
-        def tb_bbox(tb):  # 从文本块对象中，提取左上角、右下角坐标元组
-            # b = tb["box"]
-            # return (b[0][0], b[0][1], b[2][0], b[2][1])
-            return tb["normalized_bbox"]
-
-        self.gtree = GapTree(tb_bbox)  # 算法对象
+        # 构建算法对象，指定包围盒的元素位置
+        self.gtree = GapTree(lambda tb: tb["normalized_bbox"])
 
     def run(self, textBlocks):
         textBlocks = linePreprocessing(textBlocks)  # 预处理
