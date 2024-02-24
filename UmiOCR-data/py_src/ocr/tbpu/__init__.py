@@ -5,6 +5,7 @@ from .ignore_area import IgnoreArea
 
 from .parser_multi_para import MultiPara
 from .parser_multi_line import MultiLine
+from .parser_multi_none import MultiNone
 from .parser_single_para import SinglePara
 from .parser_single_line import SingleLine
 
@@ -13,6 +14,7 @@ Parser = {
     "none": ParserNone,  # 不做处理
     "multi_para": MultiPara,  # 多栏-自然段
     "multi_line": MultiLine,  # 多栏-单行
+    "multi_none": MultiNone,  # 多栏-无换行
     "single_para": SinglePara,  # 单栏-自然段
     "single_line": SingleLine,  # 单栏-单行
     # "single_code": ,  # TODO: 单栏-代码段

@@ -38,10 +38,12 @@ QtObject {
             "toolTip": qsTr("按什么方式，解析和排序图片中的文字块"),
             "default": d,
             "optionsList": [
-                ["multi_para", qsTr("多栏-自然段")],
-                ["multi_line", qsTr("多栏-单行")],
-                ["single_para", qsTr("单栏-自然段")],
-                ["single_line", qsTr("单栏-单行")],
+                ["multi_para", qsTr("多栏-自然段换行")],
+                ["multi_line", qsTr("多栏-总是换行")],
+                ["multi_none", qsTr("多栏-无换行")],
+                ["single_para", qsTr("单栏-自然段换行")],
+                ["single_line", qsTr("单栏-总是换行")],
+                ["single_none", qsTr("单栏-无换行")],
                 // ["single_code", qsTr("单栏-代码段")], // TODO
                 ["none", qsTr("不做处理")],
             ],
