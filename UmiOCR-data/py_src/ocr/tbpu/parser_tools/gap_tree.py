@@ -1,5 +1,6 @@
 # 【间隙·树·排序算法】 GapTree_Sort_Algorithm
 # 对OCR结果或PDF提取的文本进行版面分析，按人类阅读顺序进行排序。
+# Author: hiroi-sora
 # https://github.com/hiroi-sora/GapTree_Sort_Algorithm
 
 from typing import Callable
@@ -99,7 +100,8 @@ class GapTree:
                     inter_r = min(r1, r2)
                     # 如果交集有效
                     if inter_l <= inter_r:
-                        new_gaps1.append((inter_l, inter_r, g1[2]))  # 更新 gap1 左右边缘
+                        # 更新 gap1 左右边缘
+                        new_gaps1.append((inter_l, inter_r, g1[2]))
                         flags1[i1] = False  # 旧的 gap1 不应移除
                         flags2[i2] = False  # 新的 gap2 不应添加
             # gap2 新加入
@@ -213,7 +215,7 @@ class GapTree:
             # 在完成列表中，寻找父节点
             for com_node in completed_nodes:
                 # 父节点的垂直投影必须包含当前右界
-                if node_r < com_node["x_left"] or node_r > com_node["x_right"] + 0.001:
+                if node_r < com_node["x_left"] or node_r > com_node["x_right"] + 0.0001:
                     continue
                 # 父节点底部必须在当前之上
                 if com_node["r_bottom"] >= node["r_top"]:
@@ -269,7 +271,7 @@ class GapTree:
                 x_l = row_gaps[g_i][1]  # 左间隙 g_i 的右边界
                 x_r = row_gaps[g_i + 1][0]  # 右间隙 g_i+1 的左边界
                 # 检查区间是否正确
-                if unit[0][0] > x_r:  # 块比右间隙更右，说明到了下一个区间
+                if unit[0][0] + 0.0001 > x_r:  # 块比右间隙更右，说明到了下一个区间
                     g_i += 1  # 间隙步进，块不步进
                     continue
                 # ========== 检查当前块可否加入已有的节点 ==========
