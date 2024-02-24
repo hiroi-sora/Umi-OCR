@@ -3,6 +3,38 @@
 
 from typing import Callable
 
+
+# 传入前句尾字符和后句首字符，返回分隔符
+def word_separator(letter1, letter2):
+
+    # 判断Unicode字符是否属于中文、日文或韩文字符集
+    def is_cjk(character):
+        cjk_unicode_ranges = [
+            (0x4E00, 0x9FFF),  # 中文
+            (0x3040, 0x30FF),  # 日文
+            (0x1100, 0x11FF),  # 韩文
+            (0x3130, 0x318F),  # 韩文兼容字母
+            (0xAC00, 0xD7AF),  # 韩文音节
+            # 全角符号
+            (0x3000, 0x303F),  # 中文符号和标点
+            (0xFE30, 0xFE4F),  # 中文兼容形式标点
+            (0xFF00, 0xFFEF),  # 半角和全角形式字符
+        ]
+        return any(start <= ord(character) <= end for start, end in cjk_unicode_ranges)
+
+    if is_cjk(letter1) and is_cjk(letter2):
+        return ""
+
+    # 特殊情况：前文为连字符。
+    if letter1 == "-":
+        return ""
+    # 特殊情况：后文为缩写，如 n't。或为结尾符号，意味着OCR错误分割。
+    if letter2 in {r"'", ",", ".", "!", "?", ";", ":", ")", "]", "}", "/", "\\"}:
+        return ""
+    # 其它正常情况加空格
+    return " "
+
+
 TH = 1.2  # 行高用作对比的阈值
 
 
@@ -40,34 +72,6 @@ class ParagraphParse:
         return units
 
     # ======================= 分析 =====================
-
-    # 获取两个连续的行的单词分隔符
-    def _word_separator(self, unit1, unit2):
-        letter1 = unit1[1][1]  # 行1结尾字母
-        letter2 = unit2[1][0]  # 行2开头字母
-
-        # 判断结尾和开头，是否属于汉藏语族
-        # 汉藏语族：行间无需分割符。印欧语族：则两行之间需加空格。
-        ranges = [
-            (0x4E00, 0x9FFF),  # 汉字
-            (0x3040, 0x30FF),  # 日文
-            (0xAC00, 0xD7AF),  # 韩文
-            (0xFF01, 0xFF5E),  # 全角字符
-        ]
-        fa, fb = False, False
-        for l, r in ranges:
-            if l <= ord(letter1) <= r:
-                fa = True
-            if l <= ord(letter2) <= r:
-                fb = True
-        if fa and fb:
-            return ""
-
-        # 特殊情况：字母2为缩写，如 n't。或者字母2为结尾符号，意味着OCR错误分割。
-        if letter2 in {r"'", ",", ".", "!", "?", ";", ":"}:
-            return ""
-        # 其它正常情况加空格
-        return " "
 
     # 执行分析
     def _parse(self, units):
@@ -160,7 +164,9 @@ class ParagraphParse:
         # 刷新所有段，添加end
         for para in paras:
             for i1 in range(len(para) - 1):
-                sep = self._word_separator(para[i1], para[i1 + 1])
+                letter1 = para[i1][1][1]  # 行1结尾字母
+                letter2 = para[i1 + 1][1][0]  # 行2开头字母
+                sep = word_separator(letter1, letter2)
                 self.set_end(para[i1][2], sep)
             self.set_end(para[-1][2], "\n")
         return units
