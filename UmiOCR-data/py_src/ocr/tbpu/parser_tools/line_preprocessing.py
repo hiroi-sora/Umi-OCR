@@ -2,7 +2,7 @@
 # =============== 按行预处理 ===============
 # =========================================
 
-from math import atan2, cos, sin, sqrt, pi, radians
+from math import atan2, cos, sin, sqrt, pi, radians, degrees
 from statistics import median  # 中位数
 
 angle_threshold = 3  # 进行一些操作的最小角度阈值
@@ -55,7 +55,7 @@ def _getBboxes(textBlocks, rotation_rad):
         ]
     # 否则，进行旋转操作。
     else:
-        print("进行旋转！")
+        # print(f"文本块预处理旋转 {degrees(rotation_rad):.1f} °")
         bboxes = []
         min_x, min_y = float("inf"), float("inf")  # 初始化最小的x和y坐标
         cos_angle = cos(-rotation_rad)  # 计算角度正弦值
