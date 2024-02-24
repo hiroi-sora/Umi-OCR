@@ -8,15 +8,17 @@ from .parser_multi_line import MultiLine
 from .parser_multi_none import MultiNone
 from .parser_single_para import SinglePara
 from .parser_single_line import SingleLine
+from .parser_single_none import SingleNone
 
 # 排版解析
 Parser = {
     "none": ParserNone,  # 不做处理
     "multi_para": MultiPara,  # 多栏-自然段
-    "multi_line": MultiLine,  # 多栏-单行
+    "multi_line": MultiLine,  # 多栏-总是换行
     "multi_none": MultiNone,  # 多栏-无换行
     "single_para": SinglePara,  # 单栏-自然段
-    "single_line": SingleLine,  # 单栏-单行
+    "single_line": SingleLine,  # 单栏-总是换行
+    "single_none": SingleNone,  # 单栏-无换行
     # "single_code": ,  # TODO: 单栏-代码段
 }
 
