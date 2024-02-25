@@ -13,6 +13,17 @@ Rectangle {
     property alias contentItem: mPanel.data
     property string closeText: qsTr("保存并返回") // 右上角关闭提示文本
 
+    // Esc 退出
+    focus: false
+    onVisibleChanged: focus = visible
+    Keys.enabled: true
+    Keys.onEscapePressed: mRoot.visible = false
+    Component.onCompleted: {
+        if(!closeText)
+            closeText = qsTr("返回")
+        closeText += " (Esc)"
+    }
+
     // 模糊效果
     // GaussianBlur {
     //     anchors.fill: parent
