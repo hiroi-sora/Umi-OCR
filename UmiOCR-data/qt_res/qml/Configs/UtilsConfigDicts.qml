@@ -44,7 +44,7 @@ QtObject {
                 ["single_para", qsTr("单栏-按自然段换行")],
                 ["single_line", qsTr("单栏-总是换行")],
                 ["single_none", qsTr("单栏-无换行")],
-                // ["single_code", qsTr("单栏-代码段")], // TODO
+                ["single_code", qsTr("单栏-保留缩进")],
                 ["none", qsTr("不做处理")],
             ],
         }

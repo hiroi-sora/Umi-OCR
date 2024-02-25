@@ -56,8 +56,11 @@ class SingleLine(Tbpu):
 
     def run(self, textBlocks):
         textBlocks = linePreprocessing(textBlocks)  # 预处理
-        # 获取每一行
-        lines = self.get_lines(textBlocks)
-        # 展开回tb
-        textBlocks = [tb for tbs in lines for tb in tbs]
+        lines = self.get_lines(textBlocks)  # 获取每一行
+        # 解包
+        textBlocks = []
+        for line in lines:
+            for tb in line:
+                del tb["normalized_bbox"]
+                textBlocks.append(tb)
         return textBlocks

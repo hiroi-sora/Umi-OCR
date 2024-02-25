@@ -19,8 +19,7 @@ class SinglePara(SingleLine):
 
     def run(self, textBlocks):
         textBlocks = linePreprocessing(textBlocks)  # 预处理
-        # 获取每一行
-        lines = self.get_lines(textBlocks)
+        lines = self.get_lines(textBlocks)  # 获取每一行
         # 将行封装为tb
         temp_tbs = []
         for line in lines:
