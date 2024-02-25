@@ -106,7 +106,7 @@ class ParagraphParse:
                 paras_line_space.append(para_line_s)
                 now_para = [units[i]]
                 para_l, para_r, para_line_h = l, r, bottom - top
-                para_line_s = -1
+                para_line_s = None
             para_bottom = bottom
         # 归档最后一段
         paras.append(now_para)
