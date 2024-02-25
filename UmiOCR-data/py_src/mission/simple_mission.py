@@ -30,7 +30,7 @@ class SimpleMission:
         # 若当前异步任务对象为空，则创建工作线程
         self._taskMutex.lock()  # 上锁
         if self._task == None:
-            self._task = self.__Task(self._taskRun)
+            self._task = self._Task(self._taskRun)
             self._threadPool.start(self._task)
         self._taskMutex.unlock()  # 解锁
 
@@ -58,10 +58,10 @@ class SimpleMission:
 
     # ========================= 【异步类】 =========================
 
-    class __Task(QRunnable):
+    class _Task(QRunnable):
         def __init__(self, taskFunc):
             super().__init__()
-            self.__taskFunc = taskFunc
+            self._taskFunc = taskFunc
 
         def run(self):
-            self.__taskFunc()
+            self._taskFunc()

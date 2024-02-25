@@ -27,11 +27,11 @@ class ScreenshotOCR(Page):
             e = f'[Error] ScreenshotOCR: imgID "{imgID}" does not exist in the PixmapProvider dict.'
             print(e)
             return
-        self.__msnImage(pixmap, imgID, configDict)  # 开始OCR
+        self._msnImage(pixmap, imgID, configDict)  # 开始OCR
 
     # 对一批路径进行OCR
     def ocrPaths(self, paths, configDict):
-        self.__msnPaths(paths, configDict)
+        self._msnPaths(paths, configDict)
 
     # 停止全部任务
     def msnStop(self):
@@ -43,41 +43,41 @@ class ScreenshotOCR(Page):
     # ========================= 【OCR 任务控制】 =========================
 
     # 传入 QImage或QPixmap图片， 图片id， 配置字典。 提交OCR任务。
-    def __msnImage(self, img, imgID, configDict):
+    def _msnImage(self, img, imgID, configDict):
         # 图片转字节，构造任务队列
         bytesData = PixmapProvider.toBytes(img)
         msnList = [{"bytes": bytesData, "imgID": imgID}]
-        self.__msn(msnList, configDict)
+        self._msn(msnList, configDict)
 
     # 传入路径列表，提交OCR任务，返回图片缓存ID
-    def __msnPaths(self, paths, configDict):
+    def _msnPaths(self, paths, configDict):
         msnList = [{"path": x} for x in paths]
-        self.__msn(msnList, configDict)
+        self._msn(msnList, configDict)
 
     # 开始任务
-    def __msn(self, msnList, configDict):
+    def _msn(self, msnList, configDict):
         # 任务信息
         msnInfo = {
-            "onStart": self.__onStart,
-            "onReady": self.__onReady,
-            "onGet": self.__onGet,
-            "onEnd": self.__onEnd,
+            "onStart": self._onStart,
+            "onReady": self._onReady,
+            "onGet": self._onGet,
+            "onEnd": self._onEnd,
             "argd": configDict,
         }
         msnID = MissionOCR.addMissionList(msnInfo, msnList)
         if msnID.startswith("[Error]"):  # 添加任务失败
-            self.__onEnd(None, f"{self.msnID}\n添加任务失败。")
+            self._onEnd(None, f"{self.msnID}\n添加任务失败。")
         else:  # 添加成功
             self.msnDict[msnID] = None
             self.callQml("setMsnState", "run")
 
-    def __onStart(self, msnInfo):  # 任务队列开始
+    def _onStart(self, msnInfo):  # 任务队列开始
         pass
 
-    def __onReady(self, msnInfo, msn):  # 单个任务准备
+    def _onReady(self, msnInfo, msn):  # 单个任务准备
         pass
 
-    def __onGet(self, msnInfo, msn, res):  # 单个任务完成
+    def _onGet(self, msnInfo, msn, res):  # 单个任务完成
         # 补充平均置信度
         score = 0
         num = 0
@@ -94,7 +94,7 @@ class ScreenshotOCR(Page):
         self.recentResult = res  # 记录最后一次结果
         self.callQmlInMain("onOcrGet", res, imgID, imgPath)  # 在主线程中调用qml
 
-    def __onEnd(self, msnInfo, msg):  # 任务队列完成或失败
+    def _onEnd(self, msnInfo, msg):  # 任务队列完成或失败
         # msg: [Success] [Warning] [Error]
 
         def update():

@@ -35,11 +35,11 @@ class _I18n:
         self.langCode = ""
         self.langDict = {}
         # 获取信息
-        self.__getLangPath()
+        self._getLangPath()
         text, path = self.langDict[self.langCode]
         setLangCode(self.langCode)  # 设置插件翻译
         if not path:
-            print("翻译未加载。")
+            print("使用默认文本，未加载翻译。")
             return
         if not trans.load(path):
             msg = f"无法加载UI语言！\n[Error] Unable to load UI language: {path}"
@@ -64,7 +64,7 @@ class _I18n:
         return [self.langCode, self.langDict]
 
     # 获取当前翻译文件路径，如果没有配置文件则初始化
-    def __getLangPath(self):
+    def _getLangPath(self):
         self.langDict = {}
         self.langCode = ""
         # 搜索本地翻译文件
@@ -98,7 +98,9 @@ class _I18n:
             if not self.setLanguage(code):
                 # 写入配置失败，则使用默认语言
                 self.setLanguage(DefaultLang)
-                print(f"当前系统语言为{code}，无对应翻译文件，使用默认语言：{DefaultLang}。")
+                print(
+                    f"当前系统语言为{code}，无对应翻译文件，使用默认语言：{DefaultLang}。"
+                )
 
 
 I18n = _I18n()

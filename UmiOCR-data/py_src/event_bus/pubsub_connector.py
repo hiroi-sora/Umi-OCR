@@ -10,7 +10,7 @@ from .pubsub_service import PubSubService
 class PubSubConnector(QObject):
     def __init__(self, *args):
         super().__init__(*args)
-        self.__funcDict = {}  # 缓存历史已订阅的函数
+        self._funcDict = {}  # 缓存历史已订阅的函数
 
     # 订阅事件。传入 标题，函数所在Item，函数名
     @Slot(str, "QVariant", str)
@@ -21,7 +21,7 @@ class PubSubConnector(QObject):
             return
         PubSubService.subscribe(title, func)
         fKey = title + funcName
-        self.__funcDict[fKey] = func
+        self._funcDict[fKey] = func
 
     # 订阅事件，可额外传入组
     @Slot(str, "QVariant", str, str)
@@ -32,17 +32,17 @@ class PubSubConnector(QObject):
             return
         PubSubService.subscribeGroup(title, func, groupName)
         fKey = title + funcName
-        self.__funcDict[fKey] = func
+        self._funcDict[fKey] = func
 
     # 取消订阅事件，由于getattr的不稳定性，因此从历史记录中取函数引用，而不是重新查询。
     @Slot(str, "QVariant", str)
     def unsubscribe(self, title, item, funcName):
         fKey = title + funcName
-        if fKey not in self.__funcDict:
+        if fKey not in self._funcDict:
             print(f"[Warning] qml取消订阅事件失败！fKey {fKey} 未在 __funcDict 中。")
             return
-        func = self.__funcDict[fKey]
-        del self.__funcDict[fKey]
+        func = self._funcDict[fKey]
+        del self._funcDict[fKey]
         PubSubService.unsubscribe(title, func)
 
     # 取消订阅整个组的事件

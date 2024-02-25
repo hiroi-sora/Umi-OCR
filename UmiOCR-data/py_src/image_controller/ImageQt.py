@@ -163,9 +163,9 @@ class ImageQt(QImage):
         # All QImage constructors that take data operate on an existing
         # buffer, so this buffer has to hang on for the life of the image.
         # Fixes https://github.com/python-pillow/Pillow/issues/1370
-        self.__data = im_data["data"]
+        self._data = im_data["data"]
         super().__init__(
-            self.__data,
+            self._data,
             im_data["size"][0],
             im_data["size"][1],
             im_data["format"],

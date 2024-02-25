@@ -50,7 +50,7 @@ class TagPageConnector(QObject):
     def addPage(self, key):
         if key not in self.pageClass:
             return ""
-        ctrlKey = self.__getCtrlKey(key)
+        ctrlKey = self._getCtrlKey(key)
         obj = self.pageClass[key](ctrlKey, self)  # 实例化 页控制器对象
         self.pages[ctrlKey] = {  # key为控制器id
             "pyObj": obj,  # py对象
@@ -63,7 +63,7 @@ class TagPageConnector(QObject):
     # 增： 新增一个不带控制器的简单页
     @Slot(str, result=str)
     def addSimplePage(self, key):
-        ctrlKey = self.__getCtrlKey(key)
+        ctrlKey = self._getCtrlKey(key)
         self.pages[ctrlKey] = {
             "pyObj": None,
             "qmlObj": None,
@@ -138,7 +138,7 @@ class TagPageConnector(QObject):
     # ==================================================
 
     # 生成一个ctrlKey
-    def __getCtrlKey(self, key):
+    def _getCtrlKey(self, key):
         if key not in self._keysNum:
             n = 1
         else:

@@ -14,16 +14,12 @@ from ..ocr.tbpu import getParser
 from ..ocr.tbpu import IgnoreArea
 from ..utils.utils import isImg, argdIntConvert
 
-from PIL import Image
-from io import BytesIO
-import os
-
 
 class __MissionOcrClass(Mission):
     def __init__(self):
         super().__init__()
-        self.__apiKey = ""  # 当前api类型
-        self.__api = None  # 当前引擎api对象
+        self._apiKey = ""  # 当前api类型
+        self._api = None  # 当前引擎api对象
 
     # ========================= 【重载】 =========================
 
@@ -54,13 +50,13 @@ class __MissionOcrClass(Mission):
 
     def msnPreTask(self, msnInfo):  # 用于更新api和参数
         # 检查API对象
-        if not self.__api:
+        if not self._api:
             return "[Error] MissionOCR: API object is None."
         # 检查参数更新
         startInfo = self._dictShortKey(msnInfo["argd"])
         # 恢复int类型
         argdIntConvert(startInfo)
-        msg = self.__api.start(startInfo)
+        msg = self._api.start(startInfo)
         if msg.startswith("[Error]"):
             print(f"引擎启动失败！", msg)
             return msg  # 更新失败，结束该队列
@@ -69,12 +65,12 @@ class __MissionOcrClass(Mission):
 
     def msnTask(self, msnInfo, msn):  # 执行msn
         if "path" in msn:
-            res = self.__api.runPath(msn["path"])
+            res = self._api.runPath(msn["path"])
             res["path"] = msn["path"]  # 结果字典中补充参数
         elif "bytes" in msn:
-            res = self.__api.runBytes(msn["bytes"])
+            res = self._api.runBytes(msn["bytes"])
         elif "base64" in msn:
-            res = self.__api.runBase64(msn["base64"])
+            res = self._api.runBase64(msn["base64"])
         else:
             res = {
                 "code": 901,
@@ -100,27 +96,27 @@ class __MissionOcrClass(Mission):
 
     def getStatus(self):  # 返回当前状态
         return {
-            "apiKey": self.__apiKey,
+            "apiKey": self._apiKey,
             "missionListsLength": self.getMissionListsLength(),
         }
 
     def setApi(self, apiKey, info):  # 设置api
         # 成功返回 [Success] ，失败返回 [Error] 开头的字符串
-        self.__apiKey = apiKey
+        self._apiKey = apiKey
         info = self._dictShortKey(info)
         # 如果api对象已启动，则先停止
-        if self.__api:
-            self.__api.stop()
+        if self._api:
+            self._api.stop()
         # 获取新api对象
         res = getApiOcr(apiKey, info)
         # 失败
         if type(res) == str:
-            self.__apiKey = ""
-            self.__api = None
+            self._apiKey = ""
+            self._api = None
             return res
         # 成功
         else:
-            self.__api = res
+            self._api = res
             return "[Success]"
 
     # 将字典中配置项的长key转为短key
@@ -128,7 +124,7 @@ class __MissionOcrClass(Mission):
     def _dictShortKey(self, d):
         newD = {}
         key1 = "ocr."
-        key2 = key1 + self.__apiKey + "."
+        key2 = key1 + self._apiKey + "."
         for k in d:
             if k.startswith(key2):
                 newD[k[len(key2) :]] = d[k]
@@ -139,8 +135,8 @@ class __MissionOcrClass(Mission):
     # ========================= 【qml接口】 =========================
 
     def getLocalOptions(self):
-        if self.__apiKey:
-            return getLocalOptions(self.__apiKey)
+        if self._apiKey:
+            return getLocalOptions(self._apiKey)
         else:
             return {}
 

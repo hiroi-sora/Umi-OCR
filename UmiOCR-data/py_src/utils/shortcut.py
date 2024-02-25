@@ -9,7 +9,7 @@ from ..platform import Platform
 
 class ShortcutApi:
     @staticmethod  # 获取地址
-    def __getPath(position):
+    def _getPath(position):
         if position == "desktop":
             return Qsp.writableLocation(Qsp.DesktopLocation)
         elif position == "startMenu":
@@ -23,7 +23,7 @@ class ShortcutApi:
         appPath = os.environ["APP_PATH"]
         if not appPath:
             return "未找到 Umi-OCR.exe 。请尝试手动创建快捷方式。\n[Error] Umi-OCR.exe APP_PATH not exist. Please try creating a shortcut manually."
-        lnkPathBase = ShortcutApi.__getPath(position)
+        lnkPathBase = ShortcutApi._getPath(position)
         lnkPathBase = os.path.join(lnkPathBase, lnkName)
         lnkPath = lnkPathBase + ".lnk"
         i = 1
@@ -39,7 +39,7 @@ class ShortcutApi:
     @staticmethod  # 删除快捷方式
     def deleteShortcut(position):
         appName = "Umi-OCR"
-        lnkDir = ShortcutApi.__getPath(position)
+        lnkDir = ShortcutApi._getPath(position)
         num = 0
         for fileName in os.listdir(lnkDir):
             lnkPath = os.path.join(lnkDir, fileName)
