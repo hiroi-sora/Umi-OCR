@@ -17,8 +17,8 @@ TabPage {
     }
 
     Component.onCompleted: {
-        const tips = qsTr("截图快捷键、识别语言等选项，请在各个功能页中进行设置。")
-        qmlapp.popup.messageMemory("globalConfigsKey", "", tips)
+        const tips = qsTr("1. 关于快捷键、OCR语言等选项，请在各个功能页中进行设置。\n2. 勾选左下角的“高级”按钮，可以显示更多进阶选项。")
+        qmlapp.popup.messageMemory("globalConfigsKey", qsTr("小贴士"), tips)
     }
 
     DoubleRowLayout {
