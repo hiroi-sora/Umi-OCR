@@ -69,7 +69,7 @@ SystemTrayIcon {
     // ========================= 【布局】 =========================
 
     id: systemTrayRoot
-    visible: true
+    visible: false
     icon.source: "../../images/icons/umiocr.ico"
     tooltip: "Umi-OCR"
     property var funcDict: {} // 存放函数的字典

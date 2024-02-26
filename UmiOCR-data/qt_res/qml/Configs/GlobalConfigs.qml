@@ -157,6 +157,13 @@ Configs {
                     [false, qsTr("退出应用")],
                 ],
             },
+            "hideTrayIcon": {
+                "title": qsTr("隐藏托盘图标"),
+                "toolTip": qsTr("若要弹出位于后台的软件窗口，请在文件管理器中重复启动软件。\n若要彻底退出软件，请从任务管理器中结束进程。"),
+                "default": false,
+                "advanced": true,
+                "onChanged": changeHideTrayIcon,
+            },
             "simpleNotificationType": utilsDicts.getSimpleNotificationType(true),
             "geometry": { // 存放主窗位置大小，字符串格式 "x,y,w,h"
                 "type": "var",
@@ -431,5 +438,13 @@ Configs {
         if(fontPanel) {
             fontPanel.visible = true
         }
+    }
+
+    // 改变托盘图标显示
+    function changeHideTrayIcon(flag, old) {
+        if(flag && old===false) {
+            qmlapp.popup.messageMemory("changeHideTrayIcon", "", configDict.window.hideTrayIcon.toolTip)
+        }
+        qmlapp.systemTray.visible = flag
     }
 }
