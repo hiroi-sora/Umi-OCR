@@ -3,6 +3,7 @@ import json
 from .bottle import request
 from ..mission.mission_ocr import MissionOCR
 from ..utils.utils import initConfigDict
+from ..ocr.output.tools import getDataText
 
 
 # 获取ocr配置字典
@@ -14,16 +15,29 @@ def _get_ocr_options():
     for key in ocr_opts:
         opts[f"ocr.{key}"] = ocr_opts[key]
     # 排版解析的参数
-    opts[f"tbpu.parser"] = {  # TODO: 新排版解析的HTTP接口数据
-        "title": "排版解析",
-        "default": "MergeLine",
+    opts["tbpu.parser"] = {
+        "title": "排版解析方案",
+        "toolTip": "按什么方式，解析和排序图片中的文字块",
+        "default": "multi_para",
         "optionsList": [
-            ["MergeLine", "单行"],
-            ["MergePara", "多行-自然段"],
-            ["MergeParaCode", "多行-代码段"],
-            ["MergeLineVrl", "竖排-从右到左"],
-            ["MergeLineVlr", "竖排-从左到右"],
-            ["None", "不做处理"],
+            ["multi_para", "多栏-按自然段换行"],
+            ["multi_line", "多栏-总是换行"],
+            ["multi_none", "多栏-无换行"],
+            ["single_para", "单栏-按自然段换行"],
+            ["single_line", "单栏-总是换行"],
+            ["single_none", "单栏-无换行"],
+            ["single_code", "单栏-保留缩进"],
+            ["none", "不做处理"],
+        ],
+    }
+    # 输出格式
+    opts["data.format"] = {
+        "title": "数据返回格式",
+        "toolTip": '返回值字典中，["data"] 按什么格式表示OCR结果数据',
+        "default": "json",
+        "optionsList": [
+            ["json", "原始json格式"],
+            ["text", "纯文本"],
         ],
     }
     return opts
@@ -70,6 +84,9 @@ def init(UmiWeb):
         # 同步执行
         resList = MissionOCR.addMissionWait(opt, {"base64": data["base64"]})
         res = resList[0]["result"]
+        if opt["data.format"] == "text":  # 转纯文本
+            if res["code"] == 100:
+                res["data"] = getDataText(res["data"])
         res = json.dumps(res)
         return res
 
@@ -83,7 +100,8 @@ const data = {
         "ocr.angle": false,
         "ocr.language": "简体中文",
         "ocr.maxSideLen": 1024,
-        "tbpu.parser": "MergeLine",
+        "tbpu.parser": "multi_para",
+        "data.format": "text",
     }
 };
 
