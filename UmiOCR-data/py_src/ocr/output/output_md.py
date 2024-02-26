@@ -1,6 +1,7 @@
 # 输出markdown格式
 
 from .output import Output
+from .tools import getDataText
 
 import os
 
@@ -34,15 +35,7 @@ class OutputMD(Output):
 """
         # 正文
         if res["code"] == 100:
-            texts = [""]
-            datas = res["data"]
-            for i, tb in enumerate(datas):
-                if tb["end"] == "\n":
-                    texts[-1] += tb["text"]
-                    texts.append("")
-                else:
-                    texts[-1] += tb["text"] + tb["end"]
-            print(f"原本{len(datas)}，处理后 {len(texts)}")
+            texts = getDataText(res["data"]).split("\n")  # 获取拼接结果列表
             for t in texts:
                 textOut += f"> {t}  \n"
         elif res["code"] == 101:

@@ -1,6 +1,7 @@
 # 输出到csv表格文件
 
 from .output import Output
+from .tools import getDataText
 
 import csv
 
@@ -30,12 +31,7 @@ class OutputCsv(Output):
         path = res["path"]
         textOut = ""
         if res["code"] == 100:
-            datas = res["data"]
-            last = len(datas) - 1
-            for i, tb in enumerate(datas):
-                textOut += tb["text"]
-                if i < last:
-                    textOut += tb["end"]
+            textOut += getDataText(res["data"])  # 获取拼接结果
         elif res["code"] == 101:
             pass
         else:

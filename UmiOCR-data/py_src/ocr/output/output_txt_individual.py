@@ -2,6 +2,7 @@
 
 import os
 from .output import Output
+from .tools import getDataText
 
 
 class OutputTxtIndividual(Output):
@@ -18,12 +19,7 @@ class OutputTxtIndividual(Output):
             return  # 忽略空白图片
         textOut = ""
         if res["code"] == 100:
-            datas = res["data"]
-            last = len(datas) - 1
-            for i, tb in enumerate(datas):
-                textOut += tb["text"]
-                if i < last:
-                    textOut += tb["end"]
+            textOut += getDataText(res["data"])  # 获取拼接结果
         elif res["code"] == 101:
             pass
         else:

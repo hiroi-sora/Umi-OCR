@@ -1,5 +1,6 @@
 # OCR输出器的基类。按指定的格式，将传入的文本输出到指定地方。
 
+from .tools import getDataText
 from ...platform import Platform
 import os
 
@@ -16,12 +17,7 @@ class Output:
             return  # 忽略空白图片
         textOut = f"图片路径：{res['path']}\n代码：{res['code']}\n"
         if res["code"] == 100:
-            datas = res["data"]
-            last = len(datas) - 1
-            for i, tb in enumerate(datas):
-                textOut += tb["text"]
-                if i < last:
-                    textOut += tb["end"]
+            textOut += getDataText(res["data"])  # 获取拼接结果
         elif res["code"] == 101:
             textOut += "无文字"
         else:
