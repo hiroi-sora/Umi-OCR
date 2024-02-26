@@ -90,11 +90,6 @@ Configs {
                     "toolTip": qsTr("拷贝原文档内容，并叠加一层透明文字，可以搜索和复制"),
                     "default": true,
                 },
-                "pdfText": {
-                    // "title": qsTr("pdf 纯文本还原排版"), // TODO
-                    "toolTip": qsTr("创建一个新的PDF文档，只含OCR文本，排版尽量还原原文档"),
-                    "default": false,
-                },
                 "txt": {
                     "title": qsTr("txt 标准格式"),
                     "toolTip": qsTr("含识别文字和页数信息"),

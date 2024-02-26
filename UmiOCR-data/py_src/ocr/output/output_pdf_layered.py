@@ -13,17 +13,44 @@ class OutputPdfLayered(Output):
         self.originPath = argd["originPath"]  # 原始文件路径
         self.fileName = argd["outputFileName"]  # 文件名
         self.outputPath = f"{self.dir}/{self.fileName}.layered.pdf"  # 输出路径
+        self.pdf = None
         try:
-            self.pdf = fitz.open(self.originPath)  # 加载pymupdf对象
-            # TODO ：原文件不是PDF时，手动创建新PDF。
-            if not self.pdf.is_pdf:
-                raise Exception(f"原文档不是PDF格式，暂不支持转为双层可搜索PDF。")
             self.font = fitz.Font("cjk")  # 字体
         except Exception as e:
-            self.pdf = None
+            raise Exception(f"Failed to load cjk font. {e}\n无法加载cjk字体。")
+        try:
+            self.pdf = self._getPDF(self.originPath)  # 加载pymupdf对象
+        except Exception as e:
             raise Exception(
-                f"Failed to open doc file. {e}\n无法打开原始文档。\n{self.originPath}"
+                f"Failed to load doc file. {e}\n无法加载文档。\n{self.originPath}"
             )
+
+    # 获取pdf文档对象，或将其它类型的文档转为PDF对象
+    def _getPDF(self, path):
+        # https://github.com/pymupdf/PyMuPDF-Utilities/blob/master/examples/convert-document/convert.py
+        doc = fitz.open(path)
+        if doc.is_pdf:
+            return doc
+        b = doc.convert_to_pdf()  # 转换为PDF格式的二进制数据
+        pdf = fitz.open("pdf", b)  # 创建PDF文档对象
+        pdf.set_toc(doc.get_toc())  # 复制原始文档的目录
+        # 复制原始文档的元数据（如作者、标题等）
+        meta = doc.metadata
+        if not meta["producer"]:
+            meta["producer"] = "Umi-OCR & PyMuPDF v" + fitz.VersionBind
+        if not meta["creator"]:
+            meta["creator"] = "Umi-OCR & PyMuPDF PDF converter"
+        pdf.set_metadata(meta)
+        # 复制原始文档的链接
+        for pinput in doc:
+            links = pinput.get_links()
+            pout = pdf[pinput.number]
+            for l in links:
+                if l["kind"] == fitz.LINK_NAMED:  # 不处理 named links
+                    continue
+                pout.insert_link(l)  # 写入新文档
+        doc.close()  # 释放原文档
+        return pdf
 
     # 计算填满宽和高的一行字体大小
     def _calculateFontSize(self, text, w, h):
@@ -70,7 +97,7 @@ class OutputPdfLayered(Output):
                 fontname="cjk",
                 rotate=0,  # 旋转
                 stroke_opacity=0,  # 描边透明度
-                fill_opacity=0,  # 填充（字体）透明的
+                fill_opacity=0,  # 填充（字体）透明度
             )
         # shape.commit()
 
@@ -83,3 +110,4 @@ class OutputPdfLayered(Output):
                 print("[Warning] 构建字体子集失败：", e)
             # ez_save默认启用压缩和垃圾回收 deflate=True, garbage=3
             self.pdf.ez_save(self.outputPath)
+        self.pdf.close()
