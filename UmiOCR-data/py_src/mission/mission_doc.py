@@ -148,15 +148,6 @@ class _MissionDocClass(Mission):
                             }
                             tbs.append(tb)
 
-        # 仅提取文本时任务速度过快，频繁回调会导致UI卡死，因此故意引入延迟
-        currentTime = time.time()
-        elapsedTime = currentTime - self._lastCallTime
-        # 如果与上一次调用的时间差小于最短间隔，则睡至满足最短间隔
-        if elapsedTime < self._minInterval:
-            t = self._minInterval - elapsedTime
-            time.sleep(t)
-        self._lastCallTime = currentTime
-
         # =============== 调用OCR，将 imgs 的内容提取出来放入 tbs ===============
         if imgs:
             # 提取 "ocr." 开头的参数，组装OCR参数字典
@@ -198,6 +189,15 @@ class _MissionDocClass(Mission):
             resDict = {"code": 102, "data": errMsg}
         else:  # 无文本，无异常
             resDict = {"code": 101, "data": ""}
+
+        # ===== 仅提取文本时任务速度过快，频繁回调会导致UI卡死，因此故意引入延迟 =====
+        currentTime = time.time()
+        elapsedTime = currentTime - self._lastCallTime
+        # 如果与上一次调用的时间差小于最短间隔，则睡至满足最短间隔
+        if elapsedTime < self._minInterval:
+            t = self._minInterval - elapsedTime
+            time.sleep(t)
+        self._lastCallTime = currentTime
         return resDict
 
     # 获取一个文档的信息，如页数
