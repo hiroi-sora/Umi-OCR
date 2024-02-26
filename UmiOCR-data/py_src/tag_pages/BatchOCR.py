@@ -52,7 +52,8 @@ class BatchOCR(Page):
     def _preprocessArgd(self, argd, path0):  # 预处理参数字典，无异常返回True
         self.argd = None
         if argd["mission.dirType"] == "source":  # 若保存到原目录
-            argd["mission.dir"] = os.path.dirname(path0)  # 则保存路径设为第1张图片的目录
+            # 则保存路径设为第1张图片的目录
+            argd["mission.dir"] = os.path.dirname(path0)
         else:  # 若保存到用户指定目录
             d = os.path.abspath(argd["mission.dir"])  # 转绝对地址
             if not os.path.exists(d):  # 检查地址是否存在
@@ -97,7 +98,8 @@ class BatchOCR(Page):
         self.outputList = []
         outputArgd = {  # 数据转换，封装有需要的值
             "outputDir": argd["mission.dir"],  # 输出目录
-            "outputDirType": argd["mission.dirType"],  # 输出目录类型，"source" 为原文件目录
+            # 输出目录类型，"source" 为原文件目录
+            "outputDirType": argd["mission.dirType"],
             "outputFileName": argd["mission.fileName"],  # 输出文件名（前缀）
             "startDatetime": argd["startDatetime"],  # 开始日期
             "ingoreBlank": argd["mission.ingoreBlank"],  # 忽略空白文件
@@ -181,6 +183,12 @@ class BatchOCR(Page):
                 return
         else:
             msnID = ""
+        # 结束输出器，保存文件。
+        for o in self.outputList:
+            try:
+                o.onEnd()
+            except Exception as e:
+                msg = f"[Error] 输出器异常：{e}" + msg
         # msg: [Success] [Warning] [Error]
         self.callQmlInMain("onOcrEnd", msg, msnID)
 
