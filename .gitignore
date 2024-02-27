@@ -11,10 +11,7 @@ release
 release.py
 
 # 开发工具
-dev-tools/i18n/*.txt.ts
-dev-tools/i18n/*.txt
-dev-tools/i18n/*.qm
-dev-tools/i18n/*.xml
+!dev-tools/i18n/release
 dev-tools/7z
 dev-tools/*.zip
 
