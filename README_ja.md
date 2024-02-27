@@ -40,6 +40,9 @@
   <a href="https://github.com/hiroi-sora/Umi-OCR/forks">
     <img src="https://img.shields.io/github/forks/hiroi-sora/Umi-OCR?style=flat-square" alt="フォーク">
   </a>
+  <a href="https://hosted.weblate.org/engage/umi-ocr/">
+    <img src="https://hosted.weblate.org/widget/umi-ocr/svg-badge.svg" alt="翻译状态">
+  </a>
 </p>
 
 <div align="center">
@@ -86,7 +89,7 @@ Umi-OCRは、インターフェースの複数の言語をサポートしてい�
 
 Weblateオンラインで翻訳作業に参加できます:
 
-https://hosted.weblate.org/projects/umi-ocr/ui/
+https://hosted.weblate.org/engage/umi-ocr/
 
 ## タブインターフェース
 
