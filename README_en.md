@@ -80,8 +80,10 @@ If you need to manually switch languages, please refer to the following figure, 
 <p align="center"><img src="https://tupian.li/images/2023/11/19/65599c3f9e600.png" alt="1-标题-1.png" style="width: 80%;"></p>
 
 ### Help us translate / 帮助我们翻译！
-- Translate `Readme_en.md` 文档
-- Translate [Software Interface / 软件界面](dev-tools/i18n)
+
+You can participate in translation work online on Weblate:
+
+https://hosted.weblate.org/projects/umi-ocr/main/
 
 ## Tabbed Interface
 
