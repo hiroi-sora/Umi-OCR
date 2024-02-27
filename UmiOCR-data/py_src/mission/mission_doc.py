@@ -106,7 +106,8 @@ class _MissionDocClass(Mission):
             imgs.append({"bytes": bytes, "xy": (0, 0), "scale": 1})
         else:
             # 获取元素 https://pymupdf.readthedocs.io/en/latest/_images/img-textpage.png
-            p = page.get_text("dict")
+            # 确保越界图像能被采集 https://github.com/pymupdf/PyMuPDF/issues/3171
+            p = page.get_text("dict", clip=fitz.INFINITE_RECT())
             for t in p["blocks"]:
                 # 图片
                 if t["type"] == 1 and (
@@ -118,6 +119,7 @@ class _MissionDocClass(Mission):
                     # 图片实际大小
                     with Image.open(BytesIO(t["image"])) as pimg:
                         w2, h2 = pimg.size
+                        pimg.save("ttttttttttttttttt.png")
                     scale = w1 / w2  # 图片缩放比例
 
                     imgs.append(
