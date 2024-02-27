@@ -15,13 +15,6 @@ TabPage {
     configsComp: ScreenshotOcrConfigs {} 
     property string msnState: "none" // OCR任务状态， none run
 
-    // TODO: 测试用
-    // Timer {
-    //     interval: 200
-    //     running: true
-    //     onTriggered: {
-    //     }
-    // }
     // ========================= 【逻辑】 =========================
 
     // 重复截图
@@ -211,8 +204,8 @@ TabPage {
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.bottom: parent.bottom
-        anchors.margins: size_.spacing
-        width: doubleColumnLayout.hideLR===1 ? 32 : 0
+        anchors.leftMargin: doubleColumnLayout.hideLR===1 ? size_.spacing : 0
+        width: doubleColumnLayout.hideLR===1 ? size_.line * 2 : 0
         visible: doubleColumnLayout.hideLR===1
 
         Column {
