@@ -55,7 +55,7 @@ def _getBboxes(textBlocks, rotation_rad):
         ]
     # 否则，进行旋转操作。
     else:
-        # print(f"文本块预处理旋转 {degrees(rotation_rad):.1f} °")
+        # print(f"文本块预处理旋转 {degrees(rotation_rad):.2f} °")
         bboxes = []
         min_x, min_y = float("inf"), float("inf")  # 初始化最小的x和y坐标
         cos_angle = cos(-rotation_rad)  # 计算角度正弦值
