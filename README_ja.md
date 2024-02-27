@@ -86,7 +86,7 @@ Umi-OCRは、インターフェースの複数の言語をサポートしてい�
 
 Weblateオンラインで翻訳作業に参加できます:
 
-https://hosted.weblate.org/projects/umi-ocr/main/
+https://hosted.weblate.org/projects/umi-ocr/ui/
 
 ## タブインターフェース
 

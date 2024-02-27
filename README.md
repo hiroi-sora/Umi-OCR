@@ -222,7 +222,7 @@ Umi-OCR v2 由一系列灵活好用的**标签页**组成。您可按照自己�
 
 您可以在 Weblate 在线参与翻译工作：
 
-https://hosted.weblate.org/projects/umi-ocr/main/
+https://hosted.weblate.org/projects/umi-ocr/ui/
 
 ## 开发计划
 

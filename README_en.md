@@ -83,7 +83,7 @@ If you need to manually switch languages, please refer to the following figure, 
 
 You can participate in translation work online on Weblate:
 
-https://hosted.weblate.org/projects/umi-ocr/main/
+https://hosted.weblate.org/projects/umi-ocr/ui/
 
 ## Tabbed Interface
 
