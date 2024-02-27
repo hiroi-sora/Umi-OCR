@@ -58,18 +58,18 @@
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="204"/>
         <source>任务正在进行中。
 要结束任务并关闭页面吗？</source>
-        <translation type="unfinished">タスクが進行中です。
+        <translation>タスクが進行中です。
 タスクを終了してページを閉じますか？</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="224"/>
         <source>开始任务</source>
-        <translation type="unfinished">開始する</translation>
+        <translation>開始する</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="228"/>
         <source>启动中…</source>
-        <translation type="unfinished">起動中...</translation>
+        <translation>起動中…</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="232"/>
@@ -79,12 +79,12 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="236"/>
         <source>停止中…</source>
-        <translation type="unfinished">停止中...</translation>
+        <translation>停止中…</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="286"/>
         <source>批量识别任务异常</source>
-        <translation type="unfinished">一括認識タスクの例外</translation>
+        <translation>一括認識タスクの例外</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="383"/>
@@ -95,7 +95,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="385"/>
         <source>状态</source>
-        <translation type="unfinished">ステータス</translation>
+        <translation>ステータス</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="386"/>
@@ -110,7 +110,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="389"/>
         <source>清空</source>
-        <translation type="unfinished">クリア</translation>
+        <translation>クリア</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="390"/>
@@ -125,12 +125,12 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="420"/>
         <source>设置</source>
-        <translation type="unfinished">設定</translation>
+        <translation>設定</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="425"/>
         <source>记录</source>
-        <translation type="unfinished">記録</translation>
+        <translation>記録</translation>
     </message>
 </context>
 <context>
@@ -188,7 +188,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="55"/>
         <source>保存到</source>
-        <translation type="unfinished">保存先</translation>
+        <translation>保存先</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="57"/>
@@ -199,12 +199,12 @@
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="58"/>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="62"/>
         <source>指定目录</source>
-        <translation type="unfinished">指定したディレクトリ</translation>
+        <translation>指定したディレクトリ</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="63"/>
         <source>必须先指定“保存到指定目录”才生效</source>
-        <translation type="unfinished">有効にするには「保存先を指定する」必要があります</translation>
+        <translation>有効にするには「保存先を指定する」必要があります</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="67"/>
@@ -214,7 +214,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="70"/>
         <source>文件名格式</source>
-        <translation type="unfinished">ファイル名の形式</translation>
+        <translation>ファイル名の形式</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="71"/>
@@ -229,7 +229,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="76"/>
         <source>日期时间格式</source>
-        <translation type="unfinished">日付と時刻の形式</translation>
+        <translation>日付と時刻の形式</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="77"/>
@@ -238,7 +238,7 @@
 %M 分钟、 %S 秒 、 %unix 时间戳 
 举例：%Y年%m月%d日_%H-%M
 生成：2023年09月01日_12-13.txt</source>
-        <translation type="unfinished">ファイル名内の %date の日付形式です。次のプレースホルダを挿入できます：
+        <translation>ファイル名内の %date の日付形式です。次のプレースホルダを挿入できます：
 %Y 年、 %m 月、 %d 日、 %H 時、 
 %M 分、 %S 秒、 %unix タイムスタンプ
 例：%Y年%m月%d日_%H-%M
@@ -247,7 +247,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="83"/>
         <source>保存文件类型</source>
-        <translation type="unfinished">保存するファイルの種類</translation>
+        <translation>保存するファイルの種類</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="89"/>
@@ -262,7 +262,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="94"/>
         <source>txt 标准格式</source>
-        <translation type="unfinished">txt 標準形式</translation>
+        <translation>txt 標準形式</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="95"/>
@@ -272,7 +272,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="99"/>
         <source>p.txt 纯文字格式</source>
-        <translation type="unfinished">p.txt 純粋なテキスト形式</translation>
+        <translation>p.txt 純粋なテキスト形式</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="100"/>
@@ -282,7 +282,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="104"/>
         <source>csv 表格文件(Excel)</source>
-        <translation type="unfinished">csv テーブル形式（Excel）</translation>
+        <translation>csv テーブル形式（Excel）</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="105"/>
@@ -292,7 +292,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="109"/>
         <source>jsonl 原始信息</source>
-        <translation type="unfinished">jsonl 生データ</translation>
+        <translation>jsonl 生データ</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="110"/>
