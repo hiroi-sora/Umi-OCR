@@ -2,6 +2,7 @@
 # 对已经是一个列区块之内的文本块，判断其段落关系。
 
 from typing import Callable
+import unicodedata
 
 
 # 传入前句尾字符和后句首字符，返回分隔符
@@ -28,8 +29,8 @@ def word_separator(letter1, letter2):
     # 特殊情况：前文为连字符。
     if letter1 == "-":
         return ""
-    # 特殊情况：后文为缩写，如 n't。或为结尾符号，意味着OCR错误分割。
-    if letter2 in {r"'", ",", ".", "!", "?", ";", ":", ")", "]", "}", "/", "\\"}:
+    # 特殊情况：后文为任意标点符号。
+    if unicodedata.category(letter2).startswith("P"):
         return ""
     # 其它正常情况加空格
     return " "
