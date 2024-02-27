@@ -119,7 +119,6 @@ class _MissionDocClass(Mission):
                     # 图片实际大小
                     with Image.open(BytesIO(t["image"])) as pimg:
                         w2, h2 = pimg.size
-                        pimg.save("ttttttttttttttttt.png")
                     scale = w1 / w2  # 图片缩放比例
 
                     imgs.append(
