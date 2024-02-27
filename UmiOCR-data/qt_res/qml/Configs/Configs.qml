@@ -610,10 +610,23 @@ Item {
                 else { // 未启用折叠按钮，则使用设定值
                     fold = f
                 }
+                // 如果设定了提示，则加载提示组件
+                if(origin.toolTip) {
+                    toolTipLoader.sourceComponent = toolTip
+                }
             }
 
+            // 提示
+            Component {
+                id: toolTip
+                ToolTip_ {
+                    visible: mouseAreaBackgroud.hovered
+                    text: origin.toolTip
+                }
+            }
+            Loader { id: toolTipLoader }
             // 背景
-            MouseAreaBackgroud { }
+            MouseAreaBackgroud { id: mouseAreaBackgroud }
             // 标题
             Text_ {
                 id: groupText
