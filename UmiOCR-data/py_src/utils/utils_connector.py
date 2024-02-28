@@ -20,6 +20,14 @@ class UtilsConnector(QObject):
     def startfile(self, path):
         Platform.startfile(path)
 
+    # 硬件控制
+    @Slot(str)
+    def hardwareCtrl(self, key):
+        if key == "shutdown":  # 关机
+            Platform.HardwareCtrl.shutdown()
+        elif key == "hibernate":  # 休眠
+            Platform.HardwareCtrl.hibernate()
+
     # 传入paths和是否递归，返回合法的图片路径
     @Slot("QVariant", bool, result="QVariant")
     def findImages(self, paths, isRecurrence):

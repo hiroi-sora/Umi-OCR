@@ -11,14 +11,6 @@ QtObject {
             "title": qsTr("任务完成后的操作"),
             "type": "group",
 
-            "openFile": {
-                "title": qsTr("自动打开文件"),
-                "default": false,
-            },
-            "openFolder": {
-                "title": qsTr("自动打开目录"),
-                "default": false,
-            },
             "system": {
                 "title": qsTr("系统"),
                 "save": false, // 不保存
@@ -30,28 +22,23 @@ QtObject {
             },
         }
     }
-    // 传入后续操作设置值，通过回调函数传入值字典
-    function callPostTaskActions(openFile, openFolder, system, callback) {
-        let d = {
-            "openFile": openFile,
-            "openFolder": openFolder,
-        }
+    // 传入 getPostTaskActions 的system值，执行硬件控制操作
+    function postTaskHardwareCtrl(system) {
         if(system) {
             let s = ""
             const sysList = getPostTaskActions().system.optionsList
-            // 对话框：系统即将关机  继续关机 | 取消关机
             for(let i in sysList)
-                if(sysList[i][0] === system)
+                if(sysList[i][0] === system) {
                     s = sysList[i][1]
+                    break
+                }
+            // 对话框：系统即将关机  继续关机 | 取消关机
             const argd = {yesText: qsTr("继续%1").arg(s), noText: qsTr("取消%1").arg(s)}
             const c = (flag)=>{
-                d[system] = flag
-                callback(d)
+                if(flag)
+                    qmlapp.utilsConnector.hardwareCtrl(system)
             }
             qmlapp.popup.dialogCountdown(qsTr("系统即将%1").arg(s), "", c, "", argd)
-        }
-        else {
-            callback(d)
         }
     }
 

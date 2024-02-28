@@ -119,25 +119,6 @@ class BatchOCR(Page):
     def msnStop(self):  # 任务停止（异步）
         MissionOCR.stopMissionList(self.msnID)
 
-    def postTaskActions(self, argd):  # 任务完成后续操作
-        # argd可选值 "openFolder": "要打开的目录", "openFile": True(打开上次任务的文件),
-        # "shutdown": True(关机), "hibernate": True(休眠)
-
-        # 打开目录
-        openFolder = argd.get("openFolder", False)
-        if openFolder and os.path.exists(self.argd["mission.dir"]):
-            Platform.startfile(self.argd["mission.dir"])
-        # 打开文件
-        if argd.get("openFile", False):
-            for o in self.outputList:
-                o.openOutputFile()
-        # 关机
-        if argd.get("shutdown", False):
-            Platform.HardwareCtrl.shutdown()
-        # 休眠
-        elif argd.get("hibernate", False):
-            Platform.HardwareCtrl.hibernate()
-
     def msnPreview(self, path, argd):  # 快速进行一次任务，主要用于预览
         msnInfo = {
             "onGet": self._onPreview,

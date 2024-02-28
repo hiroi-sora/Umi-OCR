@@ -215,11 +215,8 @@ TabPage {
             const simpleType = configsComp.getValue("other.simpleNotificationType")
             qmlapp.popup.simple(qsTr("批量识别完成"), "", simpleType)
             // 任务完成后续操作
-            qmlapp.globalConfigs.utilsDicts.callPostTaskActions(
-                configsComp.getValue("postTaskActions.openFile"),
-                configsComp.getValue("postTaskActions.openFolder"),
-                configsComp.getValue("postTaskActions.system"),
-                (d) => {tabPage.callPy("postTaskActions", d)}
+            qmlapp.globalConfigs.utilsDicts.postTaskHardwareCtrl(
+                configsComp.getValue("postTaskActions.system")
             )
         }
         // 任务失败
