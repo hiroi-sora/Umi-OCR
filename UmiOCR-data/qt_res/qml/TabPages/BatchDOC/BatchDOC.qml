@@ -275,10 +275,15 @@ TabPage {
         filesTableView.setProperty(path, "state", "√")
         // 任务成功
         if(msg.startsWith("[Success]")) {
-            // TODO
             // 所有文档处理完毕
             if(msg === "[Success] All completed.") {
                 setMsnState("none") // 状态：不在运行
+                const simpleType = configsComp.getValue("other.simpleNotificationType")
+                qmlapp.popup.simple(qsTr("文档识别完成"), "", simpleType)
+                // 任务完成后续操作
+                qmlapp.globalConfigs.utilsDicts.postTaskHardwareCtrl(
+                    configsComp.getValue("postTaskActions.system")
+                )
             }
         }
         // 任务失败

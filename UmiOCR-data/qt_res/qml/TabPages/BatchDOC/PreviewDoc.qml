@@ -361,7 +361,7 @@ ModalLayer {
                         }
                     }
                     Text_ {
-                        text: qsTr("右键拖拽，绘制矩形区域。包含在区域内的文字框将被忽略。可用于排除水印。对所有文档生效。")
+                        text: qsTr("右键拖拽，绘制矩形区域。包含在区域内的文字框将被忽略。可用于排除水印、页眉页脚。对所有文档生效。")
                         color: theme.subTextColor
                         font.pixelSize: size_.smallText
                         anchors.left: parent.left

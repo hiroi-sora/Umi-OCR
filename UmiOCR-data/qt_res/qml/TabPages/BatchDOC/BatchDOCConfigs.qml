@@ -124,5 +124,14 @@ Configs {
                 "advanced": true,
             },
         },
+
+        // 任务完成后续操作
+        "postTaskActions": qmlapp.globalConfigs.utilsDicts.getPostTaskActions(),
+
+        "other": {
+            "title": qsTr("其它"),
+            "type": "group",
+            "simpleNotificationType": qmlapp.globalConfigs.utilsDicts.getSimpleNotificationType()
+        },
     }
 }
