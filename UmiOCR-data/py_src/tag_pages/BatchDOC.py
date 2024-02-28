@@ -17,6 +17,18 @@ class BatchDOC(Page):
         super().__init__(*args)
         self._msnIdPath = {}  # 当前运行的任务，id到地址的映射
 
+    # TODO 临时：限制windows系统版本
+    def winVer(self):
+        import platform
+
+        version = platform.version()
+
+        if "." in version:
+            ver = version.split(".")[0]
+            if ver.isdigit() and int(ver) >= 10:
+                return [True, version]
+        return [False, version]
+
     # 添加一些文档
     def addDocs(self, paths, isRecurrence):
         paths = utils.findDocs(paths, isRecurrence)
@@ -120,7 +132,9 @@ class BatchDOC(Page):
         # =============== 组装输出参数字典 ===============
         outputArgd = {
             "outputDir": outputDir,  # 输出路径
-            "outputDirType": argd["mission.dirType"],  # 输出目录类型，"source" 为原文件目录
+            "outputDirType": argd[
+                "mission.dirType"
+            ],  # 输出目录类型，"source" 为原文件目录
             "outputFileName": outputFileName,  # 输出文件名（前缀）
             "startDatetime": startDatetime,  # 开始日期
             "ingoreBlank": argd["mission.ingoreBlank"],  # 忽略空白文件

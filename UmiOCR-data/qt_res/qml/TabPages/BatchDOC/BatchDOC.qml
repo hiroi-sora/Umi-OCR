@@ -42,6 +42,20 @@ TabPage {
     Component.onCompleted: {
         missionInfo = {}
         setMsnState("none")
+        // TODO 临时：只允许win10以上系统
+        const winVer = tabPage.callPy("winVer")
+        const f = winVer[0]
+        const v = winVer[1]
+        if(!f) {
+            const tips = `抱歉，批量文档识别 暂时只对Windows10及以上的系统提供完整支持。
+您当前的系统版本为Windows ${v}，可能在识别某些文档时出现无法保存文件、软件崩溃等情况。
+我们正在尝试修复该问题，请见谅。
+
+Sorry, the batch document recognition feature is currently only fully supported on Windows 10 and above systems.
+Your current system version is Windows ${v}, which may result in errors such as inability to save files or software crashes when recognizing certain documents.
+We are attempting to fix this issue.`
+            qmlapp.popup.messageMemory("justWin10", "警告 Warning", tips)
+        }
     }
     // TODO: 测试用
     // Timer {
@@ -223,10 +237,10 @@ TabPage {
                 runBtn.text_ = qsTr("开始任务")
                 runBtn.enabled = true
                 // 首次运行 显示提示信息
-                if(msnState) {
-                    const tips = qsTr("提示：如果识别效果不好，比如输出乱码或没有文字输出。请尝试将设置的[内容提取模式]改为“整页强制OCR”。")
-                    qmlapp.popup.messageMemory("pdfOcrNotFood", qsTr("文档识别任务完成"), tips)
-                }
+                // if(msnState) {
+                //     const tips = qsTr("提示：如果识别效果不好，比如输出乱码或没有文字输出。请尝试将设置的[内容提取模式]改为“整页强制OCR”。")
+                //     qmlapp.popup.messageMemory("pdfOcrNotFood", qsTr("文档识别任务完成"), tips)
+                // }
                 break;
             case "init": // 正在启动
                 runBtn.text_ = qsTr("启动中…")
