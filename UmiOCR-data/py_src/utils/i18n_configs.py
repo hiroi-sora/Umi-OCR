@@ -9,16 +9,20 @@ DefaultLang = "zh_CN"  # 默认语言
 # 语言表。每个语种只有第一个代号是有效代号，剩下的会映射到第一个。如zh_HK会映射到zh_TW。
 LanguageCodes = {
     "zh_CN": "简体中文",  # 简中
+    "zh": "简体中文",
     "zh_TW": "繁體中文",  # 繁中
     "zh_HK": "繁體中文",
     "en_US": "English",  # 英语
+    "en": "English",
     "en_GB": "English",
     "en_CA": "English",
     "es_ES": "Español",  # 西班牙语
     "es_MX": "Español",
     "fr_FR": "Français",  # 法语
+    "fr": "Français",
     "fr_CA": "Français",
     "de_DE": "Deutsch",  # 德语
+    "de": "Deutsch",
     "de_AT": "Deutsch",
     "de_CH": "Deutsch",
     "ja_JP": "日本語",  # 日语
