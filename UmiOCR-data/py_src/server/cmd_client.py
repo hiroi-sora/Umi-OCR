@@ -15,7 +15,8 @@ import psutil
 def getPidTime(pid):
     try:
         return str(psutil.Process(pid).create_time())
-    except psutil.NoSuchProcess as e:  # 虽然psutil.pid_exists验证pid存在，但 Process 无法生成对象
+    except psutil.NoSuchProcess as e:
+        # 虽然psutil.pid_exists验证pid存在，但 Process 无法生成对象
         return ""
 
 
