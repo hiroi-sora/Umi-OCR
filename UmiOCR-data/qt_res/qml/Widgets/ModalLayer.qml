@@ -13,9 +13,15 @@ Rectangle {
     property alias contentItem: mPanel.data
     property string closeText: qsTr("保存并返回") // 右上角关闭提示文本
 
+    onVisibleChanged: {
+        focus = visible
+        // 当父组件隐藏，导致子组件连锁隐藏时，显式将visible设为false，
+        // 以避免父组件显示时 子组件也连锁显示，导致的重加载bug。
+        if(!visible)
+            visible = false
+    }
     // Esc 退出
     focus: false
-    onVisibleChanged: focus = visible
     Keys.enabled: true
     Keys.onEscapePressed: mRoot.visible = false
     Component.onCompleted: {
