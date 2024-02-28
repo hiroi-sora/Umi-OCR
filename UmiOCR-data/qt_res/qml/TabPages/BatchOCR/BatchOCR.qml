@@ -214,29 +214,13 @@ TabPage {
         if(msg.startsWith("[Success]")) {
             const simpleType = configsComp.getValue("other.simpleNotificationType")
             qmlapp.popup.simple(qsTr("批量识别完成"), "", simpleType)
-            // 任务完成后续操作：打开文件/文件夹
-            const openWhat = {
-                "openFile": configsComp.getValue("postTaskActions.openFile"),
-                "openFolder": configsComp.getValue("postTaskActions.openFolder"),
-            }
-            tabPage.callPy("postTaskActions", openWhat)
-            // 任务完成后续操作：系统关机/待机
-            const actSys = configsComp.getValue("postTaskActions.system")
-            if(actSys) {
-                let actStr = ""
-                // 对话框：系统即将关机  继续关机 | 取消关机
-                if(actSys==="shutdown") actStr = qsTr("关机")
-                else if(actSys==="hibernate") actStr = qsTr("休眠")
-                const argd = {yesText: qsTr("继续%1").arg(actStr), noText: qsTr("取消%1").arg(actStr)}
-                const callback = (flag)=>{
-                    if(flag) {
-                        const d = {}
-                        d[actSys] = true
-                        tabPage.callPy("postTaskActions", d)
-                    }
-                }
-                qmlapp.popup.dialogCountdown(qsTr("系统即将%1").arg(actStr), "", callback, "", argd)
-            }
+            // 任务完成后续操作
+            qmlapp.globalConfigs.utilsDicts.callPostTaskActions(
+                configsComp.getValue("postTaskActions.openFile"),
+                configsComp.getValue("postTaskActions.openFolder"),
+                configsComp.getValue("postTaskActions.system"),
+                (d) => {tabPage.callPy("postTaskActions", d)}
+            )
         }
         // 任务失败
         else if(msg.startsWith("[Error]")) {

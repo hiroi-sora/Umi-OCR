@@ -30,6 +30,30 @@ QtObject {
             },
         }
     }
+    // 传入后续操作设置值，通过回调函数传入值字典
+    function callPostTaskActions(openFile, openFolder, system, callback) {
+        let d = {
+            "openFile": openFile,
+            "openFolder": openFolder,
+        }
+        if(system) {
+            let s = ""
+            const sysList = getPostTaskActions().system.optionsList
+            // 对话框：系统即将关机  继续关机 | 取消关机
+            for(let i in sysList)
+                if(sysList[i][0] === system)
+                    s = sysList[i][1]
+            const argd = {yesText: qsTr("继续%1").arg(s), noText: qsTr("取消%1").arg(s)}
+            const c = (flag)=>{
+                d[system] = flag
+                callback(d)
+            }
+            qmlapp.popup.dialogCountdown(qsTr("系统即将%1").arg(s), "", c, "", argd)
+        }
+        else {
+            callback(d)
+        }
+    }
 
     // OCR文本后处理-排版解析
     function getTbpuParser(d=undefined) {
