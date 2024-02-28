@@ -75,6 +75,10 @@ SystemTrayIcon {
     property var funcDict: {} // 存放函数的字典
     Component.onCompleted: funcDict = {}
     
+    onVisibleChanged: {
+        // 隐藏/显示托盘图标时，重新挂载菜单
+        systemTrayRoot.menu = visible ? trayMenu : null
+    }
 
     // 右键菜单
     menu: Menu {

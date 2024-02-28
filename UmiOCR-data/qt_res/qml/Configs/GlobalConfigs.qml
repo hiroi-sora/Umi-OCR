@@ -445,6 +445,6 @@ Configs {
         if(flag && old===false) {
             qmlapp.popup.messageMemory("changeHideTrayIcon", "", configDict.window.hideTrayIcon.toolTip)
         }
-        qmlapp.systemTray.visible = flag
+        qmlapp.systemTray.visible = !flag
     }
 }
