@@ -74,7 +74,7 @@
 - **方便**：解压即用，离线运行，无需网络。
 - **高效**：自带高效率离线OCR引擎。只要电脑性能足够，可以比在线OCR服务更快。
 - **灵活**：支持命令行、HTTP接口等多种调用方式。
-- **功能**：截图OCR / 批量OCR / 二维码 / 公式识别（[测试中](https://github.com/hiroi-sora/Umi-OCR/issues/254)） / PDF识别（[测试中](https://github.com/hiroi-sora/Umi-OCR/releases)）
+- **功能**：截图OCR / 批量OCR / PDF识别 / 二维码 / 公式识别（[测试中](https://github.com/hiroi-sora/Umi-OCR/issues/254)）
 
 <p align="center"><img src="https://tupian.li/images/2023/11/19/65599097ab5f4.png" alt="1-标题-1.png" style="width: 80%;"></p>
 
