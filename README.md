@@ -266,7 +266,7 @@ https://hosted.weblate.org/engage/umi-ocr/
 - [x] 重复上一次截图 [#357](https://github.com/hiroi-sora/Umi-OCR/issues/357)
 - [x] 完善输出器
 - [x] 完善段落分析器，优化代码逻辑
-- [ ] 更新HTTP接口及文档
+- [x] 更新HTTP接口及文档
 
 ##### 远期计划
 
