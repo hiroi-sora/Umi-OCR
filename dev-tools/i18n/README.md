@@ -1,28 +1,26 @@
-### 当前进度
+## 参与本地化翻译（译者）
 
-|         | 已校对           |         | 未翻译    |
-| ------- | ---------------- | ------- | --------- |
-| `zh_TW` | 繁體中文         | `es_ES` | Español   |
-| `en_US` | English          | `fr_FR` | Français  |
-|         |                  | `de_DE` | Deutsch   |
-|         |                  | `ko_KR` | 한국어    |
-|         | **机翻，未校对** | `ru_RU` | Русский   |
-| `ja_JP` | 日本語           | `pt_BR` | Português |
-|         |                  | `it_IT` | Italiano  |
+前往 Weblate 在线翻译平台，注册账户，或用Github账户登录：
 
-### 翻译软件主界面
+https://hosted.weblate.org/engage/umi-ocr/
 
-请参考下述文档：
+您可以补充、订正现有语言的翻译，或创建新的语言。
 
-- [翻译步骤（简易）](翻译步骤（简易）.md)
+## 维护本地化文件（开发者）
 
-- [翻译步骤（完整）](翻译步骤（完整）.md)
+### 从源代码生成或更新翻译文件.ts
 
-- [翻译注意事项](翻译注意事项.md)
+1. 运行 `lupdate_all.py`
+2. 提交更改，等待 Weblate 平台更新
 
-### 翻译插件界面
+### 从翻译文件.ts 生成二进制翻译包.qm 并载入软件
 
-Umi-OCR 中的插件（如引擎组件）使用另一套更轻量的翻译机制。
+1. 运行 `lrelease_all.py`
+2. 在 `/release` 目录下，找到所有 .qm 后缀的文件，剪贴到 `Umi-OCR/UmiOCR-data/i18n`
+
+## 翻译插件界面
+
+Umi-OCR 中的插件（如引擎组件）使用另一套轻量翻译机制。
 
 简单而言：
 1. 打开 [插件仓库](https://github.com/hiroi-sora/Umi-OCR_plugins) ，找到某个插件对应的目录。
