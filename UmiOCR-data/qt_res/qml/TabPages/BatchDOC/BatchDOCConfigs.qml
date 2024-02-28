@@ -38,8 +38,8 @@ Configs {
                 "title": qsTr("内容提取模式"),
                 "toolTip": qsTr("若一页文档既存在图片又存在文本，如何进行处理"),
                 "optionsList": [
-                    ["mixed", qsTr("混合OCR/原文本")],
                     ["fullPage", qsTr("整页强制OCR")],
+                    ["mixed", qsTr("混合OCR/原文本")],
                     ["imageOnly", qsTr("仅OCR图片")],
                     ["textOnly", qsTr("仅拷贝原有文本")],
                 ],
