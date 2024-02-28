@@ -34,9 +34,9 @@ def _get_ocr_options():
     opts["data.format"] = {
         "title": "数据返回格式",
         "toolTip": '返回值字典中，["data"] 按什么格式表示OCR结果数据',
-        "default": "json",
+        "default": "dict",
         "optionsList": [
-            ["json", "原始json格式"],
+            ["dict", "含有位置等信息的原始字典"],
             ["text", "纯文本"],
         ],
     }
