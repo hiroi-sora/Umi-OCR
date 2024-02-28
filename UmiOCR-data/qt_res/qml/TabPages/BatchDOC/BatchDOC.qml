@@ -44,21 +44,21 @@ TabPage {
         setMsnState("none")
     }
     // TODO: 测试用
-    Timer {
-        interval: 200
-        running: true
-        onTriggered: {
-            addDocs(
-                [
-                    // "D:/Pictures/Screenshots/test",
-                    "../../PDF测试",
-                ]
-            )
-            console.log("自动添加！！！！！！！！！！！！！")
-            // ocrStart()
-            // onClickDoc(0)
-        }
-    }
+    // Timer {
+    //     interval: 200
+    //     running: true
+    //     onTriggered: {
+    //         addDocs(
+    //             [
+    //                 // "D:/Pictures/Screenshots/test",
+    //                 "../../PDF测试",
+    //             ]
+    //         )
+    //         console.log("自动添加！！！！！！！！！！！！！")
+    //         ocrStart()
+    //         onClickDoc(0)
+    //     }
+    // }
 
     // 添加一批文档。传入值是没有 file:/// 开头的纯字符串的列表。
     function addDocs(paths) {
@@ -218,11 +218,15 @@ TabPage {
     */
     // 设置任务状态
     function setMsnState(flag) {
-        msnState = flag
         switch(flag) {
             case "none": // 不在运行
                 runBtn.text_ = qsTr("开始任务")
                 runBtn.enabled = true
+                // 首次运行 显示提示信息
+                if(msnState) {
+                    const tips = qsTr("提示：如果识别效果不好，比如输出乱码或没有文字输出。请尝试将设置的[内容提取模式]改为“整页强制OCR”。")
+                    qmlapp.popup.messageMemory("pdfOcrNotFood", qsTr("文档识别任务完成"), tips)
+                }
                 break;
             case "init": // 正在启动
                 runBtn.text_ = qsTr("启动中…")
@@ -237,6 +241,7 @@ TabPage {
                 runBtn.enabled = false
                 break;
         }
+        msnState = flag
         console.log("set mission state:  ", flag)
     }
 
