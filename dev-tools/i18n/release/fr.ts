@@ -336,22 +336,22 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="152"/>
         <source>开始任务</source>
-        <translation type="unfinished"></translation>
+        <translation>Démarrer tâche</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="156"/>
         <source>启动中…</source>
-        <translation type="unfinished"></translation>
+        <translation>Démarrage&#xa0;…</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="160"/>
         <source>停止任务</source>
-        <translation type="unfinished"></translation>
+        <translation>Arrêter la tâche</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="164"/>
         <source>停止中…</source>
-        <translation type="unfinished"></translation>
+        <translation>Arrêt en cours&#xa0;…</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="76"/>
@@ -386,7 +386,7 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="230"/>
         <source>取消%1</source>
-        <translation type="unfinished"></translation>
+        <translation>Annuler %1</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="238"/>
@@ -442,7 +442,7 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="412"/>
         <source>记录</source>
-        <translation type="unfinished"></translation>
+        <translation>Historique</translation>
     </message>
 </context>
 <context>
@@ -455,12 +455,12 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="23"/>
         <source>忽略区域</source>
-        <translation type="unfinished"></translation>
+        <translation>Ignorer la région</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="25"/>
         <source>进入设置</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir les réglages</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="36"/>
@@ -470,7 +470,7 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="40"/>
         <source>保存到</source>
-        <translation type="unfinished"></translation>
+        <translation>Enregistrer sous</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="42"/>
@@ -481,7 +481,7 @@ Generated: 2023-09-01_12-13.txt</translation>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="43"/>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="47"/>
         <source>指定目录</source>
-        <translation type="unfinished"></translation>
+        <translation>Dossier spécifié</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="48"/>
@@ -610,7 +610,7 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="122"/>
         <source>其它</source>
-        <translation type="unfinished"></translation>
+        <translation>Autres</translation>
     </message>
 </context>
 <context>
@@ -624,7 +624,7 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="457"/>
         <source>重置</source>
-        <translation type="unfinished"></translation>
+        <translation>Réinitialiser</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="458"/>
@@ -634,7 +634,7 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="461"/>
         <source>重置设定</source>
-        <translation type="unfinished"></translation>
+        <translation>Réinitialiser les réglages</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="463"/>
@@ -644,7 +644,7 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="471"/>
         <source>高级</source>
-        <translation type="unfinished"></translation>
+        <translation>Avancé</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="472"/>
@@ -660,7 +660,7 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="649"/>
         <source>折叠</source>
-        <translation type="unfinished"></translation>
+        <translation>Replier</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="785"/>
@@ -736,12 +736,12 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/GlobalConfigsPage/FontPanel.qml" line="107"/>
         <source>界面</source>
-        <translation type="unfinished"></translation>
+        <translation>Interface</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/GlobalConfigsPage/FontPanel.qml" line="115"/>
         <source>内容</source>
-        <translation type="unfinished"></translation>
+        <translation>Contenu</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/GlobalConfigsPage/FontPanel.qml" line="210"/>
@@ -761,22 +761,22 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="20"/>
         <source>快捷方式</source>
-        <translation type="unfinished"></translation>
+        <translation>Raccourci</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="24"/>
         <source>桌面</source>
-        <translation type="unfinished"></translation>
+        <translation>Bureau</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="32"/>
         <source>开始菜单</source>
-        <translation type="unfinished"></translation>
+        <translation>Menu démarrer</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="40"/>
         <source>开机自启</source>
-        <translation type="unfinished"></translation>
+        <translation>Lancer au démarrage</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="51"/>
@@ -786,7 +786,7 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="56"/>
         <source>主题</source>
-        <translation type="unfinished"></translation>
+        <translation>Thème</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="61"/>
@@ -796,7 +796,7 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="65"/>
         <source>字体</source>
-        <translation type="unfinished"></translation>
+        <translation>Police de caractères</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="68"/>
@@ -847,7 +847,7 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="129"/>
         <source>窗口</source>
-        <translation type="unfinished"></translation>
+        <translation>Fenêtre</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="133"/>
@@ -892,7 +892,7 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="157"/>
         <source>退出应用</source>
-        <translation type="unfinished"></translation>
+        <translation>Quitter l&apos;application</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="161"/>
@@ -908,7 +908,7 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="180"/>
         <source>截图</source>
-        <translation type="unfinished"></translation>
+        <translation>Capture d&apos;écran</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="184"/>
@@ -934,7 +934,7 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="200"/>
         <source>服务</source>
-        <translation type="unfinished"></translation>
+        <translation>Service</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="205"/>
@@ -956,12 +956,12 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="213"/>
         <source>主机</source>
-        <translation type="unfinished"></translation>
+        <translation>Hôte</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="215"/>
         <source>仅本地</source>
-        <translation type="unfinished"></translation>
+        <translation>Local uniquement</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="216"/>
@@ -981,7 +981,7 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="226"/>
         <source>端口</source>
-        <translation type="unfinished"></translation>
+        <translation>Port</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="303"/>
@@ -1016,7 +1016,7 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="348"/>
         <source>提示</source>
-        <translation type="unfinished"></translation>
+        <translation>Astuce</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="348"/>
@@ -1031,7 +1031,7 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="356"/>
         <source>稍后</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Plus tard</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="396"/>
@@ -1148,12 +1148,12 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/IgnoreArea/IgnoreArea.qml" line="156"/>
         <source>撤销</source>
-        <translation type="unfinished"></translation>
+        <translation>Défaire</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/IgnoreArea/IgnoreArea.qml" line="164"/>
         <source>清空</source>
-        <translation type="unfinished"></translation>
+        <translation>Effacer</translation>
     </message>
 </context>
 <context>
@@ -1161,7 +1161,7 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageScale.qml" line="64"/>
         <source>复制图片</source>
-        <translation type="unfinished"></translation>
+        <translation>Copier l&apos;image</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageScale.qml" line="66"/>
@@ -1182,7 +1182,7 @@ Generated: 2023-09-01_12-13.txt</translation>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageScale.qml" line="87"/>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageScale.qml" line="100"/>
         <source>保存图片</source>
-        <translation type="unfinished"></translation>
+        <translation>Enregistrer l&apos;image</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageScale.qml" line="102"/>
@@ -1251,17 +1251,17 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Popup_/MessageBox.qml" line="28"/>
         <source>取消</source>
-        <translation type="unfinished"></translation>
+        <translation>Annuler</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Popup_/MessageBox.qml" line="29"/>
         <source>确定</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Popup_/MessageBox.qml" line="38"/>
         <source>警告</source>
-        <translation type="unfinished"></translation>
+        <translation>Avertissement</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Popup_/MessageBox.qml" line="44"/>
@@ -1271,7 +1271,7 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Popup_/MessageBox.qml" line="117"/>
         <source>复制</source>
-        <translation type="unfinished"></translation>
+        <translation>Copier</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Popup_/MessageBox.qml" line="122"/>
@@ -1289,7 +1289,7 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Popup_/MessageBoxWin.qml" line="113"/>
         <source>确定</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Popup_/MessageBoxWin.qml" line="149"/>
@@ -1338,12 +1338,12 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="14"/>
         <source>文字识别</source>
-        <translation type="unfinished"></translation>
+        <translation>Reconnaissance de texte</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="18"/>
         <source>操作</source>
-        <translation type="unfinished"></translation>
+        <translation>Action</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="20"/>
@@ -1354,12 +1354,12 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="22"/>
         <source>应用修改</source>
-        <translation type="unfinished"></translation>
+        <translation>Appliquer les modifications</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="26"/>
         <source>当前接口</source>
-        <translation type="unfinished"></translation>
+        <translation>Interface actuelle</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="54"/>
@@ -1408,7 +1408,7 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="18"/>
         <source>新标签页</source>
-        <translation type="unfinished"></translation>
+        <translation>Nouvel onglet</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="24"/>
@@ -1457,7 +1457,7 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="42"/>
         <source>二维码</source>
-        <translation type="unfinished"></translation>
+        <translation>Code QR</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="43"/>
@@ -1471,7 +1471,7 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="48"/>
         <source>全局设置</source>
-        <translation type="unfinished"></translation>
+        <translation>Réglages généraux</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="49"/>
@@ -1488,12 +1488,12 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Popup_/PopupManager.qml" line="12"/>
         <source>确认</source>
-        <translation type="unfinished"></translation>
+        <translation>Confirmer</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Popup_/PopupManager.qml" line="13"/>
         <source>取消</source>
-        <translation type="unfinished"></translation>
+        <translation>Annuler</translation>
     </message>
 </context>
 <context>
@@ -1629,12 +1629,12 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="154"/>
         <source>无文字</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucun texte</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="158"/>
         <source>识别失败</source>
-        <translation type="unfinished"></translation>
+        <translation>La reconnaissance a échoué</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="178"/>
@@ -1650,7 +1650,7 @@ Generated: 2023-09-01_12-13.txt</translation>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="334"/>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="400"/>
         <source>设置</source>
-        <translation type="unfinished"></translation>
+        <translation>Réglages</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="348"/>
@@ -1675,7 +1675,7 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="405"/>
         <source>记录</source>
-        <translation type="unfinished"></translation>
+        <translation>Historique</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="410"/>
@@ -1698,7 +1698,7 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcodeConfigs.qml" line="24"/>
         <source>粘贴图片</source>
-        <translation type="unfinished"></translation>
+        <translation>Coller l&apos;image</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcodeConfigs.qml" line="32"/>
@@ -1845,7 +1845,7 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcodeConfigs.qml" line="158"/>
         <source>其它</source>
-        <translation type="unfinished"></translation>
+        <translation>Autres</translation>
     </message>
 </context>
 <context>
@@ -1853,7 +1853,7 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ResultLayout/ResultTextContainer.qml" line="115"/>
         <source>复制</source>
-        <translation type="unfinished"></translation>
+        <translation>Copier</translation>
     </message>
 </context>
 <context>
@@ -1932,7 +1932,7 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ResultLayout/ResultsTableView.qml" line="439"/>
         <source>滚动</source>
-        <translation type="unfinished"></translation>
+        <translation>Défiler</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ResultLayout/ResultsTableView.qml" line="440"/>
@@ -2048,7 +2048,7 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="189"/>
         <source>无文字</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucun texte</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="193"/>
@@ -2064,7 +2064,7 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="324"/>
         <source>文字</source>
-        <translation type="unfinished"></translation>
+        <translation>Texte</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="325"/>
@@ -2080,12 +2080,12 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="418"/>
         <source>设置</source>
-        <translation type="unfinished"></translation>
+        <translation>Réglages</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="423"/>
         <source>记录</source>
-        <translation type="unfinished"></translation>
+        <translation>Historique</translation>
     </message>
 </context>
 <context>
@@ -2143,7 +2143,7 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOcrConfigs.qml" line="64"/>
         <source>其它</source>
-        <translation type="unfinished"></translation>
+        <translation>Autres</translation>
     </message>
 </context>
 <context>
@@ -2159,7 +2159,7 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/MainWindow/SystemTray.qml" line="99"/>
         <source>退出 Umi-OCR</source>
-        <translation type="unfinished"></translation>
+        <translation>Quitter Umi-OCR</translation>
     </message>
 </context>
 <context>
@@ -2167,12 +2167,12 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Themes/Theme.qml" line="47"/>
         <source>珍珠白</source>
-        <translation type="unfinished"></translation>
+        <translation>Clair</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Themes/Theme.qml" line="62"/>
         <source>云墨黑</source>
-        <translation type="unfinished"></translation>
+        <translation>Sombre</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Themes/Theme.qml" line="109"/>
@@ -2200,22 +2200,22 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="23"/>
         <source>系统</source>
-        <translation type="unfinished"></translation>
+        <translation>Système</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="26"/>
         <source>无</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucun</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="27"/>
         <source>关机</source>
-        <translation type="unfinished"></translation>
+        <translation>Éteindre</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="28"/>
         <source>休眠</source>
-        <translation type="unfinished"></translation>
+        <translation>Mettre en veille</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="37"/>
