@@ -94,7 +94,6 @@ ModalLayer {
         }
         imgViewer.clear()
         prevConn.clear() // 清除文档缓存
-        qmlapp.popup.simple(qsTr("文档信息已更新"), previewPath)
         previewPath = ""
     }
 
@@ -111,6 +110,10 @@ ModalLayer {
             toPreview()
         }
     }
+    Keys.onLeftPressed: changePage(-1, -1)  // 上一页
+    Keys.onUpPressed: changePage(-1, -1)
+    Keys.onRightPressed: changePage(-1, 1) // 下一页
+    Keys.onDownPressed: changePage(-1, 1)
 
     // 预览一页文档
     function toPreview() {
