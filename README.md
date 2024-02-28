@@ -136,15 +136,19 @@ Umi-OCR v2 由一系列灵活好用的**标签页**组成。您可按照自己�
 - 右侧的识别记录栏，可以编辑文字，允许划选多个记录复制。
 - 也支持在别处复制图片，粘贴到Umi-OCR进行识别。
 
-#### 段落合并
+#### 文本后处理
 
 <p align="center"><img src="https://tupian.li/images/2023/11/19/6559909f3e378.png" alt="2-截图-2.png" style="width: 80%;"></p>
 
-关于 **OCR文本后处理 - 段落合并**： 可以整理OCR结果的排版和顺序，使文本更适合阅读和使用。预设方案：
-  - **单行**：合并同一行的文字，适合绝大部分情景。
-  - **多行-自然段**：智能识别、合并属于同一段落的文字，适合绝大部分情景，如上图所示。
-  - **多行-代码段**：尽可能还原原始排版的缩进与空格。适合识别代码片段，或需要保留空格的场景。
-  - **竖排**：适合竖排排版。需要与同样支持竖排识别的模型库配合使用。
+关于 **OCR文本后处理 - 排版解析方案**： 可以整理OCR结果的排版和顺序，使文本更适合阅读和使用。预设方案：
+- `多栏-按自然段换行`：适合大部分情景，自动识别多栏布局，按自然段规则进行换行。
+- `多栏-总是换行`：每段语句都进行换行。
+- `多栏-无换行`：强制将所有语句合并到同一行。
+- `单栏-按自然段换行`/`总是换行`/`无换行`：与上述类似，不过 不区分多栏布局。
+- `单栏-保留缩进`：适用于解析代码截图，保留行首缩进和行中空格。
+- `不做处理`：OCR引擎的原始输出，默认每段语句都进行换行。
+
+上述方案，均能自动处理横排和竖排（从右到左）的排版。（竖排文字还需要OCR引擎本身支持）
 
 ---
 
@@ -154,7 +158,8 @@ Umi-OCR v2 由一系列灵活好用的**标签页**组成。您可按照自己�
 
 **批量OCR**：这一页支持批量导入本地图片并识别。
 - 识别内容可以保存为 txt / jsonl / md / csv(Excel) 等多种格式。
-- 支持`文本后处理`技术，能识别属于同一自然段的文字，并将其合并。还支持代码段、竖排文本等多种处理方案。
+- 与截图OCR一样，支持`文本后处理`功能，整理OCR文本的排版和顺序。
+- 支持 `忽略区域` 。
 - 没有数量上限，可一次性导入几百张图片进行任务。
 - 支持任务完成后自动关机/待机。
 
@@ -170,6 +175,20 @@ Umi-OCR v2 由一系列灵活好用的**标签页**组成。您可按照自己�
 
 ---
 
+### 文档识别
+
+<p align="center"><img src="https://github.com/hiroi-sora/Umi-OCR/assets/56373419/fc2266ee-b9b7-4079-8b10-6610e6da6cf5" alt="" style="width: 80%;"></p>
+
+仅在 [v2.1.0+](https://github.com/hiroi-sora/Umi-OCR/releases) 支持。
+
+**文档识别**：
+- 支持导入 `pdf, xps, epub, mobi, fb2, cbz` 格式的文件。
+- 支持识别扫描件，转为文本文件或 **可搜索双层PDF** 。
+- 支持设定 **忽略区域** ，可用于排除页眉页脚的文字。
+- 可设置任务完成后 **自动关机/休眠** 。
+
+---
+
 ### 二维码
 
 <p align="center"><img src="https://tupian.li/images/2023/11/19/655991268d6b1.png" alt="4-二维码-1.png" style="width: 80%;"></p>
@@ -179,7 +198,7 @@ Umi-OCR v2 由一系列灵活好用的**标签页**组成。您可按照自己�
 - 支持一图多码。
 - 支持19种协议，如下：
 
-`Aztec`,`Codabar`,`Code128`,`Code39`,`Code93`,`DataBar`,`DataBarExpanded`,`DataMatrix`,`EAN13`,`EAN8`,`ITF`,`LinearCodes`,`MatrixCodes`,`MaxiCode`,`MicroQRCode`,`PDF417`,`QRCode`,`UPCA`,`UPCE`,
+`Aztec`,`Codabar`,`Code128`,`Code39`,`Code93`,`DataBar`,`DataBarExpanded`,`DataMatrix`,`EAN13`,`EAN8`,`ITF`,`LinearCodes`,`MatrixCodes`,`MaxiCode`,`MicroQRCode`,`PDF417`,`QRCode`,`UPCA`,`UPCE`
 
 <p align="center"><img src="https://tupian.li/images/2023/11/19/6559911cda737.png" alt="4-二维码-2.png" style="width: 80%;"></p>
 
@@ -189,26 +208,13 @@ Umi-OCR v2 由一系列灵活好用的**标签页**组成。您可按照自己�
 
 ---
 
-### 文档识别
-
-<p align="center"><img src="https://github.com/hiroi-sora/Umi-OCR/assets/56373419/fc2266ee-b9b7-4079-8b10-6610e6da6cf5" alt="" style="width: 80%;"></p>
-
-仅在 [最新测试版](https://github.com/hiroi-sora/Umi-OCR/releases) 中支持。
-
-**文档识别**：
-- 支持导入`pdf, xps, epub, mobi, fb2, cbz`格式的文件。
-- 支持识别扫描件，转为文本文件（支持所有格式文档）或**可搜索双层PDF**（仅支持原文件为pdf格式）。
-- 支持设定忽略区域，可排除页眉页脚的文字。
-
----
-
 ### 全局设置
 
 <p align="center"><img src="https://tupian.li/images/2023/11/19/655991252e780.png" alt="5-全局设置-1.png" style="width: 80%;"></p>
 
 **全局设置**：在这里可以调整软件的全局参数。常用功能如下：
 - 一键添加快捷方式或设置开机自启。
-- 更改界面**语言**。Umi支持繁中、英 语、日语等语言。
+- 更改界面**语言**。Umi支持繁中、英语、日语等语言。
 - 切换界面**主题**。Umi拥有多个亮/暗主题。
 - 调整界面**文字的大小**和**字体**。
 - 切换OCR插件。
