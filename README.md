@@ -194,7 +194,7 @@ Umi-OCR v2 由一系列灵活好用的**标签页**组成。您可按照自己�
 <p align="center"><img src="https://tupian.li/images/2023/11/19/655991268d6b1.png" alt="4-二维码-1.png" style="width: 80%;"></p>
 
 **扫码**：
-- 可截图/粘贴/拖入本地图片，读取其中的二维码、条形码。
+- 截图/粘贴/拖入本地图片，读取其中的二维码、条形码。
 - 支持一图多码。
 - 支持19种协议，如下：
 
@@ -259,20 +259,11 @@ https://hosted.weblate.org/engage/umi-ocr/
 - 忽略区域。
 - 二维码识别。
 - 批量识别页面的图片预览窗口。
+- PDF识别。
+- 调用本地图片浏览器打开图片。 [#335](https://github.com/hiroi-sora/Umi-OCR/issues/335)
+- 重复上一次截图。 [#357](https://github.com/hiroi-sora/Umi-OCR/issues/357)
 
 </details>
-
-
-##### 近期开发工作
-
-近期正在进行的工作，将会在 v2.1.0 中发布。
-
-- [x] PDF识别
-- [x] 调用本地图片浏览器打开图片 [#335](https://github.com/hiroi-sora/Umi-OCR/issues/335)
-- [x] 重复上一次截图 [#357](https://github.com/hiroi-sora/Umi-OCR/issues/357)
-- [x] 完善输出器
-- [x] 完善段落分析器，优化代码逻辑
-- [x] 更新HTTP接口及文档
 
 ##### 远期计划
 
