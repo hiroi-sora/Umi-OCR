@@ -3,6 +3,8 @@
 
 # HTTP接口手册
 
+（本文档仅适用于 `Umi-OCR v2.1.0` 及以上版本。旧版本请查看 [Github备份分支](https://github.com/hiroi-sora/Umi-OCR/branches) 中的文档。）
+
 #### 基础说明
 
 ![Umi-OCR-全局页-服务.png](https://tupian.li/images/2023/10/25/653907e9bac06.png)
@@ -11,12 +13,13 @@
 
 在全局设置页中勾选`高级`才会显示。
 
-> 由于目前的一些缺陷，如果Umi-OCR关闭时仍有用户未断开HTTP接口连接，可能导致Umi-OCR关闭不完全（UI面板和主线程结束了，但负责网络的子线程未被关闭）。这时只能等待所有用户关闭连接，或者进任务管理器删掉Umi-OCR的进程。
+> 由于目前的一些缺陷，如果Umi-OCR关闭时仍有用户未断开HTTP接口连接，可能导致Umi-OCR关闭不完全（UI线程结束了，但负责网络的子线程未被关闭）。这时只能等待所有用户关闭连接，或者进任务管理器强制结束进程。
 
 > 由于目前的一些缺陷，对并发支持较差。
 
+---
 
-### Base64 接口
+## Base64 接口
 
 传入一个base64编码的图片，进行识别。
 
@@ -27,7 +30,7 @@ URL：`/api/ocr`
 http://127.0.0.1:1224/api/ocr
 ```
 
-#### 请求
+### Base64 请求格式
 
 方法：`POST`
 
@@ -40,166 +43,141 @@ http://127.0.0.1:1224/api/ocr
 
 `base64`无需`data:image/png;base64,`等前缀，直接放正文。
 
-`options` 是可选的，可以不传这个参数。如果传了，则内部的所有子参数也均为可选。注意，使用不同引擎插件时， `options` 的子参数可能不同，见下：
+`options` 是可选的，可以不传这个参数。如果传了，则内部的所有子参数也均为可选。
 
-#### Paddle引擎插件 选项：
+示例：
 
-| options 子参数       | 类型    | 默认值                      | 描述                                      |
-| -------------------- | ------- | --------------------------- | ----------------------------------------- |
-| `ocr.language`       | string  | `models/config_chinese.txt` | 识别语言，具体见下                        |
-| `ocr.cls`            | boolean | `false`                     | 是否进行图像旋转校正。`true/false`        |
-| `ocr.limit_side_len` | int     | `960`                       | 图像压缩边长。允许 `960/2880/4320/999999` |
-| `tbpu.merge`         | string  | `MergeLine`                 | 段落合并方案，具体见下                    |
-
-Paddle专属 `ocr.language` 可选项：
-| 可选项（字符串）                    | 对应语言 |
-| ----------------------------------- | -------- |
-| `models/config_chinese.txt`         | 简体中文 |
-| `models/config_en.txt`              | English  |
-| `models/config_chinese_cht(v2).txt` | 繁體中文 |
-| `models/config_japan.txt`           | 日本語   |
-| `models/config_korean.txt`          | 한국어   |
-| `models/config_cyrillic.txt`        | Русский  |
-
-通用 `tbpu.merge` 可选项：
-| 可选项（字符串） | 对应方案      |
-| ---------------- | ------------- |
-| `MergeLine`      | 单行          |
-| `MergePara`      | 多行-自然段   |
-| `MergeParaCode`  | 多行-代码段   |
-| `MergeLineVrl`   | 竖排-从右到左 |
-| `MergeLineVlr`   | 竖排-从左到右 |
-| `None`           | 不做处理      |
-
-Paddle `options` 完整字典示例：
-```json
-    "options": {
-        "ocr.language": "models/config_chinese.txt",
-        "ocr.maxSideLen": 960,
-        "ocr.cls": false,
-        "tbpu.parser": "MergeLine",
-    }
 ```
-
-#### Rapid引擎插件 选项：
-
-| options 子参数   | 类型    | 默认值      | 描述                                       |
-| ---------------- | ------- | ----------- | ------------------------------------------ |
-| `ocr.language`   | string  | `简体中文`  | 识别语言，具体见下                         |
-| `ocr.angle`      | boolean | `false`     | 是否进行图像旋转校正。`true/false`         |
-| `ocr.maxSideLen` | int     | `1024`      | 图像压缩边长。允许 `1024/2048/4096/999999` |
-| `tbpu.merge`     | string  | `MergeLine` | 段落合并方案                               |
-
-Rapid专属 `ocr.language` 可选项：
-| 可选项（字符串） | 对应语言 |
-| ---------------- | -------- |
-| `简体中文`       | 简体中文 |
-| `English`        | English  |
-| `繁體中文`       | 繁體中文 |
-| `日本語`         | 日本語   |
-| `한국어`         | 한국어   |
-| `Русский`        | Русский  |
-
-Paddle `options` 完整字典示例：
-```json
+{
+    "base64": "iVBORw0KGgoAAAAN……",
     "options": {
-        "ocr.language": "简体中文",
-        "ocr.maxSideLen": 1024,
+        # 通用参数
+        "tbpu.parser": "multi_para",
+        "data.format": "json",
+        # 引擎参数
         "ocr.angle": false,
-        "tbpu.parser": "MergeLine",
+        "ocr.language": "简体中文",
+        "ocr.maxSideLen": 1024
     }
+}
 ```
 
-#### P2T引擎插件 选项：
+`options` 中有两部分参数：**通用参数** 和 **引擎参数** 。
 
-> P2T暂时不可调整语言，支持 中文+英文+数学公式混合图片。
+**通用参数** 是在任何情况下都适用的，选项：
 
-| options 子参数 | 类型   | 默认值      | 描述         |
-| -------------- | ------ | ----------- | ------------ |
-| `tbpu.merge`   | string | `MergeLine` | 段落合并方案 |
+- `data.format` ：数据返回格式。返回值字典中，`["data"]` 按什么格式表示OCR结果数据。可选值（字符串）：
+    - `dict`：含有位置等信息的原始字典（默认）
+    - `text`：纯文本
+- `tbpu.parser` ：排版解析方案。可选值（字符串）：
+    - `multi_para`：多栏-按自然段换行（默认）
+    - `multi_line`：多栏-总是换行
+    - `multi_none`：多栏-无换行
+    - `single_para`：单栏-按自然段换行
+    - `single_line`：单栏-总是换行
+    - `single_none`：单栏-无换行
+    - `single_code`：单栏-保留缩进，适用于解析代码截图
+    - `none`：不做处理
 
-P2T `options` 完整字典示例：
-```json
-    "options": {
-        "tbpu.parser": "MergeLine",
-    }
-```
+**引擎参数** 对于加载不同引擎插件时，可能有所不同。完整参数说明请通过  [get_options](#查询接口) 接口查询。以下是一些示例：
 
-#### 响应
+| PaddleOCR 引擎参数   | 类型    | 默认值                      | 描述                                                     |
+| -------------------- | ------- | --------------------------- | -------------------------------------------------------- |
+| `ocr.language`       | string  | `models/config_chinese.txt` | 识别语言。可选值请通过 [get_options](#查询接口) 接口查询 |
+| `ocr.cls`            | boolean | `false`                     | 是否进行图像旋转校正。`true/false`                       |
+| `ocr.limit_side_len` | int     | `960`                       | 图像压缩边长。允许 `960/2880/4320/999999`                |
+
+| RapidOCR 引擎参数 | 类型    | 默认值     | 描述                                                     |
+| ----------------- | ------- | ---------- | -------------------------------------------------------- |
+| `ocr.language`    | string  | `简体中文` | 识别语言。可选值请通过 [get_options](#查询接口) 接口查询 |
+| `ocr.angle`       | boolean | `false`    | 是否进行图像旋转校正。`true/false`                       |
+| `ocr.maxSideLen`  | int     | `1024`     | 图像压缩边长。允许 `1024/2048/4096/999999`               |
+
+
+### Base64 响应格式
 
 `json`
 
-| 字段名    | 类型        | 描述                                              |
-| --------- | ----------- | ------------------------------------------------- |
-| code      | int         | 任务状态。`100`为成功，`101`为无文本，其余为失败  |
-| data      | list/string | 识别结果。`code==100`时为object，其余情况为string |
-| time      | double      | 识别耗时（秒）                                    |
-| timestamp | double      | 任务开始时间戳（秒）                              |
+| 字段名    | 类型        | 描述                                             |
+| --------- | ----------- | ------------------------------------------------ |
+| code      | int         | 任务状态。`100`为成功，`101`为无文本，其余为失败 |
+| data      | list/string | 识别结果，格式见下                               |
+| time      | double      | 识别耗时（秒）                                   |
+| timestamp | double      | 任务开始时间戳（秒）                             |
 
-#### `data` 参数
+#### `data` 格式
 
-识别成功（`code==100`）时为列表list，列表中每项元素的组成如下。
-图片中无文本（`code==101`），或识别失败（`code>101`）时为string，内容为错误原因。
+图片中无文本（`code==101`），或识别失败（`code!=100 and code!=101`）时：
 
-| 参数名 | 类型   | 描述               |
-| ------ | ------ | ------------------ |
-| text   | string | 文本               |
-| score  | double | 置信度 (0~1)       |
-| box    | list   | 文本框四个角的坐标 |
+- `["data"]`为string，内容为错误原因。例： `{"code": 902, "data": "向识别器进程传入指令失败，疑似子进程已崩溃"}`
 
-`box`的格式：从左上角开始，顺时针。
+识别成功（`code==100`）时，如果options中`data.format`为`dict`（默认值）：
 
-`[左上角,右上角,右下角,左下角]`
+- `["data"]`为list，每一项元素为dict，包含以下子元素：
 
-每个角为 `[x, y]`
+| 参数名 | 类型   | 描述                                                               |
+| ------ | ------ | ------------------------------------------------------------------ |
+| text   | string | 文本                                                               |
+| score  | double | 置信度 (0~1)                                                       |
+| box    | list   | 文本框顺时针四个角的xy坐标：`[左上,右上,右下,左下]`                |
+| end    | string | 表示本行文字结尾的结束符，根据排版解析得出。可能为空、空格、换行。 |
+
 
 例：
 ```json
 "data": [
     {
-        "text": "识别文本111",
+        "text": "第一行的文本，",
         "score": 0.99800001,
-        "box": [[x1,y1], [x2,y2], [x3,y3], [x4,y4]]
+        "box": [[x1,y1], [x2,y2], [x3,y3], [x4,y4]],
+        "end": "",
     },
     {
-        "text": "识别文本222",
+        "text": "第二行的文本",
         "score": 0.97513333,
-        "box": [[x1,y1], [x2,y2], [x3,y3], [x4,y4]]
+        "box": [[x1,y1], [x2,y2], [x3,y3], [x4,y4]],
+        "end": "\n",
     },
 ]
 ```
 
-### Base64 接口示例
+识别成功（`code==100`）时，如果options中`data.format`为`text`：
+
+- `["data"]`为string，即所有OCR结果的拼接。例：
+```json
+"data": "第一行的文本，第二行的文本\n"
+```
+
+### Base64 接口完整示例
 
 JavaScript 示例：
 
 ```javascript
 const url = 'http://127.0.0.1:1224/api/ocr';
 const data = {
-    base64: 'iVBORw0KGgoAAAANSUhEUgAAAC4AAAAXCAIAAAD7ruoFAAAACXBIWXMAABnWAAAZ1gEY0crtAAAAEXRFWHRTb2Z0d2FyZQBTbmlwYXN0ZV0Xzt0AAAHjSURBVEiJ7ZYrcsMwEEBXnR7FLuj0BPIJHJOi0DAZ2qSsMCxEgjYrDQqJdALrBJ2ASndRgeNI8ledutOCLrLl1e7T/mRkjIG/IXe/DWBldRTNEoQSpgNURe5puiiaJehrMuJSXSTgbaby0A1WzLrCCQCmyn0FwoN0V06QONWAt1nUxfnjHYA8p65GjhDKxcjedVH6JOejBPwYh21eE0Wzfe0tqIsEkGXcVcpoMH4CRZ+P0lsQp/pWJ4ripf1XFDFe8GHSHlYcSo9Es31t60RdFlN1RUmrma5oTzTVB8ZUaeeYEC9GmL6kNkDw9BANAQYo3xTNdqUkvHq+rYhDKW0Bj3RSEIpmyWyBaZaMTCrCK+tJ5Jsa07fs3E7esE66HzralRLgJKp0/BD6fJRSxvmDsb6joqkcFXGqMVVFFEHDL2gTxwCAaTabnkFUWhDCHTd9iYrGcAL1ZnqIp5Vpiqh7bCfua7FA4qN0INMcN1+cgCzj+UFxtbmvwdZvGIrI41JiqhZBWhhF8WxorkYPpQwJiWYJeA3rXE4hzcwJ+B96F9zCFHC0FcVegghvFul7oeEE8PvHeJqC0w0AUbbFIT8JnEwGbPKcS2OxU3HMTqD0r4wgEIuiKJ7i4MS16+og8/+bPZRPLa+6Ld2DSzcAAAAASUVORK5CYII=',
+    base64: "iVBORw0KGgoAAAANSUhEUgAAAC4AAAAXCAIAAAD7ruoFAAAACXBIWXMAABnWAAAZ1gEY0crtAAAAEXRFWHRTb2Z0d2FyZQBTbmlwYXN0ZV0Xzt0AAAHjSURBVEiJ7ZYrcsMwEEBXnR7FLuj0BPIJHJOi0DAZ2qSsMCxEgjYrDQqJdALrBJ2ASndRgeNI8ledutOCLrLl1e7T/mRkjIG/IXe/DWBldRTNEoQSpgNURe5puiiaJehrMuJSXSTgbaby0A1WzLrCCQCmyn0FwoN0V06QONWAt1nUxfnjHYA8p65GjhDKxcjedVH6JOejBPwYh21eE0Wzfe0tqIsEkGXcVcpoMH4CRZ+P0lsQp/pWJ4ripf1XFDFe8GHSHlYcSo9Es31t60RdFlN1RUmrma5oTzTVB8ZUaeeYEC9GmL6kNkDw9BANAQYo3xTNdqUkvHq+rYhDKW0Bj3RSEIpmyWyBaZaMTCrCK+tJ5Jsa07fs3E7esE66HzralRLgJKp0/BD6fJRSxvmDsb6joqkcFXGqMVVFFEHDL2gTxwCAaTabnkFUWhDCHTd9iYrGcAL1ZnqIp5Vpiqh7bCfua7FA4qN0INMcN1+cgCzj+UFxtbmvwdZvGIrI41JiqhZBWhhF8WxorkYPpQwJiWYJeA3rXE4hzcwJ+B96F9zCFHC0FcVegghvFul7oeEE8PvHeJqC0w0AUbbFIT8JnEwGbPKcS2OxU3HMTqD0r4wgEIuiKJ7i4MS16+og8/+bPZRPLa+6Ld2DSzcAAAAASUVORK5CYII=",
     // 可选参数
     // Paddle引擎模式
     // "options": {
     //     "ocr.language": "models/config_chinese.txt",
     //     "ocr.cls": false,
     //     "ocr.limit_side_len": 960,
-    //     "tbpu.parser": "MergeLine",
+    //     "tbpu.parser": "multi_para",
+    //     "data.format": "text",
     // }
     // Rapid引擎模式
     // "options": {
     //     "ocr.language": "简体中文",
     //     "ocr.angle": false,
     //     "ocr.maxSideLen": 1024,
-    //     "tbpu.parser": "MergeLine",
+    //     "tbpu.parser": "multi_para",
+    //     "data.format": "text",
     // }
 };
 
 fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
+        method: "POST", body: JSON.stringify(data),
+        headers: {"Content-Type": "application/json"},
     })
     .then(response => response.json())
     .then(data => {
@@ -225,14 +203,16 @@ data = {
     #     "ocr.language": "models/config_chinese.txt",
     #     "ocr.cls": False,
     #     "ocr.limit_side_len": 960,
-    #     "tbpu.parser": "MergeLine",
+    #     "tbpu.parser": "multi_para",
+    #     "data.format": "text",
     # }
     # Rapid引擎模式
     # "options": {
     #     "ocr.language": "简体中文",
     #     "ocr.angle": False,
     #     "ocr.maxSideLen": 1024,
-    #     "tbpu.parser": "MergeLine",
+    #     "tbpu.parser": "multi_para",
+    #     "data.format": "text",
     # }
 }
 headers = {"Content-Type": "application/json"}
@@ -243,10 +223,11 @@ if response.status_code == 200:
     print("返回值字典\n", res_dict)
 ```
 
+---
 
-### 获取可用配置 接口
+## 查询接口
 
-获取当前是什么引擎，及需要提供哪些options参数。
+获取当前需要提供哪些options参数。
 
 URL：`/api/ocr/get_options`
 
@@ -254,6 +235,10 @@ URL：`/api/ocr/get_options`
 ```
 http://127.0.0.1:1224/api/ocr/get_options
 ```
+
+#### 请求
+
+方法：`GET`
 
 JavaScript 示例：
 
@@ -268,21 +253,11 @@ fetch(url, {
     .catch(error => { console.error(error); });
 ```
 
-#### 请求
-
-方法：`GET`
-
 #### 响应
 
 `json`
 
-| 参数名 | 类型   | 描述                |
-| ------ | ------ | ------------------- |
-| title  | string | 引擎名称            |
-| type   | string | 总是`group`，无意义 |
-| 其余   | object | 描述一个配置项。    |
-
-以Paddle为例：
+以PaddleOCR引擎插件为例：
 
 ```
 {
@@ -318,32 +293,49 @@ fetch(url, {
     "default": 960
   },
   "tbpu.parser": {
-    "title": "段落合并",
-    "default": "MergeLine",
+    "title": "排版解析方案",
+    "toolTip": "按什么方式，解析和排序图片中的文字块",
+    "default": "multi_para",
     "optionsList": [
-      [ "MergeLine", "单行" ],
-      [ "MergePara", "多行-自然段" ],
-      [ "MergeParaCode", "多行-代码段" ],
-      [ "MergeLineVrl", "竖排-从右到左" ],
-      [ "MergeLineVlr", "竖排-从左到右" ],
-      [ "None", "不做处理" ]
+      ["multi_para","多栏-按自然段换行"],
+      ["multi_line","多栏-总是换行"],
+      ["multi_none","多栏-无换行"],
+      ["single_para","单栏-按自然段换行"],
+      ["single_line","单栏-总是换行"],
+      ["single_none","单栏-无换行"],
+      ["single_code","单栏-保留缩进"],
+      ["none","不做处理"]
+    ]
+  },
+  "data.format": {
+    "title": "数据返回格式",
+    "toolTip": "返回值字典中，[\"data\"] 按什么格式表示OCR结果数据",
+    "default": "dict",
+    "optionsList": [
+      ["dict", "含有位置等信息的原始字典"],
+      ["text","纯文本"]
     ]
   }
 }
 ```
 
-可以看到，当前引擎插件的名称为`文字识别（PaddleOCR）`，拥有4个配置参数：`ocr.language`、`ocr.cls`、`ocr.limit_side_len`、`tbpu.merge`。  
+可以看到，当前拥有5个配置参数：`ocr.language`、`ocr.cls`、`ocr.limit_side_len`、`tbpu.parser`、`data.format` 。
 
 其中`ocr.cls`是布尔值，对应到UI面板中的开关。
 
-`ocr.language`、`ocr.limit_side_len`、`tbpu.merge`是枚举，对应下拉栏UI。`optionsList`的元素的第0位是key，第1位是显示文本。当使用HTTP接口时，应该传入key值。
+其余参数都是枚举，对应下拉栏UI。`optionsList`的元素的第0位是key，第1位是显示文本。当使用HTTP接口时，应该传入key值。比如对于如下的 `optionsList` ，应该传入 `dict` 或 `text` 。
+```
+      ["dict", "含有位置等信息的原始字典"],
+      ["text","纯文本"]
+```
 
+---
 
-### 命令行 接口
+## 命令行 接口
 
 此接口用于命令行参数的跨进程传输，一般由程序内部自动调用。开发者也可手动调用。
 
-由于此接口较敏感（如允许访问本机图片、关闭软件），故只允许本地环回 `127.0.0.1` 调用。局域网无法访问此接口。
+由于此接口较敏感（如允许访问本机图片、关闭软件等），故只允许本地环回 `127.0.0.1` 调用。局域网或外网无法访问此接口。
 
 URL：`/argv`
 
