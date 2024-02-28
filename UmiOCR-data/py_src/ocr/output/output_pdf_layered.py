@@ -14,6 +14,7 @@ class OutputPdfLayered(Output):
         self.fileName = argd["outputFileName"]  # 文件名
         self.outputPath = f"{self.dir}/{self.fileName}.layered.pdf"  # 输出路径
         self.pdf = None
+        self.existentPages = []  # 已处理的页数
         try:
             self.font = fitz.Font("cjk")  # 字体
         except Exception as e:
@@ -71,10 +72,11 @@ class OutputPdfLayered(Output):
         if not self.pdf:
             print("[Error] PDF对象未初始化！")
             return
+        pno = res["page"] - 1  # 当前页数
+        self.existentPages.append(pno)  # 记录已处理的页面
         if not res["code"] == 100:
             return  # 忽略空白
 
-        pno = res["page"] - 1  # 当前页数
         page = self.pdf[pno]  # 当前页对象
         page.insert_font(fontname="cjk", fontbuffer=self.font.buffer)  # 页面插入字体
         # shape = page.new_shape()  # 页面创建新形状
@@ -102,7 +104,11 @@ class OutputPdfLayered(Output):
         # shape.commit()
 
     def onEnd(self):  # 结束时保存。
-        print("保存PDF：", self.outputPath)
+        # 删除未处理的页数
+        for i in range(len(self.pdf) - 1, -1, -1):
+            if i not in self.existentPages:
+                self.pdf.delete_page(i)
+        print(f"保存{len(self.pdf)}页PDF：{self.outputPath}")
         if self.pdf:
             try:  # 对于部分PDF，如用txt直接打印的，构建字体子集会失败。
                 self.pdf.subset_fonts()  # 构建字体子集，减小文件大小。需要 fontTools 库
