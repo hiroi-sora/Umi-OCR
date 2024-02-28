@@ -42,7 +42,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="163"/>
         <source>任务失败</source>
-        <translation>Task failed,</translation>
+        <translation>Task failed</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="168"/>
