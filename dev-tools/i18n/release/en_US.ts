@@ -1350,10 +1350,10 @@ For example, when processing screenshots of watermarked images, you can add an i
 当前版本：%1  
 [%2](%2)</source>
         <translation># Welcome to Umi-OCR
-
-👈 Start by opening a feature tab on the left.
-
-Current version: %1
+&#x3000;  
+👈 Start by opening a feature tab on the left.  
+&#x3000;  
+Current version: %1  
 [%2](%2)</translation>
     </message>
     <message>
