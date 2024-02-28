@@ -20,7 +20,7 @@ git clone --single-branch --branch [分支名] https://github.com/hiroi-sora/Umi
 
 # 更新日志 CHANGE LOG
 
-##### v2.1.0 `2024.2.28`
+##### v2.1.0 `2024.2.29`
 
 分支名：`main`
 
