@@ -1607,8 +1607,8 @@ Adjust global settings. Applys to all pages.</translation>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/PreviewImage.qml" line="60"/>
         <source>在图片上叠加显示识别文字
 可在全局设置中设为默认关闭</source>
-        <translation>Overlay recognized text on the image.
-Can be set as default off in global settings.</translation>
+        <translation>Overlay recognized text on the image
+Can be set as default off in global settings</translation>
     </message>
 </context>
 <context>
@@ -2106,8 +2106,8 @@ Do you want to end the task and close the page?</translation>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="325"/>
         <source>在图片上叠加显示识别文字
 可在全局设置中设为默认关闭</source>
-        <translation>Overlay recognized text on the image.
-Can be set as default off in global settings.</translation>
+        <translation>Overlay recognized text on the image
+Can be set as default off in global settings</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="394"/>
