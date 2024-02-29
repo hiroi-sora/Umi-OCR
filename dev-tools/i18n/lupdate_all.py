@@ -6,13 +6,14 @@ LangList = [
     "en_US",
     "zh_TW",
     "ja_JP",
+    "fr_FR",
+    "nb_NO",
+    # "it_IT",
     # "es_ES",
-    # "fr_FR",
     # "de_DE",
     # "ko_KR",
     # "ru_RU",
     # "pt_BR",
-    # "it_IT",
 ]
 
 working = os.path.dirname(os.path.abspath(__file__))  # 工作目录

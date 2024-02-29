@@ -31,6 +31,7 @@ LanguageCodes = {
     "pt_BR": "Português",  # 葡萄牙语
     "pt_PT": "Português",
     "it_IT": "Italiano",  # 意大利语
+    "nb_NO": "norsk",  # 挪威语
 }
 
 
