@@ -6,33 +6,34 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="92"/>
         <source>加密</source>
-        <translation type="unfinished"></translation>
+        <translation>Encrypted</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="104"/>
         <source>%1个加密文档</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 encrypted file</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="105"/>
         <source>请点击文件名填写密码</source>
-        <translation type="unfinished"></translation>
+        <translation>Please click on the filename and fill in password</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="136"/>
         <source>文档已加密</source>
-        <translation type="unfinished"></translation>
+        <translation>File has been encrypted</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="136"/>
         <source>【%1】
 请点击文档名，设置密码</source>
-        <translation type="unfinished"></translation>
+        <translation>【%1】
+Please click on the filename and reset your password</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="151"/>
         <source>失败</source>
-        <translation type="unfinished"></translation>
+        <translation>Failed</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="155"/>
@@ -84,7 +85,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="301"/>
         <source>文档识别完成</source>
-        <translation type="unfinished"></translation>
+        <translation>Document recognition complete</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="310"/>
@@ -95,7 +96,7 @@ Do you want to end the task and close the page?</translation>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="407"/>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="416"/>
         <source>文档</source>
-        <translation type="unfinished"></translation>
+        <translation>File</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="409"/>
@@ -105,7 +106,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="410"/>
         <source>范围</source>
-        <translation type="unfinished"></translation>
+        <translation>Range</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="412"/>
@@ -120,12 +121,12 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="414"/>
         <source>拖入或选择文档</source>
-        <translation type="unfinished"></translation>
+        <translation>Drag in or open documents</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="415"/>
         <source>请选择文档</source>
-        <translation type="unfinished"></translation>
+        <translation>Please select a file</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="444"/>
@@ -1464,7 +1465,7 @@ Import local images or folders for batch text conversion.</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="36"/>
         <source>批量文档</source>
-        <translation type="unfinished"></translation>
+        <translation>Batch OCR Documents</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="37"/>
@@ -1542,12 +1543,12 @@ Adjust global settings. Applys to all pages.</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="138"/>
         <source>请填写正确的密码</source>
-        <translation type="unfinished"></translation>
+        <translation>Please fill in the correct password</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="147"/>
         <source>密码正确</source>
-        <translation type="unfinished"></translation>
+        <translation>Password correct</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="156"/>
@@ -1557,12 +1558,12 @@ Adjust global settings. Applys to all pages.</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="197"/>
         <source>密码：</source>
-        <translation type="unfinished"></translation>
+        <translation>Password:</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="237"/>
         <source>预览页面</source>
-        <translation type="unfinished"></translation>
+        <translation>Preview pages</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="255"/>
@@ -1606,8 +1607,8 @@ Adjust global settings. Applys to all pages.</translation>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/PreviewImage.qml" line="60"/>
         <source>在图片上叠加显示识别文字
 可在全局设置中设为默认关闭</source>
-        <translation>Overlay recognized text on the image.
-Can be set as default off in global settings.</translation>
+        <translation>Overlay recognized text on the image
+Can be set as default off in global settings</translation>
     </message>
 </context>
 <context>
@@ -2105,8 +2106,8 @@ Do you want to end the task and close the page?</translation>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="325"/>
         <source>在图片上叠加显示识别文字
 可在全局设置中设为默认关闭</source>
-        <translation>Overlay recognized text on the image.
-Can be set as default off in global settings.</translation>
+        <translation>Overlay recognized text on the image
+Can be set as default off in global settings</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="394"/>
