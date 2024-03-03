@@ -327,7 +327,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="132"/>
         <source>其它</source>
-        <translation type="unfinished">その他</translation>
+        <translation>その他</translation>
     </message>
 </context>
 <context>
@@ -2246,17 +2246,17 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="36"/>
         <source>继续%1</source>
-        <translation type="unfinished">続行%1</translation>
+        <translation>続行%1</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="36"/>
         <source>取消%1</source>
-        <translation type="unfinished">キャンセル%1</translation>
+        <translation>キャンセル%1</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="41"/>
         <source>系统即将%1</source>
-        <translation type="unfinished">システムが%1する予定です</translation>
+        <translation>システムが%1する予定です</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="48"/>

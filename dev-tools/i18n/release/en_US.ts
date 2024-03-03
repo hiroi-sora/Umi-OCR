@@ -328,7 +328,7 @@ Generated: 2023-09-01_12-13.txt</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="132"/>
         <source>其它</source>
-        <translation type="unfinished">Others</translation>
+        <translation>Others</translation>
     </message>
 </context>
 <context>
@@ -368,7 +368,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="76"/>
         <source>排队</source>
-        <translation type="unfinished">In queue</translation>
+        <translation>In queue</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="174"/>
@@ -2247,17 +2247,17 @@ Can be set as default off in global settings</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="36"/>
         <source>继续%1</source>
-        <translation type="unfinished">Continue %1</translation>
+        <translation>Continue %1</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="36"/>
         <source>取消%1</source>
-        <translation type="unfinished">Cancel %1</translation>
+        <translation>Cancel %1</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="41"/>
         <source>系统即将%1</source>
-        <translation type="unfinished">System will %1</translation>
+        <translation>System will %1</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="48"/>
