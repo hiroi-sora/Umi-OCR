@@ -16,7 +16,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="105"/>
         <source>请点击文件名填写密码</source>
-        <translation>請點擊文件名填寫密碼</translation>
+        <translation>請點擊檔案名稱填寫密碼</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="136"/>
@@ -28,7 +28,7 @@
         <source>【%1】
 请点击文档名，设置密码</source>
         <translation>【%1】
-請點擊文件名，設置密碼</translation>
+請點擊文件名稱，設定密碼</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="151"/>
@@ -85,12 +85,12 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="301"/>
         <source>文档识别完成</source>
-        <translation>文件識別完成</translation>
+        <translation>文件辨識完成</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="310"/>
         <source>批量识别任务异常</source>
-        <translation>批量識別任務異常</translation>
+        <translation>批次辨識任務異常</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="407"/>
@@ -149,7 +149,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="23"/>
         <source>忽略区域（点击文档名进入设置）</source>
-        <translation>忽略區域（點擊文件名進入設置）</translation>
+        <translation>忽略區域（點擊文件名進入設定）</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="34"/>
@@ -164,7 +164,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="39"/>
         <source>若一页文档既存在图片又存在文本，如何进行处理</source>
-        <translation>若一頁文件既存在圖片又存在文本，如何進行處理</translation>
+        <translation>若一頁文件既存在圖片又存在文字，如何進行處理</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="41"/>
@@ -189,7 +189,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="51"/>
         <source>批量任务</source>
-        <translation>批量任務</translation>
+        <translation>批次任務</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="55"/>
@@ -235,7 +235,7 @@
 %name 原文件名
 舉例：[OCR]_%name_%date
 生成：[OCR]_文件A_20230901_1213.txt
-添加佔位符號可以避免舊文件被新文件覆寫。</translation>
+新增佔位符號可以避免舊檔案被新檔案覆寫。</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="76"/>
@@ -278,7 +278,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="95"/>
         <source>含识别文字和页数信息</source>
-        <translation>含識別文字和頁數資料</translation>
+        <translation>含辨識文字和頁數資料</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="99"/>
@@ -288,7 +288,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="100"/>
         <source>输出所有识别文字</source>
-        <translation>輸出所有識別文字</translation>
+        <translation>輸出所有辨識文字</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="104"/>
@@ -298,7 +298,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="105"/>
         <source>将页数信息和识别内容写入csv表格文件。可用Excel打开，另存为xlsx格式。</source>
-        <translation>將頁數資料和識別內容寫入csv表格文件。可用Excel打開，另存為xlsx格式。</translation>
+        <translation>將頁數資料和辨識內容寫入csv表格檔案。可用Excel開啟，另存為xlsx格式。</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="109"/>
@@ -318,7 +318,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="117"/>
         <source>若某一页没有文字或识别失败，也不会输出错误提示信息</source>
-        <translation>若某一頁沒有文字或識別失敗，也不會輸出錯誤提示訊息</translation>
+        <translation>若某一頁沒有文字或辨識失敗，也不會輸出錯誤提示訊息</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="121"/>
@@ -383,12 +383,12 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="216"/>
         <source>批量识别完成</source>
-        <translation>批量識別完成</translation>
+        <translation>批次辨識完成</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="224"/>
         <source>批量识别任务异常</source>
-        <translation>批量識別任務異常</translation>
+        <translation>批次辨識任務異常</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="351"/>
@@ -457,7 +457,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="36"/>
         <source>批量任务</source>
-        <translation>批量任務</translation>
+        <translation>批次任務</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="40"/>
@@ -536,7 +536,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="75"/>
         <source>含原图片文件名和识别文字</source>
-        <translation>含原圖片文件名和識別文字</translation>
+        <translation>含原圖片檔案名稱和辨識文字</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="79"/>
@@ -546,7 +546,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="80"/>
         <source>仅输出识别文字，不含图片标题</source>
-        <translation>僅輸出識別文字，不含圖片標題</translation>
+        <translation>僅輸出辨識文字，不含圖片標題</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="84"/>
@@ -556,7 +556,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="85"/>
         <source>对每张图片，生成同名txt文件，仅输出识别文字</source>
-        <translation>對每張圖片，生成同名txt文件，僅輸出識別文字</translation>
+        <translation>對每張圖片，生成同名txt檔案，僅輸出辨識文字</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="89"/>
@@ -576,7 +576,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="95"/>
         <source>将图片信息和识别内容写入csv表格文件。可用Excel打开，另存为xlsx格式。</source>
-        <translation>將圖片信息和識別內容寫入csv表格文件。可用Excel打開，另存為xlsx格式。</translation>
+        <translation>將圖片訊息和辨識內容寫入csv表格檔案。可用Excel開啟，另存為xlsx格式。</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="99"/>
@@ -596,7 +596,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="107"/>
         <source>若图片没有文字或识别失败，也不会输出错误提示信息</source>
-        <translation>若圖片沒有文字或識別失敗，也不會輸出錯誤提示信息</translation>
+        <translation>若圖片沒有文字或辨識失敗，也不會輸出錯誤提示訊息</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="111"/>
@@ -758,7 +758,7 @@
         <source>内容字体：
 识别结果内容的字体。</source>
         <translation>內容字體：
-識別結果內容的字體。</translation>
+辨識結果內容的字體。</translation>
     </message>
 </context>
 <context>
@@ -1111,7 +1111,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/IconButtonBar.qml" line="27"/>
         <source>用默认应用打开图片</source>
-        <translation>用預設應用程式打開圖片</translation>
+        <translation>用預設應用程式開啟圖片</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/IconButtonBar.qml" line="28"/>
@@ -1150,8 +1150,8 @@
 左鍵：拖拽
 右鍵：繪製忽略區域
 
-可繪製一個或多個忽略區域矩形框。在執行批量OCR時，完全位於忽略區域內的文本塊將被排除。
-比如批量處理影視截圖時，可在右上角水印處添加忽略區域，避免輸出水印文本。</translation>
+可繪製一個或多個忽略區域矩形框。在執行批次OCR時，完全位於忽略區域內的文字區塊將被排除。
+比如批次處理影像截圖時，可在右上角水印處添加忽略區域，避免輸出水印文字。</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/IgnoreArea/IgnoreArea.qml" line="143"/>
@@ -1189,12 +1189,12 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageScale.qml" line="74"/>
         <source>打开图片</source>
-        <translation>打開圖片</translation>
+        <translation>開啟圖片</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageScale.qml" line="76"/>
         <source>打开图片失败</source>
-        <translation>打開圖片失敗</translation>
+        <translation>開啟圖片失敗</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageScale.qml" line="87"/>
@@ -1361,7 +1361,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="14"/>
         <source>文字识别</source>
-        <translation>文字識別</translation>
+        <translation>文字辨識</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="18"/>
@@ -1397,12 +1397,12 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="66"/>
         <source>无法修改 文字识别接口设置</source>
-        <translation>無法修改 文字識別接口設定</translation>
+        <translation>無法修改 文字辨識介面設定</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="86"/>
         <source>文字识别接口应用成功</source>
-        <translation>文字識別接口應用成功</translation>
+        <translation>文字辨識介面應用成功</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="86"/>
@@ -1412,7 +1412,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="90"/>
         <source>文字识别接口应用失败</source>
-        <translation>文字識別接口應用失敗</translation>
+        <translation>文字辨識介面應用失敗</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="99"/>
@@ -1468,12 +1468,12 @@
 
 &#x3000;  
 
-導入本地圖片或資料夾，批次轉換文字。</translation>
+匯入本機圖片或資料夾，批次轉換文字。</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="36"/>
         <source>批量文档</source>
-        <translation>批量文件</translation>
+        <translation>批次文件</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="37"/>
@@ -1484,13 +1484,13 @@
 支持格式： pdf, xps, epub, mobi, fb2, cbz
 
 批量导入文档，提取文字，或生成双层可搜索PDF。</source>
-        <translation># 批量文件識別
+        <translation># 批次文件辨識
 
 &#x3000;  
 
-支持格式： pdf, xps, epub, mobi, fb2, cbz
+支援格式： pdf, xps, epub, mobi, fb2, cbz
 
-批量匯入文件，提取文字，或生成雙層可搜尋PDF。</translation>
+批次匯入文件，提取文字，或生成雙層可搜尋PDF。</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="42"/>
@@ -1504,11 +1504,11 @@
 &#x3000;  
 
 支持截图识别二维码。</source>
-        <translation># QR碼
+        <translation># 二維碼
 
 &#x3000;  
 
-支持截圖識別QR碼。</translation>
+支援截圖辨識二維碼（QR Code）。</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="48"/>
@@ -1552,7 +1552,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="136"/>
         <source>打开文档失败</source>
-        <translation>打開文件失敗</translation>
+        <translation>開啟文件失敗</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="138"/>
@@ -1621,8 +1621,8 @@
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/PreviewImage.qml" line="60"/>
         <source>在图片上叠加显示识别文字
 可在全局设置中设为默认关闭</source>
-        <translation>在圖片上疊加顯示識別文字
-可在全局設定中設為默認關閉</translation>
+        <translation>在圖片上疊加顯示辨識文字
+可在全域設定中設為預設關閉</translation>
     </message>
 </context>
 <context>
@@ -1676,7 +1676,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="158"/>
         <source>识别失败</source>
-        <translation>識別失敗</translation>
+        <translation>辨識失敗</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="178"/>
@@ -2083,7 +2083,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="162"/>
         <source>截图识别任务异常</source>
-        <translation>截圖識別任務異常</translation>
+        <translation>截圖辨識任務異常</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="185"/>
@@ -2103,7 +2103,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="193"/>
         <source>识别失败</source>
-        <translation>識別失敗</translation>
+        <translation>辨識失敗</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="248"/>
@@ -2120,8 +2120,8 @@
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="325"/>
         <source>在图片上叠加显示识别文字
 可在全局设置中设为默认关闭</source>
-        <translation>在圖片上疊加顯示識別文字
-可在全局設定中設為默認關閉</translation>
+        <translation>在圖片上疊加顯示辨識文字
+可在全域設定中設為預設關閉</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="394"/>
