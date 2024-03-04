@@ -22,7 +22,7 @@ git clone --single-branch --branch [分支名] https://github.com/hiroi-sora/Umi
 
 ##### v2.1.0 `2024.2.29`
 
-分支名：`main`
+分支名：`release/2.1.0`
 
 - 新增：批量文档识别功能。支持 `pdf, epub, mobi` 等格式。
 - 新增：允许隐藏托盘图标。 (#338)
