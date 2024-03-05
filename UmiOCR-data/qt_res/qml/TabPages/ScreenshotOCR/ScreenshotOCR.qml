@@ -30,7 +30,8 @@ TabPage {
     // 截图完毕
     function screenshotEnd(clipID) {
         popMainWindow()
-        if(!clipID) {
+        if(!clipID) { // 截图取消
+            tabPage.callPy("ocrImgID", undefined, undefined)
             return
         }
         const configDict = configsComp.getValueDict()
@@ -45,10 +46,12 @@ TabPage {
         const res = qmlapp.imageManager.getPaste()
         if(res.error) {
             qmlapp.popup.simple(qsTr("获取剪贴板异常"), res.error)
+            tabPage.callPy("ocrImgID", undefined, undefined)
             return
         }
         if(res.text) {
             qmlapp.popup.simple(qsTr("剪贴板中为文本"), res.text)
+            tabPage.callPy("ocrImgID", undefined, undefined)
             return
         }
         qmlapp.tab.showTabPageObj(tabPage) // 切换标签页
