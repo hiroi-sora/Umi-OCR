@@ -5,6 +5,7 @@ Temp
 build
 PyStand_for_UmiOCR/build
 *.exe
+*.txt
 
 # 发布
 release
