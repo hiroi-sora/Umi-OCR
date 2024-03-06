@@ -265,6 +265,14 @@ https://hosted.weblate.org/engage/umi-ocr/
 
 </details>
 
+##### 即将进行的工作
+
+- [ ] 修Bug：文档识别在Windows7系统的兼容性问题。
+- [ ] OCR支持常见在线API。
+- [ ] 检查更新机制。
+- [ ] 独立的数学公式识别插件定义。
+- [ ] “数学公式”标签页，提供独立的数学公式识别/Latex渲染。
+
 ##### 远期计划
 
 <details>
