@@ -207,9 +207,9 @@ TabPage {
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.bottom: parent.bottom
-        anchors.leftMargin: doubleColumnLayout.hideLR===1 ? size_.spacing : 0
-        width: doubleColumnLayout.hideLR===1 ? size_.line * 2 : 0
-        visible: doubleColumnLayout.hideLR===1
+        anchors.leftMargin: doubleRowLayout.hideLR===1 ? size_.spacing : 0
+        width: doubleRowLayout.hideLR===1 ? size_.line * 2 : 0
+        visible: doubleRowLayout.hideLR===1
 
         Column {
             anchors.top: parent.top
@@ -255,7 +255,7 @@ TabPage {
     }
     // 主区域：双栏面板
     DoubleRowLayout {
-        id: doubleColumnLayout
+        id: doubleRowLayout
         anchors.left: leftCtrlPanel.right
         anchors.top: parent.top
         anchors.bottom: parent.bottom
