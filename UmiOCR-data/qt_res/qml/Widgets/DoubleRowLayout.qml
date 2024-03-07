@@ -34,7 +34,7 @@ Item {
         Component.onCompleted: { // 初始化分割线位置
             if(parent.initSplitterX <= 0)
                 parent.initSplitterX = 0.5 // 默认值0.5
-            toInit()
+            Qt.callLater(toInit) // 延迟一个事件循环，再进行位置初始化
         }
         property int rightMax: width - splitter.width // 右边缘位置
 
