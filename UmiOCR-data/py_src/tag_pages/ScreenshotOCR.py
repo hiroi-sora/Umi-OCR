@@ -24,6 +24,7 @@ class ScreenshotOCR(Page):
     def ocrImgID(self, imgID, configDict):
         if not imgID or not configDict:  # 截图取消
             self.recentResult = {"code": 101, "data": ""}
+            return
         pixmap = PixmapProvider.getPixmap(imgID)
         if not pixmap:
             e = f'[Error] ScreenshotOCR: imgID "{imgID}" does not exist in the PixmapProvider dict.'
