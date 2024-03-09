@@ -19,6 +19,7 @@ Window {
     property int lineWidth: 1 // 线宽
     property color crossLineColor: "#00f91a" // 十字指示器的颜色
     property color clipBorderColor: "white" // 框选区边框的颜色
+    property color darkLayerColor: "#73000000" // 深色背景层的颜色
 
     // 鼠标状态， 0 等待 ， 1 拖拽中
     property int mouseStatus: 0
@@ -76,7 +77,7 @@ Window {
     Rectangle {
         id: darkLayer
         anchors.fill: parent
-        color: "#73000000"
+        color: darkLayerColor
         // 遮罩，拖拽时扣除框选区域
         layer.enabled: mouseStatus==1
         layer.effect: OpacityMask {
