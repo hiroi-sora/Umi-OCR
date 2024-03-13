@@ -105,20 +105,21 @@ class OutputPdfLayered(Output):
             )
 
     def onEnd(self):  # 结束时保存。
+        if not self.pdf:
+            return
         # 删除未处理的页数
         for i in range(len(self.pdf) - 1, -1, -1):
             if i not in self.existentPages:
                 self.pdf.delete_page(i)
         print(f"保存{len(self.pdf)}页PDF：{self.outputPath}")
-        if self.pdf:
-            if self.isInsertFont:  # 有任意页面嵌入字体，则构建字体子集
-                try:  # 对于部分PDF，如用txt直接打印的，构建字体子集会失败。
-                    self.pdf.subset_fonts()  # 构建字体子集，减小文件大小。需要 fontTools 库
-                except Exception as e:  # TODO: 失败原因？可能文件中实际并没有字体？
-                    print("[Warning] 构建字体子集失败：", e)
-                # 保存：压缩并进行3级垃圾回收。等同 ez_save
-                self.pdf.save(self.outputPath, deflate=True, garbage=3)
-            else:
-                # 无嵌入字体，则直接保存，不压缩
-                self.pdf.save(self.outputPath)
+        if self.isInsertFont:  # 有任意页面嵌入字体，则构建字体子集
+            try:  # 对于部分PDF，如用txt直接打印的，构建字体子集会失败。
+                self.pdf.subset_fonts()  # 构建字体子集，减小文件大小。需要 fontTools 库
+            except Exception as e:  # TODO: 失败原因？可能文件中实际并没有字体？
+                print("[Warning] 构建字体子集失败：", e)
+            # 保存：压缩并进行3级垃圾回收。等同 ez_save
+            self.pdf.save(self.outputPath, deflate=True, garbage=3)
+        else:
+            # 无嵌入字体，则直接保存，不压缩
+            self.pdf.save(self.outputPath)
         self.pdf.close()
