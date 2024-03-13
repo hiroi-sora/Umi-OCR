@@ -15,6 +15,7 @@ class OutputPdfLayered(Output):
         self.outputPath = f"{self.dir}/{self.fileName}.layered.pdf"  # 输出路径
         self.pdf = None
         self.existentPages = []  # 已处理的页数
+        self.isInsertFont = False  # 是否有字体嵌入
         try:
             self.font = fitz.Font("cjk")  # 字体
         except Exception as e:
@@ -78,12 +79,14 @@ class OutputPdfLayered(Output):
             return  # 忽略空白
 
         page = self.pdf[pno]  # 当前页对象
-        page.insert_font(fontname="cjk", fontbuffer=self.font.buffer)  # 页面插入字体
-        # shape = page.new_shape()  # 页面创建新形状
+        isInsertFont = False  # 当前是否进行过字体注入
         # 插入文本，用shape.insert_text（可编辑）或page.insert_text（不可编辑）
         for tb in res["data"]:
             if "from" in tb and tb["from"] == "text":
                 continue  # 跳过直接提取的文本，只写入OCR文本
+            if not isInsertFont:  # 页面插入字体
+                self.isInsertFont = isInsertFont = True
+                page.insert_font(fontname="cjk", fontbuffer=self.font.buffer)
             text = tb["text"]
             box = tb["box"]
             x0, y0 = box[0]
@@ -91,7 +94,6 @@ class OutputPdfLayered(Output):
             w = x2 - x0
             h = y2 - y0
             fontsize = self._calculateFontSize(text, w, h)
-            # shape.insert_text(
             page.insert_text(
                 (x0, y2),
                 text,
@@ -101,7 +103,6 @@ class OutputPdfLayered(Output):
                 stroke_opacity=0,  # 描边透明度
                 fill_opacity=0,  # 填充（字体）透明度
             )
-        # shape.commit()
 
     def onEnd(self):  # 结束时保存。
         # 删除未处理的页数
@@ -110,10 +111,14 @@ class OutputPdfLayered(Output):
                 self.pdf.delete_page(i)
         print(f"保存{len(self.pdf)}页PDF：{self.outputPath}")
         if self.pdf:
-            try:  # 对于部分PDF，如用txt直接打印的，构建字体子集会失败。
-                self.pdf.subset_fonts()  # 构建字体子集，减小文件大小。需要 fontTools 库
-            except Exception as e:  # TODO: 失败原因？可能文件中实际并没有字体？
-                print("[Warning] 构建字体子集失败：", e)
-            # ez_save默认启用压缩和垃圾回收 deflate=True, garbage=3
-            self.pdf.ez_save(self.outputPath)
+            if self.isInsertFont:  # 有任意页面嵌入字体，则构建字体子集
+                try:  # 对于部分PDF，如用txt直接打印的，构建字体子集会失败。
+                    self.pdf.subset_fonts()  # 构建字体子集，减小文件大小。需要 fontTools 库
+                except Exception as e:  # TODO: 失败原因？可能文件中实际并没有字体？
+                    print("[Warning] 构建字体子集失败：", e)
+                # 保存：压缩并进行3级垃圾回收。等同 ez_save
+                self.pdf.save(self.outputPath, deflate=True, garbage=3)
+            else:
+                # 无嵌入字体，则直接保存，不压缩
+                self.pdf.save(self.outputPath)
         self.pdf.close()
