@@ -276,7 +276,8 @@ We are attempting to fix this issue.`
         missionInfo.nowNum = missionInfo.nowNum + 1
         const costTime = (missionInfo.costTime/1000).toFixed(1)
         const nowNum = missionInfo.nowNum
-        const percent = Math.floor(((nowNum/missionInfo.allNum)*100))
+        let percent = Math.floor(((nowNum/missionInfo.allNum)*100))
+        if(percent > 99) percent = 99 // 单页识别进度卡 99% ，只有onDocEnd全部任务完毕才能 100%
         missionProgress.percent = nowNum/missionInfo.allNum // 进度条显示
         missionShow = `${costTime}s  ${nowNum}/${missionInfo.allNum}  ${percent}%` // 信息显示
         // 刷新单个文档的信息
@@ -297,6 +298,7 @@ We are attempting to fix this issue.`
             // 所有文档处理完毕
             if(msg === "[Success] All completed.") {
                 setMsnState("none") // 状态：不在运行
+                missionShow = `${missionInfo.costTime}s  ${missionInfo.nowNum}/${missionInfo.allNum}  100%` // 刷新 100%
                 const simpleType = configsComp.getValue("other.simpleNotificationType")
                 qmlapp.popup.simple(qsTr("文档识别完成"), "", simpleType)
                 // 任务完成后续操作
