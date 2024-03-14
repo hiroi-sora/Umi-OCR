@@ -17,7 +17,10 @@ ScrollView {
     function init() {
         // 初始化 字符串替换正则
         const replacements = [
+            // 双换行
             ["\n\n", "\n\n　  \n\n"],
+            // Markdown 链接转 HTML 链接
+            ["\\[(.*?)\\]\\((.*?)\\)", `<a href="\$2"><font color="${theme.specialTextColor}">\$1</font></a>`]
         ]
         regexes =  replacements.map(([search, replacement]) => ({
             regex: new RegExp(search, "g"), replacement
