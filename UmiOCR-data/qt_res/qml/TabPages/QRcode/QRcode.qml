@@ -188,6 +188,7 @@ TabPage {
     // 主区域：双栏面板
     DoubleRowLayout {
         id: doubleRowLayout
+        saveKey: "QRcode_1"
         anchors.fill: parent
         initSplitterX: 0.5
 

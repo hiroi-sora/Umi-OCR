@@ -326,6 +326,7 @@ We are attempting to fix this issue.`
     }
     // 主区域：左右双栏面板。
     DoubleRowLayout {
+        saveKey: "BatchDOC_1"
         anchors.fill: parent
         initSplitterX: 0.5
 

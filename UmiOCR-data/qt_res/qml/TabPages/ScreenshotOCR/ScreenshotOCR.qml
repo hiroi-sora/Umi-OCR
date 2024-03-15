@@ -256,6 +256,7 @@ TabPage {
     // 主区域：双栏面板
     DoubleRowLayout {
         id: doubleRowLayout
+        saveKey: "ScreenshotOCR_1"
         anchors.left: leftCtrlPanel.right
         anchors.top: parent.top
         anchors.bottom: parent.bottom

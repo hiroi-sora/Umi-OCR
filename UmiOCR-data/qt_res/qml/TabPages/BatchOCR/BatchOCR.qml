@@ -267,6 +267,7 @@ TabPage {
     }
     // 主区域：左右双栏面板。
     DoubleRowLayout {
+        saveKey: "BatchOCR_1"
         anchors.fill: parent
         initSplitterX: 0.5
 
