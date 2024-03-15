@@ -14,6 +14,7 @@ Item {
     property QtObject rightItem // 右元素
     property real hideWidth: 80 // 一个栏小于该值时隐藏
     property real initSplitterX: 0.5 // 分割线初始位置。>1时为像素，0~1为比例。
+    property string saveKey: "" // 如果非空，则缓存 hideLR 参数。
 
     // 只读信息
     property int hideLR: 0 // 0为不隐藏，1为隐藏左边，2为隐藏右边
@@ -31,15 +32,36 @@ Item {
 
         property alias hideWidth: doubleCC.hideWidth
         property alias splitterX: splitter.x // 分割线当前位置
+        property bool isInitialized: false // 当前是否初始化完毕
         Component.onCompleted: { // 初始化分割线位置
             if(parent.initSplitterX <= 0)
                 parent.initSplitterX = 0.5 // 默认值0.5
-            Qt.callLater(toInit) // 延迟一个事件循环，再进行位置初始化
+            Qt.callLater(() => { // 延迟一个事件循环，再进行位置初始化
+                isInitialized = true // 标记初始化完成
+                let hideFlag = 0
+                if(doubleCC.saveKey) { // 取hide缓存
+                    const layoutDict = qmlapp.globalConfigs.getValue("window.doubleLayout")
+                    const f = layoutDict[doubleCC.saveKey]
+                    if(f !== undefined) hideFlag = f
+                }
+                toLR(hideFlag)
+            })
         }
         property int rightMax: width - splitter.width // 右边缘位置
 
+        function setHideLR(h) {
+            if(doubleCC.hideLR === h) return
+            doubleCC.hideLR = h
+            // 缓存状态
+            if(doubleCC.saveKey) {
+                let layoutDict = qmlapp.globalConfigs.getValue("window.doubleLayout")
+                layoutDict[doubleCC.saveKey] = doubleCC.hideLR
+                qmlapp.globalConfigs.setValue("window.doubleLayout", layoutDict)
+            }
+        }
         // 检查左右隐藏
         function toHide(isWidthChanged = false){
+            if(!isInitialized) return // 防止初始化完成之前自动触发
             if(isWidthChanged && doubleCC.hideLR === 2) { // 总体宽度改变时右吸附
                 splitterX = width - splitter.width
                 return
@@ -47,26 +69,26 @@ Item {
             if(splitterX+splitter.width > (width - hideWidth)){ // 隐藏右边
                 leftContainer.visible = true
                 rightContainer.visible = false
-                doubleCC.hideLR = 2
+                setHideLR(2)
                 splitterX = width - splitter.width
             }
             else if(splitterX < hideWidth){ // 隐藏左边
                 leftContainer.visible = false
                 rightContainer.visible = true
-                doubleCC.hideLR = 1
+                setHideLR(1)
                 splitterX = 0
             }
             else{
                 leftContainer.visible = true
                 rightContainer.visible = true
-                doubleCC.hideLR = 0
+                setHideLR(0)
             }
 
         }
         // 去到左右。flag: 0 初始 1 左 2 右
         function toLR(flag) {
             if(flag === 0)
-                toInit()
+                toInitPosition()
             else if(flag === 1)
                 splitterX = hideWidth-1
             else if(flag === 2)
@@ -74,7 +96,7 @@ Item {
             toHide()
         }
         // 去到初始位置
-        function toInit() {
+        function toInitPosition() {
             if(parent.initSplitterX >= 0 && parent.initSplitterX <= 1)
                 splitterX = width * parent.initSplitterX - size_.spacing * 2
             else

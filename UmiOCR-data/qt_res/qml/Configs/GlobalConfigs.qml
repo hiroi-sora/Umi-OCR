@@ -173,6 +173,10 @@ Configs {
                 "type": "var",
                 "default": [], // 如： ["aaa", "bbb"]
             },
+            "doubleLayout": { // 存放 Double__Layout 的 hide 信息
+                "type": "var",
+                "default": {}, // 如： {"ScreenshotOCR1": 0, }
+            },
         },
 
         // 截图

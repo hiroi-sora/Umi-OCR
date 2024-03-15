@@ -14,6 +14,7 @@ Item {
     property QtObject bottomItem // 下元素
     property real hideHeight: 40 // 一个栏小于该值时隐藏
     property real initSplitterY: 0.5 // 分割线初始位置。>1时为像素，0~1为比例。
+    property string saveKey: "" // 如果非空，则缓存 hideTB 参数。
 
     // 只读信息
     property int hideTB: 0 // 0为不隐藏，1为隐藏上边，2为隐藏下边
@@ -31,15 +32,36 @@ Item {
 
         property alias hideHeight: doubleCC.hideHeight
         property alias splitterY: splitter.y // 分割线当前位置
+        property bool isInitialized: false // 当前是否初始化完毕
         Component.onCompleted: { // 初始化分割线位置
             if(parent.initSplitterY <= 0)
                 parent.initSplitterY = 0.5 // 默认值0.5
-            Qt.callLater(toInit) // 延迟一个事件循环，再进行位置初始化
+            Qt.callLater(() => { // 延迟一个事件循环，再进行位置初始化
+                isInitialized = true // 标记初始化完成
+                let hideFlag = 0
+                if(doubleCC.saveKey) { // 取hide缓存
+                    const layoutDict = qmlapp.globalConfigs.getValue("window.doubleLayout")
+                    const f = layoutDict[doubleCC.saveKey]
+                    if(f !== undefined) hideFlag = f
+                }
+                toTB(hideFlag)
+            })
         }
         property int bottomMax: height - splitter.height // 下边缘位置
 
+        function setHideTB(h) {
+            if(doubleCC.hideTB === h) return
+            doubleCC.hideTB = h
+            // 缓存状态
+            if(doubleCC.saveKey) {
+                let layoutDict = qmlapp.globalConfigs.getValue("window.doubleLayout")
+                layoutDict[doubleCC.saveKey] = doubleCC.hideTB
+                qmlapp.globalConfigs.setValue("window.doubleLayout", layoutDict)
+            }
+        }
         // 检查上下隐藏
         function toHide(isHeightChanged = false){
+            if(!isInitialized) return // 防止初始化完成之前自动触发
             if(isHeightChanged && doubleCC.hideTB === 2) { // 总体高改变时下吸附
                 splitterY = height - splitter.height
                 return
@@ -47,26 +69,26 @@ Item {
             if(splitterY+splitter.height > (height - hideHeight)){ // 隐藏下边
                 topContainer.visible = true
                 bottomContainer.visible = false
-                doubleCC.hideTB = 2
+                setHideTB(2)
                 splitterY = height - splitter.height
             }
-            else if(splitterY < hideHeight){ // 隐藏左边
+            else if(splitterY < hideHeight){ // 隐藏上边
                 topContainer.visible = false
                 bottomContainer.visible = true
-                doubleCC.hideTB = 1
+                setHideTB(1)
                 splitterY = 0
             }
             else{
                 topContainer.visible = true
                 bottomContainer.visible = true
-                doubleCC.hideTB = 0
+                setHideTB(0)
             }
 
         }
         // 去到上下。flag: 0 初始 1 上 2 下
         function toTB(flag) {
             if(flag === 0)
-                toInit()
+                toInitPosition()
             else if(flag === 1)
                 splitterY = hideHeight-1
             else if(flag === 2)
@@ -74,7 +96,7 @@ Item {
             toHide()
         }
         // 去到初始位置
-        function toInit() {
+        function toInitPosition() {
             if(parent.initSplitterY >= 0 && parent.initSplitterY <= 1)
                 splitterY = height * parent.initSplitterY
             else
