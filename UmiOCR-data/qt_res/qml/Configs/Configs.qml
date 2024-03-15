@@ -286,7 +286,7 @@ Item {
     }
     // 设置值  键, 值, 是否刷新UI, 是否立刻写入本地（还是缓存写入）
     function setValue(key, val, isupdateUI=false, saveNow=false) {
-        if(valueDict[key] === val) // 排除相同值
+        if(typeof val !== "object" && valueDict[key] === val) // 如果val不是数组或字典，排除相同值
             return
         let res = onChangedFunc(key, val, valueDict[key]) // 触发函数，传入新值和旧值
         if(res !== undefined) { // 阻止这次变动
