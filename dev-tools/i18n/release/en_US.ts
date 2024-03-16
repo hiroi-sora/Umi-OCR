@@ -1468,7 +1468,7 @@ Supported formats: </translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="37"/>
         <source>批量文档</source>
-        <translation type="unfinished">Batch Documents OCR</translation>
+        <translation>Batch Documents OCR</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="38"/>
@@ -1477,11 +1477,11 @@ Supported formats: </translation>
 批量导入文档，提取文字，或生成双层可搜索PDF。
 
 支持格式：</source>
-        <translation type="unfinished"># Batch OCR Documents
+        <translation># Batch OCR Documents
 
 Bulk import documents, extract text, or generate dual-layer searchable PDFs.
 
-Supported formats: </translation>
+Supported formats:</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="44"/>
@@ -1495,11 +1495,11 @@ Supported formats: </translation>
 识别或生成二维码、条形码。
 
 支持协议：</source>
-        <translation type="unfinished"># QR Code
+        <translation># QR Code
 
 Recognize or generate QR codes, barcodes.
 
-Supported protocols: </translation>
+Supported protocols:</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="50"/>
@@ -1525,7 +1525,7 @@ Supported protocols: </translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="71"/>
         <source>加密</source>
-        <translation type="unfinished">Encrypted</translation>
+        <translation>Encrypted</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="136"/>
@@ -1952,7 +1952,7 @@ Exception message: %2</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ResultLayout/ResultsTableView.qml" line="412"/>
         <source>清空全部记录（Ctrl+Del 双击）</source>
-        <translation type="unfinished">Clear all records  (Double-press Ctrl+Del)</translation>
+        <translation>Clear all records  (Double-press Ctrl+Del)</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ResultLayout/ResultsTableView.qml" line="440"/>
