@@ -62,3 +62,5 @@ ScrollView {
         onLinkHovered: {} // 链接悬停，空事件，自动改变鼠标光标
     }
 }
+
+// https://doc.qt.io/qt-5.15/qml-qtquick-textedit.html

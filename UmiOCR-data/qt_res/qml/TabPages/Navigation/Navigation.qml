@@ -16,10 +16,8 @@ TabPage {
 
     id: naviPage
     
-    ListModel { // 所有页面的标题
-        id: pageModel
-    }
-    
+    ListModel { id: pageModel } // 页面信息存储
+
     // 初始化数据
     Component.onCompleted: initData()
     function initData() {
@@ -35,12 +33,10 @@ TabPage {
         }
     }
     // 动态变化的简介文本
-    property string introText: qsTr("# 欢迎使用 Umi-OCR
-　  
-👈 请在左侧选择功能页。  
-　  
-当前版本：%1  
-[%2](%2)").arg(APP_VERSION).arg(APP_WEBSITE)
+    property string introText: `# ${qsTr("欢迎使用 Umi-OCR")}
+
+## 👈 ${qsTr("请选择功能页")}
+`
 
 
     // =============== 布局 ===============
@@ -101,22 +97,12 @@ TabPage {
         rightItem: Panel{
             anchors.fill: parent
             
-            ScrollView {
+            MarkdownView {
                 id: introView
                 anchors.fill: parent
                 anchors.margins: size_.spacing * 2
-                contentWidth: width // 内容宽度
-                clip: true // 溢出隐藏
-
-                TextEdit_ {
-                    text: introText
-                    width: introView.width // 与内容宽度相同
-                    textFormat: TextEdit.MarkdownText // md格式
-                    readOnly: true // 只读
-                }
+                text: introText
             }
         }
     }
 }
-
-// https://doc.qt.io/qt-5.15/qml-qtquick-textedit.html
