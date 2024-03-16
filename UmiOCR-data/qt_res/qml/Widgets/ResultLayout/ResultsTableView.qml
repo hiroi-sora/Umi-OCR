@@ -158,6 +158,7 @@ Item {
             copyAll: tableMouseArea.selectAllCopy
             selectAll: tableMouseArea.selectAll
             selectSingle: tableMouseArea.selectSingle
+            selectAllDel: tableMouseArea.selectAllDel
         } 
         // 滚动条
         ScrollBar.vertical: scrollBar
@@ -408,7 +409,7 @@ Item {
                 [tableMouseArea.selectSingle, qsTr("选中单个　　（Ctrl+A）")],
                 [tableMouseArea.selectAll, qsTr("选中全部记录（Ctrl+A 双击）")],
                 [tableMouseArea.selectDel, qsTr("删除选中记录"), "noColor"],
-                [tableMouseArea.selectAllDel, qsTr("清空全部记录"), "noColor"],
+                [tableMouseArea.selectAllDel, qsTr("清空全部记录（Ctrl+Del 双击）"), "noColor"],
             ]
         }
     }

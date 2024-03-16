@@ -24,6 +24,7 @@ Item {
     property var copyAll: undefined // 复制全部
     property var selectSingle: undefined // 选中单个文本框
     property var selectAll: undefined // 所有文本框全选
+    property var selectAllDel: undefined // 清空
 
     // 传入一个相对于item的坐标，返回该坐标位于this组件的什么位置。
     // undefined:不在组件中 | -1:顶部信息栏 | 0~N:所在字符的下标
@@ -141,15 +142,18 @@ Item {
             property int keyDoubleTime: 300 // 双击毫秒
             property int lastUpTime: -1 // 上次按键抬起的时间戳。需要截取后8位以免int放不下
             property int lastKey: -1 // 上次按键的键值
+            property var listeningKeys: [Qt.Key_A, Qt.Key_C, Qt.Key_Delete]
             Keys.onPressed: {
                 if (event.modifiers & Qt.ControlModifier) {
-                    if (event.key === Qt.Key_A || event.key === Qt.Key_C) {
+                    if (listeningKeys.includes(event.key)) {
                         event.accepted = true // 拦截按键
                         const t = Date.now() & 0xFFFFFFFF
                         // 双击
                         if(t - lastUpTime <= keyDoubleTime && lastKey==event.key) {
                             event.key===Qt.Key_A && resultRoot.selectAll && resultRoot.selectAll()
                             event.key===Qt.Key_C && resultRoot.copyAll && resultRoot.copyAll()
+                            event.key===Qt.Key_Delete && resultRoot.selectAllDel && resultRoot.selectAllDel()
+                            console.log("=yes", event.key)
                         }
                         else { // 单击
                             event.key===Qt.Key_A && resultRoot.selectSingle && resultRoot.selectSingle()
@@ -159,7 +163,7 @@ Item {
                 }
             }
             Keys.onReleased: {
-                if (event.key === Qt.Key_A || event.key === Qt.Key_C) {
+                if (listeningKeys.includes(event.key)) {
                     lastUpTime = Date.now() & 0xFFFFFFFF
                     lastKey = event.key
                 }
