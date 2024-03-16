@@ -1,0 +1,31 @@
+name: Bug 错误
+description: Report bugs 报告错误
+labels: bug
+body:
+- type: input
+  attributes:
+    label: Umi-OCR version 程序版本
+    placeholder: 2.1.0
+  validations:
+    required: true
+- type: input
+  attributes:
+    label: Windows version 系统版本
+    placeholder: win10
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: Reproduction steps 复现步骤
+    description: Describe the reproduction steps precisely if possible. 尽可能详细描述错误产生的细节。
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: >
+      Problem screenshots or related files (optional)
+      If there are pop-up errors, interface anomalies, or obviously incorrect results, please provide complete screenshots.
+      If a specific image or document can reliably trigger a bug, please upload that file.
+      问题截图或相关文件（可选）
+      如果存在弹窗报错、界面异常、结果明显错误等问题，请提供完整截图。
+      如果特定的图片或文档能稳定触发Bug，请上传该文件。
