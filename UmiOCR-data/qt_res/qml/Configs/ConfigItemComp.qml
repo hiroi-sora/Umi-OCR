@@ -35,6 +35,9 @@ Item {
             advanced = origin.advanced
             title = "* "+title
         }
+        Qt.callLater(() => { // 延迟一个事件循环，再激活背景鼠标响应
+            mouseAreaBackgroud.hoverEnabled = true
+        })
     }
     // 获取或设置值
     function value(v=undefined) {
@@ -57,6 +60,7 @@ Item {
     MouseAreaBackgroud {
         id: mouseAreaBackgroud
         cursorShape: cursorShape_
+        hoverEnabled: false
     }
     // 提示
     Component {
