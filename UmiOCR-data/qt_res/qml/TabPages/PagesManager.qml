@@ -22,32 +22,36 @@ Item {
             key: "ScreenshotOCR",
             needController: true,
             title: qsTr("截图OCR"),
-            intro: qsTr("# 截图OCR\n\n　  \n\n屏幕截图，快捷转文字。也支持粘贴图片。")
+            intro: qsTr("# 截图OCR\n\n屏幕截图，快捷转文字。也支持粘贴图片。")
         },
         {
             key: "BatchOCR",
             needController: true,
             title: qsTr("批量OCR"),
-            intro: qsTr("# 批量OCR\n\n　  \n\n导入本地图片或文件夹，批量转换文字。")
+            intro: qsTr("# 批量OCR\n\n导入本地图片或文件夹，批量转换文字。\n\n支持格式：`jpg, jpe, jpeg, jfif, png, webp, bmp, tif, tiff`")
         },
         {
             key: "BatchDOC",
             needController: true,
             title: qsTr("批量文档"),
-            intro: qsTr("# 批量文档识别\n\n　  \n\n支持格式： pdf, xps, epub, mobi, fb2, cbz\n\n批量导入文档，提取文字，或生成双层可搜索PDF。")
+            intro: qsTr("# 批量文档识别\n\n批量导入文档，提取文字，或生成双层可搜索PDF。\n\n支持格式：`pdf, xps, epub, mobi, fb2, cbz`")
         },
         {
             key: "QRcode",
             needController: true,
             title: qsTr("二维码"),
-            intro: qsTr("# 二维码\n\n　  \n\n支持截图识别二维码。")
+            intro: qsTr("# 二维码\n\n识别或生成二维码、条形码。\n\n支持协议：`Aztec, Codabar, Code128, Code39, Code93, DataBar, DataBarExpanded, DataMatrix, EAN13, EAN8, ITF, LinearCodes, MatrixCodes, MaxiCode, MicroQRCode, PDF417, QRCode, UPCA, UPCE`")
         },
         {
             key: "GlobalConfigsPage",
-            needController: false,
             title: qsTr("全局设置"),
-            intro: qsTr("# 全局设置\n\n　  \n\n调节全局设置项，对所有页面生效。")
+            intro: qsTr("# 全局设置\n\n调节全局设置项，对所有页面生效。")
         },
+        // {
+        //     key: "About",
+        //     title: qsTr("关于"),
+        //     intro: qsTr("# 关于\n\n查看软件信息、检查版本更新。")
+        // },
     ]
 
     /* 存放当前已打开的页面
