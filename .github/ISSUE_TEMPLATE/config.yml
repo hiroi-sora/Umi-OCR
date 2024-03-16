@@ -2,4 +2,7 @@ blank_issues_enabled: true
 contact_links:
   - name: Discussions 讨论
     url: https://github.com/hiroi-sora/Umi-OCR/discussions
-    about: Feel free to talk about something here 自由交流论坛
+    about: |
+      If you encounter issues with secondary development, wish to implement niche features, have suggestions for the future development of the project, or want to share your usage experiences, tips, or insights about the project, please post them here.
+      
+      二次开发遇到问题，想要实现小众功能，对项目未来发展的建议，使用经验、技巧或者对项目的见解，请在这里发表。

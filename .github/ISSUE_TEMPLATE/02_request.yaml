@@ -4,14 +4,20 @@ labels: 功能建议
 body:
 - type: markdown
   attributes:
-    value:
+    value: |
       Please first browse the [Issues](https://github.com/hiroi-sora/Umi-OCR/issues) to ensure that no one else has previously raised a similar request. If there is a similar request, you can post a reply under the Issue; the number of replies may affect the priority decision of development.
+      
       When proposing a new feature, please clearly state the applicable scenarios, operation methods, and the desired effects.
-      This project is primarily maintained and updated by [hiroi-sora](https://github.com/hiroi-sora) alone. Given the limited time and energy, not all requests can necessarily be implemented. Your understanding is appreciated.
-
+      
+      The developer has limited time and energy, and may not be able to fulfill all requests. Your understanding is appreciated.
+      
+      ---
+      
       请先浏览 [Issues](https://github.com/hiroi-sora/Umi-OCR/issues) ，确保没有其他人曾经提出过类似请求。如果已有类似的请求，你可以在Issue下回帖；回帖人数可能影响开发的优先级决策。
+      
       提出新功能时，请明确说明适用场景、操作方式、希望达到的效果。
-      本项目主要由 [hiroi-sora](https://github.com/hiroi-sora) 单人维护更新，时间精力有限，不一定能实现所有的请求，敬请谅解。
+      
+      开发者时间精力有限，不一定能实现所有的请求，敬请谅解。
 - type: textarea
   attributes:
     label: Expected behavior 预期的功能
@@ -19,7 +25,8 @@ body:
     required: true
 - type: textarea
   attributes:
-    label: >
-      Approximate reference (optional) 近似的参考（可选）
+    label: Approximate reference (optional) 近似的参考（可选）
+    description:
       If another software already has a similar feature, you can provide a description or screenshots of that software for reference.
+      
       如果别的软件已有近似功能，可以提供该软件的描述或截图，以供参考。

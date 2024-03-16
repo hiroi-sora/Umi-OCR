@@ -2,6 +2,12 @@ name: Bug 错误
 description: Report bugs 报告错误
 labels: bug
 body:
+- type: markdown
+  attributes:
+    value: |
+      Please first search the [Issues](https://github.com/hiroi-sora/Umi-OCR/issues) to make sure that no one else has already raised a similar question. If there is an existing issue, you can reply under that Issue to provide more details. The more the developer knows, the easier it is to fix the problem.
+
+      请先浏览 [Issues](https://github.com/hiroi-sora/Umi-OCR/issues) ，确保没有其他人曾经提出过类似问题。如果已有类似问题，你可以在该Issue下回复，提供更多细节。开发者知道得越多，修复问题越容易。
 - type: input
   attributes:
     label: Umi-OCR version 程序版本
@@ -22,10 +28,10 @@ body:
     required: true
 - type: textarea
   attributes:
-    label: >
-      Problem screenshots or related files (optional)
+    label: Problem screenshots or related files (optional) 问题截图或相关文件（可选）
+    description:
       If there are pop-up errors, interface anomalies, or obviously incorrect results, please provide complete screenshots.
       If a specific image or document can reliably trigger a bug, please upload that file.
-      问题截图或相关文件（可选）
+      
       如果存在弹窗报错、界面异常、结果明显错误等问题，请提供完整截图。
       如果特定的图片或文档能稳定触发Bug，请上传该文件。
