@@ -10,7 +10,11 @@
         "prerelease": "alpha",
         "prereleaseNumber": 1
     },
-    "developers": [
+    "license": {
+        "type": "MIT",
+        "url": "https://github.com/hiroi-sora/Umi-OCR/blob/main/LICENSE"
+    },
+    "authors": [
         {
             "name": "hiroi-sora",
             "url": "https://github.com/hiroi-sora"
