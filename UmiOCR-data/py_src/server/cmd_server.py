@@ -295,7 +295,9 @@ class _Cmd:
             "-->",
             help='The file path for CLI output (overwrite). If the command does not work, please enclose it in double quotes: "-->"',
         )
-        self._parser.add_argument("-->>", help="The file path for CLI output (append).")
+        self._parser.add_argument(
+            "-->>", help='The file path for CLI output (append). Can also use "-->>"'
+        )
         self._parser.add_argument("paras", nargs="*", help="parameters of [--func].")
 
     # 分析指令，返回指令对象或报错字符串
