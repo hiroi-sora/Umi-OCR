@@ -1,13 +1,58 @@
-# =====================================
-# ========== Umi-OCR 启动入口 ==========
-# =====================================
+# Umi-OCR
+# OCR software, free and offline. 开源、免费的离线OCR软件。
+# Website - https://github.com/hiroi-sora/Umi-OCR
+# Author - hiroi-sora
+#
+# You are free to use, modify, and distribute Umi-OCR, but it must include
+# the original author's copyright statement and the following license statement.
+# 您可以免费地使用、修改和分发 Umi-OCR ，但必须包含原始作者的版权声明和下列许可声明。
+"""
+Copyright (c) 2023 hiroi-sora
 
-# 耗时统计：
-# runtime/python.exe -X importtime main.py
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+"""
+
+
+"""
+======================================================
+========== Umi-OCR Windows 运行环境初始化入口 ==========
+======================================================
+
+说明：
+本文件负责 Windows + PyStand 运行环境的初始化，主要涉及：
+- 创建底层弹窗接口 os.MessageBox
+- 重定向标准输入输出流
+- 指定工作目录为 "/UmiOCR-data"
+- 添加Python库搜索目录 "site-packages"
+- 添加PySide2插件搜索目录 "PySide2/plugins"
+
+环境初始化后，调用正式入口 py_src/run.py 启动软件。
+
+耗时分析：
+runtime/python.exe -X importtime main.py
+"""
+
 
 import os
 import sys
 import site
+import traceback
 
 
 def MessageBox(msg, type="error"):
@@ -25,7 +70,7 @@ def MessageBox(msg, type="error"):
 os.MessageBox = MessageBox
 
 
-def initRuntimeEnvironment(startup_script):
+def initRuntimeEnvironment():
     """初始化运行环境"""
 
     # 尝试获取控制台的输出对象
@@ -43,34 +88,33 @@ def initRuntimeEnvironment(startup_script):
     #     sys.__excepthook__(cls, exception, traceback)
     # sys.excepthook = except_hook
 
-    # 安装某些软件时可能在系统中写入 QMLSCENE_DEVICE 环境变量，影响本软件的渲染方式，因此屏蔽该环境变量
-    if "QMLSCENE_DEVICE" in os.environ:
-        del os.environ["QMLSCENE_DEVICE"]
     # 初始化工作目录和Python搜索路径
-    script = os.path.abspath(startup_script)  # 启动脚本.py的路径
-    working = os.path.dirname(script)  # 工作目录
-    os.environ["APP_WORKING"] = working
-    os.chdir(working)  # 重新设定工作目录（不在最顶层，而在UmiOCR-data文件夹下）
-    for n in [".", "site-packages"]:  # 将模块目录添加到 Python 搜索路径中
-        path = os.path.abspath(os.path.join(working, n))
+    script = os.path.abspath(__file__)  # 启动脚本.py的路径
+    cwd = os.path.dirname(script)  # 工作目录
+    os.chdir(cwd)  # 重新设定工作目录（不在最顶层，而在 UmiOCR-data 文件夹下）
+    for n in ["site-packages"]:  # 将模块目录添加到 Python 搜索路径中
+        path = os.path.abspath(os.path.join(cwd, n))
         if os.path.exists(path):
             site.addsitedir(path)
+    # 初始化Qt搜索路径为相对路径，避免上层目录存在中文编码
+    from PySide2.QtCore import QCoreApplication
 
-
-def runScript():
-    # 默认启动脚本
-    from py_src.run import main
-
-    main()
+    QCoreApplication.addLibraryPath("./site-packages/PySide2/plugins")
 
 
 if __name__ == "__main__":
     try:
-        initRuntimeEnvironment(__file__)  # 初始化运行环境
+        initRuntimeEnvironment()  # 初始化运行环境
     except Exception as e:
-        MessageBox("初始化运行环境失败 !\n\n" + str(e))
+        MessageBox("初始化运行环境失败 !\n\n" + traceback.format_exc())
         sys.exit(0)
     try:
-        runScript()  # 启动脚本
+        # 获取 pystand.exe 记录的程序入口环境变量
+        app_path = os.environ.get("PYSTAND", "")
+        # 启动正式入口
+        from py_src.run import main
+
+        main(app_path=app_path, engineAddImportPath="./site-packages/PySide2/qml")
     except Exception as e:
-        MessageBox("主程序启动失败 !\n\n" + str(e))
+        MessageBox("主程序启动失败 !\n\n" + traceback.format_exc())
+        sys.exit(0)

@@ -4,6 +4,7 @@
 from PySide2.QtCore import QStandardPaths as Qsp, QFile, QFileInfo, QFileDevice
 import os
 
+from umi_about import UmiAbout  # 项目信息
 from ..platform import Platform
 
 
@@ -20,9 +21,9 @@ class ShortcutApi:
     @staticmethod  # 创建快捷方式，返回成功与否的字符串
     def createShortcut(position):
         lnkName = "Umi-OCR"
-        appPath = os.environ["APP_PATH"]
+        appPath = UmiAbout["app"]["path"]
         if not appPath:
-            return "未找到 Umi-OCR.exe 。请尝试手动创建快捷方式。\n[Error] Umi-OCR.exe APP_PATH not exist. Please try creating a shortcut manually."
+            return "未找到 Umi-OCR.exe 。请尝试手动创建快捷方式。\n[Error] Umi-OCR app path not exist. Please try creating a shortcut manually."
         lnkPathBase = ShortcutApi._getPath(position)
         lnkPathBase = os.path.join(lnkPathBase, lnkName)
         lnkPath = lnkPathBase + ".lnk"

@@ -125,7 +125,7 @@ Rectangle {
                 Button_ {
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
-                    property string issueUrl: APP_WEBSITE+"/issues"
+                    property string issueUrl: UmiAbout.reportIssueUrl
                     text_: "Issues"
                     toolTip: issueUrl
                     textSize: size_.smallText
