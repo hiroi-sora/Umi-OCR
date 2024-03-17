@@ -42,20 +42,6 @@ TabPage {
     Component.onCompleted: {
         missionInfo = {}
         setMsnState("none")
-        // TODO 临时：只允许win10以上系统
-        const winVer = tabPage.callPy("winVer")
-        const f = winVer[0]
-        const v = winVer[1]
-        if(!f) {
-            const tips = `抱歉，批量文档识别 暂时只对Windows10及以上的系统提供完整支持。
-您当前的系统版本为Windows ${v}，可能在识别某些文档时出现无法保存文件、软件崩溃等情况。
-我们正在尝试修复该问题，请见谅。
-
-Sorry, the batch document recognition feature is currently only fully supported on Windows 10 and above systems.
-Your current system version is Windows ${v}, which may result in errors such as inability to save files or software crashes when recognizing certain documents.
-We are attempting to fix this issue.`
-            qmlapp.popup.messageMemory("justWin10", "警告 Warning", tips)
-        }
     }
     // TODO: 测试用
     // Timer {

@@ -17,18 +17,6 @@ class BatchDOC(Page):
         super().__init__(*args)
         self._msnIdPath = {}  # 当前运行的任务，id到地址的映射
 
-    # TODO 临时：限制windows系统版本
-    def winVer(self):
-        import platform
-
-        version = platform.version()
-
-        if "." in version:
-            ver = version.split(".")[0]
-            if ver.isdigit() and int(ver) >= 10:
-                return [True, version]
-        return [False, version]
-
     # 添加一些文档
     def addDocs(self, paths, isRecurrence):
         paths = utils.findDocs(paths, isRecurrence)
