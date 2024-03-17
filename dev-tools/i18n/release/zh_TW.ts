@@ -1274,7 +1274,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/MarkdownView.qml" line="60"/>
         <source>链接</source>
-        <translation type="unfinished">網址</translation>
+        <translation>網址</translation>
     </message>
 </context>
 <context>
@@ -1960,7 +1960,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ResultLayout/ResultsTableView.qml" line="412"/>
         <source>清空全部记录（Ctrl+Del 双击）</source>
-        <translation type="unfinished">清空全部記錄&#x3000;（Ctrl+Del 雙擊）</translation>
+        <translation>清空全部記錄（Ctrl+Del 雙擊）</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ResultLayout/ResultsTableView.qml" line="440"/>

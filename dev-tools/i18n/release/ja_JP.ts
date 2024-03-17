@@ -1476,7 +1476,7 @@
 批量导入文档，提取文字，或生成双层可搜索PDF。
 
 支持格式：</source>
-        <translation type="unfinished"># バルクドキュメント認識
+        <translation># バルクドキュメント認識
 
 ドキュメントを一括でインポートし、テキストを抽出したり、二層の検索可能なPDFを生成します。
 
@@ -1494,7 +1494,7 @@
 识别或生成二维码、条形码。
 
 支持协议：</source>
-        <translation type="unfinished"># QR コード
+        <translation># QR コード
 
 QR コードやバーコードを識別、生成する。
 
@@ -1951,7 +1951,7 @@ QR コードやバーコードを識別、生成する。
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ResultLayout/ResultsTableView.qml" line="412"/>
         <source>清空全部记录（Ctrl+Del 双击）</source>
-        <translation type="unfinished">全ての記録をクリア&#x3000;（Ctrl+Del ダブルクリック）</translation>
+        <translation>全ての記録をクリア（Ctrl+Del ダブルクリック）</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ResultLayout/ResultsTableView.qml" line="440"/>
