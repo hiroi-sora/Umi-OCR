@@ -5,7 +5,6 @@
 from ..utils import pre_configs
 from ..platform import Platform
 
-from umi_about import UmiAbout  # 项目信息
 import os
 import sys
 import time
@@ -92,6 +91,8 @@ def _sendCmd(argv):
 
 # 启动新进程，并发送指令
 def _newSend(argv):
+    from umi_about import UmiAbout  # 项目信息
+
     appPath = UmiAbout["app"]["path"]
     if not appPath:
         msg = "未找到 Umi-OCR.exe 的路径，无法启动新进程。请手动启动Umi-OCR后发送指令。\nUmi-OCR.exe path not found, unable to start a new process."

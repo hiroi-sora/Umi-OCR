@@ -4,7 +4,6 @@
 from PySide2.QtCore import QStandardPaths as Qsp, QFile, QFileInfo, QFileDevice
 import os
 
-from umi_about import UmiAbout  # 项目信息
 from ..platform import Platform
 
 
@@ -20,6 +19,8 @@ class ShortcutApi:
 
     @staticmethod  # 创建快捷方式，返回成功与否的字符串
     def createShortcut(position):
+        from umi_about import UmiAbout  # 项目信息
+
         lnkName = "Umi-OCR"
         appPath = UmiAbout["app"]["path"]
         if not appPath:

@@ -7,7 +7,6 @@ from PySide2.QtCore import QThreadPool, QRunnable
 from wsgiref.simple_server import make_server, WSGIServer
 
 import os
-from umi_about import UmiAbout  # 项目信息
 from ..platform import Platform
 from ..utils import pre_configs
 from ..utils.call_func import CallFunc
@@ -43,6 +42,8 @@ def _validate_after():
 @UmiWeb.route("/")
 @UmiWeb.route("/umiocr")
 def _umiocr():
+    from umi_about import UmiAbout  # 项目信息
+
     return UmiAbout["fullname"]
 
 
