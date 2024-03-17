@@ -30,7 +30,7 @@
   <a href="License">
     <img src="https://img.shields.io/github/license/hiroi-sora/Umi-OCR?style=flat-square" alt="LICENSE">
   </a>
-  <a href="#下载">
+  <a href="#下载发行版">
     <img src="https://img.shields.io/github/downloads/hiroi-sora/Umi-OCR/total?style=flat-square" alt="forks">
   </a>
   <a href="https://star-history.com/#hiroi-sora/Umi-OCR">
@@ -46,15 +46,15 @@
 
 <div align="center">
   <h3>
-    <a href="#说明目录">
+    <a href="#目录">
       使用说明
     </a>
     <span> • </span>
-    <a href="#下载">
+    <a href="#下载发行版">
       下载地址
     </a>
     <span> • </span>
-    <a href="#更新日志">
+    <a href="CHANGE_LOG.md">
       更新日志
     </a>
     <span> • </span>
@@ -73,7 +73,7 @@
 - **免费**：本项目所有代码开源，完全免费。
 - **方便**：解压即用，离线运行，无需网络。
 - **高效**：自带高效率的离线OCR引擎，内置多种语言识别库。
-- **灵活**：支持[命令行](docs/README_CLI.md)、[HTTP接口](docs/README_HTTP.md)等外部调用方式。
+- **灵活**：支持命令行、HTTP接口等外部调用方式。
 - **功能**：截图OCR / 批量OCR / PDF识别 / 二维码 / 公式识别（[测试中](https://github.com/hiroi-sora/Umi-OCR/issues/254)）
 
 <p align="center"><img src="https://tupian.li/images/2023/11/19/65599097ab5f4.png" alt="1-标题-1.png" style="width: 80%;"></p>
@@ -83,7 +83,7 @@
 ## 目录
 
 - [截图识别](#截图OCR)
-  - [段落合并](#段落合并) - 优化不同文字排版
+  - [排版解析](#文本后处理) - 识别不同排版，按正确顺序输出文字
 - [批量识别](#批量OCR)
   - [忽略区域](#忽略区域) - 排除截图水印处的文字
 - [二维码](#二维码) 支持扫码或生成二维码图片
@@ -99,7 +99,7 @@
 
 ## 下载发行版
 
-可选择以下方式下载：
+以下发布链接均长期维护，提供最新软件版本。
 
 - **GitHub** https://github.com/hiroi-sora/Umi-OCR/releases/latest
 - **蓝奏云** https://hiroi-sora.lanzoul.com/s/umi-ocr
@@ -156,12 +156,14 @@ Umi-OCR v2 由一系列灵活好用的**标签页**组成。您可按照自己�
 
 <p align="center"><img src="https://tupian.li/images/2023/11/19/655990a2511e0.png" alt="3-批量-1.png" style="width: 80%;"></p>
 
-**批量OCR**：这一页支持批量导入本地图片并识别。
-- 识别内容可以保存为 txt / jsonl / md / csv(Excel) 等多种格式。
+**批量OCR**：这一页用于批量导入本地图片进行识别。
+- 支持格式：`jpg, jpe, jpeg, jfif, png, webp, bmp, tif, tiff`。
+- 保存识别结果的支持格式：`txt, jsonl, md, csv(Excel)`。
 - 与截图OCR一样，支持`文本后处理`功能，整理OCR文本的排版和顺序。
-- 支持 `忽略区域` 。
 - 没有数量上限，可一次性导入几百张图片进行任务。
 - 支持任务完成后自动关机/待机。
+- 如果要识别像素超大的长图或大图，请调整：**页面的设置→文字识别→限制图像边长→【调高数值】**。
+- 拥有特殊功能 `忽略区域` 。
 
 #### 忽略区域
 
@@ -179,10 +181,8 @@ Umi-OCR v2 由一系列灵活好用的**标签页**组成。您可按照自己�
 
 <p align="center"><img src="https://github.com/hiroi-sora/Umi-OCR/assets/56373419/fc2266ee-b9b7-4079-8b10-6610e6da6cf5" alt="" style="width: 80%;"></p>
 
-仅在 [v2.1.0+](https://github.com/hiroi-sora/Umi-OCR/releases) 支持。
-
 **文档识别**：
-- 支持导入 `pdf, xps, epub, mobi, fb2, cbz` 格式的文件。
+- 支持格式：`pdf, xps, epub, mobi, fb2, cbz`。
 - 对扫描件进行OCR，或提取原有文本。可输出为 **双层可搜索PDF** 。
 - 支持设定 **忽略区域** ，可用于排除页眉页脚的文字。
 - 可设置任务完成后 **自动关机/休眠** 。
