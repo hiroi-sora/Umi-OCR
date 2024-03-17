@@ -55,8 +55,12 @@ def init(app_path=""):
     """
     global UmiAbout
     # 读取配置
-    with open("about.json", "r", encoding="utf-8") as file:
-        u = load(file)
+    try:
+        with open("about.json", "r", encoding="utf-8") as file:
+            u = load(file)
+    except Exception as e:
+        os.MessageBox(f"[Error] 无法读取配置 about.json 。\n{e}")
+        return False
     # 完整版本号
     v = f'{u["version"]["major"]}.{u["version"]["minor"]}.{u["version"]["patch"]}'
     if u["version"]["prerelease"]:
@@ -76,3 +80,4 @@ def init(app_path=""):
         "home": app_home,
     }
     UmiAbout = u
+    return True
