@@ -47,6 +47,20 @@
             "args": []
         },
         {
+            "name": "release", // 创建 Umi-OCR 发行包
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/release.py",
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "env": {
+                "PYDEVD_DISABLE_FILE_VALIDATION": "1",
+            },
+            "python": "${workspaceFolder}/UmiOCR-data/runtime/python.exe",
+            "args": []
+        },
+        {
             "name": "当前文件",
             "type": "debugpy",
             "request": "launch",
