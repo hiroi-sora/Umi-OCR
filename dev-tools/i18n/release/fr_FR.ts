@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="fr" sourcelanguage="zh_CN">
+<TS version="2.1" language="fr_FR" sourcelanguage="zh_CN">
 <context>
     <name>BatchDOC</name>
     <message>
@@ -1321,7 +1321,17 @@ Generated: 2023-09-01_12-13.txt</translation>
 <context>
     <name>Navigation</name>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/Navigation/Navigation.qml" line="65"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/Navigation/Navigation.qml" line="23"/>
+        <source>欢迎使用 Umi-OCR</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/Navigation/Navigation.qml" line="26"/>
+        <source>请选择功能页</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/Navigation/Navigation.qml" line="66"/>
         <source>功能页</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1468,6 +1478,18 @@ Generated: 2023-09-01_12-13.txt</translation>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="50"/>
         <source>全局设置</source>
         <translation>Réglages généraux</translation>
+    </message>
+    <message>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="55"/>
+        <source>关于</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="56"/>
+        <source># 关于
+
+查看软件信息、检查版本更新。</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

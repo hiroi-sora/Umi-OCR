@@ -114,7 +114,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="416"/>
         <source>清空</source>
-        <translation>Tøm</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="417"/>
@@ -129,12 +129,12 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="447"/>
         <source>设置</source>
-        <translation>Innstillinger</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="452"/>
         <source>记录</source>
-        <translation>Historikk</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -328,6 +328,11 @@
 <context>
     <name>BatchOCR</name>
     <message>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="76"/>
+        <source>排队</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="119"/>
         <source>依然关闭</source>
         <translation type="unfinished"></translation>
@@ -356,11 +361,6 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="164"/>
         <source>停止中…</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="76"/>
-        <source>排队</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -402,7 +402,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="358"/>
         <source>清空</source>
-        <translation type="unfinished">Tøm</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="359"/>
@@ -417,12 +417,12 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="389"/>
         <source>设置</source>
-        <translation type="unfinished">Innstillinger</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="394"/>
         <source>记录</source>
-        <translation type="unfinished">Historikk</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1133,7 +1133,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/IgnoreArea/IgnoreArea.qml" line="164"/>
         <source>清空</source>
-        <translation type="unfinished">Tøm</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1311,7 +1311,17 @@
 <context>
     <name>Navigation</name>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/Navigation/Navigation.qml" line="65"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/Navigation/Navigation.qml" line="23"/>
+        <source>欢迎使用 Umi-OCR</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/Navigation/Navigation.qml" line="26"/>
+        <source>请选择功能页</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/Navigation/Navigation.qml" line="66"/>
         <source>功能页</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1406,13 +1416,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="51"/>
-        <source># 全局设置
-
-调节全局设置项，对所有页面生效。</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="30"/>
         <source>批量OCR</source>
         <translation type="unfinished"></translation>
@@ -1457,6 +1460,25 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="50"/>
         <source>全局设置</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="51"/>
+        <source># 全局设置
+
+调节全局设置项，对所有页面生效。</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="55"/>
+        <source>关于</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="56"/>
+        <source># 关于
+
+查看软件信息、检查版本更新。</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1533,7 +1555,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="361"/>
         <source>清空</source>
-        <translation type="unfinished">Tøm</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="367"/>
@@ -1622,7 +1644,7 @@
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="335"/>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="401"/>
         <source>设置</source>
-        <translation type="unfinished">Innstillinger</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="349"/>
@@ -1647,7 +1669,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="406"/>
         <source>记录</source>
-        <translation type="unfinished">Historikk</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRcode/QRcode.qml" line="411"/>
@@ -1920,13 +1942,10 @@
 <context>
     <name>ScreenshotManager</name>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/ImageManager/ScreenshotManager.qml" line="149"/>
-        <source>截图失败</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/ImageManager/ScreenshotManager.qml" line="86"/>
-        <source>上次截图操作未结束，不能进行新的截图！</source>
+        <location filename="../../../UmiOCR-data/qt_res/qml/ImageManager/ScreenshotManager.qml" line="27"/>
+        <source>屏幕设备名称不相同：
+%1
+%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1945,15 +1964,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../../UmiOCR-data/qt_res/qml/ImageManager/ScreenshotManager.qml" line="86"/>
+        <source>上次截图操作未结束，不能进行新的截图！</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ImageManager/ScreenshotManager.qml" line="100"/>
         <source>未知异常！</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/ImageManager/ScreenshotManager.qml" line="27"/>
-        <source>屏幕设备名称不相同：
-%1
-%2</source>
+        <location filename="../../../UmiOCR-data/qt_res/qml/ImageManager/ScreenshotManager.qml" line="149"/>
+        <source>截图失败</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2052,12 +2074,12 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="422"/>
         <source>设置</source>
-        <translation type="unfinished">Innstillinger</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="427"/>
         <source>记录</source>
-        <translation type="unfinished">Historikk</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

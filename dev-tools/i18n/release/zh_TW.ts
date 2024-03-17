@@ -1349,7 +1349,17 @@
 <context>
     <name>Navigation</name>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/Navigation/Navigation.qml" line="65"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/Navigation/Navigation.qml" line="23"/>
+        <source>欢迎使用 Umi-OCR</source>
+        <translation type="unfinished">歡迎使用 Umi-OCR</translation>
+    </message>
+    <message>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/Navigation/Navigation.qml" line="26"/>
+        <source>请选择功能页</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/Navigation/Navigation.qml" line="66"/>
         <source>功能页</source>
         <translation>功能頁</translation>
     </message>
@@ -1513,6 +1523,18 @@
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="50"/>
         <source>全局设置</source>
         <translation>全域設定</translation>
+    </message>
+    <message>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="55"/>
+        <source>关于</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="56"/>
+        <source># 关于
+
+查看软件信息、检查版本更新。</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
