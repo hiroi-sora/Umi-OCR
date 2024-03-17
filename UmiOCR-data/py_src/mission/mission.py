@@ -9,6 +9,15 @@ from uuid import uuid4  # 唯一ID
 import time
 
 
+# 代替 self._threadPool.start ，但是检查线程池是否满，并扩充。
+def threadPoolStart(threadPool, *args):
+    activeThreadCount = threadPool.activeThreadCount()
+    if activeThreadCount >= threadPool.maxThreadCount():
+        print(f"[Warning] 线程池已满 {activeThreadCount} ！自动扩充+1。")
+        threadPool.setMaxThreadCount(activeThreadCount + 1)
+    threadPool.start(*args)
+
+
 class Mission:
     def __init__(self):
         self._msnInfoDict = {}  # 任务信息的字典
@@ -136,7 +145,7 @@ class Mission:
         self._taskMutex.lock()  # 上锁
         if self._task == None:
             self._task = self._Task(self._taskRun)
-            self._threadPool.start(self._task)
+            threadPoolStart(self._threadPool, self._task)
         self._taskMutex.unlock()  # 解锁
 
     # ========================= 【子线程 方法】 =========================

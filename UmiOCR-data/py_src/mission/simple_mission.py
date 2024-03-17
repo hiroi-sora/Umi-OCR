@@ -4,6 +4,7 @@
 
 
 from PySide2.QtCore import QMutex, QThreadPool, QRunnable
+from .mission import threadPoolStart
 
 
 class SimpleMission:
@@ -31,7 +32,7 @@ class SimpleMission:
         self._taskMutex.lock()  # 上锁
         if self._task == None:
             self._task = self._Task(self._taskRun)
-            self._threadPool.start(self._task)
+            threadPoolStart(self._threadPool, self._task)
         self._taskMutex.unlock()  # 解锁
 
     # ========================= 【子线程 方法】 =========================
