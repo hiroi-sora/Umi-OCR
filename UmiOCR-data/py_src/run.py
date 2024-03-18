@@ -66,7 +66,7 @@ def runQml(engineAddImportPath):
     qtApp = QGuiApplication(sys.argv)
     qtApp.setApplicationName(UmiAbout["name"])
     qtApp.setOrganizationName(UmiAbout["authors"][0]["name"])
-    qtApp.setOrganizationDomain(UmiAbout["homepage"])
+    qtApp.setOrganizationDomain(UmiAbout["url"]["home"])
 
     # ==================== 3. OpenGlES 兼容性检查 ====================
     app_opengl.checkOpengl()

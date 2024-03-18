@@ -26,15 +26,11 @@ TabPage {
 
 
 
-#### Umi-OCR `+qsTr("主页")+`
+#### Umi-OCR [`+qsTr("检查更新")+`](${UmiAbout.url.home}) | [`+qsTr("官方网站")+`](${UmiAbout.url.home}) | [`+qsTr("插件拓展")+`](${UmiAbout.url.plugins}) | [`+qsTr("问题反馈")+`](${UmiAbout.url.issue})
 
-[${UmiAbout.homepage}](${UmiAbout.homepage})
+#### `+qsTr("作者")+`: ${getTD(UmiAbout.authors)}
 
-#### `+qsTr("作者")+`
-
-${getTD(UmiAbout.authors)}
-
-#### `+qsTr("译者")+`
+#### `+qsTr("译者")+`:
 
 ${getLocalizationTable()}`
 

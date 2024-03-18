@@ -1,6 +1,5 @@
 {
     "name": "Umi-OCR",
-    "homepage": "https://github.com/hiroi-sora/Umi-OCR",
     "reportIssueUrl": "https://github.com/hiroi-sora/Umi-OCR/issues",
     "description": "OCR software, free and offline.",
     "version": {
@@ -9,6 +8,12 @@
         "patch": 1,
         "prerelease": "alpha",
         "prereleaseNumber": 1
+    },
+    "url": {
+        "home": "https://github.com/hiroi-sora/Umi-OCR",
+        "plugins": "https://github.com/hiroi-sora/Umi-OCR_plugins",
+        "issue": "https://github.com/hiroi-sora/Umi-OCR/issues",
+        "newIssue": "https://github.com/hiroi-sora/Umi-OCR/issues/new/choose"
     },
     "license": {
         "type": "MIT",
