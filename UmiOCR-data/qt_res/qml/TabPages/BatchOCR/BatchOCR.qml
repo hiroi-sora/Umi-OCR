@@ -354,9 +354,9 @@ TabPage {
                     {key: "time", title: qsTr("耗时"), },
                     {key: "state", title: qsTr("状态"), },
                 ]
-                openBtnText: qsTr("选择图片")
+                openBtnText: qsTr("打开图片")
                 clearBtnText: qsTr("清空")
-                defaultTips: qsTr("拖入或选择图片")
+                defaultTips: qsTr("拖入图片或文件夹")
                 fileDialogTitle: qsTr("请选择图片")
                 fileDialogNameFilters: [qsTr("图片")+" (*.jpg *.jpe *.jpeg *.jfif *.png *.webp *.bmp *.tif *.tiff)"]
                 isLock: msnState !== "none"

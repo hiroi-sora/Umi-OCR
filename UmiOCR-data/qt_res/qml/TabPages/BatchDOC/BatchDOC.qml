@@ -398,9 +398,9 @@ TabPage {
                     {key: "state", title: qsTr("状态"), btn: true, onClicked:onClickDoc},
                     {key: "pages", title: qsTr("范围"), btn: true, onClicked:onClickDoc},
                 ]
-                openBtnText: qsTr("选择文档")
+                openBtnText: qsTr("打开文档")
                 clearBtnText: qsTr("清空")
-                defaultTips: qsTr("拖入或选择文档")
+                defaultTips: qsTr("拖入文档或文件夹")
                 fileDialogTitle: qsTr("请选择文档")
                 fileDialogNameFilters: [qsTr("文档")+" (*.pdf *.xps *.epub *.mobi *.fb2 *.cbz)"]
                 isLock: msnState !== "none"
