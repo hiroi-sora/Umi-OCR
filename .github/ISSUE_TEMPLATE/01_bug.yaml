@@ -1,6 +1,5 @@
 name: Bug 错误
 description: Report bugs 报告错误
-labels: bug
 body:
 - type: markdown
   attributes:

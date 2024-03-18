@@ -1,6 +1,5 @@
 name: Feature Request 功能请求
 description: Create the request for a new feature 提出一个增加新功能的请求
-labels: 功能建议
 body:
 - type: markdown
   attributes:
