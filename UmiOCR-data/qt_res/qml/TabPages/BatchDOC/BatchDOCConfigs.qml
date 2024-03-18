@@ -51,6 +51,11 @@ Configs {
             "title": qsTr("批量任务"),
             "type": "group",
 
+            "recurrence": {
+                "title": qsTr("递归读取子文件夹"),
+                "toolTip": qsTr("导入文件夹时，导入子文件夹中全部文档"),
+                "default": false,
+            },
             "dirType": {
                 "title": qsTr("保存到"),
                 "optionsList": [
@@ -116,12 +121,6 @@ Configs {
                 "title": qsTr("忽略空白页"),
                 "toolTip": qsTr("若某一页没有文字或识别失败，也不会输出错误提示信息"),
                 "default": true,
-            },
-            "recurrence": {
-                "title": qsTr("递归读取子文件夹"),
-                "toolTip": qsTr("导入文件夹时，导入子文件夹中全部文档"),
-                "default": false,
-                "advanced": true,
             },
         },
 

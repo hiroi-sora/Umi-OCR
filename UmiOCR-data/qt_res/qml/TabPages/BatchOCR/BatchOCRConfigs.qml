@@ -36,6 +36,11 @@ Configs {
             "title": qsTr("批量任务"),
             "type": "group",
 
+            "recurrence": {
+                "title": qsTr("递归读取子文件夹"),
+                "toolTip": qsTr("导入文件夹时，导入子文件夹中全部图片"),
+                "default": false,
+            },
             "dirType": {
                 "title": qsTr("保存到"),
                 "optionsList": [
@@ -106,12 +111,6 @@ Configs {
                 "title": qsTr("输出忽略空白图片"),
                 "toolTip": qsTr("若图片没有文字或识别失败，也不会输出错误提示信息"),
                 "default": true,
-            },
-            "recurrence": {
-                "title": qsTr("递归读取子文件夹"),
-                "toolTip": qsTr("导入文件夹时，导入子文件夹中全部图片"),
-                "default": false,
-                "advanced": true,
             },
         },
 
