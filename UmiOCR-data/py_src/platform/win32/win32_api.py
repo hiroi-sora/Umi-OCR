@@ -6,22 +6,24 @@ import os
 import subprocess
 from .key_translator import getKeyName
 
+# 环境的类型：
+# "APPDATA" 用户，低权限要求
+# "ProgramData" 全局，高权限要求
+EnvType = "APPDATA"  # or "ProgramData"
+
 
 # ==================== 标准路径 ====================
 # 获取系统的标准路径
 class _StandardPaths:
-    # 获取开始菜单路径。传值：user 用户菜单 | common 公共菜单
     @staticmethod
-    def GetStartMenu(type="common"):
-        if type == "user":
-            return os.getenv("APPDATA") + "\\Microsoft\\Windows\\Start Menu"
-        elif type == "common":
-            return os.getenv("ProgramData") + "\\Microsoft\\Windows\\Start Menu"
+    def GetStartMenu():
+        """获取开始菜单路径"""
+        return os.path.join(os.getenv(EnvType), "Microsoft", "Windows", "Start Menu")
 
-    # 获取启动（开机自启）路径。
     @staticmethod
-    def GetStartup(type="common"):
-        return _StandardPaths.GetStartMenu(type) + "\\Programs\\Startup"
+    def GetStartup():
+        """获取启动（开机自启）路径"""
+        return os.path.join(_StandardPaths.GetStartMenu(), "Programs", "Startup")
 
 
 # ==================== 硬件控制 ====================
