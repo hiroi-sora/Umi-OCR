@@ -11,6 +11,8 @@ from ..image_controller.image_provider import PixmapProvider
 from ..utils.call_func import CallFunc
 from .mission_doc import MissionDOC
 
+MinSize = 1080  # 最小渲染分辨率
+
 
 # 文档预览连接器
 class DocPreviewConnector(QObject):
@@ -51,7 +53,17 @@ class DocPreviewConnector(QObject):
         if page < 0 or page > page_count:
             print(f"[Error] 页数{page}超出范围 0-{page_count} 。")
             return
-        p = doc[page].get_pixmap()
+        # 检查页面边长，如果低于阈值，则增加放大系数，以提高渲染清晰度
+        rect = doc[page].rect
+        w, h = abs(rect[2] - rect[0]), abs(rect[3] - rect[1])
+        m = min(w, h)
+        if m < MinSize:
+            zoom = MinSize / max(m, 1)
+            print("== 增加渲染分辨率：", zoom)
+            matrix = fitz.Matrix(zoom, zoom)
+        else:
+            matrix = fitz.Identity
+        p = doc[page].get_pixmap(matrix=matrix)
         # 方法1：通过 QImage fromImage 转换
         # 必须先使用变量提取出图像 https://github.com/pymupdf/PyMuPDF/issues/1210
         samples = p.samples
