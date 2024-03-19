@@ -14,6 +14,8 @@ import time
 from PIL import Image
 from io import BytesIO
 
+MinSize = 1080  # 最小渲染分辨率
+
 
 class FitzOpen:
     def __init__(self, path):
@@ -101,9 +103,19 @@ class _MissionDocClass(Mission):
         imgs = []  # 待OCR的图片列表
         tbs = []  # text box 文本块列表
         if extractionMode == "fullPage":  # 模式：整页强制OCR
-            p = page.get_pixmap()
+            # 检查页面边长，如果低于阈值，则增加放大系数，以提高渲染清晰度
+            rect = page.rect
+            w, h = abs(rect[2] - rect[0]), abs(rect[3] - rect[1])
+            m = min(w, h)
+            if m < MinSize:
+                zoom = MinSize / max(m, 1)
+                matrix = fitz.Matrix(zoom, zoom)
+            else:
+                zoom = 1
+                matrix = fitz.Identity
+            p = page.get_pixmap(matrix=matrix)
             bytes = p.tobytes("png")
-            imgs.append({"bytes": bytes, "xy": (0, 0), "scale": 1})
+            imgs.append({"bytes": bytes, "xy": (0, 0), "scale": 1 / zoom})
         else:
             # 获取元素 https://pymupdf.readthedocs.io/en/latest/_images/img-textpage.png
             # 确保越界图像能被采集 https://github.com/pymupdf/PyMuPDF/issues/3171

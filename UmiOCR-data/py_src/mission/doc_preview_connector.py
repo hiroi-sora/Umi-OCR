@@ -25,6 +25,7 @@ class DocPreviewConnector(QObject):
         self._previewMission = SimpleMission(self._previewTask)  # 简单任务对象
         self._previewDoc = None  # 当前预览的对象
         self._previewPath = ""
+        self._zooms = {}  # 缓存页面缩放系数
 
     # 预览PDF画面
     @Slot(str, int, str)
@@ -49,6 +50,7 @@ class DocPreviewConnector(QObject):
                 return
             self._previewDoc = doc
             self._previewPath = path
+            self._zooms = {}
         page_count = doc.page_count
         if page < 0 or page > page_count:
             print(f"[Error] 页数{page}超出范围 0-{page_count} 。")
@@ -59,21 +61,18 @@ class DocPreviewConnector(QObject):
         m = min(w, h)
         if m < MinSize:
             zoom = MinSize / max(m, 1)
-            print("== 增加渲染分辨率：", zoom)
             matrix = fitz.Matrix(zoom, zoom)
+            self._zooms[page] = zoom
         else:
             matrix = fitz.Identity
+            self._zooms[page] = 1
         p = doc[page].get_pixmap(matrix=matrix)
-        # 方法1：通过 QImage fromImage 转换
+        # 通过 QImage fromImage 转换
         # 必须先使用变量提取出图像 https://github.com/pymupdf/PyMuPDF/issues/1210
         samples = p.samples
         # 必须传入 pix.stride ，否则部分格式的图像会导致崩溃
         qimage = QImage(samples, p.width, p.height, p.stride, QImage.Format_RGB888)
         qpixmap = QPixmap.fromImage(qimage)
-        # 方法2：编码后传入QPixmap（性能低）
-        # imgBytes = p.tobytes("ppm")
-        # qpixmap = QPixmap()
-        # qpixmap.loadFromData(imgBytes)
         imgID = PixmapProvider.addPixmap(qpixmap)
         self.previewImg.emit(imgID)
 
@@ -83,6 +82,13 @@ class DocPreviewConnector(QObject):
         argd = argd.toVariant()  # qml对象转python字典
 
         def _onGet(msnInfo, page_, res):
+            # 缩放文本位置
+            if page_ in self._zooms and res["code"] == 100:
+                z = self._zooms[page_]
+                for r in res["data"]:
+                    for bi in range(4):
+                        r["box"][bi][0] = r["box"][bi][0] * z
+                        r["box"][bi][1] = r["box"][bi][1] * z
             page_ += 1
             self.previewOcr.emit([path, page_, res])
 
