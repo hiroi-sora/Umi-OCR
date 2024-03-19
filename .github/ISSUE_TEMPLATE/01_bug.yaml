@@ -31,7 +31,6 @@ body:
       - Pix2Text
       - ChineseOCR
       - Other 其他插件/自开发插件
-      - None 不相关
   validations:
     required: false
 - type: textarea
