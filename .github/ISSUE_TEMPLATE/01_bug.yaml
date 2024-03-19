@@ -19,6 +19,21 @@ body:
     placeholder: win10
   validations:
     required: true
+- type: dropdown
+  attributes:
+    label: Plugin Used 使用的插件
+    description: If the bug is related to OCR, please select the plugin(s) you were using. 如果Bug与OCR相关，请选择您使用的插件。
+    multiple: true
+    options:
+      - PaddleOCR
+      - RapidOCR
+      - TesseractOCR
+      - Pix2Text
+      - ChineseOCR
+      - Other 其他插件/自开发插件
+      - None 不相关
+  validations:
+    required: false
 - type: textarea
   attributes:
     label: Reproduction steps 复现步骤
