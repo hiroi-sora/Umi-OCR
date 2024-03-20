@@ -27,7 +27,6 @@ TabPage {
             return
         }
         const configDict = configsComp.getValueDict()
-        running = true
         tabPage.callPy("scanImgID", clipID, configDict)
         qmlapp.tab.showTabPageObj(tabPage) // 切换标签页
     }
@@ -48,7 +47,6 @@ TabPage {
         if(res.imgID) { // 图片
             imageText.showImgID(res.imgID)
             const configDict = configsComp.getValueDict()
-            running = true
             tabPage.callPy("scanImgID", res.imgID, configDict)
         }
         else if(res.paths) { // 地址
@@ -67,7 +65,6 @@ TabPage {
         const simpleType = configDict["other.simpleNotificationType"]
         qmlapp.popup.simple(qsTr("导入%1条图片路径").arg(paths.length), "", simpleType)
         imageText.showPath(paths[0])
-        running = true
         tabPage.callPy("scanPaths", paths, configDict)
     }
 
@@ -82,7 +79,7 @@ TabPage {
     function writeBarcode(text) {
         if(!text || text.length===0)
             return
-        running = true
+        setRunning(true)
         const configDict = configsComp.getValueDict()
         const format = configDict["writeBarcode.format"]
         const w = configDict["writeBarcode.width"]
@@ -90,7 +87,7 @@ TabPage {
         const quiet_zone = configDict["writeBarcode.quiet_zone"]
         const ec_level = configDict["writeBarcode.ec_level"]
         const imgID = tabPage.callPy("writeBarcode", format, text, w, h, quiet_zone, ec_level)
-        running = false
+        setRunning(false)
         if(imgID.startsWith("[Error]") || imgID.startsWith("[Warning]")) {
             if(imgID.startsWith("[Error] [")) {
                 const msg = qsTr("参数有误，或输入内容不合规定。请参照报错指示修改：") +"\n"+ imgID
@@ -108,13 +105,14 @@ TabPage {
 
     // 获取一个扫码的返回值
     function onQRcodeGet(res, imgID="", imgPath="") {
-        running = false
         // 添加到结果
         if(imgID) // 图片类型
             imageText.showImgID(imgID)
         else if(imgPath) // 地址类型
             imageText.showPath(imgPath)
-            res.title = res.fileName
+            // 路径转文件名
+            const parts = imgPath.split("/")
+            res.title = parts[parts.length - 1]
         imageText.showTextBoxes(res)
         const resText = resultsTableView.addOcrResult(res)
         // 若tabPanel面板的下标没有变化过，则切换到记录页
@@ -159,6 +157,11 @@ TabPage {
         }
         title += `  -  ${time}s`
         qmlapp.popup.simple(title, resText, simpleType)
+    }
+
+    // 设置运行状态
+    function setRunning(flag) {
+        running = flag
     }
 
     // ========================= 【事件管理】 =========================
@@ -290,6 +293,12 @@ TabPage {
                 anchors.margins: size_.spacing
                 anchors.topMargin: size_.smallSpacing
 
+                // 加载中 动态图标
+                Loading {
+                    text: "Running"
+                    visible: running
+                    anchors.centerIn: parent
+                }
                 // 提示
                 DefaultTips {
                     visibleFlag: running
