@@ -16,11 +16,36 @@ except Exception as e:
 
 class _MissionQRcodeClass(Mission):
 
+    def createImage(self, text, format="QRCode", w=0, h=0, quiet_zone=-1, ec_level=-1):
+        """
+        生成二维码图片
+        format: "Aztec","Codabar","Code128","Code39","Code93","DataBar","DataBarExpanded","DataMatrix","EAN13","EAN8","ITF","LinearCodes","MatrixCodes","MaxiCode","MicroQRCode","PDF417","QRCode","UPCA","UPCE",
+        quiet_zone: 四周的空闲区域
+        ec_level：纠错等级，-1 - 自动, 1- L-7% , 0 - M-15%, 3 - Q-25%, 2 - H-30%
+        纠错仅用于Aztec、PDF417和QRCode
+        返回：成功返回PIL对象，失败返回错误原因字符串
+        """
+        # 转整数
+        w, h = round(w), round(h)
+        quiet_zone, ec_level = round(quiet_zone), round(ec_level)
+        # 生成格式对象
+        bFormat = getattr(zxingcpp.BarcodeFormat, format, None)
+        if not bFormat:
+            return f"[Error] format {format} not in zxingcpp.BarcodeFormat!"
+        try:
+            bit = zxingcpp.write_barcode(bFormat, text, w, h, quiet_zone, ec_level)
+        except Exception as e:
+            return f"[Error] [{format}] {e}"
+        try:
+            img = Image.fromarray(bit, "L")
+        except Exception as e:
+            return f"[Error] Image.fromarray: {e}"
+        return img
+
     # msnInfo: { 回调函数"onXX" , 参数"argd":{ "preprocessing.xx" } }
     # msnList: [ { "path", "pil", "base64" } ]
     # def addMissionList(self, msnInfo, msnList):  # 添加任务列表
     #     return super().addMissionList(msnInfo, msnList)
-
     def msnTask(self, msnInfo, msn):  # 执行msn
         # 导入库失败
         if not zxingcpp:

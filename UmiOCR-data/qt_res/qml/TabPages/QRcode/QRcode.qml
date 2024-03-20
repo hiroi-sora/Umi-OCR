@@ -86,7 +86,7 @@ TabPage {
         const h = configDict["writeBarcode.height"]
         const quiet_zone = configDict["writeBarcode.quiet_zone"]
         const ec_level = configDict["writeBarcode.ec_level"]
-        const imgID = tabPage.callPy("writeBarcode", format, text, w, h, quiet_zone, ec_level)
+        const imgID = tabPage.callPy("writeBarcode", text, format, w, h, quiet_zone, ec_level)
         setRunning(false)
         if(imgID.startsWith("[Error]") || imgID.startsWith("[Warning]")) {
             if(imgID.startsWith("[Error] [")) {
