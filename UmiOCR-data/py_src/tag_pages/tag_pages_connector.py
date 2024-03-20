@@ -13,11 +13,11 @@ from PySide2.QtCore import QObject, Slot
 from .BatchOCR import BatchOCR
 from .BatchDOC import BatchDOC
 from .ScreenshotOCR import ScreenshotOCR
-from .QRcode import QRcode
+from .QRCode import QRCode
 from ..utils.call_func import CallFunc
 
 # 控制器类列表
-PageClass = [BatchOCR, ScreenshotOCR, QRcode, BatchDOC]
+PageClass = [BatchOCR, ScreenshotOCR, QRCode, BatchDOC]
 
 
 TagPageConnObj = None  # 记录实例

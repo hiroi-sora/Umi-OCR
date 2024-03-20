@@ -6,7 +6,7 @@ import QtQuick 2.15
 import "../../Configs"
 
 Configs {
-    category_: "QRcode"
+    category_: "QRCode"
 
     configDict: {
 

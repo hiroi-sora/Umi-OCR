@@ -14,7 +14,7 @@ except Exception as e:
     zxingcppErr = str(e)
 
 
-class _MissionQRcodeClass(Mission):
+class _MissionQRCodeClass(Mission):
 
     def createImage(self, text, format="QRCode", w=0, h=0, quiet_zone=-1, ec_level=-1):
         """
@@ -189,7 +189,7 @@ class _MissionQRcodeClass(Mission):
         return img
 
 
-MissionQRcode = _MissionQRcodeClass()
+MissionQRCode = _MissionQRCodeClass()
 
 
 """

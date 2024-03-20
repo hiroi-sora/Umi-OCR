@@ -12,7 +12,7 @@ import "../../Widgets/ImageViewer"
 TabPage {
     id: tabPage
     // 配置
-    configsComp: QRcodeConfigs {} 
+    configsComp: QRCodeConfigs {}
 
     // ========================= 【逻辑】 =========================
 
@@ -104,7 +104,7 @@ TabPage {
     // ========================= 【python调用qml】 =========================
 
     // 获取一个扫码的返回值
-    function onQRcodeGet(res, imgID="", imgPath="") {
+    function onQRCodeGet(res, imgID="", imgPath="") {
         // 添加到结果
         if(imgID) // 图片类型
             imageText.showImgID(imgID)
@@ -191,7 +191,7 @@ TabPage {
     // 主区域：双栏面板
     DoubleRowLayout {
         id: doubleRowLayout
-        saveKey: "QRcode_1"
+        saveKey: "QRCode_1"
         anchors.fill: parent
         initSplitterX: 0.5
 

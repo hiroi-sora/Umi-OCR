@@ -39,7 +39,7 @@ Item {
                 + "`pdf, xps, epub, mobi, fb2, cbz`",
         },
         {
-            key: "QRcode",
+            key: "QRCode",
             needController: true,
             title: qsTr("二维码"),
             intro: qsTr("# 二维码\n\n识别或生成二维码、条形码。\n\n支持协议：")

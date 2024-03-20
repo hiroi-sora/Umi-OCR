@@ -4,7 +4,7 @@
 
 from .page import Page  # 页基类
 from ..image_controller.image_provider import PixmapProvider  # 图片提供器
-from ..mission.mission_qrcode import MissionQRcode
+from ..mission.mission_qrcode import MissionQRCode
 
 import os
 import time
@@ -18,7 +18,7 @@ except Exception as e:
     zxingcppErr = str(e)
 
 
-class QRcode(Page):
+class QRCode(Page):
     # def __init__(self, *args):
     #     super().__init__(*args)
 
@@ -32,7 +32,7 @@ class QRcode(Page):
             "argd": configDict,
         }
         msnList = [{"pil": PixmapProvider.getPilImage(imgID), "imgID": imgID}]
-        MissionQRcode.addMissionList(msnInfo, msnList)
+        MissionQRCode.addMissionList(msnInfo, msnList)
 
     # 对一串path进行扫码
     def scanPaths(self, paths, configDict):
@@ -44,7 +44,7 @@ class QRcode(Page):
             "argd": configDict,
         }
         msnList = [{"path": x} for x in paths]
-        MissionQRcode.addMissionList(msnInfo, msnList)
+        MissionQRCode.addMissionList(msnInfo, msnList)
 
     # 生成二维码
     # format: "Aztec","Codabar","Code128","Code39","Code93","DataBar","DataBarExpanded","DataMatrix","EAN13","EAN8","ITF","LinearCodes","MatrixCodes","MaxiCode","MicroQRCode","PDF417","QRCode","UPCA","UPCE",
@@ -52,7 +52,7 @@ class QRcode(Page):
     # ec_level：纠错等级，-1 - 自动, 1- L-7% , 0 - M-15%, 3 - Q-25%, 2 - H-30%
     # 纠错仅用于Aztec、PDF417和QRCode
     def writeBarcode(self, text, format, w=0, h=0, quiet_zone=-1, ec_level=-1):
-        img = MissionQRcode.createImage(text, format, w, h, quiet_zone, ec_level)
+        img = MissionQRCode.createImage(text, format, w, h, quiet_zone, ec_level)
         if type(img) == str:
             return img
         imgID = PixmapProvider.setPilImage(img)
@@ -71,7 +71,7 @@ class QRcode(Page):
         # 通知qml更新UI
         imgID = msn.get("imgID", "")
         imgPath = msn.get("path", "")
-        self.callQmlInMain("onQRcodeGet", res, imgID, imgPath)  # 在主线程中调用qml
+        self.callQmlInMain("onQRCodeGet", res, imgID, imgPath)  # 在主线程中调用qml
 
     def _onEnd(self, msnInfo, msg):  # 任务队列完成或失败
         # msg: [Success] [Warning] [Error]
