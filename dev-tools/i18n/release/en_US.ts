@@ -154,12 +154,12 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="34"/>
         <source>文档处理</source>
-        <translation type="unfinished"></translation>
+        <translation>document processing</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="38"/>
         <source>内容提取模式</source>
-        <translation type="unfinished"></translation>
+        <translation>Content extraction mode</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="39"/>
