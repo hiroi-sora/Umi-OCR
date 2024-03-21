@@ -655,6 +655,7 @@ Item {
             // 内容
             Column {
                 id: panelContainer
+                visible: !fold
                 anchors.left: panelLeftBorder.right
                 anchors.right: parent.right
                 anchors.top: groupText.bottom
@@ -667,8 +668,8 @@ Item {
                 anchors.top: panelContainer.top
                 anchors.bottom: panelContainer.bottom
                 anchors.leftMargin: size_.smallSpacing*2
-                width: size_.smallSpacing*0.5
-                color: theme.coverColor1
+                width: size_.smallSpacing*0.7
+                color: theme.coverColor2
             }
         }
     }
