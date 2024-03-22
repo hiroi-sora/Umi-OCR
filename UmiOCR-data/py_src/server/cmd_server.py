@@ -228,7 +228,7 @@ class _Actuator:
         # 5. 处理结果列表，转文本
         text = ""
         for i, r in enumerate(resList):  # 遍历图片
-            if i > 0:
+            if text and not text.endswith("\n"):  # 如果上次结果结尾没有换行，则补换行
                 text += "\n"
             if r["code"] == 100:
                 for d in r["data"]:  # 遍历文本块
