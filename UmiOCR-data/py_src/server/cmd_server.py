@@ -4,8 +4,10 @@
 
 import time
 import argparse
+from threading import Condition
 from ..utils.call_func import CallFunc
 from ..utils.utils import findImages
+from ..event_bus.pubsub_service import PubSubService  # 发布/订阅管理器
 
 
 # 命令执行器
@@ -170,7 +172,7 @@ class _Actuator:
 
     # 快捷OCR：截图/粘贴/路径，并获取返回结果
     def quick_ocr(self, ss, clip, paras):
-        # 检查截图标签页，如果未创建则创建
+        # 1. 检查截图标签页，如果未创建则创建
         module, moduleName = self.getModuleFromName("ScreenshotOCR", "py")
         if module == None:
             tvm = self.qmlDict["TabViewManager"]
@@ -190,37 +192,52 @@ class _Actuator:
                     break
         if module == None:
             return '[Error] Unable to create template "ScreenshotOCR".'
-        # 清除最近一次结果
-        res = self.call(moduleName, "py", "clearRecentResult", True)
-        # 调用截图标签页的函数
+
+        # 2. 订阅事件，监听 <<ScreenshotOcrEnd>>
+        isOcrEnd = False
+        resList = []
+        condition = Condition()  # 线程同步器
+
+        def onOcrEnd(recentResult):
+            nonlocal isOcrEnd, resList
+            isOcrEnd = True
+            resList = recentResult
+            with condition:  # 释放线程阻塞
+                condition.notify()
+
+        PubSubService.subscribe("<<ScreenshotOcrEnd>>", onOcrEnd)
+
+        # 3. 调用截图标签页的函数
         if ss:  # 截图
             self.call(moduleName, "qml", "screenshot", False)
         elif clip:  # 粘贴
             self.call(moduleName, "qml", "paste", False)
-        else:  # 粘贴
+        else:  # 路径
             if not paras:
                 return "[Error] Paths is empty."
-            paths = findImages(paras, False)
+            paths = findImages(paras, True)  # 递归搜索
             if not paths:
                 return "[Error] No valid path."
-            self.call(moduleName, "qml", "ocrPaths", False, [paths[0]])
-        # 等待OCR完成
-        for i in range(100):
-            time.sleep(0.3)
-            res = self.call(moduleName, "py", "getRecentResult", True)
-            if res:
-                if res["code"] == 100:
-                    text = ""
-                    for r in res["data"]:
-                        text += r["text"] + "\n"
-                    return text
-                elif res["code"] == 101:
-                    return "[Message] No text in OCR result."
-                elif res["code"] == 102:
-                    return res["data"]
-                else:
-                    return f'[Error] Code: {res["code"]}\nMessage: {res["data"]}.'
-        return "[Error] OCR waiting timeout."
+            self.call(moduleName, "qml", "ocrPaths", False, paths)
+
+        # 4. 堵塞等待事件完成
+        with condition:
+            while not isOcrEnd:
+                condition.wait()
+
+        # 5. 处理结果列表，转文本
+        text = ""
+        for i, r in enumerate(resList):  # 遍历图片
+            if i > 0:
+                text += "\n"
+            if r["code"] == 100:
+                for d in r["data"]:  # 遍历文本块
+                    text += d["text"] + d["end"]
+            elif r["code"] != 100 and type(r["data"]) == str:
+                text += r["data"]
+        if not text:
+            text = "[Message] No text in OCR result."
+        return text
 
     # 创建二维码
     def qrcode_create(self, paras):

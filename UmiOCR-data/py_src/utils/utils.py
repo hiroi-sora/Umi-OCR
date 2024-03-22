@@ -62,7 +62,6 @@ def _findFiles(func, paths, isRecurrence):
         elif os.path.isdir(p):  # 是目录
             if isRecurrence:  # 需要递归
                 for root, dirs, files in os.walk(p):
-                    print("dirs: ", dirs)
                     for file in files:
                         if func(file):  # 收集子文件
                             filePaths.append(

@@ -5,6 +5,9 @@
 from .page import Page  # 页基类
 from ..image_controller.image_provider import PixmapProvider  # 图片提供器
 from ..mission.mission_ocr import MissionOCR  # 任务管理器
+from ..event_bus.pubsub_service import PubSubService  # 发布/订阅管理器
+
+# 只要触发了截图/粘贴/图片识图任务，并结束任务（无论是否成功），都发送 <<ScreenshotOcrEnd>> 事件。
 
 from PySide2.QtGui import QGuiApplication, QClipboard, QImage, QPixmap  # 截图 剪贴板
 import time
@@ -16,14 +19,15 @@ class ScreenshotOCR(Page):
     def __init__(self, *args):
         super().__init__(*args)
         self.msnDict = {}
-        self.recentResult = None  # 缓存最后一次识别结果
+        self.recentResult = []  # 缓存本轮任务的识别结果，提交给 <<ScreenshotOcrEnd>>
 
     # ========================= 【qml调用python】 =========================
 
     # 对一个imgID进行OCR
     def ocrImgID(self, imgID, configDict):
+        self.recentResult = []
         if not imgID or not configDict:  # 截图取消
-            self.recentResult = {"code": 101, "data": ""}
+            PubSubService.publish("<<ScreenshotOcrEnd>>", [])
             return
         pixmap = PixmapProvider.getPixmap(imgID)
         if not pixmap:
@@ -34,6 +38,7 @@ class ScreenshotOCR(Page):
 
     # 对一批路径进行OCR
     def ocrPaths(self, paths, configDict):
+        self.recentResult = []
         self._msnPaths(paths, configDict)
 
     # 停止全部任务
@@ -42,6 +47,7 @@ class ScreenshotOCR(Page):
         for i in self.msnDict:
             MissionOCR.stopMissionList(i)
         self.msnDict = {}
+        PubSubService.publish("<<ScreenshotOcrEnd>>", self.recentResult)
 
     # ========================= 【OCR 任务控制】 =========================
 
@@ -94,11 +100,12 @@ class ScreenshotOCR(Page):
         # 通知qml更新UI
         imgID = msn.get("imgID", "")
         imgPath = msn.get("path", "")
-        self.recentResult = res  # 记录最后一次结果
+        self.recentResult.append(res)  # 记录结果
         self.callQmlInMain("onOcrGet", res, imgID, imgPath)  # 在主线程中调用qml
 
     def _onEnd(self, msnInfo, msg):  # 任务队列完成或失败
         # msg: [Success] [Warning] [Error]
+        PubSubService.publish("<<ScreenshotOcrEnd>>", self.recentResult)
 
         def update():
             # 清除任务id
@@ -111,13 +118,3 @@ class ScreenshotOCR(Page):
             self.callQml("onOcrEnd", msg)
 
         self.callFunc(update)  # 在主线程中执行
-
-    # 清除最近一次结果
-    def clearRecentResult(self):
-        self.recentResult = None
-
-    # 获取最近一次结果
-    def getRecentResult(self):
-        res = self.recentResult
-        self.clearRecentResult()
-        return res
