@@ -220,10 +220,11 @@ class _Actuator:
                 return "[Error] No valid path."
             self.call(moduleName, "qml", "ocrPaths", False, paths)
 
-        # 4. 堵塞等待事件完成
+        # 4. 堵塞等待任务完成，注销事件订阅
         with condition:
             while not isOcrEnd:
                 condition.wait()
+        PubSubService.unsubscribe("<<ScreenshotOcrEnd>>", onOcrEnd)
 
         # 5. 处理结果列表，转文本
         text = ""
