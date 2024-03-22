@@ -222,6 +222,57 @@ class _Actuator:
                     return f'[Error] Code: {res["code"]}\nMessage: {res["data"]}.'
         return "[Error] OCR waiting timeout."
 
+    # 创建二维码
+    def qrcode_create(self, paras):
+        if len(paras) != 2:
+            return (
+                '[Error] Not enough arguments passed! Must pass "text" "save_image.jpg"'
+            )
+        text, path = paras[0], paras[1]
+        try:
+            from ..mission.mission_qrcode import MissionQRCode
+
+            pil = MissionQRCode.createImage(
+                text,
+                format="QRCode",  # 格式
+                w=128,  # 宽高
+                h=128,
+                quiet_zone=-1,  # 边缘宽度
+                ec_level=-1,  # 纠错等级
+            )
+            pil.save(path)
+            return f"Successfully saved to {path}"
+        except Exception as e:
+            return f"[Error] {str(e)}"
+
+    # 识别二维码
+    def qrcode_read(self, paras):
+        if len(paras) != 1:
+            return '[Error] Not enough arguments passed! Must pass "image_to_recognize.jpg"'
+        path = paras[0]
+        try:
+            from ..mission.mission_qrcode import MissionQRCode
+            from PIL import Image
+
+            pil = Image.open(path)
+            print("111111111111")
+            res = MissionQRCode.addMissionWait({}, [{"pil": pil}])
+            res = res[0]["result"]
+            print("22222222222")
+            if res["code"] == 100:
+                t = ""
+                for i, d in enumerate(res["data"]):
+                    if i != 0:
+                        t += "\n"
+                    t += d["text"]
+                return t
+            elif res["code"] == 101:
+                return "No code in image."
+            else:
+                return f"[Error] Code: {res['code']}\nMessage: {res['data']}"
+        except Exception as e:
+            return f"[Error] {str(e)}"
+
 
 CmdActuator = _Actuator()
 
@@ -257,6 +308,16 @@ class _Cmd:
             "--path",
             action="store_true",
             help="OCR the image in path and output the result.",
+        )
+        self._parser.add_argument(
+            "--qrcode_create",
+            action="store_true",
+            help='Create a QR code from the text. Use --qrcode_create "text" "save_image.jpg"',
+        )
+        self._parser.add_argument(
+            "--qrcode_read",
+            action="store_true",
+            help='Read the QR code. Use --qrcode_read "image_to_recognize.jpg"',
         )
         # 页面管理
         self._parser.add_argument(
@@ -329,6 +390,10 @@ class _Cmd:
             return CmdActuator.ctrlWindow(args.show, args.hide, args.quit)
         if args.screenshot or args.clipboard or args.path:  # 快捷识图
             return CmdActuator.quick_ocr(args.screenshot, args.clipboard, args.paras)
+        if args.qrcode_create:  # 写二维码
+            return CmdActuator.qrcode_create(args.paras)
+        if args.qrcode_read:  # 读二维码
+            return CmdActuator.qrcode_read(args.paras)
         # 页面管理
         if args.all_pages:
             return CmdActuator.getAllPages()
