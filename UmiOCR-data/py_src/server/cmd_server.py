@@ -370,12 +370,15 @@ class _Cmd:
         )
         # 输出
         self._parser.add_argument(
-            "-->",
-            help='The file path for CLI output (overwrite). If the command does not work, please enclose it in double quotes: "-->"',
+            "--output",
+            help="The path to the file where results will be saved. (overwrite)",
         )
         self._parser.add_argument(
-            "-->>", help='The file path for CLI output (append). Can also use "-->>"'
+            "--output_append",
+            help="The path to the file where results will be saved. (append)",
         )
+        self._parser.add_argument("-->", help='"-->" equivalent to "--output"')
+        self._parser.add_argument("-->>", help='"-->>" equivalent to "--output_append"')
         self._parser.add_argument("paras", nargs="*", help="parameters of [--func].")
 
     # 分析指令，返回指令对象或报错字符串

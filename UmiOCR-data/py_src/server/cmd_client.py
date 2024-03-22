@@ -86,7 +86,9 @@ def _sendCmd(argv):
     # 输出
     print(res)
     _output(argv, "-->", "w", res)
+    _output(argv, "--output", "w", res)
     _output(argv, "-->>", "a", res)
+    _output(argv, "--output_append", "a", res)
 
 
 # 启动新进程，并发送指令
