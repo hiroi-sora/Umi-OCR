@@ -13,6 +13,7 @@ from ..utils.call_func import CallFunc
 from .bottle import Bottle, ServerAdapter, request, HTTPResponse, response, BaseRequest
 from .cmd_server import CmdServer
 from . import ocr_server
+from . import qrcode_server
 
 BaseRequest.MEMFILE_MAX = 10485760  # 设置单次请求大小上限：10MB
 
@@ -61,6 +62,7 @@ def _argv():
 
 
 ocr_server.init(UmiWeb)
+qrcode_server.init(UmiWeb)
 
 # =============== 自定义服务器适配器，方便控制服务终止 ==============================
 QmlCallback = None  # qml回调函数
