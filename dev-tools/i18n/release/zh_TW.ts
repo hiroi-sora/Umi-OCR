@@ -16,19 +16,19 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="105"/>
         <source>请点击文件名填写密码</source>
-        <translation>請點擊檔案名稱填寫密碼</translation>
+        <translation>請點擊文件名填寫密碼</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="136"/>
         <source>文档已加密</source>
-        <translation>文件已加密</translation>
+        <translation>文檔已加密</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="136"/>
         <source>【%1】
 请点击文档名，设置密码</source>
         <translation>【%1】
-請點擊文件名稱，設定密碼</translation>
+請點擊文檔名，設置密碼</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="151"/>
@@ -1269,7 +1269,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/MarkdownView.qml" line="54"/>
         <source>打开网页</source>
-        <translation type="unfinished">開啟網頁</translation>
+        <translation>打開網頁</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/MarkdownView.qml" line="60"/>
@@ -1351,7 +1351,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/Navigation/Navigation.qml" line="23"/>
         <source>欢迎使用 Umi-OCR</source>
-        <translation type="unfinished">歡迎使用 Umi-OCR</translation>
+        <translation>歡迎使用 Umi-OCR</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/Navigation/Navigation.qml" line="26"/>
@@ -1513,9 +1513,9 @@
 识别或生成二维码、条形码。
 
 支持协议：</source>
-        <translation type="unfinished"># QR Code
+        <translation># QR Code（二維碼）
 
-辨識或產生QR Code、條碼。
+辨識或產生QR Code（二維碼）、條碼。
 
 支援的協定：</translation>
     </message>
