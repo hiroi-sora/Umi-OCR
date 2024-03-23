@@ -6,53 +6,54 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="92"/>
         <source>加密</source>
-        <translation type="unfinished"></translation>
+        <translation>暗号化</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="104"/>
         <source>%1个加密文档</source>
-        <translation type="unfinished"></translation>
+        <translation>%1個の暗号化文書</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="105"/>
         <source>请点击文件名填写密码</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイル名をクリックしてパスワードを入力してください</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="136"/>
         <source>文档已加密</source>
-        <translation type="unfinished"></translation>
+        <translation>文書は暗号化されていま</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="136"/>
         <source>【%1】
 请点击文档名，设置密码</source>
-        <translation type="unfinished"></translation>
+        <translation>【%1】
+文書名をクリックしてパスワードを設定してください</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="151"/>
         <source>失败</source>
-        <translation type="unfinished"></translation>
+        <translation>失敗</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="155"/>
         <source>排队</source>
-        <translation type="unfinished"></translation>
+        <translation>待機</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="177"/>
         <source>任务失败</source>
-        <translation type="unfinished"></translation>
+        <translation>タスクが失敗しました</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="182"/>
         <source>部分文档异常</source>
-        <translation type="unfinished"></translation>
+        <translation>一部の文書が異常です</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="211"/>
         <source>依然关闭</source>
-        <translation type="unfinished"></translation>
+        <translation>依然として閉じます</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="218"/>
@@ -74,7 +75,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="250"/>
         <source>停止任务</source>
-        <translation type="unfinished"></translation>
+        <translation>タスクを停止</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="254"/>
@@ -84,7 +85,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="303"/>
         <source>文档识别完成</source>
-        <translation type="unfinished"></translation>
+        <translation>文書の認識が完了しました</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="312"/>
@@ -95,7 +96,7 @@
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="410"/>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="419"/>
         <source>文档</source>
-        <translation type="unfinished"></translation>
+        <translation>文書</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="412"/>
@@ -105,12 +106,12 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="413"/>
         <source>范围</source>
-        <translation type="unfinished"></translation>
+        <translation>範囲</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="415"/>
         <source>选择文档</source>
-        <translation type="unfinished"></translation>
+        <translation>文書を選択</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="416"/>
@@ -120,12 +121,12 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="417"/>
         <source>拖入或选择文档</source>
-        <translation type="unfinished"></translation>
+        <translation>ドラッグアンドドロップまたは文書を選択</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="418"/>
         <source>请选择文档</source>
-        <translation type="unfinished"></translation>
+        <translation>文書を選択してください</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="447"/>
@@ -143,47 +144,47 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="18"/>
         <source>OCR文本后处理</source>
-        <translation type="unfinished"></translation>
+        <translation>OCRテキストの後処理</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="23"/>
         <source>忽略区域（点击文档名进入设置）</source>
-        <translation type="unfinished"></translation>
+        <translation>無視する領域（文書名をクリックして設定に入る）</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="34"/>
         <source>文档处理</source>
-        <translation type="unfinished"></translation>
+        <translation>文書処理</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="38"/>
         <source>内容提取模式</source>
-        <translation type="unfinished"></translation>
+        <translation>内容抽出モード</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="39"/>
         <source>若一页文档既存在图片又存在文本，如何进行处理</source>
-        <translation type="unfinished"></translation>
+        <translation>もし一頁の文書に画像とテキストが両方存在する場合,どのように処理すればよいか</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="41"/>
         <source>混合OCR/原文本</source>
-        <translation type="unfinished"></translation>
+        <translation>ミックスOCR/元のテキスト</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="42"/>
         <source>整页强制OCR</source>
-        <translation type="unfinished"></translation>
+        <translation>全ページOCRを強制</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="43"/>
         <source>仅OCR图片</source>
-        <translation type="unfinished"></translation>
+        <translation>画像のみOCR</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="44"/>
         <source>仅拷贝原有文本</source>
-        <translation type="unfinished"></translation>
+        <translation>元のテキストのみコピー</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="51"/>
@@ -198,7 +199,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="57"/>
         <source>文档原目录</source>
-        <translation type="unfinished"></translation>
+        <translation>文書の元のディレクトリ</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="58"/>
@@ -229,7 +230,12 @@
 举例：[OCR]_%name_%date
 生成：[OCR]_文档A_20230901_1213.txt
 添加占位符可以避免旧文件被新文件覆盖。</source>
-        <translation type="unfinished"></translation>
+        <translation>拡張子は入力する必要はありません。以下のプレースホルダーをサポートしています：
+%date 日付時刻
+%name 元の文書名
+例：[OCR]_%name_%date
+生成：[OCR]_文書A_20230901_1213.txt 
+プレースホルダーの追加により、古いファイルが新しいファイルに上書きされることを防ぐことができます。</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="76"/>
@@ -257,32 +263,32 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="89"/>
         <source>layered.pdf 双层可搜索文档</source>
-        <translation type="unfinished"></translation>
+        <translation>layered.pdf レイヤー化された検索可能な文書</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="90"/>
         <source>拷贝原文档内容，并叠加一层透明文字，可以搜索和复制</source>
-        <translation type="unfinished"></translation>
+        <translation>元の文書の内容をコピーし、透明な文字層を重ねる（検索とコピーが可能）</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="94"/>
         <source>txt 标准格式</source>
-        <translation>txt 標準形式</translation>
+        <translation>txt 標準フォーマット</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="95"/>
         <source>含识别文字和页数信息</source>
-        <translation type="unfinished"></translation>
+        <translation>認識されたテキストとページ情報を含む</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="99"/>
         <source>p.txt 纯文字格式</source>
-        <translation>p.txt 純粋なテキスト形式</translation>
+        <translation>p.txt 純粋なテキストフォーマット</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="100"/>
         <source>输出所有识别文字</source>
-        <translation type="unfinished"></translation>
+        <translation>すべての認識されたテキストを出力</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="104"/>
@@ -292,7 +298,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="105"/>
         <source>将页数信息和识别内容写入csv表格文件。可用Excel打开，另存为xlsx格式。</source>
-        <translation type="unfinished"></translation>
+        <translation>ページ情報と認識内容をCSV表に書き込むファイル。Excelで開き、xlsx形式に保存することができます。</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="109"/>
@@ -307,12 +313,12 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="116"/>
         <source>忽略空白页</source>
-        <translation type="unfinished"></translation>
+        <translation>空のページを無視</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="117"/>
         <source>若某一页没有文字或识别失败，也不会输出错误提示信息</source>
-        <translation type="unfinished"></translation>
+        <translation>ページにテキストがないか認識に失敗した場合、エラーメッセージは表示されません</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="121"/>
@@ -322,7 +328,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="122"/>
         <source>导入文件夹时，导入子文件夹中全部文档</source>
-        <translation type="unfinished"></translation>
+        <translation>フォルダをインポートする際、サブフォルダ内のすべての文書もインポートします</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="132"/>
@@ -367,12 +373,12 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="76"/>
         <source>排队</source>
-        <translation type="unfinished"></translation>
+        <translation>待機</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="174"/>
         <source>处理</source>
-        <translation type="unfinished"></translation>
+        <translation>処理</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="216"/>
@@ -835,13 +841,14 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="121"/>
         <source>图片预览默认显示叠加层</source>
-        <translation type="unfinished"></translation>
+        <translation>画像プレビューのデフォルトでオーバーレイを表示</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="123"/>
         <source>默认开启/关闭叠加层显示
 对所有图片预览组件生效</source>
-        <translation type="unfinished"></translation>
+        <translation>オーバーレイ表示のデフォルトでオン/オフ
+すべての画像プレビューコンポーネントに適用</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="129"/>
@@ -896,13 +903,14 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="161"/>
         <source>隐藏托盘图标</source>
-        <translation type="unfinished"></translation>
+        <translation>トレイアイコンを非表示</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="162"/>
         <source>若要弹出位于后台的软件窗口，请在文件管理器中重复启动软件。
 若要彻底退出软件，请从任务管理器中结束进程。</source>
-        <translation type="unfinished"></translation>
+        <translation>バックグラウンドで動作しているソフトウェアのウィンドウを表示するには、ファイルマネージャーでソフトウェアを再度起動してください。
+ソフトウェアを完全に終了するには、タスクマネージャーからプロセスを終了してください。</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="184"/>
@@ -1066,12 +1074,13 @@
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/GlobalConfigsPage/GlobalConfigsPage.qml" line="20"/>
         <source>1. 关于快捷键、OCR语言等选项，请在各个功能页中进行设置。
 2. 勾选左下角的“高级”按钮，可以显示更多进阶选项。</source>
-        <translation type="unfinished"></translation>
+        <translation>1.ショートカットキー、OCR言語などのオプションについては、各機能ページで設定してください。
+2.左下の「高度」ボタンをチェックすると、より高度なオプションが表示されます。</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/GlobalConfigsPage/GlobalConfigsPage.qml" line="21"/>
         <source>小贴士</source>
-        <translation type="unfinished"></translation>
+        <translation>コツ（ヒント）</translation>
     </message>
 </context>
 <context>
@@ -1102,17 +1111,17 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/IconButtonBar.qml" line="27"/>
         <source>用默认应用打开图片</source>
-        <translation type="unfinished"></translation>
+        <translation>デフォルトのアプリで画像を開く</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/IconButtonBar.qml" line="28"/>
         <source>图片大小：适应窗口</source>
-        <translation type="unfinished"></translation>
+        <translation>画像サイズ：ウィンドウに合わせる</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/IconButtonBar.qml" line="29"/>
         <source>图片大小：实际</source>
-        <translation type="unfinished"></translation>
+        <translation>画像サイズ：実際のサイズ</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/IconButtonBar.qml" line="31"/>
@@ -1180,12 +1189,12 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageScale.qml" line="74"/>
         <source>打开图片</source>
-        <translation type="unfinished"></translation>
+        <translation>画像を開く</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageScale.qml" line="76"/>
         <source>打开图片失败</source>
-        <translation type="unfinished"></translation>
+        <translation>画像の開きに失敗しました</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageScale.qml" line="87"/>
@@ -1260,12 +1269,12 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/MarkdownView.qml" line="54"/>
         <source>打开网页</source>
-        <translation type="unfinished">ウェブページを開く</translation>
+        <translation>ウェブページを開く</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/MarkdownView.qml" line="60"/>
         <source>链接</source>
-        <translation type="unfinished">URL</translation>
+        <translation>リンク（URL）</translation>
     </message>
 </context>
 <context>
@@ -1342,12 +1351,12 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/Navigation/Navigation.qml" line="23"/>
         <source>欢迎使用 Umi-OCR</source>
-        <translation type="unfinished">Umi-OCR をご利用いただきありがとうございます</translation>
+        <translation>Umi-OCR をご利用いただきありがとうございます</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/Navigation/Navigation.qml" line="26"/>
         <source>请选择功能页</source>
-        <translation type="unfinished"></translation>
+        <translation>機能ページを選択してください</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/Navigation/Navigation.qml" line="66"/>
@@ -1477,7 +1486,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="37"/>
         <source>批量文档</source>
-        <translation type="unfinished">バルクドキュメント認識</translation>
+        <translation>バルクドキュメント認識</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="38"/>
@@ -1518,14 +1527,16 @@ QR コードやバーコードを識別、生成する。
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="55"/>
         <source>关于</source>
-        <translation type="unfinished"></translation>
+        <translation>について</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="56"/>
         <source># 关于
 
 查看软件信息、检查版本更新。</source>
-        <translation type="unfinished"></translation>
+        <translation>#關於
+
+ソフトウェア情報を表示し、バージョン更新を確認します。</translation>
     </message>
 </context>
 <context>
@@ -1546,47 +1557,47 @@ QR コードやバーコードを識別、生成する。
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="71"/>
         <source>加密</source>
-        <translation type="unfinished"></translation>
+        <translation>暗号化</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="136"/>
         <source>打开文档失败</source>
-        <translation type="unfinished"></translation>
+        <translation>文書の開きに失敗しました</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="138"/>
         <source>请填写正确的密码</source>
-        <translation type="unfinished"></translation>
+        <translation>正しいパスワードを入力してください</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="147"/>
         <source>密码正确</source>
-        <translation type="unfinished"></translation>
+        <translation>パスワードが正しい</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="156"/>
         <source>文档预览异常</source>
-        <translation type="unfinished"></translation>
+        <translation>文書のプレビューが異常です</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="197"/>
         <source>密码：</source>
-        <translation type="unfinished"></translation>
+        <translation>パスワード：</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="237"/>
         <source>预览页面</source>
-        <translation type="unfinished"></translation>
+        <translation>プレビューページ</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="255"/>
         <source>预览PDF时，是否预览OCR结果</source>
-        <translation type="unfinished"></translation>
+        <translation>PDFをプレビューする際、OCR結果をプレビューしますか</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="299"/>
         <source>OCR范围</source>
-        <translation type="unfinished"></translation>
+        <translation>OCRの範囲</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="346"/>
@@ -1606,7 +1617,7 @@ QR コードやバーコードを識別、生成する。
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="367"/>
         <source>右键拖拽，绘制矩形区域。包含在区域内的文字框将被忽略。可用于排除水印、页眉页脚。对所有文档生效。</source>
-        <translation type="unfinished"></translation>
+        <translation>右クリックしてドラッグして、矩形領域を描画。領域内のテキストボックスは無視されます。水印やヘッダー・フッターを除外するのに使用できます。すべての文書に適用されます。</translation>
     </message>
 </context>
 <context>
@@ -2006,17 +2017,17 @@ QR コードやバーコードを識別、生成する。
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ImageManager/ScreenshotManager.qml" line="55"/>
         <source>尚未记录截图区域</source>
-        <translation type="unfinished"></translation>
+        <translation>まだスクショ区域が記録されていません</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ImageManager/ScreenshotManager.qml" line="75"/>
         <source>重复截图失败</source>
-        <translation type="unfinished"></translation>
+        <translation>スクショの再撮影に失敗しました</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ImageManager/ScreenshotManager.qml" line="75"/>
         <source>未找到匹配的屏幕</source>
-        <translation type="unfinished"></translation>
+        <translation>一致するスクリーンが見つかりませんでした</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ImageManager/ScreenshotManager.qml" line="100"/>
@@ -2163,12 +2174,12 @@ QR コードやバーコードを識別、生成する。
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOcrConfigs.qml" line="40"/>
         <source>重复截图</source>
-        <translation type="unfinished"></translation>
+        <translation>スクショの再撮影</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOcrConfigs.qml" line="41"/>
         <source>重新截取上一次截图的范围</source>
-        <translation type="unfinished"></translation>
+        <translation>前回のスクショの範囲を再截取します</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOcrConfigs.qml" line="49"/>
@@ -2275,47 +2286,47 @@ QR コードやバーコードを識別、生成する。
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="48"/>
         <source>排版解析方案</source>
-        <translation type="unfinished"></translation>
+        <translation>レイアウト解析ソリューション</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="49"/>
         <source>按什么方式，解析和排序图片中的文字块</source>
-        <translation type="unfinished"></translation>
+        <translation>どのように画像内のテキストブロックを解析および並べ替えますか</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="52"/>
         <source>多栏-按自然段换行</source>
-        <translation type="unfinished"></translation>
+        <translation>複数カラム-自然な段落で改行</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="53"/>
         <source>多栏-总是换行</source>
-        <translation type="unfinished"></translation>
+        <translation>複数カラム-常に改行</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="54"/>
         <source>多栏-无换行</source>
-        <translation type="unfinished"></translation>
+        <translation>複数カラム-改行なし</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="55"/>
         <source>单栏-按自然段换行</source>
-        <translation type="unfinished"></translation>
+        <translation>単一カラム-自然な段落で改行</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="56"/>
         <source>单栏-总是换行</source>
-        <translation type="unfinished"></translation>
+        <translation>単一カラム-常に改行</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="57"/>
         <source>单栏-无换行</source>
-        <translation type="unfinished"></translation>
+        <translation>単一カラム-改行なし</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="58"/>
         <source>单栏-保留缩进</source>
-        <translation type="unfinished"></translation>
+        <translation>単一カラム-インデントを保持</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="59"/>
