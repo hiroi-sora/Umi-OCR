@@ -196,18 +196,12 @@ ModalLayer {
                         anchors.verticalCenter: parent.verticalCenter
                         text: qsTr("密码：")
                     }
-                    Rectangle {
+                    TextField_ {
                         width: size_.line * 6
                         anchors.top: parent.top
                         anchors.bottom: parent.bottom
-                        color: theme.bgColor
-                        TextInput_ {
-                            clip: true
-                            anchors.fill: parent
-                            bgColor: "#00000000"
-                            text: password
-                            onTextChanged: password = text
-                        }
+                        text: password
+                        onTextChanged: password = text
                     }
                     IconButton {
                         anchors.top: parent.top
@@ -257,7 +251,7 @@ ModalLayer {
                     }
                     Row {
                         spacing: size_.spacing
-                        height: size_.line + size_.spacing * 2
+                        height: size_.line + size_.smallSpacing * 2
                         Button_ {
                             anchors.top: parent.top
                             anchors.bottom: parent.bottom
@@ -270,18 +264,13 @@ ModalLayer {
                             text_: ">"
                             onClicked: changePage(0, 1)
                         }
-                        Rectangle {
+                        TextField_ {
                             width: size_.line * 3
                             anchors.top: parent.top
                             anchors.bottom: parent.bottom
-                            color: theme.bgColor
-                            TextInput_ {
-                                clip: true
-                                anchors.fill: parent
-                                bgColor: "#00000000"
-                                text: previewPage
-                                onTextChanged: changePage(text)
-                            }
+                            validator: IntValidator{bottom: 1; top: pageCount;}
+                            text: previewPage
+                            onTextChanged: changePage(text)
                         }
                         Text_ {
                             anchors.verticalCenter: parent.verticalCenter
@@ -299,35 +288,35 @@ ModalLayer {
                         text: qsTr("OCR范围")
                     }
                     Row {
-                        height: size_.line + size_.spacing * 2
-                        Rectangle {
+                        height: size_.line + size_.smallSpacing * 2
+                        spacing: size_.spacing
+                        Text_ {
+                            font.pixelSize: size_.smallText
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: qsTr("页数")
+                        }
+                        TextField_ {
                             width: size_.line * 3
                             anchors.top: parent.top
                             anchors.bottom: parent.bottom
-                            color: theme.bgColor
-                            TextInput_ {
-                                clip: true
-                                anchors.fill: parent
-                                bgColor: "#00000000"
-                                text: rangeStart
-                                onTextChanged: rangeStart = text
+                            validator: IntValidator{bottom: 1; top: pageCount;}
+                            text: rangeStart
+                            onTextChanged: {
+                                if(text !== "") rangeStart = text
                             }
                         }
                         Text_ {
                             anchors.verticalCenter: parent.verticalCenter
-                            text: " - "
+                            text: "-"
                         }
-                        Rectangle {
+                        TextField_ {
                             width: size_.line * 3
                             anchors.top: parent.top
                             anchors.bottom: parent.bottom
-                            color: theme.bgColor
-                            TextInput_ {
-                                clip: true
-                                anchors.fill: parent
-                                bgColor: "#00000000"
-                                text: rangeEnd
-                                onTextChanged: rangeEnd = text
+                            validator: IntValidator{bottom: 1; top: pageCount;}
+                            text: rangeEnd
+                            onTextChanged: {
+                                if(text !== "") rangeEnd = text
                             }
                         }
                     }
@@ -345,6 +334,10 @@ ModalLayer {
                             anchors.verticalCenter: parent.verticalCenter
                             text: qsTr("忽略区域")
                         }
+                    }
+                    Row {
+                        spacing: size_.spacing
+                        height: size_.line
                         Button_ {
                             anchors.verticalCenter: parent.verticalCenter
                             height: size_.line
