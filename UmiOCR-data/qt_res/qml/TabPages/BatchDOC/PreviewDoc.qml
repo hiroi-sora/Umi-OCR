@@ -61,6 +61,11 @@ ModalLayer {
     // 返回上层，更新信息
     onVisibleChanged: {
         if(visible) return
+        console.log("检查", rangeStart, rangeEnd)
+        // 负数转倒数
+        if(rangeStart < 0) rangeStart += pageCount + 1
+        if(rangeEnd < 0) rangeEnd += pageCount + 1
+        // 范围检查
         if(rangeStart < 1) rangeStart = 1
         if(rangeStart > pageCount) rangeStart = pageCount
         if(rangeEnd < rangeStart) rangeEnd = rangeStart
@@ -225,7 +230,7 @@ ModalLayer {
                         color: theme.coverColor4
                     }
                     Row {
-                        spacing: size_.spacing
+                        spacing: size_.line
                         height: size_.line
                         Text_ {
                             text: qsTr("预览页面")
@@ -236,6 +241,7 @@ ModalLayer {
                             height: size_.line
                             enabledAnime: true
                             checked: previewOCR
+                            textColor_: theme.subTextColor
                             onCheckedChanged: {
                                 if(!previewOCR&&checked) {
                                     previewOCR = true
@@ -285,7 +291,7 @@ ModalLayer {
                         color: theme.coverColor4
                     }
                     Text_ {
-                        text: qsTr("OCR范围")
+                        text: qsTr("OCR页面")
                     }
                     Row {
                         height: size_.line + size_.smallSpacing * 2
@@ -293,16 +299,16 @@ ModalLayer {
                         Text_ {
                             font.pixelSize: size_.smallText
                             anchors.verticalCenter: parent.verticalCenter
-                            text: qsTr("页数")
+                            text: qsTr("范围")
                         }
                         TextField_ {
                             width: size_.line * 3
                             anchors.top: parent.top
                             anchors.bottom: parent.bottom
-                            validator: IntValidator{bottom: 1; top: pageCount;}
+                            validator: IntValidator{bottom: -pageCount; top: pageCount;}
                             text: rangeStart
                             onTextChanged: {
-                                if(text !== "") rangeStart = text
+                                if(text !== "" && text !== "-") rangeStart = text
                             }
                         }
                         Text_ {
@@ -313,10 +319,10 @@ ModalLayer {
                             width: size_.line * 3
                             anchors.top: parent.top
                             anchors.bottom: parent.bottom
-                            validator: IntValidator{bottom: 1; top: pageCount;}
+                            validator: IntValidator{bottom: -pageCount; top: pageCount;}
                             text: rangeEnd
                             onTextChanged: {
-                                if(text !== "") rangeEnd = text
+                                if(text !== "" && text !== "-") rangeEnd = text
                             }
                         }
                     }
