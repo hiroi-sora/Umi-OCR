@@ -454,7 +454,6 @@ TabPage {
         id: previewDoc
         anchors.fill: parent
         configsComp: tabPage.configsComp
-        ignoreAreaKey: "tbpu.ignoreArea"
         updateInfo: (path, info) => {
             let infoA = filesTableView.get(path)
             Object.assign(infoA, info)

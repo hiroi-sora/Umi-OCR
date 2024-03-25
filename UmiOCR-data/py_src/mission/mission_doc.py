@@ -78,11 +78,22 @@ class _MissionDocClass(Mission):
         # =============== tbpu文本块后处理 msnInfo["tbpu"] ===============
         argd = msnInfo["argd"]  # 参数
         msnInfo["tbpu"] = []
+        msnInfo["ignoreArea"] = {}
         # 忽略区域
         if "tbpu.ignoreArea" in argd:
             iArea = argd["tbpu.ignoreArea"]
             if type(iArea) == list and len(iArea) > 0:
-                msnInfo["tbpu"].append(IgnoreArea(iArea))
+                msnInfo["ignoreArea"]["obj"] = IgnoreArea(iArea)
+                # 范围，负数转为倒数第x页
+                igStart = argd.get("tbpu.ignoreRangeStart", 1)
+                igEnd = argd.get("tbpu.ignoreRangeEnd", doc.page_count)
+                if igStart < 0:
+                    igStart += doc.page_count + 1
+                if igEnd < 0:
+                    igEnd += doc.page_count + 1
+                msnInfo["ignoreArea"]["start"] = igStart - 1  # -1是将起始1页转为起始0页
+                msnInfo["ignoreArea"]["end"] = igEnd - 1
+                print(f"忽略区域范围： {igStart} ~ {igEnd}")
         # 获取排版解析器对象
         if "tbpu.parser" in argd:
             msnInfo["tbpu"].append(getParser(argd["tbpu.parser"]))
@@ -187,6 +198,14 @@ class _MissionDocClass(Mission):
                     errMsg += f'[Error] OCR code:{res["code"]} msg:{res["data"]}\n'
 
         # =============== tbpu文本块后处理 ===============
+        # 忽略区域
+        if msnInfo["ignoreArea"]:
+            # 检查范围
+            igStart = msnInfo["ignoreArea"]["start"]
+            igEnd = msnInfo["ignoreArea"]["end"]
+            if pno >= igStart and pno <= igEnd:
+                msnInfo["ignoreArea"]["obj"].run(tbs)
+        # 其他tbpu
         if msnInfo["tbpu"]:
             for tbpu in msnInfo["tbpu"]:
                 tbs = tbpu.run(tbs)

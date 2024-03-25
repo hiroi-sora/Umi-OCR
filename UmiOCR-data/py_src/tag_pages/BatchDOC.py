@@ -38,7 +38,11 @@ class BatchDOC(Page):
             return "[Error] 有任务进行中，不允许提交新任务。"
         resList = []
         # 组装参数字典。tbpu分两部分，在MissionDOC中执行ignoreArea，本文件执行parser
-        docArgd = {"tbpu.ignoreArea": argd["tbpu.ignoreArea"]}
+        docArgd = {
+            "tbpu.ignoreArea": argd["tbpu.ignoreArea"],
+            "tbpu.ignoreRangeStart": argd["tbpu.ignoreRangeStart"],
+            "tbpu.ignoreRangeEnd": argd["tbpu.ignoreRangeEnd"],
+        }
         for k in argd:
             if k.startswith("ocr.") or k.startswith("doc."):
                 docArgd[k] = argd[k]

@@ -13,7 +13,6 @@ ModalLayer {
     id: pRoot
     property var updateInfo // 更新信息函数
     property var configsComp: undefined // 设置组件
-    property string ignoreAreaKey: "" // 设置组件中忽略区域的key
 
     property string previewPath: ""
     property string password: ""
@@ -23,6 +22,8 @@ ModalLayer {
     property int pageCount: -1
     property int rangeStart: -1
     property int rangeEnd: -1
+    property int ignoreRangeStart: 1
+    property int ignoreRangeEnd: -1
     property bool previewOCR: false // 是否预览OCR
     property bool ocrRunning: false // 是否预览OCR正在执行
 
@@ -40,7 +41,7 @@ ModalLayer {
         isEncrypted = info.is_encrypted
         isAuthenticate = info.is_authenticate
         // 读取忽略区域设置
-        let initArea = configsComp.getValue(ignoreAreaKey)
+        let initArea = configsComp.getValue("tbpu.ignoreArea")
         if(initArea && initArea.length>0) {
             // 读取设置，反格式化
             let ig1 = []
@@ -55,13 +56,14 @@ ModalLayer {
             }
             imgViewer.ig1Boxes = ig1
         }
+        ignoreRangeStart = configsComp.getValue("tbpu.ignoreRangeStart")
+        ignoreRangeEnd = configsComp.getValue("tbpu.ignoreRangeEnd")
         toPreview()
     }
 
     // 返回上层，更新信息
     onVisibleChanged: {
         if(visible) return
-        console.log("检查", rangeStart, rangeEnd)
         // 负数转倒数
         if(rangeStart < 0) rangeStart += pageCount + 1
         if(rangeEnd < 0) rangeEnd += pageCount + 1
@@ -92,11 +94,13 @@ ModalLayer {
                 const h = Math.round(b.height)
                 ig1.push([[x, y], [x+w, y], [x+w, y+h], [x, y+h]])
             }
-            configsComp.setValue(ignoreAreaKey, ig1)
+            configsComp.setValue("tbpu.ignoreArea", ig1)
         }
         else {
-            configsComp.setValue(ignoreAreaKey, undefined)
+            configsComp.setValue("tbpu.ignoreArea", undefined)
         }
+        configsComp.setValue("tbpu.ignoreRangeStart", ignoreRangeStart)
+        configsComp.setValue("tbpu.ignoreRangeEnd", ignoreRangeEnd)
         imgViewer.clear()
         prevConn.clear() // 清除文档缓存
         previewPath = ""
@@ -170,206 +174,242 @@ ModalLayer {
         }
     }
 
+    property string ignoreTips: qsTr("忽略区域说明：\n右键拖拽，绘制矩形区域，包含在区域内的文字框将被忽略。可用于排除水印、页眉页脚。\n范围允许填写负数，表示倒数第x页。如-1表示最后一页，-2表示倒数第2页。\n忽略区域的设置对所有文档生效。")
+
     contentItem: DoubleRowLayout {
         anchors.fill: parent
         initSplitterX: size_.line * 13
         // 左：控制面板
         leftItem: Panel {
             anchors.fill: parent
-            Column {
+
+            ScrollView {
                 anchors.fill: parent
-                anchors.margins: size_.spacing
-                spacing: size_.smallSpacing
-                clip: true
-                // ===== 文件名 =====
-                Text_ {
-                    text: previewPath
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    wrapMode: TextEdit.WrapAnywhere // 任意换行
-                    maximumLineCount: 4 // 限制行数
-                    color: theme.subTextColor
-                    font.pixelSize: size_.smallText
-                }
-                // ===== 密码 =====
-                Row {
-                    visible: isEncrypted && !isAuthenticate // 已加密，未填密码，才显示
-                    spacing: size_.spacing
-                    height: size_.line + size_.spacing * 2
-                    Text_ {
-                        color: theme.noColor
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: qsTr("密码：")
-                    }
-                    TextField_ {
-                        width: size_.line * 6
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
-                        text: password
-                        onTextChanged: password = text
-                    }
-                    IconButton {
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
-                        width: height
-                        icon_: "yes"
-                        onClicked: toPreview()
-                    }
-                }
-                // ===== 控制项 =====
+                contentWidth: width // 内容宽度
+                clip: true // 溢出隐藏
+
                 Column {
-                    visible: !isEncrypted || isAuthenticate
-                    spacing: size_.smallSpacing
                     anchors.left: parent.left
                     anchors.right: parent.right
-                    // ===== 页数 =====
-                    Rectangle {
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        height: 1
-                        color: theme.coverColor4
-                    }
-                    Row {
-                        spacing: size_.line
-                        height: size_.line
-                        Text_ {
-                            text: qsTr("预览页面")
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
-                        CheckButton {
-                            anchors.verticalCenter: parent.verticalCenter
-                            height: size_.line
-                            enabledAnime: true
-                            checked: previewOCR
-                            textColor_: theme.subTextColor
-                            onCheckedChanged: {
-                                if(!previewOCR&&checked) {
-                                    previewOCR = true
-                                    toPreview()
-                                }
-                                else {
-                                    previewOCR = ocrRunning = false
-                                }
-                            }
-                            text_: "OCR"
-                            toolTip: qsTr("预览PDF时，是否预览OCR结果")
-                        }
-                    }
-                    Row {
-                        spacing: size_.spacing
-                        height: size_.line + size_.smallSpacing * 2
-                        Button_ {
-                            anchors.top: parent.top
-                            anchors.bottom: parent.bottom
-                            text_: "<"
-                            onClicked: changePage(0, -1)
-                        }
-                        Button_ {
-                            anchors.top: parent.top
-                            anchors.bottom: parent.bottom
-                            text_: ">"
-                            onClicked: changePage(0, 1)
-                        }
-                        TextField_ {
-                            width: size_.line * 3
-                            anchors.top: parent.top
-                            anchors.bottom: parent.bottom
-                            validator: IntValidator{bottom: 1; top: pageCount;}
-                            text: previewPage
-                            onTextChanged: changePage(text)
-                        }
-                        Text_ {
-                            anchors.verticalCenter: parent.verticalCenter
-                            text: "/ "+pageCount
-                        }
-                    }
-                    // ===== OCR范围 =====
-                    Rectangle {
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        height: 1
-                        color: theme.coverColor4
-                    }
+                    anchors.margins: size_.spacing
+                    spacing: size_.smallSpacing
+                    // ===== 文件名 =====
                     Text_ {
-                        text: qsTr("OCR页面")
-                    }
-                    Row {
-                        height: size_.line + size_.smallSpacing * 2
-                        spacing: size_.spacing
-                        Text_ {
-                            font.pixelSize: size_.smallText
-                            anchors.verticalCenter: parent.verticalCenter
-                            text: qsTr("范围")
-                        }
-                        TextField_ {
-                            width: size_.line * 3
-                            anchors.top: parent.top
-                            anchors.bottom: parent.bottom
-                            validator: IntValidator{bottom: -pageCount; top: pageCount;}
-                            text: rangeStart
-                            onTextChanged: {
-                                if(text !== "" && text !== "-") rangeStart = text
-                            }
-                        }
-                        Text_ {
-                            anchors.verticalCenter: parent.verticalCenter
-                            text: "-"
-                        }
-                        TextField_ {
-                            width: size_.line * 3
-                            anchors.top: parent.top
-                            anchors.bottom: parent.bottom
-                            validator: IntValidator{bottom: -pageCount; top: pageCount;}
-                            text: rangeEnd
-                            onTextChanged: {
-                                if(text !== "" && text !== "-") rangeEnd = text
-                            }
-                        }
-                    }
-                    // ===== 忽略区域 =====
-                    Rectangle {
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        height: 1
-                        color: theme.coverColor4
-                    }
-                    Row {
-                        spacing: size_.spacing
-                        height: size_.line
-                        Text_ {
-                            anchors.verticalCenter: parent.verticalCenter
-                            text: qsTr("忽略区域")
-                        }
-                    }
-                    Row {
-                        spacing: size_.spacing
-                        height: size_.line
-                        Button_ {
-                            anchors.verticalCenter: parent.verticalCenter
-                            height: size_.line
-                            bgColor_: theme.coverColor1
-                            text_: qsTr("撤销")
-                            onClicked: imgViewer.revokeIg()
-                            textSize: size_.smallText
-                        }
-                        Button_ {
-                            anchors.verticalCenter: parent.verticalCenter
-                            height: size_.line
-                            bgColor_: theme.coverColor1
-                            textColor_: theme.noColor
-                            text_: qsTr("清空")
-                            onClicked: imgViewer.clearIg()
-                            textSize: size_.smallText
-                        }
-                    }
-                    Text_ {
-                        text: qsTr("右键拖拽，绘制矩形区域。包含在区域内的文字框将被忽略。可用于排除水印、页眉页脚。对所有文档生效。")
-                        color: theme.subTextColor
-                        font.pixelSize: size_.smallText
+                        text: previewPath
                         anchors.left: parent.left
                         anchors.right: parent.right
                         wrapMode: TextEdit.WrapAnywhere // 任意换行
                         maximumLineCount: 4 // 限制行数
+                        color: theme.subTextColor
+                        font.pixelSize: size_.smallText
+                    }
+                    // ===== 密码 =====
+                    Row {
+                        visible: isEncrypted && !isAuthenticate // 已加密，未填密码，才显示
+                        spacing: size_.spacing
+                        height: size_.line + size_.spacing * 2
+                        Text_ {
+                            color: theme.noColor
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: qsTr("密码：")
+                        }
+                        TextField_ {
+                            width: size_.line * 6
+                            anchors.top: parent.top
+                            anchors.bottom: parent.bottom
+                            text: password
+                            onTextChanged: password = text
+                        }
+                        IconButton {
+                            anchors.top: parent.top
+                            anchors.bottom: parent.bottom
+                            width: height
+                            icon_: "yes"
+                            onClicked: toPreview()
+                        }
+                    }
+                    // ===== 控制项 =====
+                    Column {
+                        visible: !isEncrypted || isAuthenticate
+                        spacing: size_.smallSpacing
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        // ===== 页数 =====
+                        Rectangle {
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            height: 1
+                            color: theme.coverColor4
+                        }
+                        Row {
+                            spacing: size_.line
+                            height: size_.line
+                            Text_ {
+                                text: qsTr("预览页面")
+                                anchors.verticalCenter: parent.verticalCenter
+                            }
+                            CheckButton {
+                                anchors.verticalCenter: parent.verticalCenter
+                                height: size_.line
+                                enabledAnime: true
+                                checked: previewOCR
+                                textColor_: theme.subTextColor
+                                onCheckedChanged: {
+                                    if(!previewOCR&&checked) {
+                                        previewOCR = true
+                                        toPreview()
+                                    }
+                                    else {
+                                        previewOCR = ocrRunning = false
+                                    }
+                                }
+                                text_: "OCR"
+                                toolTip: qsTr("预览PDF时，是否预览OCR结果")
+                            }
+                        }
+                        Row {
+                            spacing: size_.spacing
+                            height: size_.line + size_.smallSpacing * 2
+                            Button_ {
+                                anchors.top: parent.top
+                                anchors.bottom: parent.bottom
+                                text_: "<"
+                                onClicked: changePage(0, -1)
+                            }
+                            Button_ {
+                                anchors.top: parent.top
+                                anchors.bottom: parent.bottom
+                                text_: ">"
+                                onClicked: changePage(0, 1)
+                            }
+                            TextField_ {
+                                width: size_.line * 3
+                                anchors.top: parent.top
+                                anchors.bottom: parent.bottom
+                                validator: IntValidator{bottom: 1; top: pageCount;}
+                                text: previewPage
+                                onTextChanged: changePage(text)
+                            }
+                            Text_ {
+                                anchors.verticalCenter: parent.verticalCenter
+                                text: "/ "+pageCount
+                            }
+                        }
+                        // ===== OCR范围 =====
+                        Rectangle {
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            height: 1
+                            color: theme.coverColor4
+                        }
+                        Text_ {
+                            text: qsTr("OCR页面")
+                        }
+                        Row {
+                            height: size_.line + size_.smallSpacing * 2
+                            spacing: size_.spacing
+                            Text_ {
+                                font.pixelSize: size_.smallText
+                                anchors.verticalCenter: parent.verticalCenter
+                                text: qsTr("范围")
+                            }
+                            TextField_ {
+                                width: size_.line * 3
+                                anchors.top: parent.top
+                                anchors.bottom: parent.bottom
+                                validator: IntValidator{bottom: -pageCount; top: pageCount;}
+                                text: rangeStart
+                                onTextChanged: {
+                                    if(text !== "" && text !== "-") rangeStart = text
+                                }
+                            }
+                            Text_ {
+                                anchors.verticalCenter: parent.verticalCenter
+                                text: "-"
+                            }
+                            TextField_ {
+                                width: size_.line * 3
+                                anchors.top: parent.top
+                                anchors.bottom: parent.bottom
+                                validator: IntValidator{bottom: -pageCount; top: pageCount;}
+                                text: rangeEnd
+                                onTextChanged: {
+                                    if(text !== "" && text !== "-") rangeEnd = text
+                                }
+                            }
+                        }
+                        // ===== 忽略区域 =====
+                        Rectangle {
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            height: 1
+                            color: theme.coverColor4
+                        }
+                        Text_ {
+                            text: qsTr("忽略区域（全局）")
+                        }
+                        Row {
+                            height: size_.line + size_.smallSpacing * 2
+                            spacing: size_.spacing
+                            Text_ {
+                                font.pixelSize: size_.smallText
+                                anchors.verticalCenter: parent.verticalCenter
+                                text: qsTr("范围")
+                            }
+                            TextField_ {
+                                width: size_.line * 3
+                                anchors.top: parent.top
+                                anchors.bottom: parent.bottom
+                                validator: IntValidator {}
+                                text: ignoreRangeStart
+                                onTextChanged: {
+                                    if(text !== "" && text !== "-") ignoreRangeStart = text
+                                }
+                            }
+                            Text_ {
+                                anchors.verticalCenter: parent.verticalCenter
+                                text: "-"
+                            }
+                            TextField_ {
+                                width: size_.line * 3
+                                anchors.top: parent.top
+                                anchors.bottom: parent.bottom
+                                validator: IntValidator {}
+                                text: ignoreRangeEnd
+                                onTextChanged: {
+                                    if(text !== "" && text !== "-") ignoreRangeEnd = text
+                                }
+                            }
+                        }
+                        Row {
+                            spacing: size_.spacing
+                            height: size_.smallLine + size_.smallSpacing * 2
+                            Button_ {
+                                anchors.verticalCenter: parent.verticalCenter
+                                height: size_.smallLine + size_.smallSpacing
+                                bgColor_: theme.coverColor1
+                                text_: qsTr("撤销")
+                                onClicked: imgViewer.revokeIg()
+                                textSize: size_.smallText
+                            }
+                            Button_ {
+                                anchors.verticalCenter: parent.verticalCenter
+                                height: size_.smallLine + size_.smallSpacing
+                                bgColor_: theme.coverColor1
+                                textColor_: theme.noColor
+                                text_: qsTr("清空")
+                                onClicked: imgViewer.clearIg()
+                                textSize: size_.smallText
+                            }
+                        }
+                        Text_ {
+                            text: ignoreTips
+                            color: theme.subTextColor
+                            font.pixelSize: size_.smallText
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            wrapMode: TextEdit.WrapAnywhere // 任意换行
+                        }
                     }
                 }
             }

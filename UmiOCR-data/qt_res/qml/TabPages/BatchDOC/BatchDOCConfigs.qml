@@ -27,6 +27,14 @@ Configs {
                 "type": "var",
                 "save": false,
             },
+            "ignoreRangeStart": { // 忽略区域范围
+                "default": 1,
+                "save": false,
+            },
+            "ignoreRangeEnd": {
+                "default": -1,
+                "save": false,
+            },
         },
 
         // 文档参数
