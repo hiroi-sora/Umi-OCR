@@ -43,6 +43,8 @@ UmiAbout.fullname
 """
 
 import os
+import psutil
+import platform
 from json import load
 
 UmiAbout = None
@@ -68,7 +70,7 @@ def init(app_path=""):
     u["version"]["string"] = v
     # 全名
     u["fullname"] = f'{u["name"]} v{v}'
-    # 入口信息
+    # 程序运行信息
     if app_path:
         app_path = os.path.abspath(app_path)
         app_home = os.path.dirname(app_path)
@@ -76,8 +78,16 @@ def init(app_path=""):
         app_path = ""
         app_home = ""
     u["app"] = {
+        # 程序入口
         "path": app_path,
         "home": app_home,
+        # 运行平台
+        "platform": platform.platform(),
+        "python": platform.python_version(),
+        # 硬件信息，用于debug
+        "cpu": f"{platform.processor()} | {psutil.cpu_count(logical=False)}C{psutil.cpu_count(logical=True)}T",
+        "ram": f"{(psutil.virtual_memory().total / 1073741824):.1f} GB",
     }
+
     UmiAbout = u
     return True

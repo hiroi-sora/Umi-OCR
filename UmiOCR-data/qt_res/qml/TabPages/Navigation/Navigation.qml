@@ -22,37 +22,7 @@ TabPage {
     // 初始简介（欢迎词）
     property string welcomeText: `# `+qsTr("欢迎使用 Umi-OCR")+`
 
-## 👈 `+qsTr("请选择功能页")+`
-
-
-
-#### Umi-OCR [`+qsTr("检查更新")+`](${UmiAbout.url.home}) | [`+qsTr("官方网站")+`](${UmiAbout.url.home}) | [`+qsTr("插件拓展")+`](${UmiAbout.url.plugins}) | [`+qsTr("问题反馈")+`](${UmiAbout.url.issue})
-
-#### `+qsTr("作者")+`: ${getTD(UmiAbout.authors)}
-
-#### `+qsTr("译者")+`:
-
-${getLocalizationTable()}`
-
-    function getTD(as) { // 传入人员列表，生成人员的 <a> 标签
-        let t = "", l = as.length-1
-        for(const i in as) {
-            const a = as[i]
-            t += `<a href="${a.url}"><font color="${theme.specialTextColor}">${a.name}</font></a>`
-            if(i < l) t += " | "
-        }
-        return t
-    }
-    function getLocalizationTable() { // 生成 译者信息
-        let table = "<table>"
-        for(const lang in UmiAbout.localization) {
-            const info = UmiAbout.localization[lang]
-            let t = `<tr><td>${lang}\t</td><td>${getTD(info)}</td></tr>`
-            table += t
-        }
-        table += "</table>"
-        return table
-    }
+## 👈 `+qsTr("请选择功能页")
 
     // 初始化数据
     Component.onCompleted: initData()

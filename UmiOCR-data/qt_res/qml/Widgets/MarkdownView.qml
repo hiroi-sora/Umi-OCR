@@ -10,6 +10,7 @@ ScrollView {
     contentWidth: width // 内容宽度
     clip: true // 溢出隐藏
     property string text: "" // 要显示的文本
+    property var textFormat: TextEdit.MarkdownText
     // 内部
     property var regexes: undefined // 正则
 
@@ -20,7 +21,12 @@ ScrollView {
             // 双换行
             ["\n\n", "\n\n　  \n\n"],
             // Markdown 链接转 HTML 链接
-            ["\\[(.*?)\\]\\((.*?)\\)", `<a href="\$2"><font color="${theme.specialTextColor}">\$1</font></a>`]
+            ["!?(\\[(.*?)\\]\\((.*?)\\))", (match, p1, p2, p3, offset, string) => {
+                    // 如果匹配的字符串以感叹号开头，就返回原字符串，不做替换
+                    if (match.startsWith('!')) return match
+                    // 否则，进行替换
+                    return `<a href="${p3}"><font color="${theme.specialTextColor}">${p2}</font></a>`
+                }],
         ]
         regexes =  replacements.map(([search, replacement]) => ({
             regex: new RegExp(search, "g"), replacement
@@ -45,7 +51,7 @@ ScrollView {
         id: textEdit
         text: ""
         width: mdView.width // 与内容宽度相同
-        textFormat: TextEdit.MarkdownText // md格式
+        textFormat: mdView.textFormat // md格式
         readOnly: true // 只读
 
         // 点击链接 link

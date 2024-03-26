@@ -1,14 +1,15 @@
 {
     "name": "Umi-OCR",
-    "reportIssueUrl": "https://github.com/hiroi-sora/Umi-OCR/issues",
-    "description": "OCR software, free and offline.",
     "version": {
         "major": 2,
         "minor": 1,
         "patch": 1,
         "prerelease": "alpha",
-        "prereleaseNumber": 1
+        "prereleaseNumber": 1,
+        "string": "自动生成"
     },
+    "fullname": "自动生成",
+    "app": "自动生成, home, path, platform, python, cpu, ram",
     "url": {
         "home": "https://github.com/hiroi-sora/Umi-OCR",
         "plugins": "https://github.com/hiroi-sora/Umi-OCR_plugins",
@@ -25,40 +26,49 @@
             "url": "https://github.com/hiroi-sora"
         }
     ],
-    "localization": {
-        "English": [
-            {
-                "name": "Qingzheng Gao",
-                "url": "https://github.com/QZGao"
-            },
-            {
-                "name": "Eric Guo",
-                "url": "https://github.com/qwedc001"
-            },
-            {
-                "name": "Weng, Chia-Ling",
-                "url": "https://github.com/ChiaLingWeng"
-            }
-        ],
-        "繁體中文": [
-            {
-                "name": "Qingzheng Gao",
-                "url": "https://github.com/QZGao"
-            },
-            {
-                "name": "plum7x",
-                "url": "https://github.com/plum7x"
-            },
-            {
-                "name": "Weng, Chia-Ling",
-                "url": "https://github.com/ChiaLingWeng"
-            }
-        ],
-        "日本語": [
-            {
-                "name": "hiroi-sora",
-                "url": "https://github.com/hiroi-sora"
-            }
-        ]
-    }
+    "localization": [
+        {
+            "language": "English",
+            "translators": [
+                {
+                    "name": "Qingzheng Gao",
+                    "url": "https://github.com/QZGao"
+                },
+                {
+                    "name": "Eric Guo",
+                    "url": "https://github.com/qwedc001"
+                },
+                {
+                    "name": "Weng, Chia-Ling",
+                    "url": "https://github.com/ChiaLingWeng"
+                }
+            ]
+        },
+        {
+            "language": "繁體中文",
+            "translators": [
+                {
+                    "name": "Qingzheng Gao",
+                    "url": "https://github.com/QZGao"
+                },
+                {
+                    "name": "plum7x",
+                    "url": "https://github.com/plum7x"
+                },
+                {
+                    "name": "Weng, Chia-Ling",
+                    "url": "https://github.com/ChiaLingWeng"
+                }
+            ]
+        },
+        {
+            "language": "日本語",
+            "translators": [
+                {
+                    "name": "hiroi-sora",
+                    "url": "https://github.com/hiroi-sora"
+                }
+            ]
+        }
+    ]
 }
