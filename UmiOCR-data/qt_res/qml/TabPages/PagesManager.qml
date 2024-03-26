@@ -50,11 +50,11 @@ Item {
             title: qsTr("全局设置"),
             intro: qsTr("# 全局设置\n\n调节全局设置项，对所有页面生效。")
         },
-        // {
-        //     key: "About",
-        //     title: qsTr("关于"),
-        //     intro: qsTr("# 关于\n\n查看软件信息、检查版本更新。")
-        // },
+        {
+            key: "About",
+            title: qsTr("关于"),
+            intro: qsTr("# 关于")
+        },
     ]
 
     /* 存放当前已打开的页面
