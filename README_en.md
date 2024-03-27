@@ -81,7 +81,7 @@
 - [Screenshot OCR](#Screenshot-OCR)
   - [Paragraph Merge](#Paragraph-Merge) - Recognize different paragraphs and merge correctly
 - [Batch OCR](#Batch-OCR)
-  - [Ignore area](#Ignore-Regions) - exclude the watermarks, headers or footers
+  - [Ignore Regions](#Ignore-Regions) - exclude the watermarks, headers or footers
 - [QR Code](#QR-Code) Support for scanning QR Code or generating QR Code.
 - [Batch Documents OCR](#Batch-Documents-OCR) OCR from scanned PDF document and output layered PDF
 - [Global settings](#Global-Settings) Add more PP-OCR supported language models!
