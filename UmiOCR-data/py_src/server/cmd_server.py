@@ -3,6 +3,7 @@
 # ===============================================
 
 import time
+import json
 import argparse
 from threading import Condition
 from ..utils.call_func import CallFunc
@@ -242,22 +243,30 @@ class _Actuator:
 
     # 创建二维码
     def qrcode_create(self, paras):
-        if len(paras) != 2:
+        if len(paras) < 2:
             return (
                 '[Error] Not enough arguments passed! Must pass "text" "save_image.jpg"'
             )
         text, path = paras[0], paras[1]
+        if len(paras) == 3:
+            w = h = int(paras[2])
+        elif len(paras) == 4:
+            w, h = int(paras[2]), int(paras[3])
+        else:
+            w = h = 0
         try:
             from ..mission.mission_qrcode import MissionQRCode
 
             pil = MissionQRCode.createImage(
                 text,
                 format="QRCode",  # 格式
-                w=128,  # 宽高
-                h=128,
+                w=w,  # 宽高
+                h=h,
                 quiet_zone=-1,  # 边缘宽度
                 ec_level=-1,  # 纠错等级
             )
+            if type(pil) == str:
+                return pil
             pil.save(path)
             return f"Successfully saved to {path}"
         except Exception as e:
@@ -265,31 +274,36 @@ class _Actuator:
 
     # 识别二维码
     def qrcode_read(self, paras):
-        if len(paras) != 1:
+        if len(paras) < 1:
             return '[Error] Not enough arguments passed! Must pass "image_to_recognize.jpg"'
-        path = paras[0]
         try:
             from ..mission.mission_qrcode import MissionQRCode
             from PIL import Image
-
-            pil = Image.open(path)
-            print("111111111111")
-            res = MissionQRCode.addMissionWait({}, [{"pil": pil}])
-            res = res[0]["result"]
-            print("22222222222")
-            if res["code"] == 100:
-                t = ""
-                for i, d in enumerate(res["data"]):
-                    if i != 0:
-                        t += "\n"
-                    t += d["text"]
-                return t
-            elif res["code"] == 101:
-                return "No code in image."
-            else:
-                return f"[Error] Code: {res['code']}\nMessage: {res['data']}"
         except Exception as e:
             return f"[Error] {str(e)}"
+        resText = ""
+        paths = findImages(paras, True)  # 递归搜索图片
+        for index, path in enumerate(paths):
+            if index != 0:
+                resText += "\n"
+            try:
+                pil = Image.open(path)
+                res = MissionQRCode.addMissionWait({}, [{"pil": pil}])
+                res = res[0]["result"]
+                if res["code"] == 100:
+                    t = ""
+                    for i, d in enumerate(res["data"]):
+                        if i != 0:
+                            t += "\n"
+                        t += d["text"]
+                    resText += t
+                elif res["code"] == 101:
+                    resText += "No code in image."
+                else:
+                    resText += f"[Error] Code: {res['code']}\nMessage: {res['data']}"
+            except Exception as e:
+                resText += f"[Error] {str(e)}"
+        return resText
 
 
 CmdActuator = _Actuator()
@@ -426,17 +440,44 @@ class _Cmd:
         if args.call_py:
             if args.func:
                 return CmdActuator.call(
-                    args.call_py, "py", args.func, args.thread, *args.paras
+                    args.call_py,
+                    "py",
+                    args.func,
+                    args.thread,
+                    *self.format_paras(args.paras),
                 )
             else:
                 return CmdActuator.getModuleFuncsHelp(args.call_py, "py")
         if args.call_qml:
             if args.func:
                 return CmdActuator.call(
-                    args.call_qml, "qml", args.func, args.thread, *args.paras
+                    args.call_qml,
+                    "qml",
+                    args.func,
+                    args.thread,
+                    *self.format_paras(args.paras),
                 )
             else:
                 return CmdActuator.getModuleFuncsHelp(args.call_qml, "qml")
+
+    # paras 格式化
+    def format_paras(self, paras):
+        def convert_param(param):
+            try:
+                return int(param)
+            except ValueError:
+                pass
+            try:
+                return float(param)
+            except ValueError:
+                pass
+            try:
+                return json.loads(param)
+            except json.JSONDecodeError:
+                pass
+            return param
+
+        return [convert_param(p) for p in paras]
 
 
 CmdServer = _Cmd()
