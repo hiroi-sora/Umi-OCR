@@ -15,16 +15,14 @@ Item {
         else visible = false
     }
 
-    TextEdit_ {
-        anchors.centerIn: parent
-        readOnly: true
-        selectByMouse: false
-        selectByKeyboard: false
-        font.family: theme.fontFamily
+    Text_ {
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.margins: size_.spacing
+        wrapMode: TextEdit.Wrap
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
         text: tips
-        MouseArea {
-            anchors.fill: parent
-            cursorShape: Qt.ArrowCursor
-        }
     }
 }

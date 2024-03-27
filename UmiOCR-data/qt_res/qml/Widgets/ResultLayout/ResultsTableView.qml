@@ -356,7 +356,7 @@ Item {
             else if(info.where >= 0) { // 文本区域
                 endIndex = startIndex = info.index
                 endTextIndex = startTextIndex = info.where
-                info.obj.focus() // 赋予焦点
+                info.obj.focus(info.where) // 放置光标 & 赋予焦点
             }
         }
         // 移动

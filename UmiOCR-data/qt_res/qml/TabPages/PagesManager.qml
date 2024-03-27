@@ -29,21 +29,21 @@ Item {
             needController: true,
             title: qsTr("批量OCR"),
             intro: qsTr("# 批量OCR\n\n导入本地图片或文件夹，批量转换文字。\n\n支持格式：")
-                + "`jpg, jpe, jpeg, jfif, png, webp, bmp, tif, tiff`",
+                + " `jpg, jpe, jpeg, jfif, png, webp, bmp, tif, tiff`",
         },
         {
             key: "BatchDOC",
             needController: true,
             title: qsTr("批量文档"),
             intro: qsTr("# 批量文档识别\n\n批量导入文档，提取文字，或生成双层可搜索PDF。\n\n支持格式：")
-                + "`pdf, xps, epub, mobi, fb2, cbz`",
+                + " `pdf, xps, epub, mobi, fb2, cbz`",
         },
         {
             key: "QRCode",
             needController: true,
             title: qsTr("二维码"),
             intro: qsTr("# 二维码\n\n识别或生成二维码、条形码。\n\n支持协议：")
-                + "`Aztec, Codabar, Code128, Code39, Code93, DataBar, DataBarExpanded, DataMatrix, EAN13, EAN8, ITF, LinearCodes, MatrixCodes, MaxiCode, MicroQRCode, PDF417, QRCode, UPCA, UPCE`",
+                + " `Aztec, Codabar, Code128, Code39, Code93, DataBar, DataBarExpanded, DataMatrix, EAN13, EAN8, ITF, LinearCodes, MatrixCodes, MaxiCode, MicroQRCode, PDF417, QRCode, UPCA, UPCE`",
         },
         {
             key: "GlobalConfigsPage",

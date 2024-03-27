@@ -207,14 +207,15 @@ TabPage {
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.bottom: parent.bottom
-        anchors.leftMargin: doubleRowLayout.hideLR===1 ? size_.spacing : 0
-        width: doubleRowLayout.hideLR===1 ? size_.line * 2 : 0
+        anchors.leftMargin: doubleRowLayout.hideLR===1 ? size_.smallSpacing : 0
+        width: doubleRowLayout.hideLR===1 ? size_.line * 1.5 : 0
         visible: doubleRowLayout.hideLR===1
 
         Column {
             anchors.top: parent.top
             anchors.left: parent.left
             anchors.right: parent.right
+            anchors.rightMargin: -size_.smallSpacing // 负间距，增加空间利用
             spacing: size_.spacing
 
             Item {
