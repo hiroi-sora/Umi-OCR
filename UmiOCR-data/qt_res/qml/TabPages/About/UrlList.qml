@@ -6,7 +6,7 @@ import QtQuick.Controls 2.15
 import ".."
 import "../../Widgets"
 
-Flow {
+Item {
     id: uRoot
     property string title: ""
     property var urlList: [] // {"text", "url"}
@@ -14,25 +14,32 @@ Flow {
 
     anchors.left: parent.left
     anchors.right: parent.right
-    // spacing: size_.spacing
-    spacing: 0
+    height: flow.height
 
     Text_ {
+        id: lText
+        anchors.left: parent.left
+        anchors.top: parent.top
         height: textSize + size_.spacing * 2
         verticalAlignment: Text.AlignVCenter
         text: title + "   • "
         font.pixelSize: textSize
     }
-    // Item { height: 1; width: size_.spacing }
 
-    Repeater {
-        model: urlList
+    Flow {
+        id: flow
+        anchors.left: lText.right
+        anchors.right: parent.right
+        spacing: 0
+        Repeater {
+            model: urlList
 
-        UrlButton {
-            height: textSize + size_.spacing * 2
-            text_:  urlList[index].text
-            url: urlList[index].url
-            textSize: uRoot.textSize
+            UrlButton {
+                height: textSize + size_.spacing * 2
+                text_:  urlList[index].text
+                url: urlList[index].url
+                textSize: uRoot.textSize
+            }
         }
     }
 }

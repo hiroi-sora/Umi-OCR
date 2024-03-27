@@ -26,7 +26,9 @@ TabPage {
             Column {
                 anchors.left: parent.left
                 anchors.right: parent.right
+                anchors.rightMargin: size_.spacing * 2
                 spacing: size_.spacing
+                clip: true
 
                 // ==================== 标题 ====================
 
