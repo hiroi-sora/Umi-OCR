@@ -345,7 +345,8 @@ URL：`/api/ocr/get_options`
 
 ### 2.3. 调用接口 示例代码
 
-JavaScript 示例：
+<details>
+<summary>JavaScript 示例：（点击展开）</summary>
 
 ```javascript
 const url = "http://127.0.0.1:1224/api/ocr/get_options";
@@ -357,6 +358,8 @@ fetch(url, {
     .then(data => { console.log(data); })
     .catch(error => { console.error(error); });
 ```
+
+</details>
 
 ---
 
@@ -443,7 +446,8 @@ URL：`/api/qrcode`
 
 ### 3.3. 调用接口 示例代码
 
-JavaScript 示例：
+<details>
+<summary>JavaScript 示例：（点击展开）</summary>
 
 ```javascript
 const url = "http://127.0.0.1:1224/api/qrcode";
@@ -475,6 +479,8 @@ fetch(url, {
         console.error(error);
     });
 ```
+
+</details>
 
 <a id="/api/qrcode/text"></a>
 
@@ -541,7 +547,8 @@ URL：`/api/qrcode` （与二维码识别接口一致，只是参数不同）
 
 ### 4.3. 调用接口 示例代码
 
-JavaScript 示例：
+<details>
+<summary>JavaScript 示例：（点击展开）</summary>
 
 ```javascript
 const url = "http://127.0.0.1:1224/api/qrcode";
@@ -575,6 +582,8 @@ fetch(url, {
         console.error(error);
     });
 ```
+
+</details>
 
 ---
 
