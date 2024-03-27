@@ -12,10 +12,6 @@
     </a>
 </p>
 
-
-
-
-
 <p align="center">
   <a href="https://github.com/hiroi-sora/Umi-OCR">
     <img width="200" height="128" src="https://tupian.li/images/2022/10/27/icon---256.png" alt="Umi-OCR">
@@ -55,7 +51,7 @@
 - **効率的**: 高効率のオフラインOCRエンジンが付属しています。コンピュータのパフォーマンスが十分であれば、オンラインOCRサービスよりも速くなることがあります。
 - **柔軟**: カスタマイズ可能なインターフェースをサポートし、コマンドラインやHTTP APIなど、複数の呼び出し方法をサポートします。
 
-<p align="center"><img src="https://tupian.li/images/2023/11/19/65599097ab5f4.png" alt="1-タイトル-1.png" style="width: 80%;"></p>
+<p align="center"><img src="https://tupian.li/images/2024/03/27/66040ec301b55.png" alt="1-タイトル-1.png" style="width: 80%;"></p>
 
 ![1-タイトル-2.png](https://tupian.li/images/2023/11/19/6559909fdeeba.png)
 
@@ -99,7 +95,7 @@ Umi-OCR v2は、一連の柔軟で使いやすい**タブインターフェー�
 
 ### スクリーンショットOCR
 
-<p align="center"><img src="https://tupian.li/images/2023/11/19/65599097aba8e.png" alt="2-スクリーンショット-1.png" style="width: 80%;"></p>
+<p align="center"><img src="https://tupian.li/images/2024/03/27/66040ecb4dfb4.png" alt="2-スクリーンショット-1.png" style="width: 80%;"></p>
 
 **スクリーンショットOCR**: このページを開いた後、キーボードショートカットを使用してスクリーンショットをキャプチャし、画像内のテキストを認識することができます。
 - 左側の画像プレビューパネルを使用して、マウスでテキストを選択してコピーすることができます。
@@ -108,7 +104,7 @@ Umi-OCR v2は、一連の柔軟で使いやすい**タブインターフェー�
 
 #### 段落マージ
 
-<p align="center"><img src="https://tupian.li/images/2023/11/19/6559909f3e378.png" alt="2-スクリーンショット-2.png" style="width: 80%;"></p>
+<p align="center"><img src="https://tupian.li/images/2024/03/27/66040ecc62ac9.png" alt="2-スクリーンショット-2.png" style="width: 80%;"></p>
 
 **OCRテキスト後処理 - 段落マージ**について: この機能は、OCR結果のレイアウトと順序を整理し、テキストを読みやすく使用しやすくすることができます。プリセットスキームは以下の通りです。
   - **単一行**: 同じ行上のテキストをマージします。ほとんどのシナリオに適しています。
@@ -120,7 +116,7 @@ Umi-OCR v2は、一連の柔軟で使いやすい**タブインターフェー�
 
 ### バッチOCR
 
-<p align="center"><img src="https://tupian.li/images/2023/11/19/655990a2511e0.png" alt="3-バッチ-1.png" style="width: 80%;"></p>
+<p align="center"><img src="https://tupian.li/images/2024/03/27/66040ecdc5197.png" alt="3-バッチ-1.png" style="width: 80%;"></p>
 
 **バッチOCR**: このページでは、ローカル画像をバッチでインポートして認識することがサポートされています。
 - 認識されたコンテンツは、txt/jsonl/md/csv(Excel)などのさまざまな形式で保存できます。
@@ -129,7 +125,7 @@ Umi-OCR v2は、一連の柔軟で使いやすい**タブインターフェー�
  
 #### 無視領域
 
-<p align="center"><img src="https://tupian.li/images/2023/11/19/6559911d28be7.png" alt="3-バッチ-2.png" style="width: 80%;"></p>
+<p align="center"><img src="https://tupian.li/images/2024/03/27/66040ecbc0021.png" alt="3-バッチ-2.png" style="width: 80%;"></p>
 
 **OCRテキスト後処理 - 無視領域**について: これは、バッチOCRの特別な機能で、画像内の望ましくないテキストを除外するために使用されます。
 - 無視領域エディタは、バッチ認識ページ設定の右側の列でアクセスできます。
@@ -139,9 +135,15 @@ Umi-OCR v2は、一連の柔軟で使いやすい**タブインターフェー�
 
 ---
 
+### バルクドキュメント認識
+
+<p align="center"><img src="https://tupian.li/images/2024/03/27/66040ecc8bfd4.png" alt="" style="width: 80%;"></p>
+
+---
+
 ### QRコード
 
-<p align="center"><img src="https://tupian.li/images/2023/11/19/655991268d6b1.png" alt="4-QRコード-1.png" style="width: 80%;"></p>
+<p align="center"><img src="https://tupian.li/images/2024/03/27/66040ed01f5b2.png" alt="4-QRコード-1.png" style="width: 80%;"></p>
 
 **スキャンコード**:
 - スクリーンショットをキャプチャしたり、貼り付けたり、ローカル画像をドラッグして、QRコードやバーコードを読み取ることができます。
@@ -150,7 +152,7 @@ Umi-OCR v2は、一連の柔軟で使いやすい**タブインターフェー�
 
 `Aztec`,`Codabar`,`Code128`,`Code39`,`Code93`,`DataBar`,`DataBarExpanded`,`DataMatrix`,`EAN13`,`EAN8`,`ITF`,`LinearCodes`,`MatrixCodes`,`MaxiCode`,`MicroQRCode`,`PDF417`,`QRCode`,`UPCA`,`UPCE`,
 
-<p align="center"><img src="https://tupian.li/images/2023/11/19/6559911cda737.png" alt="4-QRコード-2.png" style="width: 80%;"></p>
+<p align="center"><img src="https://tupian.li/images/2024/03/27/66040ed001437.png" alt="4-QRコード-2.png" style="width: 80%;"></p>
 
 **コード生成**:
 - テキストを入力してQRコード画像を生成します。
@@ -160,7 +162,7 @@ Umi-OCR v2は、一連の柔軟で使いやすい**タブインターフェー�
 
 ### グローバル設定
 
-<p align="center"><img src="https://tupian.li/images/2023/11/19/655991252e780.png" alt="5-グローバル設定-1.png" style="width: 80%;"></p>
+<p align="center"><img src="https://tupian.li/images/2024/03/27/66040ed16f4e0.png" alt="5-グローバル設定-1.png" style="width: 80%;"></p>
 
 **グローバル設定**: ここでは、ソフトウェアのグローバルパラメータを調整できます。一般的な機能には、以下が含まれます:
 - ショートカットを一度に追加するか、自動起動を設定します。

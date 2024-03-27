@@ -18,7 +18,6 @@
   </a>
 </p>
 
-
 <h1 align="center">Umi-OCR</h1>
 
 <p align="center">
@@ -52,7 +51,7 @@
 - **Efficient**: Comes with a highly efficient offline OCR engine. As long as the computer performance is sufficient, it can be faster than online OCR services.
 - **Flexible**: Supports customizable interface, and supports multiple calling methods such as command-line and HTTP API.
 
-<p align="center"><img src="https://tupian.li/images/2023/11/19/65599097ab5f4.png" alt="1-标题-1.png" style="width: 80%;"></p>
+<p align="center"><img src="https://tupian.li/images/2024/03/27/66040ec301b55.png" alt="1-标题-1.png" style="width: 80%;"></p>
 
 ![1-标题-2.png](https://tupian.li/images/2023/11/19/6559909fdeeba.png)
 
@@ -96,7 +95,7 @@ The top left corner of the tab bar can be used to switch **window always on top*
 
 ### Screenshot OCR
 
-<p align="center"><img src="https://tupian.li/images/2023/11/19/65599097aba8e.png" alt="2-截图-1.png" style="width: 80%;"></p>
+<p align="center"><img src="https://tupian.li/images/2024/03/27/66040ecb4dfb4.png" alt="2-截图-1.png" style="width: 80%;"></p>
 
 **Screenshot OCR**: After opening this page, you can use a keyboard shortcut to capture a screenshot and recognize the text in the image.
 - The left-side image preview panel allows you to select and copy text with your mouse.
@@ -105,7 +104,7 @@ The top left corner of the tab bar can be used to switch **window always on top*
 
 #### Paragraph Merge
 
-<p align="center"><img src="https://tupian.li/images/2023/11/19/6559909f3e378.png" alt="2-截图-2.png" style="width: 80%;"></p>
+<p align="center"><img src="https://tupian.li/images/2024/03/27/66040ecc62ac9.png" alt="2-截图-2.png" style="width: 80%;"></p>
 
 About **OCR Text Post-Processing - Paragraph Merge**: This feature can organize the layout and order of OCR results to make the text more suitable for reading and use. The preset schemes are:
   - **Single line**: Merge text on the same line, suitable for most scenarios.
@@ -117,7 +116,7 @@ About **OCR Text Post-Processing - Paragraph Merge**: This feature can organize 
 
 ### Batch OCR
 
-<p align="center"><img src="https://tupian.li/images/2023/11/19/655990a2511e0.png" alt="3-批量-1.png" style="width: 80%;"></p>
+<p align="center"><img src="https://tupian.li/images/2024/03/27/66040ecdc5197.png" alt="3-批量-1.png" style="width: 80%;"></p>
 
 **Batch OCR**: This page supports batch importing local images for recognition.
 - The recognized content can be saved in various formats such as txt/jsonl/md/csv(Excel).
@@ -126,7 +125,7 @@ About **OCR Text Post-Processing - Paragraph Merge**: This feature can organize 
  
 #### Ignore Regions
 
-<p align="center"><img src="https://tupian.li/images/2023/11/19/6559911d28be7.png" alt="3-批量-2.png" style="width: 80%;"></p>
+<p align="center"><img src="https://tupian.li/images/2024/03/27/66040ecbc0021.png" alt="3-批量-2.png" style="width: 80%;"></p>
 
 About **OCR Text Post-Processing - Ignore Regions**: This is a special function in batch OCR that is used to exclude unwanted text in images.
 - The ignore region editor can be accessed in the right column of the batch recognition page settings.
@@ -136,9 +135,15 @@ About **OCR Text Post-Processing - Ignore Regions**: This is a special function 
 
 ---
 
+### Batch Documents OCR
+
+<p align="center"><img src="https://tupian.li/images/2024/03/27/66040ecc8bfd4.png" alt="" style="width: 80%;"></p>
+
+---
+
 ### QR Code
 
-<p align="center"><img src="https://tupian.li/images/2023/11/19/655991268d6b1.png" alt="4-二维码-1.png" style="width: 80%;"></p>
+<p align="center"><img src="https://tupian.li/images/2024/03/27/66040ed01f5b2.png" alt="4-二维码-1.png" style="width: 80%;"></p>
 
 **Scan Code**:
 - You can capture screenshots, paste, or drag local images to read QR codes and barcodes.
@@ -147,7 +152,7 @@ About **OCR Text Post-Processing - Ignore Regions**: This is a special function 
 
 `Aztec`,`Codabar`,`Code128`,`Code39`,`Code93`,`DataBar`,`DataBarExpanded`,`DataMatrix`,`EAN13`,`EAN8`,`ITF`,`LinearCodes`,`MatrixCodes`,`MaxiCode`,`MicroQRCode`,`PDF417`,`QRCode`,`UPCA`,`UPCE`,
 
-<p align="center"><img src="https://tupian.li/images/2023/11/19/6559911cda737.png" alt="4-二维码-2.png" style="width: 80%;"></p>
+<p align="center"><img src="https://tupian.li/images/2024/03/27/66040ed001437.png" alt="4-二维码-2.png" style="width: 80%;"></p>
 
 **Generate Code**:
 - Enter text to generate a QR code image.
@@ -157,7 +162,7 @@ About **OCR Text Post-Processing - Ignore Regions**: This is a special function 
 
 ### Global Settings
 
-<p align="center"><img src="https://tupian.li/images/2023/11/19/655991252e780.png" alt="5-全局设置-1.png" style="width: 80%;"></p>
+<p align="center"><img src="https://tupian.li/images/2024/03/27/66040ed16f4e0.png" alt="5-全局设置-1.png" style="width: 80%;"></p>
 
 **Global Settings**: Here you can adjust the global parameters of the software. Common features include:
 - One-click to add shortcuts or set auto-startup.
