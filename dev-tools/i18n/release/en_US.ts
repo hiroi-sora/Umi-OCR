@@ -6,62 +6,62 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/About/About.qml" line="42"/>
         <source>开源、免费的离线OCR软件</source>
-        <translation type="unfinished"></translation>
+        <translation>An opensouirce, free offline OCR software</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/About/About.qml" line="48"/>
         <source>当前版本</source>
-        <translation type="unfinished"></translation>
+        <translation>Current version</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/About/About.qml" line="50"/>
         <source>项目链接</source>
-        <translation type="unfinished"></translation>
+        <translation>Project link</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/About/About.qml" line="52"/>
         <source>官方网站</source>
-        <translation type="unfinished"></translation>
+        <translation>Official website</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/About/About.qml" line="53"/>
         <source>插件拓展</source>
-        <translation type="unfinished"></translation>
+        <translation>Plugins</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/About/About.qml" line="54"/>
         <source>问题反馈</source>
-        <translation type="unfinished"></translation>
+        <translation>Issue a problem</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/About/About.qml" line="58"/>
         <source>发布地址</source>
-        <translation type="unfinished"></translation>
+        <translation>Release webpage</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/About/About.qml" line="66"/>
         <source>许可协议</source>
-        <translation type="unfinished"></translation>
+        <translation>License</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/About/About.qml" line="76"/>
         <source>作者</source>
-        <translation type="unfinished"></translation>
+        <translation>Author</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/About/About.qml" line="84"/>
         <source>译者</source>
-        <translation type="unfinished"></translation>
+        <translation>Translators</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/About/About.qml" line="110"/>
         <source>运行环境信息（如需请求协助，请提供给开发者）</source>
-        <translation type="unfinished"></translation>
+        <translation>Runtime environment (If you need assistance, please provide this to the developer)</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/About/About.qml" line="115"/>
         <source>复制</source>
-        <translation type="unfinished">Copy</translation>
+        <translation>Copy</translation>
     </message>
 </context>
 <context>
@@ -179,7 +179,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="403"/>
         <source>拖入文档或文件夹</source>
-        <translation type="unfinished"></translation>
+        <translation>Drop in document or folder</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="402"/>
@@ -477,7 +477,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="359"/>
         <source>拖入图片或文件夹</source>
-        <translation type="unfinished"></translation>
+        <translation>Drop in picture or folder</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="358"/>
@@ -1380,7 +1380,7 @@ For example, when processing screenshots of watermarked images, you can add an i
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Popup_/MessageBox.qml" line="129"/>
         <source>问题反馈</source>
-        <translation type="unfinished"></translation>
+        <translation>Issue a problem</translation>
     </message>
 </context>
 <context>
@@ -1649,7 +1649,10 @@ Supported protocols:</translation>
 右键拖拽，绘制矩形区域，包含在区域内的文字框将被忽略。可用于排除水印、页眉页脚。
 范围允许填写负数，表示倒数第x页。如-1表示最后一页，-2表示倒数第2页。
 忽略区域的设置对所有文档生效。</source>
-        <translation type="unfinished"></translation>
+        <translation>Usage:
+Hold your right mouse button, drag and draw a rect area, the contents included will be ignored by the software. It can be used to exclude watermarks, headers or footers.
+It is allowed to input negative page number to represent the x page counting backwards.For instance, -1 represents the last page,while -2 is the page before it.
+This setting is enabled for all documents.</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="214"/>
@@ -1669,7 +1672,7 @@ Supported protocols:</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="306"/>
         <source>OCR页面</source>
-        <translation type="unfinished"></translation>
+        <translation>OCR Page</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="314"/>
@@ -1680,7 +1683,7 @@ Supported protocols:</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="349"/>
         <source>忽略区域（全局）</source>
-        <translation type="unfinished"></translation>
+        <translation>Ignore Area (Global)</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="391"/>
@@ -1718,7 +1721,7 @@ Can be set as default off in global settings</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRCode/QRCode.qml" line="43"/>
         <source>剪贴板中为文本</source>
-        <translation></translation>
+        <translation>The content of the clipboard is text</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRCode/QRCode.qml" line="61"/>
