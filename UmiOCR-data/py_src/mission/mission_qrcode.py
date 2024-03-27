@@ -121,6 +121,7 @@ class _MissionQRCodeClass(Mission):
                 [c.position.bottom_left.x, c.position.bottom_left.y],
             ]
             d["score"] = 1  # 置信度，兼容OCR格式，无意义
+            d["end"] = "\n"  # 间隔符，兼容OCR格式，无意义
             # 格式
             d["format"] = c.format.name
             # 内容为文本类型
