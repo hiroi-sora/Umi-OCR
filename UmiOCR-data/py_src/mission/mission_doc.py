@@ -152,21 +152,19 @@ class _MissionDocClass(Mission):
                     extractionMode == "textOnly" or extractionMode == "mixed"
                 ):
                     for line in t["lines"]:
+                        text = ""
                         for span in line["spans"]:
-                            b = span["bbox"]
-                            size = span["size"]  # 字体大小
-                            box = [
-                                [b[0], b[1]],
-                                [b[2], b[1]],
-                                [
-                                    b[2],
-                                    b[1] + size,
-                                ],  # 使用字体大小作为行高，而不是 b[3]
-                                [b[0], b[1] + size],
-                            ]
+                            text += span["text"]
+                        if text:
+                            b = line["bbox"]
                             tb = {
-                                "box": box,
-                                "text": span["text"],
+                                "box": [
+                                    [b[0], b[1]],
+                                    [b[2], b[1]],
+                                    [b[2], b[3]],
+                                    [b[0], b[3]],
+                                ],
+                                "text": text,
                                 "score": 1,
                                 "from": "text",  # 来源：直接提取文本
                             }
