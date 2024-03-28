@@ -284,7 +284,8 @@ TabPage {
             // 所有文档处理完毕
             if(msg === "[Success] All completed.") {
                 setMsnState("none") // 状态：不在运行
-                missionShow = `${missionInfo.costTime}s  ${missionInfo.nowNum}/${missionInfo.allNum}  100%` // 刷新 100%
+                const costTime = (missionInfo.costTime/1000).toFixed(1)
+                missionShow = `${costTime}s  ${missionInfo.nowNum}/${missionInfo.allNum}  100%` // 刷新 100%
                 const simpleType = configsComp.getValue("other.simpleNotificationType")
                 qmlapp.popup.simple(qsTr("文档识别完成"), "", simpleType)
                 // 任务完成后续操作
