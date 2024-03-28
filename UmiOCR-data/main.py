@@ -53,17 +53,32 @@ import os
 import sys
 import site
 import traceback
+import subprocess
 
 
-def MessageBox(msg, type="error"):
-    import ctypes
-
+def MessageBox(msg, type_="error"):
     info = "Umi-OCR Message"
-    if type == "error":
+    if type_ == "error":
         info = "【错误】 Umi-OCR Error"
-    elif type == "warning":
+    elif type_ == "warning":
         info = "【警告】 Umi-OCR Warning"
-    ctypes.windll.user32.MessageBoxW(None, str(msg), str(info), 0)
+    try:
+        # 通过 ctypes 发起弹窗
+        import ctypes
+
+        ctypes.windll.user32.MessageBoxW(None, str(msg), str(info), 0)
+    except Exception:
+        # 部分系统，连ctypes也用不了。转为在新的控制台窗口中打印信息。
+        msg_cmd = (
+            msg.replace("^", "^^")
+            .replace("&", "^&")
+            .replace("<", "^<")
+            .replace(">", "^>")
+            .replace("|", "^|")
+            .replace("\n\n", "___")
+            .replace("\n", "___")
+        )
+        subprocess.Popen(["start", "cmd", "/k", f"echo {info}: {msg_cmd}"], shell=True)
     return 0
 
 
@@ -106,7 +121,8 @@ if __name__ == "__main__":
     try:
         initRuntimeEnvironment()  # 初始化运行环境
     except Exception as e:
-        MessageBox("初始化运行环境失败 !\n\n" + traceback.format_exc())
+        err = traceback.format_exc()
+        MessageBox("Failed to initialize running environment!\n\n" + err)
         sys.exit(0)
     try:
         # 获取 pystand.exe 记录的程序入口环境变量
@@ -116,5 +132,6 @@ if __name__ == "__main__":
 
         main(app_path=app_path, engineAddImportPath="./site-packages/PySide2/qml")
     except Exception as e:
-        MessageBox("主程序启动失败 !\n\n" + traceback.format_exc())
+        err = traceback.format_exc()
+        MessageBox("Failed to startup main program!\n\n" + err)
         sys.exit(0)
