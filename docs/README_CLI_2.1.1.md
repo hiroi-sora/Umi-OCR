@@ -64,10 +64,9 @@
 
 ### 结果输出
 
-#### 将结果输出到文件：
-
-- **覆盖原文件** ` --output "文件路径.txt"`
-- **追加到文件末尾** ` --output_append "文件路径.txt"`
+- **复制到剪贴板** ` --clip`
+- **输出到文件（覆盖）** ` --output "文件路径.txt"`
+- **输出到文件（追加）** ` --output_append "文件路径.txt"`
 
 也可以使用箭头符号：
 
@@ -76,19 +75,12 @@
 
 例：
 ```
+./Umi-OCR.exe --screenshot --clip
 ./Umi-OCR.exe --screenshot --output test.txt
 ./Umi-OCR.exe --screenshot "-->" test.txt
 ```
 
-> 注：由于运行环境的一些限制，无法使用系统管道重定向符`>`。请使用 `-->` 或 `--output` 代替。  
-
-#### 将结果复制到剪贴板
-- ` | clip`
-
-例：
-```
-./Umi-OCR.exe --screenshot | clip
-```
+> 注：由于运行环境的一些限制，Umi-OCR 暂时无法配合使用系统管道重定向符`>`、管道操作符`|`。  
 
 ---
 
