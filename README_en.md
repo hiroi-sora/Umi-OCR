@@ -42,6 +42,27 @@
 </p>
 
 <div align="center">
+  <h3>
+    <a href="#Usage:">
+      Usage
+    </a>
+    <span> • </span>
+    <a href="#Download Releases:">
+      Download Releases
+    </a>
+    <span> • </span>
+    <a href="CHANGE_LOG.md">
+      Changelog
+    </a>
+    <span> • </span>
+    <a href="https://github.com/hiroi-sora/Umi-OCR/issues">
+      Issue a problem
+    </a>
+  </h3>
+</div>
+<br>
+
+<div align="center">
   <strong>Free, Open-source, Batch Offline OCR Software</strong><br>
   <sub>Compatible with Windows7 x64 and above</sub>
 </div><br>
@@ -54,6 +75,19 @@
 <p align="center"><img src="https://tupian.li/images/2024/03/27/66040ec301b55.png" alt="1-标题-1.png" style="width: 80%;"></p>
 
 ![1-标题-2.png](https://tupian.li/images/2023/11/19/6559909fdeeba.png)
+
+## Usage:
+
+- [Screenshot OCR](#Screenshot-OCR)
+  - [Paragraph Merge](#Paragraph-Merge) - Recognize different paragraphs and merge correctly
+- [Batch OCR](#Batch-OCR)
+  - [Ignore Regions](#Ignore-Regions) - exclude the watermarks, headers or footers
+- [QR Code](#QR-Code) Support for scanning QR Code or generating QR Code.
+- [Batch Documents OCR](#Batch-Documents-OCR) OCR from scanned PDF document and output layered PDF
+- [Global settings](#Global-Settings) Add more PP-OCR supported language models!
+- [Command line usage](docs/README_CLI.md)
+- [HTTP API](docs/README_HTTP.md)
+- [Building the Project](#Build-the-Project)
 
 ## Using the Source Code:
 
@@ -98,6 +132,7 @@ The top left corner of the tab bar can be used to switch **window always on top*
 <p align="center"><img src="https://tupian.li/images/2024/03/27/66040ecb4dfb4.png" alt="2-截图-1.png" style="width: 80%;"></p>
 
 **Screenshot OCR**: After opening this page, you can use a keyboard shortcut to capture a screenshot and recognize the text in the image.
+
 - The left-side image preview panel allows you to select and copy text with your mouse.
 - The right-side recognition record panel allows you to edit text and select and copy multiple records.
 - It also supports copying images from elsewhere and pasting them into Umi-OCR for recognition.
@@ -107,10 +142,11 @@ The top left corner of the tab bar can be used to switch **window always on top*
 <p align="center"><img src="https://tupian.li/images/2024/03/27/66040ecc62ac9.png" alt="2-截图-2.png" style="width: 80%;"></p>
 
 About **OCR Text Post-Processing - Paragraph Merge**: This feature can organize the layout and order of OCR results to make the text more suitable for reading and use. The preset schemes are:
-  - **Single line**: Merge text on the same line, suitable for most scenarios.
-  - **Multiple lines - natural paragraphs**: Intelligently recognize and merge text belonging to the same paragraph, suitable for most scenarios, as shown in the figure above.
-  - **Multiple lines - code block**: Try to restore the original indentation and spacing of the text. Suitable for recognizing code snippets or scenes that require retaining spaces.
-  - **Vertical layout**: Suitable for vertical layout. Needs to be used in conjunction with a model library that also supports vertical layout recognition.
+
+- **Single line**: Merge text on the same line, suitable for most scenarios.
+- **Multiple lines - natural paragraphs**: Intelligently recognize and merge text belonging to the same paragraph, suitable for most scenarios, as shown in the figure above.
+- **Multiple lines - code block**: Try to restore the original indentation and spacing of the text. Suitable for recognizing code snippets or scenes that require retaining spaces.
+- **Vertical layout**: Suitable for vertical layout. Needs to be used in conjunction with a model library that also supports vertical layout recognition.
 
 ---
 
@@ -119,15 +155,17 @@ About **OCR Text Post-Processing - Paragraph Merge**: This feature can organize 
 <p align="center"><img src="https://tupian.li/images/2024/03/27/66040ecdc5197.png" alt="3-批量-1.png" style="width: 80%;"></p>
 
 **Batch OCR**: This page supports batch importing local images for recognition.
+
 - The recognized content can be saved in various formats such as txt/jsonl/md/csv(Excel).
 - Supports `text post-processing` technology, which can recognize text belonging to the same natural paragraph and merge it. It also supports multiple processing schemes such as code blocks and vertical text.
 - There is no limit on the number of images that can be imported for processing at one time, and the software can automatically shut down or sleep after completing the task.
- 
+
 #### Ignore Regions
 
 <p align="center"><img src="https://tupian.li/images/2024/03/27/66040ecbc0021.png" alt="3-批量-2.png" style="width: 80%;"></p>
 
 About **OCR Text Post-Processing - Ignore Regions**: This is a special function in batch OCR that is used to exclude unwanted text in images.
+
 - The ignore region editor can be accessed in the right column of the batch recognition page settings.
 - As shown in the example above, there are multiple watermarks/LOGOs at the top and bottom right corner of the image. If these images are recognized in batches, the watermarks will interfere with the recognition results.
 - Hold down the right mouse button to draw multiple rectangular boxes. The text inside these areas will be ignored during the task.
@@ -146,6 +184,7 @@ About **OCR Text Post-Processing - Ignore Regions**: This is a special function 
 <p align="center"><img src="https://tupian.li/images/2024/03/27/66040ed01f5b2.png" alt="4-二维码-1.png" style="width: 80%;"></p>
 
 **Scan Code**:
+
 - You can capture screenshots, paste, or drag local images to read QR codes and barcodes.
 - Supports multiple codes in one image.
 - Supports 19 protocols, as follows:
@@ -155,6 +194,7 @@ About **OCR Text Post-Processing - Ignore Regions**: This is a special function 
 <p align="center"><img src="https://tupian.li/images/2024/03/27/66040ed001437.png" alt="4-二维码-2.png" style="width: 80%;"></p>
 
 **Generate Code**:
+
 - Enter text to generate a QR code image.
 - Supports 19 protocols and parameters such as **error correction level**.
 
@@ -165,6 +205,7 @@ About **OCR Text Post-Processing - Ignore Regions**: This is a special function 
 <p align="center"><img src="https://tupian.li/images/2024/03/27/66040ed16f4e0.png" alt="5-全局设置-1.png" style="width: 80%;"></p>
 
 **Global Settings**: Here you can adjust the global parameters of the software. Common features include:
+
 - One-click to add shortcuts or set auto-startup.
 - Change the interface **language**. Umi supports traditional Chinese, English, Japanese, and other languages.
 - Switch interface **themes**. Umi has multiple light/dark themes.
@@ -194,6 +235,7 @@ About **OCR Text Post-Processing - Ignore Regions**: This is a special function 
 ### Step 1: Download the code
 
 Choose one of the following:
+
 - Pull your forked repository to your local machine
 - Download the zip source code package of this repository
 - Clone this repository
