@@ -55,10 +55,37 @@ def _output(argv, argument, mode, text):
     try:
         with open(path, mode, encoding="utf-8") as f:
             f.write(text)
-        print(f"Success output to file: {path}")
+        print(f"\nSuccess output to file: {path}")
     except Exception as e:
         print(f"[Error] failed to write file {path} : \n{e}")
         return
+
+
+# 复制文本到剪贴板，不依赖第三方库
+def _clip(text):
+    import subprocess
+    import platform
+    import tempfile
+
+    os_type = platform.system()
+    try:
+        if os_type == "Windows":
+            # 创建一个临时文件，并立即关闭它，以便其他进程可以访问
+            with tempfile.NamedTemporaryFile(
+                delete=False, mode="w+", newline="\n"
+            ) as temp_file:
+                temp_file.write(text)
+                temp_file_name = temp_file.name
+                temp_file.close()
+            try:
+                subprocess.run(f"clip < {temp_file_name}", check=True, shell=True)
+            finally:
+                os.unlink(temp_file_name)  # 删除临时文件
+            print("\nSuccess copy to clipboard.")
+        else:
+            print(f"[Error] clip unsupported OS: {os_type}")
+    except Exception as e:
+        print(f"[Error] failed to copy to clipboard: {e}")
 
 
 # 跨进程发送指令
@@ -89,6 +116,8 @@ def _sendCmd(argv):
     _output(argv, "--output", "w", res)
     _output(argv, "-->>", "a", res)
     _output(argv, "--output_append", "a", res)
+    if "--clip" in argv:
+        _clip(res)
 
 
 # 启动新进程，并发送指令
