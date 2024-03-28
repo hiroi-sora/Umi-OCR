@@ -385,6 +385,11 @@ class _Cmd:
         )
         # 输出
         self._parser.add_argument(
+            "--clip",
+            action="store_true",
+            help="Copy the results to the clipboard.",
+        )
+        self._parser.add_argument(
             "--output",
             help="The path to the file where results will be saved. (overwrite)",
         )
