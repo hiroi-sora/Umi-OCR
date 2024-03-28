@@ -24,6 +24,7 @@ Item {
     property var copyAll: undefined // 复制全部
     property var selectSingle: undefined // 选中单个文本框
     property var selectAll: undefined // 所有文本框全选
+    property var selectDel: undefined // 删除单个
     property var selectAllDel: undefined // 清空
 
     // 传入一个相对于item的坐标，返回该坐标位于this组件的什么位置。
@@ -144,7 +145,7 @@ Item {
             property int keyDoubleTime: 300 // 双击毫秒
             property int lastUpTime: -1 // 上次按键抬起的时间戳。需要截取后8位以免int放不下
             property int lastKey: -1 // 上次按键的键值
-            property var listeningKeys: [Qt.Key_A, Qt.Key_C, Qt.Key_Delete]
+            property var listeningKeys: [Qt.Key_A, Qt.Key_C, Qt.Key_D]
             Keys.onPressed: {
                 if (event.modifiers & Qt.ControlModifier) {
                     if (listeningKeys.includes(event.key)) {
@@ -154,8 +155,7 @@ Item {
                         if(t - lastUpTime <= keyDoubleTime && lastKey==event.key) {
                             event.key===Qt.Key_A && resultRoot.selectAll && resultRoot.selectAll()
                             event.key===Qt.Key_C && resultRoot.copyAll && resultRoot.copyAll()
-                            event.key===Qt.Key_Delete && resultRoot.selectAllDel && resultRoot.selectAllDel()
-                            console.log("=yes", event.key)
+                            event.key===Qt.Key_D && resultRoot.selectAllDel && resultRoot.selectAllDel()
                         }
                         else { // 单击
                             event.key===Qt.Key_A && resultRoot.selectSingle && resultRoot.selectSingle()
