@@ -81,11 +81,11 @@ Button {
         // 侧边小条
         Rectangle{
             visible: !parent.parent.checked
-            height: parent.height-20
+            height: size_.line
             width: 1
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
-            color: theme.subTextColor
+            color: theme.coverColor4
         }
 
         // 边缘阴影
