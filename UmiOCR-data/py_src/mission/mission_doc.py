@@ -8,6 +8,7 @@ from .mission import Mission
 from .mission_ocr import MissionOCR
 from ..ocr.tbpu import getParser
 from ..ocr.tbpu import IgnoreArea
+from ..ocr.tbpu.parser_tools.paragraph_parse import word_separator  # 上下句间隔符
 
 import fitz  # PyMuPDF
 import time
@@ -131,7 +132,7 @@ class _MissionDocClass(Mission):
             # 获取元素 https://pymupdf.readthedocs.io/en/latest/_images/img-textpage.png
             # 确保越界图像能被采集 https://github.com/pymupdf/PyMuPDF/issues/3171
             p = page.get_text("dict", clip=fitz.INFINITE_RECT())
-            for t in p["blocks"]:
+            for t in p["blocks"]:  # 遍历区块（段落）
                 # 图片
                 if t["type"] == 1 and (
                     extractionMode == "imageOnly" or extractionMode == "mixed"
@@ -151,9 +152,10 @@ class _MissionDocClass(Mission):
                 elif t["type"] == 0 and (
                     extractionMode == "textOnly" or extractionMode == "mixed"
                 ):
-                    for line in t["lines"]:
+                    l = len(t["lines"]) - 1
+                    for index, line in enumerate(t["lines"]):  # 遍历每一行
                         text = ""
-                        for span in line["spans"]:
+                        for span in line["spans"]:  # 遍历每一文本块
                             text += span["text"]
                         if text:
                             b = line["bbox"]
@@ -166,9 +168,17 @@ class _MissionDocClass(Mission):
                                 ],
                                 "text": text,
                                 "score": 1,
+                                "end": "\n" if index == l else "",  # 结尾符
                                 "from": "text",  # 来源：直接提取文本
                             }
                             tbs.append(tb)
+        # 补充结尾符
+        for i1 in range(len(tbs) - 1):
+            if tbs[i1]["end"]:  # 跳过已有结尾符的
+                continue
+            i2 = i1 + 1
+            sep = word_separator(tbs[i1]["text"][-1], tbs[i2]["text"][0])
+            tbs[i1]["end"] = sep
 
         # =============== 调用OCR，将 imgs 的内容提取出来放入 tbs ===============
         if imgs:
@@ -202,7 +212,7 @@ class _MissionDocClass(Mission):
             igStart = msnInfo["ignoreArea"]["start"]
             igEnd = msnInfo["ignoreArea"]["end"]
             if pno >= igStart and pno <= igEnd:
-                msnInfo["ignoreArea"]["obj"].run(tbs)
+                tbs = msnInfo["ignoreArea"]["obj"].run(tbs)
         # 其他tbpu
         if msnInfo["tbpu"]:
             for tbpu in msnInfo["tbpu"]:
