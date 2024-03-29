@@ -22,7 +22,16 @@ TabPage {
     // 初始简介（欢迎词）
     property string welcomeText: `# `+qsTr("欢迎使用 Umi-OCR")+`
 
-## 👈 `+qsTr("请选择功能页")
+## 👈 `+qsTr("请选择功能页")+`
+
+
+
+
+`+qsTr("当前版本")+`   •   ${UmiAbout.version.string}
+
+`+qsTr("项目链接")+`   •   [`+qsTr("官方网站")+`](${UmiAbout.url.home})    [`+qsTr("插件拓展")+`](${UmiAbout.url.plugins})    [`+qsTr("问题反馈")+`](${UmiAbout.url.issue})
+
+`
 
     // 初始化数据
     Component.onCompleted: initData()
