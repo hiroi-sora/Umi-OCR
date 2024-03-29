@@ -408,7 +408,7 @@ ModalLayer {
                             font.pixelSize: size_.smallText
                             anchors.left: parent.left
                             anchors.right: parent.right
-                            wrapMode: TextEdit.WrapAnywhere // 任意换行
+                            wrapMode: TextEdit.Wrap
                         }
                     }
                 }
