@@ -220,8 +220,6 @@ Umi-OCR v2 由一系列灵活好用的**标签页**组成。您可按照自己�
 - 切换OCR插件。
 - **渲染器**：软件界面默认支持显卡加速渲染。如果在你的机器上出现截屏闪烁、UI错位的情况，请调整`界面和外观` → `渲染器` ，尝试切换到不同渲染方案，或关闭硬件加速。
 
----
-
 ## 调用接口：
 
 - 命令行手册： [README_CLI.md](docs/README_CLI.md)
@@ -231,15 +229,15 @@ Umi-OCR v2 由一系列灵活好用的**标签页**组成。您可按照自己�
 
 ## 软件本地化翻译：
 
-感谢以下译者，为本项目贡献了本地化翻译工作：
+感谢以下译者，为 Umi-OCR 贡献了本地化翻译工作：（排名不分先后）
 
 | 译者                                                            | 贡献语言                  |
 | --------------------------------------------------------------- | ------------------------- |
-| [Qingzheng Gao](https://github.com/QZGao)                       | English, 繁體中文         |
 | [bob](https://hosted.weblate.org/user/q021)                     | English, 繁體中文, 日本語 |
-| [Eric Guo](https://hosted.weblate.org/user/qwedc001)            | English                   |
+| [Qingzheng Gao](https://github.com/QZGao)                       | English, 繁體中文         |
 | [Weng, Chia-Ling](https://hosted.weblate.org/user/ChiaLingWeng) | English, 繁體中文         |
 | [linzow](https://hosted.weblate.org/user/linzow)                | English, 繁體中文         |
+| [Eric Guo](https://hosted.weblate.org/user/qwedc001)            | English                   |
 | [plum7x](https://hosted.weblate.org/user/plum7x)                | 繁體中文                  |
 | [ドコモ光](https://hosted.weblate.org/user/umren190402)         | 日本語                    |
 
