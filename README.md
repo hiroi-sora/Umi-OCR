@@ -227,11 +227,91 @@ Umi-OCR v2 由一系列灵活好用的**标签页**组成。您可按照自己�
 - 命令行手册： [README_CLI.md](docs/README_CLI.md)
 - HTTP接口手册： [README_HTTP.md](docs/README_HTTP.md)
 
-## 协助软件界面翻译
+--- 
 
-您可以在 Weblate 在线参与翻译工作：
+## 软件本地化翻译：
 
-https://hosted.weblate.org/engage/umi-ocr/
+感谢以下译者，为本项目贡献了本地化翻译工作：
+
+| 译者                                                            | 贡献语言                  |
+| --------------------------------------------------------------- | ------------------------- |
+| [Qingzheng Gao](https://github.com/QZGao)                       | English, 繁體中文         |
+| [bob](https://hosted.weblate.org/user/q021)                     | English, 繁體中文, 日本語 |
+| [Eric Guo](https://hosted.weblate.org/user/qwedc001)            | English                   |
+| [Weng, Chia-Ling](https://hosted.weblate.org/user/ChiaLingWeng) | English, 繁體中文         |
+| [linzow](https://hosted.weblate.org/user/linzow)                | English, 繁體中文         |
+| [plum7x](https://hosted.weblate.org/user/plum7x)                | 繁體中文                  |
+| [ドコモ光](https://hosted.weblate.org/user/umren190402)         | 日本語                    |
+
+如果有信息错误或人员缺漏，请在 [这个讨论](https://github.com/hiroi-sora/Umi-OCR/discussions/449) 中回复。
+
+本项目使用在线平台 [Weblate: Umi-OCR](https://hosted.weblate.org/engage/umi-ocr/) 进行本地化翻译协作。我们欢迎任何用户参与翻译工作，您可校对、补充现有语言，或添加新语言。
+
+---
+
+## 关于项目结构
+
+### 各仓库：
+
+- [主仓库](https://github.com/hiroi-sora/Umi-OCR) 👈
+- [插件库](https://github.com/hiroi-sora/Umi-OCR_plugins)
+- [Win 运行库](https://github.com/hiroi-sora/Umi-OCR_runtime_windows)
+
+### 工程结构：
+
+`**` 后缀表示本仓库(`主仓库`)包含的内容。
+
+```
+Umi-OCR
+├─ Umi-OCR.exe
+└─ UmiOCR-data
+   ├─ main.py **
+   ├─ version.py **
+   ├─ site-packages
+   │  └─ python包
+   ├─ runtime
+   │  └─ python解释器
+   ├─ qt_res **
+   │  └─ 项目qt资源，包括图标和qml源码
+   ├─ py_src **
+   │  └─ 项目python源码
+   ├─ plugins
+   │  └─ 插件
+   └─ i18n **
+      └─ 翻译文件
+```
+
+支持的离线OCR引擎：
+
+- [PaddleOCR-json](https://github.com/hiroi-sora/PaddleOCR-json)
+- [RapidOCR-json](https://github.com/hiroi-sora/RapidOCR-json)
+
+运行环境框架：
+
+- [PyStand](https://github.com/skywind3000/PyStand) 定制版
+
+## 构建项目
+
+### 第零步：（可选）fork本项目
+
+### 第一步：下载代码
+
+请参考 [更新日志](CHANGE_LOG.md) 开头的说明。
+
+### 后续步骤：
+
+对于不同平台（虽然现在只有Windows），需要不同的运行环境。
+
+- [Windows](https://github.com/hiroi-sora/Umi-OCR_runtime_windows)
+- 跨平台的支持筹备中
+
+请跳转上述仓库，完成对应平台的开发/运行环境部署。
+
+本项目也拥有非常简易的一键打包脚本，在以上仓库中查看。
+
+---
+
+## [更新日志](CHANGE_LOG.md)
 
 ## 开发计划
 
@@ -298,66 +378,3 @@ https://hosted.weblate.org/engage/umi-ocr/
 - 兼容 MacOS / Ubuntu 等平台。
 
 </details>
-
-
-## 关于项目结构
-
-### 各仓库：
-
-- [主仓库](https://github.com/hiroi-sora/Umi-OCR) 👈
-- [插件库](https://github.com/hiroi-sora/Umi-OCR_plugins)
-- [Win 运行库](https://github.com/hiroi-sora/Umi-OCR_runtime_windows)
-
-### 工程结构：
-
-`**` 后缀表示本仓库(`主仓库`)包含的内容。
-
-```
-Umi-OCR
-├─ Umi-OCR.exe
-└─ UmiOCR-data
-   ├─ main.py **
-   ├─ version.py **
-   ├─ site-packages
-   │  └─ python包
-   ├─ runtime
-   │  └─ python解释器
-   ├─ qt_res **
-   │  └─ 项目qt资源，包括图标和qml源码
-   ├─ py_src **
-   │  └─ 项目python源码
-   ├─ plugins
-   │  └─ 插件
-   └─ i18n **
-      └─ 翻译文件
-```
-
-支持的离线OCR引擎：
-
-- [PaddleOCR-json](https://github.com/hiroi-sora/PaddleOCR-json)
-- [RapidOCR-json](https://github.com/hiroi-sora/RapidOCR-json)
-
-运行环境框架：
-
-- [PyStand](https://github.com/skywind3000/PyStand) 定制版
-
-## 构建项目
-
-### 第零步：（可选）fork本项目
-
-### 第一步：下载代码
-
-请参考 [更新日志](CHANGE_LOG.md) 开头的说明。
-
-### 后续步骤：
-
-对于不同平台（虽然现在只有Windows），需要不同的运行环境。
-
-- [Windows](https://github.com/hiroi-sora/Umi-OCR_runtime_windows)
-- 跨平台的支持筹备中
-
-请跳转上述仓库，完成对应平台的开发/运行环境部署。
-
-本项目也拥有非常简易的一键打包脚本，在以上仓库中查看。
-
-## [更新日志](CHANGE_LOG.md)
