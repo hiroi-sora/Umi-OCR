@@ -599,7 +599,7 @@ URL：`/argv`
 
 例：`http://127.0.0.1:1224/argv`
 
-#### 请求
+### 请求
 
 方法：`POST`
 
@@ -611,3 +611,28 @@ URL：`/argv`
 - 等价于向argv接口发送： `["--path", "D:/xxx.png"]`
 
 具体命令行规则请见 [README_CLI.md](README_CLI.md) 。
+
+### 调用接口 示例代码
+
+<details>
+<summary>JavaScript 示例：（点击展开）</summary>
+
+```javascript
+const url = "http://127.0.0.1:1224/argv";
+// 发送截图指令 Umi-OCR.exe --screenshot
+const data = ["--screenshot"];
+fetch(url, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(data)
+    })
+    .then(response => response.text()) // 返回值是字符串
+    .then(data => {
+        console.log("截图结果：\n", data)
+    })
+    .catch(error => {
+        console.error(error);
+    });
+```
+
+</details>
