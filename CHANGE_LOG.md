@@ -20,7 +20,24 @@ git clone --single-branch --branch [分支名] https://github.com/hiroi-sora/Umi
 
 # 更新日志 CHANGE LOG
 
-##### v2.1.0 `2024.2.29`
+##### v2.1.1 `2024.3.29`
+
+- 新增：批量文档识别允许指定忽略区域的页数范围。
+- 新增：命令行`--path`允许传入多个图片或文件夹。
+- 新增：新的命令行、HTTP接口：识别/生成二维码图像。
+- 新增：命令行新指令 `--output`, `--output_append`, `--clip` 。
+- 新增：清空全部识别记录的快捷键。 (#420)
+- 新增：截图预览 删除图片显示的选项和快捷键。 (#427)
+- 修复：Esc取消截图的消息传递错误。 (#402)
+- 修复：文档`整页强制OCR`模式下，提高小尺寸页面的渲染精度。
+- 修复：Windows7及低端CPU无法进行文档识别的Bug。
+- 优化：开始菜单/开机自启快捷方式，默认放置于用户目录下，避免请求管理员权限。
+- 优化：保存双层PDF，在没有新文本写入时的处理逻辑。 (#416)
+- 优化：PDF解析时，提取原有文本行的逻辑。
+- 优化：双栏面板会记忆左右折叠状态。
+- UI：优化一些提示，修复一些渲染问题，美化一些视觉效果。
+
+##### [v2.1.0](https://github.com/hiroi-sora/Umi-OCR/tree/release/2.1.0) `2024.2.29`
 
 分支名：`release/2.1.0`
 
@@ -31,7 +48,7 @@ git clone --single-branch --branch [分支名] https://github.com/hiroi-sora/Umi
 - 更新：更强大的排版解析器。
 - 修复：避免系统环境变量`QMLSCENE_DEVICE`的影响。 (#270)
 
-##### v2.0.2 `2024.1.15`
+##### [v2.0.2](https://github.com/hiroi-sora/Umi-OCR/tree/release/2.0.2) `2024.1.15`
 
 分支名：`release/2.0.2`
 
@@ -46,7 +63,7 @@ git clone --single-branch --branch [分支名] https://github.com/hiroi-sora/Umi
 - 修复：`段落合并参数不存在` 的误报。
 - 修复：组件`DefaultTips`不生效。
 
-##### v2.0.1 `2023.12.8`
+##### [v2.0.1](https://github.com/hiroi-sora/Umi-OCR/tree/release/2.0.1) `2023.12.8`
 
 分支名：`release/2.0.1`
 
