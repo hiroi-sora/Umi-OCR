@@ -11,7 +11,7 @@ from ..image_controller.image_provider import PixmapProvider
 from ..utils.call_func import CallFunc
 from .mission_doc import MissionDOC
 
-MinSize = 1080  # 最小渲染分辨率
+MinSize = 0  # 最小渲染分辨率
 
 
 # 文档预览连接器
@@ -80,6 +80,8 @@ class DocPreviewConnector(QObject):
     @Slot(str, int, str, "QVariant")
     def ocr(self, path, page, password, argd):
         argd = argd.toVariant()  # qml对象转python字典
+        # if "tbpu.ignoreArea" in argd:  # 删除忽略区域参数
+        #     del argd["tbpu.ignoreArea"]
 
         def _onGet(msnInfo, page_, res):
             # 缩放文本位置
