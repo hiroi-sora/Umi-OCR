@@ -11,8 +11,19 @@ Item {
     property real time: 700 // 动画间隔时间，毫秒
     width: size_.smallText * 6
     height: width
-
     clip: true
+    property bool running: false // 是否运行动画
+
+    onVisibleChanged: {
+        if(visible) {
+            image.init()
+            cRoot.init()
+            running = qmlapp.enabledEffect // 启动动画
+        }
+        else {
+            running = false // 停止动画
+        }
+    }
 
     // 主体
     Panel {
@@ -31,6 +42,10 @@ Item {
                 fillMode: Image.Stretch
                 property real p1x
                 property real p1y
+                property real pw
+                property real ph
+                property real sw
+                property real sh
                 property real p1w
                 property real p1h
                 property real p2x
@@ -38,37 +53,32 @@ Item {
                 property real p2w
                 property real p2h
                 property real pt: lRoot.time * 0.5
-                property bool running: false
+                // 预计算变形动画参数
                 Component.onCompleted: {
                     // 父组件大小
-                    let pw=parent.width, ph=parent.height
+                    pw=parent.width, ph=parent.height
                     // 图片原始大小
-                    let sw=sourceSize.width, sh=sourceSize.height
+                    sw=sourceSize.width, sh=sourceSize.height
+                    // 最高点
+                    p1h=ph*0.9, p1w=p1h*(sw/sh)*0.9, p1y=0, p1x=(pw-p1w)*0.5
+                    // 最低点
+                    p2h=p1h*0.9, p2w=p1h*(sw/sh)*1.1, p2x=(pw-p2w)*0.5, p2y=ph-p2h
+                }
+                // 恢复初始状态
+                function init() {
                     if(qmlapp.enabledEffect) {
-                        // 最高点
-                        p1h=ph*0.9
-                        p1w=p1h*(sw/sh)*0.9
-                        p1y=0, p1x=(pw-p1w)*0.5
-                        // 最低点
-                        p2h=p1h*0.9
-                        p2w=p1h*(sw/sh)*1.1
-                        p2x=(pw-p2w)*0.5, p2y=ph-p2h
-                        x=p2x
-                        y=p2y
-                        width=p2w
-                        height=p2h
-                        image.running = true
+                        x=p2x, y=p2y
+                        width=p2w, height=p2h
                     }
                     else {
-                        height = ph
-                        width = ph*(sw/sh)
-                        y=0
-                        x=(pw-width)*0.5
+                        height=ph, width=ph*(sw/sh)
+                        y=0, x=(pw-width)*0.5
                     }
                 }
-                SequentialAnimation{ // 串行动画
+                // 串行动画
+                SequentialAnimation{
                     id: animation
-                    running: image.running && qmlapp.enabledEffect
+                    running: lRoot.running
                     loops: Animation.Infinite
                     ParallelAnimation {
                         NumberAnimation{ target:image; property:"x"; to:image.p1x; duration:image.pt; easing.type:Easing.OutCubic}
@@ -103,14 +113,17 @@ Item {
                     l.push(lRoot.text[i])
                 chars = l
                 textTimer.max = l.length
-                textTimer.running = true
+            }
+            // 恢复初始状态
+            function init() {
+                textTimer.now = 0
             }
             Timer {
                 id: textTimer
                 property int now: 0
                 property int max: 0
                 interval: cRoot.time
-                running: false
+                running: lRoot.visible
                 repeat: true
                 onTriggered: {
                     if(now===max-1)
@@ -142,7 +155,7 @@ Item {
                         height: size_.smallText
 
                         onCharShowChanged: {
-                            if(qmlapp.enabledEffect) {
+                            if(lRoot.running) {
                                 if(charShow) caShow.running = true
                                 else caHide.running = true
                             }
