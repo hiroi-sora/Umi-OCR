@@ -78,16 +78,28 @@
 
 ## Usage:
 
-- [Screenshot OCR](#Screenshot-OCR)
-  - [Paragraph Merge](#Paragraph-Merge) - Recognize different paragraphs and merge correctly
-- [Batch OCR](#Batch-OCR)
-  - [Ignore Regions](#Ignore-Regions) - exclude the watermarks, headers or footers
-- [QR Code](#QR-Code) Support for scanning QR Code or generating QR Code.
-- [Batch Documents OCR](#Batch-Documents-OCR) OCR from scanned PDF document and output layered PDF
-- [Global settings](#Global-Settings) Add more PP-OCR supported language models!
-- [Command line usage](docs/README_CLI.md)
-- [HTTP API](docs/README_HTTP.md)
-- [Building the Project](#Build-the-Project)
+- [Usage:](#usage)
+- [Using the Source Code:](#using-the-source-code)
+- [Download Releases:](#download-releases)
+- [Getting Started](#getting-started)
+- [Interface Language](#interface-language)
+  - [Help us translate / 帮助我们翻译！](#help-us-translate--帮助我们翻译)
+- [Tabbed Interface](#tabbed-interface)
+  - [Screenshot OCR](#screenshot-ocr)
+    - [Paragraph Merge](#paragraph-merge)
+  - [Batch OCR](#batch-ocr)
+    - [Ignore Regions](#ignore-regions)
+  - [Batch Documents OCR](#batch-documents-ocr)
+  - [QR Code](#qr-code)
+  - [Global Settings](#global-settings)
+- [API Usage:](#api-usage)
+- [About Project Structure](#about-project-structure)
+  - [Repositories:](#repositories)
+- [Build the Project](#build-the-project)
+  - [Step 0: (Optional) Fork this project](#step-0-optional-fork-this-project)
+  - [Step 1: Download the code](#step-1-download-the-code)
+  - [Next Steps:](#next-steps)
+- [CHANGE LOG](#change-log)
 
 ## Using the Source Code:
 
@@ -98,6 +110,30 @@ Developers should read [Building the Project](#Build-the-Project) before proceed
 - **GitHub** https://github.com/hiroi-sora/Umi-OCR/releases/latest
 - **Source Forge** https://sourceforge.net/projects/umi-ocr
 - **Lanzou (蓝奏云)** https://hiroi-sora.lanzoul.com/s/umi-ocr
+
+<details>
+<summary><b>•&nbsp;&nbsp;Scoop Installer</b> (Click to expand)</summary>
+
+[Scoop](https://scoop.sh/) is a command-line installer for Windows that facilitates the management of multiple applications. You can install Scoop first and then use the following commands to install `Umi-OCR`:
+
+- Add the `extras` bucket:
+```
+scoop bucket add extras
+```
+
+- (Optional 1) Install Umi-OCR (comes with the `Rapid-OCR` engine, better compatibility):
+```
+scoop install extras/umi-ocr
+```
+
+- (Optional 2) Install Umi-OCR (comes with the `Paddle-OCR` engine, slightly faster):
+```
+scoop install extras/umi-ocr-paddle
+```
+
+- Do not install both, as the shortcuts may be overwritten. However, you can import additional [plugins](https://github.com/hiroi-sora/Umi-OCR_plugins) to switch between different OCR engines at any time.
+
+</details>
 
 ## Getting Started
 

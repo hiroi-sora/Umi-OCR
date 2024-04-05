@@ -65,6 +65,30 @@
 - **Source Forge** https://sourceforge.net/projects/umi-ocr
 - **Lanzou (蓝奏云)** https://hiroi-sora.lanzoul.com/s/umi-ocr
 
+<details>
+<summary><b>• Scoop インストーラー</b></summary>
+
+[Scoop](https://scoop.sh/) はWindowsで動作するコマンドラインインストーラーで、複数のアプリケーションを簡単に管理できます。まず Scoop をインストールし、次に以下のコマンドを使用して `Umi-OCR` をインストールしてください：
+
+- `extras` バケットを追加：
+```
+scoop bucket add extras
+```
+
+- （オプション1）Umi-OCR をインストール（ `Rapid-OCR` エンジン付属、互換性が高い）：
+```
+scoop install extras/umi-ocr
+```
+
+- （オプション2）Umi-OCR をインストール（ `Paddle-OCR` エンジン付属、やや高速）：
+```
+scoop install extras/umi-ocr-paddle
+```
+
+- 両方を同時にインストールしないでください。ショートカットが上書きされる可能性があります。しかし、[プラグイン](https://github.com/hiroi-sora/Umi-OCR_plugins) を追加することで、異なるOCRエンジンをいつでも切り替えることができます。
+
+</details>
+
 ## はじめに
 
 ソフトウェアリリースパッケージは、`.7z`圧縮形式または自己解凍`.7z.exe`パッケージで利用可能です。自己解凍パッケージは、圧縮ソフトウェアがインストールされていないコンピューターでファイルを抽出するために使用できます。

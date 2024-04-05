@@ -108,24 +108,24 @@
 <details>
 <summary><b>•&nbsp;&nbsp;Scoop Installer</b>（点击展开）</summary>
 
-[Scoop](https://scoop.sh/) 是一款Windows下的命令行安装程序，可方便地管理多个应用。您可以先安装 Scoop ，再使用以下指令安装本项目：
+[Scoop](https://scoop.sh/) 是一款Windows下的命令行安装程序，可方便地管理多个应用。您可以先安装 Scoop ，再使用以下指令安装 `Umi-OCR` ：
 
 - 添加 `extras` 桶：
 ```
 scoop bucket add extras
 ```
 
-- （可选1）安装 Umi-OCR（自带Rapid引擎，兼容性好）：
+- （可选1）安装 Umi-OCR（自带 `Rapid-OCR` 引擎，兼容性好）：
 ```
 scoop install extras/umi-ocr
 ```
 
-- （可选2）安装 Umi-OCR（自带Paddle引擎，速度稍快）：
+- （可选2）安装 Umi-OCR（自带 `Paddle-OCR` 引擎，速度稍快）：
 ```
 scoop install extras/umi-ocr-paddle
 ```
 
-- 不要同时安装二者，快捷方式可能会被覆盖。但您可以额外导入多个 [插件](https://github.com/hiroi-sora/Umi-OCR_plugins) 来切换OCR引擎。
+- 不要同时安装二者，快捷方式可能会被覆盖。但您可以额外导入 [插件](https://github.com/hiroi-sora/Umi-OCR_plugins) ，随时切换不同OCR引擎。
 
 </details>
 
