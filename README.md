@@ -12,9 +12,6 @@
     </a>
 </p>
 
-
-
-
 <p align="center">
   <a href="https://github.com/hiroi-sora/Umi-OCR">
     <img width="200" height="128" src="https://tupian.li/images/2022/10/27/icon---256.png" alt="Umi-OCR">
@@ -88,7 +85,7 @@
   - [忽略区域](#忽略区域) - 排除截图水印处的文字
 - [二维码](#二维码) 支持扫码或生成二维码图片
 - [文档识别](#文档识别) 从PDF扫描件中提取文本，或转为双层可搜索PDF
-- [全局设置](#全局设置) 添加更多PP-OCR支持的语言模型库！
+- [全局设置](#全局设置)
 - [命令行调用](docs/README_CLI.md)
 - [HTTP接口](docs/README_HTTP.md)
 - [构建项目](#构建项目)
