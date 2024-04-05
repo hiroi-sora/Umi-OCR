@@ -1,14 +1,14 @@
 <p align="left">
     <span>
-        中文
+        <b>中文</b>
     </span>
-    <span> • </span>
-    <a href="README_ja.md">
-        日本語
-    </a>
     <span> • </span>
     <a href="README_en.md">
         English
+    </a>
+    <span> • </span>
+    <a href="README_ja.md">
+        日本語
     </a>
 </p>
 
