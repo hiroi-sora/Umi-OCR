@@ -10,6 +10,7 @@ from ..ocr.tbpu import getParser
 from ..ocr.tbpu import IgnoreArea
 from ..ocr.tbpu.parser_tools.paragraph_parse import word_separator  # 上下句间隔符
 
+import os
 import fitz  # PyMuPDF
 import time
 from PIL import Image
@@ -114,6 +115,7 @@ class _MissionDocClass(Mission):
         # =============== 提取图片和原文本 ===============
         imgs = []  # 待OCR的图片列表
         tbs = []  # text box 文本块列表
+        protation = page.rotation  # 获取页面的旋转角度
         if extractionMode == "fullPage":  # 模式：整页强制OCR
             # 检查页面边长，如果低于阈值，则增加放大系数，以提高渲染清晰度
             rect = page.rect
@@ -137,16 +139,32 @@ class _MissionDocClass(Mission):
                 if t["type"] == 1 and (
                     extractionMode == "imageOnly" or extractionMode == "mixed"
                 ):
-                    bbox = t["bbox"]
-                    # 图片视觉大小
+                    img_bytes = t["image"]  # 图片字节
+                    bbox = t["bbox"]  # 图片包围盒
+                    # 图片视觉大小、原始大小、缩放比例
                     w1, h1 = bbox[2] - bbox[0], bbox[3] - bbox[1]
-                    # 图片实际大小
-                    with Image.open(BytesIO(t["image"])) as pimg:
-                        w2, h2 = pimg.size
-                    scale = w1 / w2  # 图片缩放比例
-
+                    w2, h2 = t["width"], t["height"]
+                    scale = w1 / w2
+                    # 如果页面有旋转，逆向旋转图片字节
+                    if protation != 0:
+                        print(f"    P {pno} - Rotation {protation}")
+                        try:
+                            with Image.open(BytesIO(img_bytes)) as pimg:
+                                # 记录原图格式
+                                format = pimg.format
+                                if not format:
+                                    format = "PNG"
+                                # PDF的旋转是顺时针，需要逆时针旋转图片
+                                pimg = pimg.rotate(-protation, expand=True)
+                                # 将旋转后的图片转回bytes
+                                buffered = BytesIO()
+                                pimg.save(buffered, format=format)
+                                img_bytes = buffered.getvalue()
+                        except Exception as e:
+                            print(f"[Error] Rotation doc image:", e)
+                    # 记录图片
                     imgs.append(
-                        {"bytes": t["image"], "xy": (bbox[0], bbox[1]), "scale": scale}
+                        {"bytes": img_bytes, "xy": (bbox[0], bbox[1]), "scale": scale}
                     )
                 # 文本
                 elif t["type"] == 0 and (
