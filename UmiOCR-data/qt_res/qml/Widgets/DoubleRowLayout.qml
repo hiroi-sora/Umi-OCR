@@ -15,6 +15,7 @@ Item {
     property real hideWidth: 80 // 一个栏小于该值时隐藏
     property real initSplitterX: 0.5 // 分割线初始位置。>1时为像素，0~1为比例。
     property string saveKey: "" // 如果非空，则缓存 hideLR 参数。
+    property real margins: size_.spacing // 边缘空白
 
     // 只读信息
     property int hideLR: 0 // 0为不隐藏，1为隐藏左边，2为隐藏右边
@@ -28,7 +29,7 @@ Item {
     Item {
         id: doubleColumn
         anchors.fill: parent
-        anchors.margins: size_.spacing
+        anchors.margins: parent.margins
 
         property alias hideWidth: doubleCC.hideWidth
         property alias splitterX: splitter.x // 分割线当前位置
