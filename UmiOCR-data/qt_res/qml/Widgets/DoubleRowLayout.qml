@@ -243,7 +243,7 @@ Item {
         Item {
             id: hideContainer
             visible: false
-            width: 400
+            width: Math.max(doubleCC.width, 400)
             anchors.top: parent.top
             anchors.bottom: parent.bottom
         }

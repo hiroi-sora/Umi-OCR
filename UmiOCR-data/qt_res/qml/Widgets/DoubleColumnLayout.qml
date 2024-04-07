@@ -188,7 +188,7 @@ Item {
         Item {
             id: hideContainer
             visible: false
-            height: 400
+            height: Math.max(doubleCC.height, 400)
             anchors.left: parent.left
             anchors.right: parent.right
         }
