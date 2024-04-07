@@ -10,7 +10,6 @@ from ..ocr.tbpu import getParser
 from ..ocr.tbpu import IgnoreArea
 from ..ocr.tbpu.parser_tools.paragraph_parse import word_separator  # 上下句间隔符
 
-import os
 import fitz  # PyMuPDF
 import time
 from PIL import Image
@@ -147,7 +146,7 @@ class _MissionDocClass(Mission):
                     scale = w1 / w2
                     # 如果页面有旋转，逆向旋转图片字节
                     if protation != 0:
-                        print(f"    P {pno} - Rotation {protation}")
+                        print(f"    P{pno} - 旋转 {protation} °")
                         try:
                             with Image.open(BytesIO(img_bytes)) as pimg:
                                 # 记录原图格式

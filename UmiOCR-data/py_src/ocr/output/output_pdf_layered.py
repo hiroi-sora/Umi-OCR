@@ -3,8 +3,8 @@
 
 from .output import Output
 
-import os
 import fitz  # PyMuPDF
+import math
 
 
 class OutputPdfLayered(Output):
@@ -69,6 +69,36 @@ class OutputPdfLayered(Output):
             fontsize -= 0.1  # 再次减小字体，将精度提升到 0.1
         return fontsize
 
+    @staticmethod  # 以(0,0)为中心，旋转一个点 a 度（顺时针）
+    def _rotate_point(x, y, a, w, h):
+        # 角度匹配误差范围
+        alpha = 2.0
+        # 0°，不处理
+        if -alpha <= a <= alpha:
+            return x, y
+        # 不是90°倍数，不处理
+        a_90 = round(a / 90) * 90
+        if not (a_90 - alpha <= a <= a_90 + alpha):
+            print(f"[Error] 页面旋转 {a} 不为90倍数！")
+            return x, y
+
+        # 逆时针旋转的次数（每次90度）
+        num_rotations = (a_90 // 90) % 4
+        if num_rotations % 2 == 1:
+            w, h = h, w  # 如果横转，则先交换宽高
+        # 将点(x, y)转换为以图片中心为原点的坐标系
+        x -= w / 2
+        y -= h / 2
+        # 根据旋转次数更新点的坐标
+        for _ in range(num_rotations):
+            x, y = y, -x  # 旋转90度
+        if num_rotations % 2 == 1:
+            w, h = h, w  # 如果横转，再次交换宽高
+        # 将坐标转换回以图片左上角为原点的坐标系
+        x += w / 2
+        y += h / 2
+        return x, y
+
     def print(self, res):  # 输出图片结果
         if not self.pdf:
             print("[Error] PDF对象未初始化！")
@@ -79,6 +109,9 @@ class OutputPdfLayered(Output):
             return  # 忽略空白
 
         page = self.pdf[pno]  # 当前页对象
+        protation = page.rotation  # 获取页面旋转角度
+        pwidth = page.cropbox.width  # 获取页面可视区域的宽高
+        pheight = page.cropbox.height
         isInsertFont = False  # 当前是否进行过字体注入
         # 插入文本，用shape.insert_text（可编辑）或page.insert_text（不可编辑）
         for tb in res["data"]:
@@ -95,11 +128,12 @@ class OutputPdfLayered(Output):
             h = y2 - y0
             fontsize = self._calculateFontSize(text, w, h)
             page.insert_text(
-                (x0, y2),
+                # 如果页面有旋转，则文本坐标也旋转相同角度
+                self._rotate_point(x0, y2, protation, pwidth, pheight),
                 text,
                 fontsize,
                 fontname="cjk",
-                rotate=0,  # 旋转
+                rotate=protation,  # 文本角度设定
                 stroke_opacity=0,  # 描边透明度
                 fill_opacity=0,  # 填充（字体）透明度
             )
