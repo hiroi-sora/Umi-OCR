@@ -6,7 +6,12 @@ body:
     value: |
       Please first search the [Issues](https://github.com/hiroi-sora/Umi-OCR/issues) to make sure that no one else has already raised a similar question. If there is an existing issue, you can reply under that Issue to provide more details. The more the developer knows, the easier it is to fix the problem.
 
-      请先浏览 [Issues](https://github.com/hiroi-sora/Umi-OCR/issues) ，确保没有其他人曾经提出过类似问题。如果已有类似问题，你可以在该Issue下回复，提供更多细节。开发者知道得越多，修复问题越容易。
+      请先浏览或搜索 [Issues](https://github.com/hiroi-sora/Umi-OCR/issues) ，确保没有其他人曾经提出过类似问题。如果已有类似问题，你可以在该Issue下回复，提供更多细节。开发者知道得越多，修复问题越容易。
+- type: checkboxes
+  attributes:
+    options:
+      - label: I have browsed through the Issues. 我已浏览过Issues，确定没有重复提问。
+        required: true
 - type: input
   attributes:
     label: Umi-OCR version 程序版本
