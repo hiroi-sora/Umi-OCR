@@ -9,11 +9,10 @@ body:
       请先浏览或搜索 [Issues](https://github.com/hiroi-sora/Umi-OCR/issues) ，确保没有其他人曾经提出过类似问题。如果已有类似问题，你可以在该Issue下回复，提供更多细节。开发者知道得越多，修复问题越容易。
 - type: checkboxes
   attributes:
-    label:
-    description:
+    label: Issues
     options:
       - label: I have browsed through the Issues. 我已浏览过Issues，确定没有重复提问。
-        required: true
+      - required: true
 - type: input
   attributes:
     label: Umi-OCR version 程序版本
