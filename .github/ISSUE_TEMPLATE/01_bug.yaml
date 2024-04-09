@@ -12,7 +12,7 @@ body:
     label: Issues
     options:
       - label: I have browsed through the Issues. 我已浏览过Issues，确定没有重复提问。
-      - required: true
+        required: true
 - type: input
   attributes:
     label: Umi-OCR version 程序版本
