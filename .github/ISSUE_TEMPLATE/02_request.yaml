@@ -4,19 +4,21 @@ body:
 - type: markdown
   attributes:
     value: |
-      Please first browse the [Issues](https://github.com/hiroi-sora/Umi-OCR/issues) to ensure that no one else has previously raised a similar request. If there is a similar request, you can post a reply under the Issue; the number of replies may affect the priority decision of development.
+      Please first browse the [Issues](https://github.com/hiroi-sora/Umi-OCR/issues) to ensure that no one else has previously raised a similar request. If there is a similar request, you can post a reply under the Issue; the number of replies may affect the priority decision of development. The developer has limited time and energy, and may not be able to fulfill all requests. Your understanding is appreciated.
       
       When proposing a new feature, please clearly state the applicable scenarios, operation methods, and the desired effects.
       
-      The developer has limited time and energy, and may not be able to fulfill all requests. Your understanding is appreciated.
-      
       ---
       
-      请先浏览 [Issues](https://github.com/hiroi-sora/Umi-OCR/issues) ，确保没有其他人曾经提出过类似请求。如果已有类似的请求，你可以在Issue下回帖；回帖人数可能影响开发的优先级决策。
+      请先浏览 [Issues](https://github.com/hiroi-sora/Umi-OCR/issues) ，确保没有其他人曾经提出过类似请求。如果已有类似的请求，你可以在Issue下回帖；回帖人数可能影响开发的优先级决策。开发者时间精力有限，不一定能实现所有的请求，敬请谅解。
       
       提出新功能时，请明确说明适用场景、操作方式、希望达到的效果。
-      
-      开发者时间精力有限，不一定能实现所有的请求，敬请谅解。
+- type: checkboxes
+  attributes:
+    label: Issues
+    options:
+      - label: I have browsed through the Issues. 我已浏览过Issues，确定没有重复的建议。
+        required: true
 - type: textarea
   attributes:
     label: Expected behavior 预期的功能
