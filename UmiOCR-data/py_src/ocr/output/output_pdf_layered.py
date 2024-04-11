@@ -79,6 +79,7 @@ class OutputPdfLayered(Output):
             return  # 忽略空白
 
         page = self.pdf[pno]  # 当前页对象
+        page.clean_contents()  # 内容流清理、语法更正，减少错误
         protation = page.rotation  # 获取页面旋转角度
         isInsertFont = False  # 当前是否进行过字体注入
         # 插入文本，用shape.insert_text（可编辑）或page.insert_text（不可编辑）
