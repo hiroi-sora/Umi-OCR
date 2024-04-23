@@ -100,8 +100,14 @@ Configs {
 
                 "pdfLayered": {
                     "title": qsTr("layered.pdf 双层可搜索文档"),
-                    "toolTip": qsTr("拷贝原文档内容，并叠加一层透明文字，可以搜索和复制"),
+                    "toolTip": qsTr("保留原有图片，叠加一层透明文字，可以搜索和复制"),
                     "default": true,
+                },
+                "pdfOneLayer": {
+                    "title": qsTr(".pdf 单层纯文本文档"),
+                    "toolTip": qsTr("移除原有内容，写入一层可见的文字"),
+                    "default": false,
+                    "advanced": true,
                 },
                 "txt": {
                     "title": qsTr("txt 标准格式"),

@@ -4,7 +4,6 @@
 from .output import Output
 
 import fitz  # PyMuPDF
-import math
 
 
 class OutputPdfLayered(Output):
@@ -16,6 +15,7 @@ class OutputPdfLayered(Output):
         self.pdf = None
         self.existentPages = []  # 已处理的页数
         self.isInsertFont = False  # 是否有字体嵌入
+        self.opacity = 0  # 文本透明度为0
         try:
             self.font = fitz.Font("cjk")  # 字体
         except Exception as e:
@@ -104,8 +104,8 @@ class OutputPdfLayered(Output):
                 fontsize,
                 fontname="cjk",
                 rotate=protation,  # 文本角度设定
-                stroke_opacity=0,  # 描边透明度
-                fill_opacity=0,  # 填充（字体）透明度
+                stroke_opacity=self.opacity,  # 描边透明度
+                fill_opacity=self.opacity,  # 填充（字体）透明度
             )
 
     def onEnd(self):  # 结束时保存。

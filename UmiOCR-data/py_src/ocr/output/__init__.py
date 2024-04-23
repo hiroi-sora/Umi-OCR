@@ -5,6 +5,7 @@ from .output_md import OutputMD
 from .output_jsonl import OutputJsonl
 from .output_csv import OutputCsv
 from .output_pdf_layered import OutputPdfLayered
+from .output_pdf_one_layer import OutputPdfOneLayer
 
 """纯文本输出器。初始化传入参数字典：
     outputArgd = {
@@ -25,4 +26,5 @@ Output = {
     "csv": OutputCsv,
     # PDF输出器，需要额外的参数 "originPath" 原始文件路径
     "pdfLayered": OutputPdfLayered,
+    "pdfOneLayer": OutputPdfOneLayer,
 }
