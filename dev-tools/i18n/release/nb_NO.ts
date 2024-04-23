@@ -329,61 +329,71 @@
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="103"/>
-        <source>拷贝原文档内容，并叠加一层透明文字，可以搜索和复制</source>
+        <source>保留原有图片，叠加一层透明文字，可以搜索和复制</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="107"/>
-        <source>txt 标准格式</source>
+        <source>.pdf 单层纯文本文档</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="108"/>
-        <source>含识别文字和页数信息</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="112"/>
-        <source>p.txt 纯文字格式</source>
+        <source>移除原有内容，写入一层可见的文字</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="113"/>
-        <source>输出所有识别文字</source>
+        <source>txt 标准格式</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="117"/>
-        <source>csv 表格文件(Excel)</source>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="114"/>
+        <source>含识别文字和页数信息</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="118"/>
-        <source>将页数信息和识别内容写入csv表格文件。可用Excel打开，另存为xlsx格式。</source>
+        <source>p.txt 纯文字格式</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="122"/>
-        <source>jsonl 原始信息</source>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="119"/>
+        <source>输出所有识别文字</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="123"/>
-        <source>每行为一条json数据，便于第三方程序读取操作</source>
+        <source>csv 表格文件(Excel)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="124"/>
+        <source>将页数信息和识别内容写入csv表格文件。可用Excel打开，另存为xlsx格式。</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="128"/>
+        <source>jsonl 原始信息</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="129"/>
+        <source>每行为一条json数据，便于第三方程序读取操作</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="135"/>
         <source>忽略空白页</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="130"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="136"/>
         <source>若某一页没有文字或识别失败，也不会输出错误提示信息</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="139"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="145"/>
         <source>其它</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1191,7 +1201,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/IgnoreArea/IgnoreArea.qml" line="156"/>
         <source>撤销</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tøm</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/IgnoreArea/IgnoreArea.qml" line="164"/>
@@ -1665,7 +1675,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="400"/>
         <source>清空</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tøm</translation>
     </message>
 </context>
 <context>

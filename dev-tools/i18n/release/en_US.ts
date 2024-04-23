@@ -329,57 +329,52 @@ Generated: 2023-09-01_12-13.txt</translation>
         <translation>layered.pdf Double-layer Searchable Document</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="103"/>
-        <source>拷贝原文档内容，并叠加一层透明文字，可以搜索和复制</source>
-        <translation>Copy the original document content and overlay a layer of transparent text that can be searched and copied</translation>
-    </message>
-    <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="107"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="113"/>
         <source>txt 标准格式</source>
         <translation>txt Standard format</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="108"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="114"/>
         <source>含识别文字和页数信息</source>
         <translation>Contains Recognized Text and Page Number Information</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="112"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="118"/>
         <source>p.txt 纯文字格式</source>
         <translation>p.txt Plain text format</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="113"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="119"/>
         <source>输出所有识别文字</source>
         <translation>Output All Recognized Text</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="117"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="123"/>
         <source>csv 表格文件(Excel)</source>
         <translation>csv Table file (Excel)</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="118"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="124"/>
         <source>将页数信息和识别内容写入csv表格文件。可用Excel打开，另存为xlsx格式。</source>
         <translation>Write page number information and recognized content into a CSV table file. It can be opened with Excel and saved as an xlsx format.</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="122"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="128"/>
         <source>jsonl 原始信息</source>
         <translation>jsonl Raw information</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="123"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="129"/>
         <source>每行为一条json数据，便于第三方程序读取操作</source>
         <translation>Each line is a json structured data, convenient for third-party program to read</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="129"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="135"/>
         <source>忽略空白页</source>
         <translation>Ignore blank pages</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="130"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="136"/>
         <source>若某一页没有文字或识别失败，也不会输出错误提示信息</source>
         <translation>If a page contains no text or fails to be recognized, no error message will be output</translation>
     </message>
@@ -394,7 +389,22 @@ Generated: 2023-09-01_12-13.txt</translation>
         <translation>When importing a folder, import all documents in the subfolders as well</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="139"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="103"/>
+        <source>保留原有图片，叠加一层透明文字，可以搜索和复制</source>
+        <translation type="unfinished">Preserve the original images, overlay a layer of transparent text that can be searched and copied</translation>
+    </message>
+    <message>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="107"/>
+        <source>.pdf 单层纯文本文档</source>
+        <translation type="unfinished">.pdf One-layer plain text document</translation>
+    </message>
+    <message>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="108"/>
+        <source>移除原有内容，写入一层可见的文字</source>
+        <translation type="unfinished">Remove the original content and write a layer of visible text</translation>
+    </message>
+    <message>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="145"/>
         <source>其它</source>
         <translation>Others</translation>
     </message>
