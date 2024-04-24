@@ -18,6 +18,7 @@ TabPage {
     property string msnState: "" // OCR任务状态， none init run stop
     property var missionInfo: {} // 当前任务信息，耗时等
     property string missionShow: "" // 当前任务信息展示字符串
+    property int errorNum: 0 // 异常的任务个数
 
     property string msnID: "" // 当前任务ID
 
@@ -84,6 +85,7 @@ TabPage {
         }
         missionProgress.percent = 0 // 进度条显示
         missionShow = `0s  0/${msnLength}  0%` // 信息显示
+        errorNum = 0 // 异常任务个数
         // 开始运行
         const paths = filesTableView.getColumnsValue("path")
         const argd = configsComp.getValueDict()
@@ -177,7 +179,7 @@ TabPage {
     // 获取一个OCR的返回值
     function onOcrGet(path, res) {
         // 刷新耗时显示
-        const date = new Date();
+        const date = new Date()
         const currentTime = date.getTime()
         missionInfo.costTime = currentTime - missionInfo.startTime
         missionInfo.nowNum = missionInfo.nowNum + 1
@@ -194,7 +196,9 @@ TabPage {
             case 101:
                 state = "√ ---- ";break
             default:
-                state = "× "+res.code;break
+                state = "× "+res.code
+                errorNum++ // 异常任务数量+1
+                break
         }
         // 刷新表格显示
         filesTableView.set(path, { "time": time, "state": state })
@@ -212,8 +216,14 @@ TabPage {
         _ocrStop()
         // 任务成功
         if(msg.startsWith("[Success]")) {
+            let errMsg = ""
+            if(errorNum > 0) { // 有异常任务
+                errMsg = qsTr("%1 张图片识别失败！").arg(errorNum)
+                const coding = "jpg, jpe, jpeg, jfif, png, webp, bmp, tif, tiff"
+                qmlapp.popup.message(errMsg, qsTr("请检查图片是否损坏；编码是否符合： ")+coding, "warning")
+            }
             const simpleType = configsComp.getValue("other.simpleNotificationType")
-            qmlapp.popup.simple(qsTr("批量识别完成"), "", simpleType)
+            qmlapp.popup.simple(qsTr("批量识别完成"), errMsg, simpleType)
             // 任务完成后续操作
             qmlapp.globalConfigs.utilsDicts.postTaskHardwareCtrl(
                 configsComp.getValue("postTaskActions.system")
