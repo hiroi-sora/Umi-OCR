@@ -274,53 +274,20 @@ TabPage {
                 anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.right: parent.right
-                anchors.topMargin: size_.smallSpacing
+                // anchors.topMargin: size_.smallSpacing
+                anchors.margins: size_.smallSpacing
+                anchors.bottomMargin: 0
                 height: size_.line * 1.5
-                // 靠左
-                Row {
-                    id: dLeftTopL
-                    anchors.left: parent.left
-                    anchors.top: parent.top
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: size_.spacing
-                    spacing: size_.smallSpacing
+                clip: true
 
-                    IconButtonBar {
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
-                        btnList: [
-                            {
-                                icon: "screenshot",
-                                onClicked: tabPage.screenshot,
-                                color: theme.textColor,
-                                toolTip: tr("屏幕截图"),
-                            },
-                            {
-                                icon: "paste",
-                                onClicked: tabPage.paste,
-                                color: theme.textColor,
-                                toolTip: tr("粘贴图片"),
-                            },
-                        ]
-                    }
-                    Button_ {
-                        visible: msnState==="run"
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
-                        text_: qsTr("停止任务")
-                        textColor_: theme.noColor
-                        onClicked: tabPage.msnStop()
-                    }
-                }
                 // 靠右
                 Row {
                     id: dLeftTopR
                     anchors.top: parent.top
                     anchors.right: parent.right
                     anchors.bottom: parent.bottom
-                    anchors.rightMargin: size_.spacing
                     spacing: size_.smallSpacing
-                    visible: dLeftTop.width > dLeftTopL.width + dLeftTopR.width
+                    // visible: dLeftTop.width > dLeftTopL.width + dLeftTopR.width
 
                     // 显示文字
                     CheckButton {
@@ -373,6 +340,54 @@ TabPage {
                         text: (imageText.scale*100).toFixed(0) + "%"
                         color: theme.subTextColor
                         width: size_.line * 2.5
+                    }
+                }
+
+                // 靠左
+                Rectangle { // 背景
+                    anchors.left: parent.left
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    width: dLeftTopL.width + size_.line
+                    color: theme.bgColor
+                    Rectangle {
+                        anchors.fill: parent
+                        color: theme.coverColor1
+                    }
+                }
+                Row { // 按钮栏
+                    id: dLeftTopL
+                    anchors.left: parent.left
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    spacing: size_.smallSpacing
+
+                    IconButtonBar {
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        btnList: [
+                            {
+                                icon: "screenshot",
+                                onClicked: tabPage.screenshot,
+                                color: theme.textColor,
+                                toolTip: tr("屏幕截图"),
+                                text: tr("截图"),
+                            },
+                            {
+                                icon: "paste",
+                                onClicked: tabPage.paste,
+                                color: theme.textColor,
+                                toolTip: tr("粘贴图片"),
+                            },
+                        ]
+                    }
+                    Button_ {
+                        visible: msnState==="run"
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        text_: qsTr("停止任务")
+                        textColor_: theme.noColor
+                        onClicked: tabPage.msnStop()
                     }
                 }
             }
