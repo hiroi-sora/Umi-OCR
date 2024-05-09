@@ -9,7 +9,8 @@ Button_ {
     property string icon_: ""
     property string text_: ""
     property color color: theme.subTextColor
-    implicitWidth: btnIcon.width+btnText.width+size_.smallSpacing*1.5
+    width: size_.line + size_.smallSpacing * 2 + (text_ ? btnText.width + size_.smallSpacing * 0.5 : 0)
+    implicitWidth: width
 
     contentItem: Item {
         anchors.fill: parent
@@ -20,7 +21,7 @@ Button_ {
             width: size_.line
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
-            anchors.leftMargin: size_.smallSpacing * 0.5
+            anchors.leftMargin: size_.smallSpacing
             color: btn.color
         }
         Text_ {
@@ -32,6 +33,7 @@ Button_ {
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             text: text_
+            width: text_ ? undefined : 0
             color: btn.color
         }
     }
