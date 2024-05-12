@@ -2,11 +2,21 @@
 # =============== 为插件提供接口，在主线程中调用指定函数 ===============
 # ==================================================================
 
+"""
+from call_func import CallFunc
+
+def func():
+    print("延时3秒调用！")
+
+id = CallFunc.delay(func, 3) # 延时调用
+# CallFunc.delayStop(id) # 取消延时调用
+"""
+
 from PySide2.QtCore import QObject, Slot, Signal, QTimer, QMutex
 from uuid import uuid4  # 唯一ID
 
 
-class __CallFunc(QObject):
+class _CallFunc(QObject):
     def __init__(self):
         super().__init__()
         # 信号 在主线程中调用函数
@@ -62,4 +72,4 @@ class __CallFunc(QObject):
         signal = Signal("QVariant")
 
 
-CallFunc = __CallFunc()
+CallFunc = _CallFunc()
