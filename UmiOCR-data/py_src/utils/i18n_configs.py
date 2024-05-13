@@ -1,6 +1,7 @@
 # UI语言设置
 
 import os
+from PySide2.QtCore import QTranslator
 from . import pre_configs
 from plugin_i18n import setLangCode
 
@@ -36,7 +37,10 @@ LanguageCodes = {
 
 
 class _I18n:
-    def init(self, qtApp, trans):
+    def init(self, qtApp):
+        translator = QTranslator()
+        qtApp.translators = [translator]
+
         self.langCode = ""
         self.langDict = {}
         # 获取信息
@@ -46,11 +50,11 @@ class _I18n:
         if not path:
             print("使用默认文本，未加载翻译。")
             return
-        if not trans.load(path):
+        if not translator.load(path):
             msg = f"无法加载UI语言！\n[Error] Unable to load UI language: {path}"
             os.MessageBox(msg, type="warning")
             return
-        if not qtApp.installTranslator(trans):  # 安装翻译器
+        if not qtApp.installTranslator(translator):  # 安装翻译器
             msg = f"无法加载翻译模块！\n[Error] Unable to installTranslator: {path}"
             os.MessageBox(msg, type="warning")
             return

@@ -47,7 +47,7 @@ import site
 # 启动主qml。工作路径必须为 UmiOCR-data
 def runQml(engineAddImportPath):
     # ==================== 0. 导入包 ====================
-    from PySide2.QtCore import Qt, QTranslator
+    from PySide2.QtCore import Qt
     from PySide2.QtGui import QGuiApplication
     from PySide2.QtQml import QQmlApplicationEngine, qmlRegisterType
 
@@ -103,8 +103,7 @@ def runQml(engineAddImportPath):
     )
 
     # ==================== 5. 启动翻译 ====================
-    trans = QTranslator()
-    I18n.init(qtApp, trans)
+    I18n.init(qtApp)
 
     # ==================== 6. 启动qml引擎 ====================
     engine = QQmlApplicationEngine()
