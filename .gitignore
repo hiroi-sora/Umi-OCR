@@ -1,4 +1,3 @@
-# 开发工具，太乱还没整理好，先不git
 开发工具
 命名规范.md
 Temp
@@ -13,6 +12,7 @@ release.py
 
 # 开发工具
 !dev-tools/i18n/release
+!dev-tools/i18n/*.exe
 dev-tools/7z
 dev-tools/*.zip
 
