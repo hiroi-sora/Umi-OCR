@@ -134,6 +134,7 @@ Item {
                 Text_ {
                     id: timer
                     text: ""
+                    color: timer_.running?theme.textColor:theme.noColor
                     // 新开始计时
                     function start() {
                         timer_.running = true
@@ -161,14 +162,11 @@ Item {
                     // 刷新显示
                     function updateDisplay() {
                         let s = ""
-                        const minutes = Math.floor(runTime / 60)
-                        const seconds = Math.floor(runTime % 60)
-                        let formattedSeconds = seconds
-                        if(minutes>0 && seconds<10)
-                            formattedSeconds = "0"+formattedSeconds
-                        if(minutes < 1) s = formattedSeconds
-                        else s = minutes + ':' + formattedSeconds
-                        timer.text = s
+                        let minutes = Math.floor(runTime / 60)
+                        let seconds = Math.floor(runTime % 60)
+                        if(minutes < 10) minutes = "0"+minutes
+                        if(seconds < 10) seconds = "0"+seconds
+                        timer.text = minutes + ':' + seconds
                     }
 
                     property real startStamp // 开始时间戳，秒
@@ -190,6 +188,15 @@ Item {
                     }
                 }
             }
+        }
+
+        HProgressBar {
+            id: missionProgress
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+            color: theme.bgColor
+            percent: 0
         }
     }
 }
