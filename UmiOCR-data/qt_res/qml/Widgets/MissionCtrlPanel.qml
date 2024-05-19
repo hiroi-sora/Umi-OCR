@@ -13,31 +13,44 @@ Item {
     signal resumeClicked // 点击 恢复
     signal stopClicked // 点击 停止
     // 通知回调
-    function runFinished() { // 开始
+    function runFinished(allNum) { // 任务开始，传入总任务数
         state_ = "run"
         isWaiting = false
         timer.start() // 新开始计时
+        msnNowNum = 0 // 刷新任务计数
+        msnAllNum = allNum
+        timer.updateNumber() // 刷新任务计数文本
     }
     function pauseFinished() { // 暂停
         state_ = "pause"
         isWaiting = false
         timer.pause() // 暂停计时
+        timer.updateNumber() // 刷新任务计数文本
     }
     function resumeFinished() { // 恢复
         state_ = "run"
         isWaiting = false
         timer.resume() // 恢复计时
+        timer.updateNumber() // 刷新任务计数文本
     }
     function stopFinished() { // 停止
         state_ = "stop"
         isWaiting = false
         timer.pause() // 暂停计时
+        timer.updateNumber() // 刷新任务计数文本
+    }
+    function msnStep(step=1) { // 任务计数步进
+        msnNowNum += step
+        if(msnNowNum > msnAllNum) msnNowNum = msnAllNum
+        timer.updateNumber() // 刷新任务计数文本
     }
 
-    // 当前状态， stop run pause
-    property string state_: "stop"
-    // 等待回调中
-    property bool isWaiting: false
+    // 任务状态
+    property string state_: "stop" // 当前状态， stop run pause
+    property bool isWaiting: false // 等待回调中
+    // 任务计数
+    property int msnAllNum: 0 // 总任务数
+    property int msnNowNum: 0 // 当前已完成任务数
 
     // 右：开始/暂停/停止按钮
     Item {
@@ -130,43 +143,75 @@ Item {
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
                 anchors.right: parent.right
-                // 计时器
+                spacing: size_.line
+
+                // 计时器、任务计数器
                 Text_ {
                     id: timer
-                    text: ""
+                    text: `${strState}  ${strTime}  ${strNumber}`
                     color: timer_.running?theme.textColor:theme.noColor
+                    property string strState: "" // 状态文本， "已暂停"
+                    property string strTime: "" // 时间文本
+                    property string strNumber: "" // 任务数量文本， 23/100
                     // 新开始计时
                     function start() {
                         timer_.running = true
                         startStamp = getTimestamp()
                         runTime = pauseTime = 0
-                        updateDisplay()
+                        updateTime()
                     }
                     // 暂停
                     function pause() {
                         timer_.running = false
                         pauseStartStamp = getTimestamp()
-                        updateDisplay()
+                        updateTime()
                     }
                     // 恢复计时
                     function resume() {
                         timer_.running = true
                         const t = getTimestamp()
                         pauseTime += t-pauseStartStamp // 累加暂停时长
-                        updateDisplay()
+                        updateTime()
                     }
                     // 获取时间戳
                     function getTimestamp() {
                         return (new Date()).getTime() / 1000
                     }
-                    // 刷新显示
-                    function updateDisplay() {
+                    // 刷新时间
+                    function updateTime() {
                         let s = ""
                         let minutes = Math.floor(runTime / 60)
                         let seconds = Math.floor(runTime % 60)
                         if(minutes < 10) minutes = "0"+minutes
                         if(seconds < 10) seconds = "0"+seconds
-                        timer.text = minutes + ':' + seconds
+                        strTime = minutes + ':' + seconds
+                    }
+                    // 刷新数量
+                    function updateNumber() {
+                        // n="23/100" , p="已停止"
+                        let n = `${missionCtrl.msnNowNum}/${missionCtrl.msnAllNum}`
+                        let p = ""
+                        // 运行中
+                        if(missionCtrl.state_ === "run") {
+                            if(missionCtrl.msnNowNum < missionCtrl.msnAllNum)
+                                p = qsTr("正在运行")
+                            else
+                                p = qsTr("正在保存") // 所有任务处理完毕，但任务队列未返回结束
+                        }
+                        // 暂停中
+                        else if(missionCtrl.state_ === "pause") {
+                            p = qsTr("已暂停")
+                        }
+                        // 已停止
+                        else if(missionCtrl.state_ === "stop") {
+                            if(missionCtrl.msnNowNum <= 0)
+                                n = p = ""
+                            else
+                                p = qsTr("已停止任务")
+                        }
+                        // 刷新
+                        timer.strNumber = n
+                        timer.strState = p
                     }
 
                     property real startStamp // 开始时间戳，秒
@@ -183,7 +228,7 @@ Item {
                             // 刷新运行时长
                             const timestamp = timer.getTimestamp()
                             timer.runTime = timestamp-timer.startStamp-timer.pauseTime
-                            timer.updateDisplay()
+                            timer.updateTime()
                         }
                     }
                 }
