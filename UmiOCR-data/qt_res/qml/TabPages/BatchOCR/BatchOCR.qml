@@ -15,15 +15,10 @@ TabPage {
 
     // ========================= 【逻辑】 =========================
 
-    property string msnState: "" // OCR任务状态， none init run stop
-    property var missionInfo: {} // 当前任务信息，耗时等
-    property string missionShow: "" // 当前任务信息展示字符串
     property int errorNum: 0 // 异常的任务个数
-
     property string msnID: "" // 当前任务ID
 
     Component.onCompleted: {
-        setMsnState("none")
     }
     // TODO: 测试用
     // Timer {
@@ -42,6 +37,7 @@ TabPage {
 
     // 将需要查询的图片路径列表paths发送给python。传入值是没有 file:/// 开头的纯字符串的列表。
     function addImages(paths) {
+        if(ctrlPanel.state_ !== "stop") return
         // 调用Python方法
         const isRecurrence = configsComp.getValue("mission.recurrence")
         const res = qmlapp.utilsConnector.findImages(paths, isRecurrence)
@@ -54,37 +50,18 @@ TabPage {
         }
     }
 
-    // 运行按钮按下
-    function runBtnClick() {
-        switch(msnState) {
-            case "none": // 不在运行
-                ocrStart()
-                break
-            case "run":  // 工作中
-                ocrStop()
-                break
-        }
-    }
-
     // 运行OCR
     function ocrStart() {
         let msnLength = filesTableView.rowCount
-        if(msnLength <= 0)
+        if(msnLength <= 0) {
+            ctrlPanel.stopFinished()
             return
-        setMsnState("init") // 状态：初始化任务
+        }
         // 刷新表格
         for(let i = 0; i < msnLength; i++) {
             filesTableView.set(i, { time: "", state: qsTr("排队") })
         }
         // 刷新计数
-        missionInfo = {
-            startTime: new Date().getTime(), // 开始时间
-            allNum: msnLength, // 总长度
-            costTime: 0, // 当前耗时
-            nowNum: 0, // 当前执行长度
-        }
-        missionProgress.percent = 0 // 进度条显示
-        missionShow = `0s  0/${msnLength}  0%` // 信息显示
         errorNum = 0 // 异常任务个数
         // 开始运行
         const paths = filesTableView.getColumnsValue("path")
@@ -93,17 +70,18 @@ TabPage {
         // 若tabPanel面板的下标没有变化过，则切换到记录页
         if(tabPanel.indexChangeNum < 2)
             tabPanel.currentIndex = 1
+        ctrlPanel.runFinished(msnLength)
     }
 
     // 停止OCR
     function ocrStop() {
         _ocrStop()
         tabPage.callPy("msnStop")
+        ctrlPanel.stopFinished()
     }
 
     function _ocrStop() {
         msnID = "" // 清除任务ID
-        setMsnState("stop") // 设置结束中
         // 刷新表格，清空未执行的任务的状态
         let msnLength = filesTableView.rowCount
         for(let i = 0; i < msnLength; i++) {
@@ -112,12 +90,11 @@ TabPage {
                 filesTableView.setProperty(i, "state", "")
             }
         }
-        setMsnState("none") // 设置结束
     }
 
     // 关闭页面
     function closePage() {
-        if(msnState !== "none") {
+        if(ctrlPanel.state_ !== "stop") {
             const argd = { yesText: qsTr("依然关闭") }
             const callback = (flag)=>{
                 if(flag) {
@@ -140,36 +117,6 @@ TabPage {
 
     // ========================= 【python调用qml】 =========================
 
-    /* 
-    none  不在运行
-    init  正在启动
-    run   工作中
-    stop  停止中
-    */
-    // 设置任务状态
-    function setMsnState(flag) {
-        msnState = flag
-        switch(flag) {
-            case "none": // 不在运行
-                runBtn.text_ = qsTr("开始任务")
-                runBtn.enabled = true
-                break;
-            case "init": // 正在启动
-                runBtn.text_ = qsTr("启动中…")
-                runBtn.enabled = false
-                break;
-            case "run":  // 工作中
-                runBtn.text_ = qsTr("停止任务")
-                runBtn.enabled = true
-                break;
-            case "stop": // 停止中
-                runBtn.text_ = qsTr("停止中…")
-                runBtn.enabled = false
-                break;
-        }
-        console.log("set mission state:  ", flag)
-    }
-
     // 准备开始一个任务
     function onOcrReady(path) {
         // 刷新表格显示
@@ -178,16 +125,6 @@ TabPage {
 
     // 获取一个OCR的返回值
     function onOcrGet(path, res) {
-        // 刷新耗时显示
-        const date = new Date()
-        const currentTime = date.getTime()
-        missionInfo.costTime = currentTime - missionInfo.startTime
-        missionInfo.nowNum = missionInfo.nowNum + 1
-        const costTime = (missionInfo.costTime/1000).toFixed(1)
-        const nowNum = missionInfo.nowNum
-        const percent = Math.floor(((nowNum/missionInfo.allNum)*100))
-        missionProgress.percent = nowNum/missionInfo.allNum // 进度条显示
-        missionShow = `${costTime}s  ${nowNum}/${missionInfo.allNum}  ${percent}%` // 信息显示
         const time = res.time.toFixed(2)
         let state = ""
         switch(res.code){
@@ -205,6 +142,7 @@ TabPage {
         // 提取文字，添加到结果表格
         res.title = res.fileName
         resultsTableView.addOcrResult(res)
+        ctrlPanel.msnStep(1) // 任务计数器步进
     }
 
     // 任务队列完毕
@@ -233,6 +171,7 @@ TabPage {
         else if(msg.startsWith("[Error]")) {
             qmlapp.popup.message(qsTr("批量识别任务异常"), msg, "error")
         }
+        ctrlPanel.stopFinished()
     }
 
     // 预览
@@ -286,67 +225,24 @@ TabPage {
             anchors.fill: parent
 
             // 上方控制板
-            Item {
+            MissionCtrlPanel {
                 id: ctrlPanel
                 anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.margins: size_.spacing
                 height: size_.line * 2
-                clip: true
 
-                // 右边按钮
-                Button_ {
-                    id: runBtn
-                    anchors.top: parent.top
-                    anchors.bottom: parent.bottom
-                    anchors.right: parent.right
-                    width: size_.line * 6
-                    bold_: true
-
-                    bgColor_: theme.coverColor1
-                    bgHoverColor_: theme.coverColor2
-                    text_: "" // 动态变化
-                    onClicked: tabPage.runBtnClick()
+                onRunClicked: tabPage.ocrStart()
+                onPauseClicked: {
+                    tabPage.callPy("msnPause")
+                    pauseFinished()
                 }
-
-                // 左上信息
-                Item {
-                    id: infoContainer
-                    anchors.top: parent.top
-                    anchors.left: parent.left
-                    anchors.right: runBtn.left
-                    anchors.rightMargin: size_.smallSpacing
-                    height: size_.line * 1.3
-                    clip: true
-
-                    Text_ {
-                        anchors.right: parent.right
-                        anchors.bottom: parent.bottom
-                        // anchors.rightMargin: size_.smallSpacing
-                        
-                        text: missionShow
-                        color: theme.subTextColor
-                    }
+                onResumeClicked: {
+                    tabPage.callPy("msnResume")
+                    resumeFinished()
                 }
-
-                // 左下进度条
-                Item {
-                    id: progressContainer
-                    anchors.top: infoContainer.bottom
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.right: runBtn.left
-                    anchors.rightMargin: size_.smallSpacing
-                    anchors.topMargin: size_.smallSpacing * 0.5
-
-                    HProgressBar {
-                        id: missionProgress
-                        anchors.fill: parent
-                        color: theme.bgColor
-                        percent: 0
-                    }
-                }
+                onStopClicked: tabPage.ocrStop()
             }
 
             // 下方文件表格
@@ -369,7 +265,7 @@ TabPage {
                 defaultTips: qsTr("拖入图片或文件夹")
                 fileDialogTitle: qsTr("请选择图片")
                 fileDialogNameFilters: [qsTr("图片")+" (*.jpg *.jpe *.jpeg *.jfif *.png *.webp *.bmp *.tif *.tiff)"]
-                isLock: msnState !== "none"
+                isLock: ctrlPanel.state_ !== "stop"
                 onAddPaths: {
                     tabPage.addImages(paths)
                 }

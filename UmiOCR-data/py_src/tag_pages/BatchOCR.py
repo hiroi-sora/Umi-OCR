@@ -45,7 +45,6 @@ class BatchOCR(Page):
         if self.msnID.startswith("[Error]"):  # 添加任务失败
             self._onEnd(None, f"{self.msnID}\n添加任务失败。")
         else:  # 添加成功，通知前端刷新UI
-            self.callQml("setMsnState", "run")
             print(f"添加任务成功 {self.msnID}")
         return self.msnID
 
@@ -116,8 +115,14 @@ class BatchOCR(Page):
             return False
         return True
 
-    def msnStop(self):  # 任务停止（异步）
+    def msnStop(self):  # 任务停止
         MissionOCR.stopMissionList(self.msnID)
+
+    def msnPause(self):  # 任务暂停
+        MissionOCR.pauseMissionList(self.msnID)
+
+    def msnResume(self):  # 任务恢复
+        MissionOCR.resumeMissionList(self.msnID)
 
     def msnPreview(self, path, argd):  # 快速进行一次任务，主要用于预览
         msnInfo = {
