@@ -51,6 +51,7 @@ Item {
     // 任务计数
     property int msnAllNum: 0 // 总任务数
     property int msnNowNum: 0 // 当前已完成任务数
+    clip: true
 
     // 右：开始/暂停/停止按钮
     Item {
@@ -149,7 +150,7 @@ Item {
                 Text_ {
                     id: timer
                     text: `${strState}  ${strTime}  ${strNumber}`
-                    color: timer_.running?theme.textColor:theme.noColor
+                    color: timer_.running?theme.textColor:(missionCtrl.msnNowNum<missionCtrl.msnAllNum?theme.noColor:theme.yesColor)
                     property string strState: "" // 状态文本， "已暂停"
                     property string strTime: "" // 时间文本
                     property string strNumber: "" // 任务数量文本， 23/100
@@ -179,6 +180,10 @@ Item {
                     }
                     // 刷新时间
                     function updateTime() {
+                        if(runTime < 0.1) {
+                            strTime = "" // 时间太短，不显示
+                            return
+                        }
                         let s = ""
                         let minutes = Math.floor(runTime / 60)
                         let seconds = Math.floor(runTime % 60)
@@ -206,8 +211,10 @@ Item {
                         else if(missionCtrl.state_ === "stop") {
                             if(missionCtrl.msnNowNum <= 0)
                                 n = p = ""
-                            else
+                            else if(missionCtrl.msnNowNum < missionCtrl.msnAllNum)
                                 p = qsTr("已停止任务")
+                            else
+                                p = qsTr("已完成")
                         }
                         // 刷新
                         timer.strNumber = n
