@@ -22,6 +22,7 @@ class Mission:
     def __init__(self):
         self._msnInfoDict = {}  # 任务信息的字典
         self._msnListDict = {}  # 任务队列的字典
+        self._msnPausedDict = {}  # 已暂停的任务队列
         self._msnMutex = QMutex()  # 任务队列的锁
         self._task = None  # 异步任务对象
         self._taskMutex = QMutex()  # 任务对象的锁
@@ -75,16 +76,52 @@ class Mission:
     # 停止一条任务队列
     def stopMissionList(self, msnID):
         self._msnMutex.lock()  # 上锁
+        # 将暂停中的任务恢复
+        if msnID in self._msnPausedDict:
+            info, list_ = self._msnPausedDict[msnID]
+            self._msnInfoDict[msnID] = info
+            self._msnListDict[msnID] = list_
+        # 将进行中的任务置为停止状态
         if msnID in self._msnListDict:
             self._msnInfoDict[msnID]["state"] = "stop"  # 设为停止状态
         self._msnMutex.unlock()  # 解锁
+        self._startMsns()  # 拉起工作线程，使已暂停的任务可以正常结束
 
     # 停止全部任务
     def stopAllMissions(self):
         self._msnMutex.lock()  # 上锁
+        # 将暂停中的任务恢复
+        for msnID in self._msnPausedDict:
+            info, list_ = self._msnPausedDict[msnID]
+            self._msnInfoDict[msnID] = info
+            self._msnListDict[msnID] = list_
+        # 将进行中的任务置为停止状态
         for msnID in self._msnListDict:
             self._msnInfoDict[msnID]["state"] = "stop"
         self._msnMutex.unlock()  # 解锁
+        self._startMsns()
+
+    # 暂停一条任务队列
+    def pauseMissionList(self, msnID):
+        self._msnMutex.lock()  # 上锁
+        if msnID in self._msnListDict:
+            msn = (self._msnInfoDict[msnID], self._msnListDict[msnID])
+            self._msnPausedDict[msnID] = msn
+            del self._msnInfoDict[msnID]
+            del self._msnListDict[msnID]
+        self._msnMutex.unlock()  # 解锁
+        print(f"暂停：{msnID}")
+
+    # 恢复一条任务队列的运行
+    def resumeMissionList(self, msnID):
+        self._msnMutex.lock()  # 上锁
+        if msnID in self._msnPausedDict:
+            info, list_ = self._msnPausedDict[msnID]
+            self._msnInfoDict[msnID] = info
+            self._msnListDict[msnID] = list_
+        self._msnMutex.unlock()  # 解锁
+        self._startMsns()  # 拉起工作线程
+        print(f"恢复：{msnID}")
 
     # 获取每一条任务队列长度
     def getMissionListsLength(self):
@@ -155,10 +192,10 @@ class Mission:
         # 循环，直到任务队列的列表为空
         while True:
             # 1. 检查api和任务字典是否为空
-            self._msnMutex.lock()  # 上锁
+            self._msnMutex.lock()  # 锁1 上锁
             dl = len(self._msnInfoDict)  # 任务字典长度
             if dl == 0:  # 任务字典已空
-                self._msnMutex.unlock()  # 解锁
+                self._msnMutex.unlock()  # 锁1 解锁
                 break
 
             # 2. 任务调度，取一个任务
@@ -169,7 +206,7 @@ class Mission:
             dictKey = tuple(self._msnInfoDict.keys())[dictIndex]
             msnInfo = self._msnInfoDict[dictKey]
             msnList = self._msnListDict[dictKey]
-            self._msnMutex.unlock()  # 解锁
+            self._msnMutex.unlock()  # 锁1 解锁
 
             # 3. 检查任务是否要求停止
             if msnInfo["state"] == "stop":
@@ -203,10 +240,15 @@ class Mission:
                 res["time"] = t2 - t1
                 res["timestamp"] = t2
 
-            # 7. 再次检查任务是否要求停止
+            # 7. 再次检查任务是否要求停止，或者已暂停
+            self._msnMutex.lock()  # 锁2 上锁
             if msnInfo["state"] == "stop":
                 self._msnDictDel(dictKey)
                 msnInfo["onEnd"](msnInfo, "[Warning] Task stop.")
+                self._msnMutex.unlock()  # 锁2 解锁
+                continue
+            if dictKey not in self._msnInfoDict:
+                self._msnMutex.unlock()  # 锁2 解锁
                 continue
 
             # 8. 不停止，则上报该任务
@@ -218,6 +260,7 @@ class Mission:
                 msnInfo["onEnd"](msnInfo, "[Success]")
                 self._msnDictDel(dictKey)
                 dictIndex -= 1  # 字典下标回退1位，下次执行正确的下一项
+            self._msnMutex.unlock()  # 锁2 解锁
 
         # 完成
         self._taskFinish()
