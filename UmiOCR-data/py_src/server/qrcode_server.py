@@ -6,13 +6,16 @@ from .bottle import request
 from ..mission.mission_qrcode import MissionQRCode
 
 
-# 从base64识别二维码图片。传入base64字符串，返回字典 {"code", "data"}
-def base2text(base64):
-    res = MissionQRCode.addMissionWait({}, [{"base64": base64}])
+# 从base64识别二维码图片。传入data指令字典 {"base64", "options"}
+# 返回字典 {"code", "data"}
+def base2text(data):
+    base64 = data["base64"]
+    opt = data.get("options", {})
+    res = MissionQRCode.addMissionWait(opt, [{"base64": base64}])
     return res[0]["result"]
 
 
-# 从文本生成base64。传入data指令字典 {"text","xxx"}
+# 从文本生成base64。传入data指令字典 {"text", "xxx"}
 # 返回  {"code", "data"}
 def text2base(data):
     text = data["text"]
@@ -46,7 +49,7 @@ def init(UmiWeb):
             return json.dumps({"code": 801, "data": f"请求为空。"})
 
         if "base64" in data:
-            return json.dumps(base2text(data["base64"]))
+            return json.dumps(base2text(data))
         elif "text" in data:
             return json.dumps(text2base(data))
         return json.dumps({"code": 802, "data": '指令中不存在 "base64" 或 "text"'})
