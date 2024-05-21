@@ -130,8 +130,8 @@ Item {
         id: ctrlLeft
         anchors.top: parent.top
         anchors.bottom: parent.bottom
-        anchors.right: ctrlRight.left
         anchors.left: parent.left
+        anchors.right: ctrlRight.left
         anchors.rightMargin: size_.spacing
         Item {
             id: ctrlLeftTop
@@ -191,7 +191,7 @@ Item {
                         if(seconds < 10) seconds = "0"+seconds
                         strTime = minutes + ':' + seconds
                     }
-                    // 刷新数量
+                    // 刷新数量、显示文本
                     function updateNumber() {
                         // n="23/100" , p="已停止"
                         let n = `${missionCtrl.msnNowNum}/${missionCtrl.msnAllNum}`
@@ -205,20 +205,22 @@ Item {
                         }
                         // 暂停中
                         else if(missionCtrl.state_ === "pause") {
-                            p = qsTr("已暂停")
+                            p = qsTr("暂停")
                         }
                         // 已停止
                         else if(missionCtrl.state_ === "stop") {
                             if(missionCtrl.msnNowNum <= 0)
                                 n = p = ""
                             else if(missionCtrl.msnNowNum < missionCtrl.msnAllNum)
-                                p = qsTr("已停止任务")
+                                p = qsTr("任务停止")
                             else
-                                p = qsTr("已完成")
+                                p = qsTr("任务完成")
                         }
                         // 刷新
                         timer.strNumber = n
                         timer.strState = p
+                        if(missionCtrl.msnAllNum > 0)
+                            missionProgress.percent = missionCtrl.msnNowNum/missionCtrl.msnAllNum
                     }
 
                     property real startStamp // 开始时间戳，秒
@@ -247,6 +249,9 @@ Item {
             anchors.bottom: parent.bottom
             anchors.left: parent.left
             anchors.right: parent.right
+            anchors.bottomMargin: size_.line * 0.1
+            height: size_.line * 0.5
+            highlightColor: missionCtrl.state_==="run"?theme.yesColor:theme.coverColor4
             color: theme.bgColor
             percent: 0
         }
