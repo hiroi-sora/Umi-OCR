@@ -100,6 +100,10 @@ SystemTrayIcon {
         }
 
         MenuItem {
+            text: qsTr("打开主窗口")
+            onTriggered: qmlapp.mainWin.setVisibility(true)
+        }
+        MenuItem {
             text: qsTr("退出 Umi-OCR")
             onTriggered: qmlapp.mainWin.quit()
         }
