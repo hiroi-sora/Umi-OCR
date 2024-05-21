@@ -27,22 +27,8 @@ TabPage {
 
     // ========================= 【逻辑】 =========================
 
-    property string msnState: "" // 任务状态， none init run stop
-    property string missionShow: "" // 当前任务信息展示字符串
-    property var missionInfo: {} // 当前任务信息，耗时等
-    /*
-        startTime: new Date().getTime(), // 开始时间
-        allNum: msnLength, // 总长度
-        costTime: 0, // 当前耗时
-        nowNum: 0, // 当前执行长度
-    */
-
     property string msnID: "" // 当前任务ID
 
-    Component.onCompleted: {
-        missionInfo = {}
-        setMsnState("none")
-    }
     // TODO: 测试用
     // Timer {
     //     interval: 200
@@ -50,13 +36,13 @@ TabPage {
     //     onTriggered: {
     //         addDocs(
     //             [
-    //                 // "D:/Pictures/Screenshots/test",
+    //                 "D:/Pictures/Screenshots/test",
     //                 "../../PDF测试",
     //             ]
     //         )
     //         console.log("自动添加！！！！！！！！！！！！！")
-    //         ocrStart()
-    //         onClickDoc(0)
+    //         // docStart()
+    //         // onClickDoc(0)
     //     }
     // }
 
@@ -92,25 +78,13 @@ TabPage {
         }
     }
 
-    // 运行按钮按下
-    function runBtnClick() {
-        switch(msnState) {
-            case "none": // 不在运行
-                docStart()
-                break
-            case "run":  // 工作中
-                docStop()
-                break
-        }
-    }
-
     // 运行文档任务
     function docStart() {
         const fileCount = filesTableView.rowCount
-        if(fileCount <= 0)
+        if(fileCount <= 0) {
+            ctrlPanel.stopFinished()
             return
-        setMsnState("init") // 状态：初始化任务
-        missionShow = ""
+        }
         // 获取信息
         const docs = filesTableView.getColumnsValues([
             "path","range_start", "range_end", "is_encrypted", "is_authenticate", "password"])
@@ -120,7 +94,7 @@ TabPage {
             pathIndex[d.path] = i
             if(d.is_encrypted && !d.is_authenticate) {
                 qmlapp.popup.message(qsTr("文档已加密"), qsTr("【%1】\n请点击文档名，设置密码").arg(d.path), "warning")
-                setMsnState("none") // 状态：不在运行
+                ctrlPanel.stopFinished()
                 return
             }
         }
@@ -143,25 +117,14 @@ TabPage {
                 allPages += d.range_end - d.range_start + 1
             }
         }
-        missionProgress.percent = 0 // 进度条显示
         if(allPages > 0) { // 有成功的任务
-            // 刷新计数
-            missionInfo = {
-                startTime: new Date().getTime(), // 开始时间
-                allNum: allPages, // 总长度
-                costTime: 0, // 当前耗时
-                nowNum: 0, // 当前执行长度
-            }
-            missionShow = `0s  0/${allPages}  0%` // 信息显示
             // 若tabPanel面板的下标没有变化过，则切换到记录页
             if(tabPanel.indexChangeNum < 2)
                 tabPanel.currentIndex = 1
-            setMsnState("run") // 状态：运行中
+            ctrlPanel.runFinished(allPages)
         }
         else {
-            missionInfo = {}
-            missionShow = qsTr("任务失败")
-            setMsnState("none") // 状态：不在运行
+            ctrlPanel.stopFinished()
         }
         // 错误信息显示
         if(errMsg) {
@@ -171,7 +134,6 @@ TabPage {
 
     // 停止文档任务
     function docStop() {
-        setMsnState("stop") // 设置结束中
         tabPage.callPy("msnStop")
         // 刷新表格，清空未执行的任务的状态
         let msnLength = filesTableView.rowCount
@@ -181,19 +143,20 @@ TabPage {
                 filesTableView.setProperty(i, "state", "")
             }
         }
-        setMsnState("none") // 设置结束
+        ctrlPanel.stopFinished()
     }
 
     // 文件表格中单击文档
     function onClickDoc(index) {
-        if(msnState !== "none") return
+        if(ctrlPanel.state_ !== "stop") return
         const info = filesTableView.get(index)
-        previewDoc.show(info)
+        if(Object.keys(info).length > 0)
+            previewDoc.show(info)
     }
 
     // 关闭页面
     function closePage() {
-        if(msnState !== "none") {
+        if(ctrlPanel.state_ !== "stop") {
             const argd = { yesText: qsTr("依然关闭") }
             const callback = (flag)=>{
                 if(flag) {
@@ -210,41 +173,6 @@ TabPage {
 
     // ========================= 【python调用qml】 =========================
 
-    /* 
-    none  不在运行
-    init  正在启动
-    run   工作中
-    stop  停止中
-    */
-    // 设置任务状态
-    function setMsnState(flag) {
-        switch(flag) {
-            case "none": // 不在运行
-                runBtn.text_ = qsTr("开始任务")
-                runBtn.enabled = true
-                // 首次运行 显示提示信息
-                // if(msnState) {
-                //     const tips = qsTr("提示：如果识别效果不好，比如输出乱码或没有文字输出。请尝试将设置的[内容提取模式]改为“整页强制OCR”。")
-                //     qmlapp.popup.messageMemory("pdfOcrNotFood", qsTr("文档识别任务完成"), tips)
-                // }
-                break;
-            case "init": // 正在启动
-                runBtn.text_ = qsTr("启动中…")
-                runBtn.enabled = false
-                break;
-            case "run":  // 工作中
-                runBtn.text_ = qsTr("停止任务")
-                runBtn.enabled = true
-                break;
-            case "stop": // 停止中
-                runBtn.text_ = qsTr("停止中…")
-                runBtn.enabled = false
-                break;
-        }
-        msnState = flag
-        console.log("set mission state:  ", flag)
-    }
-
     // 准备开始处理一个文档
     function onDocStart(path) {
         // 刷新表格显示
@@ -255,48 +183,33 @@ TabPage {
 
     // 获取一个文档的一页的结果
     function onDocGet(path, page, res) {
-        // 刷新总体 耗时显示
-        const date = new Date();
-        const currentTime = date.getTime()
-        missionInfo.costTime = currentTime - missionInfo.startTime
-        missionInfo.nowNum = missionInfo.nowNum + 1
-        const costTime = (missionInfo.costTime/1000).toFixed(1)
-        const nowNum = missionInfo.nowNum
-        let percent = Math.floor(((nowNum/missionInfo.allNum)*100))
-        if(percent > 99) percent = 99 // 单页识别进度卡 99% ，只有onDocEnd全部任务完毕才能 100%
-        missionProgress.percent = nowNum/missionInfo.allNum // 进度条显示
-        missionShow = `${costTime}s  ${nowNum}/${missionInfo.allNum}  ${percent}%` // 信息显示
         // 刷新单个文档的信息
         const d = filesTableView.get(path)
-        let state = `${page - d.range_start}/${d.range_end - d.range_start + 1}`
+        const state = `${page - d.range_start}/${d.range_end - d.range_start + 1}`
         filesTableView.setProperty(path, "state", state)
         // 提取文字，添加到结果表格
-        let title = path2name(path)
+        const title = path2name(path)
         res.title = `${title} - ${page}`
         resultsTableView.addOcrResult(res)
+        ctrlPanel.msnStep(1)
     }
 
     // 一个文档处理完毕
     function onDocEnd(path, msg) {
         filesTableView.setProperty(path, "state", "√")
-        // 任务成功
-        if(msg.startsWith("[Success]")) {
-            // 所有文档处理完毕
-            if(msg === "[Success] All completed.") {
-                setMsnState("none") // 状态：不在运行
-                const costTime = (missionInfo.costTime/1000).toFixed(1)
-                missionShow = `${costTime}s  ${missionInfo.nowNum}/${missionInfo.allNum}  100%` // 刷新 100%
-                const simpleType = configsComp.getValue("other.simpleNotificationType")
-                qmlapp.popup.simple(qsTr("文档识别完成"), "", simpleType)
-                // 任务完成后续操作
-                qmlapp.globalConfigs.utilsDicts.postTaskHardwareCtrl(
-                    configsComp.getValue("postTaskActions.system")
-                )
-            }
-        }
         // 任务失败
-        else if(msg.startsWith("[Error]")) {
-            qmlapp.popup.message(qsTr("批量识别任务异常"), msg, "error")
+        if(msg.startsWith("[Error]")) {
+            qmlapp.popup.message(qsTr("文档识别异常"), msg, "error")
+        }
+        // 所有文档处理完毕
+        if(ctrlPanel.msnNowNum >= ctrlPanel.msnAllNum) {
+            const simpleType = configsComp.getValue("other.simpleNotificationType")
+            qmlapp.popup.simple(qsTr("批量识别完成"), "", simpleType)
+            ctrlPanel.stopFinished()
+            // 任务完成后续操作
+            qmlapp.globalConfigs.utilsDicts.postTaskHardwareCtrl(
+                configsComp.getValue("postTaskActions.system")
+            )
         }
     }
 
@@ -309,8 +222,8 @@ TabPage {
     // ========================= 【布局】 =========================
 
     // 配置
-    configsComp: BatchDOCConfigs {
-    }
+    configsComp: BatchDOCConfigs {}
+
     // 主区域：左右双栏面板。
     DoubleRowLayout {
         saveKey: "BatchDOC_1"
@@ -322,66 +235,24 @@ TabPage {
             anchors.fill: parent
 
             // 上方控制板
-            Item {
+            MissionCtrlPanel {
                 id: ctrlPanel
                 anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.margins: size_.spacing
                 height: size_.line * 2
-                clip: true
 
-                // 右边按钮
-                Button_ {
-                    id: runBtn
-                    anchors.top: parent.top
-                    anchors.bottom: parent.bottom
-                    anchors.right: parent.right
-                    width: size_.line * 6
-                    bold_: true
-
-                    bgColor_: theme.coverColor1
-                    bgHoverColor_: theme.coverColor2
-                    text_: "" // 动态变化
-                    onClicked: tabPage.runBtnClick()
+                onRunClicked: tabPage.docStart()
+                onPauseClicked: {
+                    tabPage.callPy("msnPause")
+                    pauseFinished()
                 }
-
-                // 左上信息
-                Item {
-                    id: infoContainer
-                    anchors.top: parent.top
-                    anchors.left: parent.left
-                    anchors.right: runBtn.left
-                    anchors.rightMargin: size_.smallSpacing
-                    height: size_.line * 1.3
-                    clip: true
-
-                    Text_ {
-                        anchors.right: parent.right
-                        anchors.bottom: parent.bottom
-                        
-                        text: missionShow
-                        color: theme.subTextColor
-                    }
+                onResumeClicked: {
+                    tabPage.callPy("msnResume")
+                    resumeFinished()
                 }
-
-                // 左下进度条
-                Item {
-                    id: progressContainer
-                    anchors.top: infoContainer.bottom
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.right: runBtn.left
-                    anchors.rightMargin: size_.smallSpacing
-                    anchors.topMargin: size_.smallSpacing * 0.5
-
-                    HProgressBar {
-                        id: missionProgress
-                        anchors.fill: parent
-                        color: theme.bgColor
-                        percent: 0
-                    }
-                }
+                onStopClicked: tabPage.docStop()
             }
 
             // 下方文件表格
@@ -404,7 +275,7 @@ TabPage {
                 defaultTips: qsTr("拖入文档或文件夹")
                 fileDialogTitle: qsTr("请选择文档")
                 fileDialogNameFilters: [qsTr("文档")+" (*.pdf *.xps *.epub *.mobi *.fb2 *.cbz)"]
-                isLock: msnState !== "none"
+                isLock: ctrlPanel.state_ !== "stop"
                 onAddPaths: {
                     tabPage.addDocs(paths)
                 }

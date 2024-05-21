@@ -84,6 +84,14 @@ class BatchDOC(Page):
             MissionDOC.stopMissionList(msnID)
         self._msnIdPath = {}
 
+    def msnPause(self):  # 任务暂停
+        for msnID in self._msnIdPath:
+            MissionDOC.pauseMissionList(msnID)
+
+    def msnResume(self):  # 任务恢复
+        for msnID in self._msnIdPath:
+            MissionDOC.resumeMissionList(msnID)
+
     # 初始化输出器列表。成功返回两个输出器列表 output1, output2 。失败返回 "失败信息", None
     def _initOutputList(self, argd, path):
         # =============== 提取输出路径 outputDir, outputDirName ===============
