@@ -151,6 +151,8 @@ Item {
                     id: timer
                     text: `${strState}  ${strTime}  ${strNumber}`
                     color: timer_.running?theme.textColor:(missionCtrl.msnNowNum<missionCtrl.msnAllNum?theme.noColor:theme.yesColor)
+                    font.pixelSize: size_.smallText
+                    verticalAlignment: Text.AlignVCenter // 垂直居中
                     property string strState: "" // 状态文本， "已暂停"
                     property string strTime: "" // 时间文本
                     property string strNumber: "" // 任务数量文本， 23/100
