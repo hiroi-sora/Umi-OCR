@@ -157,8 +157,6 @@ TabPage {
             let errMsg = ""
             if(errorNum > 0) { // 有异常任务
                 errMsg = qsTr("%1 张图片识别失败！").arg(errorNum)
-                const coding = "jpg, jpe, jpeg, jfif, png, webp, bmp, tif, tiff"
-                qmlapp.popup.message(errMsg, qsTr("请检查图片是否损坏；编码是否符合： ")+coding, "warning")
             }
             const simpleType = configsComp.getValue("other.simpleNotificationType")
             qmlapp.popup.simple(qsTr("批量识别完成"), errMsg, simpleType)
