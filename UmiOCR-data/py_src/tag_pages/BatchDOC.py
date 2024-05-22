@@ -80,17 +80,14 @@ class BatchDOC(Page):
 
     # 停止当前所有任务
     def msnStop(self):
-        for msnID in self._msnIdPath:
-            MissionDOC.stopMissionList(msnID)
+        MissionDOC.stopMissionList(list(self._msnIdPath.keys()))
         self._msnIdPath = {}
 
     def msnPause(self):  # 任务暂停
-        for msnID in self._msnIdPath:
-            MissionDOC.pauseMissionList(msnID)
+        MissionDOC.pauseMissionList(list(self._msnIdPath.keys()))
 
     def msnResume(self):  # 任务恢复
-        for msnID in self._msnIdPath:
-            MissionDOC.resumeMissionList(msnID)
+        MissionDOC.resumeMissionList(list(self._msnIdPath.keys()))
 
     # 初始化输出器列表。成功返回两个输出器列表 output1, output2 。失败返回 "失败信息", None
     def _initOutputList(self, argd, path):
@@ -162,7 +159,6 @@ class BatchDOC(Page):
 
     def _onReady(self, msnInfo, page):  # 一个文档的一页 准备开始
         page += 1
-        pass
 
     def _onGet(self, msnInfo, page, res):  # 一个文档的一页 获取结果
         page += 1

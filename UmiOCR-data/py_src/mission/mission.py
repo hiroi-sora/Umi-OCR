@@ -73,17 +73,20 @@ class Mission:
         # 返回任务id
         return msnID
 
-    # 停止一条任务队列
-    def stopMissionList(self, msnID):
+    # 停止一些任务队列
+    def stopMissionList(self, msnIDs):
+        if not type(msnIDs) == list:
+            msnIDs = [msnIDs]
         self._msnMutex.lock()  # 上锁
-        # 将暂停中的任务恢复
-        if msnID in self._msnPausedDict:
-            info, list_ = self._msnPausedDict[msnID]
-            self._msnInfoDict[msnID] = info
-            self._msnListDict[msnID] = list_
-        # 将进行中的任务置为停止状态
-        if msnID in self._msnListDict:
-            self._msnInfoDict[msnID]["state"] = "stop"  # 设为停止状态
+        for msnID in msnIDs:
+            # 将暂停中的任务恢复
+            if msnID in self._msnPausedDict:
+                info, list_ = self._msnPausedDict[msnID]
+                self._msnInfoDict[msnID] = info
+                self._msnListDict[msnID] = list_
+            # 将进行中的任务置为停止状态
+            if msnID in self._msnListDict:
+                self._msnInfoDict[msnID]["state"] = "stop"  # 设为停止状态
         self._msnMutex.unlock()  # 解锁
         self._startMsns()  # 拉起工作线程，使已暂停的任务可以正常结束
 
@@ -101,24 +104,30 @@ class Mission:
         self._msnMutex.unlock()  # 解锁
         self._startMsns()
 
-    # 暂停一条任务队列
-    def pauseMissionList(self, msnID):
+    # 暂停一些任务队列
+    def pauseMissionList(self, msnIDs):
+        if not type(msnIDs) == list:
+            msnIDs = [msnIDs]
         self._msnMutex.lock()  # 上锁
-        if msnID in self._msnListDict:
-            msn = (self._msnInfoDict[msnID], self._msnListDict[msnID])
-            self._msnPausedDict[msnID] = msn
-            del self._msnInfoDict[msnID]
-            del self._msnListDict[msnID]
+        for msnID in msnIDs:
+            if msnID in self._msnListDict:
+                msn = (self._msnInfoDict[msnID], self._msnListDict[msnID])
+                self._msnPausedDict[msnID] = msn
+                del self._msnInfoDict[msnID]
+                del self._msnListDict[msnID]
         self._msnMutex.unlock()  # 解锁
         print(f"暂停：{msnID}")
 
-    # 恢复一条任务队列的运行
-    def resumeMissionList(self, msnID):
+    # 恢复一些任务队列的运行
+    def resumeMissionList(self, msnIDs):
+        if not type(msnIDs) == list:
+            msnIDs = [msnIDs]
         self._msnMutex.lock()  # 上锁
-        if msnID in self._msnPausedDict:
-            info, list_ = self._msnPausedDict[msnID]
-            self._msnInfoDict[msnID] = info
-            self._msnListDict[msnID] = list_
+        for msnID in msnIDs:
+            if msnID in self._msnPausedDict:
+                info, list_ = self._msnPausedDict[msnID]
+                self._msnInfoDict[msnID] = info
+                self._msnListDict[msnID] = list_
         self._msnMutex.unlock()  # 解锁
         self._startMsns()  # 拉起工作线程
         print(f"恢复：{msnID}")
