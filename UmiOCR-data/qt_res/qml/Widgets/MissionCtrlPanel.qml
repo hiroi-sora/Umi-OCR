@@ -64,31 +64,47 @@ Item {
         width: width_
 
         // 开始/暂停/恢复 按钮
-        Button_ {
+        Item {
             id: btn1
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             anchors.left: parent.left
             width: qmlapp.enabledEffect?ctrlRight.width_:(
                 state_==="stop"?ctrlRight.width_:ctrlRight.width_*0.5)
-            bold_: true
 
-            bgColor_: theme.coverColor1
-            bgHoverColor_: theme.coverColor2
-            text_: isWaiting?"...":(
-                state_==="stop"?qsTr("开始任务"):(
-                    state_==="run"?qsTr("暂停"):qsTr("恢复")
-                )
-            )
-            onClicked: {
-                if(isWaiting) return
-                isWaiting = true
-                switch(state_) {
-                    case "stop": runClicked(); return;
-                    case "run": pauseClicked(); return;
-                    case "pause": resumeClicked(); return;
+            Button_ {
+                visible: state_ === "stop" && !isWaiting
+                anchors.fill: parent
+                bold_: true
+                bgColor_: theme.coverColor1
+                bgHoverColor_: theme.coverColor2
+                text_: qsTr("开始任务")
+                onClicked: {
+                    if(isWaiting) return
+                    isWaiting = true
+                    Qt.callLater(runClicked)
                 }
             }
+            IconButton {
+                visible: state_ !== "stop" || isWaiting
+                anchors.fill: parent
+                color: theme.textColor
+                bgColor_: theme.coverColor1
+                bgHoverColor_: theme.coverColor2
+                margins: size_.spacing
+                icon_: isWaiting?"wait":(state_==="run" ? "pause" : "run")
+                toolTip: (state_==="run" ? qsTr("暂停任务\n暂停后可以待机或休眠。\n但是关机或退出软件，将会丢弃任务内容。") :
+                    qsTr("继续任务"))
+                onClicked: {
+                    if(isWaiting) return
+                    isWaiting = true
+                    switch(state_) {
+                        case "run": Qt.callLater(pauseClicked); return;
+                        case "pause": Qt.callLater(resumeClicked); return;
+                    }
+                }
+            }
+
             // 动画
             PropertyAnimation on width { // 折叠一半
                 running: qmlapp.enabledEffect && state_!=="stop"
@@ -104,7 +120,7 @@ Item {
             }
         }
         // 停止 按钮
-        Button_ {
+        IconButton {
             id: btn2
             anchors.top: parent.top
             anchors.bottom: parent.bottom
@@ -112,16 +128,16 @@ Item {
             anchors.left: btn1.right
             anchors.leftMargin: size_.smallSpacing
             visible: width > 1
-            bold_: true
+            color: theme.noColor
             bgColor_: theme.coverColor1
             bgHoverColor_: theme.coverColor2
-            textColor_: theme.noColor
-            text_: isWaiting?"...":qsTr("停止")
-            toolTip: qsTr("终止任务，放弃未完成的内容")
+            margins: size_.spacing
+            icon_: isWaiting?"wait":"stop"
+            toolTip: qsTr("终止任务\n放弃未完成的内容。")
             onClicked: {
                 if(isWaiting) return
                 isWaiting = true
-                stopClicked()
+                Qt.callLater(stopClicked)
             }
         }
     }
