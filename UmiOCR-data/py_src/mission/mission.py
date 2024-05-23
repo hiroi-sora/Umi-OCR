@@ -253,8 +253,8 @@ class Mission:
             self._msnMutex.lock()  # 锁2 上锁
             if msnInfo["state"] == "stop":
                 self._msnDictDel(dictKey)
-                msnInfo["onEnd"](msnInfo, "[Warning] Task stop.")
                 self._msnMutex.unlock()  # 锁2 解锁
+                msnInfo["onEnd"](msnInfo, "[Warning] Task stop.")
                 continue
             if dictKey not in self._msnInfoDict:
                 self._msnMutex.unlock()  # 锁2 解锁
@@ -262,14 +262,16 @@ class Mission:
 
             # 8. 不停止，则上报该任务
             msnList.pop(0)  # 弹出该任务
+            self._msnMutex.unlock()  # 锁2 解锁
             msnInfo["onGet"](msnInfo, msn, res)  # 回调
 
             # 9. 这条任务队列完成
             if len(msnList) == 0:
                 msnInfo["onEnd"](msnInfo, "[Success]")
+                self._msnMutex.lock()  # 锁3 上锁
                 self._msnDictDel(dictKey)
+                self._msnMutex.unlock()  # 锁3 解锁
                 dictIndex -= 1  # 字典下标回退1位，下次执行正确的下一项
-            self._msnMutex.unlock()  # 锁2 解锁
 
         # 完成
         self._taskFinish()
