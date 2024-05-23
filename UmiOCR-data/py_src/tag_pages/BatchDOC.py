@@ -15,7 +15,10 @@ import time
 class BatchDOC(Page):
     def __init__(self, *args):
         super().__init__(*args)
-        self._msnIdPath = {}  # 当前运行的任务，id到地址的映射
+        self._msnID = ""  # 当前正在进行的任务ID（已提交至任务处理器）
+        self._queuedDocs = []  # 当前正在排队的文档信息（未提交）
+        self._argd = None
+        self._docArgd = None
 
     # 添加一些文档
     def addDocs(self, paths, isRecurrence):
@@ -34,9 +37,8 @@ class BatchDOC(Page):
     # docs为列表，每一项为： {path:文档路径, range_start:范围起始, range_end: 范围结束, password:密码}
     # 返回一个列表，每项为： {path:文档路径, msnID:任务ID。若[Error]开头则为失败。}
     def msnDocs(self, docs, argd):
-        if self._msnIdPath:
+        if self._msnID or self._queuedDocs:
             return "[Error] 有任务进行中，不允许提交新任务。"
-        resList = []
         # 组装参数字典。tbpu分两部分，在MissionDOC中执行ignoreArea，本文件执行parser
         docArgd = {
             "tbpu.ignoreArea": argd["tbpu.ignoreArea"],
@@ -46,48 +48,25 @@ class BatchDOC(Page):
         for k in argd:
             if k.startswith("ocr.") or k.startswith("doc."):
                 docArgd[k] = argd[k]
-        # 获取排版解析器对象
-        tbpuList = []
-        if "tbpu.parser" in argd:
-            tbpuList.append(getParser(argd["tbpu.parser"]))
-        # 对每个文档发起一个任务
-        for d in docs:
-            path = d["path"]
-            # 构造输出器
-            output = self._initOutputList(argd, path)
-            if type(output) == str:  # 创建输出器失败
-                resList.append({"path": path, "msnID": output})
-                continue
-            # 任务信息
-            msnInfo = {
-                "onStart": self._onStart,
-                "onReady": self._onReady,
-                "onGet": self._onGet,
-                "onEnd": self._onEnd,
-                "argd": docArgd,
-                # 交给 self._onGet 的参数
-                "get_output": output,
-                "get_tbpu": tbpuList,
-            }
-            pageRange = [int(d["range_start"]), int(d["range_end"])]
-            password = d["password"]
-            msnID = MissionDOC.addMission(msnInfo, path, pageRange, password=password)
-            if not msnID.startswith("["):  # 添加任务成果才记录到 _msnIdPath
-                self._msnIdPath[msnID] = path
-            res = {"path": path, "msnID": msnID}
-            resList.append(res)
-        return resList
+        # 记录任务参数
+        self._queuedDocs = docs
+        self._argd = argd
+        self._docArgd = docArgd
+        # 提交第一个任务
+        self._runNewDoc()
 
-    # 停止当前所有任务
-    def msnStop(self):
-        MissionDOC.stopMissionList(list(self._msnIdPath.keys()))
-        self._msnIdPath = {}
+    def msnStop(self):  # 停止当前所有任务
+        MissionDOC.stopMissionList(self._msnID)
+        self._msnID = ""
+        self._queuedDocs = []
+        self._argd = None
+        self._docArgd = None
 
     def msnPause(self):  # 任务暂停
-        MissionDOC.pauseMissionList(list(self._msnIdPath.keys()))
+        MissionDOC.pauseMissionList(self._msnID)
 
     def msnResume(self):  # 任务恢复
-        MissionDOC.resumeMissionList(list(self._msnIdPath.keys()))
+        MissionDOC.resumeMissionList(self._msnID)
 
     # 初始化输出器列表。成功返回两个输出器列表 output1, output2 。失败返回 "失败信息", None
     def _initOutputList(self, argd, path):
@@ -148,11 +127,46 @@ class BatchDOC(Page):
             return f"[Error] 初始化输出器失败。{e}"
         return output
 
+    def _runNewDoc(self):  # 取 self._queuedList 首位任务，提交执行
+        if not self._queuedDocs:
+            print("[Warning] 文档任务： queuedDocs 已空")
+            return
+        d = self._queuedDocs.pop(0)  # 取首位任务
+        path = d["path"]  # 取地址
+        # 构造输出器
+        output = self._initOutputList(self._argd, path)
+        if type(output) == str:  # 创建输出器失败
+            self._onEnd({"path": path}, "[Error] 无法创建输出器。")
+            return
+        # 构造排版解析器
+        tbpuList = []
+        if "tbpu.parser" in self._argd:
+            tbpuList.append(getParser(self._argd["tbpu.parser"]))
+        # 任务信息
+        msnInfo = {
+            "onStart": self._onStart,
+            "onReady": self._onReady,
+            "onGet": self._onGet,
+            "onEnd": self._onEnd,
+            "argd": self._docArgd,
+            # 交给 self._onGet 的参数
+            "get_output": output,
+            "get_tbpu": tbpuList,
+        }
+        pageRange = [int(d["range_start"]), int(d["range_end"])]
+        password = d["password"]
+        msnID = MissionDOC.addMission(msnInfo, path, pageRange, password=password)
+        if msnID.startswith("["):  # 添加任务失败
+            self._msnID = ""
+            self._onEnd({"path": path}, msnID)
+        else:
+            self._msnID = msnID
+
     # ========================= 【任务控制器的异步回调】 =========================
 
     def _onStart(self, msnInfo):  # 一个文档 开始
         msnID = msnInfo["msnID"]
-        if msnID not in self._msnIdPath:
+        if not msnID == self._msnID:
             print(f"[Warning] _onStart 任务ID未在记录。{msnID}")
             return
         self.callQmlInMain("onDocStart", msnInfo["path"])
@@ -163,7 +177,7 @@ class BatchDOC(Page):
     def _onGet(self, msnInfo, page, res):  # 一个文档的一页 获取结果
         page += 1
         msnID = msnInfo["msnID"]
-        if msnID not in self._msnIdPath:
+        if not msnID == self._msnID:
             print(f"[Warning] _onGet 任务ID未在记录。{msnID}")
             return
 
@@ -191,19 +205,35 @@ class BatchDOC(Page):
 
     def _onEnd(self, msnInfo, msg):  # 一个文档处理完毕
         # msg: [Success] [Warning] [Error]
-        msnID = msnInfo["msnID"]
-        if msnID not in self._msnIdPath:
-            print(f"[Warning] _onEnd 任务ID未在记录。{msnID}")
-            return
-        del self._msnIdPath[msnID]
 
-        if not self._msnIdPath:  # 全部完成
-            msg = "[Success] All completed."
+        if "path" not in msnInfo:
+            raise Exception('[Error] BatchDOC onEnd(): "path" not in msnInfo')
+
+        if "msnID" in msnInfo:
+            msnID = msnInfo["msnID"]
+            if not msnID == self._msnID:
+                print(f"[Warning] _onEnd 任务ID未在记录。{msnID}")
+                return
+            self._msnID = ""
+
         # 结束输出器，保存文件。
-        output = msnInfo["get_output"]
-        for o in output:
-            try:
-                o.onEnd()
-            except Exception as e:
-                msg = f"[Error] 输出器异常：{e}" + msg
-        self.callQmlInMain("onDocEnd", msnInfo["path"], msg)
+        if "get_output" in msnInfo:
+            output = msnInfo["get_output"]
+            for o in output:
+                try:
+                    o.onEnd()
+                except Exception as e:
+                    msg = f"[Error] 输出器异常：{e}" + msg
+
+        # 上报
+        isAll = False if self._queuedDocs else True  # 是否所有文档处理完毕
+        self.callQmlInMain("onDocEnd", msnInfo["path"], msg, isAll)
+
+        # 所有任务完毕
+        if isAll:
+            self._msnID = ""
+            self._argd = None
+            self._docArgd = None
+        # 还有排队中的任务，则提交新任务
+        else:
+            self._runNewDoc()

@@ -36,13 +36,13 @@ TabPage {
     //     onTriggered: {
     //         addDocs(
     //             [
-    //                 "D:/Pictures/Screenshots/test",
-    //                 "../../PDF测试",
+    //                 // "D:/Pictures/Screenshots/test",
+    //                 // "../../PDF测试",
+    //                 "D:/MyCode/PythonCode/Umi-OCR 计划/PDF测试/多样本",
     //             ]
     //         )
     //         console.log("自动添加！！！！！！！！！！！！！")
     //         // docStart()
-    //         // onClickDoc(0)
     //     }
     // }
 
@@ -88,48 +88,30 @@ TabPage {
         // 获取信息
         const docs = filesTableView.getColumnsValues([
             "path","range_start", "range_end", "is_encrypted", "is_authenticate", "password"])
-        let pathIndex = {} // 缓存路径到下标的映射
+        // 第1次遍历：检查密码填写
         for(let i = 0; i < fileCount; i++) {
             const d = docs[i]
-            pathIndex[d.path] = i
             if(d.is_encrypted && !d.is_authenticate) {
                 qmlapp.popup.message(qsTr("文档已加密"), qsTr("【%1】\n请点击文档名，设置密码").arg(d.path), "warning")
                 ctrlPanel.stopFinished()
                 return
             }
         }
-        const argd = configsComp.getValueDict()
-        // 提交任务，获取任务信息
-        const resList = tabPage.callPy("msnDocs", docs, argd)
-        let errMsg = "" // 错误信息
+        // 第2次遍历：刷新信息
         let allPages = 0 // 页总数
-        // 判断任务添加结果，刷新表格
-        for(let i in resList) {
-            const res = resList[i]
-            const path = res.path, msnID = res.msnID
-            if(msnID.startsWith("[")) { // 添加任务失败
-                filesTableView.setProperty(path, "state", qsTr("失败"))
-                errMsg += `${path} - ${msnID}\n`
-            }
-            else { // 添加任务成果，增加计数
-                filesTableView.setProperty(path, "state", qsTr("排队"))
-                const d = docs[pathIndex[path]]
-                allPages += d.range_end - d.range_start + 1
-            }
+        for(let i = 0; i < fileCount; i++) {
+            const d = docs[i]
+            allPages += d.range_end - d.range_start + 1
+            filesTableView.setProperty(d.path, "state", qsTr("排队"))
         }
-        if(allPages > 0) { // 有成功的任务
-            // 若tabPanel面板的下标没有变化过，则切换到记录页
-            if(tabPanel.indexChangeNum < 2)
-                tabPanel.currentIndex = 1
-            ctrlPanel.runFinished(allPages)
-        }
-        else {
-            ctrlPanel.stopFinished()
-        }
-        // 错误信息显示
-        if(errMsg) {
-            qmlapp.popup.message(qsTr("部分文档异常"), errMsg, "error")
-        }
+        // 若tabPanel面板的下标没有变化过，则切换到记录页
+        if(tabPanel.indexChangeNum < 2)
+            tabPanel.currentIndex = 1
+        // 任务进度 开始计时
+        ctrlPanel.runFinished(allPages)
+        // 提交任务
+        const argd = configsComp.getValueDict()
+        tabPage.callPy("msnDocs", docs, argd)
     }
 
     // 停止文档任务
@@ -139,7 +121,8 @@ TabPage {
         let msnLength = filesTableView.rowCount
         for(let i = 0; i < msnLength; i++) {
             const row = filesTableView.get(i)
-            if(row.state !== "√") {
+            const s = row.state
+            if(s.length > 0 && s[0] !== "√" && s[0] !== "×") {
                 filesTableView.setProperty(i, "state", "")
             }
         }
@@ -185,7 +168,7 @@ TabPage {
     function onDocGet(path, page, res) {
         // 刷新单个文档的信息
         const d = filesTableView.get(path)
-        const state = `${page - d.range_start}/${d.range_end - d.range_start + 1}`
+        const state = `${page - d.range_start + 1}/${d.range_end - d.range_start + 1}`
         filesTableView.setProperty(path, "state", state)
         // 提取文字，添加到结果表格
         const title = path2name(path)
@@ -194,15 +177,19 @@ TabPage {
         ctrlPanel.msnStep(1)
     }
 
-    // 一个文档处理完毕
-    function onDocEnd(path, msg) {
-        filesTableView.setProperty(path, "state", "√")
+    // 一个文档处理完毕。 isAll==true 时所有文档处理完毕。
+    function onDocEnd(path, msg, isAll) {
+        // 成功结束
+        if(msg.startsWith("[Success]")) {
+            filesTableView.setProperty(path, "state", "√")
+        }
         // 任务失败
-        if(msg.startsWith("[Error]")) {
-            qmlapp.popup.message(qsTr("文档识别异常"), msg, "error")
+        else {
+            filesTableView.setProperty(path, "state", "× "+ qsTr("失败"))
+            qmlapp.popup.simple(qsTr("文档识别异常"), msg)
         }
         // 所有文档处理完毕
-        if(ctrlPanel.msnNowNum >= ctrlPanel.msnAllNum) {
+        if(isAll) {
             const simpleType = configsComp.getValue("other.simpleNotificationType")
             qmlapp.popup.simple(qsTr("批量识别完成"), "", simpleType)
             ctrlPanel.stopFinished()
