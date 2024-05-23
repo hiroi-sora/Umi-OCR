@@ -388,7 +388,8 @@ Item {
                                     anchors.horizontalCenter: isLeft? undefined : parent.horizontalCenter
                                     verticalAlignment: Text.AlignVCenter // 垂直居中
                                     font.pixelSize: size_.smallText
-                                    color: rowModel.state&&rowModel.state.startsWith("×") ? theme.noColor: theme.subTextColor
+                                    color: (columnKey != "state"|| typeof rowModel.state != "string" || rowModel.state.length == 0) ? theme.subTextColor : 
+                                        (rowModel.state.startsWith("×") ? theme.noColor : (rowModel.state.startsWith("√") ? theme.yesColor : theme.subTextColor))
                                     text: header.display ? header.display(rowModel[columnKey]) : rowModel[columnKey]
                                 }
                             }
