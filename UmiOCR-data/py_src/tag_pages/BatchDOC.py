@@ -7,6 +7,7 @@ from ..mission.mission_doc import MissionDOC  # 任务管理器
 from ..utils import utils
 from ..ocr.output import Output
 from ..ocr.tbpu import getParser
+from ..utils.thread_pool import threadRun  # 异步执行函数
 
 import os
 import time
@@ -22,6 +23,10 @@ class BatchDOC(Page):
 
     # 添加一些文档
     def addDocs(self, paths, isRecurrence):
+        threadRun(self._addDocsThread, paths, isRecurrence)
+
+    # 添加一些文档
+    def _addDocsThread(self, paths, isRecurrence):
         paths = utils.findDocs(paths, isRecurrence)
         docs = []
         for p in paths:
@@ -30,8 +35,8 @@ class BatchDOC(Page):
                 print(f'[Warning] 读入文档失败：{p}\n{info["error"]}')
                 continue
             docs.append(info)
-        # 返回：{ "path" , "page_count" }
-        return docs
+        # 回调传入：{ "path" , "page_count" }
+        self.callQmlInMain("onAddDocs", docs)
 
     # 进行任务。
     # docs为列表，每一项为： {path:文档路径, range_start:范围起始, range_end: 范围结束, password:密码}

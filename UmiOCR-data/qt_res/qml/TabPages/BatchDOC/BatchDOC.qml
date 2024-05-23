@@ -48,34 +48,11 @@ TabPage {
 
     // 添加一批文档。传入值是没有 file:/// 开头的纯字符串的列表。
     function addDocs(paths) {
-        // 调用Python方法
+        addDocsDropArea.enable = false // 禁用继续拖入
+        qmlapp.popup.showMask(qsTr("文件读取中…"), "addDocs")
         const isRecurrence = configsComp.getValue("mission.recurrence")
-        const res = tabPage.callPy("addDocs", paths, isRecurrence)
-        if(res.length <= 0){
-            return
-        }
-        // 加入表格
-        let encryptedCount = 0
-        for(let i in res) {
-            const info = res[i]
-            filesTableView.add({
-                // 显示：路径，状态，页范围
-                path: info.path, pages: `1-${info.page_count}`,
-                state: info.is_encrypted ? qsTr("加密") : "" ,
-                // 数据
-                page_count: info.page_count,
-                range_start: 1,
-                range_end: info.page_count,
-                is_encrypted: info.is_encrypted, // 有密码
-                is_authenticate: !info.is_encrypted, // 已解密（密码正确）
-                password: "",
-            })
-            if(info.is_encrypted) encryptedCount++
-        }
-        if(encryptedCount > 0) {
-            qmlapp.popup.simple(qsTr("%1个加密文档").arg(encryptedCount),
-                qsTr("请点击文件名填写密码"))
-        }
+        // 等待python调用 onAddDocs 回调
+        tabPage.callPy("addDocs", paths, isRecurrence)
     }
 
     // 运行文档任务
@@ -155,6 +132,37 @@ TabPage {
     }
 
     // ========================= 【python调用qml】 =========================
+
+    // 添加一批文档
+    function onAddDocs(docs) {
+        qmlapp.popup.hideMask("addDocs")
+        addDocsDropArea.enable = true
+        if(docs.length <= 0){
+            return
+        }
+        // 加入表格
+        let encryptedCount = 0
+        for(let i in docs) {
+            const info = docs[i]
+            filesTableView.add({
+                // 显示：路径，状态，页范围
+                path: info.path, pages: `1-${info.page_count}`,
+                state: info.is_encrypted ? qsTr("加密") : "" ,
+                // 数据
+                page_count: info.page_count,
+                range_start: 1,
+                range_end: info.page_count,
+                is_encrypted: info.is_encrypted, // 有密码
+                is_authenticate: !info.is_encrypted, // 已解密（密码正确）
+                password: "",
+            })
+            if(info.is_encrypted) encryptedCount++
+        }
+        if(encryptedCount > 0) {
+            qmlapp.popup.simple(qsTr("%1个加密文档").arg(encryptedCount),
+                qsTr("请点击文件名填写密码"))
+        }
+    }
 
     // 准备开始处理一个文档
     function onDocStart(path) {
@@ -304,6 +312,7 @@ TabPage {
 
     // 鼠标拖入文档
     DropArea_ {
+        id: "addDocsDropArea"
         anchors.fill: parent
         callback: tabPage.addDocs
     }
