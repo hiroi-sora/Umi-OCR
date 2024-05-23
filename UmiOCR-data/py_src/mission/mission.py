@@ -3,19 +3,12 @@
 # ==============================================
 
 
-from PySide2.QtCore import QMutex, QThreadPool, QRunnable
+from PySide2.QtCore import QMutex, QRunnable
 from threading import Condition
 from uuid import uuid4  # 唯一ID
 import time
 
-
-# 代替 self._threadPool.start ，但是检查线程池是否满，并扩充。
-def threadPoolStart(threadPool, *args):
-    activeThreadCount = threadPool.activeThreadCount()
-    if activeThreadCount >= threadPool.maxThreadCount():
-        print(f"[Warning] 线程池已满 {activeThreadCount} ！自动扩充+1。")
-        threadPool.setMaxThreadCount(activeThreadCount + 1)
-    threadPool.start(*args)
+from ..utils.thread_pool import threadRun  # 异步执行函数
 
 
 class Mission:
@@ -26,7 +19,6 @@ class Mission:
         self._msnMutex = QMutex()  # 任务队列的锁
         self._task = None  # 异步任务对象
         self._taskMutex = QMutex()  # 任务对象的锁
-        self._threadPool = QThreadPool.globalInstance()  # 全局线程池
         # 任务队列调度方式
         # 1111 : 轮询调度，轮流取每个队列的第1个任务
         # 1234 : 顺序调度，将首个队列所有任务处理完，再进入下一个队列
@@ -190,8 +182,7 @@ class Mission:
         # 若当前异步任务对象为空，则创建工作线程
         self._taskMutex.lock()  # 上锁
         if self._task == None:
-            self._task = self._Task(self._taskRun)
-            threadPoolStart(self._threadPool, self._task)
+            self._task = threadRun(self._taskRun)
         self._taskMutex.unlock()  # 解锁
 
     # ========================= 【子线程 方法】 =========================
@@ -303,13 +294,3 @@ class Mission:
 
     def getStatus(self):  # 返回当前状态
         return "Mission 基类 返回空状态"
-
-    # ========================= 【异步类】 =========================
-
-    class _Task(QRunnable):
-        def __init__(self, taskFunc):
-            super().__init__()
-            self._taskFunc = taskFunc
-
-        def run(self):
-            self._taskFunc()

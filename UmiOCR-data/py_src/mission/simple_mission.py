@@ -3,8 +3,8 @@
 # =============================================
 
 
-from PySide2.QtCore import QMutex, QThreadPool, QRunnable
-from .mission import threadPoolStart
+from PySide2.QtCore import QMutex
+from ..utils.thread_pool import threadRun  # 异步执行函数
 
 
 class SimpleMission:
@@ -14,7 +14,6 @@ class SimpleMission:
         self._msnMutex = QMutex()  # 任务队列的锁
         self._task = None  # 异步任务对象
         self._taskMutex = QMutex()  # 任务对象的锁
-        self._threadPool = QThreadPool.globalInstance()  # 全局线程池
 
     def addMissionList(self, msnList):  # 添加一条任务队列，返回任务ID
         if len(msnList) < 1:
@@ -31,8 +30,7 @@ class SimpleMission:
         # 若当前异步任务对象为空，则创建工作线程
         self._taskMutex.lock()  # 上锁
         if self._task == None:
-            self._task = self._Task(self._taskRun)
-            threadPoolStart(self._threadPool, self._task)
+            self._task = threadRun(self._taskRun)
         self._taskMutex.unlock()  # 解锁
 
     # ========================= 【子线程 方法】 =========================
@@ -56,13 +54,3 @@ class SimpleMission:
         self._taskMutex.lock()  # 上锁
         self._task = None
         self._taskMutex.unlock()  # 解锁
-
-    # ========================= 【异步类】 =========================
-
-    class _Task(QRunnable):
-        def __init__(self, taskFunc):
-            super().__init__()
-            self._taskFunc = taskFunc
-
-        def run(self):
-            self._taskFunc()
