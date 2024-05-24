@@ -12,6 +12,8 @@ Item {
     readonly property var screenshot: screenshotManager.screenshot
     // 重复截图
     readonly property var reScreenshot: screenshotManager.reScreenshot
+    // 获取指定区域的截图ID
+    readonly property var getScreenshot: screenshotManager.getScreenshot
     // 复制图片
     readonly property var copyImage: imageConnector.copyImage
     // 用系统默认应用打开图片

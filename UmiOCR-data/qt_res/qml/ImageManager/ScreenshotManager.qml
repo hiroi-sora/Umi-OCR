@@ -14,7 +14,10 @@ Item {
     function screenshot(callback) {
         // 获取所有屏幕的截图图像
         const grabList = getGrabList()
-        if(!grabList) return
+        if(!grabList) {
+            callback()
+            return
+        }
         // 记录回调
         lastCallback = callback 
         if(winDict === undefined) winDict = {}
@@ -26,6 +29,7 @@ Item {
                 qmlapp.popup.message(errorTitle, 
                     qsTr("屏幕设备名称不相同：\n%1\n%2").arg(screen.name).arg(g.screenName), "error")
                 running = false
+                callback()
                 return
             }
             const argd = {
@@ -48,12 +52,16 @@ Item {
 
     // 重复上一次截图区域
     function reScreenshot(callback) {
-        // 获取所有屏幕的截图图像
-        const grabList = getGrabList()
-        if(!grabList) return
         if(!lastClipArgd) {
             qmlapp.popup.simple(qsTr("尚未记录截图区域"), "")
             running = false
+            callback()
+            return
+        }
+        // 获取所有屏幕的截图图像
+        const grabList = getGrabList()
+        if(!grabList) {
+            callback()
             return
         }
         // 在截图列表中，寻找上一次截图所在的屏幕
@@ -74,6 +82,28 @@ Item {
         running = false
         qmlapp.popup.simple(qsTr("重复截图失败"), qsTr("未找到匹配的屏幕"))
         runLastCallback()
+    }
+
+    // 【同步】获取指定区域的截图ID，失败返回 "[Error]..."
+    function getScreenshot(rect, screen=0) { // screen 屏幕编号
+        // 获取所有屏幕的截图图像
+        const grabList = getGrabList()
+        running = false
+        // 参数检查
+        if(!grabList)
+            return "[Error] Unable to obtain screenshot image"
+        if(!Number.isInteger(screen) || screen < 0 || screen >= grabList.length)
+            return `[Error] Invalid screen=${screen}: must be an integer 0-${grabList.length}`
+        if(rect.length != 4) // 不检查内部是否合法，getClipImgID会检查
+            return `[Error] Invalid rect=${rect}: must be integers [x,y,w,h]`
+        const grab = grabList[screen]
+        const imgID = grab.imgID
+        let [x, y, w, h] = rect
+        // 补充缺省宽高
+        if(w <= 0) w = grab.width - x
+        if(h <= 0) h = grab.height - y
+        // 返回裁剪后的imgID
+        return imageConn.getClipImgID(imgID, x, y, w, h)
     }
 
     // =================================================
