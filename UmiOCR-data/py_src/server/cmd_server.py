@@ -210,7 +210,25 @@ class _Actuator:
 
         # 3. 调用截图标签页的函数
         if ss:  # 截图
-            self.call(moduleName, "qml", "screenshot", False)
+            if not paras:  # 无参数，手动截图
+                self.call(moduleName, "qml", "screenshot", False)
+            else:  # 有参数，自动截图 umi-ocr --screenshot screen=0 rect=0,100,500,200
+                rect = [0, 0, 0, 0]  # 截图矩形框
+                screen = 0  # 显示器编号
+                para_args = []
+                try:
+                    for para in paras:  # 空格分隔
+                        para_args.extend(para.split())
+                    for part in para_args:
+                        if part.startswith("rect="):
+                            rect_values = part[len("rect=") :].split(",")
+                            rect_values = [int(v) for v in rect_values]
+                            rect[: len(rect_values)] = rect_values  # 补齐rect的值
+                        elif part.startswith("screen="):
+                            screen = int(part[len("screen=") :])
+                    self.call(moduleName, "qml", "autoScreenshot", False, rect, screen)
+                except Exception as e:
+                    return f"[Error] {e}"
         elif clip:  # 粘贴
             self.call(moduleName, "qml", "paste", False)
         else:  # 路径
@@ -235,7 +253,7 @@ class _Actuator:
             if r["code"] == 100:
                 for d in r["data"]:  # 遍历文本块
                     text += d["text"] + d["end"]
-            elif r["code"] != 100 and type(r["data"]) == str:
+            elif r["code"] != 101 and type(r["data"]) == str:
                 text += r["data"]
         if not text:
             text = "[Message] No text in OCR result."

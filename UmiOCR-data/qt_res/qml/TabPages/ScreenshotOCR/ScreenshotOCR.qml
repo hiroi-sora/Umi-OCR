@@ -40,18 +40,37 @@ TabPage {
         imageText.showImgID(clipID) // 展示图片
     }
 
+    // 指定区域截图。rect=[x,y,w,h]  screen=屏幕编号  返回"[Success]"为成功
+    function autoScreenshot(rect, screen) {
+        // 获取截图
+        const clipID = qmlapp.imageManager.getScreenshot(rect, screen)
+        if(!clipID) {
+            tabPage.callPy("ocrImgID", "[Error] Unknow", undefined)
+            return
+        }
+        if(clipID.startsWith("[")) {
+            tabPage.callPy("ocrImgID", clipID, undefined)
+            return
+        }
+        // 进行识别
+        const configDict = configsComp.getValueDict()
+        tabPage.callPy("ocrImgID", clipID, configDict)
+    }
+
     // 开始粘贴
     function paste() {
         popMainWindow()
         const res = qmlapp.imageManager.getPaste()
         if(res.error) {
-            qmlapp.popup.simple(qsTr("获取剪贴板异常"), res.error)
-            tabPage.callPy("ocrImgID", undefined, undefined)
+            const t = qsTr("获取剪贴板异常")
+            qmlapp.popup.simple(t, res.error)
+            tabPage.callPy("ocrImgID", `[Error] ${t} ${res.error}`, undefined)
             return
         }
         if(res.text) {
-            qmlapp.popup.simple(qsTr("剪贴板中为文本"), res.text)
-            tabPage.callPy("ocrImgID", undefined, undefined)
+            const t = qsTr("剪贴板中为文本")
+            qmlapp.popup.simple(t, res.text)
+            tabPage.callPy("ocrImgID", `[Warning] ${t}`, undefined)
             return
         }
         qmlapp.tab.showTabPageObj(tabPage) // 切换标签页
