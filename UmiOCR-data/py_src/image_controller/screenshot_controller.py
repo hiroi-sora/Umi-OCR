@@ -26,6 +26,8 @@ class _ScreenshotControllerClass:
                     {
                         "imgID": imgID,
                         "screenName": screen.name(),
+                        "width": pixmap.width(),
+                        "height": pixmap.height(),
                     }
                 )
             return grabList
@@ -34,16 +36,17 @@ class _ScreenshotControllerClass:
 
     # 对一张图片做裁切。传入原图imgID和裁切参数，返回裁切后的imgID或[Error]
     def getClipImgID(self, imgID, x, y, w, h):
-        pixmap = PixmapProvider.getPixmap(imgID)
-        if not pixmap:
-            e = f'[Error] ScreenshotOCR: Key "{imgID}" does not exist in the PixmapProvider dict.'
-            return e
-        if x < 0 or y < 0 or w <= 0 or h <= 0:
-            e = f"[Error] ScreenshotOCR: x/y/w/h value error. {x}/{y}/{w}/{h}"
-            return e
-        pixmap = pixmap.copy(x, y, w, h)  # 进行裁切
-        clipID = PixmapProvider.addPixmap(pixmap)  # 存入提供器，获取imgID
-        return clipID
+        try:
+            pixmap = PixmapProvider.getPixmap(imgID)
+            if not pixmap:
+                return f'[Error] Screenshot: Key "{imgID}" does not exist in the PixmapProvider dict.'
+            if x < 0 or y < 0 or w <= 0 or h <= 0:
+                return f"[Error] Screenshot: x/y/w/h value error. {x}/{y}/{w}/{h}"
+            pixmap = pixmap.copy(x, y, w, h)  # 进行裁切
+            clipID = PixmapProvider.addPixmap(pixmap)  # 存入提供器，获取imgID
+            return clipID
+        except Exception as e:
+            return f"[Error] Screenshot: {e}"
 
     # 获取当前剪贴板的内容
     # type: imgID paths text
