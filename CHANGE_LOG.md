@@ -20,7 +20,7 @@ git clone --single-branch --branch [分支名] https://github.com/hiroi-sora/Umi
 
 # 更新日志 CHANGE LOG
 
-##### v2.1.1 `2024.3.29`
+##### [v2.1.1](https://github.com/hiroi-sora/Umi-OCR/tree/release/2.1.1) `2024.3.29`
 
 - 新增：批量文档识别允许指定忽略区域的页数范围。
 - 新增：命令行`--path`允许传入多个图片或文件夹。
