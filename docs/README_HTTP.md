@@ -53,7 +53,6 @@ URL：`/api/ocr`
 | options | object | 【可选】配置选项字典                     |
 
 - `base64`无需`data:image/png;base64,`等前缀，直接放正文。
-
 - `options` 是可选的，可以不传这个参数。如果传了，则内部的所有子参数也均为可选。
 
 参数示例：
@@ -379,16 +378,34 @@ URL：`/api/qrcode`
 
 参数：`json`
 
-| 参数名 | 类型   | 描述                                     |
-| ------ | ------ | ---------------------------------------- |
-| base64 | string | 待识别图像的 Base64 编码字符串，无需前缀 |
+| 参数名  | 类型   | 描述                                     |
+| ------- | ------ | ---------------------------------------- |
+| base64  | string | 待识别图像的 Base64 编码字符串，无需前缀 |
+| options | object | 【可选】配置选项字典                     |
 
 - `base64`无需`data:image/png;base64,`等前缀，直接放正文。
+- `options` 是可选的，可以不传这个参数。如果传了，则内部的所有子参数也均为可选。
+
+options 内部项说明：（控制对图片进行像素层面的预处理，增强识别准确度。）
+
+| options 内部参数                 | 类型   | 描述                                                                                                                                      |
+| -------------------------------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| preprocessing.median_filter_size | int    | 中值滤波器的大小，应为1~9的奇数。默认不进行。                                                                                             |
+| preprocessing.sharpness_factor   | double | 锐度增强因子，应为0.1~10。默认不调整锐度。                                                                                                |
+| preprocessing.contrast_factor    | double | 对比度增强因子，应为0.1~10。大于1增强对比度，小于1但大于0减少对比度，1保持原样。默认不调整对比度。                                        |
+| preprocessing.grayscale          | bool   | 是否将图像转换为灰度图像。True为转换，False为不转换。默认为False。                                                                        |
+| preprocessing.threshold          | int    | 二值化阈值，用于灰度图像的二值化处理。应为0到255之间的整数。只有当"preprocessing.grayscale"为true时，此参数才生效。默认不进行二值化处理。 |
 
 参数示例：
 
 ```
-{ "base64": "iVBORw0KGgoAAAAN……" }
+{
+    "base64": "iVBORw0KGgoAAAAN……",
+    "options": {
+        "preprocessing.contrast_factor": 1.5,
+        "preprocessing.grayscale": true
+    }
+}
 ```
 
 ### 3.2. 响应格式
@@ -452,7 +469,14 @@ URL：`/api/qrcode`
 ```javascript
 const url = "http://127.0.0.1:1224/api/qrcode";
 const base64 = "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/wAALCAAdAB0BAREA/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/9oACAEBAAA/APU/GfjM+EjAzW9o0DW8txNPdXEkSxKkkMYAEcUjMS069hjBrn3+K0yi3B0/RozO52y3OtG3gaPy7WRWV5IVJO27DFSoIEbYycCrF18Sb2z1a20u70rTbO8uLiKzigutRl3NcNDBIyAxW7rhTcIu4sAcE8Cu00LU/wC2/D2mat5Pk/brSK58rdu2b0Dbc4GcZxnAri/iSdPGs6AuqySW+nzpcW11dg27xwIzQspkimikDIZUiG/5QhK5PzCuPI1qz8ISalajUtNu1czLGsxnt7tHhhhiijNmkSF22W8aFeFWZ2RjIjeVXvrq0t/EWmaTpq3d9rTXFpCqpa2iRW92sCJOUP2WZYjEsNszrG7Bd/GNhr2zQtP/ALI8PaZpuMfY7SK3x5nmY2IF+9tXd067Vz6DpXH/ABK1LVrN7SLTIr6622k159isYYnknkjuLVUI8yGXGzzWfhc5UHPFeeSyav4dtI9R8O+Ho5dYS4WNrSK1EV2sb29ncFJY7aOPzIkkYhjhSGaME7WdHy72y8NWthbfDxrrfDDdpdXH2eVvtIu/IcStcOUaCGFMqGKNKUELZDEsU+g/DUcMXhXSI7cRrAllCsYjIKhQgxgh3BGP9t/95upk1PQtH1vyv7W0qxv/ACc+X9rt0l2ZxnG4HGcDp6Co7Xw1oNiipaaJptuiPvVYbVEAbcjZGB13RxnPqin+EYksdC0fTIo4rDSrG0jjlM6JBbpGFkKlC4AHDFSVz1wcdKuQQQ2tvFb28UcMESBI441CqigYAAHAAHGK/9k="
-const data = { "base64": base64 };
+const data = {
+    "base64": base64,
+    // 可选，预处理参数
+    // "options": {
+    //     "preprocessing.contrast_factor": 1.5,
+    //     "preprocessing.grayscale": true,
+    // }
+};
 
 fetch(url, {
         method: "POST",
