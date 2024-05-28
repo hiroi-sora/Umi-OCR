@@ -15,6 +15,7 @@ Row {
         "toolTip": "提示，支持",
         "text": "显示文本",
         "color": theme.subTextColor,
+        "bgColor": theme.subTextColor,
     } */
     property var btnList: []
 
@@ -25,11 +26,11 @@ Row {
     property var trTable: {
         "右键菜单": qsTr("右键菜单"),
         "保存图片": qsTr("保存图片"),
-        "用默认应用打开图片": qsTr("用默认应用打开图片"),
         "图片大小：适应窗口": qsTr("图片大小：适应窗口"),
         "图片大小：实际": qsTr("图片大小：实际"),
 
         "截图": qsTr("截图"),
+        "粘贴": qsTr("粘贴"),
         "屏幕截图": qsTr("屏幕截图"),
         "粘贴图片": qsTr("粘贴图片"),
     }
@@ -45,6 +46,7 @@ Row {
             // width: height
             icon_: modelData.icon
             color: modelData.color || theme.subTextColor
+            bgColor_: modelData.bgColor || "#00000000"
             text_: modelData.text || ""
             toolTip: modelData.toolTip || ""
             // 函数类型onClicked只能用 [index] 访问

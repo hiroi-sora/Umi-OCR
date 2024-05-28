@@ -284,6 +284,7 @@ ImageScale {
                 [iRoot.copyImage, qsTr("复制图片（Ctrl+X）")],
                 [iRoot.saveImage, qsTr("保存图片（Ctrl+S）")],
                 [iRoot.switchOverlay, qsTr("显示/隐藏文字（Tab）")],
+                [iRoot.openImage, qsTr("用默认应用打开图片")],
                 [iRoot.clear, qsTr("删除图片（Ctrl+D）"), "noColor"],
             ]
         }
