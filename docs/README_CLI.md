@@ -225,9 +225,12 @@ C:\Users\My\Desktop\222.pdf
 ```
 - 使用以下指令，输入文档路径：（路径中`\`需要改为`/`）
 ```bash
-umi-ocr --call_qml BatchDOC --func addDocs '[\"C:/Users/My/Desktop/111.epub\",\"C:/Users/My/Desktop/222.pdf\"]'
+umi-ocr --call_qml BatchDOC --func addDocs '[ \"C:/Users/My/Desktop/111.epub\", \"C:/Users/My/Desktop/222.pdf\"]'
 ```
-- `addDocs`后面路径参数的格式为：`'[\"路径1\",\"路径2\",\"路径3\"]'`。并且路径内不能使用反引号`\`，而必须使用`/`。如果只传一个路径，就是`'[\"路径1\"]'`。
+关于`addDocs`后面路径参数的格式：
+- 在 Powershell 中，最外层为单引号`'`，且左双引号前面必须有空格`空格→ \"←左引号,右引号→\"`。即：`'[ \"路径1\", \"路径2\", \"路径3\"]'`。单个路径为`'[ \"路径1\"]'`。
+- 在 CMD 中，最外层为双引号`"`。即：`"[\"路径1\",\"路径2\",\"路径3\"]"`。
+- 这是 Windows 解析命令行参数的规则，与 Umi 自身的设计无关。
 
 ##### 3. 启动任务：
 ```bash
