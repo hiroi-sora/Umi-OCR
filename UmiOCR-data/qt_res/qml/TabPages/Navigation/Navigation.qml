@@ -125,4 +125,11 @@ TabPage {
             }
         }
     }
+
+    // 鼠标拖入文档
+    DropArea_ {
+        id: "addDocsDropArea"
+        anchors.fill: parent
+        tips: qsTr("请打开对应标签页（如批量OCR、批量文档识别），再拖入文件。")
+    }
 }
