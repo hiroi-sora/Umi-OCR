@@ -762,7 +762,7 @@
 <context>
     <name>DropArea_</name>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/DropArea_.qml" line="13"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/DropArea_.qml" line="11"/>
         <source>松手放入文件</source>
         <translation>鬆手放入檔案</translation>
     </message>
@@ -1491,6 +1491,11 @@
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/Navigation/Navigation.qml" line="75"/>
         <source>功能页</source>
         <translation>功能頁</translation>
+    </message>
+    <message>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/Navigation/Navigation.qml" line="136"/>
+        <source>请打开对应标签页（如批量OCR、批量文档），再拖入文件。</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

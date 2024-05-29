@@ -741,7 +741,7 @@ Do you want to end the task and close the page?</translation>
 <context>
     <name>DropArea_</name>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/DropArea_.qml" line="13"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/DropArea_.qml" line="11"/>
         <source>松手放入文件</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1454,6 +1454,11 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/Navigation/Navigation.qml" line="75"/>
         <source>功能页</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/Navigation/Navigation.qml" line="136"/>
+        <source>请打开对应标签页（如批量OCR、批量文档），再拖入文件。</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
