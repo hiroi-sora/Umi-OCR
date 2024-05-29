@@ -40,6 +40,12 @@ def _get_ocr_options():
             ["text", "纯文本"],
         ],
     }
+    # 忽略区域
+    opts["tbpu.ignoreArea"] = {
+        "title": "忽略区域",
+        "toolTip": "数组，每一项为[[左上角x,y],[右下角x,y]]。",
+        "default": [],
+    }
     return opts
 
 
