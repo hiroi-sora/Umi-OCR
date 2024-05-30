@@ -1,6 +1,7 @@
 # 刷新所有翻译文本文件 .ts
 
 import os
+import sys
 import xml.etree.ElementTree as ET
 
 LangList = [
@@ -30,6 +31,8 @@ for l in LangList:
 -target-language "{l}" \
 -ts "release/{l}.ts"'''
     os.system(cmd)
+
+sys.exit()  # Py翻译的部分 待定
 
 
 # 2. 扫描py文件，生成 en_US_2.ts

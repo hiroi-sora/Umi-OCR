@@ -293,8 +293,8 @@ TabPage {
                 anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.right: parent.right
-                // anchors.topMargin: size_.smallSpacing
-                anchors.margins: size_.smallSpacing
+                anchors.margins: size_.spacing
+                anchors.topMargin: size_.smallSpacing
                 anchors.bottomMargin: 0
                 height: size_.line * 1.5
                 clip: true
@@ -306,7 +306,6 @@ TabPage {
                     anchors.right: parent.right
                     anchors.bottom: parent.bottom
                     spacing: size_.smallSpacing
-                    // visible: dLeftTop.width > dLeftTopL.width + dLeftTopR.width
 
                     // 显示文字
                     CheckButton {
@@ -318,7 +317,6 @@ TabPage {
                         enabledAnime: true
                         onCheckedChanged: imageText.showOverlay = checked
                     }
-
                     IconButtonBar {
                         anchors.top: parent.top
                         anchors.bottom: parent.bottom
@@ -332,11 +330,6 @@ TabPage {
                                 icon: "save",
                                 onClicked: imageText.saveImage,
                                 toolTip: tr("保存图片"),
-                            },
-                            {
-                                icon: "open_image",
-                                onClicked: imageText.openImage,
-                                toolTip: tr("用默认应用打开图片"),
                             },
                             {
                                 icon: "full_screen",
@@ -367,7 +360,7 @@ TabPage {
                     anchors.left: parent.left
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
-                    width: dLeftTopL.width + size_.line
+                    width: dLeftTopL.width
                     color: theme.bgColor
                     Rectangle {
                         anchors.fill: parent
@@ -389,17 +382,21 @@ TabPage {
                                 icon: "screenshot",
                                 onClicked: tabPage.screenshot,
                                 color: theme.textColor,
-                                toolTip: tr("屏幕截图"),
+                                bgColor: theme.bgColor,
                                 text: tr("截图"),
+                                toolTip: tr("屏幕截图"),
                             },
                             {
                                 icon: "paste",
                                 onClicked: tabPage.paste,
                                 color: theme.textColor,
+                                bgColor: theme.bgColor,
+                                text: tr("粘贴"),
                                 toolTip: tr("粘贴图片"),
                             },
                         ]
                     }
+                    // 停止任务
                     Button_ {
                         visible: msnState==="run"
                         anchors.top: parent.top

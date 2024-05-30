@@ -104,10 +104,9 @@ Configs {
                     "default": true,
                 },
                 "pdfOneLayer": {
-                    "title": qsTr(".pdf 单层纯文本文档"),
-                    "toolTip": qsTr("移除原有内容，写入一层可见的文字"),
+                    "title": qsTr("pdf 单层纯文本文档"),
+                    "toolTip": qsTr("创建空白PDF文档，写入识别文字，不含图片"),
                     "default": false,
-                    "advanced": true,
                 },
                 "txt": {
                     "title": qsTr("txt 标准格式"),

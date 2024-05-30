@@ -13,10 +13,6 @@ class OutputPdfOneLayer(OutputPdfLayered):
     def _getPDF(self, path):
         source_doc = fitz.open(path)  # 打开原文档
         pdf = fitz.open()  # 创建空白PDF文档对象
-        try:
-            pdf.set_toc(source_doc.get_toc())  # 复制原始文档的目录
-        except Exception as e:
-            print(f"[Warning] get_toc: {e}")
         # 复制原始文档的元数据（如作者、标题等）
         meta = source_doc.metadata
         if not meta["producer"]:
@@ -28,5 +24,10 @@ class OutputPdfOneLayer(OutputPdfLayered):
         for page in source_doc:
             rect = page.rect  # 原文档渲染尺寸
             pdf.new_page(width=rect.width, height=rect.height)
+        # 尝试复制原始文档的目录数据
+        try:
+            pdf.set_toc(source_doc.get_toc())
+        except Exception as e:
+            print(f"[Warning] set_toc: {e}")
         source_doc.close()  # 释放原文档
         return pdf

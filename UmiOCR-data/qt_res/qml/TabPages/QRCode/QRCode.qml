@@ -205,45 +205,16 @@ TabPage {
                 anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.right: parent.right
+                anchors.margins: size_.spacing
                 anchors.topMargin: size_.smallSpacing
                 height: size_.line * 1.5
-                // 靠左
-                Row {
-                    id: dLeftTopL
-                    anchors.left: parent.left
-                    anchors.top: parent.top
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: size_.spacing
-                    spacing: size_.smallSpacing
-
-                    IconButtonBar {
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
-                        btnList: [
-                            {
-                                icon: "screenshot",
-                                onClicked: tabPage.screenshot,
-                                color: theme.textColor,
-                                toolTip: tr("屏幕截图"),
-                            },
-                            {
-                                icon: "paste",
-                                onClicked: tabPage.paste,
-                                color: theme.textColor,
-                                toolTip: tr("粘贴图片"),
-                            },
-                        ]
-                    }
-                }
                 // 靠右
                 Row {
                     id: dLeftTopR
                     anchors.top: parent.top
                     anchors.right: parent.right
                     anchors.bottom: parent.bottom
-                    anchors.rightMargin: size_.spacing
                     spacing: size_.smallSpacing
-                    visible: dLeftTop.width > dLeftTopL.width + dLeftTopR.width
 
                     IconButtonBar {
                         anchors.top: parent.top
@@ -280,6 +251,48 @@ TabPage {
                         text: (imageText.scale*100).toFixed(0) + "%"
                         color: theme.subTextColor
                         width: size_.line * 2.5
+                    }
+                }
+                // 靠左
+                Rectangle { // 背景
+                    anchors.left: parent.left
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    width: dLeftTopL.width
+                    color: theme.bgColor
+                    Rectangle {
+                        anchors.fill: parent
+                        color: theme.coverColor1
+                    }
+                }
+                Row {
+                    id: dLeftTopL
+                    anchors.left: parent.left
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    spacing: size_.smallSpacing
+
+                    IconButtonBar {
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        btnList: [
+                            {
+                                icon: "screenshot",
+                                onClicked: tabPage.screenshot,
+                                color: theme.textColor,
+                                bgColor: theme.bgColor,
+                                text: tr("截图"),
+                                toolTip: tr("屏幕截图"),
+                            },
+                            {
+                                icon: "paste",
+                                onClicked: tabPage.paste,
+                                color: theme.textColor,
+                                bgColor: theme.bgColor,
+                                text: tr("粘贴"),
+                                toolTip: tr("粘贴图片"),
+                            },
+                        ]
                     }
                 }
             }

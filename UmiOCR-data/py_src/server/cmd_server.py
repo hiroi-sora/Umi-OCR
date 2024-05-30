@@ -79,6 +79,30 @@ class _Actuator:
             return f"[Error] page_index {index} out of range (0~{l})."
         return self.call("TabViewManager", "qml", "delTabPage", False, index)
 
+    # 通过key创建页面
+    def addPageByKey(self, key):
+        # 1. 检查截图标签页，如果未创建则创建
+        module, _ = self.getModuleFromName(key, "qml")
+        if module == None:
+            tvm = self.qmlDict["TabViewManager"]
+            infoList = tvm.getInfoList().toVariant()
+            f2 = False
+            for i, v in enumerate(infoList):
+                if v["key"] == key:
+                    f2 = True
+                    self.addPage(i)
+                    break
+            if not f2:
+                return f"[Error] Template {key} not found."
+            for i in range(10):
+                time.sleep(0.5)
+                module, _ = self.getModuleFromName(key, "qml")
+                if module != None:
+                    break
+        if module == None:
+            return f"[Error] Unable to create template {key}."
+        return "[Success]"
+
     # ============================== 动态模块调用 ==============================
 
     # 返回所有可调用模块
@@ -174,25 +198,9 @@ class _Actuator:
     # 快捷OCR：截图/粘贴/路径，并获取返回结果
     def quick_ocr(self, ss, clip, paras):
         # 1. 检查截图标签页，如果未创建则创建
-        module, moduleName = self.getModuleFromName("ScreenshotOCR", "py")
-        if module == None:
-            tvm = self.qmlDict["TabViewManager"]
-            infoList = tvm.getInfoList().toVariant()
-            f2 = False
-            for i, v in enumerate(infoList):
-                if v["key"] == "ScreenshotOCR":
-                    f2 = True
-                    self.addPage(i)
-                    break
-            if not f2:
-                return '[Error] Template "ScreenshotOCR" not found.'
-            for i in range(10):
-                time.sleep(0.5)
-                module, moduleName = self.getModuleFromName("ScreenshotOCR", "py")
-                if not module == None:
-                    break
-        if module == None:
-            return '[Error] Unable to create template "ScreenshotOCR".'
+        msg = self.addPageByKey("ScreenshotOCR")
+        if msg != "[Success]":
+            return msg
 
         # 2. 订阅事件，监听 <<ScreenshotOcrEnd>>
         isOcrEnd = False
@@ -211,7 +219,7 @@ class _Actuator:
         # 3. 调用截图标签页的函数
         if ss:  # 截图
             if not paras:  # 无参数，手动截图
-                self.call(moduleName, "qml", "screenshot", False)
+                self.call("ScreenshotOCR", "qml", "screenshot", False)
             else:  # 有参数，自动截图 umi-ocr --screenshot screen=0 rect=0,100,500,200
                 rect = [0, 0, 0, 0]  # 截图矩形框
                 screen = 0  # 显示器编号
@@ -226,18 +234,20 @@ class _Actuator:
                             rect[: len(rect_values)] = rect_values  # 补齐rect的值
                         elif part.startswith("screen="):
                             screen = int(part[len("screen=") :])
-                    self.call(moduleName, "qml", "autoScreenshot", False, rect, screen)
+                    self.call(
+                        "ScreenshotOCR", "qml", "autoScreenshot", False, rect, screen
+                    )
                 except Exception as e:
                     return f"[Error] {e}"
         elif clip:  # 粘贴
-            self.call(moduleName, "qml", "paste", False)
+            self.call("ScreenshotOCR", "qml", "paste", False)
         else:  # 路径
             if not paras:
                 return "[Error] Paths is empty."
             paths = findImages(paras, True)  # 递归搜索
             if not paths:
                 return "[Error] No valid path."
-            self.call(moduleName, "qml", "ocrPaths", False, paths)
+            self.call("ScreenshotOCR", "qml", "ocrPaths", False, paths)
 
         # 4. 堵塞等待任务完成，注销事件订阅
         with condition:

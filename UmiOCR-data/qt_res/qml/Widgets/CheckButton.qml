@@ -8,11 +8,15 @@ import QtQuick.Controls 2.15
 Button_ {
     id: btn
     property bool enabledAnime: false
+    property real margins_: size_.smallSpacing
     checkable: true
     checked: false
+    width: checkBox.width + textComp.width + btn.margins_ * 3
 
     contentItem: Row {
-        spacing: size_.smallSpacing
+        anchors.fill: parent
+        anchors.leftMargin: btn.margins_
+        spacing: btn.margins_
 
         // 复选框
         CheckBox_ {

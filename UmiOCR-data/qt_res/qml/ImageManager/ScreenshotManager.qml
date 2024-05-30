@@ -93,7 +93,7 @@ Item {
         if(!grabList)
             return "[Error] Unable to obtain screenshot image"
         if(!Number.isInteger(screen) || screen < 0 || screen >= grabList.length)
-            return `[Error] Invalid screen=${screen}: must be an integer 0-${grabList.length-1}`
+            return `[Error] Invalid screen=${screen}: must be an integer (0~${grabList.length-1})`
         if(rect.length != 4) // 不检查内部是否合法，getClipImgID会检查
             return `[Error] Invalid rect=${rect}: must be integers [x,y,w,h]`
         const grab = grabList[screen]
