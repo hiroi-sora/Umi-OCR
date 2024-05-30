@@ -39,7 +39,7 @@ class OutputPdfLayered(Output):
         try:
             pdf.set_toc(doc.get_toc())  # 复制原始文档的目录
         except Exception as e:
-            print(f"[Warning] get_toc: {e}")
+            print(f"[Warning] set_toc: {e}")
         # 复制原始文档的元数据（如作者、标题等）
         meta = doc.metadata
         if not meta["producer"]:
