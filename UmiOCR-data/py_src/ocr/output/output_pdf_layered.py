@@ -3,6 +3,7 @@
 
 from .output import Output
 
+import os
 import fitz  # PyMuPDF
 
 
@@ -125,8 +126,31 @@ class OutputPdfLayered(Output):
             except Exception as e:  # TODO: 失败原因？可能文件中实际并没有字体？
                 print("[Warning] 构建字体子集失败：", e)
             # 保存：压缩并进行3级垃圾回收。等同 ez_save
-            self.pdf.save(self.outputPath, deflate=True, garbage=3)
+            self.save(self.pdf, self.outputPath, deflate=True, garbage=3)
         else:
             # 无嵌入字体，则直接保存，不压缩
-            self.pdf.save(self.outputPath)
-        self.pdf.close()
+            self.save(self.pdf, self.outputPath)
+
+    def save(self, pdf, path, **options):  # 保存并关闭 pdf 对象
+        try:
+            # 尝试保存到指定路径
+            pdf.save(path, **options)
+        except Exception as e:
+            # 保存失败，尝试保存到 ".temp" 路径
+            tempPath = self.outputPath + ".temp"
+            try:
+                pdf.save(tempPath, **options)
+                pdf.close()
+            except Exception as e:
+                raise Exception(f"[Error] Unable to save PDF to [{tempPath}]: {e}")
+            # 已保存到 .temp 并 close 原对象，尝试替换文件
+            try:
+                if os.path.exists(path):
+                    os.remove(path)
+                os.rename(tempPath, path)
+            except Exception as e:
+                raise Exception(
+                    f"[Warning] Unable to save PDF: [{path}]. Exception: {e}. Saved to temporary path: [{tempPath}]."
+                )
+        else:  # 正常结束
+            pdf.close()
