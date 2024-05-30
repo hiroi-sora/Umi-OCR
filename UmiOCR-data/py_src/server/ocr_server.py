@@ -85,6 +85,28 @@ def init(UmiWeb):
             for key in default:
                 if key not in opt:
                     opt[key] = default[key]["default"]
+            # 检查忽略区域参数
+            if opt["tbpu.ignoreArea"]:
+                new_ia = []
+                ia = opt["tbpu.ignoreArea"]
+                for a in ia:
+                    if (
+                        not isinstance(a, list)
+                        or len(a) != 2
+                        or not isinstance(a[0], list)
+                        or len(a[0]) != 2
+                        or not isinstance(a[1], list)
+                        or len(a[1]) != 2
+                        or not all(
+                            isinstance(x, (int, float))
+                            for x in [a[0][0], a[0][1], a[1][0], a[1][1]]
+                        )
+                    ):
+                        raise Exception(
+                            f"tbpu.ignoreArea 中，每一项的格式必须是 [[x1,y1],[x2,y2]] 。当前值不合法： {ia}"
+                        )
+                    new_ia.append([[a[0][0], a[0][1]], [], [a[1][0], a[1][1]], []])
+                opt["tbpu.ignoreArea"] = new_ia
         except Exception as e:
             return json.dumps({"code": 804, "data": f"options 解释失败。 {e}"})
         # 同步执行
