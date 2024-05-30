@@ -147,7 +147,7 @@ class _MissionDocClass(Mission):
                     w1, h1 = bbox[2] - bbox[0], bbox[3] - bbox[1]
                     w2, h2 = t["width"], t["height"]
                     # 单独计算宽高的缩放比例
-                    scale_w = w1 / w2  
+                    scale_w = w1 / w2
                     scale_h = h1 / h2
                     # 如果页面有旋转，逆向旋转图片字节
                     if protation != 0:
@@ -168,7 +168,12 @@ class _MissionDocClass(Mission):
                             print(f"[Error] Rotation doc image:", e)
                     # 记录图片
                     imgs.append(
-                        {"bytes": img_bytes, "xy": (bbox[0], bbox[1]), "scale_w": scale_w,"scale_h":scale_h}
+                        {
+                            "bytes": img_bytes,
+                            "xy": (bbox[0], bbox[1]),
+                            "scale_w": scale_w,
+                            "scale_h": scale_h,
+                        }
                     )
                 # 文本
                 elif t["type"] == 0 and (
@@ -219,7 +224,7 @@ class _MissionDocClass(Mission):
                     scale_w = o["scale_w"]
                     scale_h = o["scale_h"]
                     for r in res["data"]:
-                        # 将图片相对坐标 转为 页面绝对坐标
+                        # 将所有文本块的坐标，从图片相对坐标系，转为页面绝对坐标系
                         for bi in range(4):
                             r["box"][bi][0] = r["box"][bi][0] * scale_w + x
                             r["box"][bi][1] = r["box"][bi][1] * scale_h + y
