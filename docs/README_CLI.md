@@ -1,3 +1,5 @@
+[Translate to English](https://github-com.translate.goog/hiroi-sora/Umi-OCR/blob/main/docs/README_CLI.md?_x_tr_sl=zh-CN&_x_tr_tl=en&_x_tr_hl=en&_x_tr_pto=wapp)
+
 - 命令行手册： [README_CLI.md](README_CLI.md)
 - HTTP接口手册： [README_HTTP.md](README_HTTP.md)
 
