@@ -305,7 +305,12 @@
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="107"/>
-        <source>pdf 单层纯文本文档</source>
+        <source>text.pdf 单层纯文本文档</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="108"/>
+        <source>创建空白PDF文档，只写入识别文字，不含图片</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -372,11 +377,6 @@
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="103"/>
         <source>保留原有图片，叠加一层透明文字，可以搜索和复制</source>
         <translation type="unfinished">元の画像を保持し、検索してコピーできる透明なテキストのレイヤーを重ねます</translation>
-    </message>
-    <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="108"/>
-        <source>创建空白PDF文档，写入识别文字，不含图片</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="144"/>

@@ -309,12 +309,12 @@
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="107"/>
-        <source>pdf 单层纯文本文档</source>
+        <source>text.pdf 单层纯文本文档</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="108"/>
-        <source>创建空白PDF文档，写入识别文字，不含图片</source>
+        <source>创建空白PDF文档，只写入识别文字，不含图片</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
