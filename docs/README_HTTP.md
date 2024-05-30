@@ -88,6 +88,20 @@ URL：`/api/ocr`
     - `single_none`：单栏-无换行
     - `single_code`：单栏-保留缩进，适用于解析代码截图
     - `none`：不做处理
+- `tbpu.ignoreArea` ：忽略区域功能。传入一些矩形框，位于这些矩形框内部的文字块将会被忽略。
+    - 外层格式：列表`[]`，每项表示一个矩形框。
+    - 内层格式：列表`[[x1,y1],[x2,y2]]`，其中`x1,y1`是矩形框左上角坐标，`x2,y2`是右下角坐标。
+    - 示例：假设忽略区域包含3个矩形框，那么 `tbpu.ignoreArea` 的格式类似：
+        ```javascript
+        [
+            [[0,0],[100,50]],   // 第1个框，左上角(0,0)，右下角(100,50)
+            [[0,60],[200,120]], // 第2个
+            [[400,0],[500,30]]  // 第3个
+        ]
+        ```
+    - 注意，只有处于忽略区域框内部的整个文本块（而不是单个字符）会被忽略。如下图所示，黄色边框的深色矩形是一个忽略区域。那么只有`key_mouse`才会被忽略。`pubsub_connector.py`、`pubsub_service.py` 这两个文本块得以保留。
+<p align="center"><img src="https://tupian.li/images/2024/05/30/66587bf03ae15.png" alt="忽略区域范围示例.png" style="width: 80%;"></p>
+
 
 **引擎参数** 对于加载不同引擎插件时，可能有所不同。完整参数说明请通过  [get_options](#/api/ocr/get_options) 接口查询。以下是一些示例：
 
@@ -179,6 +193,9 @@ const data = {
     //     "ocr.limit_side_len": 960,
     //     "tbpu.parser": "multi_para",
     //     "data.format": "text",
+    //     "tbpu.ignoreArea": [ // 忽略区域
+    //         [[-5,-5],[100,50]]
+    //     ],
     // }
     // Rapid引擎模式
     // "options": {
@@ -223,6 +240,9 @@ data = {
     #     "ocr.limit_side_len": 960,
     #     "tbpu.parser": "multi_para",
     #     "data.format": "text",
+    #     "tbpu.ignoreArea": [ # 忽略区域
+    #         [[-5,-5],[100,50]]
+    #     ],
     # }
     # Rapid引擎模式
     # "options": {
