@@ -224,14 +224,14 @@ class _MissionDocClass(Mission):
 
         # =============== tbpu文本块后处理 ===============
         # 忽略区域
-        if msnInfo["ignoreArea"]:
+        if msnInfo["ignoreArea"] and tbs:
             # 检查范围
             igStart = msnInfo["ignoreArea"]["start"]
             igEnd = msnInfo["ignoreArea"]["end"]
             if pno >= igStart and pno <= igEnd:
                 tbs = msnInfo["ignoreArea"]["obj"].run(tbs)
         # 其他tbpu
-        if msnInfo["tbpu"]:
+        if msnInfo["tbpu"] and tbs:
             for tbpu in msnInfo["tbpu"]:
                 tbs = tbpu.run(tbs)
 

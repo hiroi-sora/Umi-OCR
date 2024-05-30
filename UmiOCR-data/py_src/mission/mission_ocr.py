@@ -90,6 +90,11 @@ class __MissionOcrClass(Mission):
             if msnInfo["tbpu"]:
                 for tbpu in msnInfo["tbpu"]:
                     res["data"] = tbpu.run(res["data"])
+                    # 如果忽略区域等处理将所有文本删除，则结束tbpu
+                    if not res["data"]:
+                        res["code"] = 101
+                        res["data"] = ""
+                        break
         return res
 
     # ========================= 【qml接口】 =========================
