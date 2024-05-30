@@ -68,5 +68,9 @@ Button {
             text: btn.toolTip
         }
     }
-    Loader { id: toolTipLoader } // 默认不加载
+    // ToolTip_ 的动态加载器
+    Loader {
+        id: toolTipLoader
+        anchors.fill: parent
+    }
 }

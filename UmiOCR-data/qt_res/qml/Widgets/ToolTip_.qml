@@ -17,7 +17,7 @@ ToolTip {
         anchors.fill: parent
         hoverEnabled: true
         onEntered: { // 遮挡鼠标时，下移
-            rootToolTip.y += size_.line
+            rootToolTip.y += mouseY + size_.line
         }
     }
 
