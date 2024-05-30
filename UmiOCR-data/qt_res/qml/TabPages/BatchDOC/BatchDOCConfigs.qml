@@ -104,8 +104,8 @@ Configs {
                     "default": true,
                 },
                 "pdfOneLayer": {
-                    "title": qsTr("pdf 单层纯文本文档"),
-                    "toolTip": qsTr("创建空白PDF文档，写入识别文字，不含图片"),
+                    "title": qsTr("text.pdf 单层纯文本文档"),
+                    "toolTip": qsTr("创建空白PDF文档，只写入识别文字，不含图片"),
                     "default": false,
                 },
                 "txt": {

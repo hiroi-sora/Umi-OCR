@@ -8,6 +8,7 @@ class OutputPdfOneLayer(OutputPdfLayered):
     def __init__(self, argd):
         super().__init__(argd)
         self.opacity = 1  # 文本不透明
+        self.outputPath = f"{self.dir}/{self.fileName}.text.pdf"  # 输出路径
 
     # 创建空白 PDF
     def _getPDF(self, path):
