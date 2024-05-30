@@ -190,16 +190,17 @@ TabPage {
         // 成功结束
         if(msg.startsWith("[Success]")) {
             filesTableView.setProperty(path, "state", "√")
+            msg = ""
         }
-        // 任务失败
-        else {
+        // 单个文档任务失败，总体未结束
+        else if(!isAll) {
             filesTableView.setProperty(path, "state", "× "+ qsTr("失败"))
             qmlapp.popup.simple(qsTr("文档识别异常"), msg)
         }
         // 所有文档处理完毕
         if(isAll) {
             const simpleType = configsComp.getValue("other.simpleNotificationType")
-            qmlapp.popup.simple(qsTr("批量识别完成"), "", simpleType)
+            qmlapp.popup.simple(qsTr("批量识别完成"), msg, simpleType)
             ctrlPanel.stopFinished()
             // 任务完成后续操作
             qmlapp.globalConfigs.utilsDicts.postTaskHardwareCtrl(

@@ -58,6 +58,9 @@ class _MissionDocClass(Mission):
             return msg
         msnInfo["doc"] = doc
         msnInfo["path"] = msnPath
+        # =============== 拦截 onEnd ===============
+        msnInfo["sourceOnEnd"] = msnInfo["onEnd"] if "onEnd" in msnInfo else None
+        msnInfo["onEnd"] = self._preOnEnd
         # =============== pageRange 页面范围 ===============
         if len(pageList) == 0:
             if isinstance(pageRange, (tuple, list)) and len(pageRange) == 2:
@@ -269,6 +272,13 @@ class _MissionDocClass(Mission):
                 return info
         except Exception as e:
             return {"path": path, "error": e}
+
+    # 结束前的处理
+    def _preOnEnd(self, msnInfo, msg):
+        # 先关闭文档对象，再触发原本的 onEnd ，防止新文档保存到原路径时的冲突
+        msnInfo["doc"].close()
+        if msnInfo["sourceOnEnd"]:
+            msnInfo["sourceOnEnd"](msnInfo, msg)
 
 
 # 全局 DOC 任务管理器
