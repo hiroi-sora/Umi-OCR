@@ -1266,12 +1266,12 @@ For example, when processing screenshots of watermarked images, you can add an i
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageWithText.qml" line="282"/>
         <source>复制&#x3000;&#x3000;（Ctrl+C）</source>
-        <translation>Copy     (Ctrl+C)</translation>
+        <translation>Copy (Ctrl+C)</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageWithText.qml" line="283"/>
         <source>全选&#x3000;&#x3000;（Ctrl+A）</source>
-        <translation>Select all     (Ctrl+A)</translation>
+        <translation>Select all (Ctrl+A)</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageWithText.qml" line="284"/>
@@ -2101,17 +2101,17 @@ Exception message: %2</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ResultLayout/ResultsTableView.qml" line="408"/>
         <source>复制&#x3000;&#x3000;&#x3000;&#x3000;（Ctrl+C）</source>
-        <translation>Copy      (Ctrl+C)</translation>
+        <translation>Copy (Ctrl+C)</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ResultLayout/ResultsTableView.qml" line="409"/>
         <source>复制全部&#x3000;&#x3000;（Ctrl+C 双击）</source>
-        <translation>Copy all     (Double-press Ctrl+C)</translation>
+        <translation>Copy all (Double-press Ctrl+C)</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ResultLayout/ResultsTableView.qml" line="410"/>
         <source>选中单个&#x3000;&#x3000;（Ctrl+A）</source>
-        <translation>Select single   (Ctrl+A)</translation>
+        <translation>Select single (Ctrl+A)</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ResultLayout/ResultsTableView.qml" line="411"/>
