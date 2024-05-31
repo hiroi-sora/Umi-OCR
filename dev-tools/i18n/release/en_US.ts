@@ -1426,8 +1426,8 @@ Abandon unfinished content.</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/MissionCtrlPanel.qml" line="226"/>
-        <source>暂停</source>
-        <translation>Task paused</translation>
+        <source>已暂停</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/MissionCtrlPanel.qml" line="233"/>

@@ -1387,7 +1387,7 @@ Do you want to end the task and close the page?</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/MissionCtrlPanel.qml" line="226"/>
-        <source>暂停</source>
+        <source>已暂停</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

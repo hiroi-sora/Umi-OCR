@@ -223,7 +223,7 @@ Item {
                         }
                         // 暂停中
                         else if(missionCtrl.state_ === "pause") {
-                            p = qsTr("暂停")
+                            p = qsTr("已暂停")
                         }
                         // 已停止
                         else if(missionCtrl.state_ === "stop") {
