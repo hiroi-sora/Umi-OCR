@@ -1164,7 +1164,7 @@ If you don&apos;t want to see this notification, disable advanced mode in global
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/IconButtonBar.qml" line="34"/>
         <source>屏幕截图</source>
-        <translation>Capture screen</translation>
+        <translation type="unfinished">Screenshot</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/IconButtonBar.qml" line="35"/>
@@ -1841,7 +1841,7 @@ Can be set as default off in global settings</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRCode/QRCode.qml" line="319"/>
         <source>截图、拖入或粘贴二维码图片</source>
-        <translation>Capture, drag and drop, or paste QR code image</translation>
+        <translation type="unfinished">Screenshot, drag and drop, or paste QR code image</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRCode/QRCode.qml" line="357"/>
@@ -1890,7 +1890,7 @@ Can be set as default off in global settings</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRCode/QRCodeConfigs.qml" line="18"/>
         <source>屏幕截图</source>
-        <translation>Capture screen</translation>
+        <translation type="unfinished">Screenshot</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRCode/QRCodeConfigs.qml" line="24"/>
@@ -2227,7 +2227,7 @@ Do you want to end the task and close the page?</translation>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="142"/>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="252"/>
         <source>屏幕截图</source>
-        <translation>Capture screen</translation>
+        <translation type="unfinished">Screenshot</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="143"/>
@@ -2281,7 +2281,7 @@ Can be set as default off in global settings</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="430"/>
         <source>截图、拖入或粘贴图片</source>
-        <translation>Capture, drag and drop, or paste image</translation>
+        <translation type="unfinished">Screenshot, drag and drop, or paste image</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="454"/>
@@ -2309,7 +2309,7 @@ Can be set as default off in global settings</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOcrConfigs.qml" line="28"/>
         <source>屏幕截图</source>
-        <translation>Capture screen</translation>
+        <translation type="unfinished">Screenshot</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOcrConfigs.qml" line="34"/>
