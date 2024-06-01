@@ -53,8 +53,11 @@ Item {
     Text_ {
         text: title
         anchors.left: parent.left
+        anchors.right: parent.right
         anchors.leftMargin: size_.smallSpacing
+        anchors.rightMargin: size_.line
         anchors.verticalCenter: parent.verticalCenter
+        clip: true
     }
     // 背景
     MouseAreaBackgroud {

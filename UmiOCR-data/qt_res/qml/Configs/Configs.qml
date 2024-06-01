@@ -647,6 +647,7 @@ Item {
                 textSize: size_.smallLine
                 textColor_: theme.subTextColor
                 text_: fold ? qsTr("展开")+" 🔽" : qsTr("折叠")+" 🔼"
+                bgColor_: theme.bgColor
                 onClicked: {
                     fold=!fold
                     uiSettings.setValue(foldKey, fold) // 折叠状态写入本地
@@ -744,7 +745,7 @@ Item {
                 anchors.right: parent.right
                 anchors.margins: 1
                 width: parent.width*0.5
-                color: "#00000000"
+                color: theme.bgColor
                 border.width: 2
                 border.color: theme.coverColor2
                 radius: size_.btnRadius
@@ -831,7 +832,7 @@ Item {
                 anchors.right: parent.right
                 anchors.margins: 1
                 width: parent.width*0.25
-                color: "#00000000"
+                color: theme.bgColor
                 border.width: 2
                 border.color: theme.coverColor2
                 radius: size_.btnRadius
@@ -909,14 +910,18 @@ Item {
                     text: parent.currentText
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left: parent.left
+                    anchors.right: downIcon.left
                     anchors.leftMargin: size_.smallSpacing
+                    anchors.rightMargin: size_.smallSpacing
                     verticalAlignment: Text.AlignVCenter
                     font.pixelSize: size_.text
                     font.family: theme.fontFamily
                     color: theme.subTextColor
+                    clip: true
                 }
                 // 前景箭头
                 indicator: Icon_ {
+                    id: "downIcon"
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.right: parent.right
                     anchors.margins: size_.smallSpacing
@@ -928,7 +933,7 @@ Item {
                 // 背景
                 background: Rectangle {
                     anchors.fill: parent
-                    color: "#00000000"
+                    color: theme.bgColor
                     border.width: 2
                     border.color: theme.coverColor2
                     radius: size_.btnRadius
@@ -945,11 +950,14 @@ Item {
                     Text {
                         text: modelData + (comboBox.currentIndex===index? " √":"")
                         anchors.left: parent.left
+                        anchors.right: parent.right
                         anchors.leftMargin: size_.smallSpacing
+                        anchors.rightMargin: size_.smallSpacing
                         font.pixelSize: size_.text
                         font.family: theme.fontFamily
                         font.bold: comboBox.currentIndex===index
                         color: comboBox.currentIndex===index? theme.textColor:theme.subTextColor
+                        clip: true
                     }
                     background: Rectangle {
                         color: theme.bgColor
@@ -977,12 +985,13 @@ Item {
                 value(path) // 设置值
             }
 
-            Item {
+            Rectangle {
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
                 anchors.right: parent.right
                 anchors.margins: 1
                 width: parent.width*0.5
+                color: theme.bgColor
 
                 // 选择按钮
                 IconButton {
@@ -1009,7 +1018,6 @@ Item {
                         }
                     }
                 }
-                
 
                 // 文本输入框
                 Rectangle {
@@ -1018,7 +1026,7 @@ Item {
                     anchors.left: parent.left
                     anchors.right: iconButton.left
                     anchors.rightMargin: 2
-                    color: "#00000000"
+                    color: theme.bgColor
                     border.width: 2
                     border.color: theme.coverColor2
                     radius: size_.btnRadius
@@ -1043,7 +1051,12 @@ Item {
 
         ConfigItemComp {
 
+            Rectangle {
+                anchors.fill: btnsRow
+                color: theme.bgColor
+            }
             Row {
+                id: btnsRow
                 anchors.right: parent.right
                 anchors.rightMargin: size_.smallSpacing
                 anchors.top: parent.top
@@ -1157,12 +1170,13 @@ Item {
                 changeHotkey(kn)
             }
 
-            Item {
+            Rectangle {
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
                 anchors.right: parent.right
                 anchors.margins: 1
                 width: parent.width*0.5
+                color: theme.bgColor
 
                 IconButton {
                     id: clearBtn
@@ -1180,6 +1194,7 @@ Item {
                     anchors.bottom: parent.bottom
                     anchors.left: parent.left
                     anchors.right: clearBtn.left
+                    clip: true
                     textColor_: theme.subTextColor
                     borderWidth: 2
                     borderColor: theme.coverColor2
