@@ -30,8 +30,8 @@
 **鼠标截屏**：`umi-ocr --screenshot`
 
 <details>
-<summary>范围截屏（无需鼠标划选）</summary>
-
+<summary><b>范围截屏</b>（无需鼠标划选）</summary>
+</br>
 自动对指定屏幕、指定区域进行截屏。
 
 **范围截屏** 指令：
@@ -56,6 +56,16 @@ umi-ocr --screenshot screen=0
 ```bash
 umi-ocr --screenshot screen=1 rect=50,100,300,200
 ```
+
+示例3：与 [HotkeysCMD](https://github.com/hiroi-sora/HotkeysCMD) 工具配合，实现点击**快捷键**进行范围截图。
+
+向 HotkeysCMD 的配置文件中添加这一行，表示点击 `F10` 时进行范围截图：
+
+```bash
+F10 umi-ocr --screenshot screen=0 rect=50,100,300,200
+```
+
+更多快捷键定义方式，详见 [HotkeysCMD](https://github.com/hiroi-sora/HotkeysCMD) 文档。
 
 </details></br>
 
