@@ -12,6 +12,7 @@ class OutputPdfLayered(Output):
         self.dir = argd["outputDir"]  # 输出路径（文件夹）
         self.originPath = argd["originPath"]  # 原始文件路径
         self.fileName = argd["outputFileName"]  # 文件名
+        self.password = argd["password"]  # 密码
         self.outputPath = f"{self.dir}/{self.fileName}.layered.pdf"  # 输出路径
         self.pdf = None
         self.existentPages = []  # 已处理的页数
@@ -32,6 +33,11 @@ class OutputPdfLayered(Output):
     def _getPDF(self, path):
         # https://github.com/pymupdf/PyMuPDF-Utilities/blob/master/examples/convert-document/convert.py
         doc = fitz.open(path)
+        # 如果已加密，则尝试解密
+        if doc.isEncrypted and not doc.authenticate(self.password):
+            raise Exception(
+                f'The document is encrypted, and the password "{self.password}" is incorrect.\n文档已加密，输入密码不正确。'
+            )
         if doc.is_pdf:
             return doc
         b = doc.convert_to_pdf()  # 转换为PDF格式的二进制数据

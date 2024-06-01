@@ -13,6 +13,11 @@ class OutputPdfOneLayer(OutputPdfLayered):
     # 创建空白 PDF
     def _getPDF(self, path):
         source_doc = fitz.open(path)  # 打开原文档
+        # 如果已加密，则尝试解密
+        if source_doc.isEncrypted and not source_doc.authenticate(self.password):
+            raise Exception(
+                f'The document is encrypted, and the password "{self.password}" is incorrect.\n文档已加密，输入密码不正确。'
+            )
         pdf = fitz.open()  # 创建空白PDF文档对象
         # 复制原始文档的元数据（如作者、标题等）
         meta = source_doc.metadata

@@ -73,8 +73,8 @@ class BatchDOC(Page):
     def msnResume(self):  # 任务恢复
         MissionDOC.resumeMissionList(self._msnID)
 
-    # 初始化输出器列表。成功返回两个输出器列表 output1, output2 。失败返回 "失败信息", None
-    def _initOutputList(self, argd, path):
+    # 初始化输出器列表。成功返回两个输出器列表 output 。失败返回 "失败信息"
+    def _initOutputList(self, argd, path, password=""):
         # =============== 提取输出路径 outputDir, outputDirName ===============
         if argd["mission.dirType"] == "source":  # 若保存到原目录
             outputDir = os.path.dirname(path)  # 则保存路径设为文档的目录
@@ -84,7 +84,7 @@ class BatchDOC(Page):
                 try:  # 不存在，尝试创建地址
                     os.makedirs(d)
                 except OSError as e:
-                    return f"[Error] 无法创建路径 {d}", None
+                    return f"[Error] 无法创建路径 {d}"
             outputDir = d
 
         # =============== 提取时间信息和文件名 outputFileName ===============
@@ -105,10 +105,7 @@ class BatchDOC(Page):
         fileNameEle = os.path.splitext(os.path.basename(path))[0]
         outputFileName = nameTemplate.replace("%name", fileNameEle)  # 替换名称元素
         if not utils.allowedFileName(outputFileName):  # 文件名不合法
-            return (
-                f'[Error] 文件名【{outputFileName}】含有不允许的字符。\n不允许含有下列字符： \  /  :  *  ?  "  <  >  |',
-                None,
-            )
+            return f'[Error] 文件名【{outputFileName}】含有不允许的字符。\n不允许含有下列字符： \  /  :  *  ?  "  <  >  |'
 
         # =============== 组装输出参数字典 ===============
         outputArgd = {
@@ -120,6 +117,7 @@ class BatchDOC(Page):
             "startDatetime": startDatetime,  # 开始日期
             "ingoreBlank": argd["mission.ingoreBlank"],  # 忽略空白文件
             "originPath": path,  # 原始文件名
+            "password": password,  # 文档密码
         }
 
         # =============== 实例化输出器对象 ===============
@@ -138,8 +136,9 @@ class BatchDOC(Page):
             return
         d = self._queuedDocs.pop(0)  # 取首位任务
         path = d["path"]  # 取地址
+        password = d["password"]  # 密码
         # 构造输出器
-        output = self._initOutputList(self._argd, path)
+        output = self._initOutputList(self._argd, path, password)
         if type(output) == str:  # 创建输出器失败
             self._onEnd({"path": path}, "[Error] 无法创建输出器。")
             return
@@ -159,7 +158,6 @@ class BatchDOC(Page):
             "get_tbpu": tbpuList,
         }
         pageRange = [int(d["range_start"]), int(d["range_end"])]
-        password = d["password"]
         msnID = MissionDOC.addMission(msnInfo, path, pageRange, password=password)
         if msnID.startswith("["):  # 添加任务失败
             self._msnID = ""
