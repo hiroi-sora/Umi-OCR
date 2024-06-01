@@ -20,7 +20,7 @@ git clone --single-branch --branch [分支名] https://github.com/hiroi-sora/Umi
 
 # 更新日志 CHANGE LOG
 
-##### [v2.1.2](https://github.com/hiroi-sora/Umi-OCR/tree/release/2.1.2) `2024.6`
+### [v2.1.2](https://github.com/hiroi-sora/Umi-OCR/tree/release/2.1.2) `2024.6`
 
 分支名：`release/2.1.2`
 
@@ -32,7 +32,7 @@ git clone --single-branch --branch [分支名] https://github.com/hiroi-sora/Umi
 - 优化：PDF标签页，拖入大量文件、提交大批任务时的性能和流畅度。 (#476)
 - UI：优化一些布局，美化一些视觉效果。
 
-##### [v2.1.1](https://github.com/hiroi-sora/Umi-OCR/tree/release/2.1.1) `2024.3.29`
+### [v2.1.1](https://github.com/hiroi-sora/Umi-OCR/tree/release/2.1.1) `2024.3.29`
 
 分支名：`release/2.1.1`
 
@@ -51,7 +51,7 @@ git clone --single-branch --branch [分支名] https://github.com/hiroi-sora/Umi
 - 优化：双栏面板会记忆左右折叠状态。
 - UI：优化一些提示，修复一些渲染问题，美化一些视觉效果。
 
-##### [v2.1.0](https://github.com/hiroi-sora/Umi-OCR/tree/release/2.1.0) `2024.2.29`
+### [v2.1.0](https://github.com/hiroi-sora/Umi-OCR/tree/release/2.1.0) `2024.2.29`
 
 分支名：`release/2.1.0`
 
@@ -62,7 +62,7 @@ git clone --single-branch --branch [分支名] https://github.com/hiroi-sora/Umi
 - 更新：更强大的排版解析器。
 - 修复：避免系统环境变量`QMLSCENE_DEVICE`的影响。 (#270)
 
-##### [v2.0.2](https://github.com/hiroi-sora/Umi-OCR/tree/release/2.0.2) `2024.1.15`
+### [v2.0.2](https://github.com/hiroi-sora/Umi-OCR/tree/release/2.0.2) `2024.1.15`
 
 分支名：`release/2.0.2`
 
@@ -77,7 +77,7 @@ git clone --single-branch --branch [分支名] https://github.com/hiroi-sora/Umi
 - 修复：`段落合并参数不存在` 的误报。
 - 修复：组件`DefaultTips`不生效。
 
-##### [v2.0.1](https://github.com/hiroi-sora/Umi-OCR/tree/release/2.0.1) `2023.12.8`
+### [v2.0.1](https://github.com/hiroi-sora/Umi-OCR/tree/release/2.0.1) `2023.12.8`
 
 分支名：`release/2.0.1`
 
@@ -89,7 +89,7 @@ git clone --single-branch --branch [分支名] https://github.com/hiroi-sora/Umi
 - 修复：开启“禁用美化效果”后，外部通知弹窗无法关闭。 (#234)
 - 修复：别的程序通过命令行调用Umi-OCR时，无法获取stdout输出。
 
-##### [v2.0.0](https://github.com/hiroi-sora/Umi-OCR/tree/release/2.0.0) `2023.11.19`
+### [v2.0.0](https://github.com/hiroi-sora/Umi-OCR/tree/release/2.0.0) `2023.11.19`
 
 分支名：`release/2.0.0`
 
@@ -97,7 +97,7 @@ git clone --single-branch --branch [分支名] https://github.com/hiroi-sora/Umi
 - 优化：下拉框UI。
 - 修复：段落合并-自然段合并的bug。
 
-##### v2.0.0 dev `2023.11.14`
+### v2.0.0 dev `2023.11.14`
 
 - 新增：生成二维码功能。
 - 新增：所有图片预览窗口（如截图、二维码页），允许保存图片到指定路径。
@@ -110,7 +110,7 @@ git clone --single-branch --branch [分支名] https://github.com/hiroi-sora/Umi
 - 修复：其它少量报错。
 - 翻译：人工校对`繁体中文`和`英语`。 (贡献：@QZGao)
 
-##### v2.0.0 dev `2023.11.5`
+### v2.0.0 dev `2023.11.5`
 
 - 新增：记忆窗口位置。 [v2 #44](https://github.com/hiroi-sora/Umi-OCR_v2/issues/44)
 - 新增：批量识图页增加图片预览窗口，单击图片条目打开。 [v2 #2](https://github.com/hiroi-sora/Umi-OCR_v2/issues/2)
@@ -125,7 +125,7 @@ git clone --single-branch --branch [分支名] https://github.com/hiroi-sora/Umi
 - 修复：输出到单独文件txt时，文件名去除原后缀。 [v2 #36](https://github.com/hiroi-sora/Umi-OCR_v2/issues/36)
 - 修复：一些小Bug。
 
-##### v2.0.0 dev `2023.10.25`
+### v2.0.0 dev `2023.10.25`
 - 新增：命令行支持传入图片路径。 [v2 #28](https://github.com/hiroi-sora/Umi-OCR_v2/issues/28)
 - 新增：HTTP接口支持Base64传输图片。 [v2 #28](https://github.com/hiroi-sora/Umi-OCR_v2/issues/28)
 - 新增：忽略区域功能。
@@ -141,7 +141,7 @@ git clone --single-branch --branch [分支名] https://github.com/hiroi-sora/Umi
 - 修正：拖入非图片文件可能导致卡顿几秒的问题。
 - 修正：PaddleOCR插件的兼容性问题。 ([Umi-OCR #209](https://github.com/hiroi-sora/Umi-OCR/issues/209))
 
-##### v2.0.0 dev `2023.10.18`
+### v2.0.0 dev `2023.10.18`
 - 新增：截图前自动隐藏窗口。 [v2 #26](https://github.com/hiroi-sora/Umi-OCR_v2/issues/26)
 - 新增：更改字体功能。 [v2 #25](https://github.com/hiroi-sora/Umi-OCR_v2/issues/25)
 - 新增：可爱的加载动画。
@@ -154,7 +154,7 @@ git clone --single-branch --branch [分支名] https://github.com/hiroi-sora/Umi
 - 修正：文件重复导致无法添加开机自启。 [v2 #27](https://github.com/hiroi-sora/Umi-OCR_v2/issues/27)
 
 
-##### v2.0.0 dev `2023.10.10`
+### v2.0.0 dev `2023.10.10`
 - 新功能：第一次启动软件时，根据系统情况，选择最恰当的渲染器。解决截图闪烁问题。 [v2 #7](https://github.com/hiroi-sora/Umi-OCR_v2/issues/7)
 - 新功能：初步实现插件机制，切换引擎等组件更加便捷。
 - 新功能：支持调整界面比例（文字大小）。
@@ -164,19 +164,19 @@ git clone --single-branch --branch [分支名] https://github.com/hiroi-sora/Umi
 - 优化：禁用美化效果时，外部弹窗将不会渲染阴影区域。 [v2 #14](https://github.com/hiroi-sora/Umi-OCR_v2/issues/14)
 - 优化：Paddle引擎也支持win7系统了。
 
-##### v2.0.0 dev `2023.9.25`
+### v2.0.0 dev `2023.9.25`
 
-##### v2.0.0 dev `2023.9.8`
+### v2.0.0 dev `2023.9.8`
 - 支持多种界面语言（实验性）
 
-##### v2.0.0 dev `2023.9.7`
+### v2.0.0 dev `2023.9.7`
 
-##### v2.0.0 dev `2023.8.9`
+### v2.0.0 dev `2023.8.9`
 - 截图OCR
 - 兼容高分辨率屏幕和多屏幕系统
 - 更准确、智能的段落合并
 
-##### v2.0.0 dev `2023.7.26`
+### v2.0.0 dev `2023.7.26`
 - 批量OCR
 - 现代化UI风格
 - 自定义标签页系统
@@ -184,36 +184,36 @@ git clone --single-branch --branch [分支名] https://github.com/hiroi-sora/Umi
 
 ---
 
-##### [v1.3.7](https://github.com/hiroi-sora/Umi-OCR/tree/release/1.3.7) `2023.10.10`
+### [v1.3.7](https://github.com/hiroi-sora/Umi-OCR/tree/release/1.3.7) `2023.10.10`
 - Paddle引擎兼容Win7 x64 。
 
-##### v1.3.6 `2023.9.26`
+### v1.3.6 `2023.9.26`
 - 新功能：更强大的段落合并方案-`单行/多行自然段/多行代码段`。支持自动判断中/英文段落，采取对应的合并规则。
 - 移除一些过时的段落合并方案。
 - 功能调整：`截图联动` 划分为独立的功能，不受常规截图OCR影响。
 
-##### [v1.3.5](https://github.com/hiroi-sora/Umi-OCR/tree/release/1.3.5) `2023.6.20`
+### [v1.3.5](https://github.com/hiroi-sora/Umi-OCR/tree/release/1.3.5) `2023.6.20`
 <!-- 6.5k★ 撒花~ -->
 - 新功能：复制识别结果后，可发送指定按键，以便联动唤起翻译器等工具。
 - 新功能：命令行增加切换识别语言的指令。
 - 修Bug：低配置机器上有概率误报`OCR init timeout: 5s` 。[#154](https://github.com/hiroi-sora/Umi-OCR/issues/154) , [#156](https://github.com/hiroi-sora/Umi-OCR/issues/156)。
 - 调整：默认停止任务30秒后释放一次内存。
 
-##### [v1.3.4](https://github.com/hiroi-sora/Umi-OCR/tree/release/1.3.4) `2023.4.26`
+### [v1.3.4](https://github.com/hiroi-sora/Umi-OCR/tree/release/1.3.4) `2023.4.26`
 <!-- 一周年纪念！ -->
 - 新功能：截图预览窗口。
 - 新功能：可用方向键微调截图框位置。
 - 修Bug：拖入图片时有几率卡退主窗口 [issue #126](https://github.com/hiroi-sora/Umi-OCR/issues/126) 。
 - 优化了一些处理流程。
 
-##### [v1.3.3](https://github.com/hiroi-sora/Umi-OCR/tree/release/1.3.3) `2023.3.19`
+### [v1.3.3](https://github.com/hiroi-sora/Umi-OCR/tree/release/1.3.3) `2023.3.19`
 <!-- 4.5k★ 撒花~ -->
 - 新功能：命令行模式。
 - 新功能：识图完成的通知悬浮窗。
 - 新功能：自动清理引擎内存。
 - 修复了一些BUG，优化了一些UI表现。
 
-##### [v1.3.2](https://github.com/hiroi-sora/Umi-OCR/tree/release/1.3.2) `2022.12.1`
+### [v1.3.2](https://github.com/hiroi-sora/Umi-OCR/tree/release/1.3.2) `2022.12.1`
 <!-- 3k★ 撒花~ -->
 - 新功能：创建开机启动项时，可选`不显示主窗口`。
 - 新功能：OCR结果输出到每个图片同名的单独txt文件。
@@ -222,7 +222,7 @@ git clone --single-branch --branch [分支名] https://github.com/hiroi-sora/Umi
 - 新功能：快捷识图可选`自动清空面板`，只显示本次识别结果，且隐藏时间信息。
 - 修复了一些BUG。
 
-##### [v1.3.1](https://github.com/hiroi-sora/Umi-OCR/tree/release/1.3.1) `2022.11.4`
+### [v1.3.1](https://github.com/hiroi-sora/Umi-OCR/tree/release/1.3.1) `2022.11.4`
 <!-- 2k★ 撒花~ -->
 - 修Bug：快捷键模块重写，引入pynput库，舍弃keyboard库，解决几率失效、录制不正确等Bug。
 - 新功能：添加开机自启，桌面快捷方式，开始菜单快捷方式。
@@ -232,7 +232,7 @@ git clone --single-branch --branch [分支名] https://github.com/hiroi-sora/Umi
 - 优化：检查引擎组件是否存在。
 - 优化：`横排-合并多行-自然段` 优化逻辑，支持0~2全角空格首行缩进。
 
-##### [v1.3.0](https://github.com/hiroi-sora/Umi-OCR/tree/release/1.3.0) `2022.9.29`
+### [v1.3.0](https://github.com/hiroi-sora/Umi-OCR/tree/release/1.3.0) `2022.9.29`
 - 新功能：框选截屏。
 - 新功能：系统托盘图标。
 - 新功能：引擎进程常驻。
@@ -244,7 +244,7 @@ git clone --single-branch --branch [分支名] https://github.com/hiroi-sora/Umi
 - 修正了Bug：微信图片粘贴问题 [issue #22](https://github.com/hiroi-sora/Umi-OCR/issues/22) 。
 - 更新PaddleOCR-json模块至`v1.2.1`，提供剪贴板支持。快捷识图通过剪贴板中转，无需再保存临时文件到硬盘。
 
-##### [v1.2.6](https://github.com/hiroi-sora/Umi-OCR/tree/release/1.2.6) `2022.9.1`
+### [v1.2.6](https://github.com/hiroi-sora/Umi-OCR/tree/release/1.2.6) `2022.9.1`
 <!-- Takahara Umi酱生日快乐~ -->
 - 更新PaddleOCR-json模块至`v1.2.0`，提高识别速度、准确度。
 - 调整UI：更方便地用下拉框切换识别语言。
@@ -253,34 +253,34 @@ git clone --single-branch --branch [分支名] https://github.com/hiroi-sora/Umi
 - 修正了Bug：彻底解决了对边缘过窄的图片，识别结果不准确的问题 [issue #7](https://github.com/hiroi-sora/Umi-OCR/issues/7) 。
 - 优化适配PP-OCRv3模型，彻底解决了v3版模型比v2慢、不准的问题 [issue #4](https://github.com/hiroi-sora/Umi-OCR/issues/4#issuecomment-1141735773) 。
 
-##### v1.2.5 `2022.7.22`
+### v1.2.5 `2022.7.22`
 - 新功能：计划任务。识图完成后执行自动关机等任务。
 - 新功能：可选拖入文件夹时递归导入子文件夹中所有图片。
 - 调整UI：添加一些配置文件的快捷入口。
 
-##### v1.2.4 `2022.6.4`
+### v1.2.4 `2022.6.4`
 - 新功能：可选识别剪贴板图片后自动复制识别的文本。
 - 补充功能：快捷键调用剪贴板识图时，若程序窗口被最小化，则恢复前台状态并挪到最前位置。
   
-##### v1.2.3 `2022.5.31`
+### v1.2.3 `2022.5.31`
 - 新功能：读取剪贴板图片。配置全局快捷键调用该功能。
 
-##### v1.2.2 `2022.4.30`
+### v1.2.2 `2022.4.30`
 - 新功能：可选任务完成后自动打开输出文件或目录。
 
-##### v1.2.1 `2022.4.16`
+### v1.2.1 `2022.4.16`
 - 更新PaddleOCR-json模块至`v1.1.1`，修正了可能得到错误包围盒的漏洞。
 
-##### v1.2.0 `2022.4.8`
+### v1.2.0 `2022.4.8`
 - 可选生成图文链接.md文件，作为索引使用有更佳的观感。
 - 修改设置面板的样式，改为滚动面板以容纳更多设置选项。
 - 用户修改配置项后可自动保存。
 
-##### v1.1.1 `2022.3.30`
+### v1.1.1 `2022.3.30`
 - 修正了Bug：退出忽略区域窗口时，OCR子进程未关闭。
 
-##### v1.1.0 `2022.3.30`
+### v1.1.0 `2022.3.30`
 - 新功能：忽略区域窗口以虚线框 展示识别出的文字块。
 
-##### v1.0.0 `2022.3.28`
+### v1.0.0 `2022.3.28`
 - “梦开始的地方”
