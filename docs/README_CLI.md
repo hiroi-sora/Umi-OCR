@@ -45,7 +45,7 @@ umi-ocr --screenshot screen=0 rect=x,y,w,h
 
 注意：
 - 这两个参数的前面无需加`--`。
-- 这两个参数至少要填一个，才能触发后台截图。
+- 这两个参数至少要填一个，才能触发范围截图。没有任一参数时，执行鼠标截屏。
 
 示例1：截取第1个显示器的全屏
 ```bash
@@ -57,7 +57,7 @@ umi-ocr --screenshot screen=0
 umi-ocr --screenshot screen=1 rect=50,100,300,200
 ```
 
-示例3：与 [HotkeysCMD](https://github.com/hiroi-sora/HotkeysCMD) 工具配合，实现点击**快捷键**进行范围截图。
+示例3：与 [HotkeysCMD](https://github.com/hiroi-sora/HotkeysCMD) 工具配合，实现点击 **快捷键** 进行范围截图。
 
 向 HotkeysCMD 的配置文件中添加这一行，表示点击 `F10` 时进行范围截图：
 
