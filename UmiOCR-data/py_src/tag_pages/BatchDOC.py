@@ -39,7 +39,7 @@ class BatchDOC(Page):
         self.callQmlInMain("onAddDocs", docs)
 
     # 进行任务。
-    # docs为列表，每一项为： {path:文档路径, range_start:范围起始, range_end: 范围结束, password:密码}
+    # docs为列表，每一项为： {path:文档路径, range_start:范围起始, range_end: 范围结束, page_count:总页数, password:密码}
     # 返回一个列表，每项为： {path:文档路径, msnID:任务ID。若[Error]开头则为失败。}
     def msnDocs(self, docs, argd):
         if self._msnID or self._queuedDocs:
@@ -74,7 +74,7 @@ class BatchDOC(Page):
         MissionDOC.resumeMissionList(self._msnID)
 
     # 初始化输出器列表。成功返回两个输出器列表 output 。失败返回 "失败信息"
-    def _initOutputList(self, argd, path, password=""):
+    def _initOutputList(self, argd, path, pageRange, pageCount, password=""):
         # =============== 提取输出路径 outputDir, outputDirName ===============
         if argd["mission.dirType"] == "source":  # 若保存到原目录
             outputDir = os.path.dirname(path)  # 则保存路径设为文档的目录
@@ -99,11 +99,20 @@ class BatchDOC(Page):
         startDatetimeUser = time.strftime(
             startDatetimeUser, time.localtime(startTimestamp)
         )
-        # 处理文件名
+        # 替换时间 %date
         nameTemplate = argd["mission.fileNameFormat"]
         nameTemplate = nameTemplate.replace(r"%date", startDatetimeUser)  # 替换时间
-        fileNameEle = os.path.splitext(os.path.basename(path))[0]
-        outputFileName = nameTemplate.replace("%name", fileNameEle)  # 替换名称元素
+        # 替换范围 %range
+        rangeStr = ""  # 范围全本
+        if pageRange[1] - pageRange[0] + 1 < pageCount:  # 范围非全本
+            if pageRange[1] == pageRange[0]:  # 只识别一页，写入单个页数
+                rangeStr = f"(p{pageRange[0]})"
+            else:  # 识别多页，写入开头和结尾页数
+                rangeStr = f"(p{pageRange[0]}-{pageRange[1]})"
+        nameTemplate = nameTemplate.replace(r"%range", rangeStr)
+        # 替换文件名 #name
+        fileNameStr = os.path.splitext(os.path.basename(path))[0]
+        outputFileName = nameTemplate.replace(r"%name", fileNameStr)  # 替换名称元素
         if not utils.allowedFileName(outputFileName):  # 文件名不合法
             return f'[Error] 文件名【{outputFileName}】含有不允许的字符。\n不允许含有下列字符： \  /  :  *  ?  "  <  >  |'
 
@@ -137,8 +146,10 @@ class BatchDOC(Page):
         d = self._queuedDocs.pop(0)  # 取首位任务
         path = d["path"]  # 取地址
         password = d["password"]  # 密码
+        pageRange = [int(d["range_start"]), int(d["range_end"])]  # 识别范围
+        pageCount = int(d["page_count"])  # 总页数
         # 构造输出器
-        output = self._initOutputList(self._argd, path, password)
+        output = self._initOutputList(self._argd, path, pageRange, pageCount, password)
         if type(output) == str:  # 创建输出器失败
             self._onEnd({"path": path}, "[Error] 无法创建输出器。")
             return
@@ -157,7 +168,6 @@ class BatchDOC(Page):
             "get_output": output,
             "get_tbpu": tbpuList,
         }
-        pageRange = [int(d["range_start"]), int(d["range_end"])]
         msnID = MissionDOC.addMission(msnInfo, path, pageRange, password=password)
         if msnID.startswith("["):  # 添加任务失败
             self._msnID = ""

@@ -64,7 +64,7 @@ TabPage {
         }
         // 获取信息
         const docs = filesTableView.getColumnsValues([
-            "path","range_start", "range_end", "is_encrypted", "is_authenticate", "password"])
+            "path","range_start", "range_end", "page_count", "is_encrypted", "is_authenticate", "password"])
         // 第1次遍历：检查密码填写
         for(let i = 0; i < fileCount; i++) {
             const d = docs[i]

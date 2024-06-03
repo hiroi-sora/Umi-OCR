@@ -81,8 +81,8 @@ Configs {
             },
             "fileNameFormat": {
                 "title": qsTr("文件名格式"),
-                "toolTip": qsTr("无需填写拓展名。支持插入以下占位符：\n%date 日期时间\n%name 原文档名\n举例：[OCR]_%name_%date\n生成：[OCR]_文档A_20230901_1213.txt\n添加占位符可以避免旧文件被新文件覆盖。"),
-                "default": "[OCR]_%name_%date",
+                "toolTip": qsTr("无需填写拓展名。支持插入以下占位符：\n%date 日期时间\n%name 原文档名\n%range 识别页数范围。只有识别页数小于总页数时才会显示。\n举例：[OCR]_%name%range_%date\n生成：[OCR]_文档A(p2-10)_20230901_1213.txt\n添加占位符可以避免旧文件被新文件覆盖。"),
+                "default": "[OCR]_%name%range_%date",
                 "advanced": true,
             },
             "datetimeFormat": {
