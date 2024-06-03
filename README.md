@@ -264,6 +264,7 @@ Umi-OCR v2 由一系列灵活好用的**标签页**组成。您可按照自己�
 | [Eric Guo](https://hosted.weblate.org/user/qwedc001)            | English                   |
 | [steven0081](https://hosted.weblate.org/user/steven0081)        | English                   |
 | [plum7x](https://hosted.weblate.org/user/plum7x)                | 繁體中文                  |
+| [hugoalh](https://hosted.weblate.org/user/hugoalh)              | 繁體中文                  |
 | [ドコモ光](https://hosted.weblate.org/user/umren190402)         | 日本語                    |
 
 如果有信息错误或人员缺漏，请在 [这个讨论](https://github.com/hiroi-sora/Umi-OCR/discussions/449) 中回复。
