@@ -185,11 +185,6 @@
         <translation>OCR文本後處理</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="23"/>
-        <source>忽略区域（点击文档名进入设置）</source>
-        <translation>忽略區域（點擊文件名進入設定）</translation>
-    </message>
-    <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="42"/>
         <source>文档处理</source>
         <translation>文件處理</translation>
@@ -259,21 +254,6 @@
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="83"/>
         <source>文件名格式</source>
         <translation>檔案名稱格式</translation>
-    </message>
-    <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="84"/>
-        <source>无需填写拓展名。支持插入以下占位符：
-%date 日期时间
-%name 原文档名
-举例：[OCR]_%name_%date
-生成：[OCR]_文档A_20230901_1213.txt
-添加占位符可以避免旧文件被新文件覆盖。</source>
-        <translation>無需填寫副檔名。支援插入以下佔位符號：
-%date 日期時間
-%name 原文件名
-舉例：[OCR]_%name_%date
-生成：[OCR]_文件A_20230901_1213.txt
-新增佔位符號可以避免舊檔案被新檔案覆寫。</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="89"/>
@@ -369,9 +349,31 @@
         <translation>遞迴讀取子資料夾</translation>
     </message>
     <message>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="23"/>
+        <source>点击表格，可设置更多内容</source>
+        <translation type="unfinished">點擊表格，可設置更多內容</translation>
+    </message>
+    <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="64"/>
         <source>导入文件夹时，导入子文件夹中全部文档</source>
         <translation>匯入資料夾時，匯入子資料夾中全部文件</translation>
+    </message>
+    <message>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="84"/>
+        <source>无需填写拓展名。支持插入以下占位符：
+%date 日期时间
+%name 原文档名
+%range 识别页数范围。只有识别页数小于总页数时才会显示。
+举例：[OCR]_%name%range_%date
+生成：[OCR]_文档A(p2-10)_20230901_1213.txt
+添加占位符可以避免旧文件被新文件覆盖。</source>
+        <translation type="unfinished">無需填寫副檔名。支援插入以下佔位符：
+%date 日期時間
+%name 原資料夾名/檔案名稱
+%range 頁數範圍。僅當OCR頁數小於總頁數時才會顯示。
+舉例：[OCR]_%name%range_%date
+生成：[OCR]_我的文件(p2-10)_2023-09-01_12-13.txt
+添加占位符可以避免舊文件被新檔案覆蓋。</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="103"/>
@@ -699,62 +701,62 @@
         <translation>折疊</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="786"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="787"/>
         <source>必须为整数</source>
         <translation>必須為整數</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="790"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="791"/>
         <source>不能超过</source>
         <translation>不能超過</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="793"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="794"/>
         <source>不能低于</source>
         <translation>不能低於</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="800"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="801"/>
         <source>必须为数字</source>
         <translation>必須為數字</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1095"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1108"/>
         <source>已取消%1的快捷键。</source>
         <translation>已取消%1的快速鍵。</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1105"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1118"/>
         <source>更新热键成功</source>
         <translation>更新熱鍵成功</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1105"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1118"/>
         <source>%1的快捷键为 %2</source>
         <translation>%1的快速鍵為 %2</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1113"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1126"/>
         <source>%1 快捷键%2已被注册，请尝试另外的按键组合。</source>
         <translation>%1 快速鍵%2已被註冊，請嘗試另外的按鍵組合。</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1116"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1129"/>
         <source>%1 快捷键%2无法注册，请尝试另外的按键组合。</source>
         <translation>%1 快速鍵%2無法註冊，請嘗試另外的按鍵組合。</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1125"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1138"/>
         <source>请按下快捷键组合。按【Esc】退出。</source>
         <translation>請按下快速鍵組合。按【Esc】退出。</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1138"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1151"/>
         <source>当前快捷键录制已在进行，不能同时录制！</source>
         <translation>目前快速鍵錄制已在進行，不能同時錄制！</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1140"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1153"/>
         <source>无法录制快捷键</source>
         <translation>無法錄制快速鍵</translation>
     </message>

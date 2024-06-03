@@ -185,11 +185,6 @@
         <translation>OCRテキストの後処理</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="23"/>
-        <source>忽略区域（点击文档名进入设置）</source>
-        <translation>無視する領域（文書名をクリックして設定に入る）</translation>
-    </message>
-    <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="42"/>
         <source>文档处理</source>
         <translation>文書処理</translation>
@@ -259,21 +254,6 @@
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="83"/>
         <source>文件名格式</source>
         <translation>ファイル名の形式</translation>
-    </message>
-    <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="84"/>
-        <source>无需填写拓展名。支持插入以下占位符：
-%date 日期时间
-%name 原文档名
-举例：[OCR]_%name_%date
-生成：[OCR]_文档A_20230901_1213.txt
-添加占位符可以避免旧文件被新文件覆盖。</source>
-        <translation>拡張子は入力する必要はありません。以下のプレースホルダーをサポートしています：
-%date 日付時刻
-%name 元の文書名
-例：[OCR]_%name_%date
-生成：[OCR]_文書A_20230901_1213.txt 
-プレースホルダーの追加により、古いファイルが新しいファイルに上書きされることを防ぐことができます。</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="89"/>
@@ -369,9 +349,31 @@
         <translation>サブフォルダを再帰的に読み込む</translation>
     </message>
     <message>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="23"/>
+        <source>点击表格，可设置更多内容</source>
+        <translation type="unfinished">表にはより多くの内容を設定することができます</translation>
+    </message>
+    <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="64"/>
         <source>导入文件夹时，导入子文件夹中全部文档</source>
         <translation>フォルダをインポートする際、サブフォルダ内のすべての文書もインポートします</translation>
+    </message>
+    <message>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="84"/>
+        <source>无需填写拓展名。支持插入以下占位符：
+%date 日期时间
+%name 原文档名
+%range 识别页数范围。只有识别页数小于总页数时才会显示。
+举例：[OCR]_%name%range_%date
+生成：[OCR]_文档A(p2-10)_20230901_1213.txt
+添加占位符可以避免旧文件被新文件覆盖。</source>
+        <translation type="unfinished">拡張子は不要です。次のプレースホルダを挿入できます：
+%date 日付と時刻
+%name 元のフォルダ名/ファイル名
+%range OCRページ範囲。認識されたページ数が総ページ数より少ない場合にのみ表示されます。
+例：[OCR]_%name%range_%date
+生成：[OCR]_ドキュメント(p2-10)_2023-09-01_12-13.txt
+プレースホルダを追加すると、古いファイルが新しいファイルに上書きされるのを防ぐことができます。</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="103"/>
@@ -699,62 +701,62 @@
         <translation>折りたたむ</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="786"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="787"/>
         <source>必须为整数</source>
         <translation>整数である必要があります</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="790"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="791"/>
         <source>不能超过</source>
         <translation>超えることはできません</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="793"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="794"/>
         <source>不能低于</source>
         <translation>以下にすることはできません</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="800"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="801"/>
         <source>必须为数字</source>
         <translation>数字である必要があります</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1095"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1108"/>
         <source>已取消%1的快捷键。</source>
         <translation>%1 のショートカットがキャンセルされました。</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1105"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1118"/>
         <source>更新热键成功</source>
         <translation>ホットキーの更新に成功しました</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1105"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1118"/>
         <source>%1的快捷键为 %2</source>
         <translation>%1 のホットキーは %2 です</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1113"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1126"/>
         <source>%1 快捷键%2已被注册，请尝试另外的按键组合。</source>
         <translation>%1 のホットキー %2 は既に登録されています。別のキーボードショートカットを試してください。</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1116"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1129"/>
         <source>%1 快捷键%2无法注册，请尝试另外的按键组合。</source>
         <translation>%1 のホットキー %2 を登録できません。別のキーボードショートカットを試してください。</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1125"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1138"/>
         <source>请按下快捷键组合。按【Esc】退出。</source>
         <translation>キーボードショートカットの組み合わせを押してください。【Esc】キーで終了します。</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1138"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1151"/>
         <source>当前快捷键录制已在进行，不能同时录制！</source>
         <translation>現在、キーボードショートカットの記録が進行中です。同時に記録することはできません！</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1140"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1153"/>
         <source>无法录制快捷键</source>
         <translation>キーボードショートカットを記録できません</translation>
     </message>
