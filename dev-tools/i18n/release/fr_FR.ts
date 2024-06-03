@@ -67,17 +67,17 @@
 <context>
     <name>BatchDOC</name>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="150"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="151"/>
         <source>加密</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="162"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="163"/>
         <source>%1个加密文档</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="163"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="164"/>
         <source>请点击文件名填写密码</source>
         <translation type="unfinished"></translation>
     </message>
@@ -98,7 +98,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="198"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="199"/>
         <source>失败</source>
         <translation type="unfinished"></translation>
     </message>
@@ -120,58 +120,58 @@
 Do you want to end the task and close the page?</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="190"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="191"/>
         <source>文档识别异常</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="204"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="205"/>
         <source>批量识别完成</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="267"/>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="276"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="268"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="277"/>
         <source>文档</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="269"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="270"/>
         <source>状态</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="270"/>
-        <source>范围</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="272"/>
-        <source>打开文档</source>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="271"/>
+        <source>页数</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="273"/>
-        <source>清空</source>
+        <source>打开文档</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="274"/>
-        <source>拖入文档或文件夹</source>
+        <source>清空</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="275"/>
+        <source>拖入文档或文件夹</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="276"/>
         <source>请选择文档</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="304"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="305"/>
         <source>设置</source>
         <translation type="unfinished">Réglages</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="309"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="310"/>
         <source>记录</source>
         <translation type="unfinished">Historique</translation>
     </message>
@@ -1633,32 +1633,32 @@ Do you want to end the task and close the page?</translation>
 <context>
     <name>PreviewDoc</name>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="78"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="81"/>
         <source>加密</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="145"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="148"/>
         <source>打开文档失败</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="147"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="150"/>
         <source>请填写正确的密码</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="156"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="159"/>
         <source>密码正确</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="165"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="168"/>
         <source>文档预览异常</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="177"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="180"/>
         <source>忽略区域说明：
 右键拖拽，绘制矩形区域，包含在区域内的文字框将被忽略。可用于排除水印、页眉页脚。
 范围允许填写负数，表示倒数第x页。如-1表示最后一页，-2表示倒数第2页。
@@ -1666,43 +1666,43 @@ Do you want to end the task and close the page?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="214"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="217"/>
         <source>密码：</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="248"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="251"/>
         <source>预览页面</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="267"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="270"/>
         <source>预览PDF时，是否预览OCR结果</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="306"/>
-        <source>OCR页面</source>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="309"/>
+        <source>OCR页数</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="314"/>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="357"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="352"/>
+        <source>忽略区域页数（全局）</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="317"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="360"/>
         <source>范围</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="349"/>
-        <source>忽略区域（全局）</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="391"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="394"/>
         <source>撤销</source>
         <translation>Undo</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="400"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="403"/>
         <source>清空</source>
         <translation>Clear</translation>
     </message>
