@@ -146,7 +146,8 @@ TabPage {
             const info = docs[i]
             filesTableView.add({
                 // 显示：路径，状态，页范围
-                path: info.path, pages: `1-${info.page_count}`,
+                path: info.path,
+                pages: `${info.page_count}`, // 如果范围为整本，只显示总页数。否则显示 起始-结束
                 state: info.is_encrypted ? qsTr("加密") : "" ,
                 // 数据
                 page_count: info.page_count,
@@ -267,7 +268,7 @@ TabPage {
                     {key: "path", title: qsTr("文档"), left: true, display: path2name,
                         btn: true, onClicked:onClickDoc},
                     {key: "state", title: qsTr("状态"), btn: true, onClicked:onClickDoc},
-                    {key: "pages", title: qsTr("范围"), btn: true, onClicked:onClickDoc},
+                    {key: "pages", title: qsTr("页数"), btn: true, onClicked:onClickDoc},
                 ]
                 openBtnText: qsTr("打开文档")
                 clearBtnText: qsTr("清空")

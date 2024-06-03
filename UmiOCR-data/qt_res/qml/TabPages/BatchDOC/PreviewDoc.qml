@@ -72,9 +72,12 @@ ModalLayer {
         if(rangeStart > pageCount) rangeStart = pageCount
         if(rangeEnd < rangeStart) rangeEnd = rangeStart
         if(rangeEnd > pageCount) rangeEnd = pageCount
+        let pages_ = `${pageCount}` // 如果范围为整本，只显示总页数。否则显示 起始-结束
+        if(rangeEnd - rangeStart + 1 < pageCount)
+            pages_ = `${rangeStart}-${rangeEnd}`
         if(updateInfo) {
             updateInfo(previewPath, {
-                pages: `${rangeStart}-${rangeEnd}`,
+                pages: pages_,
                 state: isAuthenticate ? "" : qsTr("加密"),
                 range_start: rangeStart,
                 range_end: rangeEnd,
@@ -303,7 +306,7 @@ ModalLayer {
                             color: theme.coverColor4
                         }
                         Text_ {
-                            text: qsTr("OCR页面")
+                            text: qsTr("OCR页数")
                         }
                         Row {
                             height: size_.line + size_.smallSpacing * 2
@@ -346,7 +349,7 @@ ModalLayer {
                             color: theme.coverColor4
                         }
                         Text_ {
-                            text: qsTr("忽略区域（全局）")
+                            text: qsTr("忽略区域页数（全局）")
                         }
                         Row {
                             height: size_.line + size_.smallSpacing * 2
