@@ -196,6 +196,8 @@ Umi-OCR v2 由一系列灵活好用的**标签页**组成。您可按照自己�
 - 如上方样例，图片顶部和右下角存在多个水印 / LOGO。如果批量识别这类图片，水印会对识别结果造成干扰。
 - 按住右键，绘制多个矩形框。这些区域内的文字将在任务中被忽略。
 - 请尽量将矩形框画得大一些，完全包裹住水印所有可能出现的位置。
+- 注意，只有处于忽略区域框内部的整个文本块（而不是单个字符）会被忽略。如下图所示，黄色边框的深色矩形是一个忽略区域。那么只有`key_mouse`才会被忽略。`pubsub_connector.py`、`pubsub_service.py` 这两个文本块得以保留。
+<p align="center"><img src="https://tupian.li/images/2024/05/30/66587bf03ae15.png" alt="忽略区域范围示例.png" style="width: 80%;"></p>
 
 ---
 
@@ -260,7 +262,9 @@ Umi-OCR v2 由一系列灵活好用的**标签页**组成。您可按照自己�
 | [Weng, Chia-Ling](https://hosted.weblate.org/user/ChiaLingWeng) | English, 繁體中文         |
 | [linzow](https://hosted.weblate.org/user/linzow)                | English, 繁體中文         |
 | [Eric Guo](https://hosted.weblate.org/user/qwedc001)            | English                   |
+| [steven0081](https://hosted.weblate.org/user/steven0081)        | English                   |
 | [plum7x](https://hosted.weblate.org/user/plum7x)                | 繁體中文                  |
+| [hugoalh](https://hosted.weblate.org/user/hugoalh)              | 繁體中文                  |
 | [ドコモ光](https://hosted.weblate.org/user/umren190402)         | 日本語                    |
 
 如果有信息错误或人员缺漏，请在 [这个讨论](https://github.com/hiroi-sora/Umi-OCR/discussions/449) 中回复。
@@ -330,6 +334,16 @@ Umi-OCR
 本项目也拥有非常简易的一键打包脚本，在以上仓库中查看。
 
 ---
+
+## 赞助
+
+Umi-OCR 项目主要由作者 [hiroi-sora](https://github.com/hiroi-sora) 用业余时间在开发和维护。如果您喜欢这款软件，欢迎赞助。
+
+- 国内用户可通过 [爱发电](https://afdian.net/a/hiroi-sora) 赞助作者。
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=hiroi-sora/Umi-OCR&type=Date)](https://star-history.com/#hiroi-sora/Umi-OCR&Date)
 
 ## [更新日志](CHANGE_LOG.md)
 
