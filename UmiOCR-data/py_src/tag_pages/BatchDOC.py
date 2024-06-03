@@ -17,6 +17,7 @@ class BatchDOC(Page):
     def __init__(self, *args):
         super().__init__(*args)
         self._msnID = ""  # 当前正在进行的任务ID（已提交至任务处理器）
+        self._pauseMsnID = ""  # 当前正在暂停的任务ID
         self._queuedDocs = []  # 当前正在排队的文档信息（未提交）
         self._argd = None
         self._docArgd = None
@@ -68,9 +69,11 @@ class BatchDOC(Page):
         self._docArgd = None
 
     def msnPause(self):  # 任务暂停
+        self._pauseMsnID = self._msnID
         MissionDOC.pauseMissionList(self._msnID)
 
     def msnResume(self):  # 任务恢复
+        self._pauseMsnID = ""
         MissionDOC.resumeMissionList(self._msnID)
 
     # 初始化输出器列表。成功返回两个输出器列表 output 。失败返回 "失败信息"
@@ -222,12 +225,12 @@ class BatchDOC(Page):
         if "path" not in msnInfo:
             raise Exception('[Error] BatchDOC onEnd(): "path" not in msnInfo')
 
+        msnID = ""  # 该任务的ID
         if "msnID" in msnInfo:
             msnID = msnInfo["msnID"]
             if not msnID == self._msnID:
                 print(f"[Warning] _onEnd 任务ID未在记录。{msnID}")
                 return
-            self._msnID = ""
 
         # 结束输出器，保存文件。
         if "get_output" in msnInfo:
@@ -250,3 +253,8 @@ class BatchDOC(Page):
         # 还有排队中的任务，则提交新任务
         else:
             self._runNewDoc()
+            # 如果新任务 self._msnID 已提交成功，且上一个任务 msnID 处于暂停状态，
+            # 也就是在保存文件的过程中，用户点了暂停，
+            # 那么将新的任务设为暂停。
+            if self._msnID and msnID and self._pauseMsnID == msnID:
+                self.msnPause()

@@ -108,7 +108,7 @@ class Mission:
                 del self._msnInfoDict[msnID]
                 del self._msnListDict[msnID]
         self._msnMutex.unlock()  # 解锁
-        print(f"暂停：{msnID}")
+        print(f"暂停：{msnID}\n", end="")
 
     # 恢复一些任务队列的运行
     def resumeMissionList(self, msnIDs):
@@ -120,9 +120,10 @@ class Mission:
                 info, list_ = self._msnPausedDict[msnID]
                 self._msnInfoDict[msnID] = info
                 self._msnListDict[msnID] = list_
+                del self._msnPausedDict[msnID]
         self._msnMutex.unlock()  # 解锁
         self._startMsns()  # 拉起工作线程
-        print(f"恢复：{msnID}")
+        print(f"恢复：{msnID}\n", end="")
 
     # 获取每一条任务队列长度
     def getMissionListsLength(self):
@@ -254,7 +255,8 @@ class Mission:
             # 8. 不停止，则上报该任务
             msnList.pop(0)  # 弹出该任务
             self._msnMutex.unlock()  # 锁2 解锁
-            msnInfo["onGet"](msnInfo, msn, res)  # 回调
+            # 回调。注意：回调函数执行时间长时，可能用户再次提交了任务暂停，需要后续继续判断。
+            msnInfo["onGet"](msnInfo, msn, res)
 
             # 9. 这条任务队列完成
             if len(msnList) == 0:
@@ -268,9 +270,14 @@ class Mission:
         self._taskFinish()
 
     def _msnDictDel(self, dictKey):  # 停止一组任务队列
-        # print(f"停止任务字典{dictKey}")
-        del self._msnInfoDict[dictKey]
-        del self._msnListDict[dictKey]
+        # 正常 删除任务队列项
+        if dictKey in self._msnInfoDict:
+            del self._msnInfoDict[dictKey]
+            del self._msnListDict[dictKey]
+        # 如果该任务在暂停中，则移除暂停队列中的项
+        if dictKey in self._msnPausedDict:
+            del self._msnPausedDict[dictKey]
+            print(f"移除暂停任务：{dictKey}")
 
     def _taskFinish(self):  # 任务结束
         self._taskMutex.lock()  # 上锁

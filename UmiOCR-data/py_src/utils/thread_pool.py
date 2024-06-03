@@ -2,6 +2,7 @@
 # =============== 全局线程池 异步任务接口 ===============
 # =====================================================
 
+import traceback
 from PySide2.QtCore import QThreadPool, QRunnable
 
 # 全局线程池
@@ -20,7 +21,8 @@ class Runnable(QRunnable):
         try:
             self._taskFunc(*self._args, **self._kwargs)
         except Exception as e:
-            print(f"[Error] 异步运行发生错误: {e}")
+            err = traceback.format_exc()
+            print(f"[Error] 异步运行发生错误: {err}")
 
 
 # 启动异步类
