@@ -20,7 +20,7 @@ Configs {
 
             "parser": qmlapp.globalConfigs.utilsDicts.getTbpuParser(),
             "btns": {
-                "title": qsTr("忽略区域（点击文档名进入设置）"),
+                "title": "👈"+qsTr("点击表格，可设置更多内容"),
                 "btnsList": [],
             },
             "ignoreArea": {
