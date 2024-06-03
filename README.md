@@ -334,6 +334,16 @@ Umi-OCR
 
 ---
 
+## 赞助
+
+Umi-OCR 项目主要由作者 [hiroi-sora](https://github.com/hiroi-sora) 用业余时间在开发和维护。如果您喜欢这款软件，欢迎赞助。
+
+- 国内用户可通过 [爱发电](https://afdian.net/a/hiroi-sora) 赞助作者。
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=hiroi-sora/Umi-OCR&type=Date)](https://star-history.com/#hiroi-sora/Umi-OCR&Date)
+
 ## [更新日志](CHANGE_LOG.md)
 
 ## 开发计划
