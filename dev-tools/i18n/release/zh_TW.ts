@@ -6,7 +6,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/About/About.qml" line="44"/>
         <source>开源、免费的离线OCR软件</source>
-        <translation>開放原始碼、免費的離線 OCR 軟體</translation>
+        <translation>開源、免費的離線 OCR 軟體</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/About/About.qml" line="50"/>
@@ -31,7 +31,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/About/About.qml" line="56"/>
         <source>问题反馈</source>
-        <translation type="unfinished">問題迴響</translation>
+        <translation>提出問題</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/About/About.qml" line="60"/>
@@ -41,7 +41,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/About/About.qml" line="68"/>
         <source>许可协议</source>
-        <translation type="unfinished">授權合約</translation>
+        <translation>許可證</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/About/About.qml" line="78"/>
@@ -74,7 +74,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="163"/>
         <source>%1个加密文档</source>
-        <translation>%1個加密文件</translation>
+        <translation>%1 個加密文件</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="164"/>
@@ -154,7 +154,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="205"/>
         <source>批量识别完成</source>
-        <translation type="unfinished">批次辨識完成</translation>
+        <translation>批量識別已完成</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="271"/>
@@ -351,7 +351,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="23"/>
         <source>点击表格，可设置更多内容</source>
-        <translation type="unfinished">點擊表格，可設置更多內容</translation>
+        <translation>點擊表格以設定更多內容</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="64"/>
@@ -367,18 +367,18 @@
 举例：[OCR]_%name%range_%date
 生成：[OCR]_文档A(p2-10)_20230901_1213.txt
 添加占位符可以避免旧文件被新文件覆盖。</source>
-        <translation type="unfinished">無需填寫副檔名。支援插入以下佔位符：
+        <translation>無需填寫副檔名。支援插入以下佔位符：
 %date 日期時間
-%name 原資料夾名/檔案名稱
-%range 頁數範圍。僅當OCR頁數小於總頁數時才會顯示。
+%name 原文件名稱
+%range 識別頁數範圍。只有在識別頁數小於總頁數時才會顯示。
 舉例：[OCR]_%name%range_%date
-生成：[OCR]_我的文件(p2-10)_2023-09-01_12-13.txt
-添加占位符可以避免舊文件被新檔案覆蓋。</translation>
+產生：[OCR]_文件A(p2-10)_20230901_1213.txt
+增加佔位符可以避免舊文件被新文件覆寫。</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="103"/>
         <source>保留原有图片，叠加一层透明文字，可以搜索和复制</source>
-        <translation type="unfinished">保留原有圖片，疊加一層透明文字，可以搜索和複製</translation>
+        <translation>保留原有圖片，疊加一層透明文字，可以搜尋和複製</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="144"/>
@@ -1156,7 +1156,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/IconButtonBar.qml" line="32"/>
         <source>截图</source>
-        <translation type="unfinished">截圖</translation>
+        <translation>螢幕截圖</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/IconButtonBar.qml" line="33"/>
@@ -1293,7 +1293,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageWithText.qml" line="287"/>
         <source>用默认应用打开图片</source>
-        <translation type="unfinished">用預設應用程式開啟圖片</translation>
+        <translation>使用預設應用程式開啟圖片</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageWithText.qml" line="288"/>
@@ -1367,7 +1367,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Popup_/MessageBox.qml" line="129"/>
         <source>问题反馈</source>
-        <translation type="unfinished">問題迴響</translation>
+        <translation>提出問題</translation>
     </message>
 </context>
 <context>
@@ -1393,7 +1393,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/MissionCtrlPanel.qml" line="81"/>
         <source>开始任务</source>
-        <translation type="unfinished">開始任務</translation>
+        <translation>開始任務</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/MissionCtrlPanel.qml" line="96"/>
@@ -1490,7 +1490,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/Navigation/Navigation.qml" line="35"/>
         <source>问题反馈</source>
-        <translation type="unfinished">問題迴響</translation>
+        <translation>提出問題</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/Navigation/Navigation.qml" line="75"/>
