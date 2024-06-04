@@ -26,13 +26,13 @@ class ScreenshotOCR(Page):
     # 对一个imgID进行OCR
     def ocrImgID(self, imgID, configDict):
         self.recentResult = []
+        if not imgID or not configDict:  # 截图取消
+            PubSubService.publish("<<ScreenshotOcrEnd>>", [])
+            return
         if imgID.startswith("["):  # 截图失败
             PubSubService.publish(
                 "<<ScreenshotOcrEnd>>", [{"code": 301, "data": imgID}]
             )
-            return
-        if not imgID or not configDict:  # 截图取消
-            PubSubService.publish("<<ScreenshotOcrEnd>>", [])
             return
         pixmap = PixmapProvider.getPixmap(imgID)
         if not pixmap:
