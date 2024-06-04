@@ -114,7 +114,7 @@ ImageScale {
         function mouseInTextIndex(index) {
             return textBoxes[index].obj.where(mouseArea, mouseX, mouseY)
         }
-        // 获取Index正确顺序
+        // 获取Index正确顺序。返回： [li 起始块, lt 起始块选区左侧, ri 结束块, rt 结束块选区右侧]
         function getIndexes() {
             let li, lt, ri, rt
             if(startIndex < endIndex) {
@@ -124,7 +124,7 @@ ImageScale {
                 li=endIndex; lt=endTextIndex; ri=startIndex; rt=startTextIndex;
             }
             else {
-                li=ri=startIndex
+                li = ri = startIndex
                 if(startTextIndex < endTextIndex) {
                     lt=startTextIndex; rt=endTextIndex;
                 }
@@ -132,7 +132,6 @@ ImageScale {
                     lt=endTextIndex; rt=startTextIndex;
                 }
                 else { // 单击，未选中
-                    li = ri = startIndex
                     lt = rt = -1
                 }
             }
@@ -176,42 +175,37 @@ ImageScale {
         }
         // 复制已选中的内容
         function selectCopy() {
+            let [li, lt, ri, rt] = getIndexes()
             // 没有有效选中，则复制全部
-            if(startIndex<0 || endIndex<0 || 
-                (startIndex==endIndex&&startTextIndex==endTextIndex)) {
+            if(li<0 || ri<0 || (li===ri && lt===rt)) {
                 selectAllCopy()
                 return
             }
-            let [li, lt, ri, rt] = getIndexes()
-            if(li >= 0 && ri >= 0) {
-                let copyText = ""
+            let copyText = ""
+            // 选中单个文本块
+            if(li === ri) {
+                copyText = textBoxes[li].text.substring(lt, rt)
+            }
+            // 选中多个块，则遍历多个块，提取各自的文本
+            else {
                 for(let i = li; i <= ri; i++) {
                     const text = textBoxes[i].text
                     const end = textBoxes[i].end
-                    // 范围检查
-                    const len = text.length
-                    if (lt < 0) lt = 0
-                    if (lt > len) lt = len
-                    if (rt < lt) rt = lt
-                    if (rt > len) rt = len
-                    // 获取文本
-                    if(i === li && i === ri) // 单个块
-                        copyText = text.substring(lt, rt)
-                    else if(i === li) // 多个块的起始
-                        copyText = text.substring(lt)+end
+                    if(i === li) // 多个块的起始
+                        copyText = text.substring(lt) + end
                     else if(i === ri) // 多个块的结束
                         copyText += text.substring(0, rt)
                     else // 多个块的中间
-                        copyText += text+end
-                }
-                if(copyText && copyText.length>0) {
-                    qmlapp.utilsConnector.copyText(copyText)
-                    qmlapp.popup.simple(qsTr("图片：复制%1字").arg(copyText.length), "")
-                    return copyText
+                        copyText += text + end
                 }
             }
-            qmlapp.popup.simple(qsTr("图片：无选中文字"), "")
-            return ""
+            if(copyText && copyText.length > 0) {
+                qmlapp.utilsConnector.copyText(copyText)
+                qmlapp.popup.simple(qsTr("图片：复制%1字").arg(copyText.length), "")
+            }
+            else {
+                qmlapp.popup.simple(qsTr("图片：无选中文字"), "")
+            }
         }
         // 复制所有
         function selectAllCopy() {

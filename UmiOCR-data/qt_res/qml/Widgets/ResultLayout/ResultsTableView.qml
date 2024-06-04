@@ -200,7 +200,7 @@ Item {
             }
             return undefined
         }
-        // 获取Index正确顺序
+        // 获取Index正确顺序。返回： [li 起始块, lt 起始块选区左侧, ri 结束块, rt 结束块选区右侧]
         function getIndexes() {
             let li, lt, ri, rt
             if(startIndex < endIndex) {
@@ -210,7 +210,7 @@ Item {
                 li=endIndex; lt=endTextIndex; ri=startIndex; rt=startTextIndex;
             }
             else {
-                li=ri=startIndex
+                li = ri = startIndex
                 if(startTextIndex < endTextIndex) {
                     lt=startTextIndex; rt=endTextIndex;
                 }
@@ -218,7 +218,6 @@ Item {
                     lt=endTextIndex; rt=startTextIndex;
                 }
                 else { // 单击，未选中
-                    li = ri = startIndex
                     lt = rt = -1
                 }
             }
@@ -279,37 +278,37 @@ Item {
                 selectSingle()
             }
             let [li, lt, ri, rt] = getIndexes()
-            if(li >= 0 && ri >= 0) {
-                let copyText = ""
+            let copyText = ""
+            // 选中单个文本块
+            if(li === ri) {
+                const item = resultsModel.get(li)
+                if(item.resText) {
+                    copyText = item.resText.substring(lt, rt)
+                }
+            }
+            // 选中多个块，则遍历多个块，提取各自的文本
+            else {
                 for(let i = li; i <= ri; i++) {
                     const item = resultsModel.get(i)
                     if(item.resText) {
-                        // 范围检查
                         const text = item.resText
                         const len = text.length
-                        if (lt < 0) lt = 0
-                        if (lt > len) lt = len
-                        if (rt < lt) rt = lt
-                        if (rt > len) rt = len
-                        // 获取文本
-                        if(i === li && i === ri) // 单个块
-                            copyText = text.substring(lt, rt)
-                        else if(i === li) // 多个块的起始
-                            copyText = text.substring(lt)+"\n"
+                        if(i === li) // 多个块的起始
+                            copyText = text.substring(lt) + "\n"
                         else if(i === ri) // 多个块的结束
                             copyText += text.substring(0, rt)
                         else // 多个块的中间
-                            copyText += text+"\n"
+                            copyText += text + "\n"
                     }
                 }
-                if(copyText && copyText.length>0) {
-                    qmlapp.utilsConnector.copyText(copyText)
-                    qmlapp.popup.simple(qsTr("记录：复制%1字").arg(copyText.length), "")
-                    return copyText
-                }
             }
-            qmlapp.popup.simple(qsTr("记录：无选中文字"), "")
-            return ""
+            if(copyText && copyText.length > 0) {
+                qmlapp.utilsConnector.copyText(copyText)
+                qmlapp.popup.simple(qsTr("记录：复制%1字").arg(copyText.length), "")
+            }
+            else {
+                qmlapp.popup.simple(qsTr("记录：无选中文字"), "")
+            }
         }
         // 复制所有
         function selectAllCopy() {
