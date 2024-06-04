@@ -57,6 +57,9 @@ import subprocess
 
 
 def MessageBox(msg, type_="error"):
+    # 软件中如遇到错误，会优先用QT弹窗来警示。
+    # 但一些异常可能触发太早或导致QT事件循环崩溃。
+    # 因此 os.MessageBox() 是用于报告错误的最后防线。
     info = "Umi-OCR Message"
     if type_ == "error":
         info = "【错误】 Umi-OCR Error"

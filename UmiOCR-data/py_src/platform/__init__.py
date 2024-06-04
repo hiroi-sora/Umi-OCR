@@ -6,7 +6,7 @@ _plat = sys.platform
 if _plat.startswith("win32"):
     from .win32.win32_api import Api as _Platform
 elif _plat.startswith("linux"):
-    raise ImportError("尚未支持linux系统！")
+    from .linux.linux_api import Api as _Platform
 elif _plat.startswith("darwin"):
     raise ImportError("尚未支持macos系统！")
 else:
