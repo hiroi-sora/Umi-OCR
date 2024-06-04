@@ -3,6 +3,7 @@
 Temp
 build
 PyStand_for_UmiOCR/build
+.vscode
 *.exe
 *.txt
 
