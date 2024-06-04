@@ -20,7 +20,7 @@ dev-tools/*.zip
 UmiOCR-data/*
 !UmiOCR-data/main.py
 !UmiOCR-data/version.py
-!UmiOCR-data/帮助.txt
+!UmiOCR-data/Help 帮助.txt
 !UmiOCR-data/RUN_CLI.bat
 !UmiOCR-data/RUN_GUI.bat
 !UmiOCR-data/test_speed.bat

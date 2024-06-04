@@ -1,0 +1,112 @@
+错误排查手册
+
+详细内容请见： https://github.com/hiroi-sora/Umi-OCR/issues/447
+
+================================
+
+# 弹窗报错 Cannot find Py_Main() in ……
+
+解决方法1：
+下载安装VC运行库，重启系统，测试Umi-OCR能否正常运行。
+https://aka.ms/vs/17/release/vc_redist.x64.exe
+
+解决方法2：
+使用这个bat文件代替 Umi-OCR.exe 来启动软件。双击它即可。
+UmiOCR-data/RUN_GUI.bat
+注意1：通过bat启动时，部分功能受限，将无法使用命令行指令和创建快捷方式（开始菜单、开机自启等）。如有需要，请参考后面【手动放置快捷方式】条目。
+注意2：不要移动bat的位置。
+
+================================
+
+# 手动放置快捷方式
+
+如果因为某些原因，软件自身无法创建快捷方式；请手动创建并将快捷方式放置到如下目录：
+
+开始菜单目录：
+C:\ProgramData\Microsoft\Windows\Start Menu
+开机自启目录：
+C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup
+
+================================
+
+# 弹窗报错 Failed to create OpenGL context ……
+
+1. 下载运行库：
+https://github.com/hiroi-sora/Umi-OCR_v2/files/13167436/opengl32sw_64.zip
+2. 解压，将其中的dll文件放置于：
+UmiOCR-data/site-packages/PySide2/
+
+================================
+
+# 弹窗报错 Umi-OCR.exe 已停止工作
+
+此问题常见于：软件已经在win10使用过，然后原封不动复制到win7上，导致配置冲突。
+删除下述配置文件即可：
+UmiOCR-data/.pre_settings
+
+================================
+
+# 应用程序无法正常启动(0xc0000142)
+# 或者：`[Error] OCR init fail.l. Argd: {'enable_mkldnn': True...` 
+
+此问题大概率是：CPU不支持AVX指令集。
+
+请换用 PaddleOCR 之外的插件或软件版本。比如：
+方法1：更换使用 [Umi-OCR_Rapid](https://github.com/hiroi-sora/Umi-OCR/releases) 。
+方法2：额外导入 [RapleOCR插件](https://github.com/hiroi-sora/Umi-OCR_plugins/releases) 。
+
+================================
+
+# 弹出黑框控制台窗口，【错误】Umi-OCR Error 找不到指定的程序 OSError
+
+可能的发生条件：
+- win7早期版本，缺少系统补丁（尤其是`KB2533623`）
+- 其他原因，导致 Python 3.8 无法在该系统中运行。
+
+修复方法：
+
+推荐方法：使用系统检查更新（`控制面板 → 系统和安全 → Windows Update → 检查更新`），安装所有更新。
+
+另一种方法：单独下载安装 **KB2533623补丁** ，重启系统即可。不过，微软官方渠道已经关闭了该补丁的下载链接，您可能只能从第三方网站下载补丁，请务必注意安全。
+
+================================
+
+# 保存PDF时 “已停止工作”
+
+文档识别，能识别出文字，能保存为txt等文件。但如果选择保存为`双层可搜索PDF`，则最后导出文件时弹窗报错：
+
+```
+Umi-OCR.exe 已停止工作
+
+查看问题详细信息：
+
+问题事件名称：BEX64
+故障模块名称：ucrtbase.DLL
+故障模块版本：10.0.10240.16390
+异常偏移：00000000064399
+异常代码：c0000417
+```
+
+可能的发生条件：win7早期版本，缺少系统补丁（尤其是 `KB4534310`、`KB3042058`）
+
+修复方法：
+
+注意！由于 `KB4534310` 依赖前置补丁，因此 **不能** 单独下载安装该补丁。
+
+您必须使用系统检查更新（`控制面板 → 系统和安全 → Windows Update → 检查更新`），安装所有缺失的更新，直到下面这个项目安装完毕：
+
+2020-01 适用于基于 x64 的系统的 Windows 7 月度安全质量汇总 （KB4534310）
+
+================================
+
+# 丢失`api-ms-win-crt-runtime-l1-1-0.dll`
+
+打开软件时，弹出错误弹窗：
+
+Umi-OCR.exe-系统错误
+无法启动此程序，因为计算机中丢失 api-ms-win-crt-runtime-l1-1-0.dll 。尝试重新安装该程序以解决此问题。
+
+可能的发生条件：缺少VC运行库。
+
+# 修复方法：安装VC运行库：
+https://aka.ms/vs/17/release/vc_redist.x64.exe

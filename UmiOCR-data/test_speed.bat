@@ -1,1 +1,0 @@
-start "" runtime/python.exe -X importtime main.py
