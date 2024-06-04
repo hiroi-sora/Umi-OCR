@@ -21,9 +21,6 @@ UmiOCR-data/*
 !UmiOCR-data/main.py
 !UmiOCR-data/version.py
 !UmiOCR-data/Help 帮助.txt
-!UmiOCR-data/RUN_CLI.bat
-!UmiOCR-data/RUN_GUI.bat
-!UmiOCR-data/test_speed.bat
 # 允许二级目录
 !UmiOCR-data/**/
 # 排除运行环境目录
