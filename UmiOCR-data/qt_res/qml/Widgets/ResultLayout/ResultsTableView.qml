@@ -231,24 +231,25 @@ Item {
                 if( li<0 || ri<0 || i<li || i>ri ) { // 未被选中
                     resultsModel.setProperty(i, "selectL_", -1)
                     resultsModel.setProperty(i, "selectR_", -1)
+                    continue
                 }
-                else if(i === li && i === ri) { // 单个块
+                const item = resultsModel.get(i)
+                const len = item.resText.length
+                if(i === li && i === ri) { // 单个块
                     resultsModel.setProperty(i, "selectL_", lt)
-                    resultsModel.setProperty(i, "selectR_", rt)
+                    resultsModel.setProperty(i, "selectR_", Math.min(rt, len))
                 }
                 else if(i === li) { // 多个块的起始
                     resultsModel.setProperty(i, "selectL_", lt)
-                    let item = resultsModel.get(i)
-                    resultsModel.setProperty(i, "selectR_", item.resText.length)
+                    resultsModel.setProperty(i, "selectR_", len)
                 }
                 else if(i === ri) { // 多个块的结束
                     resultsModel.setProperty(i, "selectL_", 0)
-                    resultsModel.setProperty(i, "selectR_", rt)
+                    resultsModel.setProperty(i, "selectR_", Math.min(rt, len))
                 }
                 else { // 多个块的中间
                     resultsModel.setProperty(i, "selectL_", 0)
-                    let item = resultsModel.get(i)
-                    resultsModel.setProperty(i, "selectR_", item.resText.length)
+                    resultsModel.setProperty(i, "selectR_", len)
                 }
                 resultsModel.setProperty(i, "selectUpdate_", selectUpdate) // 开始刷新
             }
