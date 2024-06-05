@@ -52,11 +52,11 @@ class _I18n:
             return
         if not translator.load(path):
             msg = f"无法加载UI语言！\n[Error] Unable to load UI language: {path}"
-            os.MessageBox(msg, type="warning")
+            os.MessageBox(msg, type_="warning")
             return
         if not qtApp.installTranslator(translator):  # 安装翻译器
             msg = f"无法加载翻译模块！\n[Error] Unable to installTranslator: {path}"
-            os.MessageBox(msg, type="warning")
+            os.MessageBox(msg, type_="warning")
             return
         print(f"翻译加载完毕。{self.langCode} - {text}")
 

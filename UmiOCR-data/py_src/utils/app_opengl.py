@@ -34,7 +34,7 @@ def checkOpengl():
             setOpengl(_Opt)
             msg = "当前系统不支持OpenGLES，已禁用此渲染器。\n若本次运行中程序崩溃或报错，请重新启动程序。\n\n"
             msg += "The current system does not support OpenGLES and has disabled the program from using this renderer. \nIf there are crashes or errors during this run, please restarting the program."
-            os.MessageBox(msg, type="warning")
+            os.MessageBox(msg, type_="warning")
 
 
 def setOpengl(opt):
