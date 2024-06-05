@@ -131,7 +131,10 @@ class _MissionDocClass(Mission):
                 matrix = fitz.Identity
             p = page.get_pixmap(matrix=matrix)
             bytes = p.tobytes("png")
-            imgs.append({"bytes": bytes, "xy": (0, 0), "scale": 1 / zoom})
+            scale = 1 / zoom
+            imgs.append(
+                {"bytes": bytes, "xy": (0, 0), "scale_w": scale, "scale_h": scale}
+            )
         else:
             # 获取元素 https://pymupdf.readthedocs.io/en/latest/_images/img-textpage.png
             # 确保越界图像能被采集 https://github.com/pymupdf/PyMuPDF/issues/3171
