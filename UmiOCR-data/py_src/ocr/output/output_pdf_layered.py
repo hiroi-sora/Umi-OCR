@@ -34,7 +34,7 @@ class OutputPdfLayered(Output):
         # https://github.com/pymupdf/PyMuPDF-Utilities/blob/master/examples/convert-document/convert.py
         doc = fitz.open(path)
         # 如果已加密，则尝试解密
-        if doc.isEncrypted and not doc.authenticate(self.password):
+        if doc.is_encrypted and not doc.authenticate(self.password):
             raise Exception(
                 f'The document is encrypted, and the password "{self.password}" is incorrect.\n文档已加密，输入密码不正确。'
             )

@@ -146,7 +146,7 @@ ModalLayer {
         // 图片渲染的回调
         onPreviewImg: function(imgID) {
             const title = qsTr("打开文档失败")
-            if(imgID === "[Warning] isEncrypted") {
+            if(imgID === "[Warning] is_encrypted") {
                 qmlapp.popup.simple(title, qsTr("请填写正确的密码"))
                 isAuthenticate = false
             }

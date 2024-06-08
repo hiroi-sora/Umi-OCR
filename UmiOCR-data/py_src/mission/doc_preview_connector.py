@@ -40,8 +40,8 @@ class DocPreviewConnector(QObject):
         else:  # 新加载
             try:
                 doc = fitz.open(path)
-                if doc.isEncrypted and not doc.authenticate(password):
-                    msg = "[Warning] isEncrypted"  # 固定指令，不能改
+                if doc.is_encrypted and not doc.authenticate(password):
+                    msg = "[Warning] is_encrypted"  # 固定指令，不能改
                     self.previewImg.emit(msg)
                     return
             except Exception as e:

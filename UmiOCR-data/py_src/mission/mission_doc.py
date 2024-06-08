@@ -50,7 +50,7 @@ class _MissionDocClass(Mission):
             doc = fitz.open(msnPath)
         except Exception as e:
             return f"[Error] fitz.open error: {msnPath} {e}"
-        if doc.isEncrypted and not doc.authenticate(password):
+        if doc.is_encrypted and not doc.authenticate(password):
             if password:
                 msg = f"[Error] Incorrect password. 文档已加密，密码错误。 [{password}]"
             else:
@@ -278,7 +278,7 @@ class _MissionDocClass(Mission):
                 info = {
                     "path": path,
                     "page_count": doc.page_count,
-                    "is_encrypted": doc.isEncrypted,
+                    "is_encrypted": doc.is_encrypted,
                 }
                 return info
         except Exception as e:
