@@ -3,9 +3,9 @@
     "version": {
         "major": 2,
         "minor": 1,
-        "patch": 2,
-        "prerelease": "",
-        "prereleaseNumber": 0,
+        "patch": 3,
+        "prerelease": "dev",
+        "prereleaseNumber": 1,
         "string": "自动生成"
     },
     "fullname": "自动生成",
