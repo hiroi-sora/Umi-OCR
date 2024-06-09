@@ -12,24 +12,32 @@ Item {
 
     // 开始一次截图。传入回调函数。
     function screenshot(callback) {
-        // 获取所有屏幕的截图图像
-        const grabList = getGrabList()
-        if(!grabList) {
-            callback()
+        // 重复调用验证
+        if(running) {
+            qmlapp.popup.simple(errorTitle, errorRepeat)
             return
         }
-        // 记录回调
-        lastCallback = callback 
-        if(winDict === undefined) winDict = {}
-        // 遍历截图列表，生成数量一致的覆盖窗口
+        running = true
+        // 获取所有屏幕的截图图像
+        const grabList = getGrabList()
+        // 遍历截图列表，收集覆盖窗口属性 argds
+        let argds = []
         for(let i in grabList) {
             const g = grabList[i]  // 截图属性
+            // 合法性检查
+            if(g.imgID.startsWith("[")) {
+                qmlapp.popup.message(errorTitle,
+                    qsTr("显示器： %1\n错误信息： %2").arg(g.screenName).arg(g.imgID), "error")
+                callback()
+                running = false
+                return
+            }
             const screen = Qt.application.screens[i]  // 获取对应编号的屏幕
             if(screen.name !== g.screenName) {
-                qmlapp.popup.message(errorTitle, 
+                qmlapp.popup.message(errorTitle,
                     qsTr("屏幕设备名称不相同：\n%1\n%2").arg(screen.name).arg(g.screenName), "error")
-                running = false
                 callback()
+                running = false
                 return
             }
             const argd = {
@@ -43,8 +51,15 @@ Item {
                 height: screen.height,
                 screenshotEnd: ssWinRoot.ssEnd // 关闭函数
             }
-            const obj = ssWinComp.createObject(this, argd)
-            winDict[g.imgID] = obj
+            argds.push(argd)
+        }
+        // 记录回调
+        lastCallback = callback
+        if(winDict === undefined) winDict = {}
+        // 生成覆盖窗口
+        for(let a in argds) {
+            const obj = ssWinComp.createObject(this, argds[a])
+            winDict[argds[a].imgID] = obj
         }
         // 注册esc事件监听
         qmlapp.pubSub.subscribeGroup("<<esc>>", ssWinRoot, "ssEsc", "ssEsc")
@@ -52,21 +67,30 @@ Item {
 
     // 重复上一次截图区域
     function reScreenshot(callback) {
+        // 重复调用验证
+        if(running) {
+            qmlapp.popup.simple(errorTitle, errorRepeat)
+            return
+        }
+        running = true
         if(!lastClipArgd) {
             qmlapp.popup.simple(qsTr("尚未记录截图区域"), "")
-            running = false
             callback()
+            running = false
             return
         }
         // 获取所有屏幕的截图图像
         const grabList = getGrabList()
-        if(!grabList) {
-            callback()
-            return
-        }
+        let errorMsg = "" // 缓存报错信息
         // 在截图列表中，寻找上一次截图所在的屏幕
         for(let i in grabList) {
             const g = grabList[i]  // 截图属性
+            // 合法性检查
+            if(g.imgID.startsWith("[")) {
+                errorMsg = g.imgID // 记录失败，跳过本轮
+                continue
+            }
+            // 找到对应屏幕
             if(lastClipArgd.screenName === g.screenName) {
                 // 向py汇报，获取裁剪后的imgID
                 const clipImgID = imageConn.getClipImgID(g.imgID,
@@ -79,25 +103,26 @@ Item {
         }
         // 失败，未找到相同屏幕
         lastClipArgd = undefined
-        running = false
-        qmlapp.popup.simple(qsTr("重复截图失败"), qsTr("未找到匹配的屏幕"))
+        if(!errorMsg) errorMsg = qsTr("未找到匹配的屏幕")
+        qmlapp.popup.simple(qsTr("重复截图失败"), errorMsg)
         runLastCallback()
+        running = false
     }
 
     // 【同步】获取指定区域的截图ID，失败返回 "[Error]..."
     function getScreenshot(rect, screen=0) { // screen 屏幕编号
+        // 无需验证 running
         // 获取所有屏幕的截图图像
         const grabList = getGrabList()
-        running = false
         // 参数检查
-        if(!grabList)
-            return "[Error] Unable to obtain screenshot image"
         if(!Number.isInteger(screen) || screen < 0 || screen >= grabList.length)
             return `[Error] Invalid screen=${screen}: must be an integer (0~${grabList.length-1})`
         if(rect.length != 4) // 不检查内部是否合法，getClipImgID会检查
             return `[Error] Invalid rect=${rect}: must be integers [x,y,w,h]`
         const grab = grabList[screen]
         const imgID = grab.imgID
+        if(imgID.startsWith("[")) // 获取截图数据失败
+            return imgID
         let [x, y, w, h] = rect
         // 补充缺省宽高
         if(w <= 0) w = grab.width - x
@@ -110,32 +135,24 @@ Item {
 
     // 获取所有屏幕的截图图像
     function getGrabList() {
-        // 重复调用验证
-        if(running) {
-            qmlapp.popup.message(errorTitle,
-                qsTr("上次截图操作未结束，不能进行新的截图！"), "error")
-            return undefined
+        /*
+        返回列表(不为空)，每项为：\n
+        {
+            "imgID": 图片ID 或 报错信息 "[Error]开头" ,
+            "screenName": 显示器名称 ,
+            "width": 截图宽度 ,
+            "height": 截图高度 ,
         }
-        running = true
+        */
+
         // 截图前等待时间
         let wait = 0
         if(qmlapp.globalConfigs.getValue("screenshot.hideWindow")) {
             qmlapp.mainWin.setVisibility(false)
             wait = qmlapp.globalConfigs.getValue("screenshot.hideWindowTime")
         }
-        // 获取所有屏幕的截图并验证
+        // 获取所有屏幕的截图
         const grabList = imageConn.getScreenshot(wait)
-        if(!grabList || grabList.length<1 || !grabList[0]) {
-            qmlapp.popup.message(errorTitle,
-                qsTr("未知异常！"), "error")
-            running = false
-            return undefined
-        }
-        if(typeof grabList[0] === "string") {
-            qmlapp.popup.message(errorTitle, grabList[0], "error")
-            running = false
-            return undefined
-        }
         return grabList
     }
 
@@ -154,11 +171,11 @@ Item {
             winDict[key].destroy()
         }
         winDict = {}
-        running = false
-        // 检测是否有效
+        // 检测是否有效。如果无效，可能是按Esc退出了截图流程
         if(argd.clipX<0 || argd.clipY<0 || argd.clipW<1 || argd.clipH<1 || !argd.imgID) {
             runLastCallback()
             lastClipArgd = undefined
+            running = false
             return
         }
         // 记录当前截图信息
@@ -167,6 +184,7 @@ Item {
         const clipImgID = imageConn.getClipImgID(argd.imgID, argd.clipX, argd.clipY, argd.clipW, argd.clipH)
         // 调用回调
         runLastCallback(clipImgID)
+        running = false
     }
 
     // 调用上级回调
@@ -177,6 +195,7 @@ Item {
     }
 
     property string errorTitle: qsTr("截图失败")
+    property string errorRepeat: qsTr("上次截图操作未结束，不能进行新的截图！")
     property bool running: false // 当前是否正在截图
     property var lastClipArgd: undefined // 最后一次截图的信息
     property var lastCallback: undefined // 截图完毕的回调，得到 clipImgID

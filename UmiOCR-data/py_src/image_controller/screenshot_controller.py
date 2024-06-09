@@ -12,27 +12,47 @@ Clipboard = QClipboard()  # 剪贴板
 
 
 class _ScreenshotControllerClass:
-    # 延时wait秒后，获取所有屏幕的截图，返回imgID
+
     def getScreenshot(self, wait=0):
+        """
+        延时wait秒后，获取所有屏幕的截图。返回列表(不为空)，每项为：\n
+        {
+            "imgID": 图片ID 或 报错信息 "[Error]开头" ,
+            "screenName": 显示器名称 ,
+            "width": 截图宽度 ,
+            "height": 截图高度 ,
+        }
+        """
         if wait > 0:
             time.sleep(wait)
         try:
             grabList = []
             screensList = QGuiApplication.screens()
             for screen in screensList:
-                pixmap = screen.grabWindow(0)  # 截图
-                imgID = PixmapProvider.addPixmap(pixmap)  # 存入提供器，获取imgID
+                name = screen.name()
+                # 获取截图
+                pixmap = screen.grabWindow(0)
+                width = pixmap.width()
+                height = pixmap.height()
+                # 检查截图失败
+                if width <= 0 or height <= 0:
+                    imgID = f"[Error] width={width}, height={height}"
+                # 检查有效，存入提供器，获取imgID
+                else:
+                    imgID = PixmapProvider.addPixmap(pixmap)
                 grabList.append(
                     {
                         "imgID": imgID,
-                        "screenName": screen.name(),
-                        "width": pixmap.width(),
-                        "height": pixmap.height(),
+                        "screenName": name,
+                        "width": width,
+                        "height": height,
                     }
                 )
+            if not grabList:  # 获取到的截图列表为空
+                return [{"imgID": f"[Error] grabList is empty."}]
             return grabList
         except Exception as e:
-            return [f"[Error] Screenshot: {e}"]
+            return [{"imgID": f"[Error] Screenshot: {e}"}]
 
     # 对一张图片做裁切。传入原图imgID和裁切参数，返回裁切后的imgID或[Error]
     def getClipImgID(self, imgID, x, y, w, h):
