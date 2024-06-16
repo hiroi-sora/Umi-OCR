@@ -149,6 +149,9 @@ class _MissionDocClass(Mission):
                     # 图片视觉大小、原始大小、缩放比例
                     w1, h1 = bbox[2] - bbox[0], bbox[3] - bbox[1]
                     w2, h2 = t["width"], t["height"]
+                    # 特殊情况：图片宽高为0
+                    if w2 <= 0 or h2 <= 0:
+                        continue
                     # 单独计算宽高的缩放比例
                     scale_w = w1 / w2
                     scale_h = h1 / h2
