@@ -130,11 +130,12 @@ def main(app_path, engineAddImportPath=""):
     # 初始化运行信息
     site.addsitedir("./py_src/imports")  # 自定义库添加到搜索路径
     import umi_about
+    if not umi_about.init(app_path):  # 初始化版本信息，失败则结束运行
+        sys.exit(0)
+
     from .utils import pre_configs
     from .server.cmd_client import initCmd
 
-    if not umi_about.init(app_path):  # 初始化版本信息，失败则结束运行
-        sys.exit(0)
     # 安装某些软件时可能在系统中写入 QMLSCENE_DEVICE 环境变量，影响本软件的渲染方式，因此屏蔽该环境变量
     if "QMLSCENE_DEVICE" in os.environ:
         del os.environ["QMLSCENE_DEVICE"]
