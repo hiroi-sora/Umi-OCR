@@ -27,13 +27,16 @@ Configs {
             "screenshot": {
                 "title": qsTr("屏幕截图"),
                 "type": "hotkey",
-                "default": "win+alt+c", // 默认热键
+                // 默认热键
+                "default": UmiAbout.app.system==="win32" ?
+                            "win+alt+c" : "alt+c",
                 "eventTitle": "<<screenshot>>", // 触发事件标题
             },
             "paste": {
                 "title": qsTr("粘贴图片"),
                 "type": "hotkey",
-                "default": "win+alt+v",
+                "default": UmiAbout.app.system==="win32" ?
+                            "win+alt+v" : "alt+v",
                 "eventTitle": "<<paste>>",
             },
             "reScreenshot": {

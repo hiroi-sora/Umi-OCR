@@ -43,6 +43,7 @@ UmiAbout.fullname
 """
 
 import os
+import sys
 import psutil
 import platform
 from json import load
@@ -77,12 +78,25 @@ def init(app_path=""):
     else:
         app_path = ""
         app_home = ""
+    # 简短的平台代号
+    _plat = sys.platform
+    if _plat.startswith("win32"):
+        _system = "win32"
+    elif _plat.startswith("linux"):
+        _system = "linux"
+    elif _plat.startswith("darwin"):
+        _system = "darwin"
+    elif _plat and isinstance(_plat, str):
+        _system = _plat
+    else:
+        _system = "unknow"
     u["app"] = {
         # 程序入口
         "path": app_path,
         "home": app_home,
         # 运行平台
-        "platform": platform.platform(),
+        "system": _system,  # 简略系统版本，如 'win32'
+        "platform": platform.platform(),  # 详细系统版本，如 'Windows-10-10.0.22631-SP0'
         "python": platform.python_version(),
         # 硬件信息，用于debug
         "cpu": f"{platform.processor()} | {psutil.cpu_count(logical=False)}C{psutil.cpu_count(logical=True)}T",
