@@ -4,8 +4,9 @@
 
 import os
 import subprocess
-from PySide2.QtCore import QStandardPaths as Qsp, QFile, QFileInfo, QFileDevice
+from PySide2.QtCore import QStandardPaths as Qsp, QFile, QFileInfo
 
+from umi_about import UmiAbout
 from .key_translator import getKeyName
 
 # 环境的类型：
@@ -36,12 +37,10 @@ class _Shortcut:
     # startup 开机自启
     @staticmethod
     def createShortcut(position):
-        from umi_about import UmiAbout  # 项目信息
-
-        lnkName = "Umi-OCR"
+        lnkName = UmiAbout["name"]
         appPath = UmiAbout["app"]["path"]
-        if not appPath:
-            return "[Error] 未找到 Umi-OCR.exe 。请尝试手动创建快捷方式。\n[Error] Umi-OCR app path not exist. Please try creating a shortcut manually."
+        if not appPath or not os.path.exists(appPath):
+            return f"[Error] 未找到程序exe文件。请尝试手动创建快捷方式。\n[Error] Exe path not exist. Please try creating a shortcut manually.\n\n{appPath}"
         lnkPathBase = _Shortcut._getPath(position)
         lnkPathBase = os.path.join(lnkPathBase, lnkName)
         lnkPath = lnkPathBase + ".lnk"
@@ -55,9 +54,10 @@ class _Shortcut:
             return f"[Error] {appFile.errorString()}\n请尝试以管理员权限启动软件。\nPlease try starting the software as an administrator.\nappPath: {appPath}\nlnkPath: {lnkPath}"
         return "[Success]"
 
-    @staticmethod  # 删除快捷方式
+    # 删除快捷方式，返回删除文件的个数
+    @staticmethod
     def deleteShortcut(position):
-        appName = "Umi-OCR"
+        lnkName = UmiAbout["name"]
         lnkDir = _Shortcut._getPath(position)
         num = 0
         for fileName in os.listdir(lnkDir):
@@ -69,7 +69,7 @@ class _Shortcut:
                 if not info.isSymLink():  # 排除非快捷方式
                     continue
                 originName = os.path.basename(info.symLinkTarget())
-                if appName in originName:  # 快捷方式指向的文件名包含appName，删之
+                if lnkName in originName:  # 快捷方式指向的文件名包含appName，删之
                     os.remove(lnkPath)
                     num += 1
             except Exception as e:
