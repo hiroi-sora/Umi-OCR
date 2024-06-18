@@ -8,18 +8,28 @@ import subprocess
 from .key_translator import getKeyName
 
 
-# ==================== 标准路径 ====================
-# TODO: 获取系统的标准路径
-class _StandardPaths:
+# ==================== 快捷方式 ====================
+class _Shortcut:
+    # 创建快捷方式，返回成功与否的字符串。position取值：
+    # desktop 桌面
+    # startMenu 开始菜单
+    # startup 开机自启
     @staticmethod
-    def GetStartMenu():
-        """获取开始菜单路径"""
-        return "TODO: 获取开始菜单路径"
+    def createShortcut(position):
+        from umi_about import UmiAbout  # 项目信息
 
-    @staticmethod
-    def GetStartup():
-        """获取启动（开机自启）路径"""
-        return "TODO: 获取开机自启路径"
+        lnkName = "Umi-OCR"
+        appPath = UmiAbout["app"]["path"]
+        # TODO
+        return f"[Error] Linux 尚未实现 {position} 快捷方式的创建！"
+
+    @staticmethod  # 删除快捷方式
+    def deleteShortcut(position):
+        appName = "Umi-OCR"
+        # TODO
+        return 0
+
+
 
 
 # ==================== 硬件控制 ====================
@@ -38,8 +48,9 @@ class _HardwareCtrl:
 
 # ==================== 对外接口 ====================
 class Api:
-    # 系统标准路径。接口： GetStartMenu GetStartup
-    StandardPaths = _StandardPaths()
+    # 快捷方式。接口： createShortcut deleteShortcut
+    # 参数：快捷方式位置， desktop startMenu startup
+    Shortcut = _Shortcut()
 
     # 硬件控制。接口： shutdown hibernate
     HardwareCtrl = _HardwareCtrl()

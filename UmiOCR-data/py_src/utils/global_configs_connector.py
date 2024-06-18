@@ -2,7 +2,7 @@
 
 from . import app_opengl
 from .i18n_configs import I18n
-from .shortcut import ShortcutApi
+from ..platform import Platform
 from .pre_configs import getErrorStr
 from ..server import web_server
 from ..server.cmd_server import CmdActuator
@@ -18,12 +18,12 @@ class GlobalConfigsConnector(QObject):
     # 创建快捷方式
     @Slot(str, result=str)
     def createShortcut(self, position):
-        return ShortcutApi.createShortcut(position)
+        return Platform.Shortcut.createShortcut(position)
 
     # 删除快捷方式
     @Slot(str, result=int)
     def deleteShortcut(self, position):
-        return ShortcutApi.deleteShortcut(position)
+        return Platform.Shortcut.deleteShortcut(position)
 
     # 获取UI语言信息
     @Slot(result="QVariant")

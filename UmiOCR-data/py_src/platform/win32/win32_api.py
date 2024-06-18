@@ -4,6 +4,8 @@
 
 import os
 import subprocess
+from PySide2.QtCore import QStandardPaths as Qsp, QFile, QFileInfo, QFileDevice
+
 from .key_translator import getKeyName
 
 # 环境的类型：
@@ -12,18 +14,68 @@ from .key_translator import getKeyName
 EnvType = "APPDATA"  # or "ProgramData"
 
 
-# ==================== 标准路径 ====================
-# 获取系统的标准路径
-class _StandardPaths:
-    @staticmethod
-    def GetStartMenu():
-        """获取开始菜单路径"""
-        return os.path.join(os.getenv(EnvType), "Microsoft", "Windows", "Start Menu")
+# ==================== 快捷方式 ====================
+class _Shortcut:
+    @staticmethod  # 获取地址
+    def _getPath(position):
+        # 桌面
+        if position == "desktop":
+            return Qsp.writableLocation(Qsp.DesktopLocation)
 
+        startMenu = os.path.join(os.getenv(EnvType), "Microsoft", "Windows", "Start Menu")
+        # 开始菜单
+        if position == "startMenu":
+            return startMenu
+        # 开机自启
+        elif position == "startup":
+            return os.path.join(startMenu, "Programs", "Startup")
+
+    # 创建快捷方式，返回成功与否的字符串。position取值：
+    # desktop 桌面
+    # startMenu 开始菜单
+    # startup 开机自启
     @staticmethod
-    def GetStartup():
-        """获取启动（开机自启）路径"""
-        return os.path.join(_StandardPaths.GetStartMenu(), "Programs", "Startup")
+    def createShortcut(position):
+        from umi_about import UmiAbout  # 项目信息
+
+        lnkName = "Umi-OCR"
+        appPath = UmiAbout["app"]["path"]
+        if not appPath:
+            return "[Error] 未找到 Umi-OCR.exe 。请尝试手动创建快捷方式。\n[Error] Umi-OCR app path not exist. Please try creating a shortcut manually."
+        lnkPathBase = _Shortcut._getPath(position)
+        lnkPathBase = os.path.join(lnkPathBase, lnkName)
+        lnkPath = lnkPathBase + ".lnk"
+        i = 1
+        while os.path.exists(lnkPath):  # 快捷方式已存在
+            lnkPath = lnkPathBase + f" ({i}).lnk"  # 添加序号
+            i += 1
+        appFile = QFile(appPath)
+        res = appFile.link(lnkPath)
+        if not res:
+            return f"[Error] {appFile.errorString()}\n请尝试以管理员权限启动软件。\nPlease try starting the software as an administrator.\nappPath: {appPath}\nlnkPath: {lnkPath}"
+        return "[Success]"
+
+    @staticmethod  # 删除快捷方式
+    def deleteShortcut(position):
+        appName = "Umi-OCR"
+        lnkDir = _Shortcut._getPath(position)
+        num = 0
+        for fileName in os.listdir(lnkDir):
+            lnkPath = os.path.join(lnkDir, fileName)
+            try:
+                if not os.path.isfile(lnkPath):  # 排除非文件
+                    continue
+                info = QFileInfo(lnkPath)
+                if not info.isSymLink():  # 排除非快捷方式
+                    continue
+                originName = os.path.basename(info.symLinkTarget())
+                if appName in originName:  # 快捷方式指向的文件名包含appName，删之
+                    os.remove(lnkPath)
+                    num += 1
+            except Exception as e:
+                print(f"[Error] 删除快捷方式失败 {lnkPath}: {e}")
+                continue
+        return num
 
 
 # ==================== 硬件控制 ====================
@@ -41,8 +93,9 @@ class _HardwareCtrl:
 
 # ==================== 对外接口 ====================
 class Api:
-    # 系统标准路径。接口： GetStartMenu GetStartup
-    StandardPaths = _StandardPaths()
+    # 快捷方式。接口： createShortcut deleteShortcut
+    # 参数：快捷方式位置， desktop startMenu startup
+    Shortcut = _Shortcut()
 
     # 硬件控制。接口： shutdown hibernate
     HardwareCtrl = _HardwareCtrl()
