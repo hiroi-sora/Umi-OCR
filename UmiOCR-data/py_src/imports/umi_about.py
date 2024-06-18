@@ -75,9 +75,12 @@ def init(app_path=""):
     if app_path:
         app_path = os.path.abspath(app_path)
         app_home = os.path.dirname(app_path)
+        app_dir = os.path.dirname(app_path)
     else:
         app_path = ""
         app_home = ""
+        app_dir = ""
+        print("[Warning] 未能获取程序入口路径！")
     # 简短的平台代号
     _plat = sys.platform
     if _plat.startswith("win32"):
@@ -94,6 +97,7 @@ def init(app_path=""):
         # 程序入口
         "path": app_path,
         "home": app_home,
+        "dir": app_dir,
         # 运行平台
         "system": _system,  # 简略系统版本，如 'win32'
         "platform": platform.platform(),  # 详细系统版本，如 'Windows-10-10.0.22631-SP0'
