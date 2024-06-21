@@ -24,7 +24,7 @@
   <a href="https://github.com/hiroi-sora/Umi-OCR/releases/latest">
     <img src="https://img.shields.io/github/v/release/hiroi-sora/Umi-OCR?style=flat-square" alt="Umi-OCR">
   </a>
-  <a href="License">
+  <a href="https://github.com/hiroi-sora/Umi-OCR/blob/main/LICENSE">
     <img src="https://img.shields.io/github/license/hiroi-sora/Umi-OCR?style=flat-square" alt="LICENSE">
   </a>
   <a href="#下载发行版">

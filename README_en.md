@@ -24,10 +24,10 @@
   <a href="https://github.com/hiroi-sora/Umi-OCR/releases/latest">
     <img src="https://img.shields.io/github/v/release/hiroi-sora/Umi-OCR?style=flat-square" alt="Umi-OCR">
   </a>
-  <a href="License">
+  <a href="https://github.com/hiroi-sora/Umi-OCR/blob/main/LICENSE">
     <img src="https://img.shields.io/github/license/hiroi-sora/Umi-OCR?style=flat-square" alt="LICENSE">
   </a>
-  <a href="#下载">
+  <a href="#download-releases">
     <img src="https://img.shields.io/github/downloads/hiroi-sora/Umi-OCR/total?style=flat-square" alt="forks">
   </a>
   <a href="https://star-history.com/#hiroi-sora/Umi-OCR">
@@ -43,11 +43,11 @@
 
 <div align="center">
   <h3>
-    <a href="#Usage:">
+    <a href="#usage">
       Usage
     </a>
     <span> • </span>
-    <a href="#Download Releases:">
+    <a href="#download-releases">
       Download Releases
     </a>
     <span> • </span>
