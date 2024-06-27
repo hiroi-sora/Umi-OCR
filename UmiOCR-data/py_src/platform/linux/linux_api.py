@@ -8,7 +8,6 @@ import subprocess
 from PySide2.QtCore import QStandardPaths as Qsp
 
 from umi_about import UmiAbout
-from .key_translator import getKeyName
 
 
 # ==================== 快捷方式 ====================
@@ -31,6 +30,8 @@ class _Shortcut:
     # startup 开机自启
     @staticmethod
     def createShortcut(position):
+        if position == "startup":  # TODO
+            return "[Warning] Linux 暂不支持自动添加开机自启。请手动设置。\nAutomatically adding startup functions is not supported at this time. Please set it manually."
         try:
             lnkName = UmiAbout["name"]
             appPath = UmiAbout["app"]["path"]
@@ -127,7 +128,18 @@ class Api:
     # 键值转键名
     @staticmethod
     def getKeyName(key):
-        return getKeyName(key)
+        # 传入 pynput 按键事件对象，返回键名字符串
+        if not isinstance(key, str):
+            key = str(key)
+        if not key:  # 错误，未获取键值
+            return "unknown"
+        if key.startswith("'") and key.endswith("'"): # 去除自带引号
+            key = key[1:-1]
+        if key.startswith("Key."):  # 修饰建
+            key = key[4:]
+        if not key: # 再检查一次
+            return "unknown"
+        return key
 
     # 让系统运行一个程序，不堵塞当前进程
     @staticmethod
