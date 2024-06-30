@@ -87,6 +87,7 @@ class _MissionDocClass(Mission):
                 return "[Error] 页数列表内容非整数"
             if not 0 <= p < page_count:
                 return f"[Error] 页数列表超出 1~{page_count} 范围"
+        msnInfo["pageList"] = pageList
         # =============== tbpu文本块后处理 msnInfo["tbpu"] ===============
         argd = msnInfo["argd"]  # 参数
         msnInfo["tbpu"] = []

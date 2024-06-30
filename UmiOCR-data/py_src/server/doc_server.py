@@ -67,13 +67,13 @@ class DocUnitError(Exception):
         self.data = data
 
 
-# 单个任务字典
+# 单个任务单元
 class _DocUnit:
     def __init__(self, file_path, options):
         # 提取文档信息
-        docInfo = MissionDOC.getDocInfo(file_path)
-        if "error" in docInfo.keys():
-            raise DocUnitError({"code": 201, "data": docInfo["error"]})
+        doc_info = MissionDOC.getDocInfo(file_path)
+        if "error" in doc_info.keys():
+            raise DocUnitError({"code": 201, "data": doc_info["error"]})
 
         # 补充缺失的默认参数
         default = get_doc_options()
@@ -82,12 +82,12 @@ class _DocUnit:
                 options[key] = default[key]["default"]
 
         # 提取参数
-        pageRange = [options["pageRangeStart"], options["pageRangeEnd"]]  # 识别范围
-        pageList = options["pageList"]  # 页数列表
-        if pageList:  # 下标起始由1转为0
-            pageList = [x - 1 for x in pageList]
+        page_range = [options["pageRangeStart"], options["pageRangeEnd"]]  # 识别范围
+        page_list = options["pageList"]  # 页数列表
+        if page_list:  # 下标起始由1转为0
+            page_list = [x - 1 for x in page_list]
         password = options["password"]  # 密码
-        if not password and docInfo["is_encrypted"]:
+        if not password and doc_info["is_encrypted"]:
             raise DocUnitError(
                 {
                     "code": 202,
@@ -97,11 +97,11 @@ class _DocUnit:
 
         # 从 options 中提取一些条目，组装 docArgd 作为 MissionDoc 任务参数字典
         prefixes = ["ocr.", "doc.", "tbpu."]  # 要提取的条目前缀
-        docArgd = {}
+        doc_argd = {}
         for k, v in options.items():
             for prefix in prefixes:
                 if k.startswith(prefix):
-                    docArgd[k] = v
+                    doc_argd[k] = v
                     break
 
         # 任务信息
@@ -109,28 +109,70 @@ class _DocUnit:
             "onStart": self._onStart,
             "onGet": self._onGet,
             "onEnd": self._onEnd,
-            "argd": docArgd,
+            "argd": doc_argd,
         }
 
         # 提交任务
         self.msnID = ""
-        msg = MissionDOC.addMission(msnInfo, file_path, pageRange, pageList, password)
+        msg = MissionDOC.addMission(msnInfo, file_path, page_range, page_list, password)
         if not msg:
             raise DocUnitError({"code": 203, "data": "addMission unknow."})
         if msg.startswith("["):
             raise DocUnitError({"code": 204, "data": msg})
+        page_list = msnInfo["pageList"]
 
         self.msnID = msg  # 任务ID
         self.results = {}  # 任务结果原始字典，键为页数
-        self.pagesCount = len(pageList)  # 任务总页数
-        self.processedCount = 0  # 已处理的页数
-        self.unreadList = []  # 未读的任务列表
-        self.isDone = False  #  当前任务是否完成
+        self.pages_count = len(page_list)  # 任务总页数
+        self.processed_count = 0  # 已处理的页数
+        self.unread_list = []  # 未读的任务列表
+        self.is_done = False  #  当前任务是否完成
         self.state = "waiting"  # 任务状态， waiting running success failure
         self.message = ""  # 如果任务失败，则记录失败信息
         self._mutex = QMutex()  # 主锁
 
-    # ========================= 【获取状态的接口】 =========================
+    # ========================= 【获取接口】 =========================
+
+    # 获取结果
+    def get_result(
+        self,
+        is_data=False,  # True 时返回识别内容data
+        format="dict",  # 识别内容格式， "dict", "text"
+        is_unread=False,  # True 时只返回未读过的识别内容
+    ):
+        self._mutex.lock()
+        data = {
+            "code": 100,
+            "processed_count": self.processed_count,  # 已处理的数量
+            "pages_count": self.pages_count,  # 总页数
+            "is_done": self.is_done,  # 是否已结束
+            "state": self.state,  # 任务状态
+            "data": [],  # 结果
+        }
+        if self.state == "failure":
+            data["message"] = self.message
+        # 需要返回识别内容
+        if is_data:
+            datas = []
+            # 增量式
+            if is_unread:
+                for page in self.unread_list:
+                    datas.append(self.results[page])
+                self.unread_list = []
+            # 全量式
+            else:
+                for _, res in self.results.items():
+                    datas.append(res)
+            # 需要转为纯文本
+            if format == "text":
+                datas_text = ""
+                for res in datas:
+                    if res["code"] == 100:
+                        datas_text += getDataText(res["data"])
+                datas = datas_text
+            data["data"] = datas
+        self._mutex.unlock()
+        return data
 
     # ========================= 【任务控制器的异步回调】 =========================
 
@@ -144,25 +186,43 @@ class _DocUnit:
         # 记录信息
         self._mutex.lock()
         self.results[page] = res
-        self.processedCount += 1
-        self.unreadList.append(page)
+        self.processed_count += 1
+        self.unread_list.append(page)
         self._mutex.unlock()
-
-        print(f"_onGet: {page}")
-        print(f"_onGet: {res['data']}")
 
     def _onEnd(self, msnInfo, msg):  # 一个文档处理完毕
         # msg: [Success] [Warning] [Error]
 
         # 记录信息
         self._mutex.lock()
-        self.isDone = True
+        self.is_done = True
         if msg == "[Success]":
             self.state = "success"
         else:
             self.state = "failure"
             self.message = msg
         self._mutex.unlock()
+
+
+# 管理所有任务单元
+class _DocUnitManagerClass:
+    def __init__(self):
+        self.doc_units = {}
+
+    def add(self, id, unit):
+        self.doc_units[id] = unit
+
+    def get(self, id):
+        if id not in self.doc_units:
+            return None
+        return self.doc_units[id]
+
+    def remove(self, id):
+        if id in self.doc_units:
+            del self.doc_units[id]
+
+
+_DocUnitManager = _DocUnitManagerClass()
 
 
 # 路由函数
@@ -221,6 +281,7 @@ def init(UmiWeb):
         try:
             doc_unit = _DocUnit(file_path, options)
             msnID = doc_unit.msnID
+            _DocUnitManager.add(msnID, doc_unit)
             return {"code": 100, "data": msnID}
         except DocUnitError as e:
             os.remove(file_path)
@@ -228,3 +289,31 @@ def init(UmiWeb):
         except Exception as e:
             os.remove(file_path)
             return {"code": 105, "data": f"[Error] Failed to submit mission: {e}"}
+
+    """
+    获取结果，方法：POST
+    json参数：
+    "id"="",  # 任务ID
+    "is_data"=False,  # True 时返回识别内容data
+    "format"="dict",  # 识别内容格式， "dict", "text"
+    "is_unread"=False,  # True 时只返回未读过的识别内容
+
+    返回值： {}
+    """
+
+    @UmiWeb.route("/api/doc/result", method="POST")
+    def _result():
+        try:
+            user_data = request.json
+        except Exception as e:
+            return {"code": 101, "data": f"请求无法解析为json。"}
+        if not user_data or "id" not in user_data:
+            return {"code": 102, "data": f"未填写id。"}
+        msnID = user_data["id"]
+        doc_unit = _DocUnitManager.get(msnID)
+        if not doc_unit:
+            return {"code": 103, "data": f"任务 {msnID} 不存在。"}
+        is_data = user_data.get("is_data", False)
+        format = user_data.get("format", "dict")
+        is_unread = user_data.get("is_unread", False)
+        return doc_unit.get_result(is_data, format, is_unread)
