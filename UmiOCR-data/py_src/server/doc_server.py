@@ -94,9 +94,13 @@ class _DocUnit:
         }
 
         # 提交任务
-        self.msnID = MissionDOC.addMission(
-            msnInfo, file_path, pageRange, pageList, password
-        )
+        self.msnID = ""
+        msg = MissionDOC.addMission(msnInfo, file_path, pageRange, pageList, password)
+        if not msg:
+            raise Exception("[Error] addMission")
+        if msg.startswith("["):
+            raise Exception(msg)
+        self.msnID = msg
 
     # ========================= 【任务控制器的异步回调】 =========================
 
@@ -115,7 +119,8 @@ class _DocUnit:
         res["page"] = page
 
         print(f"_onGet: {msnID} | {page}")
-        # print(res)
+        # del res["data"]
+        print(res)
 
     def _onEnd(self, msnInfo, msg):  # 一个文档处理完毕
         # msg: [Success] [Warning] [Error]
