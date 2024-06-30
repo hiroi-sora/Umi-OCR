@@ -50,6 +50,7 @@ class BatchDOC(Page):
             "tbpu.ignoreArea": argd["tbpu.ignoreArea"],
             "tbpu.ignoreRangeStart": argd["tbpu.ignoreRangeStart"],
             "tbpu.ignoreRangeEnd": argd["tbpu.ignoreRangeEnd"],
+            "tbpu.parser": argd["tbpu.parser"],
         }
         for k in argd:
             if k.startswith("ocr.") or k.startswith("doc."):
@@ -156,10 +157,6 @@ class BatchDOC(Page):
         if type(output) == str:  # 创建输出器失败
             self._onEnd({"path": path}, "[Error] 无法创建输出器。")
             return
-        # 构造排版解析器
-        tbpuList = []
-        if "tbpu.parser" in self._argd:
-            tbpuList.append(getParser(self._argd["tbpu.parser"]))
         # 任务信息
         msnInfo = {
             "onStart": self._onStart,
@@ -169,7 +166,6 @@ class BatchDOC(Page):
             "argd": self._docArgd,
             # 交给 self._onGet 的参数
             "get_output": output,
-            "get_tbpu": tbpuList,
         }
         msnID = MissionDOC.addMission(msnInfo, path, pageRange, password=password)
         if msnID.startswith("["):  # 添加任务失败
@@ -197,21 +193,13 @@ class BatchDOC(Page):
             print(f"[Warning] _onGet 任务ID未在记录。{msnID}")
             return
 
-        # 提取信息
-        output = msnInfo["get_output"]
-        tbpuList = msnInfo["get_tbpu"]
-
         # 为 res 添加信息
         res["page"] = page
         res["fileName"] = f"{page}"
         res["path"] = msnInfo["path"]
 
-        if tbpuList and res["code"] == 100:  # 执行tbpu
-            data = res["data"]
-            for tbpu in tbpuList:
-                data = tbpu.run(data)
-            res["data"] = data
-        for o in output:  # 输出
+        # 输出
+        for o in msnInfo["get_output"]:
             try:
                 o.print(res)
             except Exception as e:
