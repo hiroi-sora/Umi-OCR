@@ -45,16 +45,16 @@ class BatchDOC(Page):
     def msnDocs(self, docs, argd):
         if self._msnID or self._queuedDocs:
             return "[Error] 有任务进行中，不允许提交新任务。"
-        # 组装参数字典。tbpu分两部分，在MissionDOC中执行ignoreArea，本文件执行parser
-        docArgd = {
-            "tbpu.ignoreArea": argd["tbpu.ignoreArea"],
-            "tbpu.ignoreRangeStart": argd["tbpu.ignoreRangeStart"],
-            "tbpu.ignoreRangeEnd": argd["tbpu.ignoreRangeEnd"],
-            "tbpu.parser": argd["tbpu.parser"],
-        }
-        for k in argd:
-            if k.startswith("ocr.") or k.startswith("doc."):
-                docArgd[k] = argd[k]
+
+        # 从 argd 中提取一些条目，组装 docArgd
+        prefixes = ["ocr.", "doc.", "tbpu."]  # 要提取的条目前缀
+        docArgd = {}
+        for k, v in argd.items():
+            for prefix in prefixes:
+                if k.startswith(prefix):
+                    docArgd[k] = v
+                    break
+
         # 记录任务参数
         self._queuedDocs = docs
         self._argd = argd
