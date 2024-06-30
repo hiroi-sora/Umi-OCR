@@ -82,10 +82,11 @@ class _MissionDocClass(Mission):
         # 检查页数列表合法性
         if len(pageList) == 0:
             return "[Error] 页数列表为空"
-        if not all(isinstance(item, int) for item in pageList):
-            return "[Error] 页数列表内容非整数"
-        if not all((1 <= item <= page_count) for item in pageList):
-            return f"[Error] 页数列表超出 1~{page_count} 范围"
+        for p in pageList:
+            if not isinstance(p, int):
+                return "[Error] 页数列表内容非整数"
+            if not 0 <= p < page_count:
+                return f"[Error] 页数列表超出 1~{page_count} 范围"
         # =============== tbpu文本块后处理 msnInfo["tbpu"] ===============
         argd = msnInfo["argd"]  # 参数
         msnInfo["tbpu"] = []
