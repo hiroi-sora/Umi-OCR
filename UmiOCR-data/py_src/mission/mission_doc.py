@@ -65,6 +65,10 @@ class _MissionDocClass(Mission):
         if len(pageList) == 0:
             if isinstance(pageRange, (tuple, list)) and len(pageRange) == 2:
                 a, b = pageRange[0], pageRange[1]
+                if a < 0:
+                    a += doc.page_count + 1
+                if b < 0:
+                    b += doc.page_count + 1
                 if a < 1:
                     return f"[Error] pageRange {pageRange} 范围起始不能小于1"
                 if b > doc.page_count:

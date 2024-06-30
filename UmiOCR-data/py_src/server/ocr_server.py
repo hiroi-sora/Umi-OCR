@@ -6,12 +6,11 @@ from ..utils.utils import initConfigDict
 from ..ocr.output.tools import getDataText
 
 
-# 获取ocr配置字典
-def _get_ocr_options():
+# 获取ocr配置字典。 is_format=False 时不含 format 选项。
+def get_ocr_options(is_format=True):
     opts = {}
     # OCR 的参数
     ocr_opts = MissionOCR.getLocalOptions()
-    ocr_opts = initConfigDict(ocr_opts)
     for key in ocr_opts:
         opts[f"ocr.{key}"] = ocr_opts[key]
     # 排版解析的参数
@@ -30,22 +29,52 @@ def _get_ocr_options():
             ["none", "不做处理"],
         ],
     }
-    # 输出格式
-    opts["data.format"] = {
-        "title": "数据返回格式",
-        "toolTip": '返回值字典中，["data"] 按什么格式表示OCR结果数据',
-        "default": "dict",
-        "optionsList": [
-            ["dict", "含有位置等信息的原始字典"],
-            ["text", "纯文本"],
-        ],
-    }
     # 忽略区域
     opts["tbpu.ignoreArea"] = {
         "title": "忽略区域",
         "toolTip": "数组，每一项为[[左上角x,y],[右下角x,y]]。",
         "default": [],
+        "type": "var",
     }
+    # 输出格式
+    if is_format:
+        opts["data.format"] = {
+            "title": "数据返回格式",
+            "toolTip": '返回值字典中，["data"] 按什么格式表示OCR结果数据',
+            "default": "dict",
+            "optionsList": [
+                ["dict", "含有位置等信息的原始字典"],
+                ["text", "纯文本"],
+            ],
+        }
+    opts = initConfigDict(opts)  # 格式化
+    return opts
+
+
+# 检查ocr参数字典，返回修改后字典
+def check_ocr_options(opts):
+    # 检查忽略区域参数
+    if opts["tbpu.ignoreArea"]:
+        new_ia = []
+        ia = opts["tbpu.ignoreArea"]
+        for a in ia:
+            if (
+                not isinstance(a, list)
+                or len(a) != 2
+                or not isinstance(a[0], list)
+                or len(a[0]) != 2
+                or not isinstance(a[1], list)
+                or len(a[1]) != 2
+                or not all(
+                    isinstance(x, (int, float))
+                    for x in [a[0][0], a[0][1], a[1][0], a[1][1]]
+                )
+            ):
+                raise Exception(
+                    f"tbpu.ignoreArea 中，每一项的格式必须是 [[x1,y1],[x2,y2]] 。当前值不合法： {ia}"
+                )
+            new_ia.append([[a[0][0], a[0][1]], [], [a[1][0], a[1][1]], []])
+        opts["tbpu.ignoreArea"] = new_ia
     return opts
 
 
@@ -53,7 +82,7 @@ def _get_ocr_options():
 def init(UmiWeb):
     @UmiWeb.route("/api/ocr/get_options")
     def _get_options_json():
-        opts = _get_ocr_options()
+        opts = get_ocr_options()
         res = json.dumps(opts)
         return res
 
@@ -78,35 +107,15 @@ def init(UmiWeb):
             data["options"] = {}
         elif not type(data["options"]) is dict:
             return json.dumps({"code": 803, "data": f"请求中 options 字段必须为字典。"})
-        # 补充缺失的默认参数
         try:
+            # 补充缺失的默认参数
             opt = data["options"]
-            default = _get_ocr_options()
+            default = get_ocr_options()
             for key in default:
                 if key not in opt:
                     opt[key] = default[key]["default"]
-            # 检查忽略区域参数
-            if opt["tbpu.ignoreArea"]:
-                new_ia = []
-                ia = opt["tbpu.ignoreArea"]
-                for a in ia:
-                    if (
-                        not isinstance(a, list)
-                        or len(a) != 2
-                        or not isinstance(a[0], list)
-                        or len(a[0]) != 2
-                        or not isinstance(a[1], list)
-                        or len(a[1]) != 2
-                        or not all(
-                            isinstance(x, (int, float))
-                            for x in [a[0][0], a[0][1], a[1][0], a[1][1]]
-                        )
-                    ):
-                        raise Exception(
-                            f"tbpu.ignoreArea 中，每一项的格式必须是 [[x1,y1],[x2,y2]] 。当前值不合法： {ia}"
-                        )
-                    new_ia.append([[a[0][0], a[0][1]], [], [a[1][0], a[1][1]], []])
-                opt["tbpu.ignoreArea"] = new_ia
+            # 检查OCR参数
+            check_ocr_options(opt)
         except Exception as e:
             return json.dumps({"code": 804, "data": f"options 解释失败。 {e}"})
         # 同步执行
