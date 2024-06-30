@@ -1,6 +1,7 @@
 import os
 import json
 from uuid import uuid4
+from PySide2.QtCore import QMutex
 
 from .bottle import request
 from .ocr_server import get_ocr_options, check_ocr_options
@@ -60,9 +61,20 @@ def get_doc_options():
     return opts
 
 
+# 异常类
+class DocUnitError(Exception):
+    def __init__(self, data):
+        self.data = data
+
+
 # 单个任务字典
 class _DocUnit:
     def __init__(self, file_path, options):
+        # 提取文档信息
+        docInfo = MissionDOC.getDocInfo(file_path)
+        if "error" in docInfo.keys():
+            raise DocUnitError({"code": 201, "data": docInfo["error"]})
+
         # 补充缺失的默认参数
         default = get_doc_options()
         for key in default:
@@ -72,22 +84,29 @@ class _DocUnit:
         # 提取参数
         pageRange = [options["pageRangeStart"], options["pageRangeEnd"]]  # 识别范围
         pageList = options["pageList"]  # 页数列表
+        if pageList:  # 下标起始由1转为0
+            pageList = [x - 1 for x in pageList]
         password = options["password"]  # 密码
+        if not password and docInfo["is_encrypted"]:
+            raise DocUnitError(
+                {
+                    "code": 202,
+                    "data": "The doc is encrypted, please fill in the password.",
+                }
+            )
 
-        # MissionDoc 任务参数字典
-        docArgd = {
-            "tbpu.ignoreArea": options["tbpu.ignoreArea"],
-            "tbpu.ignoreRangeStart": options["tbpu.ignoreRangeStart"],
-            "tbpu.ignoreRangeEnd": options["tbpu.ignoreRangeEnd"],
-        }
-        for k in options:
-            if k.startswith("ocr.") or k.startswith("doc."):
-                docArgd[k] = options[k]
+        # 从 options 中提取一些条目，组装 docArgd 作为 MissionDoc 任务参数字典
+        prefixes = ["ocr.", "doc.", "tbpu."]  # 要提取的条目前缀
+        docArgd = {}
+        for k, v in options.items():
+            for prefix in prefixes:
+                if k.startswith(prefix):
+                    docArgd[k] = v
+                    break
 
         # 任务信息
         msnInfo = {
             "onStart": self._onStart,
-            "onReady": self._onReady,
             "onGet": self._onGet,
             "onEnd": self._onEnd,
             "argd": docArgd,
@@ -97,36 +116,53 @@ class _DocUnit:
         self.msnID = ""
         msg = MissionDOC.addMission(msnInfo, file_path, pageRange, pageList, password)
         if not msg:
-            raise Exception("[Error] addMission")
+            raise DocUnitError({"code": 203, "data": "addMission unknow."})
         if msg.startswith("["):
-            raise Exception(msg)
-        self.msnID = msg
+            raise DocUnitError({"code": 204, "data": msg})
+
+        self.msnID = msg  # 任务ID
+        self.results = {}  # 任务结果原始字典，键为页数
+        self.pagesCount = len(pageList)  # 任务总页数
+        self.processedCount = 0  # 已处理的页数
+        self.unreadList = []  # 未读的任务列表
+        self.isDone = False  #  当前任务是否完成
+        self.state = "waiting"  # 任务状态， waiting running success failure
+        self.message = ""  # 如果任务失败，则记录失败信息
+        self._mutex = QMutex()  # 主锁
+
+    # ========================= 【获取状态的接口】 =========================
 
     # ========================= 【任务控制器的异步回调】 =========================
 
     def _onStart(self, msnInfo):  # 一个文档 开始
-        msnID = msnInfo["msnID"]
-        print(f"_onStart: {msnID}")
-
-    def _onReady(self, msnInfo, page):  # 一个文档的一页 准备开始
-        msnID = msnInfo["msnID"]
-        page += 1
-        print(f"_onReady: {msnID} | {page}")
+        self.state = "running"
 
     def _onGet(self, msnInfo, page, res):  # 一个文档的一页 获取结果
         page += 1
-        msnID = msnInfo["msnID"]
         res["page"] = page
 
-        print(f"_onGet: {msnID} | {page}")
-        # del res["data"]
-        print(res)
+        # 记录信息
+        self._mutex.lock()
+        self.results[page] = res
+        self.processedCount += 1
+        self.unreadList.append(page)
+        self._mutex.unlock()
+
+        print(f"_onGet: {page}")
+        print(f"_onGet: {res['data']}")
 
     def _onEnd(self, msnInfo, msg):  # 一个文档处理完毕
         # msg: [Success] [Warning] [Error]
 
-        msnID = msnInfo["msnID"]
-        print(f"_onEnd: {msnID} | {msg}")
+        # 记录信息
+        self._mutex.lock()
+        self.isDone = True
+        if msg == "[Success]":
+            self.state = "success"
+        else:
+            self.state = "failure"
+            self.message = msg
+        self._mutex.unlock()
 
 
 # 路由函数
@@ -161,9 +197,9 @@ def init(UmiWeb):
 
         # 3. 指定文件编号。保存文件
         file_id = str(uuid4())
-        save_path = os.path.join(UPLOAD_DIR, f"{file_id}{ext}")
+        file_path = os.path.join(UPLOAD_DIR, f"{file_id}{ext}")
         try:
-            upload.save(save_path, overwrite=True)
+            upload.save(file_path, overwrite=True)
         except Exception as e:
             return {"code": 103, "data": f"[Error] Failed to save file: {e}"}
 
@@ -173,6 +209,7 @@ def init(UmiWeb):
             try:
                 options = json.loads(options)
             except Exception as e:
+                os.remove(file_path)
                 return {
                     "code": 104,
                     "data": f"[Error] Invalid JSON format: {options} | {e}",
@@ -182,8 +219,12 @@ def init(UmiWeb):
 
         # 5. 构造任务对象
         try:
-            doc_unit = _DocUnit(save_path, options)
+            doc_unit = _DocUnit(file_path, options)
             msnID = doc_unit.msnID
             return {"code": 100, "data": msnID}
+        except DocUnitError as e:
+            os.remove(file_path)
+            return e.data
         except Exception as e:
+            os.remove(file_path)
             return {"code": 105, "data": f"[Error] Failed to submit mission: {e}"}
