@@ -2,10 +2,12 @@ import os
 import json
 import time
 import shutil
+import zipfile
+from urllib.parse import urlparse
 from uuid import uuid4
 from PySide2.QtCore import QMutex
 
-from .bottle import request
+from .bottle import request, static_file
 from .ocr_server import get_ocr_options
 from ..ocr.output import Output
 from ..mission.mission_doc import MissionDOC
@@ -72,7 +74,9 @@ class DocUnitError(Exception):
 
 # 单个任务单元
 class _DocUnit:
-    def __init__(self, dir_id, dir_path, origin_path, origin_name, options):
+    def __init__(
+        self, dir_id, dir_path, origin_path, origin_name, origin_prefix, options
+    ):
         # 提取文档信息
         doc_info = MissionDOC.getDocInfo(origin_path)
         if "error" in doc_info.keys():
@@ -129,6 +133,7 @@ class _DocUnit:
         self.password = password
         self.dir_id = dir_id
         self.dir_path = dir_path
+        self.origin_prefix = origin_prefix
         self.origin_name = origin_name
         self.origin_path = origin_path
         self.msnID = msg  # 任务ID
@@ -188,6 +193,7 @@ class _DocUnit:
     # 获取文件
     def get_files(
         self,
+        base_url,  # 下载基础url
         file_types=["pdfLayered"],  # 输出文件类型，可选：
         # txt, txtPlain, jsonl, csv, pdfLayered, pdfOneLayer
         ingore_blank=True,  # 忽略空白页数
@@ -201,6 +207,13 @@ class _DocUnit:
                 "code": 202,
                 "data": f"参数类型错误： file_types={file_types} , ingore_blank={ingore_blank}",
             }
+
+        # 删除旧的文件
+        for filename in os.listdir(self.dir_path):
+            file_path = os.path.join(self.dir_path, filename)
+            if filename != self.origin_name and os.path.isfile(file_path):
+                os.remove(file_path)
+
         # 准备参数
         startDatetime = time.strftime(  # 日期时间字符串（标准格式）
             r"%Y-%m-%d %H:%M:%S", time.localtime(self.start_timestamp)
@@ -208,7 +221,7 @@ class _DocUnit:
         outputArgd = {
             "outputDir": self.dir_path,  # 输出路径
             "outputDirType": "specify",
-            "outputFileName": "[OCR]_" + self.origin_name,  # 输出文件名（前缀）
+            "outputFileName": "[OCR]_" + self.origin_prefix,  # 输出文件名（前缀）
             "startDatetime": startDatetime,  # 开始日期
             "ingoreBlank": ingore_blank,  # 忽略空白页数
             "originPath": self.origin_path,  # 原始文件
@@ -235,9 +248,32 @@ class _DocUnit:
             except Exception as e:
                 return {"code": 205, "data": f"保存失败：{o}\n{e}"}
 
-        # 打包
+        # 收集新的文件
+        download_paths = []
+        for filename in os.listdir(self.dir_path):
+            file_path = os.path.join(self.dir_path, filename)
+            if filename != self.origin_name and os.path.isfile(file_path):
+                download_paths.append(file_path)
+        # 如果文件多，则打包zip
+        if not download_paths:
+            return {"code": 206, "data": "未找到生成的文件"}
+        elif len(download_paths) == 1:
+            download_name = os.path.basename(download_paths[0])
+        else:
+            download_name = f"[OCR]_{self.origin_prefix}.zip"
+            zip_path = os.path.join(self.dir_path, download_name)
+            # 将 download_list 中的所有文件打包为 zip
+            try:
+                with zipfile.ZipFile(zip_path, "w") as zipf:
+                    for p in download_paths:
+                        zipf.write(p, os.path.basename(p))
+            except Exception as e:
+                return {"code": 207, "data": f"无法打包zip：{e}"}
 
-        return {"code": 100, "data": f"Success"}
+        # 组合下载地址
+        url = f"{base_url}/api/doc/download/{self.msnID}/{download_name}"
+
+        return {"code": 100, "data": url}
 
     # ========================= 【任务控制器的异步回调】 =========================
 
@@ -315,7 +351,7 @@ def init(UmiWeb):
 
         # 2. 检查文件后缀
         origin_name = upload.filename
-        _, ext = os.path.splitext(origin_name)
+        origin_prefix, ext = os.path.splitext(origin_name)
         ext = ext.lower()
         if ext not in DocSuf:
             return {
@@ -355,7 +391,9 @@ def init(UmiWeb):
 
         # 5. 构造任务对象
         try:
-            doc_unit = _DocUnit(dir_id, dir_path, file_path, origin_name, options)
+            doc_unit = _DocUnit(
+                dir_id, dir_path, file_path, origin_name, origin_prefix, options
+            )
             msnID = doc_unit.msnID
             _DocUnitManager.add(msnID, doc_unit)
             return {"code": 100, "data": msnID}
@@ -405,8 +443,8 @@ def init(UmiWeb):
     返回值： {}
     """
 
-    @UmiWeb.route("/api/doc/files", method="POST")
-    def _files():
+    @UmiWeb.route("/api/doc/download", method="POST")
+    def _download_build():
         try:
             user_data = request.json
         except Exception as e:
@@ -420,5 +458,10 @@ def init(UmiWeb):
 
         file_types = user_data.get("file_types", ["pdfLayered"])
         ingore_blank = user_data.get("ingore_blank", True)
+        parsed_url = urlparse(request.url)
+        base_url = f"{parsed_url.scheme}://{parsed_url.netloc}"
+        return doc_unit.get_files(base_url, file_types, ingore_blank)
 
-        return doc_unit.get_files(file_types, ingore_blank)
+    @UmiWeb.route("/api/doc/download/<filepath:path>")
+    def serve_static(filepath):
+        return static_file(filepath, root="./static")
