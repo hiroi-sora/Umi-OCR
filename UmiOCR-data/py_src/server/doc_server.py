@@ -7,7 +7,7 @@ from urllib.parse import urlparse
 from uuid import uuid4
 from PySide2.QtCore import QMutex
 
-from .bottle import request, static_file
+from .bottle import request, static_file, HTTPError
 from .ocr_server import get_ocr_options
 from ..ocr.output import Output
 from ..mission.mission_doc import MissionDOC
@@ -15,6 +15,7 @@ from ..utils.utils import initConfigDict, DocSuf
 from ..ocr.output.tools import getDataText
 
 UPLOAD_DIR = "./temp"  # 上传文件目录
+UPLOAD_DIR = os.path.abspath(UPLOAD_DIR)
 
 
 # 获取参数模板字典
@@ -271,7 +272,7 @@ class _DocUnit:
                 return {"code": 207, "data": f"无法打包zip：{e}"}
 
         # 组合下载地址
-        url = f"{base_url}/api/doc/download/{self.msnID}/{download_name}"
+        url = f"{base_url}/api/doc/download/{self.dir_id}/{download_name}"
 
         return {"code": 100, "data": url}
 
@@ -364,16 +365,22 @@ def init(UmiWeb):
         dir_path = os.path.join(UPLOAD_DIR, f"{dir_id}")
         dir_path = os.path.abspath(dir_path)  # 将路径转为绝对路径
         file_path = os.path.join(dir_path, origin_name)
+        # 安全检测： file_path 是否在 UPLOAD_DIR 中
+        if os.path.commonpath([UPLOAD_DIR]) != os.path.commonpath(
+            [UPLOAD_DIR, file_path]
+        ):
+            return {"code": 103, "data": f"[Error] Unauthorized path"}
+
         try:
             if os.path.exists(dir_path):  # 如果目录存在，则删除该目录
                 shutil.rmtree(dir_path)
             os.makedirs(dir_path)  # 重新创建目录
         except Exception as e:
-            return {"code": 103, "data": f"[Error] Failed to create dir_id: {e}"}
+            return {"code": 104, "data": f"[Error] Failed to create dir_id: {e}"}
         try:
             upload.save(file_path, overwrite=True)  # 保存文件
         except Exception as e:
-            return {"code": 104, "data": f"[Error] Failed to save file: {e}"}
+            return {"code": 105, "data": f"[Error] Failed to save file: {e}"}
 
         # 4. 提取 options 参数
         options = request.forms.get("json")
@@ -383,7 +390,7 @@ def init(UmiWeb):
             except Exception as e:
                 shutil.rmtree(dir_path)
                 return {
-                    "code": 105,
+                    "code": 106,
                     "data": f"[Error] Invalid JSON format: {options} | {e}",
                 }
         if not isinstance(options, dict):
@@ -402,7 +409,7 @@ def init(UmiWeb):
             return e.data
         except Exception as e:
             shutil.rmtree(dir_path)
-            return {"code": 106, "data": f"[Error] Failed to submit mission: {e}"}
+            return {"code": 107, "data": f"[Error] Failed to submit mission: {e}"}
 
     """
     获取结果，方法：POST
@@ -462,6 +469,11 @@ def init(UmiWeb):
         base_url = f"{parsed_url.scheme}://{parsed_url.netloc}"
         return doc_unit.get_files(base_url, file_types, ingore_blank)
 
-    @UmiWeb.route("/api/doc/download/<filepath:path>")
-    def serve_static(filepath):
-        return static_file(filepath, root="./static")
+    @UmiWeb.route("/api/doc/download/<id>/<download_name>")
+    def serve_static(id, download_name):
+        dir = os.path.join(UPLOAD_DIR, id)
+        path = os.path.join(dir, download_name)
+        # 安全检测： path 是否在 UPLOAD_DIR 中
+        if os.path.commonpath([UPLOAD_DIR]) != os.path.commonpath([UPLOAD_DIR, path]):
+            raise HTTPError(103, "[Error] Unauthorized path.")
+        return static_file(download_name, root=dir)
