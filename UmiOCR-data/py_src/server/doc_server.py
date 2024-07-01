@@ -1,10 +1,12 @@
 import os
 import json
+import time
 from uuid import uuid4
 from PySide2.QtCore import QMutex
 
 from .bottle import request
-from .ocr_server import get_ocr_options, check_ocr_options
+from .ocr_server import get_ocr_options
+from ..ocr.output import Output
 from ..mission.mission_doc import MissionDOC
 from ..utils.utils import initConfigDict, DocSuf
 from ..ocr.output.tools import getDataText
@@ -69,7 +71,7 @@ class DocUnitError(Exception):
 
 # 单个任务单元
 class _DocUnit:
-    def __init__(self, file_path, options):
+    def __init__(self, origin_name, file_path, options):
         # 提取文档信息
         doc_info = MissionDOC.getDocInfo(file_path)
         if "error" in doc_info.keys():
@@ -121,6 +123,9 @@ class _DocUnit:
             raise DocUnitError({"code": 204, "data": msg})
         page_list = msnInfo["pageList"]
 
+        self.password = password
+        self.origin_name = origin_name
+        self.origin_path = file_path
         self.msnID = msg  # 任务ID
         self.results = {}  # 任务结果原始字典，键为页数
         self.pages_count = len(page_list)  # 任务总页数
@@ -129,6 +134,7 @@ class _DocUnit:
         self.is_done = False  #  当前任务是否完成
         self.state = "waiting"  # 任务状态， waiting running success failure
         self.message = ""  # 如果任务失败，则记录失败信息
+        self.start_timestamp = time.time()  # 开始时间戳
         self._mutex = QMutex()  # 主锁
 
     # ========================= 【获取接口】 =========================
@@ -174,6 +180,60 @@ class _DocUnit:
         self._mutex.unlock()
         return data
 
+    # 获取文件
+    def get_files(
+        self,
+        file_types=["pdfLayered"],  # 输出文件类型，可选：
+        # txt, txtPlain, jsonl, csv, pdfLayered, pdfOneLayer
+        ingore_blank=True,  # 忽略空白页数
+    ):
+        if not self.is_done:
+            return {"code": 201, "data": f"{self.msnID} 任务尚未结束，无法获取文件"}
+        if not self.state == "success":
+            return {"code": 201, "data": f"{self.msnID} 任务处理失败，无法获取文件"}
+        if not isinstance(file_types, list) or not isinstance(ingore_blank, bool):
+            return {
+                "code": 202,
+                "data": f"参数类型错误： file_types={file_types} , ingore_blank={ingore_blank}",
+            }
+        # 准备参数
+        startDatetime = time.strftime(  # 日期时间字符串（标准格式）
+            r"%Y-%m-%d %H:%M:%S", time.localtime(self.start_timestamp)
+        )
+        outputArgd = {
+            "outputDir": UPLOAD_DIR,  # 输出路径
+            "outputDirType": "specify",
+            "outputFileName": self.msnID,  # 输出文件名（前缀）
+            "startDatetime": startDatetime,  # 开始日期
+            "ingoreBlank": ingore_blank,  # 忽略空白页数
+            "originPath": self.origin_path,  # 原始文件
+            "password": self.password,  # 文档密码
+        }
+
+        # 创建输出器
+        output = []
+        try:
+            for f in file_types:
+                output.append(Output[f](outputArgd))
+        except Exception as e:
+            return {"code": 203, "data": f"初始化输出器失败。{e}"}
+
+        # 输出
+        for o in output:
+            for _, res in self.results.items():
+                try:
+                    o.print(res)
+                except Exception as e:
+                    return {"code": 204, "data": f"输出失败：{o}\n{e}"}
+            try:
+                o.onEnd()  # 保存
+            except Exception as e:
+                return {"code": 205, "data": f"保存失败：{o}\n{e}"}
+
+        # 打包
+
+        return {"code": 100, "data": f"Success"}
+
     # ========================= 【任务控制器的异步回调】 =========================
 
     def _onStart(self, msnInfo):  # 一个文档 开始
@@ -182,6 +242,8 @@ class _DocUnit:
     def _onGet(self, msnInfo, page, res):  # 一个文档的一页 获取结果
         page += 1
         res["page"] = page
+        res["path"] = f"{self.origin_name} - {page}"
+        res["fileName"] = f"{self.origin_name} - {page}"
 
         # 记录信息
         self._mutex.lock()
@@ -247,7 +309,7 @@ def init(UmiWeb):
             return {"code": 101, "data": "[Error] No file was uploaded."}
 
         # 2. 检查文件后缀
-        name, ext = os.path.splitext(upload.filename)
+        _, ext = os.path.splitext(upload.filename)
         ext = ext.lower()
         if ext not in DocSuf:
             return {
@@ -279,7 +341,7 @@ def init(UmiWeb):
 
         # 5. 构造任务对象
         try:
-            doc_unit = _DocUnit(file_path, options)
+            doc_unit = _DocUnit(upload.filename, file_path, options)
             msnID = doc_unit.msnID
             _DocUnitManager.add(msnID, doc_unit)
             return {"code": 100, "data": msnID}
@@ -317,3 +379,32 @@ def init(UmiWeb):
         format = user_data.get("format", "dict")
         is_unread = user_data.get("is_unread", False)
         return doc_unit.get_result(is_data, format, is_unread)
+
+    """
+    获取文件，方法：POST
+    json参数：
+    "id"="",  # 任务ID
+    "file_types"=["pdfLayered"],  # 输出文件类型，可选：
+    # ["txt", "txtPlain", "jsonl", "csv", "pdfLayered", "pdfOneLayer"]
+    "ingore_blank"=True,  # 忽略空白页数
+
+    返回值： {}
+    """
+
+    @UmiWeb.route("/api/doc/files", method="POST")
+    def _files():
+        try:
+            user_data = request.json
+        except Exception as e:
+            return {"code": 101, "data": f"请求无法解析为json。"}
+        if not user_data or "id" not in user_data:
+            return {"code": 102, "data": f"未填写id。"}
+        msnID = user_data["id"]
+        doc_unit = _DocUnitManager.get(msnID)
+        if not doc_unit:
+            return {"code": 103, "data": f"任务 {msnID} 不存在。"}
+
+        file_types = user_data.get("file_types", ["pdfLayered"])
+        ingore_blank = user_data.get("ingore_blank", True)
+
+        return doc_unit.get_files(file_types, ingore_blank)
