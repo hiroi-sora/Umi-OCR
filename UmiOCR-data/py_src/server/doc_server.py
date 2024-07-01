@@ -1,6 +1,7 @@
 import os
 import json
 import time
+import shutil
 from uuid import uuid4
 from PySide2.QtCore import QMutex
 
@@ -71,9 +72,9 @@ class DocUnitError(Exception):
 
 # 单个任务单元
 class _DocUnit:
-    def __init__(self, origin_name, file_path, options):
+    def __init__(self, dir_id, dir_path, origin_path, origin_name, options):
         # 提取文档信息
-        doc_info = MissionDOC.getDocInfo(file_path)
+        doc_info = MissionDOC.getDocInfo(origin_path)
         if "error" in doc_info.keys():
             raise DocUnitError({"code": 201, "data": doc_info["error"]})
 
@@ -116,7 +117,9 @@ class _DocUnit:
 
         # 提交任务
         self.msnID = ""
-        msg = MissionDOC.addMission(msnInfo, file_path, page_range, page_list, password)
+        msg = MissionDOC.addMission(
+            msnInfo, origin_path, page_range, page_list, password
+        )
         if not msg:
             raise DocUnitError({"code": 203, "data": "addMission unknow."})
         if msg.startswith("["):
@@ -124,8 +127,10 @@ class _DocUnit:
         page_list = msnInfo["pageList"]
 
         self.password = password
+        self.dir_id = dir_id
+        self.dir_path = dir_path
         self.origin_name = origin_name
-        self.origin_path = file_path
+        self.origin_path = origin_path
         self.msnID = msg  # 任务ID
         self.results = {}  # 任务结果原始字典，键为页数
         self.pages_count = len(page_list)  # 任务总页数
@@ -201,9 +206,9 @@ class _DocUnit:
             r"%Y-%m-%d %H:%M:%S", time.localtime(self.start_timestamp)
         )
         outputArgd = {
-            "outputDir": UPLOAD_DIR,  # 输出路径
+            "outputDir": self.dir_path,  # 输出路径
             "outputDirType": "specify",
-            "outputFileName": self.msnID,  # 输出文件名（前缀）
+            "outputFileName": "[OCR]_" + self.origin_name,  # 输出文件名（前缀）
             "startDatetime": startDatetime,  # 开始日期
             "ingoreBlank": ingore_blank,  # 忽略空白页数
             "originPath": self.origin_path,  # 原始文件
@@ -309,7 +314,8 @@ def init(UmiWeb):
             return {"code": 101, "data": "[Error] No file was uploaded."}
 
         # 2. 检查文件后缀
-        _, ext = os.path.splitext(upload.filename)
+        origin_name = upload.filename
+        _, ext = os.path.splitext(origin_name)
         ext = ext.lower()
         if ext not in DocSuf:
             return {
@@ -317,13 +323,21 @@ def init(UmiWeb):
                 "data": f"[Error] File extension '{ext}' is not allowed.",
             }
 
-        # 3. 指定文件编号。保存文件
-        file_id = str(uuid4())
-        file_path = os.path.join(UPLOAD_DIR, f"{file_id}{ext}")
+        # 3. 指定文件编号。创建对应目录，保存文件到 ./temp/dir_id/原文件名
+        dir_id = str(uuid4())
+        dir_path = os.path.join(UPLOAD_DIR, f"{dir_id}")
+        dir_path = os.path.abspath(dir_path)  # 将路径转为绝对路径
+        file_path = os.path.join(dir_path, origin_name)
         try:
-            upload.save(file_path, overwrite=True)
+            if os.path.exists(dir_path):  # 如果目录存在，则删除该目录
+                shutil.rmtree(dir_path)
+            os.makedirs(dir_path)  # 重新创建目录
         except Exception as e:
-            return {"code": 103, "data": f"[Error] Failed to save file: {e}"}
+            return {"code": 103, "data": f"[Error] Failed to create dir_id: {e}"}
+        try:
+            upload.save(file_path, overwrite=True)  # 保存文件
+        except Exception as e:
+            return {"code": 104, "data": f"[Error] Failed to save file: {e}"}
 
         # 4. 提取 options 参数
         options = request.forms.get("json")
@@ -331,9 +345,9 @@ def init(UmiWeb):
             try:
                 options = json.loads(options)
             except Exception as e:
-                os.remove(file_path)
+                shutil.rmtree(dir_path)
                 return {
-                    "code": 104,
+                    "code": 105,
                     "data": f"[Error] Invalid JSON format: {options} | {e}",
                 }
         if not isinstance(options, dict):
@@ -341,16 +355,16 @@ def init(UmiWeb):
 
         # 5. 构造任务对象
         try:
-            doc_unit = _DocUnit(upload.filename, file_path, options)
+            doc_unit = _DocUnit(dir_id, dir_path, file_path, origin_name, options)
             msnID = doc_unit.msnID
             _DocUnitManager.add(msnID, doc_unit)
             return {"code": 100, "data": msnID}
         except DocUnitError as e:
-            os.remove(file_path)
+            shutil.rmtree(dir_path)
             return e.data
         except Exception as e:
-            os.remove(file_path)
-            return {"code": 105, "data": f"[Error] Failed to submit mission: {e}"}
+            shutil.rmtree(dir_path)
+            return {"code": 106, "data": f"[Error] Failed to submit mission: {e}"}
 
     """
     获取结果，方法：POST
