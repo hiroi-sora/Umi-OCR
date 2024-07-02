@@ -148,7 +148,7 @@ class _DocUnit:
         self.start_timestamp = time.time()  # 开始时间戳
         self._mutex = QMutex()  # 主锁
 
-    # ========================= 【获取接口】 =========================
+    # ========================= 【接口】 =========================
 
     # 获取结果
     def get_result(
@@ -274,7 +274,7 @@ class _DocUnit:
         # 组合下载地址
         url = f"{base_url}/api/doc/download/{self.dir_id}/{download_name}"
 
-        return {"code": 100, "data": url}
+        return {"code": 100, "data": url, "name": download_name}
 
     # ========================= 【任务控制器的异步回调】 =========================
 
@@ -321,9 +321,20 @@ class _DocUnitManagerClass:
             return None
         return self.doc_units[id]
 
-    def remove(self, id):
+    def clear(self, id):
         if id in self.doc_units:
+            d = self.doc_units[id]
+            # 停止任务
+            if not d.is_done:
+                MissionDOC.stopMissionList([d.msnID])
+                time.sleep(0.1)  # 给一些时间收尾
+            # 删除目录
+            if os.path.exists(d.dir_path):
+                shutil.rmtree(d.dir_path)
+            # 删除对象
             del self.doc_units[id]
+            return True
+        return False
 
 
 _DocUnitManager = _DocUnitManagerClass()
@@ -331,9 +342,10 @@ _DocUnitManager = _DocUnitManagerClass()
 
 # 路由函数
 def init(UmiWeb):
-    # 确保上传文件目录存在
-    if not os.path.exists(UPLOAD_DIR):
-        os.makedirs(UPLOAD_DIR)
+    # 清空上传文件目录内容
+    if os.path.exists(UPLOAD_DIR):
+        shutil.rmtree(UPLOAD_DIR)
+    os.makedirs(UPLOAD_DIR)
 
     """
     上传文档，方法：POST
@@ -469,11 +481,20 @@ def init(UmiWeb):
         base_url = f"{parsed_url.scheme}://{parsed_url.netloc}"
         return doc_unit.get_files(base_url, file_types, ingore_blank)
 
+    # 下载文件
     @UmiWeb.route("/api/doc/download/<id>/<download_name>")
-    def serve_static(id, download_name):
+    def _download_get(id, download_name):
         dir = os.path.join(UPLOAD_DIR, id)
         path = os.path.join(dir, download_name)
         # 安全检测： path 是否在 UPLOAD_DIR 中
         if os.path.commonpath([UPLOAD_DIR]) != os.path.commonpath([UPLOAD_DIR, path]):
             raise HTTPError(103, "[Error] Unauthorized path.")
         return static_file(download_name, root=dir)
+
+    # 清理任务
+    @UmiWeb.route("/api/doc/clear/<id>")
+    def _clear(id):
+        flag = _DocUnitManager.clear(id)
+        if flag:
+            return {"code": 100, "data": "Success"}
+        return {"code": 101, "data": f"{id} does not exist."}
