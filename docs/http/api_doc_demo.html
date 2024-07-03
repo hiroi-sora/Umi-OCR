@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document OCR Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        #log {
+            white-space: pre-wrap;
+            background-color: #f4f4f4;
+            padding: 10px;
+            border: 1px solid #ccc;
+            margin-top: 10px;
+            height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Document OCR Demo</h1>
+    <form id="taskForm">
+        <label for="base_url">Base URL:</label>
+        <input type="text" id="base_url" name="base_url" value="http://127.0.0.1:1224" required>
+        <br><br>
+        <label for="file_path">File Path:</label>
+        <input type="file" id="file_path" name="file_path" required>
+        <br><br>
+        <label for="password">Password:</label>
+        <input type="text" id="password" name="password">
+        <br><br>
+        <button type="submit">Start Task</button>
+        <button type="submit">Stop / Clear</button>
+    </form>
+    <div id="log"></div>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('taskForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const log = document.getElementById('log');
+            const result = document.getElementById('result');
+            log.innerHTML = '';
+            result.innerHTML = '';
+
+            const baseUrl = document.getElementById('base_url').value;
+            const fileInput = document.getElementById('file_path').files[0];
+            const password = document.getElementById('password').value;
+
+            if (!fileInput) {
+                log.innerHTML += "Please select a file.\n";
+                return;
+            }
+
+            const missionOptions = {
+                "doc.extractionMode": "fullPage",
+                "password": password,
+            };
+
+            const downloadOptions = {
+                "file_types": [
+                    "pdfLayered",
+                ],
+                "ingore_blank": false,
+            };
+
+            try {
+                log.innerHTML += "===== 1. Upload file, get task ID =====\n";
+                const formData = new FormData();
+                formData.append('file', fileInput);
+                formData.append('json', JSON.stringify(missionOptions));
+
+                let response = await fetch(`${baseUrl}/api/doc/upload`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Task submission failed: ${response.statusText}`);
+                }
+
+                const resData = await response.json();
+                if (resData.code !== 100) {
+                    throw new Error(`Task submission failed: ${JSON.stringify(resData)}`);
+                }
+
+                const taskId = resData.data;
+                log.innerHTML += `Task ID: ${taskId}\n`;
+
+                log.innerHTML += "===== 2. Poll task status until OCR task ends =====\n";
+                while (true) {
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+
+                    response = await fetch(`${baseUrl}/api/doc/result`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            id: taskId,
+                            is_data: true,
+                            format: 'text',
+                            is_unread: true
+                        })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`Failed to get task status: ${response.statusText}`);
+                    }
+
+                    const statusData = await response.json();
+                    if (statusData.code !== 100) {
+                        throw new Error(`Failed to get task status: ${JSON.stringify(statusData)}`);
+                    }
+
+                    log.innerHTML += `Progress: ${statusData.processed_count}/${statusData.pages_count}\n`;
+                    if (statusData.data) {
+                        log.innerHTML += `${statusData.data}\n========================\n`;
+                    }
+                    if (statusData.is_done) {
+                        if (statusData.state !== 'success') {
+                            throw new Error(`Task execution failed: ${statusData.message}`);
+                        }
+                        log.innerHTML += "OCR task completed.\n";
+                        break;
+                    }
+                }
+
+                log.innerHTML += "===== 3. Generate target file, get download link =====\n";
+                downloadOptions.id = taskId;
+                response = await fetch(`${baseUrl}/api/doc/download`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(downloadOptions)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Failed to get download URL: ${response.statusText}`);
+                }
+
+                const downloadData = await response.json();
+                if (downloadData.code !== 100) {
+                    throw new Error(`Failed to get download URL: ${JSON.stringify(downloadData)}`);
+                }
+
+                const downloadUrl = downloadData.data;
+                const fileName = downloadData.name;
+
+                log.innerHTML += "===== 4. Download target file =====\n";
+                log.innerHTML += `URL: ${downloadUrl}\n`;
+                result.innerHTML = `<a href="${downloadUrl}" target="_blank">Download ${fileName}</a>`;
+
+                log.innerHTML += "======================\nProcess completed.\n";
+
+            } catch (error) {
+                log.innerHTML += `Error: ${error.message}\n`;
+            }
+        });
+    </script>
+</body>
+
+</html>
