@@ -62,23 +62,32 @@ class _MissionDocClass(Mission):
         msnInfo["sourceOnEnd"] = msnInfo["onEnd"] if "onEnd" in msnInfo else None
         msnInfo["onEnd"] = self._preOnEnd
         # =============== pageRange 页面范围 ===============
+        page_count = doc.page_count
         if len(pageList) == 0:
             if isinstance(pageRange, (tuple, list)) and len(pageRange) == 2:
                 a, b = pageRange[0], pageRange[1]
+                if a < 0:
+                    a += page_count + 1
+                if b < 0:
+                    b += page_count + 1
                 if a < 1:
                     return f"[Error] pageRange {pageRange} 范围起始不能小于1"
-                if b > doc.page_count:
+                if b > page_count:
                     return f"[Error] pageRange {pageRange} 范围结束不能大于页数 {doc.page_count}"
                 if a > b:
                     return f"[Error] pageRange {pageRange} 范围错误"
                 pageList = list(range(a - 1, b))
             else:
-                pageList = list(range(0, doc.page_count))
+                pageList = list(range(0, page_count))
         # 检查页数列表合法性
         if len(pageList) == 0:
             return "[Error] 页数列表为空"
-        if not all(isinstance(item, int) for item in pageList):
-            return "[Error] 页数列表内容非整数"
+        for p in pageList:
+            if not isinstance(p, int):
+                return "[Error] 页数列表内容非整数"
+            if not 0 <= p < page_count:
+                return f"[Error] 页数列表超出 1~{page_count} 范围"
+        msnInfo["pageList"] = pageList
         # =============== tbpu文本块后处理 msnInfo["tbpu"] ===============
         argd = msnInfo["argd"]  # 参数
         msnInfo["tbpu"] = []
@@ -90,11 +99,11 @@ class _MissionDocClass(Mission):
                 msnInfo["ignoreArea"]["obj"] = IgnoreArea(iArea)
                 # 范围，负数转为倒数第x页
                 igStart = argd.get("tbpu.ignoreRangeStart", 1)
-                igEnd = argd.get("tbpu.ignoreRangeEnd", doc.page_count)
+                igEnd = argd.get("tbpu.ignoreRangeEnd", page_count)
                 if igStart < 0:
-                    igStart += doc.page_count + 1
+                    igStart += page_count + 1
                 if igEnd < 0:
-                    igEnd += doc.page_count + 1
+                    igEnd += page_count + 1
                 msnInfo["ignoreArea"]["start"] = igStart - 1  # -1是将起始1页转为起始0页
                 msnInfo["ignoreArea"]["end"] = igEnd - 1
                 print(f"忽略区域范围： {igStart} ~ {igEnd}")

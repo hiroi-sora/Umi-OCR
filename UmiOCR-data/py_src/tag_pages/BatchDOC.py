@@ -45,15 +45,16 @@ class BatchDOC(Page):
     def msnDocs(self, docs, argd):
         if self._msnID or self._queuedDocs:
             return "[Error] 有任务进行中，不允许提交新任务。"
-        # 组装参数字典。tbpu分两部分，在MissionDOC中执行ignoreArea，本文件执行parser
-        docArgd = {
-            "tbpu.ignoreArea": argd["tbpu.ignoreArea"],
-            "tbpu.ignoreRangeStart": argd["tbpu.ignoreRangeStart"],
-            "tbpu.ignoreRangeEnd": argd["tbpu.ignoreRangeEnd"],
-        }
-        for k in argd:
-            if k.startswith("ocr.") or k.startswith("doc."):
-                docArgd[k] = argd[k]
+
+        # 从 argd 中提取一些条目，组装 docArgd
+        prefixes = ["ocr.", "doc.", "tbpu."]  # 要提取的条目前缀
+        docArgd = {}
+        for k, v in argd.items():
+            for prefix in prefixes:
+                if k.startswith(prefix):
+                    docArgd[k] = v
+                    break
+
         # 记录任务参数
         self._queuedDocs = docs
         self._argd = argd
@@ -156,10 +157,6 @@ class BatchDOC(Page):
         if type(output) == str:  # 创建输出器失败
             self._onEnd({"path": path}, "[Error] 无法创建输出器。")
             return
-        # 构造排版解析器
-        tbpuList = []
-        if "tbpu.parser" in self._argd:
-            tbpuList.append(getParser(self._argd["tbpu.parser"]))
         # 任务信息
         msnInfo = {
             "onStart": self._onStart,
@@ -169,7 +166,6 @@ class BatchDOC(Page):
             "argd": self._docArgd,
             # 交给 self._onGet 的参数
             "get_output": output,
-            "get_tbpu": tbpuList,
         }
         msnID = MissionDOC.addMission(msnInfo, path, pageRange, password=password)
         if msnID.startswith("["):  # 添加任务失败
@@ -197,21 +193,13 @@ class BatchDOC(Page):
             print(f"[Warning] _onGet 任务ID未在记录。{msnID}")
             return
 
-        # 提取信息
-        output = msnInfo["get_output"]
-        tbpuList = msnInfo["get_tbpu"]
-
         # 为 res 添加信息
         res["page"] = page
         res["fileName"] = f"{page}"
         res["path"] = msnInfo["path"]
 
-        if tbpuList and res["code"] == 100:  # 执行tbpu
-            data = res["data"]
-            for tbpu in tbpuList:
-                data = tbpu.run(data)
-            res["data"] = data
-        for o in output:  # 输出
+        # 输出
+        for o in msnInfo["get_output"]:
             try:
                 o.print(res)
             except Exception as e:

@@ -114,8 +114,8 @@ def initConfigDict(dic):
         if not config["type"] == "":
             if config["type"] == "file":  # 文件选择
                 config["default"] = "" if not config["default"] is None else None
-            elif config["type"] == "var":  # 缓存任意类型
-                config["default"] = "" if not config["default"] is None else None
+            elif config["type"] == "var" and config["default"] is None:  # 任意类型
+                config["default"] = ""
         # 类型：省略type
         else:
             if type(config["default"]) is bool:  # 布尔
