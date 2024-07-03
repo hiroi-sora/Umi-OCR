@@ -30,6 +30,7 @@ UmiOCR-data/runtime
 UmiOCR-data/lib
 UmiOCR-data/plugins/*/
 UmiOCR-data/temp
+UmiOCR-data/temp_doc
 # 允许运行环境压缩包
 !UmiOCR-data/*.7z
 !UmiOCR-data/*.zip

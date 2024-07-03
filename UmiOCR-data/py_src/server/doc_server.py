@@ -28,21 +28,25 @@ def get_doc_options():
         "title": "忽略区域起始",
         "toolTip": "忽略区域生效的页数范围起始。从1开始。",
         "default": 1,
+        "isInt": True,
     }
     opts["tbpu.ignoreRangeEnd"] = {
         "title": "忽略区域结束",
         "toolTip": "忽略区域生效的页数范围结束。可以用负数表示倒数第X页。",
         "default": -1,
+        "isInt": True,
     }
     opts["pageRangeStart"] = {
         "title": "OCR页数起始",
         "toolTip": "OCR的页数范围起始。从1开始。",
         "default": 1,
+        "isInt": True,
     }
     opts["pageRangeEnd"] = {
         "title": "OCR页数结束",
         "toolTip": "OCR的页数范围结束。可以用负数表示倒数第X页。",
         "default": -1,
+        "isInt": True,
     }
     opts["pageList"] = {
         "title": "OCR页数列表",
@@ -58,7 +62,6 @@ def get_doc_options():
     opts["doc.extractionMode"] = {
         "title": "内容提取模式",
         "toolTip": "若一页文档既存在图片又存在文本，如何进行处理。",
-        "default": "",
         "optionsList": [
             ["mixed", "混合OCR/原文本"],
             ["fullPage", "整页强制OCR"],
@@ -379,6 +382,12 @@ def init(UmiWeb):
     os.makedirs(UPLOAD_DIR)
     # 启动自动清理循环
     _DocUnitManager.auto_clear()
+
+    @UmiWeb.route("/api/doc/get_options")
+    def _get_options_json():
+        opts = get_doc_options()
+        res = json.dumps(opts)
+        return res
 
     """
     上传文档，方法：POST
