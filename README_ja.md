@@ -207,8 +207,8 @@ Umi-OCR v2 は、一連の柔軟で使いやすい**タブインターフェー�
 
 ## API の使用:
 
-- コマンドラインマニュアル: [README_CLI.md](docs/README_CLI.md)
-- HTTP API マニュアル: [README_HTTP.md](docs/README_HTTP.md)
+- [コマンドラインマニュアル](docs/README_CLI.md)
+- [HTTP API マニュアル](docs/http/README.md)
 
 ## プロジェクト構造について
 

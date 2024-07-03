@@ -1,7 +1,7 @@
 [Translate to English](https://github-com.translate.goog/hiroi-sora/Umi-OCR/blob/main/docs/README_CLI.md?_x_tr_sl=zh-CN&_x_tr_tl=en&_x_tr_hl=en&_x_tr_pto=wapp)
 
-- 命令行手册： [README_CLI.md](README_CLI.md)
-- HTTP接口手册： [README_HTTP.md](README_HTTP.md)
+- 命令行手册
+- [HTTP接口手册](http/README.md)
 
 # 命令行手册
 
@@ -123,7 +123,7 @@ umi-ocr --screenshot "-->" test.txt
 ```
 
 > 注：由于运行环境的一些限制，Umi-OCR 暂时无法重定向输出流，系统管道重定向符`>`、管道操作符`|`可能失效。  
-> 如果需要用程序 调用命令行指令，但是发现无法收到回传，可使用 [HTTP转发命令行](https://github.com/hiroi-sora/Umi-OCR/blob/main/docs/README_HTTP.md#5-%E5%91%BD%E4%BB%A4%E8%A1%8C-%E6%8E%A5%E5%8F%A3) 代替。
+> 如果需要用程序 调用命令行指令，但是发现无法收到回传，可使用 [HTTP转发命令行](http/argv.md#/argv) 代替。
 
 ---
 

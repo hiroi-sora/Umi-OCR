@@ -87,7 +87,7 @@
 - [文档识别](#文档识别) 从PDF扫描件中提取文本，或转为双层可搜索PDF
 - [全局设置](#全局设置)
 - [命令行调用](docs/README_CLI.md)
-- [HTTP接口](docs/README_HTTP.md)
+- [HTTP接口](docs/http/README.md)
 - [构建项目](#构建项目)
 
 ## 使用源码
@@ -246,8 +246,8 @@ Umi-OCR v2 由一系列灵活好用的**标签页**组成。您可按照自己�
 
 ## 调用接口：
 
-- 命令行手册： [README_CLI.md](docs/README_CLI.md)
-- HTTP接口手册： [README_HTTP.md](docs/README_HTTP.md)
+- [命令行手册](docs/README_CLI.md)
+- [HTTP接口手册](docs/http/README.md)
 
 --- 
 
