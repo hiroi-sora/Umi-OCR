@@ -128,6 +128,8 @@ URL：`/api/ocr/get_options`
   - `number`：数字。如何属性`isInt==true`，那么必须为整数。
   - `var`：特殊类型，具体见 `toolTip` 的说明。
 
+<a id="/api/ocr/options_info"></a>
+
 #### 示例参数具体说明
 
 
@@ -233,12 +235,12 @@ URL：`/api/ocr`
 参数：`json` 字典，值为：
 
 - **base64** ： 必填。待识别图像的 Base64 编码字符串，无需 `data:image/png;base64,` 等前缀。
-- **options** ：可选。参数字典，见查询接口。
+- **options** ：可选。参数字典，见 [查询接口](#/api/ocr/get_options) 。
 
 
 
 <details>
-<summary>参数示例：（点击展开）</summary>
+<summary>options 参数示例：（点击展开）</summary>
 
 ```json
 {

@@ -490,7 +490,7 @@ def init(UmiWeb):
             return {"code": 103, "data": f"任务 {msnID} 不存在。"}
         is_data = user_data.get("is_data", False)
         format = user_data.get("format", "dict")
-        is_unread = user_data.get("is_unread", False)
+        is_unread = user_data.get("is_unread", True)
         return doc_unit.get_result(is_data, format, is_unread)
 
     """
