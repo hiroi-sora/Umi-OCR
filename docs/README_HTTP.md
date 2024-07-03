@@ -65,7 +65,7 @@ URL：`/api/ocr`
     "options": {
         # 通用参数
         "tbpu.parser": "multi_para",
-        "data.format": "json",
+        "data.format": "dict",
         # 引擎参数
         "ocr.angle": false,
         "ocr.language": "简体中文",
