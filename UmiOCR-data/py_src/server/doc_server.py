@@ -6,6 +6,7 @@ import zipfile
 from urllib.parse import urlparse
 from uuid import uuid4
 from PySide2.QtCore import QMutex
+from typing import Dict
 
 from .bottle import request, static_file, HTTPError
 from .ocr_server import get_ocr_options
@@ -13,9 +14,11 @@ from ..ocr.output import Output
 from ..mission.mission_doc import MissionDOC
 from ..utils.utils import initConfigDict, DocSuf
 from ..ocr.output.tools import getDataText
+from call_func import CallFunc
 
-UPLOAD_DIR = "./temp"  # 上传文件目录
-UPLOAD_DIR = os.path.abspath(UPLOAD_DIR)
+UPLOAD_DIR = "./temp_doc"  # 上传文件临时目录
+TEMP_FILE_RETENTION_DURATION = 24  # 任务临时文件保留时长，小时
+TEMP_FILE_CLEANUP_INTERVAL = 0.5  # 自动清理临时文件的间隔，小时
 
 
 # 获取参数模板字典
@@ -65,6 +68,11 @@ def get_doc_options():
     }
     opts = initConfigDict(opts)  # 格式化
     return opts
+
+
+UPLOAD_DIR = os.path.abspath(UPLOAD_DIR)  # 路径转绝对
+TEMP_FILE_RETENTION_DURATION *= 3600  # 小时转为秒
+TEMP_FILE_CLEANUP_INTERVAL *= 3600
 
 
 # 异常类
@@ -146,6 +154,7 @@ class _DocUnit:
         self.state = "waiting"  # 任务状态， waiting running success failure
         self.message = ""  # 如果任务失败，则记录失败信息
         self.start_timestamp = time.time()  # 开始时间戳
+        self.end_timestamp = time.time()  # 任务结束的时间戳
         self._mutex = QMutex()  # 主锁
 
     # ========================= 【接口】 =========================
@@ -276,6 +285,16 @@ class _DocUnit:
 
         return {"code": 100, "data": url, "name": download_name}
 
+    # 清理任务
+    def clear(self):
+        # 停止任务
+        if not self.is_done:
+            MissionDOC.stopMissionList([self.msnID])
+            time.sleep(0.1)  # 给一些时间收尾
+        # 删除目录
+        if os.path.exists(self.dir_path):
+            shutil.rmtree(self.dir_path)
+
     # ========================= 【任务控制器的异步回调】 =========================
 
     def _onStart(self, msnInfo):  # 一个文档 开始
@@ -305,36 +324,48 @@ class _DocUnit:
         else:
             self.state = "failure"
             self.message = msg
+        self.end_timestamp = time.time()  # 刷新结束时间戳
         self._mutex.unlock()
 
 
 # 管理所有任务单元
 class _DocUnitManagerClass:
     def __init__(self):
-        self.doc_units = {}
+        self.doc_units: Dict[str, _DocUnit] = {}
 
-    def add(self, id, unit):
+    # 添加一个任务单元
+    def add(self, id: str, unit: _DocUnit):
         self.doc_units[id] = unit
 
-    def get(self, id):
+    # 获取一个任务单元
+    def get(self, id: str):
         if id not in self.doc_units:
             return None
         return self.doc_units[id]
 
-    def clear(self, id):
+    # 手动清理一个任务
+    def clear(self, id: str):
         if id in self.doc_units:
-            d = self.doc_units[id]
-            # 停止任务
-            if not d.is_done:
-                MissionDOC.stopMissionList([d.msnID])
-                time.sleep(0.1)  # 给一些时间收尾
-            # 删除目录
-            if os.path.exists(d.dir_path):
-                shutil.rmtree(d.dir_path)
-            # 删除对象
+            self.doc_units[id].clear()
             del self.doc_units[id]
             return True
         return False
+
+    # 自动清理
+    def auto_clear(self):
+        # 清理超时的任务和文件
+        if self.doc_units:
+            now = time.time()  # 当前时间戳
+            del_list = []  # 要清理的id
+            for id, unit in self.doc_units.items():
+                if now - unit.end_timestamp > TEMP_FILE_RETENTION_DURATION:
+                    print(f"超时自动清理 {id}")
+                    unit.clear()  # 清理文件
+                    del_list.append(id)
+            for id in del_list:
+                del self.doc_units[id]  # 清理任务对象
+        # 计划下一次清理
+        CallFunc.delay(self.auto_clear, TEMP_FILE_CLEANUP_INTERVAL)
 
 
 _DocUnitManager = _DocUnitManagerClass()
@@ -346,6 +377,8 @@ def init(UmiWeb):
     if os.path.exists(UPLOAD_DIR):
         shutil.rmtree(UPLOAD_DIR)
     os.makedirs(UPLOAD_DIR)
+    # 启动自动清理循环
+    _DocUnitManager.auto_clear()
 
     """
     上传文档，方法：POST
