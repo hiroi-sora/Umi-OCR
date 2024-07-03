@@ -103,7 +103,10 @@ def _sendCmd(argv):
         req = urllib.request.Request(
             url, data=data, headers={"Content-Type": "application/json"}
         )
-        response = urllib.request.urlopen(req)
+        # response = urllib.request.urlopen(req)
+        # 创建一个不使用代理的 opener ，发送请求
+        opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+        response = opener.open(req)
         if response.status == 200:
             res = response.read().decode("utf-8")
         else:
