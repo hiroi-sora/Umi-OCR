@@ -1251,52 +1251,52 @@ For example, when processing screenshots of watermarked images, you can add an i
 <context>
     <name>ImageWithText</name>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageWithText.qml" line="209"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageWithText.qml" line="204"/>
         <source>图片：复制%1字</source>
         <translation>Image: Copy %1 characters</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageWithText.qml" line="213"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageWithText.qml" line="207"/>
         <source>图片：无选中文字</source>
         <translation>Image: No selected text</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageWithText.qml" line="224"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageWithText.qml" line="218"/>
         <source>图片：复制全部%1字</source>
         <translation>Image: Copy all %1 characters</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageWithText.qml" line="282"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageWithText.qml" line="276"/>
         <source>复制&#x3000;&#x3000;（Ctrl+C）</source>
         <translation>Copy (Ctrl+C)</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageWithText.qml" line="283"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageWithText.qml" line="277"/>
         <source>全选&#x3000;&#x3000;（Ctrl+A）</source>
         <translation>Select all (Ctrl+A)</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageWithText.qml" line="284"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageWithText.qml" line="278"/>
         <source>复制图片（Ctrl+X）</source>
         <translation>Copy image (Ctrl+X)</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageWithText.qml" line="285"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageWithText.qml" line="279"/>
         <source>保存图片（Ctrl+S）</source>
         <translation>Save image (Ctrl+S)</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageWithText.qml" line="286"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageWithText.qml" line="280"/>
         <source>显示/隐藏文字（Tab）</source>
         <translation>Show/Hide text (Tab)</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageWithText.qml" line="287"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageWithText.qml" line="281"/>
         <source>用默认应用打开图片</source>
         <translation>Open with the default application</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageWithText.qml" line="288"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageWithText.qml" line="282"/>
         <source>删除图片（Ctrl+D）</source>
         <translation>Delete image (Ctrl+D)</translation>
     </message>
@@ -2079,7 +2079,7 @@ Exception message: %2</translation>
         <translation>Confidence: %1</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ResultLayout/ResultsTableView.qml" line="307"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ResultLayout/ResultsTableView.qml" line="308"/>
         <source>记录：复制%1字</source>
         <translation>History: Copy %1 characters</translation>
     </message>
@@ -2152,37 +2152,38 @@ Exception message: %2</translation>
 <context>
     <name>ScreenshotManager</name>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/ImageManager/ScreenshotManager.qml" line="179"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/ImageManager/ScreenshotManager.qml" line="197"/>
         <source>截图失败</source>
         <translation>Screenshot failed</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/ImageManager/ScreenshotManager.qml" line="116"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/ImageManager/ScreenshotManager.qml" line="198"/>
         <source>上次截图操作未结束，不能进行新的截图！</source>
         <translation>Cannot perform screenshot when previous screenshot operation is not yet completed!</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/ImageManager/ScreenshotManager.qml" line="56"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/ImageManager/ScreenshotManager.qml" line="77"/>
         <source>尚未记录截图区域</source>
         <translation>No screenshot area has been recorded yet</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/ImageManager/ScreenshotManager.qml" line="83"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/ImageManager/ScreenshotManager.qml" line="30"/>
+        <source>显示器： %1
+错误信息： %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../UmiOCR-data/qt_res/qml/ImageManager/ScreenshotManager.qml" line="107"/>
         <source>重复截图失败</source>
         <translation>Failed to repeat screenshot</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/ImageManager/ScreenshotManager.qml" line="83"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/ImageManager/ScreenshotManager.qml" line="106"/>
         <source>未找到匹配的屏幕</source>
         <translation>No matching screen found</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/ImageManager/ScreenshotManager.qml" line="130"/>
-        <source>未知异常！</source>
-        <translation>Unknown exception!</translation>
-    </message>
-    <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/ImageManager/ScreenshotManager.qml" line="30"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/ImageManager/ScreenshotManager.qml" line="38"/>
         <source>屏幕设备名称不相同：
 %1
 %2</source>
@@ -2314,42 +2315,42 @@ Can be set as default off in global settings</translation>
         <translation type="unfinished">Screenshot</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOcrConfigs.qml" line="34"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOcrConfigs.qml" line="36"/>
         <source>粘贴图片</source>
         <translation>Paste image</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOcrConfigs.qml" line="40"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOcrConfigs.qml" line="43"/>
         <source>重复截图</source>
         <translation>Repeat screenshot</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOcrConfigs.qml" line="41"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOcrConfigs.qml" line="44"/>
         <source>重新截取上一次截图的范围</source>
         <translation>Retake the previous screenshot&apos;s range</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOcrConfigs.qml" line="49"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOcrConfigs.qml" line="52"/>
         <source>识图后的操作</source>
         <translation>Action after recognition</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOcrConfigs.qml" line="53"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOcrConfigs.qml" line="56"/>
         <source>复制结果</source>
         <translation>Copy result</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOcrConfigs.qml" line="57"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOcrConfigs.qml" line="60"/>
         <source>弹出主窗口</source>
         <translation>Pop up main window</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOcrConfigs.qml" line="58"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOcrConfigs.qml" line="61"/>
         <source>识图后，如果主窗口最小化或处于后台，则弹到前台</source>
         <translation>After recognition, display the window if the main window was minimized or in the background</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOcrConfigs.qml" line="64"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOcrConfigs.qml" line="67"/>
         <source>其它</source>
         <translation>Others</translation>
     </message>
@@ -2421,102 +2422,107 @@ Can be set as default off in global settings</translation>
         <translation>Sleep</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="36"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="25"/>
+        <source>%1 系统暂不支持电源控制！</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="43"/>
         <source>继续%1</source>
         <translation>Continue %1</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="36"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="43"/>
         <source>取消%1</source>
         <translation>Cancel %1</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="41"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="48"/>
         <source>系统即将%1</source>
         <translation>System will %1</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="48"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="55"/>
         <source>排版解析方案</source>
         <translation>Layout parsing solution</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="49"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="56"/>
         <source>按什么方式，解析和排序图片中的文字块</source>
         <translation>How to parse and sort text blocks within images</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="52"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="59"/>
         <source>多栏-按自然段换行</source>
         <translation>Natural paragraph wrapping</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="53"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="60"/>
         <source>多栏-总是换行</source>
         <translation>Mutil Colum-Always wrap</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="54"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="61"/>
         <source>多栏-无换行</source>
         <translation>Multi column - No wrapping</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="55"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="62"/>
         <source>单栏-按自然段换行</source>
         <translation>Single column - Natural paragraph wrapping</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="56"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="63"/>
         <source>单栏-总是换行</source>
         <translation>Single column - Always wrap</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="57"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="64"/>
         <source>单栏-无换行</source>
         <translation>Single column - No wrapping</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="58"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="65"/>
         <source>单栏-保留缩进</source>
         <translation>Single column - Retain indentation</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="59"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="66"/>
         <source>不做处理</source>
         <translation>No processing</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="67"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="74"/>
         <source>优先内部</source>
         <translation>Internal prioritized</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="68"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="75"/>
         <source>只允许内部</source>
         <translation>Internal only</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="69"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="76"/>
         <source>只允许外部</source>
         <translation>External only</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="70"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="77"/>
         <source>禁用所有通知</source>
         <translation>Disable all notifications</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="72"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="79"/>
         <source>跟随全局设定</source>
         <translation>Follow global settings</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="74"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="81"/>
         <source>通知弹窗类型</source>
         <translation>Notification popup type</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="82"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="89"/>
         <source>通知类型已更改</source>
         <translation>Notification type changed</translation>
     </message>
