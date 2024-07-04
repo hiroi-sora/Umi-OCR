@@ -19,6 +19,13 @@ QtObject {
                     ["shutdown", qsTr("关机")],
                     ["hibernate", qsTr("休眠")],
                 ],
+                "onChanged": (newVal, oldVal)=>{
+                    // TODO: 禁止非 win32 系统修改选项
+                    if(UmiAbout.app.system !=="win32" && newVal !== "") {
+                        qmlapp.popup.message("", qsTr("%1 系统暂不支持电源控制！").arg(UmiAbout.app.system), "warning")
+                        return true
+                    }
+                }
             },
         }
     }
