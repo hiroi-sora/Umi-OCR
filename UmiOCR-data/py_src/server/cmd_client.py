@@ -129,7 +129,7 @@ def _newSend(argv):
 
     appPath = UmiAbout["app"]["path"]
     if not appPath:
-        msg = "未找到 Umi-OCR.exe 的路径，无法启动新进程。请手动启动Umi-OCR后发送指令。\nUmi-OCR.exe path not found, unable to start a new process."
+        msg = "未找到 Umi-OCR 入口路径，无法启动新进程。请手动启动 Umi-OCR 后发送指令。\nUmi-OCR path not found, unable to start a new process."
         os.MessageBox(msg)
         return
     # 启动进程，传入强制参数，避免递归无限启动进程
