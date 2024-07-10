@@ -64,14 +64,14 @@
 
 <div align="center">
   <strong>免费，开源，可批量的离线OCR软件</strong><br>
-  <sub>适用于 Windows7 x64 及以上</sub>
+  <sub>适用于 Windows7 x64 、Linux x64 ( <a href="https://github.com/hiroi-sora/Umi-OCR_runtime_linux">测试中</a> )</sub>
 </div><br>
 
 - **免费**：本项目所有代码开源，完全免费。
 - **方便**：解压即用，离线运行，无需网络。
 - **高效**：自带高效率的离线OCR引擎，内置多种语言识别库。
 - **灵活**：支持命令行、HTTP接口等外部调用方式。
-- **功能**：截图OCR / 批量OCR / PDF识别 / 二维码 / 公式识别（[测试中](https://github.com/hiroi-sora/Umi-OCR/issues/254)）
+- **功能**：截图OCR / 批量OCR / PDF识别 / 二维码 / 公式识别
 
 <p align="center"><img src="https://tupian.li/images/2023/11/19/65599097ab5f4.png" alt="1-标题-1.png" style="width: 80%;"></p>
 
@@ -88,7 +88,7 @@
 - [全局设置](#全局设置)
 - [命令行调用](docs/README_CLI.md)
 - [HTTP接口](docs/http/README.md)
-- [构建项目](#构建项目)
+- [构建项目（Windows、Linux）](#构建项目)
 
 ## 使用源码
 
@@ -157,6 +157,7 @@ Umi-OCR v2 由一系列灵活好用的**标签页**组成。您可按照自己�
 - 左侧的图片预览栏，可直接用鼠标划选复制。
 - 右侧的识别记录栏，可以编辑文字，允许划选多个记录复制。
 - 也支持在别处复制图片，粘贴到Umi-OCR进行识别。
+- 关于 [公式识别](https://github.com/hiroi-sora/Umi-OCR/issues/254) 功能
 
 #### 文本后处理
 
@@ -279,7 +280,8 @@ Umi-OCR v2 由一系列灵活好用的**标签页**组成。您可按照自己�
 
 - [主仓库](https://github.com/hiroi-sora/Umi-OCR) 👈
 - [插件库](https://github.com/hiroi-sora/Umi-OCR_plugins)
-- [Win 运行库](https://github.com/hiroi-sora/Umi-OCR_runtime_windows)
+- [Windows 运行库](https://github.com/hiroi-sora/Umi-OCR_runtime_windows)
+- [Linux 运行库](https://github.com/hiroi-sora/Umi-OCR_runtime_linux)
 
 ### 工程结构：
 
@@ -288,6 +290,7 @@ Umi-OCR v2 由一系列灵活好用的**标签页**组成。您可按照自己�
 ```
 Umi-OCR
 ├─ Umi-OCR.exe
+├─ umi-ocr.sh
 └─ UmiOCR-data
    ├─ main.py **
    ├─ version.py **
@@ -324,14 +327,10 @@ Umi-OCR
 
 ### 后续步骤：
 
-对于不同平台（虽然现在只有Windows），需要不同的运行环境。
+请跳转下述仓库，完成对应平台的开发/运行环境部署。
 
 - [Windows](https://github.com/hiroi-sora/Umi-OCR_runtime_windows)
-- 跨平台的支持筹备中
-
-请跳转上述仓库，完成对应平台的开发/运行环境部署。
-
-本项目也拥有非常简易的一键打包脚本，在以上仓库中查看。
+- [Linux](https://github.com/hiroi-sora/Umi-OCR_runtime_linux)
 
 ---
 
