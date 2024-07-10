@@ -294,10 +294,6 @@ Umi-OCR
 └─ UmiOCR-data
    ├─ main.py **
    ├─ version.py **
-   ├─ site-packages
-   │  └─ python包
-   ├─ runtime
-   │  └─ python解释器
    ├─ qt_res **
    │  └─ 项目qt资源，包括图标和qml源码
    ├─ py_src **
