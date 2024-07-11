@@ -261,7 +261,7 @@ print(json.dumps(res_dict, indent=4, ensure_ascii=False))
 
 ## 1. 文档识别：上传
 
-传入一个base64编码的图片，返回OCR识别结果。
+上传一个文档文件，启动识别任务，返回任务ID。
 
 URL：`/api/doc/upload`
 
