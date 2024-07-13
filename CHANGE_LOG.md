@@ -20,6 +20,13 @@ git clone --single-branch --branch [分支名] https://github.com/hiroi-sora/Umi
 
 # 更新日志 CHANGE LOG
 
+### v2.1.3 beta.1 `2024.7.13`
+
+分支名：`main`
+
+- 新兼容 Linux 平台。
+- 新增：HTTP 文档识别接口。
+
 ### [v2.1.2](https://github.com/hiroi-sora/Umi-OCR/tree/release/2.1.2) `2024.6`
 
 分支名：`release/2.1.2`

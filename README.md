@@ -64,7 +64,7 @@
 
 <div align="center">
   <strong>免费，开源，可批量的离线OCR软件</strong><br>
-  <sub>适用于 Windows7 x64 、Linux x64 ( <a href="https://github.com/hiroi-sora/Umi-OCR_runtime_linux">测试中</a> )</sub>
+  <sub>适用于 Windows7 x64 、Linux x64
 </div><br>
 
 - **免费**：本项目所有代码开源，完全免费。
@@ -96,11 +96,12 @@
 
 ## 下载发行版
 
-以下发布链接均长期维护，提供最新软件版本。
+以下发布链接均长期维护，提供稳定版本的下载。
 
 - **蓝奏云** https://hiroi-sora.lanzoul.com/s/umi-ocr （国内推荐，免注册/无限速）
 - **GitHub** https://github.com/hiroi-sora/Umi-OCR/releases/latest
 - **Source Forge** https://sourceforge.net/projects/umi-ocr
+
 
 <details>
 <summary><b>•&nbsp;&nbsp;Scoop Installer</b>（点击展开）</summary>
@@ -125,7 +126,11 @@ scoop install extras/umi-ocr-paddle
 - 不要同时安装二者，快捷方式可能会被覆盖。但您可以额外导入 [插件](https://github.com/hiroi-sora/Umi-OCR_plugins) ，随时切换不同OCR引擎。
 
 </details>
+</br>
 
+最新测试版（首次推出 Linux 版本）：
+
+- **GitHub** https://github.com/hiroi-sora/Umi-OCR/releases
 
 ## 开始使用
 
@@ -377,11 +382,10 @@ Umi-OCR 项目主要由作者 [hiroi-sora](https://github.com/hiroi-sora) 用业
 
 </details>
 
-##### 即将进行的工作
+##### 正在进行的工作
 
-- [ ] 重构底层插件机制。
-- [ ] 在线 OCR API 插件。
-- [ ] 独立的数学公式识别插件。
+- [ ] Linux 平台移植。
+- [ ] HTTP 文档识别接口。
 
 ##### 远期计划
 
@@ -392,6 +396,9 @@ Umi-OCR 项目主要由作者 [hiroi-sora](https://github.com/hiroi-sora) 用业
 
 但开发途中受限于实际情况，可能更改功能设计、新增及取消功能。
 
+- [ ] 重构底层插件机制。
+- [ ] 在线 OCR API 插件。
+- [ ] 独立的数学公式识别插件。
 - [ ] “数学公式”标签页，提供独立的数学公式识别/Latex渲染。
 - [ ] 检查更新机制。
 - [ ] 排版解析之外的文本后处理模块（如保留数字、半全角字符转换、文本纠错）。
