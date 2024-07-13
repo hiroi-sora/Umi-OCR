@@ -21,7 +21,7 @@
 ---
 
 > [!TIP]
-> 文档识别接口处于开发中，只有最新main分支才有该功能，release发行版暂无。
+> 必须使用最新的 Umi-OCR [v2.1.3（测试版）](https://github.com/hiroi-sora/Umi-OCR/releases) ，才具有文档识别功能。
 
 <a id="/api/doc"></a>
 
