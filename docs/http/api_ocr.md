@@ -5,6 +5,10 @@
 1. [图片OCR：参数查询](#/api/ocr/get_options)
 2. [图片OCR：Base64 识别](#/api/ocr)
 
+### 文档识别（PDF识别）
+
+- [文档识别流程](api_doc.md#/api/doc)
+
 ### 二维码识别
 
 1. [二维码：Base64 识别](api_qrcode.md#/api/qrcode)
