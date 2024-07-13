@@ -148,6 +148,8 @@ def initConfigDict(dic):
                 config["type"] = ""
             if "default" not in config:  # 默认值
                 config["default"] = None
+            if "advanced" not in config:  # 是否为高级选项
+                config["advanced"] = False
             # 记录完整key
             fullKey = prefix + key
             if config["type"] == "group":  # 若是配置项组，递归遍历
@@ -155,7 +157,7 @@ def initConfigDict(dic):
                 toDict[fullKey] = {
                     "title": config["title"],
                     "type": "group",
-                    "advanced": config.advanced,
+                    "advanced": config["advanced"],
                 }
             else:  # 若是配置项
                 toDict[fullKey] = config
