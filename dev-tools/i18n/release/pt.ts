@@ -779,7 +779,7 @@ Por favor, modifique as opções avançadas com cuidado.</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/GlobalConfigsPage/FontPanel.qml" line="115"/>
         <source>内容</source>
-        <translation type="unfinished"></translation>
+        <translation>conteúdo</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/GlobalConfigsPage/FontPanel.qml" line="210"/>
