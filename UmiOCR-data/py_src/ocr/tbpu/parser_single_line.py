@@ -44,6 +44,13 @@ class SingleLine(Tbpu):
                 r1 = r2
             # 处理完一行
             for i2 in range(len(now_line) - 1):
+                # 检查同一行内相邻文本块的水平间隙
+                l1, t1, r1, b1 = now_line[i2]["normalized_bbox"]
+                l2, t2, r2, b2 = now_line[i2 + 1]["normalized_bbox"]
+                h = (b1 + b2 - t1 - l2) * 0.5
+                if l2 - r1 > h * 1.5:  # 间隙太大，强制设置空格
+                    now_line[i2]["end"] = " "
+                    continue
                 letter1 = now_line[i2]["text"][-1]
                 letter2 = now_line[i2 + 1]["text"][0]
                 now_line[i2]["end"] = word_separator(letter1, letter2)
