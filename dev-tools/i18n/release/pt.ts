@@ -36,32 +36,32 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/About/About.qml" line="60"/>
         <source>发布地址</source>
-        <translation type="unfinished"></translation>
+        <translation>Endereço de publicação</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/About/About.qml" line="68"/>
         <source>许可协议</source>
-        <translation type="unfinished"></translation>
+        <translation>Licença de acordo</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/About/About.qml" line="78"/>
         <source>作者</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Autor</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/About/About.qml" line="86"/>
         <source>译者</source>
-        <translation type="unfinished"></translation>
+        <translation>Tradutor</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/About/About.qml" line="112"/>
         <source>运行环境信息（如需请求协助，请提供给开发者）</source>
-        <translation type="unfinished"></translation>
+        <translation>Informações do ambiente de execução (se precisar de assistência, forneça aos desenvolvedores）</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/About/About.qml" line="117"/>
         <source>复制</source>
-        <translation type="unfinished"></translation>
+        <translation>Copiar</translation>
     </message>
 </context>
 <context>
@@ -69,90 +69,92 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="151"/>
         <source>加密</source>
-        <translation type="unfinished"></translation>
+        <translation>Criptografar</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="163"/>
         <source>%1个加密文档</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 documento encriptado</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="164"/>
         <source>请点击文件名填写密码</source>
-        <translation type="unfinished"></translation>
+        <translation>Clique no nome do ficheiro e introduza a palavra-passe</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="72"/>
         <source>文档已加密</source>
-        <translation type="unfinished"></translation>
+        <translation>O documento é encriptado</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="72"/>
         <source>【%1】
 请点击文档名，设置密码</source>
-        <translation type="unfinished"></translation>
+        <translation>【%1】
+Clique no nome do documento para definir uma palavra-passe</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="199"/>
         <source>失败</source>
-        <translation type="unfinished"></translation>
+        <translation>reprovado</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="82"/>
         <source>排队</source>
-        <translation type="unfinished"></translation>
+        <translation>Fila</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="120"/>
         <source>依然关闭</source>
-        <translation type="unfinished"></translation>
+        <translation>Ainda fechado</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="127"/>
         <source>任务正在进行中。
 要结束任务并关闭页面吗？</source>
-        <translation type="unfinished"></translation>
+        <translation>A missão está em curso.
+Quer terminar uma tarefa e fechar a página?</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="268"/>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="277"/>
         <source>文档</source>
-        <translation type="unfinished"></translation>
+        <translation>documentação</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="270"/>
         <source>状态</source>
-        <translation type="unfinished"></translation>
+        <translation>Estado</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="273"/>
         <source>打开文档</source>
-        <translation type="unfinished"></translation>
+        <translation>Abrir o documento</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="275"/>
         <source>拖入文档或文件夹</source>
-        <translation type="unfinished"></translation>
+        <translation>Arrastar para dentro de um documento ou pasta</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="274"/>
         <source>清空</source>
-        <translation type="unfinished"></translation>
+        <translation>vazio</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="52"/>
         <source>文件读取中…</source>
-        <translation type="unfinished"></translation>
+        <translation>Leitura de arquivo…</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="191"/>
         <source>文档识别异常</source>
-        <translation type="unfinished"></translation>
+        <translation>Anomalias no reconhecimento de documentos</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="205"/>
         <source>批量识别完成</source>
-        <translation type="unfinished"></translation>
+        <translation>A identificação do lote está completa</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="271"/>
@@ -162,17 +164,17 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="276"/>
         <source>请选择文档</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecione um documento</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="305"/>
         <source>设置</source>
-        <translation type="unfinished"></translation>
+        <translation>Configurar</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="310"/>
         <source>记录</source>
-        <translation type="unfinished"></translation>
+        <translation>registos</translation>
     </message>
 </context>
 <context>
@@ -180,83 +182,83 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="18"/>
         <source>OCR文本后处理</source>
-        <translation type="unfinished"></translation>
+        <translation>OCR pós-processamento de texto</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="42"/>
         <source>文档处理</source>
-        <translation type="unfinished"></translation>
+        <translation>Processamento de documentos</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="46"/>
         <source>内容提取模式</source>
-        <translation type="unfinished"></translation>
+        <translation>Modo de extração de conteúdo</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="47"/>
         <source>若一页文档既存在图片又存在文本，如何进行处理</source>
-        <translation type="unfinished"></translation>
+        <translation>O que fazer se uma página de documento contém imagens e texto</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="49"/>
         <source>混合OCR/原文本</source>
-        <translation type="unfinished"></translation>
+        <translation>OCR híbrido/texto original</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="50"/>
         <source>整页强制OCR</source>
-        <translation type="unfinished"></translation>
+        <translation>Página inteira forçada OCR</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="51"/>
         <source>仅OCR图片</source>
-        <translation type="unfinished"></translation>
+        <translation>Apenas imagens OCR</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="52"/>
         <source>仅拷贝原有文本</source>
-        <translation type="unfinished"></translation>
+        <translation>Copiar apenas o texto original</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="59"/>
         <source>批量任务</source>
-        <translation type="unfinished"></translation>
+        <translation>Tarefas em massa</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="68"/>
         <source>保存到</source>
-        <translation type="unfinished"></translation>
+        <translation>Salvar para</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="70"/>
         <source>文档原目录</source>
-        <translation type="unfinished"></translation>
+        <translation>Catálogo original do documento</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="71"/>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="75"/>
         <source>指定目录</source>
-        <translation type="unfinished"></translation>
+        <translation>Especificar um diretório</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="76"/>
         <source>必须先指定“保存到指定目录”才生效</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;Salvar no diretório especificado&quot; deve ser especificado primeiro para entrar em vigor</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="80"/>
         <source>OCR结果保存目录</source>
-        <translation type="unfinished"></translation>
+        <translation>OCR resultados salvar diretório</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="83"/>
         <source>文件名格式</source>
-        <translation type="unfinished"></translation>
+        <translation>Formato do arquivo</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="89"/>
         <source>日期时间格式</source>
-        <translation type="unfinished"></translation>
+        <translation>Data hora formato</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="90"/>
@@ -265,82 +267,86 @@
 %M 分钟、 %S 秒 、 %unix 时间戳 
 举例：%Y年%m月%d日_%H-%M
 生成：2023年09月01日_12-13.txt</source>
-        <translation type="unfinished"></translation>
+        <translation>Formato de data para %date no nome do arquivo. Suporte para inserir os seguintes espaços reservados:
+% ano Y, %m mês, %d dia, %H hora,
+%M minutos, %S segundos, %unix timestamp
+Exemplo: % ano Y %m mês %d dia _%H-% m
+Gerado: 09-01-2023 _12-13.txt</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="96"/>
         <source>保存文件类型</source>
-        <translation type="unfinished"></translation>
+        <translation>Salvar o tipo de arquivo</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="102"/>
         <source>layered.pdf 双层可搜索文档</source>
-        <translation type="unfinished"></translation>
+        <translation>Layered.pdf documento pesquisável de duas camadas</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="107"/>
         <source>text.pdf 单层纯文本文档</source>
-        <translation type="unfinished"></translation>
+        <translation>Text.pdf documento de texto simples de camada única</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="108"/>
         <source>创建空白PDF文档，只写入识别文字，不含图片</source>
-        <translation type="unfinished"></translation>
+        <translation>Crie documentos PDF em branco e escreva apenas palavras de reconhecimento, sem imagens</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="112"/>
         <source>txt 标准格式</source>
-        <translation type="unfinished"></translation>
+        <translation>Formato padrão de TXT</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="113"/>
         <source>含识别文字和页数信息</source>
-        <translation type="unfinished"></translation>
+        <translation>Contém texto de identificação e informações sobre o número de páginas</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="117"/>
         <source>p.txt 纯文字格式</source>
-        <translation type="unfinished"></translation>
+        <translation>P.xt formato de texto simples</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="118"/>
         <source>输出所有识别文字</source>
-        <translation type="unfinished"></translation>
+        <translation>Saída de todas as palavras de reconhecimento</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="122"/>
         <source>csv 表格文件(Excel)</source>
-        <translation type="unfinished"></translation>
+        <translation>Arquivo de tabela CSV (Excel)</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="123"/>
         <source>将页数信息和识别内容写入csv表格文件。可用Excel打开，另存为xlsx格式。</source>
-        <translation type="unfinished"></translation>
+        <translation>Escrever informações sobre o número de páginas e conteúdo de identificação em um arquivo de tabela CSV. Disponível para abrir em Excel, salvar como formato XLSX.</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="127"/>
         <source>jsonl 原始信息</source>
-        <translation type="unfinished"></translation>
+        <translation>Jsonl informação original</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="128"/>
         <source>每行为一条json数据，便于第三方程序读取操作</source>
-        <translation type="unfinished"></translation>
+        <translation>Um dado json por comportamento para facilitar a leitura de operações por programas de terceiros</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="134"/>
         <source>忽略空白页</source>
-        <translation type="unfinished"></translation>
+        <translation>Ignorar páginas em branco</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="135"/>
         <source>若某一页没有文字或识别失败，也不会输出错误提示信息</source>
-        <translation type="unfinished"></translation>
+        <translation>Se não houver texto em uma página ou o reconhecimento falhar, uma mensagem de erro não será exibida</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="63"/>
         <source>递归读取子文件夹</source>
-        <translation type="unfinished"></translation>
+        <translation>Leitura recursiva de subpastas</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="23"/>
@@ -350,7 +356,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="64"/>
         <source>导入文件夹时，导入子文件夹中全部文档</source>
-        <translation type="unfinished"></translation>
+        <translation>Ao importar pastas, importe todos os documentos em subpastas</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="84"/>
@@ -372,12 +378,12 @@ Adding placeholders can prevent old files from being overwritten by new files.</
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="103"/>
         <source>保留原有图片，叠加一层透明文字，可以搜索和复制</source>
-        <translation type="unfinished"></translation>
+        <translation>Mantenha a imagem original e sobreponha uma camada de texto transparente que pode ser pesquisada e copiada</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="144"/>
         <source>其它</source>
-        <translation type="unfinished"></translation>
+        <translation>outros</translation>
     </message>
 </context>
 <context>
@@ -385,84 +391,85 @@ Adding placeholders can prevent old files from being overwritten by new files.</
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="98"/>
         <source>依然关闭</source>
-        <translation type="unfinished"></translation>
+        <translation>Ainda está fechado</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="105"/>
         <source>任务正在进行中。
 要结束任务并关闭页面吗？</source>
-        <translation type="unfinished"></translation>
+        <translation>A missão está em curso.
+Quer terminar a tarefa e fechar a página?</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="62"/>
         <source>排队</source>
-        <translation type="unfinished"></translation>
+        <translation>fila</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="123"/>
         <source>处理</source>
-        <translation type="unfinished"></translation>
+        <translation>transformação</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="159"/>
         <source>%1 张图片识别失败！</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 imagem falha no reconhecimento!</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="162"/>
         <source>批量识别完成</source>
-        <translation type="unfinished"></translation>
+        <translation>Identificação em massa concluída</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="170"/>
         <source>批量识别任务异常</source>
-        <translation type="unfinished"></translation>
+        <translation>Identificação em massa de anomalias de tarefa</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="256"/>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="265"/>
         <source>图片</source>
-        <translation type="unfinished"></translation>
+        <translation>imagens</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="258"/>
         <source>耗时</source>
-        <translation type="unfinished"></translation>
+        <translation>efectuado</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="259"/>
         <source>状态</source>
-        <translation type="unfinished"></translation>
+        <translation>estado</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="261"/>
         <source>打开图片</source>
-        <translation type="unfinished"></translation>
+        <translation>Abrir a imagem</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="263"/>
         <source>拖入图片或文件夹</source>
-        <translation type="unfinished"></translation>
+        <translation>Arrastar em imagens ou pastas</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="262"/>
         <source>清空</source>
-        <translation type="unfinished"></translation>
+        <translation>esvaziar</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="264"/>
         <source>请选择图片</source>
-        <translation type="unfinished"></translation>
+        <translation>Por favor, selecione uma imagem</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="293"/>
         <source>设置</source>
-        <translation type="unfinished"></translation>
+        <translation>As configurações</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="298"/>
         <source>记录</source>
-        <translation type="unfinished"></translation>
+        <translation>registos</translation>
     </message>
 </context>
 <context>
@@ -470,53 +477,53 @@ Adding placeholders can prevent old files from being overwritten by new files.</
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="18"/>
         <source>OCR文本后处理</source>
-        <translation type="unfinished"></translation>
+        <translation>OCR pós-processamento de texto</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="23"/>
         <source>忽略区域</source>
-        <translation type="unfinished"></translation>
+        <translation>Ignorar a região</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="25"/>
         <source>进入设置</source>
-        <translation type="unfinished"></translation>
+        <translation>Ir para configurações</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="36"/>
         <source>批量任务</source>
-        <translation type="unfinished"></translation>
+        <translation>Tarefas em massa</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="45"/>
         <source>保存到</source>
-        <translation type="unfinished"></translation>
+        <translation>Salvar para</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="47"/>
         <source>图片原目录</source>
-        <translation type="unfinished"></translation>
+        <translation>Catálogo original da imagem</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="48"/>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="52"/>
         <source>指定目录</source>
-        <translation type="unfinished"></translation>
+        <translation>Especificar um diretório</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="53"/>
         <source>必须先指定“保存到指定目录”才生效</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;Salvar no diretório especificado&quot; deve ser especificado primeiro para entrar em vigor</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="57"/>
         <source>OCR结果保存目录</source>
-        <translation type="unfinished"></translation>
+        <translation>OCR resultados salvar diretório</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="60"/>
         <source>文件名格式</source>
-        <translation type="unfinished"></translation>
+        <translation>Formato do arquivo</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="61"/>
@@ -526,12 +533,17 @@ Adding placeholders can prevent old files from being overwritten by new files.</
 举例：[OCR]_%name_%date
 生成：[OCR]_我的图片_2023-09-01_12-13.txt
 添加占位符可以避免旧文件被新文件覆盖。</source>
-        <translation type="unfinished"></translation>
+        <translation>Não é necessário preencher o nome estendido. Suporte para inserir os seguintes espaços reservados:
+% data hora
+%name nome da pasta original/nome do arquivo
+Exemplo: [OCR]_%name_% data
+Gerado: [OCR]_ minhas images_2023-09-01_12-13.txt
+A adição de espaços reservados evita que os arquivos antigos sejam substituídos por novos.</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="66"/>
         <source>日期时间格式</source>
-        <translation type="unfinished"></translation>
+        <translation>Data hora formato</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="67"/>
@@ -540,97 +552,101 @@ Adding placeholders can prevent old files from being overwritten by new files.</
 %M 分钟、 %S 秒 、 %unix 时间戳 
 举例：%Y年%m月%d日_%H-%M
 生成：2023年09月01日_12-13.txt</source>
-        <translation type="unfinished"></translation>
+        <translation>Formato de data para %date no nome do arquivo. Suporte para inserir os seguintes espaços reservados:
+% ano Y, %m mês, %d dia, %H hora,
+%M minutos, %S segundos, %unix timestamp
+Exemplo: % ano Y %m mês %d dia _%H-% m
+Gerado: 09-01-2023 _12-13.txt</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="73"/>
         <source>保存文件类型</source>
-        <translation type="unfinished"></translation>
+        <translation>Salvar o tipo de arquivo</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="79"/>
         <source>txt 标准格式</source>
-        <translation type="unfinished"></translation>
+        <translation>Formato padrão de TXT</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="80"/>
         <source>含原图片文件名和识别文字</source>
-        <translation type="unfinished"></translation>
+        <translation>Contém o nome do arquivo da imagem original e o texto de reconhecimento</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="84"/>
         <source>p.txt 纯文字格式</source>
-        <translation type="unfinished"></translation>
+        <translation>P.txt formato de texto simples</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="85"/>
         <source>仅输出识别文字，不含图片标题</source>
-        <translation type="unfinished"></translation>
+        <translation>Apenas texto de reconhecimento de saída, sem título de imagem</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="89"/>
         <source>txt 单独文件</source>
-        <translation type="unfinished"></translation>
+        <translation>TXT arquivo separado</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="90"/>
         <source>对每张图片，生成同名txt文件，仅输出识别文字</source>
-        <translation type="unfinished"></translation>
+        <translation>Para cada imagem, um arquivo TXT com o mesmo nome é gerado e apenas as palavras de reconhecimento são exportadas</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="94"/>
         <source>md 图文混排</source>
-        <translation type="unfinished"></translation>
+        <translation>Md mix gráfico e textual</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="95"/>
         <source>Markdown图文混排格式，可用Markdown阅读器浏览文件</source>
-        <translation type="unfinished"></translation>
+        <translation>Formato de mistura de imagem e texto Markdown, leitor Markdown disponível para navegar no arquivo</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="99"/>
         <source>csv 表格文件(Excel)</source>
-        <translation type="unfinished"></translation>
+        <translation>Arquivo de tabela CSV (Excel)</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="100"/>
         <source>将图片信息和识别内容写入csv表格文件。可用Excel打开，另存为xlsx格式。</source>
-        <translation type="unfinished"></translation>
+        <translation>Escreva as informações da imagem e o conteúdo de reconhecimento em um arquivo de tabela CSV. Disponível para abrir em Excel, salvar como formato XLSX.</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="104"/>
         <source>jsonl 原始信息</source>
-        <translation type="unfinished"></translation>
+        <translation>Jsonl informação original</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="105"/>
         <source>每行为一条json数据，便于第三方程序读取操作</source>
-        <translation type="unfinished"></translation>
+        <translation>Um dado json por comportamento para facilitar a leitura de operações por programas de terceiros</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="111"/>
         <source>输出忽略空白图片</source>
-        <translation type="unfinished"></translation>
+        <translation>Saída ignorar imagens em branco</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="112"/>
         <source>若图片没有文字或识别失败，也不会输出错误提示信息</source>
-        <translation type="unfinished"></translation>
+        <translation>Se a imagem não tem texto ou falha de reconhecimento, também não irá emitir mensagem de erro</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="40"/>
         <source>递归读取子文件夹</source>
-        <translation type="unfinished"></translation>
+        <translation>Leitura recursiva de subpastas</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="41"/>
         <source>导入文件夹时，导入子文件夹中全部图片</source>
-        <translation type="unfinished"></translation>
+        <translation>Importar todas as imagens em subpastas ao importar pastas</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="121"/>
         <source>其它</source>
-        <translation type="unfinished"></translation>
+        <translation>outros</translation>
     </message>
 </context>
 <context>
@@ -639,108 +655,110 @@ Adding placeholders can prevent old files from being overwritten by new files.</
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="171"/>
         <source>%1 处理配置项异常：
 %2枚举列表为空。</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 lida com exceções de itens de configuração:
+%2 a lista de enumeração está vazia.</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="457"/>
         <source>重置</source>
-        <translation type="unfinished"></translation>
+        <translation>substituição</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="458"/>
         <source>重置本页上的设定</source>
-        <translation type="unfinished"></translation>
+        <translation>Redefinir as configurações nesta página</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="461"/>
         <source>重置设定</source>
-        <translation type="unfinished"></translation>
+        <translation>Redefinir as configurações</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="463"/>
         <source>要重置本页的设定吗？</source>
-        <translation type="unfinished"></translation>
+        <translation>Deseja redefinir as configurações desta página?</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="471"/>
         <source>高级</source>
-        <translation type="unfinished"></translation>
+        <translation>sénior</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="472"/>
         <source>显示更多高级选项。它们标有 * 号。
 请谨慎修改高级选项。</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar mais opções avançadas. Estão marcados com *.
+Por favor, modifique as opções avançadas com cuidado.</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="649"/>
         <source>展开</source>
-        <translation type="unfinished"></translation>
+        <translation>desdobrar</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="649"/>
         <source>折叠</source>
-        <translation type="unfinished"></translation>
+        <translation>dobras</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="787"/>
         <source>必须为整数</source>
-        <translation type="unfinished"></translation>
+        <translation>Deve ser um número inteiro</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="791"/>
         <source>不能超过</source>
-        <translation type="unfinished"></translation>
+        <translation>Não pode exceder</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="794"/>
         <source>不能低于</source>
-        <translation type="unfinished"></translation>
+        <translation>Não pode ser inferior</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="801"/>
         <source>必须为数字</source>
-        <translation type="unfinished"></translation>
+        <translation>Deve ser um número</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1108"/>
         <source>已取消%1的快捷键。</source>
-        <translation type="unfinished"></translation>
+        <translation>Os atalhos para %1 foram cancelados.</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1118"/>
         <source>更新热键成功</source>
-        <translation type="unfinished"></translation>
+        <translation>Atualizar hotkey com sucesso</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1118"/>
         <source>%1的快捷键为 %2</source>
-        <translation type="unfinished"></translation>
+        <translation>O atalho para %1 é %2</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1126"/>
         <source>%1 快捷键%2已被注册，请尝试另外的按键组合。</source>
-        <translation type="unfinished"></translation>
+        <translation>O atalho %1 %2 já foi registrado. Tente uma combinação de teclas diferente.</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1129"/>
         <source>%1 快捷键%2无法注册，请尝试另外的按键组合。</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 atalhos %2 não foi possível registrar. Por favor, tente uma combinação de teclas diferente.</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1138"/>
         <source>请按下快捷键组合。按【Esc】退出。</source>
-        <translation type="unfinished"></translation>
+        <translation>Por favor, pressione a combinação de atalhos. Pressione [Esc] para sair.</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1151"/>
         <source>当前快捷键录制已在进行，不能同时录制！</source>
-        <translation type="unfinished"></translation>
+        <translation>A gravação de atalho atual já está em andamento e não pode ser gravada ao mesmo tempo!</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1153"/>
         <source>无法录制快捷键</source>
-        <translation type="unfinished"></translation>
+        <translation>Não é possível gravar atalhos</translation>
     </message>
 </context>
 <context>
@@ -748,7 +766,7 @@ Adding placeholders can prevent old files from being overwritten by new files.</
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/DropArea_.qml" line="11"/>
         <source>松手放入文件</source>
-        <translation type="unfinished"></translation>
+        <translation>Solta Põe o ficheiro</translation>
     </message>
 </context>
 <context>
@@ -756,7 +774,7 @@ Adding placeholders can prevent old files from being overwritten by new files.</
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/GlobalConfigsPage/FontPanel.qml" line="107"/>
         <source>界面</source>
-        <translation type="unfinished"></translation>
+        <translation>interface</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/GlobalConfigsPage/FontPanel.qml" line="115"/>
@@ -2458,7 +2476,7 @@ Adding placeholders can prevent old files from being overwritten by new files.</
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="89"/>
         <source>通知类型已更改</source>
-        <translation type="unfinished"></translation>
+        <translation>O tipo de notificação foi alterado</translation>
     </message>
 </context>
 </TS>
