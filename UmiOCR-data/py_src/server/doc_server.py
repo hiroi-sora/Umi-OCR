@@ -1,4 +1,5 @@
 import os
+import re
 import json
 import time
 import shutil
@@ -404,13 +405,31 @@ def init(UmiWeb):
         if not upload:
             return {"code": 101, "data": "[Error] No file was uploaded."}
 
-        # 2. 检查文件后缀
-        origin_name = upload.filename
-        origin_prefix, ext = os.path.splitext(origin_name)
-        ext = ext.lower()
+        # 2. 获取文件名，检查文件后缀
+        # origin_name = upload.filename
+        # 将原始文件名转为合法文件名
+        def filename_convert(raw_filename: str):
+            # 去除前后的空格
+            raw_filename = raw_filename.strip()
+            # 定义非法字符
+            illegal_chars = r'[\/:*?"<>|]'
+            # 替换非法字符
+            sanitized_filename = re.sub(illegal_chars, "_", raw_filename)
+            # 限制文件名长度为255个字符
+            max_length = 255
+            if len(sanitized_filename) > max_length:
+                sanitized_filename = sanitized_filename[:max_length]
+            return sanitized_filename
+
+        try:
+            origin_name = filename_convert(upload.raw_filename)
+            origin_prefix, ext = os.path.splitext(origin_name)
+            ext = ext.lower()
+        except Exception as e:
+            return {"code": 102, "data": f"[Error] Unable to obtain raw_filename: {e}"}
         if ext not in DocSuf:
             return {
-                "code": 102,
+                "code": 103,
                 "data": f"[Error] File extension '{ext}' is not allowed.",
             }
 
@@ -423,18 +442,18 @@ def init(UmiWeb):
         if os.path.commonpath([UPLOAD_DIR]) != os.path.commonpath(
             [UPLOAD_DIR, file_path]
         ):
-            return {"code": 103, "data": f"[Error] Unauthorized path"}
+            return {"code": 104, "data": f"[Error] Unauthorized path"}
 
         try:
             if os.path.exists(dir_path):  # 如果目录存在，则删除该目录
                 shutil.rmtree(dir_path)
             os.makedirs(dir_path)  # 重新创建目录
         except Exception as e:
-            return {"code": 104, "data": f"[Error] Failed to create dir_id: {e}"}
+            return {"code": 105, "data": f"[Error] Failed to create dir_id: {e}"}
         try:
             upload.save(file_path, overwrite=True)  # 保存文件
         except Exception as e:
-            return {"code": 105, "data": f"[Error] Failed to save file: {e}"}
+            return {"code": 106, "data": f"[Error] Failed to save file: {e}"}
 
         # 4. 提取 options 参数
         options = request.forms.get("json")
@@ -444,7 +463,7 @@ def init(UmiWeb):
             except Exception as e:
                 shutil.rmtree(dir_path)
                 return {
-                    "code": 106,
+                    "code": 107,
                     "data": f"[Error] Invalid JSON format: {options} | {e}",
                 }
         if not isinstance(options, dict):
@@ -457,13 +476,14 @@ def init(UmiWeb):
             )
             msnID = doc_unit.msnID
             _DocUnitManager.add(msnID, doc_unit)
+            print(f"添加 HTTP 文档任务: {origin_name}")
             return {"code": 100, "data": msnID}
         except DocUnitError as e:
             shutil.rmtree(dir_path)
             return e.data
         except Exception as e:
             shutil.rmtree(dir_path)
-            return {"code": 107, "data": f"[Error] Failed to submit mission: {e}"}
+            return {"code": 108, "data": f"[Error] Failed to submit mission: {e}"}
 
     """
     获取结果，方法：POST
