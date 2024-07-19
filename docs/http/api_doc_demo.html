@@ -35,11 +35,15 @@
         <input type="text" id="password" name="password">
         <br><br>
         <button type="submit">Start Task</button>
+        <button type="button" id="stopClearTask">Stop/Clear Task</button>
     </form>
     <div id="log"></div>
     <div id="result"></div>
 
     <script>
+        let currentTaskId = null;  // 记录当前任务ID
+        let isTaskRunning = false; // 记录任务状态
+
         document.getElementById('taskForm').addEventListener('submit', async function (event) {
             event.preventDefault();
 
@@ -89,20 +93,21 @@
                     throw new Error(`Task submission failed: ${JSON.stringify(resData)}`);
                 }
 
-                const taskId = resData.data;
-                log.innerHTML += `Task ID: ${taskId}\n`;
+                currentTaskId = resData.data;
+                isTaskRunning = true;
+                log.innerHTML += `Task ID: ${currentTaskId}\n`;
 
                 log.innerHTML += "===== 2. Poll task status until OCR task ends =====\n";
                 while (true) {
                     await new Promise(resolve => setTimeout(resolve, 1000));
-
+                    if (!isTaskRunning) return;
                     response = await fetch(`${baseUrl}/api/doc/result`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
-                            id: taskId,
+                            id: currentTaskId,
                             is_data: true,
                             format: 'text',
                             is_unread: true
@@ -131,8 +136,9 @@
                     }
                 }
 
+                if (!isTaskRunning) return;
                 log.innerHTML += "===== 3. Generate target file, get download link =====\n";
-                downloadOptions.id = taskId;
+                downloadOptions.id = currentTaskId;
                 response = await fetch(`${baseUrl}/api/doc/download`, {
                     method: 'POST',
                     headers: {
@@ -153,11 +159,47 @@
                 const downloadUrl = downloadData.data;
                 const fileName = downloadData.name;
 
+                if (!isTaskRunning) return;
                 log.innerHTML += "===== 4. Download target file =====\n";
                 log.innerHTML += `URL: ${downloadUrl}\n`;
                 result.innerHTML = `<a href="${downloadUrl}" target="_blank">Download ${fileName}</a>`;
 
                 log.innerHTML += "======================\nProcess completed.\n";
+                isTaskRunning = false;
+
+            } catch (error) {
+                log.innerHTML += `Error: ${error.message}\n`;
+                isTaskRunning = false;
+            }
+        });
+
+        document.getElementById('stopClearTask').addEventListener('click', async function () {
+            const log = document.getElementById('log');
+            const baseUrl = document.getElementById('base_url').value;
+
+            if (!currentTaskId) {
+                log.innerHTML += "No task has been submitted yet.\n";
+                return;
+            }
+
+            log.innerHTML = '';
+            if (isTaskRunning) {
+                isTaskRunning = false;
+                log.innerHTML += "Task stopped.\n";
+            }
+
+            try {
+                const response = await fetch(`${baseUrl}/api/doc/clear/${currentTaskId}`, {
+                    method: 'GET'
+                });
+
+                const resData = await response.json();
+                if (resData.code === 100) {
+                    log.innerHTML += "Cleanup completed.\n";
+                } else {
+                    log.innerHTML += `Error during cleanup: ${JSON.stringify(resData)}\n`;
+                }
+                currentTaskId = null;
 
             } catch (error) {
                 log.innerHTML += `Error: ${error.message}\n`;
