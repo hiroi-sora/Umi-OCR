@@ -67,7 +67,7 @@ class Mission:
 
     # 停止一些任务队列
     def stopMissionList(self, msnIDs):
-        if not type(msnIDs) == list:
+        if not isinstance(msnIDs, list):
             msnIDs = [msnIDs]
         self._msnMutex.lock()  # 上锁
         for msnID in msnIDs:

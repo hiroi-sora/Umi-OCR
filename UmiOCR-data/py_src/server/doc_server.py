@@ -295,9 +295,13 @@ class _DocUnit:
         if not self.is_done:
             MissionDOC.stopMissionList([self.msnID])
             time.sleep(0.1)  # 给一些时间收尾
-        # 删除目录
-        if os.path.exists(self.dir_path):
-            shutil.rmtree(self.dir_path)
+        # 尝试删除目录。如果权限原因无法删除，说明OCR线程还在占用，等待OCR结束。
+        for i in range(20):
+            try:
+                if os.path.exists(self.dir_path):
+                    shutil.rmtree(self.dir_path)
+            except PermissionError:
+                time.sleep(1)
 
     # ========================= 【任务控制器的异步回调】 =========================
 
