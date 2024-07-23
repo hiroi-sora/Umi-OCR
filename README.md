@@ -269,6 +269,7 @@ Umi-OCR v2 由一系列灵活好用的**标签页**组成。您可按照自己�
 | [linzow](https://hosted.weblate.org/user/linzow)                | English, 繁體中文         |
 | [Eric Guo](https://hosted.weblate.org/user/qwedc001)            | English                   |
 | [steven0081](https://hosted.weblate.org/user/steven0081)        | English                   |
+| [Marcos i](https://hosted.weblate.org/user/ultramarkorj9)       | English                   |
 | [plum7x](https://hosted.weblate.org/user/plum7x)                | 繁體中文                  |
 | [hugoalh](https://hosted.weblate.org/user/hugoalh)              | 繁體中文                  |
 | [ドコモ光](https://hosted.weblate.org/user/umren190402)         | 日本語                    |

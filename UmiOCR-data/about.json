@@ -4,8 +4,8 @@
         "major": 2,
         "minor": 1,
         "patch": 3,
-        "prerelease": "beta",
-        "prereleaseNumber": 1,
+        "prerelease": "",
+        "prereleaseNumber": 0,
         "string": "自动生成"
     },
     "fullname": "自动生成",
@@ -53,6 +53,10 @@
                 {
                     "name": "steven0081",
                     "url": "https://hosted.weblate.org/user/steven0081"
+                },
+                {
+                    "name": "Marcos i",
+                    "url": "https://hosted.weblate.org/user/ultramarkorj9"
                 }
             ]
         },
