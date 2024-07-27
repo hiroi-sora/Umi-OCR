@@ -785,13 +785,15 @@ Por favor, modifique as opções avançadas com cuidado.</translation>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/GlobalConfigsPage/FontPanel.qml" line="210"/>
         <source>界面字体：
 软件中大部分UI的字体。</source>
-        <translation type="unfinished"></translation>
+        <translation>Fontes da interface:
+Fontes para a maioria da interface do usuário no software.</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/GlobalConfigsPage/FontPanel.qml" line="218"/>
         <source>内容字体：
 识别结果内容的字体。</source>
-        <translation type="unfinished"></translation>
+        <translation>Fonte de conteúdo:
+Identifique a fonte do conteúdo resultante.</translation>
     </message>
 </context>
 <context>
@@ -799,82 +801,82 @@ Por favor, modifique as opções avançadas com cuidado.</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="20"/>
         <source>快捷方式</source>
-        <translation type="unfinished"></translation>
+        <translation>Atalhos para</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="24"/>
         <source>桌面</source>
-        <translation type="unfinished"></translation>
+        <translation>Área de trabalho</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="32"/>
         <source>开始菜单</source>
-        <translation type="unfinished"></translation>
+        <translation>Iniciar o menu</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="40"/>
         <source>开机自启</source>
-        <translation type="unfinished"></translation>
+        <translation>Inicialização e auto arranque</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="51"/>
         <source>界面和外观</source>
-        <translation type="unfinished"></translation>
+        <translation>Interface e aparência</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="56"/>
         <source>主题</source>
-        <translation type="unfinished"></translation>
+        <translation>tema</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="61"/>
         <source>切换主题</source>
-        <translation type="unfinished"></translation>
+        <translation>Mudar de tema</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="65"/>
         <source>字体</source>
-        <translation type="unfinished"></translation>
+        <translation>O tipo de letra</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="68"/>
         <source>修改字体</source>
-        <translation type="unfinished"></translation>
+        <translation>Modificar a fonte</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="83"/>
         <source>界面与文字大小</source>
-        <translation type="unfinished"></translation>
+        <translation>Interface e tamanho do texto</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="99"/>
         <source>渲染器</source>
-        <translation type="unfinished"></translation>
+        <translation>O renderizador</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="103"/>
         <source>关闭硬件加速</source>
-        <translation type="unfinished"></translation>
+        <translation>Desligue a aceleração de hardware</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="107"/>
         <source>若出现界面闪烁、元素错位等界面异常，尝试切换渲染器或者关闭硬件加速</source>
-        <translation type="unfinished"></translation>
+        <translation>Em caso de anormalidades na interface, como cintilação da interface ou deslocamento de elementos, tente alternar o renderizador ou desligue a aceleração de hardware</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="113"/>
         <source>禁用美化效果</source>
-        <translation type="unfinished"></translation>
+        <translation>Desativar o efeito embelezamento</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="115"/>
         <source>在低配置机器上，禁用动画、阴影等效果可减少部分资源占用</source>
-        <translation type="unfinished"></translation>
+        <translation>Desativar efeitos como animações e sombras reduz parte do uso de recursos em máquinas de configuração baixa</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="121"/>
         <source>图片预览默认显示叠加层</source>
-        <translation type="unfinished"></translation>
+        <translation>Pré-visualização de imagem exibe camadas de sobreposição por padrão</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="123"/>
