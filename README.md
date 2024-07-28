@@ -340,7 +340,7 @@ Umi-OCR
 
 Umi-OCR 项目主要由作者 [hiroi-sora](https://github.com/hiroi-sora) 用业余时间在开发和维护。如果您喜欢这款软件，欢迎赞助。
 
-- 国内用户可通过 [爱发电](https://afdian.net/a/hiroi-sora) 赞助作者。
+- 国内用户可通过 [爱发电](https://afdian.com/a/hiroi-sora) 赞助作者。
 
 ## Star History
 
