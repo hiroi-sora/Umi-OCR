@@ -29,7 +29,8 @@ LanguageCodes = {
     "ja_JP": "日本語",  # 日语
     "ko_KR": "한국어",  # 韩语
     "ru_RU": "Русский",  # 俄语
-    "pt_BR": "Português",  # 葡萄牙语
+    "pt": "Português",  # 葡萄牙语
+    "pt_BR": "Português",
     "pt_PT": "Português",
     "it_IT": "Italiano",  # 意大利语
     "nb_NO": "norsk",  # 挪威语
