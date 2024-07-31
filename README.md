@@ -128,10 +128,6 @@ scoop install extras/umi-ocr-paddle
 </details>
 </br>
 
-最新测试版（首次推出 Linux 版本）：
-
-- **GitHub** https://github.com/hiroi-sora/Umi-OCR/releases
-
 ## 开始使用
 
 软件发布包下载为 `.7z` 压缩包或 `.7z.exe` 自解压包。自解压包可在没有安装压缩软件的电脑上，解压文件。
