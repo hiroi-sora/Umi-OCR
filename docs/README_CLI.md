@@ -212,6 +212,8 @@ umi-ocr --call_qml [name] --func [function] --thread [..paras]
 
 示例目标：将一些PDF文档添加到软件，生成双层可搜索PDF。
 
+（提示：这个例子只是用来演示高级指令能做到什么事情。PDF文档识别可以直接调用 [HTTP接口](http/api_doc.md) 。）
+
 做法：
 
 ##### 1. （可选）如果当前没有打开`批量文档`标签页，那么打开它：
