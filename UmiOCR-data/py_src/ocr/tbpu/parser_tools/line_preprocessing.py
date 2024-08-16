@@ -81,8 +81,9 @@ def _getBboxes(textBlocks, rotation_rad):
     return bboxes
 
 
-# 预处理 textBlocks ，将包围盒 ["box"] 转为标准化 bbox
+# 预处理 textBlocks ，将包围盒 ["box"] 转为标准化 bbox ，同时去除 ["text"] 不完整的项
 def linePreprocessing(textBlocks):
+    textBlocks = [i for i in textBlocks if i.get("text", False)]
     # 判断角度
     rotation_rad = _estimateRotation(textBlocks)
     # 获取标准化bbox
