@@ -1,8 +1,8 @@
 # tbpu : text block processing unit 文本块后处理
 
 from .parser_none import ParserNone
-from .ignore_area import IgnoreArea
 
+from .ignore_area import IgnoreArea
 from .parser_multi_para import MultiPara
 from .parser_multi_line import MultiLine
 from .parser_multi_none import MultiNone
