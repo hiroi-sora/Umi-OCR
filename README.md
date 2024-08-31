@@ -377,13 +377,12 @@ Umi-OCR 项目主要由作者 [hiroi-sora](https://github.com/hiroi-sora) 用业
 - 修Bug：文档识别在Windows7系统的兼容性问题。
 - HTTP/命令行接口添加二维码识别/生成功能。 (#423)
 - 二维码接口的文档。
+- Linux 平台移植。
+- HTTP 文档识别接口。
 
 </details>
 
-##### 正在进行的工作
-
-- [ ] Linux 平台移植。
-- [ ] HTTP 文档识别接口。
+<!-- ##### 正在进行的工作 -->
 
 ##### 远期计划
 

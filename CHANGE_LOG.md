@@ -20,21 +20,29 @@ git clone --single-branch --branch [分支名] https://github.com/hiroi-sora/Umi
 
 # 更新日志 CHANGE LOG
 
-### v2.1.3 `2024.7.24`
-
+### v2.1.4 `2024.8.31`
 分支名：`main`
+- 修复：引擎原始输出项的"text"为空时，导致文本分析越界的错误。 (#625)
+- 新增UI语言：葡萄牙语 `Português` 。译者：[@杨鹏](https://hosted.weblate.org/user/ypf)
+- **PaddleOCR 插件相关**：
+  - 修复：布尔类型选项不生效的问题。
+  - 修复： `繁体中文` 配置文件错误的问题。
+  - 优化：调整默认线程/内存限制，默认内存占用不超过系统总内存的一半。
+  - 优化：调整识别语言库结构，精简不必要的文件。
+- **Linux 版本相关**：
+  - 修复：[Docker 部署](https://github.com/hiroi-sora/Umi-OCR_runtime_linux/blob/main/README-docker.md) 在部分旧系统中报错 `'code': 803` 的问题。(#621)
+  - 优化：`glibc` 依赖降级至 `2.31` ，兼容 Debian-11 、 Ubuntu-20 等发行版。
 
-- 修复：HTTP文档识别接口上传的文件名含非ascii字符时，字符会被保留，而不是丢弃。
-- 优化：HTTP文档识别接口的示例代码：Python示例优化了在部分Linux系统中处理含非ascii字符文件名的逻辑。Html示例增加了暂停/清除任务的按钮。
-- 优化：排版解析的 **单栏-单行** 方案，对于间隔较大的两个相邻文本块，会添加空格作为间隔符。
-
-### v2.1.3 beta.1 `2024.7.13`
+### [v2.1.3](https://github.com/hiroi-sora/Umi-OCR/tree/release/2.1.3) `2024.7.23`
+分支名：`release/2.1.3`
 
 - 新兼容 Linux 平台。
-- 新增：HTTP 文档识别接口。
-- 修复：文档中宽高为0的异常图片会导致任务卡住。 (#562)
+- 支持：[Docker 部署](https://github.com/hiroi-sora/Umi-OCR_runtime_linux/blob/main/README-docker.md) 。
+- 新增：HTTP 文档识别接口。👉 [文档](https://github.com/hiroi-sora/Umi-OCR/blob/main/docs/http/api_doc.md#/api/doc)
+- 修复：文档中宽高为0的异常图片会导致任务卡住。
+- 优化：排版解析的 **单栏-单行** 方案，对于间隔较大的两个相邻文本块，会添加空格作为间隔符。
 
-### [v2.1.2](https://github.com/hiroi-sora/Umi-OCR/tree/release/2.1.2) `2024.6`
+### [v2.1.2](https://github.com/hiroi-sora/Umi-OCR/tree/release/2.1.2) `2024.6.5`
 
 分支名：`release/2.1.2`
 
