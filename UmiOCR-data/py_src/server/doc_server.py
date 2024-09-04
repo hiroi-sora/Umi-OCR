@@ -154,7 +154,7 @@ class _DocUnit:
         self.pages_count = len(page_list)  # 任务总页数
         self.processed_count = 0  # 已处理的页数
         self.unread_list = []  # 未读的任务列表
-        self.is_done = False  #  当前任务是否完成
+        self.is_done = False  # 当前任务是否完成
         self.state = "waiting"  # 任务状态， waiting running success failure
         self.message = ""  # 如果任务失败，则记录失败信息
         self.start_timestamp = time.time()  # 开始时间戳

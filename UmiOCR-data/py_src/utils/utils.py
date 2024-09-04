@@ -154,11 +154,6 @@ def initConfigDict(dic):
             fullKey = prefix + key
             if config["type"] == "group":  # 若是配置项组，递归遍历
                 handleConfigGroup(config, fullKey + ".")  # 前缀加深一层
-                toDict[fullKey] = {
-                    "title": config["title"],
-                    "type": "group",
-                    "advanced": config["advanced"],
-                }
             else:  # 若是配置项
                 toDict[fullKey] = config
                 handleConfigItem(config, fullKey)
