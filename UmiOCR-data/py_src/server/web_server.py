@@ -16,7 +16,7 @@ from . import ocr_server
 from . import qrcode_server
 from . import doc_server
 
-BaseRequest.MEMFILE_MAX = 10485760  # 设置单次请求大小上限：10MB
+BaseRequest.MEMFILE_MAX = 104857600  # 设置单次请求大小上限： 100 MB
 
 UmiWeb = Bottle()
 Host = "127.0.0.1"  # 由qml设置
