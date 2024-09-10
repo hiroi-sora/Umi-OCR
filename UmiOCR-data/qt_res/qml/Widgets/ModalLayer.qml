@@ -15,10 +15,13 @@ Rectangle {
 
     onVisibleChanged: {
         focus = visible
-        // 当父组件隐藏，导致子组件连锁隐藏时，显式将visible设为false，
-        // 以避免父组件显示时 子组件也连锁显示，导致的重加载bug。
-        if(!visible)
+        if(!visible) {
+            // 当父组件隐藏，导致子组件连锁隐藏时，显式将visible设为false，
+            // 以避免父组件显示时 子组件也连锁显示，导致的重加载bug。
             visible = false
+            // 主标签页容器重新取得焦点，让主窗口继续接收键盘事件
+            mainContainer.focus = true
+        }
     }
     // Esc 退出
     focus: false

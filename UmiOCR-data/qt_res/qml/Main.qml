@@ -92,6 +92,21 @@ Window {
         anchors.fill: parent
         color: "#00000000"
         radius: size_.windowRadius // 窗口圆角
+        focus: true
+
+        // Esc 关闭窗口
+        Keys.enabled: true
+        Keys.onEscapePressed: {
+            // 如果设置了关闭窗口后隐藏到托盘区，则关闭窗口
+            if(qmlapp.globalConfigs.getValue("window.closeWin2Hide")) {
+                mainWindowRoot.visibility = Window.Hidden
+            }
+            // 否则，最小化窗口，以兼容没有托盘区的平台
+            else {
+                mainWindowRoot.visibility = Window.Minimized
+            }
+            // TODO： Deiban 平台测试！
+        }
 
         // 为了防止主窗启动不显示时，内容的宽度初始值为0，先让内容挂到固定宽度的Item下
         Item {
