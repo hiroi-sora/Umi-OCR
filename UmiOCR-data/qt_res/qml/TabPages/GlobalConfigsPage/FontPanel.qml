@@ -138,6 +138,7 @@ ModalLayer {
 
                         delegate: Rectangle {
                             height: size_.line * 2
+                            implicitWidth: 100
                             implicitHeight: height
                             width: leftTable.width
                             color: fontMouseArea.containsMouse?theme.coverColor2:"#00000000"
