@@ -101,7 +101,7 @@ class BatchOCR(Page):
             "outputDirType": argd["mission.dirType"],
             "outputFileName": argd["mission.fileName"],  # 输出文件名（前缀）
             "startDatetime": argd["startDatetime"],  # 开始日期
-            "ingoreBlank": argd["mission.ingoreBlank"],  # 忽略空白文件
+            "ignoreBlank": argd["mission.ignoreBlank"],  # 忽略空白文件
         }
         try:
             for key in argd.keys():

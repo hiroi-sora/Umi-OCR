@@ -13,7 +13,7 @@ from .output_pdf_one_layer import OutputPdfOneLayer
         "outputDirType": "",  # 输出目录类型，"source" 为原文件目录，"specify"为指定目录
         "outputFileName": "",  # 输出文件名（前缀）
         "startDatetime": "",  # 开始日期字符串（标准格式）
-        "ingoreBlank": True/False,  # 忽略空白文件
+        "ignoreBlank": True/False,  # 忽略空白文件
     }
 """
 Output = {

@@ -15,7 +15,7 @@ class OutputTxtIndividual(Output):
         pass  # 覆盖父类方法
 
     def print(self, res):  # 输出图片结果
-        if not res["code"] == 100 and self.ingoreBlank:
+        if not res["code"] == 100 and self.ignoreBlank:
             return  # 忽略空白图片
         textOut = ""
         if res["code"] == 100:

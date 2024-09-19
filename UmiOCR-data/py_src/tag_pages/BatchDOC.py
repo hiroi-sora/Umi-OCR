@@ -128,7 +128,7 @@ class BatchDOC(Page):
             ],  # 输出目录类型，"source" 为原文件目录
             "outputFileName": outputFileName,  # 输出文件名（前缀）
             "startDatetime": startDatetime,  # 开始日期
-            "ingoreBlank": argd["mission.ingoreBlank"],  # 忽略空白文件
+            "ignoreBlank": argd["mission.ignoreBlank"],  # 忽略空白文件
             "originPath": path,  # 原始文件名
             "password": password,  # 文档密码
         }

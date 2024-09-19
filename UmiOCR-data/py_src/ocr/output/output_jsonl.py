@@ -10,7 +10,7 @@ class OutputJsonl(Output):
         self.dir = argd["outputDir"]  # 输出路径（文件夹）
         self.fileName = argd["outputFileName"]  # 文件名
         self.outputPath = f"{self.dir}/{self.fileName}.jsonl"  # 输出路径
-        self.ingoreBlank = argd["ingoreBlank"]  # 忽略空白文件
+        self.ignoreBlank = argd["ignoreBlank"]  # 忽略空白文件
         # 创建输出文件
         try:
             with open(self.outputPath, "w", encoding="utf-8") as f:  # 覆盖创建文件

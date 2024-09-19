@@ -107,7 +107,7 @@ Configs {
                 },
             },
 
-            "ingoreBlank": {
+            "ignoreBlank": {
                 "title": qsTr("输出忽略空白图片"),
                 "toolTip": qsTr("若图片没有文字或识别失败，也不会输出错误提示信息"),
                 "default": true,

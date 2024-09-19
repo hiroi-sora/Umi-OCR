@@ -210,16 +210,16 @@ class _DocUnit:
         base_url,  # 下载基础url
         file_types=["pdfLayered"],  # 输出文件类型，可选：
         # txt, txtPlain, jsonl, csv, pdfLayered, pdfOneLayer
-        ingore_blank=True,  # 忽略空白页数
+        ignore_blank=True,  # 忽略空白页数
     ):
         if not self.is_done:
             return {"code": 201, "data": f"{self.msnID} 任务尚未结束，无法获取文件"}
         if not self.state == "success":
             return {"code": 201, "data": f"{self.msnID} 任务处理失败，无法获取文件"}
-        if not isinstance(file_types, list) or not isinstance(ingore_blank, bool):
+        if not isinstance(file_types, list) or not isinstance(ignore_blank, bool):
             return {
                 "code": 202,
-                "data": f"参数类型错误： file_types={file_types} , ingore_blank={ingore_blank}",
+                "data": f"参数类型错误： file_types={file_types} , ignore_blank={ignore_blank}",
             }
 
         # 删除旧的文件
@@ -237,7 +237,7 @@ class _DocUnit:
             "outputDirType": "specify",
             "outputFileName": "[OCR]_" + self.origin_prefix,  # 输出文件名（前缀）
             "startDatetime": startDatetime,  # 开始日期
-            "ingoreBlank": ingore_blank,  # 忽略空白页数
+            "ignoreBlank": ignore_blank,  # 忽略空白页数
             "originPath": self.origin_path,  # 原始文件
             "password": self.password,  # 文档密码
         }
@@ -523,7 +523,7 @@ def init(UmiWeb):
     "id"="",  # 任务ID
     "file_types"=["pdfLayered"],  # 输出文件类型，可选：
     # ["txt", "txtPlain", "jsonl", "csv", "pdfLayered", "pdfOneLayer"]
-    "ingore_blank"=True,  # 忽略空白页数
+    "ignore_blank"=True,  # 忽略空白页数
 
     返回值： {}
     """
@@ -542,10 +542,10 @@ def init(UmiWeb):
             return {"code": 103, "data": f"任务 {msnID} 不存在。"}
 
         file_types = user_data.get("file_types", ["pdfLayered"])
-        ingore_blank = user_data.get("ingore_blank", True)
+        ignore_blank = user_data.get("ignore_blank", True)
         parsed_url = urlparse(request.url)
         base_url = f"{parsed_url.scheme}://{parsed_url.netloc}"
-        return doc_unit.get_files(base_url, file_types, ingore_blank)
+        return doc_unit.get_files(base_url, file_types, ignore_blank)
 
     # 下载文件
     @UmiWeb.route("/api/doc/download/<id>/<download_name>")

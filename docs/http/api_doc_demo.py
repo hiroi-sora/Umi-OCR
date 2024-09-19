@@ -105,6 +105,8 @@ download_options = {
         "pdfLayered",
         "pdfOneLayer",
     ],
+    # ↓ `ingore_blank` is a typo. If you are using Umi-OCR version 2.1.4 or earlier, please use this incorrect spelling.
+    # ↓ If you are using the latest code-built version of Umi-OCR, please use the corrected spelling `ignore_blank`.
     "ingore_blank": False,  # Do not ignore blank pages
 }
 download_options["id"] = id

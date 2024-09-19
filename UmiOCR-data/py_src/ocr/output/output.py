@@ -10,10 +10,10 @@ class Output:
         self.dir = argd["outputDir"]  # 输出路径（文件夹）
         self.fileName = argd["outputFileName"]  # 文件名
         self.outputPath = f"{self.dir}/{self.fileName}.txt"  # 输出路径
-        self.ingoreBlank = argd["ingoreBlank"]  # 忽略空白文件
+        self.ignoreBlank = argd["ignoreBlank"]  # 忽略空白文件
 
     def print(self, res):  # 输出图片信息
-        if not res["code"] == 100 and self.ingoreBlank:
+        if not res["code"] == 100 and self.ignoreBlank:
             return  # 忽略空白图片
         textOut = f"图片路径：{res['path']}\n代码：{res['code']}\n"
         if res["code"] == 100:
