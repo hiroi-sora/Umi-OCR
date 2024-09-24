@@ -159,7 +159,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="271"/>
         <source>页数</source>
-        <translation type="unfinished">頁數</translation>
+        <translation>頁數</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="276"/>
@@ -1743,12 +1743,12 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="309"/>
         <source>OCR页数</source>
-        <translation type="unfinished">OCR頁數</translation>
+        <translation>OCR頁數</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="352"/>
         <source>忽略区域页数（全局）</source>
-        <translation type="unfinished">忽略區域頁數（全域）</translation>
+        <translation>忽略區域頁數（全域）</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="317"/>
@@ -2170,7 +2170,7 @@
         <location filename="../../../UmiOCR-data/qt_res/qml/ImageManager/ScreenshotManager.qml" line="30"/>
         <source>显示器： %1
 错误信息： %2</source>
-        <translation type="unfinished">顯示器： %1
+        <translation>顯示器： %1
 錯誤資訊： %2</translation>
     </message>
     <message>
@@ -2425,7 +2425,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="25"/>
         <source>%1 系统暂不支持电源控制！</source>
-        <translation type="unfinished">%1 系統暫不支持電源控制！</translation>
+        <translation>%1 系統暫不支持電源控制！</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="43"/>
