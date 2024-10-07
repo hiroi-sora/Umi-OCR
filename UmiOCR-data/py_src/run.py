@@ -47,12 +47,16 @@ import site
 # 启动主qml。工作路径必须为 UmiOCR-data
 def runQml(engineAddImportPath):
     # ==================== 0. 导入包 ====================
-    from PySide2.QtCore import Qt
+    from PySide2.QtCore import Qt, qInstallMessageHandler
     from PySide2.QtGui import QGuiApplication
     from PySide2.QtQml import QQmlApplicationEngine, qmlRegisterType
 
     from umi_about import UmiAbout  # 项目信息
     from .utils import app_opengl  # 渲染器
+    from .utils.log import get_qt_message_handler  # 日志
+
+    # ==================== 0. QT 日志重定向到 Umi 日志模块 ====================
+    qInstallMessageHandler(get_qt_message_handler())
 
     # ==================== 1. 全局参数设置 ====================
     # 启用 OpenGL 上下文之间的资源共享
