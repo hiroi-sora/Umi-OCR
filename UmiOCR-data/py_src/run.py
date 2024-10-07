@@ -52,8 +52,8 @@ def runQml(engineAddImportPath):
     from PySide2.QtQml import QQmlApplicationEngine, qmlRegisterType
 
     from umi_about import UmiAbout  # 项目信息
+    from umi_log import get_qt_message_handler, logger  # 日志
     from .utils import app_opengl  # 渲染器
-    from .utils.log import get_qt_message_handler  # 日志
 
     # ==================== 0. QT 日志重定向到 Umi 日志模块 ====================
     qInstallMessageHandler(get_qt_message_handler())
@@ -123,7 +123,7 @@ def runQml(engineAddImportPath):
     if res != 0:
         msg = f"Umi-OCR 异常退出。代码：{str(res)}\nUmi-OCR exited abnormally. Code: {str(res)}"
         os.MessageBox(msg)
-    print("###  QML引擎关闭！")
+    logger.info("QML引擎关闭")
 
 
 def main(app_path, engineAddImportPath=""):

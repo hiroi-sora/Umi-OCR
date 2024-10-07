@@ -3,18 +3,18 @@
 
 Python:     =========================
 
-from utils.log import log
+from umi_log import logger
 
-log.debug("调试信息")
-log.info("普通信息")
-log.warning("警告信息")
-log.error("错误信息"))
-log.critical("严重错误信息")
+logger.debug("调试信息")
+logger.info("普通信息")
+logger.warning("警告信息")
+logger.error("错误信息"))
+logger.critical("严重错误信息")
 
 # exc_info 只能在 except 块中开启
 log.error("错误信息", exc_info=True, stack_info=True)
 # 覆盖 LogRecord 的属性
-log.debug("信息", extra={"cover": {"level": logging.ERROR, "filename": "11111"}}
+log.debug("信息", extra={"cover": {"filename": "test.txt", "lineno": 999}}
 
 Qml:     =========================
 
@@ -46,7 +46,7 @@ class _CoverFilter(logging.Filter):
                     setattr(record, k, v)
             return True
         except Exception:
-            log.error("日志过滤错误", exc_info=True, stack_info=True)
+            logger.error("日志过滤错误", exc_info=True, stack_info=True)
             return False
 
 
@@ -177,7 +177,7 @@ class _LogManager:
 
 
 # 全局单例日志记录器
-log = _LogManager.create_logger("Umi-OCR")
+logger = _LogManager.create_logger("Umi-OCR")
 
 
 # 获取 QT 日志重定向器
@@ -204,28 +204,14 @@ def get_qt_message_handler():
             }
         }
         if mode == QtMsgType.QtDebugMsg:
-            log.debug(msg, extra=extra)
+            logger.debug(msg, extra=extra)
         elif mode == QtMsgType.QtInfoMsg:
-            log.info(msg, extra=extra)
+            logger.info(msg, extra=extra)
         elif mode == QtMsgType.QtWarningMsg:
-            log.warning(msg, extra=extra)
+            logger.warning(msg, extra=extra)
         elif mode == QtMsgType.QtCriticalMsg:
-            log.error(msg, extra=extra)
+            logger.error(msg, extra=extra)
         elif mode == QtMsgType.QtFatalMsg:
-            log.critical(msg, extra=extra)
+            logger.critical(msg, extra=extra)
 
     return qt_message_handler
-
-
-"""
-log.debug(
-    "测试",
-    extra={
-        "cover": {
-            "level": logging.ERROR,
-            "filename": "112213321231",
-            "lineno": 999,
-        }
-    },
-)
-"""
