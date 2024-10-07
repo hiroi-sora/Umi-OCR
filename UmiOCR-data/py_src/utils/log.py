@@ -1,6 +1,8 @@
 """
 日志模块
 
+Python:     =========================
+
 from utils.log import log
 
 log.debug("调试信息")
@@ -8,7 +10,6 @@ log.info("普通信息")
 log.warning("警告信息")
 log.error("错误信息"))
 log.critical("严重错误信息")
-log.custom("自定义信息")
 
 # exc_info 只能在 except 块中开启
 log.error("错误信息", exc_info=True, stack_info=True)
@@ -17,12 +18,46 @@ log.debug("信息", extra={"cover": {"level": logging.ERROR, "filename": "11111"
 """
 
 import os
+import sys
 import json
 import logging
 from threading import Lock
 from datetime import datetime
 from logging.handlers import RotatingFileHandler
 from logging import LogRecord
+
+
+# 覆盖过滤器
+class _CoverFilter(logging.Filter):
+    def filter(self, record: LogRecord):
+        try:
+            # 提取自定义信息，覆盖给 record
+            cover = record.__dict__.get("cover", {})
+            for k, v in cover.items():
+                if hasattr(record, k):
+                    setattr(record, k, v)
+            return True
+        except Exception:
+            log.error("日志过滤错误", exc_info=True, stack_info=True)
+            return False
+
+
+# 简化日志级别符号的格式化器
+class _LevelFormatter(logging.Formatter):
+    # 定义日志级别和对应符号的映射
+    LEVEL_SYMBOLS = {
+        "DEBUG": "√",
+        "INFO": "i",
+        "WARNING": "?",
+        "ERROR": "×",
+        "CRITICAL": "!",
+    }
+
+    def format(self, record):
+        # 获取符号，如果没有定义则使用默认级别名称
+        levelname = record.levelname
+        record.levelsymbol = self.LEVEL_SYMBOLS.get(levelname, levelname)
+        return super().format(record)
 
 
 # json 文件处理器
@@ -68,15 +103,9 @@ class _JsonRotatingFileHandler(RotatingFileHandler):
         return log_dict
 
     # 发送日志
-    def emit(self, record):
-        # 处理信息
+    def emit(self, record: LogRecord):
+        # 日志信息转字典
         try:
-            # 提取自定义信息，覆盖给 record
-            cover = record.__dict__.get("cover", {})
-            for k, v in cover.items():
-                if hasattr(record, k):
-                    setattr(record, k, v)
-            # 提取字典
             log_dict = self._record_to_dict(record)
         except Exception:
             self.handleError(record)
@@ -99,10 +128,11 @@ class _LogManager:
 
     @staticmethod  # 控制台处理器
     def _get_console_handler():
-        console_handler = logging.StreamHandler()
+        # 显式规定输出到 stderr ，避免干涉命令行使用
+        console_handler = logging.StreamHandler(sys.stderr)
         console_handler.setLevel(logging.DEBUG)
-        fmt = "%(asctime)s %(levelname)s | %(message)s"
-        formatter = logging.Formatter(fmt, datefmt="%H:%M:%S")
+        fmt = "%(asctime)s %(levelsymbol)s %(funcName)s | %(message)s"
+        formatter = _LevelFormatter(fmt, datefmt="%H:%M:%S")  # 使用自定义格式化器
         console_handler.setFormatter(formatter)
         return console_handler
 
@@ -131,6 +161,7 @@ class _LogManager:
     def create_logger(name):
         """创建并返回一个新的日志记录器。"""
         logger = logging.getLogger(name)
+        logger.addFilter(_CoverFilter())  # 添加覆盖过滤器
         logger.setLevel(logging.DEBUG)
         logger.addHandler(_LogManager._get_console_handler())
         logger.addHandler(_LogManager._get_json_handler())
