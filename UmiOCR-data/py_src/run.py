@@ -130,6 +130,7 @@ def main(app_path, engineAddImportPath=""):
     # 初始化运行信息
     site.addsitedir("./py_src/imports")  # 自定义库添加到搜索路径
     import umi_about
+
     if not umi_about.init(app_path):  # 初始化版本信息，失败则结束运行
         sys.exit(0)
 
