@@ -118,6 +118,7 @@ def initRuntimeEnvironment():
     from PySide2.QtCore import QCoreApplication
 
     QCoreApplication.addLibraryPath("./site-packages/PySide2/plugins")
+    1 / 0
 
 
 if __name__ == "__main__":
@@ -125,14 +126,15 @@ if __name__ == "__main__":
         initRuntimeEnvironment()  # 初始化运行环境
     except Exception:
         err = traceback.format_exc()
-        MessageBox("Failed to initialize running environment!\n\n" + err)
-        from py_src.imports.umi_log import logger
+        from py_src.imports.umi_log import logger, Logs_Dir
 
         logger.critical(
             "Failed to initialize running environment!",
             exc_info=True,
             stack_info=True,
         )
+        msg = f"Failed to initialize running environment!\n\n{err}\n\nSave the log file to: {Logs_Dir}"
+        MessageBox(msg)
         sys.exit(0)
     try:
         # 获取 pystand.exe 记录的程序入口环境变量
@@ -143,12 +145,13 @@ if __name__ == "__main__":
         main(app_path=app_path, engineAddImportPath="./site-packages/PySide2/qml")
     except Exception:
         err = traceback.format_exc()
-        MessageBox("Failed to startup main program!\n\n" + err)
-        from py_src.imports.umi_log import logger
+        from py_src.imports.umi_log import logger, Logs_Dir
 
         logger.critical(
             "Failed to startup main program!",
             exc_info=True,
             stack_info=True,
         )
+        msg = f"Failed to startup main program!\n\n{err}\n\nSave the log file to: {Logs_Dir}"
+        MessageBox(msg)
         sys.exit(0)
