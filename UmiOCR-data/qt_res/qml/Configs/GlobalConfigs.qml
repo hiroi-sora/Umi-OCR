@@ -161,7 +161,6 @@ Configs {
                 "title": qsTr("隐藏托盘图标"),
                 "toolTip": qsTr("若要弹出位于后台的软件窗口，请在文件管理器中重复启动软件。\n若要彻底退出软件，请从任务管理器中结束进程。"),
                 "default": false,
-                "advanced": true,
                 "onChanged": changeHideTrayIcon,
             },
             "simpleNotificationType": utilsDicts.getSimpleNotificationType(true),
@@ -203,7 +202,6 @@ Configs {
         "server": {
             "title": qsTr("服务"),
             "type": "group",
-            "advanced": true,
 
             "enable": {
                 "title": qsTr("允许HTTP服务"),
@@ -235,6 +233,42 @@ Configs {
                 // 保存数值，只是用于前端展示。实际端口号由pre_config保存。
                 "onChanged": (port, old)=>{
                     old!==undefined && setServerPort(port)
+                },
+            },
+        },
+
+        // 服务
+        "logs": {
+            "title": qsTr("日志"),
+            "type": "group",
+
+            "btns": {
+                "title": qsTr("操作"),
+                "btnsList": [
+                    {
+                        "text":qsTr("打开日志保存目录"),
+                        "onClicked": globalConfigConn.open_logs_dir,
+                        "textColorKey":"specialTextColor",
+                    },
+                ],
+            },
+            "saveLogLevel": {
+                "title": qsTr("保存的日志级别"),
+                "default": "WARNING",
+                "optionsList": [
+                    ["NONE", "Close"],
+                    ["DEBUG","DEBUG"],
+                    ["INFO","INFO"],
+                    ["WARNING","WARNING"],
+                    ["ERROR","ERROR"],
+                    ["CRITICAL","CRITICAL"],
+                ],
+                "onChanged": (val, old)=>{
+                    // 调整级别，如果修改失败则不动UI
+                    if(!globalConfigConn.change_save_log_level(val))
+                        return true
+                    if(val === "NONE")
+                        qmlapp.popup.simple(qsTr("已禁用日志文件保存"), "")
                 },
             },
         },
