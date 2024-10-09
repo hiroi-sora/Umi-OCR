@@ -118,7 +118,6 @@ def initRuntimeEnvironment():
     from PySide2.QtCore import QCoreApplication
 
     QCoreApplication.addLibraryPath("./site-packages/PySide2/plugins")
-    1 / 0
 
 
 if __name__ == "__main__":
