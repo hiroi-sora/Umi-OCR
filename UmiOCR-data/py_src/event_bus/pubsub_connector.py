@@ -5,6 +5,7 @@
 from PySide2.QtCore import QObject, Slot
 
 from .pubsub_service import PubSubService
+from umi_log import logger
 
 
 class PubSubConnector(QObject):
@@ -17,7 +18,7 @@ class PubSubConnector(QObject):
     def subscribe(self, title, item, funcName):
         func = getattr(item, funcName, None)
         if not func:
-            print(f"[Error] qml订阅事件失败！未在 {item} 中找到函数 {funcName} 。")
+            logger.error(f"qml订阅事件失败！未在 {item} 中找到函数 {funcName} 。")
             return
         PubSubService.subscribe(title, func)
         fKey = title + funcName
@@ -28,7 +29,7 @@ class PubSubConnector(QObject):
     def subscribeGroup(self, title, item, funcName, groupName):
         func = getattr(item, funcName, None)
         if not func:
-            print(f"[Error] qml订阅事件失败！未在 {item} 中找到函数 {funcName} 。")
+            logger.error(f"qml订阅事件失败！未在 {item} 中找到函数 {funcName} 。")
             return
         PubSubService.subscribeGroup(title, func, groupName)
         fKey = title + funcName
@@ -39,7 +40,7 @@ class PubSubConnector(QObject):
     def unsubscribe(self, title, item, funcName):
         fKey = title + funcName
         if fKey not in self._funcDict:
-            print(f"[Warning] qml取消订阅事件失败！fKey {fKey} 未在 __funcDict 中。")
+            logger.error(f"qml订阅事件失败！fKey {fKey} 未在 _funcDict 中。")
             return
         func = self._funcDict[fKey]
         del self._funcDict[fKey]

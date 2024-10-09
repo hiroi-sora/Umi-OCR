@@ -1,10 +1,11 @@
 # 双层可搜索 searchable pdf
 # https://github.com/pymupdf/PyMuPDF/discussions/2299
 
-from .output import Output
-
 import os
 import fitz  # PyMuPDF
+
+from umi_log import logger
+from .output import Output
 
 
 class OutputPdfLayered(Output):
@@ -44,8 +45,8 @@ class OutputPdfLayered(Output):
         pdf = fitz.open("pdf", b)  # 创建PDF文档对象
         try:
             pdf.set_toc(doc.get_toc())  # 复制原始文档的目录
-        except Exception as e:
-            print(f"[Warning] set_toc: {e}")
+        except Exception:
+            logger.warning("pdf.set_toc error", exc_info=True, stack_info=True)
         # 复制原始文档的元数据（如作者、标题等）
         meta = doc.metadata
         if not meta["producer"]:
@@ -57,10 +58,10 @@ class OutputPdfLayered(Output):
         for pinput in doc:
             links = pinput.get_links()
             pout = pdf[pinput.number]
-            for l in links:
-                if l["kind"] == fitz.LINK_NAMED:  # 不处理 named links
+            for link in links:
+                if link["kind"] == fitz.LINK_NAMED:  # 不处理 named links
                     continue
-                pout.insert_link(l)  # 写入新文档
+                pout.insert_link(link)  # 写入新文档
         doc.close()  # 释放原文档
         return pdf
 
@@ -81,7 +82,7 @@ class OutputPdfLayered(Output):
 
     def print(self, res):  # 输出图片结果
         if not self.pdf:
-            print("[Error] PDF对象未初始化！")
+            logger.error("self.pdf 未初始化。")
             return
         pno = res["page"] - 1  # 当前页数
         self.existentPages.append(pno)  # 记录已处理的页面
@@ -125,12 +126,12 @@ class OutputPdfLayered(Output):
         for i in range(len(self.pdf) - 1, -1, -1):
             if i not in self.existentPages:
                 self.pdf.delete_page(i)
-        print(f"保存{len(self.pdf)}页PDF：{self.outputPath}")
+        logger.info(f"保存{len(self.pdf)}页PDF：{self.outputPath}")
         if self.isInsertFont:  # 有任意页面嵌入字体，则构建字体子集
             try:  # 对于部分PDF，如用txt直接打印的，构建字体子集会失败。
                 self.pdf.subset_fonts()  # 构建字体子集，减小文件大小。需要 fontTools 库
-            except Exception as e:  # TODO: 失败原因？可能文件中实际并没有字体？
-                print("[Warning] 构建字体子集失败：", e)
+            except Exception:  # TODO: 失败原因？可能文件中实际并没有字体？
+                logger.error("构建字体子集失败。", exc_info=True, stack_info=True)
             # 保存：压缩并进行3级垃圾回收。等同 ez_save
             self.save(self.pdf, self.outputPath, deflate=True, garbage=3)
         else:
@@ -141,22 +142,30 @@ class OutputPdfLayered(Output):
         try:
             # 尝试保存到指定路径
             pdf.save(path, **options)
-        except Exception as e:
+        except Exception:
             # 保存失败，尝试保存到 ".temp" 路径
             tempPath = self.outputPath + ".temp"
+            logger.warning(f"保存PDF失败。 path: {path}", exc_info=True)
             try:
                 pdf.save(tempPath, **options)
                 pdf.close()
-            except Exception as e:
-                raise Exception(f"[Error] Unable to save PDF to [{tempPath}]: {e}")
+            except Exception as e1:
+                logger.error(
+                    f"保存PDF到临时路径失败。 tempPath: {tempPath}", exc_info=True
+                )
+                raise Exception(f"[Error] Unable to save PDF to [{tempPath}]: {e1}")
             # 已保存到 .temp 并 close 原对象，尝试替换文件
             try:
                 if os.path.exists(path):
                     os.remove(path)
                 os.rename(tempPath, path)
-            except Exception as e:
+            except Exception as e2:
+                logger.warning(
+                    f"保存PDF文件替换失败。保存到临时文件: {tempPath}", exc_info=True
+                )
+
                 raise Exception(
-                    f"[Warning] Unable to save PDF: [{path}]. Exception: {e}. Saved to temporary path: [{tempPath}]."
+                    f"[Warning] Unable to save PDF: [{path}]. Exception: {e2}. Saved to temporary path: [{tempPath}]."
                 )
         else:  # 正常结束
             pdf.close()

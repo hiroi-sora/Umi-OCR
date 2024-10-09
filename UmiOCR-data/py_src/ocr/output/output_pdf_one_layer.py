@@ -1,7 +1,9 @@
 # 单层纯文本 PDF
 
-from .output_pdf_layered import OutputPdfLayered
 import fitz  # PyMuPDF
+
+from umi_log import logger
+from .output_pdf_layered import OutputPdfLayered
 
 
 class OutputPdfOneLayer(OutputPdfLayered):
@@ -33,7 +35,9 @@ class OutputPdfOneLayer(OutputPdfLayered):
         # 尝试复制原始文档的目录数据
         try:
             pdf.set_toc(source_doc.get_toc())
-        except Exception as e:
-            print(f"[Warning] set_toc: {e}")
+        except Exception:
+            logger.warning(
+                f"pdf.set_toc error. path: {path}", exc_info=True, stack_info=True
+            )
         source_doc.close()  # 释放原文档
         return pdf

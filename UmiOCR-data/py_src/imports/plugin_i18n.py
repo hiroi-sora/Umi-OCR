@@ -5,6 +5,8 @@
 import os
 import csv
 
+from umi_log import logger
+
 LangCode = ""
 
 
@@ -39,8 +41,12 @@ class Translator:
                             index = 1  # 找不到对应语言，默认英文
                     for row in csv_reader:
                         self._trDict[row[0]] = row[index]
-        except Exception as e:
-            print("[Error] 加载插件翻译失败：", file, name, e)
+        except Exception:
+            logger.error(
+                f"加载插件翻译失败。 file: {file}, name: {name}",
+                exc_info=True,
+                stack_info=True,
+            )
 
     # 进行翻译。输入原文，返回译文
     def __call__(self, original):

@@ -9,6 +9,8 @@
 
 from PySide2.QtCore import QObject, Slot
 
+from umi_log import logger
+
 # 导入本模块内定义的控制器类
 from .BatchOCR import BatchOCR
 from .BatchDOC import BatchDOC
@@ -94,7 +96,7 @@ class TagPageConnector(QObject):
     @Slot(str, str, list, result="QVariant")
     def callPy(self, ctrlKey, funcName, args):
         if ctrlKey not in self.pages:
-            print(f"【Warning】调用py方法{funcName}，但{ctrlKey}不存在！")
+            logger.warning(f"调用py方法{funcName}，但{ctrlKey}不存在！")
             return None
         page = self.pages[ctrlKey]
         # 获取方法的引用
@@ -106,7 +108,7 @@ class TagPageConnector(QObject):
             page["pyCache"][funcName] = method
         # 查询失败
         if not method:
-            print(f"【Error】调用了{ctrlKey}的不存在的py方法{funcName}！")
+            logger.error(f"调用了{ctrlKey}的不存在的py方法{funcName}！")
             return None
         # 调用方法，参数不对的话让系统抛出错误
         return method(*args)
@@ -114,7 +116,7 @@ class TagPageConnector(QObject):
     # python调用qml的函数（同步）
     def callQml(self, ctrlKey, funcName, *args):
         if ctrlKey not in self.pages:
-            print(f"【Warning】调用qml方法{funcName}，但{ctrlKey}不存在！")
+            logger.warning(f"调用qml方法{funcName}，但{ctrlKey}不存在！")
             return None
         page = self.pages[ctrlKey]
         # 获取方法的引用
@@ -126,7 +128,7 @@ class TagPageConnector(QObject):
             page["qmlCache"][funcName] = method
         # 查询失败
         if not method:
-            print(f"【Error】调用了{ctrlKey}的不存在的qml方法{funcName}！")
+            logger.error(f"调用了{ctrlKey}的不存在的qml方法{funcName}！")
             return None
         # 调用方法，参数不对的话让系统抛出错误
         return method(*args)

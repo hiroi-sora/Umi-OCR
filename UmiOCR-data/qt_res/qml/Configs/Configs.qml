@@ -423,7 +423,7 @@ Item {
         function scrollToGroup(index) {
             const children = panelContainer.children
             if(index < 0 || index >= children.length) {
-                console.log(`[Error] 无法滚动到${index}，超出范围！`)
+                console.error(`无法滚动到${index}，超出范围！`)
                 return
             }
             const c = children[index]

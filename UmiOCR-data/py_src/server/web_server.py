@@ -6,8 +6,7 @@
 from PySide2.QtCore import QThreadPool, QRunnable
 from wsgiref.simple_server import make_server, WSGIServer
 
-import os
-from ..platform import Platform
+from umi_log import logger
 from ..utils import pre_configs
 from ..utils.call_func import CallFunc
 from .bottle import Bottle, ServerAdapter, request, HTTPResponse, response, BaseRequest
@@ -90,11 +89,15 @@ class _WSGIRefServer(ServerAdapter):
                 try:
                     request.shutdown(socket.SHUT_RDWR)
                     request.close()
-                    print("强制关闭连接", request)
+                    logger.info(f"强制关闭连接。 request: {request}")
                 except OSError:
                     pass
-                except Exception as e:
-                    print("[Error] 强制关闭连接异常：", e)
+                except Exception:
+                    logger.error(
+                        f"强制连接异常。 request: {request}",
+                        exc_info=True,
+                        stack_info=True,
+                    )
 
     def run(self, handler):
         import atexit  # 退出处理
@@ -114,22 +117,23 @@ class _WSGIRefServer(ServerAdapter):
                 )
                 break
             except OSError:  # 当前端口号已占用，测试下一位端口号
-                print(f"[Warning] 服务器端口号{self.port}已被占用")
+                logger.warning(f"服务器端口号 {self.port} 已被占用")
                 self.port += 1
                 if self.port > 65535:
                     self.port = 1024
                 pre_configs.setValue("server_port", self.port)  # 写入记录
 
-        print("Listening on http://%s:%d/\n" % (self.host, self.port))
+        logger.info(f"Listening on http://{self.host}:{self.port}")
+        print(f"Listening on http://{self.host}:{self.port}")
         CallFunc.now(QmlCallback, self.port)  # 在主线程中调用回调函数，告知实际端口号
         self.server.serve_forever()
 
     def stop(self):  # 服务终止
         # self.server.server_close() # 备选方案，但会导致 bad fd 异常
-        print("###  WEB服务器准备关闭！")
+        logger.debug("WEB服务器准备关闭！")
         self.server.close_all_request()  # 强制关闭客户端连接
         self.server.shutdown()  # 关闭服务器
-        print("###  WEB服务器已关闭！")
+        logger.info("WEB服务器已关闭！")
 
 
 # ============================== 线程类 ==============================

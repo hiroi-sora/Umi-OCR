@@ -2,15 +2,16 @@
 # =============== Python向Qml传输 Pixmap 图像 ===============
 # ==========================================================
 
-from . import ImageQt
+import os
+from uuid import uuid4  # 唯一ID
 from urllib.parse import unquote
-from ..platform import Platform
-
 from PySide2.QtCore import Qt, QByteArray, QBuffer
 from PySide2.QtGui import QPixmap, QImage, QPainter, QClipboard
 from PySide2.QtQuick import QQuickImageProvider
-from uuid import uuid4  # 唯一ID
-import os
+
+from umi_log import logger
+from . import ImageQt
+from ..platform import Platform
 
 Clipboard = QClipboard()  # 剪贴板
 
@@ -53,8 +54,8 @@ class PixmapProviderClass(QQuickImageProvider):
             return None
         try:
             return ImageQt.fromqimage(im)
-        except Exception as e:
-            print(f"[Error] QPixmap 转 PIL 失败：{e}")
+        except Exception:
+            logger.error("QPixmap 转 PIL 失败。", exc_info=True, stack_info=True)
             return None
 
     # py将PIL对象写回pixmapDict。主要是记录预处理的图像
@@ -63,9 +64,8 @@ class PixmapProviderClass(QQuickImageProvider):
         try:
             pixmap = ImageQt.toqpixmap(img)
         except Exception as e:
-            e = f"[Error] PIL 转 QPixmap 失败：{e}"
-            print(e)
-            return e
+            logger.error("PIL 转 QPixmap 失败。", exc_info=True, stack_info=True)
+            return f"[Error] PIL 转 QPixmap 失败：{e}"
         if not imgID:
             imgID = str(uuid4())
         self.pixmapDict[imgID] = pixmap
@@ -74,12 +74,12 @@ class PixmapProviderClass(QQuickImageProvider):
     # 从pixmapDict缓存中删除一个或一批图片
     # 一般无需手动调用此函数！缓存会自动管理、清除。
     def delPixmap(self, imgIDs):
-        if type(imgIDs) == str:
+        if isinstance(imgIDs, str):
             imgIDs = [imgIDs]
         for i in imgIDs:
             if i in self.pixmapDict:
                 del self.pixmapDict[i]
-        print(f"删除图片缓存，剩余：{len(self.pixmapDict)}")
+        logger.debug(f"删除图片缓存，剩余：{len(self.pixmapDict)}")
 
     # 将 QPixmap 或 QImage 转换为字节
     @staticmethod
@@ -103,7 +103,7 @@ class PixmapProviderClass(QQuickImageProvider):
         if compID in self.compDict:
             last = self.compDict[compID]
             if imgID and imgID == last:
-                print(f"[Warning] 图片组件异常清理： {compID} {imgID}")
+                logger.warning(f"图片组件异常清理： {compID} {imgID}")
                 return  # 如果下一次更新的ID等于当前ID，则为异常，不进行清理
             if last in self.pixmapDict:
                 del self.pixmapDict[last]
@@ -190,19 +190,29 @@ def openImage(path):
         path = im["path"]
     # 若为内存数据，则创建缓存文件
     else:
-        path = f"umi_temp_image.png"
+        path = "umi_temp_image.png"
         try:
             if typ == "pixmap":
                 data = data.toImage()
             data.save(path)
-            print("== 保存临时文件")
+            logger.debug(f"用系统默认应用打开图片时，缓存临时图片到 {path}")
         except Exception as e:
+            logger.error(
+                f"用系统默认应用打开图片时，无法缓存临时图片到 {path}",
+                exc_info=True,
+                stack_info=True,
+            )
             return f"[Error] can't save to temp file: {e}\n{path}"
     # 打开文件
     try:
         Platform.startfile(path)
         return "[Success]"
     except Exception as e:
+        logger.error(
+            f"无法用系统默认应用打开图片 {path}",
+            exc_info=True,
+            stack_info=True,
+        )
         return f"[Error] can't open image: {e}\n{path}"
 
 

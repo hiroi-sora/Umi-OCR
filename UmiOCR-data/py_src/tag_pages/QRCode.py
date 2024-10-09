@@ -53,7 +53,7 @@ class QRCode(Page):
     # 纠错仅用于Aztec、PDF417和QRCode
     def writeBarcode(self, text, format, w=0, h=0, quiet_zone=-1, ec_level=-1):
         img = MissionQRCode.createImage(text, format, w, h, quiet_zone, ec_level)
-        if type(img) == str:
+        if isinstance(img, str):
             return img
         imgID = PixmapProvider.setPilImage(img)
         # 若 setPilImage 失败， imgID.startswith("[Error]")

@@ -1,9 +1,10 @@
 # 输出到csv表格文件
 
+import csv
+
+from umi_log import logger
 from .output import Output
 from .tools import getDataText
-
-import csv
 
 
 class OutputCsv(Output):
@@ -54,7 +55,7 @@ class OutputCsv(Output):
             # except UnicodeEncodeError:
             except Exception:
                 pass
-        print(f"Csv 保存编码： {encoding}")
+        logger.info(f"csv encoding: {encoding}")
         # 创建文件、输出
         headers = ["Name", "OCR", "Path"]  # 表头
         try:

@@ -40,7 +40,7 @@ Item {
     function add(row, ik=-1) {
         const key = row[headerKey]
         if(key in dataDict) {
-            console.log(`[Warning] add: ${key} 已在dataDict中！`)
+            console.warn(`add: ${key} 已在dataDict中！`)
             return false
         }
         if(ik === -1 || ik === rowCount) {
@@ -50,7 +50,7 @@ Item {
         else {
             const i = ik2i(ik)
             if(i < 0) {
-                console.log(`[Warning] add: ik ${ik} ${i} < 0 ！`)
+                console.warn(`add: ik ${ik} ${i} < 0 ！`)
                 return false
             }
             dataDict[key] = i
@@ -63,7 +63,7 @@ Item {
     function del(ik) {
         const i = ik2i(ik)
         if(i < 0) {
-            console.log(`[Warning] del: ik ${ik} ${i} < 0 ！`)
+            console.warn(`del: ik ${ik} ${i} < 0 ！`)
             return false
         }
         const key = dataModel.get(i)[headerKey]
@@ -80,7 +80,7 @@ Item {
     function set(ik, columnDict) {
         const i = ik2i(ik)
         if(i < 0) {
-            console.log(`[Warning] set: ik ${ik} ${i} < 0 ！`)
+            console.warn(`set: ik ${ik} ${i} < 0 ！`)
             return false
         }
         dataModel.set(i, columnDict)
@@ -91,7 +91,7 @@ Item {
     function setProperty(ik, columnKey, value) {
         const i = ik2i(ik)
         if(i < 0) {
-            console.log(`[Warning] setProperty: ik ${ik} ${i} < 0 ！`)
+            console.warn(`setProperty: ik ${ik} ${i} < 0 ！`)
             return false
         }
         dataModel.setProperty(i, columnKey, value)
@@ -113,7 +113,7 @@ Item {
     function get(ik) {
         const i = ik2i(ik)
         if(i < 0) {
-            console.log(`[Warning] get: ik ${ik} ${i} < 0 ！`)
+            console.warn(`get: ik ${ik} ${i} < 0 ！`)
             return {}
         }
         return dataModel.get(i)

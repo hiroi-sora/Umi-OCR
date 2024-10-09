@@ -6,6 +6,7 @@ from PySide2.QtCore import QObject, Slot, Signal
 from PySide2.QtGui import QPixmap, QImage
 import fitz  # PyMuPDF
 
+from umi_log import logger
 from .simple_mission import SimpleMission
 from ..image_controller.image_provider import PixmapProvider
 from ..utils.call_func import CallFunc
@@ -53,7 +54,7 @@ class DocPreviewConnector(QObject):
             self._zooms = {}
         page_count = doc.page_count
         if page < 0 or page > page_count:
-            print(f"[Error] 页数{page}超出范围 0-{page_count} 。")
+            logger.error(f"页数 {page} 超出范围 0-{page_count} 。")
             return
         # 检查页面边长，如果低于阈值，则增加放大系数，以提高渲染清晰度
         rect = doc[page].rect

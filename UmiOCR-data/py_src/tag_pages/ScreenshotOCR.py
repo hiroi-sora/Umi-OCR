@@ -2,15 +2,15 @@
 # =============== 截图OCR页 ===============
 # ========================================
 
+from PySide2.QtGui import QClipboard  # 截图 剪贴板
+
+from umi_log import logger
 from .page import Page  # 页基类
 from ..image_controller.image_provider import PixmapProvider  # 图片提供器
 from ..mission.mission_ocr import MissionOCR  # 任务管理器
 from ..event_bus.pubsub_service import PubSubService  # 发布/订阅管理器
 
 # 只要触发了截图/粘贴/图片识图任务，并结束任务（无论是否成功），都发送 <<ScreenshotOcrEnd>> 事件。
-
-from PySide2.QtGui import QGuiApplication, QClipboard, QImage, QPixmap  # 截图 剪贴板
-import time
 
 Clipboard = QClipboard()  # 剪贴板
 
@@ -36,8 +36,7 @@ class ScreenshotOCR(Page):
             return
         pixmap = PixmapProvider.getPixmap(imgID)
         if not pixmap:
-            e = f'[Error] ScreenshotOCR: imgID "{imgID}" does not exist in the PixmapProvider dict.'
-            print(e)
+            logger.error(f'ScreenshotOCR: imgID "{imgID}" 不存在 PixmapProvider 中')
             return
         self._msnImage(pixmap, imgID, configDict)  # 开始OCR
 

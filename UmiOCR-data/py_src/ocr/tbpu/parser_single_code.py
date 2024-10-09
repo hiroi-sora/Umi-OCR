@@ -24,7 +24,6 @@ class SingleCode(SingleLine):
             if bb[0][0] > ba[1][0]:
                 space = round((bb[0][0] - ba[1][0]) / ha)
             A["text"] += "  " * space + B["text"]
-            print(space, bb[0][0], ba[1][0])
             # 合并包围盒
             yTop = min(ba[0][1], ba[1][1], bb[0][1], bb[1][1])
             yBottom = max(ba[2][1], ba[3][1], bb[2][1], bb[3][1])

@@ -45,14 +45,14 @@ Item {
         let xywh = checkGeometry(mx, my, mw, mh)
         xywh = xywh.join(",")
         qmlapp.globalConfigs.setValue("window.geometry", xywh, false, true)
-        console.log("% 保存窗口位置", xywh)
+        console.log("保存窗口位置", xywh)
     }
     // 读取
     function loadGeometry() {
         let xywh = qmlapp.globalConfigs.getValue("window.geometry")
         xywh = xywh.split(",")
         if(xywh.length < 4) {
-            console.log("% 未能读取窗口位置", xywh)
+            console.log("未能读取窗口位置", xywh)
             return
         }
         for(let i=0; i<4; i++)
@@ -72,7 +72,7 @@ Item {
                 }
         }
         mainWin.screen = Qt.application.screens[screenIndex]
-        console.log("% 读取窗口位置", x, y, w, h, screenIndex)
+        console.log("读取窗口位置", x, y, w, h, screenIndex)
     }
     // 检查窗口位置，返回检查后的值
     function checkGeometry(x, y, w, h) {

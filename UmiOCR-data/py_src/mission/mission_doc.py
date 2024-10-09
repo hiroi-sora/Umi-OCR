@@ -4,16 +4,17 @@
 
 # API所有页数page 均为1开始
 
+import fitz  # PyMuPDF
+import time
+from PIL import Image
+from io import BytesIO
+
+from umi_log import logger
 from .mission import Mission
 from .mission_ocr import MissionOCR
 from ..ocr.tbpu import getParser
 from ..ocr.tbpu import IgnoreArea
 from ..ocr.tbpu.parser_tools.paragraph_parse import word_separator  # 上下句间隔符
-
-import fitz  # PyMuPDF
-import time
-from PIL import Image
-from io import BytesIO
 
 MinSize = 1080  # 最小渲染分辨率
 
@@ -95,7 +96,7 @@ class _MissionDocClass(Mission):
         # 忽略区域
         if "tbpu.ignoreArea" in argd:
             iArea = argd["tbpu.ignoreArea"]
-            if type(iArea) == list and len(iArea) > 0:
+            if isinstance(iArea, list) and len(iArea) > 0:
                 msnInfo["ignoreArea"]["obj"] = IgnoreArea(iArea)
                 # 范围，负数转为倒数第x页
                 igStart = argd.get("tbpu.ignoreRangeStart", 1)
@@ -106,7 +107,7 @@ class _MissionDocClass(Mission):
                     igEnd += page_count + 1
                 msnInfo["ignoreArea"]["start"] = igStart - 1  # -1是将起始1页转为起始0页
                 msnInfo["ignoreArea"]["end"] = igEnd - 1
-                print(f"忽略区域范围： {igStart} ~ {igEnd}")
+                logger.debug(f"忽略区域范围： {igStart} ~ {igEnd} 。")
         # 获取排版解析器对象
         if "tbpu.parser" in argd:
             msnInfo["tbpu"].append(getParser(argd["tbpu.parser"]))
@@ -166,7 +167,7 @@ class _MissionDocClass(Mission):
                     scale_h = h1 / h2
                     # 如果页面有旋转，逆向旋转图片字节
                     if protation != 0:
-                        print(f"    P{pno} - 旋转 {protation} °")
+                        logger.debug(f"P{pno} - 旋转 {protation} °")
                         try:
                             with Image.open(BytesIO(img_bytes)) as pimg:
                                 # 记录原图格式
@@ -179,8 +180,10 @@ class _MissionDocClass(Mission):
                                 buffered = BytesIO()
                                 pimg.save(buffered, format=format)
                                 img_bytes = buffered.getvalue()
-                        except Exception as e:
-                            print(f"[Error] Rotation doc image:", e)
+                        except Exception:
+                            logger.error(
+                                "旋转文档图片异常。", exc_info=True, stack_info=True
+                            )
                     # 记录图片
                     imgs.append(
                         {
@@ -263,8 +266,8 @@ class _MissionDocClass(Mission):
 
         # =============== 组装结果字典 resDict ===============
         if errMsg:
+            logger.error(f"文档识别异常。P{pno}, errMsg: {errMsg}")
             errMsg = f"[Error] Doc P{pno}\n" + errMsg
-            print(errMsg)
 
         if tbs:  # 有文本
             resDict = {"code": 100, "data": tbs}

@@ -155,7 +155,7 @@ Item {
     // 初始化2：应用更改
     function init2() {
         applyConfigs(false)
-        console.log("% OcrManager 初始化OCR管理器完毕！")
+        console.log("OcrManager 初始化OCR管理器完毕！")
     }
 
     // ========================= 【内部】 =========================

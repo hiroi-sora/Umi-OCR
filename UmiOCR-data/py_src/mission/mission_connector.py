@@ -6,6 +6,7 @@ from PySide2.QtCore import QObject, Slot, Signal
 
 # 本模块内定义的任务控制器单例
 from .mission_ocr import MissionOCR
+from umi_log import logger
 
 # 控制器字典
 MsnObjDict = {"ocr": MissionOCR}
@@ -18,14 +19,14 @@ class MissionConnector(QObject):
     @Slot(str, str, list, result="QVariant")
     def callPy(self, msnKey, funcName, args=()):
         if msnKey not in MsnObjDict:
-            print(f"【Error】任务连接器：qml访问不存在的任务控制器{msnKey}")
+            logger.error(f"qml访问不存在的任务控制器 {msnKey} 。")
             return None
         # 获取方法的引用
         msnObj = MsnObjDict[msnKey]
         method = getattr(msnObj, funcName, None)
         # 查询失败
         if not callable(method):
-            print(f"【Error】任务连接器：qml调用了{msnKey}的不存在的py方法{funcName}！")
+            logger.error(f"qml调用了 {msnKey} 的不存在的py方法 {funcName} 。")
             return None
         # 调用方法，参数不对的话让系统抛出错误
         return method(*args)

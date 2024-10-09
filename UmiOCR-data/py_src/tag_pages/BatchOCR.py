@@ -2,17 +2,14 @@
 # =============== 批量OCR页 ===============
 # ========================================
 
+import os
+import time
+
+from umi_log import logger
 from .page import Page  # 页基类
 from ..mission.mission_ocr import MissionOCR  # 任务管理器
 from ..utils.utils import allowedFileName
-from ..platform import Platform  # 跨平台
-
-# 输出器
-from ..ocr.output import Output
-
-import os
-import time
-from PySide2.QtCore import Slot
+from ..ocr.output import Output  # 输出器
 
 
 class BatchOCR(Page):
@@ -45,7 +42,7 @@ class BatchOCR(Page):
         if self.msnID.startswith("[Error]"):  # 添加任务失败
             self._onEnd(None, f"{self.msnID}\n添加任务失败。")
         else:  # 添加成功，通知前端刷新UI
-            print(f"添加任务成功 {self.msnID}")
+            logger.debug(f"添加任务成功 {self.msnID}")
         return self.msnID
 
     def _preprocessArgd(self, argd, path0):  # 预处理参数字典，无异常返回True
@@ -58,10 +55,11 @@ class BatchOCR(Page):
             if not os.path.exists(d):  # 检查地址是否存在
                 try:  # 不存在，尝试创建地址
                     os.makedirs(d)
-                except OSError as e:  # 创建地址失败，报错
+                except OSError:  # 创建地址失败，报错
+                    logger.warning(f"批量OCR无法创建目录： {d}", exc_info=True)
                     self._onEnd(
                         None,
-                        f'[Error] Failed to create directory: "{d}"\n【异常】无法创建路径。',
+                        f'[Error] Failed to create directory: "{d}"\n【异常】无法创建目录。',
                     )
                     return False
             argd["mission.dir"] = d  # 写回字典
@@ -140,14 +138,14 @@ class BatchOCR(Page):
     def _onReady(self, msnInfo, msn):  # 单个任务准备
         msnID = msnInfo["msnID"]
         if msnID != self.msnID:
-            print(f"[Warning] _onReady 任务ID未在记录。{msnID}")
+            logger.warning(f"_onReady 任务ID未在记录。{msnID}")
             return
         self.callQmlInMain("onOcrReady", msn["path"])
 
     def _onGet(self, msnInfo, msn, res):  # 单个任务完成
         msnID = msnInfo["msnID"]
         if msnID != self.msnID:
-            print(f"[Warning] _onGet 任务ID未在记录。{msnID}")
+            logger.warning(f"_onGet 任务ID未在记录。{msnID}")
             return
         # 补充参数
         res["fileName"] = os.path.basename(msn["path"])
@@ -156,8 +154,8 @@ class BatchOCR(Page):
         for o in self.outputList:
             try:
                 o.print(res)
-            except Exception as e:
-                print(f"输出失败：{o}\n{e}")
+            except Exception:
+                logger.error(f"结果输出失败：{o}", exc_info=True, stack_info=True)
         # 通知qml更新UI
         self.callQmlInMain("onOcrGet", msn["path"], res)  # 在主线程中调用qml
 
@@ -165,7 +163,7 @@ class BatchOCR(Page):
         if msnInfo:
             msnID = msnInfo["msnID"]
             if msnID != self.msnID:
-                print(f"[Warning] _onEnd 任务ID未在记录。{msnID}")
+                logger.warning(f"_onEnd 任务ID未在记录。{msnID}")
                 return
         else:
             msnID = ""

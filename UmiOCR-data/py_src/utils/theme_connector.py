@@ -2,7 +2,9 @@
 # =============== 主题连接器 ===============
 # =========================================
 
-from PySide2.QtCore import QObject, Slot, Signal
+from PySide2.QtCore import QObject, Slot
+
+from umi_log import logger
 
 ThemePath = "themes.json"
 
@@ -17,8 +19,8 @@ class ThemeConnector(QObject):
                 return r
         except FileNotFoundError:
             pass
-        except Exception as e:
-            print(f"[Warning] 读取主题文件失败：{e}")
+        except Exception:
+            logger.warning("读取主题文件失败。", exc_info=True)
         return ""
 
     # 保存主题
@@ -27,5 +29,5 @@ class ThemeConnector(QObject):
         try:
             with open(ThemePath, "w", encoding="utf-8") as f:
                 f.write(tstr)
-        except Exception as e:
-            print(f"[Warning] 写入主题文件失败：{e}")
+        except Exception:
+            logger.warning("写入主题文件失败。", exc_info=True)

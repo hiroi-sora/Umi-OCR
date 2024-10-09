@@ -4,6 +4,8 @@
 
 from PySide2.QtCore import QObject, Slot, Signal, QMutex, QThread, QCoreApplication
 
+from umi_log import logger
+
 
 # 发布/订阅 服务类
 class _PubSubServiceClass:
@@ -23,7 +25,7 @@ class _PubSubServiceClass:
     # 订阅事件
     def subscribe(self, title, func):
         if not callable(func):
-            print(f"[Error] 订阅事件失败！{func} 不可调用。")
+            logger.error(f"订阅事件失败！传入 {func} 不是可调用对象。")
             return
         self._eventDictMutex.lock()  # 上锁
         if title not in self._eventDict:
@@ -45,7 +47,7 @@ class _PubSubServiceClass:
     # 取消订阅事件
     def unsubscribe(self, title, func):
         if not callable(func):
-            print(f"[Error] 取消订阅事件失败！{func} 不可调用。")
+            logger.error(f"取消订阅事件失败！传入 {func} 不是可调用对象。")
             return
         # 将回调函数从 对应标题的事件列表中 移除
         self._eventDictMutex.lock()  # 上锁
@@ -79,19 +81,19 @@ class _PubSubServiceClass:
     # 发布事件的实现（主线程）
     @Slot(str, "QVariant")
     def _publish(self, title, args):
-        l = []
+        event_funcs = []
         self._eventDictMutex.lock()  # 上锁
-        if title not in self._eventDict:
-            pass
-        else:
-            l = self._eventDict[title].copy()  # 拷贝一份
+        if title in self._eventDict:
+            event_funcs = self._eventDict[title].copy()  # 拷贝一份
         self._eventDictMutex.unlock()  # 解锁
-        for func in l:
+        for func in event_funcs:
             try:
                 func(*args)
-            except Exception as e:
-                print(
-                    f"[Error] 发送事件异常。{e}\n原始信息： {title} - {args}\nfunc：{func}"
+            except Exception:
+                logger.error(
+                    f"发送事件异常。 title: {title}, args: {args}, func: {func}",
+                    exc_info=True,
+                    stack_info=True,
                 )
 
     # 信号类

@@ -2,6 +2,8 @@
 # =============== OCR 插件接口管理 ===============
 # ===============================================
 
+from umi_log import logger
+
 ApiDict = {}
 AllDict = {}
 
@@ -28,8 +30,8 @@ def getApiOcr(apiKey, argd):
         try:
             return ApiDict[apiKey](argd)  # 实例化后返回
         except Exception as e:
-            print(f"生成api实例{apiKey}失败：{e}")
-            return str(e)
+            logger.error(f"生成api实例{apiKey}失败。", exc_info=True, stack_info=True)
+            return f"[Error] Failed to generate API instance {apiKey}: {e}"
     return f'[Error] "{apiKey}" not in ApiDict.'
 
 

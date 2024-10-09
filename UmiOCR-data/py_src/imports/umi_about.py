@@ -48,6 +48,8 @@ import psutil
 import platform
 from json import load
 
+from umi_log import logger
+
 UmiAbout = None
 
 
@@ -80,7 +82,7 @@ def init(app_path=""):
         app_path = ""
         app_home = ""
         app_dir = ""
-        print("[Warning] 未能获取程序入口路径！")
+        logger.warning("未能获取程序入口路径。")
     # 简短的平台代号
     _plat = sys.platform
     if _plat.startswith("win32"):

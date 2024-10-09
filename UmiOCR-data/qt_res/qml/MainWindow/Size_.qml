@@ -55,7 +55,7 @@ Item {
             textScale = s
         }
         else {
-            console.log("[Warning] 语言缩放系数无法应用：", languageScale)
+            console.warn("语言缩放系数无法应用：", languageScale)
         }
     }
 }

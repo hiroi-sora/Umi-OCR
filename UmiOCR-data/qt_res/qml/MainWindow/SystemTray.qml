@@ -15,7 +15,7 @@ SystemTrayIcon {
         // 检查重复
         const index = findMenuEvent(eventTitle)
         if(index >= 0) {
-            console.log(`[Warning] 注册系统托盘菜单重复！ ${eventTitle} - ${text}`)
+            console.warn(`注册系统托盘菜单重复！ ${eventTitle} - ${text}`)
             return
         }
         const argv = {eventTitle: eventTitle, text_:text, isFunc:func?true:false}
@@ -29,7 +29,7 @@ SystemTrayIcon {
         console.log(`删除系统托盘菜单 ${eventTitle}`)
         const index = findMenuEvent(eventTitle)
         if(index < 0) {
-            console.log(`[Warning] 删除系统托盘菜单，找不到对应项！ ${eventTitle} - ${text}`)
+            console.warn(`删除系统托盘菜单，找不到对应项！ ${eventTitle} - ${text}`)
             return
         }
         const argd = menuModel.get(index)

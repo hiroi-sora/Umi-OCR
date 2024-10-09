@@ -54,11 +54,11 @@ class _CoverFilter(logging.Filter):
 class _LevelFormatter(logging.Formatter):
     # 定义日志级别和对应符号的映射
     LEVEL_SYMBOLS = {
-        "DEBUG": "√",
-        "INFO": "i",
+        "DEBUG": " ",
+        "INFO": "√",
         "WARNING": "?",
         "ERROR": "×",
-        "CRITICAL": "!",
+        "CRITICAL": "×××",
     }
 
     def format(self, record):

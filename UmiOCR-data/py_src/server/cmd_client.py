@@ -2,21 +2,29 @@
 # =============== 命令行-客户端 ===============
 # ============================================
 
-from ..utils import pre_configs
-from ..platform import Platform
-
 import os
 import sys
 import time
 import psutil
+
+from umi_log import logger
+from ..utils import pre_configs
+from ..platform import Platform
 
 
 # 获取进程的创建时间
 def getPidTime(pid):
     try:
         return str(psutil.Process(pid).create_time())
-    except psutil.NoSuchProcess as e:
-        # 虽然psutil.pid_exists验证pid存在，但 Process 无法生成对象
+    except psutil.NoSuchProcess:
+        logger.warning(
+            "psutil.pid_exists(pid) 存在，但 Process 无法生成对象",
+            exc_info=True,
+            stack_info=True,
+        )
+        return ""
+    except Exception:
+        logger.error("psutil.Process(pid) error", exc_info=True, stack_info=True)
         return ""
 
 
@@ -43,6 +51,8 @@ def _output(argv, argument, mode, text):
         path = argv[i + 1]
         del argv[i : i + 2]
     except Exception as e:
+        # logger 输出到 stderr ， print 输出到 stdout
+        logger.error(f"argument {argument} cannot be resolved.", exc_info=True)
         print(f"[Error] argument {argument} cannot be resolved. \n{e}")
         return
     # 相对路径转绝对路径
@@ -57,6 +67,7 @@ def _output(argv, argument, mode, text):
             f.write(text)
         print(f"\nSuccess output to file: {path}")
     except Exception as e:
+        logger.error(f"failed to write file {path} .", exc_info=True)
         print(f"[Error] failed to write file {path} : \n{e}")
         return
 
@@ -85,6 +96,7 @@ def _clip(text):
         else:
             print(f"[Error] clip unsupported OS: {os_type}")
     except Exception as e:
+        logger.error("failed to copy to clipboard.", exc_info=True)
         print(f"[Error] failed to copy to clipboard: {e}")
 
 

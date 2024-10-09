@@ -7,6 +7,7 @@ import shlex
 import subprocess
 from PySide2.QtCore import QStandardPaths as Qsp
 
+from umi_log import logger
 from umi_about import UmiAbout
 
 
@@ -65,7 +66,7 @@ Terminal=false
             with open(lnkPath, "w") as f:
                 f.write(desktop_entry)
             os.chmod(lnkPath, 0o755)  # 赋予执行权限
-            print(f"创建快捷方式： {lnkPath}")
+            logger.info(f"创建快捷方式： {lnkPath}")
             return "[Success]"
         except Exception as e:
             return f"[Error] 创建快捷方式失败。\n[Error] Failed to create shortcut.\n {lnkPath}: {e}"
@@ -76,8 +77,8 @@ Terminal=false
         try:
             appName = UmiAbout["name"]
             lnkDir = _Shortcut._getPath(position)
-        except Exception as e:
-            print(f"[Error] 无法获取应用信息。\n[Error] Unable to obtain application information.\n\n{e}")
+        except Exception:
+            logger.error("无法获取应用信息", exc_info=True, stack_info=True)
             return 0
 
         num = 0
@@ -89,9 +90,13 @@ Terminal=false
                 if fileName.startswith(appName) and fileName.endswith(".desktop"):
                     os.remove(lnkPath)
                     num += 1
-                    print(f"删除快捷方式： {lnkPath}")
-            except Exception as e:
-                print(f"[Error] 删除快捷方式失败 {lnkPath}: {e}")
+                    logger.info(f"删除快捷方式： {lnkPath}")
+            except Exception:
+                logger.error(
+                    f"删除快捷方式失败。 lnkPath: {lnkPath}",
+                    exc_info=True,
+                    stack_info=True,
+                )
                 continue
         return num
 
@@ -133,11 +138,11 @@ class Api:
             key = str(key)
         if not key:  # 错误，未获取键值
             return "unknown"
-        if key.startswith("'") and key.endswith("'"): # 去除自带引号
+        if key.startswith("'") and key.endswith("'"):  # 去除自带引号
             key = key[1:-1]
         if key.startswith("Key."):  # 修饰建
             key = key[4:]
-        if not key: # 再检查一次
+        if not key:  # 再检查一次
             return "unknown"
         return key
 

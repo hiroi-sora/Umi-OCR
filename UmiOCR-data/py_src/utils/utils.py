@@ -6,8 +6,10 @@ import re
 import os
 from PySide2.QtGui import QClipboard
 from PySide2.QtCore import QFileInfo
-from urllib.parse import unquote  # 路径解码
 from PySide2.QtQml import QJSValue
+from urllib.parse import unquote  # 路径解码
+
+from umi_log import logger
 
 Clipboard = QClipboard()  # 剪贴板
 
@@ -52,10 +54,10 @@ def isDoc(path):
 
 
 def _findFiles(func, paths, isRecurrence):
-    if type(paths) == QJSValue:
+    if isinstance(paths, QJSValue):
         paths = paths.toVariant()
-    if type(paths) != list:
-        print(f"[Error] _findFiles 传入：{paths}, {type(paths)}")
+    if not isinstance(paths, list):
+        logger.error(f"_findFiles 传入：{paths}, {type(paths)}")
         return []
     filePaths = []
     for p in paths:
@@ -118,16 +120,16 @@ def initConfigDict(dic):
                 config["default"] = ""
         # 类型：省略type
         else:
-            if type(config["default"]) is bool:  # 布尔
+            if isinstance(config["default"], bool):  # 布尔
                 config["type"] = "boolean"
             elif "optionsList" in config:  # 枚举
                 config["type"] = "enum"
                 if len(config["optionsList"]) == 0:
-                    print(f"处理配置项异常：{key}枚举列表为空。")
+                    logger.error(f"处理配置项异常：{key}枚举列表为空。")
                     return
                 if config["default"] is None:
                     config["default"] = config["optionsList"][0][0]
-            elif type(config["default"]) is str:  # 文本
+            elif isinstance(config["default"], str):  # 文本
                 config["type"] = "text"
             elif isinstance(config["default"], (int, float)):  # 数字
                 config["type"] = "number"
@@ -135,13 +137,13 @@ def initConfigDict(dic):
                 config["type"] = "buttons"
                 return
             else:
-                print("【Error】未知类型的配置项：" + key)
+                logger.error(f"未知类型的配置项：{key}")
                 return
 
     def handleConfigGroup(group, prefix=""):  # 处理一个配置组
         for key in group:
             config = group[key]
-            if not type(config) is dict:
+            if not isinstance(config, dict):
                 continue
             # 补充空白参数
             if "type" not in config:  # 类型

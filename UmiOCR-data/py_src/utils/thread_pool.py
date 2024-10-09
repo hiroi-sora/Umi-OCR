@@ -2,8 +2,9 @@
 # =============== 全局线程池 异步任务接口 ===============
 # =====================================================
 
-import traceback
 from PySide2.QtCore import QThreadPool, QRunnable
+
+from umi_log import logger
 
 # 全局线程池
 GlobalThreadPool = QThreadPool.globalInstance()
@@ -20,9 +21,8 @@ class Runnable(QRunnable):
     def run(self):
         try:
             self._taskFunc(*self._args, **self._kwargs)
-        except Exception as e:
-            err = traceback.format_exc()
-            print(f"[Error] 异步运行发生错误: {err}")
+        except Exception:
+            logger.error("异步运行发生错误。", exc_info=True, stack_info=True)
 
 
 # 启动异步类
@@ -30,7 +30,7 @@ def threadPoolStart(runnable: QRunnable):
     # 检查线程池是否满，并扩充
     activeThreadCount = GlobalThreadPool.activeThreadCount()
     if activeThreadCount >= GlobalThreadPool.maxThreadCount():
-        print(f"[Warning] 线程池已满 {activeThreadCount} ！自动扩充+1。")
+        logger.debug(f"线程池已满 {activeThreadCount} ！自动扩充+1。")
         GlobalThreadPool.setMaxThreadCount(activeThreadCount + 1)
     GlobalThreadPool.start(runnable)
 

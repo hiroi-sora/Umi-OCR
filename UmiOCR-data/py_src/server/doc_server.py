@@ -9,13 +9,14 @@ from uuid import uuid4
 from PySide2.QtCore import QMutex
 from typing import Dict
 
+from umi_log import logger
+from call_func import CallFunc
 from .bottle import request, static_file, HTTPError
 from .ocr_server import get_ocr_options
 from ..ocr.output import Output
 from ..mission.mission_doc import MissionDOC
 from ..utils.utils import initConfigDict, DocSuf
 from ..ocr.output.tools import getDataText
-from call_func import CallFunc
 
 UPLOAD_DIR = "./temp_doc"  # 上传文件临时目录
 TEMP_FILE_RETENTION_DURATION = 24  # 任务临时文件保留时长，小时
@@ -367,7 +368,7 @@ class _DocUnitManagerClass:
             del_list = []  # 要清理的id
             for id, unit in self.doc_units.items():
                 if now - unit.end_timestamp > TEMP_FILE_RETENTION_DURATION:
-                    print(f"超时自动清理 {id}")
+                    logger.info(f"超时自动清理 {id}")
                     unit.clear()  # 清理文件
                     del_list.append(id)
             for id in del_list:
@@ -480,7 +481,7 @@ def init(UmiWeb):
             )
             msnID = doc_unit.msnID
             _DocUnitManager.add(msnID, doc_unit)
-            print(f"添加 HTTP 文档任务: {origin_name}")
+            logger.info(f"添加 HTTP 文档任务: {origin_name}")
             return {"code": 100, "data": msnID}
         except DocUnitError as e:
             shutil.rmtree(dir_path)

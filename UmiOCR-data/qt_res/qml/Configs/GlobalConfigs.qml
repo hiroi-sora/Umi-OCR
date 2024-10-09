@@ -287,7 +287,7 @@ Configs {
         // 应用OCR信息
         if(configDict.ocr)
             ocrManager.init2()
-        console.log("% GlobalConfig 初始化全局配置完毕！")
+        console.log("GlobalConfig 初始化全局配置完毕！")
         // 延迟执行
         Qt.callLater(()=>{
             setQmlToCmd()  // 将qml模块字典传入cmd执行模块

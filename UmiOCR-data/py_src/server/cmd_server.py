@@ -263,7 +263,7 @@ class _Actuator:
             if r["code"] == 100:
                 for d in r["data"]:  # 遍历文本块
                     text += d["text"] + d["end"]
-            elif r["code"] != 101 and type(r["data"]) == str:
+            elif r["code"] != 101 and isinstance(r["data"], str):
                 text += r["data"]
         if not text:
             text = "[Message] No text in OCR result."
@@ -293,7 +293,7 @@ class _Actuator:
                 quiet_zone=-1,  # 边缘宽度
                 ec_level=-1,  # 纠错等级
             )
-            if type(pil) == str:
+            if isinstance(pil, str):
                 return pil
             pil.save(path)
             return f"Successfully saved to {path}"
@@ -449,7 +449,7 @@ class _Cmd:
     # 执行指令，返回执行结果字符串
     def execute(self, argv):
         args = self.parse(argv)
-        if type(args) == str:
+        if isinstance(args, str):
             return args
         if args.all_modules:
             return CmdActuator.getModulesHelp()

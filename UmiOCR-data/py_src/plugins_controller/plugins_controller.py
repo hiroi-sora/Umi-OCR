@@ -5,6 +5,8 @@
 import os
 import site
 import importlib
+
+from umi_log import logger
 from ..ocr.api import initOcrPlugins
 
 # 插件 总目录
@@ -29,7 +31,7 @@ class _PluginsControllerClass:
         # 添加包搜索路径
         if not os.path.exists(PLUGINS_PATH):
             os.makedirs(PLUGINS_PATH)
-            print(f"[Error] 插件目录不存在: {PLUGINS_PATH} ")
+            logger.error(f"插件目录不存在: {PLUGINS_PATH} ")
             return None
         site.addsitedir(PLUGINS_PATH)  # 添加插件搜索路径
         # 加载所有插件。在插件目录中搜索合法的包
@@ -40,7 +42,7 @@ class _PluginsControllerClass:
                 flag, res = self._loadPlugin(name)
                 if not flag:  # 失败
                     errors[name] = res
-                    print(f"[Error] 加载插件 {name} 失败：{res}")
+                    logger.error(f"加载插件 {name} 失败：{res}")
         # TODO: 静态插件
         # 动态插件导入API管理器
         ocrErrs = initOcrPlugins(self.pluginsDict["ocr"])

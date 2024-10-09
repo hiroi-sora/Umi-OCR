@@ -75,7 +75,7 @@ Item {
             showTabPage(showPageI)
         }
         settings.save()
-        console.log("% TabViewManager 初始化页面完毕！")
+        console.log("TabViewManager 初始化页面完毕！")
     }
 
     // ========================= 【增删改查】 =========================

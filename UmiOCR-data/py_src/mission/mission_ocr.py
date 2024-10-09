@@ -8,10 +8,11 @@
 标签页可以向任务管理器提交一组任务队列，其中包含了每一项任务的信息，及总体的参数和回调。
 """
 
-from ..ocr.api import getApiOcr, getLocalOptions
+from umi_log import logger
 from .mission import Mission
 from ..ocr.tbpu import getParser
 from ..ocr.tbpu import IgnoreArea
+from ..ocr.api import getApiOcr, getLocalOptions
 from ..utils.utils import isImg, argdIntConvert
 
 
@@ -32,7 +33,7 @@ class __MissionOcrClass(Mission):
         # 忽略区域
         if "tbpu.ignoreArea" in argd:
             iArea = argd["tbpu.ignoreArea"]
-            if type(iArea) == list and len(iArea) > 0:
+            if isinstance(iArea, list) and len(iArea) > 0:
                 msnInfo["tbpu"].append(IgnoreArea(iArea))
         # 获取排版解析器对象
         if "tbpu.parser" in argd:
@@ -40,11 +41,12 @@ class __MissionOcrClass(Mission):
         # 检查任务合法性
         for i in range(len(msnList) - 1, -1, -1):
             if "path" in msnList[i]:
-                if not isImg(msnList[i]["path"]):
-                    print(f"[Warning] 任务{i}的path不存在")
+                p = msnList[i]["path"]
+                if not isImg(p):
+                    logger.warning(f"添加OCR任务时，第{i}项的路径path不是图片：{p}")
                     del msnList[i]
             elif "bytes" not in msnList[i] and "base64" not in msnList[i]:
-                print(f"[Warning] 任务{i}不含 path、bytes、base64")
+                logger.warning(f"添加OCR任务时，第{i}项不含 path、bytes、base64")
                 del msnList[i]
         return super().addMissionList(msnInfo, msnList)
 
@@ -58,7 +60,7 @@ class __MissionOcrClass(Mission):
         argdIntConvert(startInfo)
         msg = self._api.start(startInfo)
         if msg.startswith("[Error]"):
-            print(f"引擎启动失败！", msg)
+            logger.error(f"OCR引擎启动失败： {msg}")
             return msg  # 更新失败，结束该队列
         else:
             return ""  # 更新成功 TODO: continue
@@ -115,7 +117,7 @@ class __MissionOcrClass(Mission):
         # 获取新api对象
         res = getApiOcr(apiKey, info)
         # 失败
-        if type(res) == str:
+        if isinstance(res, str):
             self._apiKey = ""
             self._api = None
             return res

@@ -33,7 +33,7 @@ Item {
         if (typeof configsComp === "object" && typeof configsComp.getValueDict === "function") {
             return configsComp.getValueDict()
         }
-        console.log("[Error] 返回空配置项字典")
+        console.error("返回空配置项字典")
         return {}
     }
     // 获取原始值字典
@@ -42,7 +42,7 @@ Item {
         if (typeof configsComp === "object" && typeof configsComp.getValueDict === "function") {
             return configsComp.getOriginDict()
         }
-        console.log("[Error] 返回空原始值字典")
+        console.error("返回空原始值字典")
         return {}
     }
     // 设置配置项值
@@ -52,7 +52,7 @@ Item {
             configsComp.setValue(key, val, true)
             return
         }
-        console.log("[Error] 设置配置项失败", key, val)
+        console.error("设置配置项失败", key, val)
     }
     
 }

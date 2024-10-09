@@ -2,6 +2,7 @@ from pynput import keyboard
 from PySide2.QtCore import QMutex
 from time import time
 
+from umi_log import logger
 from ...platform import Platform
 from ..pubsub_service import PubSubService
 
@@ -74,7 +75,7 @@ class _HotkeyController:
     # 移除一组快捷键，传入键名或事件之一
     def delHotkey(self, keysName="", title="", press=0):
         if press != 0 and press != 1:
-            print(f"[Error] press只能为0按下或1抬起，不能为 {press} 。")
+            logger.error(f"press只能为0按下或1抬起，不能为 {press} 。")
             return
         keySet = _KeyTranslator.names2set(keysName)
         self._hotkeyMutex.lock()
@@ -189,7 +190,7 @@ class _HotkeyController:
         nowTime = time()
         for k in self._pressSet.copy():
             if nowTime >= self._ttlDict[k]:
-                print(f"超时删除 {k}")
+                logger.debug(f"忽略超时按键 {k}")
                 del self._ttlDict[k]
                 self._pressSet.discard(k)
 

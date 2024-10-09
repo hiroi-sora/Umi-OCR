@@ -8,6 +8,7 @@ from threading import Condition
 from uuid import uuid4  # 唯一ID
 import time
 
+from umi_log import logger
 from ..utils.thread_pool import threadRun  # 异步执行函数
 
 
@@ -49,8 +50,6 @@ class Mission:
         cbKeys = ["onStart", "onReady", "onGet", "onEnd"]
         for k in cbKeys:
             if k not in msnInfo or not callable(msnInfo[k]):
-                # print(f"补充空回调函数{k}")
-                # msnInfo[k] = (lambda key: lambda *e: print(f"空回调 {key}"))(k)
                 msnInfo[k] = lambda *e: None
         # 任务状态state:  waiting 等待开始， running 进行中， stop 要求停止
         msnInfo["state"] = "waiting"
@@ -98,7 +97,7 @@ class Mission:
 
     # 暂停一些任务队列
     def pauseMissionList(self, msnIDs):
-        if not type(msnIDs) == list:
+        if not isinstance(msnIDs, list):
             msnIDs = [msnIDs]
         self._msnMutex.lock()  # 上锁
         for msnID in msnIDs:
@@ -108,11 +107,11 @@ class Mission:
                 del self._msnInfoDict[msnID]
                 del self._msnListDict[msnID]
         self._msnMutex.unlock()  # 解锁
-        print(f"暂停：{msnID}\n", end="")
+        logger.debug(f"任务暂停： {msnID}")
 
     # 恢复一些任务队列的运行
     def resumeMissionList(self, msnIDs):
-        if not type(msnIDs) == list:
+        if not isinstance(msnIDs, list):
             msnIDs = [msnIDs]
         self._msnMutex.lock()  # 上锁
         for msnID in msnIDs:
@@ -123,7 +122,7 @@ class Mission:
                 del self._msnPausedDict[msnID]
         self._msnMutex.unlock()  # 解锁
         self._startMsns()  # 拉起工作线程
-        print(f"恢复：{msnID}\n", end="")
+        logger.debug(f"任务恢复： {msnID}")
 
     # 获取每一条任务队列长度
     def getMissionListsLength(self):
@@ -136,7 +135,7 @@ class Mission:
 
     # 【同步】添加一个任务或队列，等待完成，返回任务结果列表。[i]["result"]为结果
     def addMissionWait(self, argd, msnList):
-        if not type(msnList) is list:
+        if not isinstance(msnList, list):
             msnList = [msnList]
         resList = msnList[:]  # 浅拷贝出一条结果列表
         nowIndex = 0  # 当前处理的任务
@@ -218,7 +217,7 @@ class Mission:
             # 4. 前处理，检查、更新参数
             preFlag = self.msnPreTask(msnInfo)
             if preFlag == "continue":  # 跳过本次
-                print("任务管理器：跳过任务")
+                logger.debug(f"任务跳过： {dictKey}")
                 continue
             elif preFlag.startswith("[Error]"):  # 异常，结束该队列
                 msnInfo["onEnd"](msnInfo, preFlag)
@@ -237,7 +236,7 @@ class Mission:
             t1 = time.time()
             res = self.msnTask(msnInfo, msn)
             t2 = time.time()
-            if type(res) == dict:  # 补充耗时和时间戳
+            if isinstance(res, dict):  # 补充耗时和时间戳
                 res["time"] = t2 - t1
                 res["timestamp"] = t2
 
@@ -277,7 +276,7 @@ class Mission:
         # 如果该任务在暂停中，则移除暂停队列中的项
         if dictKey in self._msnPausedDict:
             del self._msnPausedDict[dictKey]
-            print(f"移除暂停任务：{dictKey}")
+            logger.debug(f"移除暂停任务： {dictKey}")
 
     def _taskFinish(self):  # 任务结束
         self._taskMutex.lock()  # 上锁
@@ -296,8 +295,8 @@ class Mission:
         return ""
 
     def msnTask(self, msnInfo, msn):  # 执行任务msn，返回结果字典。
-        print("mission 父类 msnTask")
-        return {"error": f"[Error] No overloaded msnTask. \n【异常】未重载msnTask。"}
+        logger.debug("mission 未重载 msnTask")
+        return {"error": "[Error] No overloaded msnTask. \n【异常】未重载msnTask。"}
 
     def getStatus(self):  # 返回当前状态
         return "Mission 基类 返回空状态"

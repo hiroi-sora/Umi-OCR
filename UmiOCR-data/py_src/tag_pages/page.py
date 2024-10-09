@@ -4,16 +4,18 @@
 
 from PySide2.QtCore import QObject
 
+from umi_log import logger
+
 
 class Page(QObject):
     def __init__(self, ctrlKey, controller):
         super().__init__()
         self.ctrlKey = ctrlKey
         self.controller = controller
-        print(f"py控制器 {self.ctrlKey} 实例化！")
+        logger.debug(f"py控制器 {self.ctrlKey} 实例化！")
 
     def __del__(self):
-        print(f"py控制器 {self.ctrlKey} 销毁！")
+        logger.debug(f"py控制器 {self.ctrlKey} 销毁！")
 
     def callQml(self, funcName, *args):  # python调用qml函数
         return self.controller.callQml(self.ctrlKey, funcName, *args)

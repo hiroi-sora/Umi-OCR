@@ -2,15 +2,15 @@
 # =============== 批量文档页 ===============
 # ========================================
 
+import os
+import time
+
+from umi_log import logger
 from .page import Page  # 页基类
 from ..mission.mission_doc import MissionDOC  # 任务管理器
 from ..utils import utils
 from ..ocr.output import Output
-from ..ocr.tbpu import getParser
 from ..utils.thread_pool import threadRun  # 异步执行函数
-
-import os
-import time
 
 
 class BatchDOC(Page):
@@ -33,7 +33,7 @@ class BatchDOC(Page):
         for p in paths:
             info = MissionDOC.getDocInfo(p)
             if "error" in info:
-                print(f'[Warning] 读入文档失败：{p}\n{info["error"]}')
+                logger.warning(f'读入文档失败：{p}, {info["error"]}')
                 continue
             docs.append(info)
         # 回调传入：{ "path" , "page_count" }
@@ -145,7 +145,7 @@ class BatchDOC(Page):
 
     def _runNewDoc(self):  # 取 self._queuedList 首位任务，提交执行
         if not self._queuedDocs:
-            print("[Warning] 文档任务： queuedDocs 已空")
+            logger.warning("文档任务： queuedDocs 已空")
             return
         d = self._queuedDocs.pop(0)  # 取首位任务
         path = d["path"]  # 取地址
@@ -154,7 +154,7 @@ class BatchDOC(Page):
         pageCount = int(d["page_count"])  # 总页数
         # 构造输出器
         output = self._initOutputList(self._argd, path, pageRange, pageCount, password)
-        if type(output) == str:  # 创建输出器失败
+        if isinstance(output, str):  # 创建输出器失败
             self._onEnd({"path": path}, "[Error] 无法创建输出器。")
             return
         # 任务信息
@@ -179,7 +179,7 @@ class BatchDOC(Page):
     def _onStart(self, msnInfo):  # 一个文档 开始
         msnID = msnInfo["msnID"]
         if not msnID == self._msnID:
-            print(f"[Warning] _onStart 任务ID未在记录。{msnID}")
+            logger.warning(f"_onStart 任务ID未在记录。{msnID}")
             return
         self.callQmlInMain("onDocStart", msnInfo["path"])
 
@@ -190,7 +190,7 @@ class BatchDOC(Page):
         page += 1
         msnID = msnInfo["msnID"]
         if not msnID == self._msnID:
-            print(f"[Warning] _onGet 任务ID未在记录。{msnID}")
+            logger.warning(f"_onGet 任务ID未在记录。{msnID}")
             return
 
         # 为 res 添加信息
@@ -202,8 +202,8 @@ class BatchDOC(Page):
         for o in msnInfo["get_output"]:
             try:
                 o.print(res)
-            except Exception as e:
-                print(f"文档结果输出失败：{o}\n{e}")
+            except Exception:
+                logger.error(f"文档结果输出失败：{o}", exc_info=True, stack_info=True)
 
         self.callQmlInMain("onDocGet", msnInfo["path"], page, res)
 
@@ -217,7 +217,7 @@ class BatchDOC(Page):
         if "msnID" in msnInfo:
             msnID = msnInfo["msnID"]
             if not msnID == self._msnID:
-                print(f"[Warning] _onEnd 任务ID未在记录。{msnID}")
+                logger.warning(f"_onEnd 任务ID未在记录。{msnID}")
                 return
 
         # 结束输出器，保存文件。

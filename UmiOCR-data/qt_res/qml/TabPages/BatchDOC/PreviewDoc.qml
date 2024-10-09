@@ -169,7 +169,7 @@ ModalLayer {
                 return
             }
             if(path != previewPath || page != previewPage) {
-                console.log("[Warning] 文档OCR预览回调不匹配")
+                console.warn("文档OCR预览回调不匹配")
                 return
             }
             ocrRunning = false

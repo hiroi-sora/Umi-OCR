@@ -2,8 +2,10 @@
 
 import os
 from PySide2.QtCore import QTranslator
+
 from . import pre_configs
 from plugin_i18n import setLangCode
+from umi_log import logger
 
 I18nDir = "i18n"  # 翻译文件 目录
 DefaultLang = "zh_CN"  # 默认语言
@@ -49,17 +51,19 @@ class _I18n:
         text, path = self.langDict[self.langCode]
         setLangCode(self.langCode)  # 设置插件翻译
         if not path:
-            print("使用默认文本，未加载翻译。")
+            logger.debug("使用默认文本，未加载翻译。")
             return
         if not translator.load(path):
             msg = f"无法加载UI语言！\n[Error] Unable to load UI language: {path}"
+            logger.warning(msg)
             os.MessageBox(msg, type_="warning")
             return
         if not qtApp.installTranslator(translator):  # 安装翻译器
             msg = f"无法加载翻译模块！\n[Error] Unable to installTranslator: {path}"
+            logger.warning(msg)
             os.MessageBox(msg, type_="warning")
             return
-        print(f"翻译加载完毕。{self.langCode} - {text}")
+        logger.info(f"i18n file loaded successfully. {self.langCode} - {text}")
 
     # 切换语言
     def setLanguage(self, code):
@@ -108,8 +112,8 @@ class _I18n:
             if not self.setLanguage(code):
                 # 写入配置失败，则使用默认语言
                 self.setLanguage(DefaultLang)
-                print(
-                    f"当前系统语言为{code}，无对应翻译文件，使用默认语言：{DefaultLang}。"
+                logger.warning(
+                    f"The current system language is {code} and there is no corresponding i18n file. The default language used is {DefaultLang}."
                 )
 
 

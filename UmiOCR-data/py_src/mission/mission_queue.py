@@ -3,6 +3,8 @@
 from uuid import uuid4
 from typing import Callable, Any
 
+from umi_log import logger
+
 
 class MissionQueue:
     def __init__(
@@ -48,7 +50,7 @@ class MissionQueue:
     def getMsn(self):
         return self.msnList[self.index]
 
-    # 完成一个任务元素 【4】
+    # 完成一个任务元素 【5】
     def popMsn(self):
         self.index += 1
 
@@ -70,27 +72,27 @@ class MissionQueue:
     def onStart(self):
         try:
             self._onStart(self)
-        except Exception as e:
-            print(f"[Error] onStart: {e}")
+        except Exception:
+            logger.error("任务 onStart 回调异常。", exc_info=True, stack_info=True)
 
-    def onReady(self):  #  【3】
+    def onReady(self):  # 【3】
         try:
             self._onReady(self)
-        except Exception as e:
-            print(f"[Error] onReady: {e}")
+        except Exception:
+            logger.error("任务 onReady 回调异常。", exc_info=True, stack_info=True)
 
-    def onGet(self, res):  #  【4】
+    def onGet(self, res):  # 【4】
         try:
             self._onGet(self, res)
-        except Exception as e:
-            print(f"[Error] onGet: {e}")
+        except Exception:
+            logger.error("任务 onGet 回调异常。", exc_info=True, stack_info=True)
 
     def onEnd(self, flag):
         # 结果标志："[Success]...", "[Warning]...", "[Error]..."
         try:
             self._onEnd(self, flag)
-        except Exception as e:
-            print(f"[Error] onEnd: {e}")
+        except Exception:
+            logger.error("任务 onEnd 回调异常。", exc_info=True, stack_info=True)
 
     @staticmethod
     def _pass(*e):  # 空函数

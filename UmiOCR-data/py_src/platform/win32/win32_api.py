@@ -6,6 +6,7 @@ import os
 import subprocess
 from PySide2.QtCore import QStandardPaths as Qsp, QFile, QFileInfo
 
+from umi_log import logger
 from umi_about import UmiAbout
 from .key_translator import getKeyName
 
@@ -23,7 +24,9 @@ class _Shortcut:
         if position == "desktop":
             return Qsp.writableLocation(Qsp.DesktopLocation)
 
-        startMenu = os.path.join(os.getenv(EnvType), "Microsoft", "Windows", "Start Menu")
+        startMenu = os.path.join(
+            os.getenv(EnvType), "Microsoft", "Windows", "Start Menu"
+        )
         # 开始菜单
         if position == "startMenu":
             return startMenu
@@ -72,8 +75,12 @@ class _Shortcut:
                 if lnkName in originName:  # 快捷方式指向的文件名包含appName，删之
                     os.remove(lnkPath)
                     num += 1
-            except Exception as e:
-                print(f"[Error] 删除快捷方式失败 {lnkPath}: {e}")
+            except Exception:
+                logger.error(
+                    f"删除快捷方式失败。 lnkPath: {lnkPath}",
+                    exc_info=True,
+                    stack_info=True,
+                )
                 continue
         return num
 

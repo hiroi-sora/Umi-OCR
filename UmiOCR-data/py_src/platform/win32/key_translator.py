@@ -3,6 +3,8 @@
 
 from pynput._util.win32 import KeyTranslator
 
+from umi_log import logger
+
 
 # ==================== 按键转换器 ====================
 # 封装 keyTranslator ，负责key、char、vk的转换
@@ -10,7 +12,9 @@ class _KeyTranslatorApi:
     def __init__(self):
         self._kt = KeyTranslator()
         self._layout, _layoutData = self._kt._generate_layout()
-        self._normalLayout = _layoutData[(False, False, False)]  # 选取常规布局，不受修饰键影响
+        self._normalLayout = _layoutData[
+            (False, False, False)
+        ]  # 选取常规布局，不受修饰键影响
 
     def __call__(self, key):
         """传入pynput的Key对象，返回与修饰键无关的键名char"""
@@ -25,11 +29,15 @@ class _KeyTranslatorApi:
                 scan = self._kt._to_scan(key.vk, self._layout)  # vk转扫描码
                 char = self._normalLayout[scan][0]  # 扫描码转char
                 return char.lower()
-        except Exception as e:  # 特殊键（如Fn）没有对应字符，会跳到这里
+        except Exception:  # 特殊键（如Fn）没有对应字符，会跳到这里
             if key and hasattr(key, "vk"):
                 return f"<{key.vk}>"  # 未知键值，无对应字符，返回键值本身
             else:
-                print(f"[Error] 键值转换异常，未知键值！{str(key)} {type(key)}")
+                logger.error(
+                    f"键值转换异常，未知键值！key: {str(key)}, type: {type(key)}.",
+                    exc_info=True,
+                    stack_info=True,
+                )
                 return str(key)
 
 

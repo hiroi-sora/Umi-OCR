@@ -98,15 +98,15 @@ def init(UmiWeb):
         try:
             data = request.json
         except Exception as e:
-            return json.dumps({"code": 800, "data": f"请求无法解析为json。"})
+            return json.dumps({"code": 800, "data": f"请求无法解析为json。 {e}"})
         if not data:
-            return json.dumps({"code": 801, "data": f"请求为空。"})
+            return json.dumps({"code": 801, "data": "请求为空。"})
         if "base64" not in data:
-            return json.dumps({"code": 802, "data": f"请求中缺少 base64 字段。"})
+            return json.dumps({"code": 802, "data": "请求中缺少 base64 字段。"})
         if "options" not in data:
             data["options"] = {}
-        elif not type(data["options"]) is dict:
-            return json.dumps({"code": 803, "data": f"请求中 options 字段必须为字典。"})
+        elif not isinstance(data["options"], dict):
+            return json.dumps({"code": 803, "data": "请求中 options 字段必须为字典。"})
         try:
             # 补充缺失的默认参数
             opt = data["options"]
