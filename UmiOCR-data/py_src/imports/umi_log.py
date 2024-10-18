@@ -12,9 +12,9 @@ logger.error("错误信息"))
 logger.critical("严重错误信息")
 
 # exc_info 只能在 except 块中开启
-log.error("错误信息", exc_info=True, stack_info=True)
+logger.error("错误信息", exc_info=True, stack_info=True)
 # 覆盖 LogRecord 的属性
-log.debug("信息", extra={"cover": {"filename": "test.txt", "lineno": 999}}
+logger.debug("信息", extra={"cover": {"filename": "test.txt", "lineno": 999}}
 
 Qml:     =========================
 
