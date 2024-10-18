@@ -8,6 +8,8 @@ import "../../Configs"
 Configs {
     category_: "QRCode"
 
+    signal reBarcode() // 重新生成二维码的信号
+
     configDict: {
 
         "hotkey": {
@@ -116,6 +118,9 @@ Configs {
                     ["UPCA", "UPCA"],
                     ["UPCE", "UPCE"],
                 ],
+                "onChanged": (newFlag, oldFlag)=>{
+                    if(oldFlag !== undefined) reBarcode()
+                },
             },
             "width": {
                 "title": qsTr("宽度"),
@@ -124,6 +129,9 @@ Configs {
                 "default": 256,
                 "min": 0,
                 "unit": qsTr("像素"),
+                "onChanged": (newFlag, oldFlag)=>{
+                    if(oldFlag !== undefined) reBarcode()
+                },
             },
             "height": {
                 "title": qsTr("高度"),
@@ -132,6 +140,9 @@ Configs {
                 "default": 256,
                 "min": 0,
                 "unit": qsTr("像素"),
+                "onChanged": (newFlag, oldFlag)=>{
+                    if(oldFlag !== undefined) reBarcode()
+                },
             },
             "quiet_zone": {
                 "title": qsTr("边缘空白"),
@@ -140,6 +151,9 @@ Configs {
                 "default": -1,
                 "min": -1,
                 "unit": qsTr("像素"),
+                "onChanged": (newFlag, oldFlag)=>{
+                    if(oldFlag !== undefined) reBarcode()
+                },
             },
             "ec_level": {
                 "title": qsTr("纠错等级"),
@@ -151,6 +165,9 @@ Configs {
                     [3, "25%"],
                     [2, "30%"],
                 ],
+                "onChanged": (newFlag, oldFlag)=>{
+                    if(oldFlag !== undefined) reBarcode()
+                },
             },
         },
 

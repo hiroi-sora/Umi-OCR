@@ -12,7 +12,10 @@ import "../../Widgets/ImageViewer"
 TabPage {
     id: tabPage
     // 配置
-    configsComp: QRCodeConfigs {}
+    configsComp: QRCodeConfigs {
+        // 修改配置信号触发后，延迟一个事件循环，重新生成二维码图片
+        onReBarcode: Qt.callLater(reWriteBarcode)
+    }
 
     // ========================= 【逻辑】 =========================
 
@@ -100,6 +103,11 @@ TabPage {
         }
         imageText.showImgID(imgID)
     }
+    // 立刻重新生成二维码图片
+    function reWriteBarcode() {
+        writeBarcode(writeEdit.text)
+    }
+
 
     // ========================= 【python调用qml】 =========================
 
@@ -384,7 +392,7 @@ TabPage {
                                 anchors.bottom: parent.bottom
                                 text_: qsTr("刷新")
                                 toolTip: qsTr("生成二维码/条形码")
-                                onClicked: writeBarcode(writeEdit.text)
+                                onClicked: reWriteBarcode()
                             }
                         }
                     }
@@ -407,7 +415,7 @@ TabPage {
                                 id: writeEditTimer
                                 interval: 500  // 0.5 秒
                                 repeat: false
-                                onTriggered: writeBarcode(writeEdit.text)
+                                onTriggered: reWriteBarcode()
                             }
                             onTextChanged: {
                                 if(autoUpdate) // 重启计时器
