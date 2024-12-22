@@ -186,16 +186,6 @@ ModalLayer {
                     visible: running
                 }
             }
-            // 文件拖拽
-            DropArea_ {
-                anchors.fill: parent
-                callback: (paths)=>{
-                    paths = qmlapp.utilsConnector.findImages(paths, false)
-                    if(paths && paths.length > 0) {
-                        showPath(paths[0])
-                    }
-                }
-            }
         }
     }
 }
