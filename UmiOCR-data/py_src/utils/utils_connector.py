@@ -1,9 +1,12 @@
 # 通用工具连接器
 
-from . import utils
-from ..platform import Platform  # 跨平台
+from typing import List
+from PySide2.QtCore import QObject, Slot
 
-from PySide2.QtCore import QObject, Slot, Signal
+from . import utils
+from . import file_finder  # 文件搜索器
+from ..platform import Platform  # 跨平台
+from .thread_pool import threadRun  # 异步执行函数
 
 
 class UtilsConnector(QObject):
@@ -37,6 +40,27 @@ class UtilsConnector(QObject):
     @Slot("QVariant", bool, result="QVariant")
     def findDocs(self, paths, isRecurrence):
         return utils.findDocs(paths, isRecurrence)
+
+    # 异步搜索文件
+    @Slot("QVariant", str, bool, str, str, float)
+    def asynFindFiles(
+        self,
+        paths: List,  # 初始路径列表
+        sufType: str,  # 后缀类型，FileSuf的key
+        isRecurrence: bool,  # 若为True，则递归搜索
+        completeKey: str,  # 全部完成后的事件key。向事件传入合法路径列表。
+        updateKey: str,  # 加载中刷新进度的key，不填则无。向事件传入 (已完成的路径数量, 最近一条路径)
+        updateTime: float,  # 刷新进度的间距
+    ):
+        threadRun(
+            file_finder.asynFindFiles,
+            paths,
+            sufType,
+            isRecurrence,
+            completeKey,
+            updateKey,
+            updateTime,
+        )
 
     # QUrl列表 转 String列表
     @Slot("QVariant", result="QVariant")
