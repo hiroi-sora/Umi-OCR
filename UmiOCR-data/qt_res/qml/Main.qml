@@ -52,6 +52,7 @@ Window {
         PubSub { id: pubSub } // 全局事件发布/订阅
         KeyMouseConnector { id:keyMouse } // 鼠标/键盘
         UtilsConnector { id:utilsConnector } // 通用连接器
+        AsynFilesLoader { id:asynFilesLoader } // 异步文件加载器
 
         // 必须先初始化的单例，onCompleted顺序从下往上
         MainWindowManager { id:mainWin; mainWin:mainWindowRoot } // 主窗管理
@@ -59,6 +60,7 @@ Window {
         PopupManager { id: popup }  // 弹窗管理器
         GlobalConfigs { id: globalConfigs }  // 全局设置
 
+        property alias asynFilesLoader: asynFilesLoader
         property alias imageManager: imageManager
         property alias globalConfigs: globalConfigs
         property alias tab: tab

@@ -7,7 +7,7 @@ import json
 import argparse
 from threading import Condition
 from ..utils.call_func import CallFunc
-from ..utils.utils import findImages
+from ..utils.file_finder import findFiles
 from ..event_bus.pubsub_service import PubSubService  # 发布/订阅管理器
 
 
@@ -244,7 +244,7 @@ class _Actuator:
         else:  # 路径
             if not paras:
                 return "[Error] Paths is empty."
-            paths = findImages(paras, True)  # 递归搜索
+            paths = findFiles(paras, "image", True)  # 递归搜索
             if not paths:
                 return "[Error] No valid path."
             self.call("ScreenshotOCR", "qml", "ocrPaths", False, paths)
@@ -310,7 +310,7 @@ class _Actuator:
         except Exception as e:
             return f"[Error] {str(e)}"
         resText = ""
-        paths = findImages(paras, True)  # 递归搜索图片
+        paths = findFiles(paras, "image", True)  # 递归搜索图片
         for index, path in enumerate(paths):
             if index != 0:
                 resText += "\n"

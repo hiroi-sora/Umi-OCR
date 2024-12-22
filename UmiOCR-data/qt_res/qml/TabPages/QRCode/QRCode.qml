@@ -57,9 +57,12 @@ TabPage {
         }
     }
 
-    // 对一批图片路径做扫码
+    // 异步加载一批图像路径
     function scanPaths(paths) {
-        paths = qmlapp.utilsConnector.findImages(paths, false)
+        qmlapp.asynFilesLoader.run(paths,"image",false,onScanPaths)
+    }
+    // 完毕后，对合法路径进行扫码
+    function onScanPaths(paths) {
         if(!paths || paths.length < 1) {
             qmlapp.popup.simple(qsTr("无有效图片"), "")
             return

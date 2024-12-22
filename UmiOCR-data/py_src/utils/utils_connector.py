@@ -31,15 +31,10 @@ class UtilsConnector(QObject):
         elif key == "hibernate":  # 休眠
             Platform.HardwareCtrl.hibernate()
 
-    # 传入paths和是否递归，返回合法的图片路径
-    @Slot("QVariant", bool, result="QVariant")
-    def findImages(self, paths, isRecurrence):
-        return utils.findImages(paths, isRecurrence)
-
-    # 传入paths和是否递归，返回合法的文档路径
-    @Slot("QVariant", bool, result="QVariant")
-    def findDocs(self, paths, isRecurrence):
-        return utils.findDocs(paths, isRecurrence)
+    # 同步搜索文件，返回合法的文件路径列表
+    @Slot("QVariant", bool, str, result="QVariant")
+    def findFiles(self, paths, sufType, isRecurrence):
+        return file_finder.findFiles(paths, sufType, isRecurrence)
 
     # 异步搜索文件
     @Slot("QVariant", str, bool, str, str, float)

@@ -84,9 +84,12 @@ TabPage {
         }
     }
 
-    // 对一批图片路径做OCR
+    // 异步扫描一批图像路径
     function ocrPaths(paths) {
-        paths = qmlapp.utilsConnector.findImages(paths, false)
+        qmlapp.asynFilesLoader.run(paths,"image",false,onAddImages)
+    }
+    // 完毕后，对合法路径进行OCR
+    function onAddImages(paths) {
         if(!paths || paths.length < 1) {
             qmlapp.popup.simple(qsTr("无有效图片"), "")
             return

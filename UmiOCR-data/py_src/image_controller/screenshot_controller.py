@@ -3,7 +3,7 @@
 # ========================================
 
 from ..image_controller.image_provider import PixmapProvider  # 图片提供器
-from ..utils.utils import findImages
+from ..utils.file_finder import findFiles
 
 import time
 from PySide2.QtGui import QGuiApplication, QClipboard, QImage, QPixmap  # 截图 剪贴板
@@ -88,7 +88,7 @@ class _ScreenshotControllerClass:
                 if url.isLocalFile():
                     p = url.toLocalFile()
                     paths.append(p)
-            paths = findImages(paths, False)  # 过滤，保留图片的路径
+            paths = findFiles(paths, "image", False)  # 过滤，保留图片的路径
             if len(paths) == 0:  # 没有有效图片
                 res = {"type": "error", "error": "[Warning] No image in clipboard."}
             else:  # 将有效图片地址传入OCR，返回地址列表
