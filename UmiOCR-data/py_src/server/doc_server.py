@@ -14,8 +14,8 @@ from call_func import CallFunc
 from .bottle import request, static_file, HTTPError
 from .ocr_server import get_ocr_options
 from ..ocr.output import Output
-from ..mission.mission_doc import MissionDOC
-from ..utils.utils import initConfigDict, DocSuf
+from ..mission.mission_doc import MissionDOC, DocSuf
+from ..utils.utils import initConfigDict
 from ..ocr.output.tools import getDataText
 
 UPLOAD_DIR = "./temp_doc"  # 上传文件临时目录

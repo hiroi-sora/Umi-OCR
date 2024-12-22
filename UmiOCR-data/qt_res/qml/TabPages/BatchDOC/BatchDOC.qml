@@ -46,13 +46,37 @@ TabPage {
     //     }
     // }
 
-    // 添加一批文档。传入值是没有 file:/// 开头的纯字符串的列表。
+    // 异步加载一批文档路径
     function addDocs(paths) {
-        addDocsDropArea.enable = false // 禁用继续拖入
-        qmlapp.popup.showMask(qsTr("文件读取中…"), "addDocs")
+        if(paths.length <= 0) return
         const isRecurrence = configsComp.getValue("mission.recurrence")
-        // 等待python调用 onAddDocs 回调
-        tabPage.callPy("addDocs", paths, isRecurrence)
+        qmlapp.asynFilesLoader.run(paths,"doc",isRecurrence,onAddDocs)
+    }
+    // 完毕后，将合法表格加入表格
+    function onAddDocs(docs) {
+        if(docs.length <= 0) return
+        let encryptedCount = 0
+        for(let i in docs) {
+            const info = docs[i]
+            filesTableView.add({
+                // 显示：路径，状态，页范围
+                path: info.path,
+                pages: `${info.page_count}`, // 如果范围为整本，只显示总页数。否则显示 起始-结束
+                state: info.is_encrypted ? qsTr("加密") : "" ,
+                // 数据
+                page_count: info.page_count,
+                range_start: 1,
+                range_end: info.page_count,
+                is_encrypted: info.is_encrypted, // 有密码
+                is_authenticate: !info.is_encrypted, // 已解密（密码正确）
+                password: "",
+            })
+            if(info.is_encrypted) encryptedCount++
+        }
+        if(encryptedCount > 0) {
+            qmlapp.popup.simple(qsTr("%1个加密文档").arg(encryptedCount),
+                qsTr("请点击文件名填写密码"))
+        }
     }
 
     // 运行文档任务
@@ -132,38 +156,6 @@ TabPage {
     }
 
     // ========================= 【python调用qml】 =========================
-
-    // 添加一批文档
-    function onAddDocs(docs) {
-        qmlapp.popup.hideMask("addDocs")
-        addDocsDropArea.enable = true
-        if(docs.length <= 0){
-            return
-        }
-        // 加入表格
-        let encryptedCount = 0
-        for(let i in docs) {
-            const info = docs[i]
-            filesTableView.add({
-                // 显示：路径，状态，页范围
-                path: info.path,
-                pages: `${info.page_count}`, // 如果范围为整本，只显示总页数。否则显示 起始-结束
-                state: info.is_encrypted ? qsTr("加密") : "" ,
-                // 数据
-                page_count: info.page_count,
-                range_start: 1,
-                range_end: info.page_count,
-                is_encrypted: info.is_encrypted, // 有密码
-                is_authenticate: !info.is_encrypted, // 已解密（密码正确）
-                password: "",
-            })
-            if(info.is_encrypted) encryptedCount++
-        }
-        if(encryptedCount > 0) {
-            qmlapp.popup.simple(qsTr("%1个加密文档").arg(encryptedCount),
-                qsTr("请点击文件名填写密码"))
-        }
-    }
 
     // 准备开始处理一个文档
     function onDocStart(path) {

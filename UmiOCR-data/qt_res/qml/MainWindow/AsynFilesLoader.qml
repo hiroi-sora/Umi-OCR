@@ -37,7 +37,6 @@ Item {
     }
 
     function fileLoadComplete(paths) {
-        console.log("全部加载完毕！")
         qmlapp.popup.hideMask("LoadingFiles")
         callback_(paths)
         callback_ = undefined

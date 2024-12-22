@@ -18,6 +18,16 @@ from ..ocr.tbpu.parser_tools.paragraph_parse import word_separator  # 上下句�
 
 MinSize = 1080  # 最小渲染分辨率
 
+# 合法文件后缀
+DocSuf = [
+    ".pdf",
+    ".xps",
+    ".epub",
+    ".mobi",
+    ".fb2",
+    ".cbz",
+]
+
 
 class FitzOpen:
     def __init__(self, path):

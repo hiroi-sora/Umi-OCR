@@ -10,7 +10,6 @@ from .page import Page  # 页基类
 from ..mission.mission_doc import MissionDOC  # 任务管理器
 from ..utils import utils
 from ..ocr.output import Output
-from ..utils.thread_pool import threadRun  # 异步执行函数
 
 
 class BatchDOC(Page):
@@ -21,23 +20,6 @@ class BatchDOC(Page):
         self._queuedDocs = []  # 当前正在排队的文档信息（未提交）
         self._argd = None
         self._docArgd = None
-
-    # 添加一些文档
-    def addDocs(self, paths, isRecurrence):
-        threadRun(self._addDocsThread, paths, isRecurrence)
-
-    # 添加一些文档
-    def _addDocsThread(self, paths, isRecurrence):
-        paths = utils.findDocs(paths, isRecurrence)
-        docs = []
-        for p in paths:
-            info = MissionDOC.getDocInfo(p)
-            if "error" in info:
-                logger.warning(f'读入文档失败：{p}, {info["error"]}')
-                continue
-            docs.append(info)
-        # 回调传入：{ "path" , "page_count" }
-        self.callQmlInMain("onAddDocs", docs)
 
     # 进行任务。
     # docs为列表，每一项为： {path:文档路径, range_start:范围起始, range_end: 范围结束, page_count:总页数, password:密码}

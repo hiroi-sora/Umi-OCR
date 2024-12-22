@@ -10,29 +10,14 @@ from PySide2.QtQml import QJSValue
 from typing import List
 
 from ..event_bus.pubsub_service import PubSubService  # 发布事件
+from ..mission.mission_doc import MissionDOC, DocSuf
+from ..mission.mission_ocr import ImageSuf
 from umi_log import logger
 
 
 FileSuf = {  # 合法文件后缀
-    "image": [
-        ".jpg",
-        ".jpe",
-        ".jpeg",
-        ".jfif",
-        ".png",
-        ".webp",
-        ".bmp",
-        ".tif",
-        ".tiff",
-    ],
-    "doc": [
-        ".pdf",
-        ".xps",
-        ".epub",
-        ".mobi",
-        ".fb2",
-        ".cbz",
-    ],
+    "image": ImageSuf,
+    "doc": DocSuf,
 }
 
 
@@ -76,7 +61,9 @@ def findFiles(
     return filePaths
 
 
-# 异步从路径中搜索后缀符合要求的文件
+# 异步从路径中搜索后缀符合要求的文件。
+# image: 返回路径列表
+# doc: 返回 MissionDOC.getDocInfo 的信息字典列表
 def asynFindFiles(
     paths: List,  # 初始路径列表
     sufType: str,  # 后缀类型，FileSuf的key
@@ -108,12 +95,26 @@ def asynFindFiles(
 
     def updateEvent(fp):
         nonlocal lastTime
-        if time.time() - lastTime > updateTime:
+        now = time.time()
+        if now - lastTime > updateTime:
             PubSubService.publish(updateKey, len(filePaths), fp)
+            lastTime = now
+
+    def addFile(fp):
+        fp = fp.replace("\\", "/")  # 规范化正斜杠
+        if sufType == "doc":  # 文档读取信息
+            info = MissionDOC.getDocInfo(fp)
+            if "error" in info:
+                logger.warning(f'读入文档失败：{fp}, {info["error"]}')
+            else:
+                filePaths.append(info)
+        else:
+            filePaths.append(fp)
+        updateEvent(fp)
 
     for p in paths:
         if os.path.isfile(p) and _sufMatching(p):  # 是文件，直接判断
-            filePaths.append(os.path.abspath(p))
+            addFile(os.path.abspath(p))
         elif os.path.isdir(p):  # 是目录
             if isRecurrence:  # 需要递归
                 for root, dirs, files in os.walk(p):
@@ -121,15 +122,11 @@ def asynFindFiles(
                         if _sufMatching(file):  # 收集子文件
                             # 转换为绝对路径
                             fp = os.path.abspath(os.path.join(root, file))
-                            fp = fp.replace("\\", "/")  # 规范化正斜杠
-                            filePaths.append(fp)
-                            updateEvent(fp)
+                            addFile(fp)
             else:  # 不递归读取子文件夹
                 for file in os.listdir(p):
                     if os.path.isfile(os.path.join(p, file)) and _sufMatching(file):
                         fp = os.path.abspath(os.path.join(p, file))
-                        fp = fp.replace("\\", "/")  # 规范化正斜杠
-                        filePaths.append(fp)
-                        updateEvent(fp)
+                        addFile(fp)
 
     PubSubService.publish(completeKey, filePaths)

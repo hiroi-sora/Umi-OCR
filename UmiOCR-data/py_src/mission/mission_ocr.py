@@ -8,12 +8,26 @@
 标签页可以向任务管理器提交一组任务队列，其中包含了每一项任务的信息，及总体的参数和回调。
 """
 
+import os
+
 from umi_log import logger
 from .mission import Mission
-from ..ocr.tbpu import getParser
-from ..ocr.tbpu import IgnoreArea
+from ..ocr.tbpu import getParser, IgnoreArea
 from ..ocr.api import getApiOcr, getLocalOptions
-from ..utils.utils import isImg, argdIntConvert
+from ..utils.utils import argdIntConvert
+
+# 合法文件后缀
+ImageSuf = [
+    ".jpg",
+    ".jpe",
+    ".jpeg",
+    ".jfif",
+    ".png",
+    ".webp",
+    ".bmp",
+    ".tif",
+    ".tiff",
+]
 
 
 class __MissionOcrClass(Mission):
@@ -42,7 +56,7 @@ class __MissionOcrClass(Mission):
         for i in range(len(msnList) - 1, -1, -1):
             if "path" in msnList[i]:
                 p = msnList[i]["path"]
-                if not isImg(p):
+                if os.path.splitext(p)[-1].lower() not in ImageSuf:
                     logger.warning(f"添加OCR任务时，第{i}项的路径path不是图片：{p}")
                     del msnList[i]
             elif "bytes" not in msnList[i] and "base64" not in msnList[i]:
