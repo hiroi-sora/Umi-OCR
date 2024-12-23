@@ -6,8 +6,8 @@
 import QtQuick 2.15
 
 Item {
-    property string tips: qsTr("加载文件中……")
-    property real updateTime: 1.0 // 刷新事件时间间隔
+    property string tips: qsTr("正在载入 %1 个文件：\n%2")
+    property real updateTime: 0.2 // 刷新事件时间间隔
     property var callback_: undefined // 缓存最近一次回调函数
 
     Component.onCompleted: {
@@ -25,7 +25,7 @@ Item {
         callback  // 加载完成后，向此回调函数传入路径列表
     ) {
         callback_ = callback
-        qmlapp.popup.showMask(tips, "LoadingFiles")
+        qmlapp.popup.showMask(tips.arg(0).arg(""), "LoadingFiles")
         qmlapp.utilsConnector.asynFindFiles(
             urls,
             sufType,
@@ -35,13 +35,15 @@ Item {
             updateTime
         )
     }
-
+    // 文件扫描结束，获取合法文件列表
     function fileLoadComplete(paths) {
         qmlapp.popup.hideMask("LoadingFiles")
         callback_(paths)
         callback_ = undefined
     }
+    // 文件扫描更新，刷新提示文本
     function fileLoadUpdate(filesCount, lastPath) {
-        console.log(`已加载 ${filesCount} 条。`)
+        qmlapp.popup.showMask(tips.arg(filesCount).arg(lastPath),
+            "LoadingFiles")
     }
 }
