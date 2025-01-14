@@ -367,7 +367,7 @@ Generated: 2023-09-01_12-13.txt</translation>
 举例：[OCR]_%name%range_%date
 生成：[OCR]_文档A(p2-10)_20230901_1213.txt
 添加占位符可以避免旧文件被新文件覆盖。</source>
-        <translation type="unfinished">No need to fill in the extension name. The following placeholders are supported:
+        <translation>No need to fill in the extension name. The following placeholders are supported:
 %date Date and time
 %name Original folder name/file name
 %range Page range. Only displayed when the OCR page count is less than the total page count.
