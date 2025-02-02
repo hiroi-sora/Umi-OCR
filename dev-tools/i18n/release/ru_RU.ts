@@ -2361,7 +2361,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/MainWindow/Size_.qml" line="50"/>
         <source>1.0</source>
-        <translation type="unfinished"></translation>
+        <translation>1.0</translation>
     </message>
 </context>
 <context>
