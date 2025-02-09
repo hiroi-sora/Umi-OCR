@@ -201,33 +201,40 @@ def get_qt_message_handler():
     from PySide2.QtCore import QtMsgType, QMessageLogContext
 
     def qt_message_handler(mode: QtMsgType, context: QMessageLogContext, msg: str):
-        # 提取信息
-        filepath = getattr(context, "file", "?")
-        filename = os.path.basename(filepath)
-        funcName = getattr(context, "function", "?")
-        if not funcName:  # 匿名函数
-            funcName = r"()=>{}"
-        # 覆盖字典
-        extra = {
-            "cover": {
-                "category": getattr(context, "category", "?"),
-                "filename": filename,
-                "funcName": funcName,
-                "lineno": getattr(context, "line", "?"),
-                "version": getattr(context, "version", "?"),
-                "module": "qml",
+        try:
+            # 提取信息
+            filepath = getattr(context, "file", "?")
+            filename = os.path.basename(filepath)
+            funcName = getattr(context, "function", "?")
+            if not funcName:  # 匿名函数
+                funcName = r"()=>{}"
+            # 覆盖字典
+            extra = {
+                "cover": {
+                    "category": getattr(context, "category", "?"),
+                    "filename": filename,
+                    "funcName": funcName,
+                    "lineno": getattr(context, "line", "?"),
+                    "version": getattr(context, "version", "?"),
+                    "module": "qml",
+                }
             }
-        }
-        if mode == QtMsgType.QtDebugMsg:
-            logger.debug(msg, extra=extra)
-        elif mode == QtMsgType.QtInfoMsg:
-            logger.info(msg, extra=extra)
-        elif mode == QtMsgType.QtWarningMsg:
-            logger.warning(msg, extra=extra)
-        elif mode == QtMsgType.QtCriticalMsg:
-            logger.error(msg, extra=extra)
-        elif mode == QtMsgType.QtFatalMsg:
-            logger.critical(msg, extra=extra)
+            if mode == QtMsgType.QtDebugMsg:
+                logger.debug(msg, extra=extra)
+            elif mode == QtMsgType.QtInfoMsg:
+                logger.info(msg, extra=extra)
+            elif mode == QtMsgType.QtWarningMsg:
+                logger.warning(msg, extra=extra)
+            elif mode == QtMsgType.QtCriticalMsg:
+                logger.error(msg, extra=extra)
+            elif mode == QtMsgType.QtFatalMsg:
+                logger.critical(msg, extra=extra)
+        except Exception:
+            logger.warning(
+                "qt_message_handler error",
+                exc_info=True,
+                stack_info=True,
+            )
 
     return qt_message_handler
 
