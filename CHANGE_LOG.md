@@ -20,8 +20,28 @@ git clone --single-branch --branch [分支名] https://github.com/hiroi-sora/Umi
 
 # 更新日志 CHANGE LOG
 
-### v2.1.4 `2024.8.31`
+### dev (v2.1.5) `开发中，未发布`
+
 分支名：`main`
+
+- 更新第三方依赖库：
+    - PyMuPDF: `1.24.11`
+    - fontTools: `4.56.0`
+    - Pillow: `10.4.0`
+    - psutil: `10.4.0`
+    - pynput: `1.8.0`
+    - zxing-cpp: `2.3.0`
+- 新增：**日志机制**。在命令行中启动Umi-OCR可查看实时日志。高于指定级别（默认为ERROR）的日志被保存到 `Umi-OCR/UmiOCR-data/logs` 目录中，级别可以在全局设置标签页中更改。
+- 新增：Esc键隐藏窗口。
+- 优化：图片/文档的异步加载机制，可一次性加载数万个文件并保持流畅，且能够预览加载进度。 (#710)
+- TODO: 部分标签页能自由切换左右/上下双栏模式。
+- TODO: Linux桌面任务栏对截图的影响。
+
+
+### [v2.1.4](https://github.com/hiroi-sora/Umi-OCR/tree/release/2.1.4) `2024.8.31`
+
+分支名：`release/2.1.4`
+
 - 修复：引擎原始输出项的"text"为空时，导致文本分析越界的错误。 (#625)
 - 新增UI语言：葡萄牙语 `Português` 。译者：[@杨鹏](https://hosted.weblate.org/user/ypf)
 - **PaddleOCR 插件相关**：
@@ -34,6 +54,7 @@ git clone --single-branch --branch [分支名] https://github.com/hiroi-sora/Umi
   - 优化：`glibc` 依赖降级至 `2.31` ，兼容 Debian-11 、 Ubuntu-20 等发行版。
 
 ### [v2.1.3](https://github.com/hiroi-sora/Umi-OCR/tree/release/2.1.3) `2024.7.23`
+
 分支名：`release/2.1.3`
 
 - 新兼容 Linux 平台。
