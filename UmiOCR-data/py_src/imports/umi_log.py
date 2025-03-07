@@ -34,7 +34,7 @@ from logging.handlers import RotatingFileHandler
 from logging import LogRecord
 
 # 保存的日志级别，可在UI修改
-Save_Log_Level: int = logging.WARNING
+Save_Log_Level: int = logging.ERROR
 
 # 日志保存目录
 Logs_Dir = "./logs"

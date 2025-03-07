@@ -254,7 +254,7 @@ Configs {
             },
             "saveLogLevel": {
                 "title": qsTr("保存的日志级别"),
-                "default": "WARNING",
+                "default": "ERROR",
                 "optionsList": [
                     ["NONE", "Close"],
                     ["DEBUG","DEBUG"],
