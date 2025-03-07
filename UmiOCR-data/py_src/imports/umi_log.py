@@ -200,11 +200,15 @@ def get_qt_message_handler():
     # 确保在初次调用时才导入QT模块
     from PySide2.QtCore import QtMsgType, QMessageLogContext
 
+    # 处理 QT (QML) 抛出的日志
     def qt_message_handler(mode: QtMsgType, context: QMessageLogContext, msg: str):
         try:
             # 提取信息
             filepath = getattr(context, "file", "?")
-            filename = os.path.basename(filepath)
+            if filepath:
+                filename = os.path.basename(filepath)
+            else:
+                filepath = filename = "?"
             funcName = getattr(context, "function", "?")
             if not funcName:  # 匿名函数
                 funcName = r"()=>{}"
