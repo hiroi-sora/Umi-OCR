@@ -16,6 +16,8 @@ Item {
             "fileLoadComplete", "FilesLoader")
         qmlapp.pubSub.subscribeGroup("<<fileLoadUpdate>>", this,
             "fileLoadUpdate", "FilesLoader")
+        // qmlapp.popup.showMask(tips.arg(32091).arg("D:/Pictures/Screenshots/屏幕截图 2024-10-24 141609.png"),
+        //     "LoadingFiles")
     }
 
     function run(
