@@ -11,6 +11,8 @@ Popup {
 
     // 展示遮罩层。同一个id重复调用时，可刷新显示文本。
     function showMask(msg="", id="") {
+        if(msgDict === undefined)
+            msgDict = {}
         if(!(id in msgDict)) // 新加入的id
             idList.push(id)
         msgDict[id] = msg // 刷新消息字典
@@ -34,7 +36,7 @@ Popup {
         else {
             const lastID = idList[idList.length - 1]
             const msg = msgDict[lastID] || ""
-            message(msg)
+            message = msg
         }
     }
 
@@ -50,10 +52,6 @@ Popup {
     property int maxWidth: parent.width - size_.line*10
     width: text.width + size_.spacing*2
     height: text.height + size_.spacing*2
-
-    Component.onCompleted: {
-        msgDict = {}
-    }
 
     // 背景
     background: Rectangle {
