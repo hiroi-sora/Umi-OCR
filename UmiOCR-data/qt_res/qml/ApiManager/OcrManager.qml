@@ -48,6 +48,13 @@ Item {
             }
         }
 
+        // 验证
+        if(Object.keys(localOptions).length === 0){
+            const s = qsTr("没有可用的 OCR 插件。")
+            qmlapp.popup.message("", s, "error")
+            return
+        }
+
         // 获取当前全局 apiKey ，验证在本字典中的存在性
         const nowKey = qmlapp.globalConfigs.getValue("ocr.api")
         if(!localOptions.hasOwnProperty(nowKey)) {
