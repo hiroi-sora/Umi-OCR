@@ -37,7 +37,8 @@ Window {
     Component.onCompleted: {
         image.showImgID(imgID)
         visible = true // 窗口可见
-        visibility = Window.Windowed
+        // 窗口模式设置为全屏，避免Linux任务栏排斥窗口位置
+        win.visibility = Window.FullScreen
         raise() // 弹到最前层
         requestActivate() // 激活窗口
     }
