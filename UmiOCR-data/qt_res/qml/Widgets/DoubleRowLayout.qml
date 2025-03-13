@@ -16,6 +16,8 @@ Item {
     property real initSplitterX: 0.5 // 分割线初始位置。>1时为像素，0~1为比例。
     property string saveKey: "" // 如果非空，则缓存 hideLR 参数。
     property real margins: size_.spacing // 边缘空白
+    property bool isShowSplitView: false // 是否展示分栏按钮
+    signal switchView() // 更改分栏布局信号
 
     // 只读信息
     property int hideLR: 0 // 0为不隐藏，1为隐藏左边，2为隐藏右边
@@ -86,8 +88,12 @@ Item {
             }
 
         }
-        // 去到左右。flag: 0 初始 1 左 2 右
+        // 去到左右。flag: 0-初始 1-左 2-右 3-切换分栏信号
         function toLR(flag) {
+            if(flag === 3) {
+                switchView()
+                return
+            }
             if(flag === 0)
                 toInitPosition()
             else if(flag === 1)
@@ -168,7 +174,7 @@ Item {
                 hoverEnabled: true
                 cursorShape: Qt.PointingHandCursor
                 width: containsMouse ? size_.line * 2 : parent.width 
-                height: size_.line * (doubleCC.hideLR===0 ? 6 : 4)
+                height: size_.line * ((doubleCC.hideLR===0 ? 6 : 4) + (doubleCC.isShowSplitView ? 2 : 0))
                 property int selectIndex: -1
                 onExited: selectIndex = -1
                 onPositionChanged: {
@@ -177,14 +183,18 @@ Item {
                             selectIndex = 1
                         else if(mouse.y < size_.line * 4)
                             selectIndex = 2
-                        else
+                        else if(mouse.y < size_.line * 6)
                             selectIndex = 0
+                        else
+                            selectIndex = 3
                     }
                     else {
                         if(mouse.y < size_.line * 2)
                             selectIndex = doubleCC.hideLR===1 ? 2 : 1
-                        else
+                        else if(mouse.y < size_.line * 4)
                             selectIndex = 0
+                        else
+                            selectIndex = 3
                     }
                 }
                 onClicked: doubleColumn.toLR(selectIndex)
@@ -221,6 +231,15 @@ Item {
                             height: width
                             color: btnsMouseArea.selectIndex===0 ? theme.textColor:theme.specialTextColor
                             icon: "arrow_to_center"
+                        }
+                        // 转为上下分栏
+                        Icon_ {
+                            visible: doubleCC.isShowSplitView
+                            width: parent.width
+                            height: width
+                            color: btnsMouseArea.selectIndex===3 ? theme.textColor:theme.specialTextColor
+                            icon: "split_view"
+                            rotation: 90
                         }
                     }
                 }

@@ -88,7 +88,7 @@ Item {
             }
 
         }
-        // 去到上下。flag: 0-初始 1-上 2-下 3-更改分栏信号
+        // 去到上下。flag: 0-初始 1-上 2-下 3-切换分栏信号
         function toTB(flag) {
             if(flag === 3) {
                 switchView()
@@ -124,6 +124,7 @@ Item {
                 topItem.parent = visible?topContainer:hideContainer
             }
         }
+
         // 中间拖动条
         Item{
             id: splitter
@@ -233,7 +234,7 @@ Item {
                             icon: "arrow_to_center"
                             rotation: 90
                         }
-                        // 转为上下分栏
+                        // 转为左右分栏
                         Icon_ {
                             visible: doubleCC.isShowSplitView
                             width: parent.height
