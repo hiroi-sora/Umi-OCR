@@ -16,6 +16,8 @@ Item {
     property real initSplitterY: 0.5 // 分割线初始位置。>1时为像素，0~1为比例。
     property string saveKey: "" // 如果非空，则缓存 hideTB 参数。
     property real margins: size_.spacing // 边缘空白
+    property bool isShowSplitView: true // 是否展示分栏按钮
+    signal switchView() // 更改分栏布局信号
 
     // 只读信息
     property int hideTB: 0 // 0为不隐藏，1为隐藏上边，2为隐藏下边
@@ -86,8 +88,12 @@ Item {
             }
 
         }
-        // 去到上下。flag: 0 初始 1 上 2 下
+        // 去到上下。flag: 0-初始 1-上 2-下 3-更改分栏信号
         function toTB(flag) {
+            if(flag === 3) {
+                switchView()
+                return
+            }
             if(flag === 0)
                 toInitPosition()
             else if(flag === 1)
@@ -167,7 +173,7 @@ Item {
                 hoverEnabled: true
                 cursorShape: Qt.PointingHandCursor
                 height: containsMouse ? size_.line * 2 : parent.height
-                width: size_.line * (doubleCC.hideTB===0 ? 6 : 4)
+                width: size_.line * ((doubleCC.hideTB===0 ? 6 : 4) + (doubleCC.isShowSplitView ? 2 : 0))
                 property int selectIndex: -1
                 onExited: selectIndex = -1
                 onPositionChanged: {
@@ -176,14 +182,18 @@ Item {
                             selectIndex = 1
                         else if(mouse.x < size_.line * 4)
                             selectIndex = 2
-                        else
+                        else if(mouse.x < size_.line * 6)
                             selectIndex = 0
+                        else
+                            selectIndex = 3
                     }
                     else {
                         if(mouse.x < size_.line * 2)
                             selectIndex = doubleCC.hideTB===1 ? 2 : 1
-                        else
+                        else if(mouse.x < size_.line * 4)
                             selectIndex = 0
+                        else
+                            selectIndex = 3
                     }
                 }
                 onClicked: doubleColumn.toTB(selectIndex)
@@ -222,6 +232,14 @@ Item {
                             color: btnsMouseArea.selectIndex===0 ? theme.textColor:theme.specialTextColor
                             icon: "arrow_to_center"
                             rotation: 90
+                        }
+                        // 转为上下分栏
+                        Icon_ {
+                            visible: doubleCC.isShowSplitView
+                            width: parent.height
+                            height: width
+                            color: btnsMouseArea.selectIndex===3 ? theme.textColor:theme.specialTextColor
+                            icon: "split_view"
                         }
                     }
                 }
