@@ -117,23 +117,18 @@ Item {
             onVisibleChanged: {
                 topItem.parent = visible?topContainer:hideContainer
             }
-            // 外框
-            Rectangle {
-                anchors.fill: parent
-                z: 10
-                color: "#00000000"
-                border.width: 1
-                border.color: theme.coverColor4
-            }
         }
         // 中间拖动条
         Item{
             id: splitter
             anchors.left: parent.left
             anchors.right: parent.right
-            height: 0
+            anchors.leftMargin: size_.spacing
+            anchors.rightMargin: size_.spacing
+            height: size_.spacing
             y: 0 // 位置可变换
             z: 1
+            property bool isVisible: splitterMouseArea.containsMouse || btnsMouseArea.containsMouse || splitterMouseArea.drag.active || doubleCC.hideTB!==0
 
             // 分割线 拖拽、悬停
             MouseArea {
@@ -142,7 +137,7 @@ Item {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 // 平常高为分隔栏高度，按下拖拽时高度增加防止鼠标出界
-                height: pressed ? doubleCC.height : size_.spacing*2
+                height: pressed ? doubleCC.height : parent.height
                 hoverEnabled: true // 鼠标悬停时，分割线颜色变深
                 cursorShape: Qt.SizeVerCursor // 鼠标指针为双箭头
                 // 拖拽
@@ -158,11 +153,80 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: parent.left
                 anchors.right: parent.right
+                height: size_.spacing * 0.3
                 radius: height
-                height: size_.spacing
                 visible: splitterMouseArea.containsMouse || splitterMouseArea.drag.active || doubleCC.hideTB!==0
                 color: splitterMouseArea.pressed ? theme.coverColor4 : theme.coverColor2
             }
+
+            // 控制按钮 点击
+            MouseArea {
+                id: btnsMouseArea
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.right: parent.right
+                hoverEnabled: true
+                cursorShape: Qt.PointingHandCursor
+                height: containsMouse ? size_.line * 2 : parent.height
+                width: size_.line * (doubleCC.hideTB===0 ? 6 : 4)
+                property int selectIndex: -1
+                onExited: selectIndex = -1
+                onPositionChanged: {
+                    if(doubleCC.hideTB===0) {
+                        if(mouse.x < size_.line * 2)
+                            selectIndex = 1
+                        else if(mouse.x < size_.line * 4)
+                            selectIndex = 2
+                        else
+                            selectIndex = 0
+                    }
+                    else {
+                        if(mouse.x < size_.line * 2)
+                            selectIndex = doubleCC.hideTB===1 ? 2 : 1
+                        else
+                            selectIndex = 0
+                    }
+                }
+                onClicked: doubleColumn.toTB(selectIndex)
+
+                // 控制按钮 视觉
+                Rectangle {
+                    color: theme.specialBgColor
+                    visible: (splitterMouseArea.containsMouse || btnsMouseArea.containsMouse) && !splitterMouseArea.drag.active
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    height: size_.line * 2
+                    radius: size_.panelRadius
+
+                    Row {
+                        height: parent.height
+                        Icon_ {
+                            visible: doubleCC.hideTB!==1
+                            width: parent.height
+                            height: width
+                            color: btnsMouseArea.selectIndex===1 ? theme.textColor:theme.specialTextColor
+                            icon: "arrow_to_left"
+                            rotation: 90
+                        }
+                        Icon_ {
+                            visible: doubleCC.hideTB!==2
+                            width: parent.height
+                            height: width
+                            color: btnsMouseArea.selectIndex===2 ? theme.textColor:theme.specialTextColor
+                            icon: "arrow_to_left"
+                            rotation: 270
+                        }
+                        Icon_ {
+                            width: parent.height
+                            height: width
+                            color: btnsMouseArea.selectIndex===0 ? theme.textColor:theme.specialTextColor
+                            icon: "arrow_to_center"
+                            rotation: 90
+                        }
+                    }
+                }
+            }
+
         }
 
         // 下容器
@@ -174,14 +238,6 @@ Item {
             anchors.bottom: parent.bottom
             onVisibleChanged: {
                 bottomItem.parent = visible?bottomContainer:hideContainer
-            }
-            // 外框
-            Rectangle {
-                anchors.fill: parent
-                z: 10
-                color: "#00000000"
-                border.width: 1
-                border.color: theme.coverColor4
             }
         }
 
