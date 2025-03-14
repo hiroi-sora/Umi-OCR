@@ -14,6 +14,7 @@ Item {
     property alias textLeft: textLeft_.text
     property string textRight: ""
     property alias textMain: textMain_.text
+    property alias activeFocus_: textMain_.activeFocus // 输入框焦点
     property int index_
     // 选取文字
     property int selectL: -1

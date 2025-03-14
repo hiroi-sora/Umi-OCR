@@ -247,37 +247,42 @@ Item {
             }
             return [li, lt, ri, rt]
         }
-        // 根据 Index 的参数，选择对应文本。
+        // 根据 Index 的参数，设置每个文本框中被划选的文本。
         function selectIndex() {
             const [li, lt, ri, rt] = getIndexes()
-            // 遍历每个文本框数据
-            for (let i = 0, l=resultsModel.count; i < l; i++) {
-                if( li<0 || ri<0 || i<li || i>ri ) { // 未被选中
-                    resultsModel.setProperty(i, "selectL_", -1)
-                    resultsModel.setProperty(i, "selectR_", -1)
-                    continue
-                }
-                const item = resultsModel.get(i)
-                const len = item.resText.length
-                if(i === li && i === ri) { // 单个块
-                    resultsModel.setProperty(i, "selectL_", lt)
-                    resultsModel.setProperty(i, "selectR_", Math.min(rt, len))
-                }
-                else if(i === li) { // 多个块的起始
-                    resultsModel.setProperty(i, "selectL_", lt)
-                    resultsModel.setProperty(i, "selectR_", len)
-                }
-                else if(i === ri) { // 多个块的结束
-                    resultsModel.setProperty(i, "selectL_", 0)
-                    resultsModel.setProperty(i, "selectR_", Math.min(rt, len))
-                }
-                else { // 多个块的中间
-                    resultsModel.setProperty(i, "selectL_", 0)
-                    resultsModel.setProperty(i, "selectR_", len)
-                }
-                resultsModel.setProperty(i, "selectUpdate_", selectUpdate) // 开始刷新
-            }
+            const currentUpdate = selectUpdate // 预存当前刷新次数
             selectUpdate++
+            // 遍历每个文本框数据
+            for (let i = 0, l = resultsModel.count; i < l; i++) {
+                let item = resultsModel.get(i) // 缓存改变之前的数据
+                // 未被选中
+                if( li<0 || ri<0 || i<li || i>ri ) {
+                    item.selectL_ = -1
+                    item.selectR_ = -1
+                }
+                // 被选中
+                else {
+                    const len = item.resText.length // 当前块的文本长度
+                    if(i === li && i === ri) { // 单个块，选中 lt~rt
+                        item.selectL_ = lt
+                        item.selectR_ = Math.min(rt, len)
+                    }
+                    else if(i === li) { // 起始块，选中 lt~末尾
+                        item.selectL_ = lt
+                        item.selectR_ = len
+                    }
+                    else if(i === ri) { // 结束块，选中 开头~rt
+                        item.selectL_ = 0
+                        item.selectR_ = Math.min(rt, len)
+                    }
+                    else { // 中间块，选中 开头~末尾
+                        item.selectL_ = 0
+                        item.selectR_ = len
+                    }
+                }
+                item.selectUpdate_ = currentUpdate // 修改刷新标记
+                resultsModel.set(i, item)
+            }
         }
         // 选中单个文本框
         function selectSingle() {
@@ -379,6 +384,15 @@ Item {
                 startIndex = startTextIndex = -1 // 复制完后，将start归为-1
             }
             else if(info.where >= 0) { // 文本区域
+                // 移除现有的所有选区
+                for (let i = 0, l=resultsModel.count; i < l; i++) {
+                    let element = resultsModel.get(i)
+                    element.selectL_ = -1
+                    element.selectR_ = -1
+                    element.selectUpdate_ = selectUpdate
+                    resultsModel.set(i, element); // 替换元素，触发一次更新
+                }
+                selectUpdate++
                 endIndex = startIndex = info.index
                 endTextIndex = startTextIndex = info.where
                 info.obj.focus(info.where) // 放置光标 & 赋予焦点
