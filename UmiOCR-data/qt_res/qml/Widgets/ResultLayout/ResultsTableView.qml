@@ -175,7 +175,6 @@ Item {
                 if(!activeFocus_) return // 临时措施：排除没有焦点的文本修改
                 if(resText===textMain) return // 临时措施：排除文本内容无变化的修改
 
-                console.log("==", index, textMain)
                 resultsModel.setProperty(index, "resText", textMain) // 文字改变时写入列表
             }
             copy: tableMouseArea.selectCopy
@@ -247,11 +246,18 @@ Item {
             }
             return [li, lt, ri, rt]
         }
+        // 重设 Index
+        function initIndexes() {
+            startIndex=startTextIndex=endIndex=endTextIndex=-1
+        }
+        function selectUpdateAdd() {
+            selectUpdate++
+            if(selectUpdate > 10000) selectUpdate = 0
+        }
         // 根据 Index 的参数，设置每个文本框中被划选的文本。
         function selectIndex() {
             const [li, lt, ri, rt] = getIndexes()
-            const currentUpdate = selectUpdate // 预存当前刷新次数
-            selectUpdate++
+            selectUpdateAdd() // 刷新标记步进
             // 遍历每个文本框数据
             for (let i = 0, l = resultsModel.count; i < l; i++) {
                 let item = resultsModel.get(i) // 缓存改变之前的数据
@@ -280,7 +286,7 @@ Item {
                         item.selectR_ = len
                     }
                 }
-                item.selectUpdate_ = currentUpdate // 修改刷新标记
+                item.selectUpdate_ = selectUpdate // 写入刷新标记
                 resultsModel.set(i, item)
             }
         }
@@ -360,11 +366,13 @@ Item {
             if(li < 0 || ri < 0) return
             const l = ri-li+1
             resultsModel.remove(li, l)
+            initIndexes() // 重设 Index
             qmlapp.popup.simple(qsTr("删除%1条记录").arg(l), "")
         }
         // 删除全部
         function selectAllDel() {
             resultsModel.clear()
+            initIndexes() // 重设 Index
             qmlapp.popup.simple(qsTr("清空记录"), "")
         }
         // 按下
@@ -374,16 +382,16 @@ Item {
                 return
             }
             const info = getWhere()
-            if(info === undefined) { // 无效区域
-                startIndex=startTextIndex=endIndex=endTextIndex=-1
-            }
+            if(info === undefined) // 无效区域
+                initIndexes()
             else if(info.where === -1) { // 标题栏区域
                 endIndex = startIndex = info.index
                 startTextIndex = endTextIndex = -1
                 selectCopy()
-                startIndex = startTextIndex = -1 // 复制完后，将start归为-1
+                initIndexes() // 复制完后，清空index记录
             }
             else if(info.where >= 0) { // 文本区域
+                selectUpdateAdd()
                 // 移除现有的所有选区
                 for (let i = 0, l=resultsModel.count; i < l; i++) {
                     let element = resultsModel.get(i)
@@ -392,7 +400,6 @@ Item {
                     element.selectUpdate_ = selectUpdate
                     resultsModel.set(i, element); // 替换元素，触发一次更新
                 }
-                selectUpdate++
                 endIndex = startIndex = info.index
                 endTextIndex = startTextIndex = info.where
                 info.obj.focus(info.where) // 放置光标 & 赋予焦点
