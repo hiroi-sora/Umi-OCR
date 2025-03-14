@@ -45,7 +45,7 @@ Item {
                 if(doubleCC.saveKey) { // 取hide缓存
                     const layoutDict = qmlapp.globalConfigs.getValue("window.doubleLayout")
                     const f = layoutDict[doubleCC.saveKey]
-                    if(f !== undefined) hideFlag = f
+                    if(Number.isInteger(f)) hideFlag = f // 合法检查
                 }
                 toTB(hideFlag)
             })

@@ -25,7 +25,7 @@ Item {
             if(doubleLayout.saveKey) {
                 const layoutDict = qmlapp.globalConfigs.getValue("window.doubleLayout")
                 const f = layoutDict[doubleLayout.saveKey]
-                if(f !== undefined) isRow = f
+                if(f === true || f === false) isRow = f // bool类型合法性检查
             }
         })
     }
