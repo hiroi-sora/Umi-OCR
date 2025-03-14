@@ -9,6 +9,8 @@ import QtGraphicalEffects 1.15
 Item {
     property alias currentIndex: bar.currentIndex // 当前下标
     property int indexChangeNum: 0 // 下标变化次数
+    property bool isMenuTop: true  // t时控制菜单在顶部，f时在底部
+    property real menuHeight: size_.line * 2 // 菜单栏高度
 
     onCurrentIndexChanged: indexChangeNum++
 
@@ -21,18 +23,42 @@ Item {
          }  */
     property var tabsModel: []
     clip: true
+    id: tabPanel
+
+    function updateMenuTop() {
+        // 菜单在顶部模式
+        if(isMenuTop) {
+            menuContainer.anchors.top = tabPanel.top
+            menuContainer.anchors.bottom = undefined
+            menuContainer.height = menuHeight
+            swipeView.anchors.top = menuContainer.bottom
+            swipeView.anchors.bottom = tabPanel.bottom
+            swipeView.anchors.topMargin = size_.smallSpacing
+            swipeView.anchors.bottomMargin = 0
+        }
+        // 菜单在底部模式
+        else {
+            menuContainer.anchors.top = undefined
+            menuContainer.anchors.bottom = tabPanel.bottom
+            menuContainer.height = menuHeight
+            swipeView.anchors.top = tabPanel.top
+            swipeView.anchors.bottom = menuContainer.top
+            swipeView.anchors.topMargin = 0
+            swipeView.anchors.bottomMargin = size_.smallSpacing
+        }
+
+    }
+    onIsMenuTopChanged: updateMenuTop()
+    Component.onCompleted: updateMenuTop()
 
     // 下方 选项页
     SwipeView {
         id: swipeView
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.top: topContainer.bottom
-        anchors.bottom: parent.bottom
-        anchors.topMargin: size_.smallSpacing
         currentIndex: bar.currentIndex
         interactive: false // 禁止直接滑动视图本身
-        Component.onCompleted:{
+        Component.onCompleted: {
             if(!qmlapp.enabledEffect) // 关闭动画
                 contentItem.highlightMoveDuration = 0
         }
@@ -50,14 +76,12 @@ Item {
         }
     }
 
-    // 上方 选项栏
+    // 选项栏
     Item {
-        id: topContainer
-        
+        id: menuContainer
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.top: parent.top
-        height: size_.line * 2
+        // 在 updateMenuTop 中重设高度
 
         Rectangle { // 背景色
             anchors.fill: parent
@@ -175,6 +199,5 @@ Item {
                 }
             }
         }
-
     }
 }
