@@ -152,6 +152,30 @@ Item {
             index_: index
             onTextHeightChanged: tableView.forceLayout // 文字高度改变时重设列宽
             onTextMainChanged: {
+                // Bug!!!!!!!!!!
+                /*
+                以下代码的本意是：当用户修改输入框文本时，将修改后的文本同步到 resultsModel 中。
+                这样，当 TableView 动态加载文本框时，可以恢复用户编辑过的内容。
+                但是， onTextChanged 信号有个致命问题：不仅会在手动编辑文本时触发此信号，
+                当程序修改文本（如动态加载文本框时的赋值）甚至文本样式改变（比如选中一段文本，使其
+                背景色变化）都会触发此信号。
+                这就有几率触发一些bug，尤其是 TableView 动态加载时，可能一个物理输入框组件轮换展示
+                不同的逻辑内容，切换这些逻辑内容时触发 onTextChanged ，误将一个逻辑内容写入另外一个
+                resultsModel 槽位，导致吞掉另一个逻辑内容。
+                本质上，这是由于 TextEdit 组件没有 textEdited 信号。如果有，那就不会产生上述误判了。
+                相关：
+                https://forum.qt.io/topic/143841/textedited-signal-for-textarea-textedit/5
+                https://bugreports.qt.io/browse/QTBUG-103718
+                https://codereview.qt-project.org/c/qt/qtdeclarative/+/606008
+                上述链接指出，qt新版本或dev分支已为 TextEdit 补上 textEdited 信号。
+                但是，pyside2暂未更新此版本。
+                本项目作为临时措施，在下文用一些先验条件来判断当前的修改是否有可能由用户发起，
+                以此降低误判的概率。
+                */
+                if(!activeFocus_) return // 临时措施：排除没有焦点的文本修改
+                if(resText===textMain) return // 临时措施：排除文本内容无变化的修改
+
+                console.log("==", index, textMain)
                 resultsModel.setProperty(index, "resText", textMain) // 文字改变时写入列表
             }
             copy: tableMouseArea.selectCopy
@@ -465,4 +489,21 @@ Item {
             }
         }
     }
+
+    // 测试
+    // Button_ {
+    //     anchors.top: parent.top
+    //     anchors.left: parent.left
+    //     z:100
+    //     bgColor_: "red"
+    //     text_: "Test"
+    //     onClicked: {
+    //         let t = "\n"
+    //         for (let i = 0, l=resultsModel.count; i < l; i++) {
+    //             let item = resultsModel.get(i);
+    //             t += "\n "+i+" "+item.resText
+    //         }
+    //         console.log("resultsModel: ", resultsModel.count, t)
+    //     }
+    // }
 }
