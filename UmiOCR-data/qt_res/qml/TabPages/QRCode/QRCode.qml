@@ -199,15 +199,14 @@ TabPage {
 
     // ========================= 【布局】 =========================
     property bool running: false
-    // 主区域：双栏面板
-    DoubleRowLayout {
-        id: doubleRowLayout
+    // 主区域：可切换双栏面板
+    DoubleSwitchableLayout {
+        id: doubleLayout
         saveKey: "QRCode_1"
         anchors.fill: parent
-        initSplitterX: 0.5
 
-        // 左面板
-        leftItem: Panel {
+        // 面板A：图像展示
+        itemA: Panel {
             anchors.fill: parent
             clip: true
             // 顶部控制栏
@@ -217,7 +216,6 @@ TabPage {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.margins: size_.spacing
-                anchors.topMargin: size_.smallSpacing
                 height: size_.line * 1.5
                 // 靠右
                 Row {
@@ -332,14 +330,16 @@ TabPage {
             }
         }
 
-        // 右面板
-        rightItem: Panel {
+        // 面板B：结果
+        itemB: Panel {
             anchors.fill: parent
 
             TabPanel {
                 id: tabPanel
                 anchors.fill: parent
                 anchors.margins: size_.spacing
+                isMenuTop: doubleLayout.isRow // 左右布局时，菜单在顶部；上下布局时菜单在底部
+                menuHeight: size_.line * 1.5
 
                 // 结果面板
                 ResultsTableView {
@@ -358,13 +358,13 @@ TabPage {
                         anchors.top: parent.top
                         anchors.left: parent.left
                         anchors.right: parent.right
-                        height: size_.line * 2 + size_.smallSpacing * 2
+                        height: size_.line * 1.5
+
                         Button_ {
                             id: writePanelBtn1
                             anchors.top: parent.top
                             anchors.bottom: parent.bottom
                             anchors.left: parent.left
-                            anchors.margins: size_.smallSpacing
                             text_: qsTr("设置")
                             onClicked: {
                                 tabPanel.currentIndex = 0 // 转到设置面板
@@ -375,7 +375,6 @@ TabPage {
                             anchors.top: parent.top
                             anchors.bottom: parent.bottom
                             anchors.right: parent.right
-                            anchors.margins: size_.smallSpacing
                             CheckButton {
                                 anchors.top: parent.top
                                 anchors.bottom: parent.bottom
@@ -404,6 +403,7 @@ TabPage {
                         anchors.left: parent.left
                         anchors.right: parent.right
                         anchors.bottom: parent.bottom
+                        anchors.topMargin: size_.smallSpacing
                         color: theme.bgColor
                         border.width: 1
                         border.color: theme.coverColor4

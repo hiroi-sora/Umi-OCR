@@ -223,15 +223,16 @@ TabPage {
 
     // ========================= 【布局】 =========================
 
-    // 左侧栏。主区域左栏隐藏时，才显示左侧栏。
+    // 左侧栏。主区域为左右双栏且左栏隐藏时，才显示左侧栏。
     Item {
         id: leftCtrlPanel
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.bottom: parent.bottom
-        anchors.leftMargin: doubleRowLayout.hideLR===1 ? size_.smallSpacing : 0
-        width: doubleRowLayout.hideLR===1 ? size_.line * 1.5 : 0
-        visible: doubleRowLayout.hideLR===1
+        // 展示条件
+        visible: doubleLayout.isRow && doubleLayout.hideAB === 1
+        anchors.leftMargin: visible ? size_.smallSpacing : 0
+        width: visible ? size_.line * 1.5 : 0
 
         Column {
             anchors.top: parent.top
@@ -276,18 +277,18 @@ TabPage {
             }
         }
     }
-    // 主区域：双栏面板
-    DoubleRowLayout {
-        id: doubleRowLayout
+
+    // 主区域：可切换双栏面板
+    DoubleSwitchableLayout {
+        id: doubleLayout
         saveKey: "ScreenshotOCR_1"
         anchors.left: leftCtrlPanel.right
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.right: parent.right
-        initSplitterX: 0.5
 
-        // 左面板
-        leftItem: Panel {
+        // 面板A：图像展示
+        itemA: Panel {
             anchors.fill: parent
             clip: true
             // 顶部控制栏
@@ -297,7 +298,6 @@ TabPage {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.margins: size_.spacing
-                anchors.topMargin: size_.smallSpacing
                 anchors.bottomMargin: 0
                 height: size_.line * 1.5
                 clip: true
@@ -435,14 +435,16 @@ TabPage {
             }
         }
 
-        // 右面板
-        rightItem: Panel {
+        // 面板B：结果
+        itemB: Panel {
             anchors.fill: parent
 
             TabPanel {
                 id: tabPanel
                 anchors.fill: parent
                 anchors.margins: size_.spacing
+                isMenuTop: doubleLayout.isRow // 左右布局时，菜单在顶部；上下布局时菜单在底部
+                menuHeight: size_.line * 1.5
 
                 // 结果面板
                 ResultsTableView {

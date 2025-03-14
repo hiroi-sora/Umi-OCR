@@ -29,23 +29,6 @@ TabPage {
 
     property string msnID: "" // 当前任务ID
 
-    // TODO: 测试用
-    // Timer {
-    //     interval: 200
-    //     running: true
-    //     onTriggered: {
-    //         addDocs(
-    //             [
-    //                 // "D:/Pictures/Screenshots/test",
-    //                 // "../../PDF测试",
-    //                 "D:/MyCode/PythonCode/Umi-OCR 计划/PDF测试/多样本",
-    //             ]
-    //         )
-    //         console.log("自动添加！！！！！！！！！！！！！")
-    //         // docStart()
-    //     }
-    // }
-
     // 异步加载一批文档路径
     function addDocs(paths) {
         if(paths.length <= 0) return
@@ -216,14 +199,14 @@ TabPage {
     // 配置
     configsComp: BatchDOCConfigs {}
 
-    // 主区域：左右双栏面板。
-    DoubleRowLayout {
+    // 主区域：可切换双栏面板
+    DoubleSwitchableLayout {
+        id: doubleLayout
         saveKey: "BatchDOC_1"
         anchors.fill: parent
-        initSplitterX: 0.5
 
-        // 左面板：控制板+文件表格
-        leftItem: Panel {
+        // 面板A：控制板+文件表格
+        itemA: Panel {
             anchors.fill: parent
 
             // 上方控制板
@@ -273,23 +256,24 @@ TabPage {
                 }
             }
         }
-        // 右面板：文字输出 & 设置
-        rightItem: Panel {
-            id: rightPanel
+        // 面板B：文字输出 & 设置
+        itemB: Panel {
             anchors.fill: parent
-
-            // 结果面板
-            ResultsTableView {
-                id: resultsTableView
-                anchors.fill: parent
-                visible: false
-            }
 
             // 配置项控制板
             TabPanel {
                 id: tabPanel
                 anchors.fill: parent
                 anchors.margins: size_.spacing
+                isMenuTop: doubleLayout.isRow // 左右布局时，菜单在顶部；上下布局时菜单在底部
+                menuHeight: size_.line * 2
+
+                // 结果面板
+                ResultsTableView {
+                    id: resultsTableView
+                    anchors.fill: parent
+                    visible: false
+                }
 
                 tabsModel: [
                     {

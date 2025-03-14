@@ -20,20 +20,6 @@ TabPage {
 
     Component.onCompleted: {
     }
-    // TODO: 测试用
-    // Timer {
-    //     interval: 200
-    //     running: true
-    //     onTriggered: {
-    //         addImages(
-    //             [
-    //                 "D:/Pictures/Screenshots/test",
-    //             ]
-    //         )
-    //         console.log("自动添加！！！！！！！！！！！！！")
-    //         // ocrStart()
-    //     }
-    // }
 
     // 异步加载一批图像路径
     function addImages(paths) {
@@ -211,14 +197,14 @@ TabPage {
             }
         }
     }
-    // 主区域：左右双栏面板。
-    DoubleRowLayout {
+    // 主区域：可切换双栏面板
+    DoubleSwitchableLayout {
+        id: doubleLayout
         saveKey: "BatchOCR_1"
         anchors.fill: parent
-        initSplitterX: 0.5
 
-        // 左面板：控制板+文件表格
-        leftItem: Panel {
+        // 面板A：控制板+文件表格
+        itemA: Panel {
             anchors.fill: parent
 
             // 上方控制板
@@ -268,23 +254,24 @@ TabPage {
                 }
             }
         }
-        // 右面板：文字输出 & 设置
-        rightItem: Panel {
-            id: rightPanel
+        // 面板B：文字输出 & 设置
+        itemB: Panel {
             anchors.fill: parent
-
-            // 结果面板
-            ResultsTableView {
-                id: resultsTableView
-                anchors.fill: parent
-                visible: false
-            }
 
             // 配置项控制板
             TabPanel {
                 id: tabPanel
                 anchors.fill: parent
                 anchors.margins: size_.spacing
+                isMenuTop: doubleLayout.isRow // 左右布局时，菜单在顶部；上下布局时菜单在底部
+                menuHeight: size_.line * 2
+
+                // 结果面板
+                ResultsTableView {
+                    id: resultsTableView
+                    anchors.fill: parent
+                    visible: false
+                }
 
                 tabsModel: [
                     {
