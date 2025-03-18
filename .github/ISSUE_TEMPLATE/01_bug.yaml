@@ -4,9 +4,13 @@ body:
 - type: markdown
   attributes:
     value: |
-      Please first search the [Issues](https://github.com/hiroi-sora/Umi-OCR/issues) to make sure that no one else has already raised a similar question. If there is an existing issue, you can reply under that Issue to provide more details. The more the developer knows, the easier it is to fix the problem.
+      Please first search the [Issues](https://github.com/hiroi-sora/Umi-OCR/issues) to make sure that no one else has already raised a similar issue. If there is an existing issue, you can reply under that Issue to provide more details. The more the developer knows, the easier it is to fix the problem.
 
       请先浏览或搜索 [Issues](https://github.com/hiroi-sora/Umi-OCR/issues) ，确保没有其他人曾经提出过类似问题。如果已有类似问题，你可以在该Issue下回复，提供更多细节。开发者知道得越多，修复问题越容易。
+
+      Please ensure that you have read the [FAQ](https://github.com/hiroi-sora/Umi-OCR/issues/447) before raising a new issue.
+
+      请确保在提问之前已经阅读过 [常见问题解答](https://github.com/hiroi-sora/Umi-OCR/issues/447)。
 - type: checkboxes
   attributes:
     label: Issues
