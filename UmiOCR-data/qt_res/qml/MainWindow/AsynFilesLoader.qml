@@ -16,8 +16,6 @@ Item {
             "fileLoadComplete", "FilesLoader")
         qmlapp.pubSub.subscribeGroup("<<fileLoadUpdate>>", this,
             "fileLoadUpdate", "FilesLoader")
-        // qmlapp.popup.showMask(tips.arg(32091).arg("D:/Pictures/Screenshots/屏幕截图 2024-10-24 141609.png"),
-        //     "LoadingFiles")
     }
 
     function run(
@@ -27,7 +25,7 @@ Item {
         callback  // 加载完成后，向此回调函数传入路径列表
     ) {
         callback_ = callback
-        qmlapp.popup.showMask(tips.arg(0).arg(""), "LoadingFiles")
+        qmlapp.popup.showMask(tips.arg(1).arg(""), "LoadingFiles")
         qmlapp.utilsConnector.asynFindFiles(
             urls,
             sufType,

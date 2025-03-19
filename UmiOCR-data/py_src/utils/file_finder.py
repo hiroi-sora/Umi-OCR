@@ -61,7 +61,7 @@ def findFiles(
     return filePaths
 
 
-# 异步从路径中搜索后缀符合要求的文件。
+# 异步从路径中搜索后缀符合要求的文件，并定时刷新UI。
 # image: 返回路径列表
 # doc: 返回 MissionDOC.getDocInfo 的信息字典列表
 def asynFindFiles(
@@ -69,8 +69,8 @@ def asynFindFiles(
     sufType: str,  # 后缀类型，FileSuf的key
     isRecurrence: bool,  # 若为True，则递归搜索
     completeKey: str,  # 全部完成后的事件key。向事件传入合法路径列表。
-    updateKey: str,  # 加载中刷新进度的key。填""则无。向事件传入 (已完成的路径数量, 最近一条路径)
-    updateTime: float,  # 刷新进度的间距
+    updateKey: str,  # UI刷新进度的事件key。填""则不刷新。向事件传入 (已完成的路径数量, 最近一条路径)
+    updateTime: float,  # UI刷新进度的间距
 ):
     if isinstance(paths, QJSValue):
         paths = paths.toVariant()
@@ -89,7 +89,6 @@ def asynFindFiles(
 
     if not updateKey:  # 如果没有刷新事件，则刷新间隔为无穷大
         updateTime = float("inf")
-    updateTime
     filePaths = []
     lastTime = time.time()  # 上一次update事件的时间
 
