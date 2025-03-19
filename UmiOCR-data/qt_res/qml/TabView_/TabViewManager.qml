@@ -95,6 +95,7 @@ Item {
         if(showPageIndex >= index) { // 若选中页在被添加页之前
             showPageIndex++ // 选中页序号后移
         }
+        settings.save()
     }
 
     // 增： 在最后，添加一个导航页，并选中该页
@@ -127,9 +128,7 @@ Item {
                 showTabPage(index)
             }
         }
-        else { // 删除不影响选中页，则手动刷新存储
-            settings.save()
-        }
+        settings.save()
     }
 
     // 改： 将 index 处的标签页，改为 infoIndex 页。
@@ -186,6 +185,7 @@ Item {
         for(let i in pageList){ // 记录新URL顺序
             openPageList[i] = pageList[i].info.url
         }
+        settings.save()
     }
 
     // 查： 传入页面对象 obj ，返回该对象的下标。
