@@ -63,8 +63,15 @@ Popup {
             id: text
             anchors.centerIn: parent
             text: message
-            width: wrapMode === Text.Wrap ? maxWidth : implicitWidth
-            wrapMode: implicitWidth > maxWidth ? Text.Wrap : Text.NoWrap
-        } 
+            width: textMetrics.width > maxWidth ? maxWidth : implicitWidth // 宽度根据内容自适应，不超过 maxWidth
+            wrapMode: textMetrics.width > maxWidth ? Text.Wrap : Text.NoWrap
+        }
+    }
+
+    // 文本宽度测量器，不可见
+    Text_ { // TextMetrics不准确，只能用普通Text
+        id: textMetrics
+        visible: false
+        text: message
     }
 }
