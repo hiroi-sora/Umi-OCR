@@ -1,21 +1,25 @@
 # 刷新所有翻译文本文件 .ts
+# git push 后，在线编辑：
+# https://hosted.weblate.org/projects/umi-ocr/ui/
 
 import os
 import sys
 import xml.etree.ElementTree as ET
 
 LangList = [
-    "en_US",
-    "zh_TW",
-    "ja_JP",
-    "fr_FR",
-    "pt",
+    "en_US",  # 英语（美国）
+    "zh_TW",  # 中文（繁体）
+    "ja_JP",  # 日语
+    "fr_FR",  # 法语
+    "pt",  # 葡萄牙语
+    "ru_RU",  # 俄语
+    "uz",  # 乌兹别克语
+    "vi",  # 越南语
     # "nb_NO",
     # "it_IT",
     # "es_ES",
     # "de_DE",
     # "ko_KR",
-    # "ru_RU",
     # "pt_BR",
 ]
 
