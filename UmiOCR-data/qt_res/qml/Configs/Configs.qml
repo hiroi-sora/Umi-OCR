@@ -112,6 +112,11 @@ Item {
         console.log(`% 加载配置 ${category_} ！`)
         // console.log(`% 加载配置 ${category_} ！: ${JSON.stringify(valueDict, null, 2)}`)
     }
+    // 重新从 settings 文件中加载设置项和UI
+    function settingsReload() {
+        settings.sync()
+        reload()
+    }
     // 获取配置值字典
     function getValueDict() {
         return valueDict
@@ -140,6 +145,16 @@ Item {
     // 初始化
     Component.onCompleted: { 
         if(autoLoad) reload() // 自动加载设置项
+        // 注册重载事件
+        Qt.callLater(()=>{
+            qmlapp.pubSub.subscribeGroup("<<settingsReload>>", configs, "settingsReload",
+                "settingsReload"+category_ // 将配置名传入组名，作为注销事件时的唯一标识符
+            )
+        })
+    }
+    // 销毁，注销重载事件
+    Component.onDestruction: {
+        qmlapp.pubSub.unsubscribeGroup("settingsReload"+category_)
     }
     // 初始化数值
     function initConfigDict() {

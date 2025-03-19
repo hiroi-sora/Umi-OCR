@@ -379,6 +379,11 @@ class _Cmd:
             action="store_true",
             help='Read the QR code. Use --qrcode_read "image_to_recognize.jpg"',
         )
+        self._parser.add_argument(
+            "--reload",
+            action="store_true",
+            help='Reload settings from the configuration file ".settings"',
+        )
         # 页面管理
         self._parser.add_argument(
             "--all_pages",
@@ -462,6 +467,9 @@ class _Cmd:
             return CmdActuator.qrcode_create(args.paras)
         if args.qrcode_read:  # 读二维码
             return CmdActuator.qrcode_read(args.paras)
+        if args.reload:  # 重新加载配置
+            PubSubService.publish("<<settingsReload>>")
+            return "Settings reload."
         # 页面管理
         if args.all_pages:
             return CmdActuator.getAllPages()
