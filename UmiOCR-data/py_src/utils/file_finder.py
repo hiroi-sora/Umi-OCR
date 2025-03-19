@@ -90,7 +90,7 @@ def asynFindFiles(
     if not updateKey:  # 如果没有刷新事件，则刷新间隔为无穷大
         updateTime = float("inf")
     filePaths = []
-    lastTime = time.time()  # 上一次update事件的时间
+    lastTime = 0  # 上一次update事件的时间
 
     def updateEvent(fp):
         nonlocal lastTime
