@@ -227,9 +227,7 @@ URL：`/api/ocr`
 - **base64** ： 必填。待识别图像的 Base64 编码字符串，无需 `data:image/png;base64,` 等前缀。
 - **options** ：可选。参数字典，见 [查询接口](#/api/ocr/get_options/table) 。
 
-
-<details>
-<summary>options 参数示例：（点击展开）</summary>
+POST 参数示例：
 
 ```json
 {
@@ -243,8 +241,6 @@ URL：`/api/ocr`
     }
 }
 ```
-
-</details>
 
 ### 2.2. 响应格式
 
