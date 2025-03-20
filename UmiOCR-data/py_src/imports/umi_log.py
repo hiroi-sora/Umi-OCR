@@ -51,6 +51,13 @@ _Log_Levels = {
 }
 
 
+# 忽略日志列表，屏蔽QT框架自发产生的一些日志。（目前仅对 get_qt_message_handler 生效）
+Log_Ignore_List = [
+    "Retrying to obtain clipboard.",  # https://bugreports.qt.io/browse/QTBUG-97930
+    "Unable to obtain clipboard.",
+]
+
+
 # 覆盖过滤器
 class _CoverFilter(logging.Filter):
     def filter(self, record: LogRecord):
@@ -205,6 +212,8 @@ def get_qt_message_handler():
     # 处理 QT (QML) 抛出的日志
     def qt_message_handler(mode: QtMsgType, context: QMessageLogContext, msg: str):
         try:
+            if msg in Log_Ignore_List:
+                return
             # 提取信息
             filepath = getattr(context, "file", "?")
             if filepath:
