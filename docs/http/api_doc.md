@@ -21,7 +21,7 @@
 ---
 
 > [!TIP]
-> 必须使用最新的 Umi-OCR [v2.1.3（测试版）](https://github.com/hiroi-sora/Umi-OCR/releases) ，才具有文档识别功能。
+> `v2.1.4` 及以上的版本，才具有文档识别功能。
 
 <a id="/api/doc"></a>
 
@@ -31,12 +31,12 @@
 
 调用文档识别的流程为：
 
-0. 开发之前，先查询确认一下参数。👉 [说明](#/api/doc/get_options)
-1. 上传要识别的文件，获取任务ID。👉 [说明](#/api/doc/upload)
-2. 通过ID，轮询任务状态，直到OCR任务结束。👉 [说明](#/api/doc/result)
-3. 生成目标文件（如双层可搜索PDF），获取下载链接。👉 [说明](#/api/doc/download)
-4. 下载目标文件。👉 [说明](#/api/doc/download/id)
-5. 清理任务。👉 [说明](#/api/doc/clear)
+- 准备工作：开发之前，先查询确认一下参数。👉 [说明](#/api/doc/get_options)
+- 第1步：上传要识别的文件，获取任务ID。👉 [说明](#/api/doc/upload)
+- 第2步：通过ID，轮询任务状态，直到OCR任务结束。👉 [说明](#/api/doc/result)
+- 第3步：生成目标文件（如双层可搜索PDF），获取下载链接。👉 [说明](#/api/doc/download)
+- 第4步：下载目标文件。👉 [说明](#/api/doc/download/id)
+- 第5步：清理任务。👉 [说明](#/api/doc/clear)
 
 建议参考下述示例代码：
 
@@ -47,10 +47,10 @@ Web - [api_doc_demo.html](api_doc_demo.html)
 
 ---
 
-## 0. 文档上传：参数查询
+## 准备工作：参数查询
 
-> 在不同的情况下（比如使用不同的OCR引擎插件），**文档上传接口**可以传入不同的参数。   
-> 通过【参数查询接口】，可以获取所有参数的定义、默认值、可选值等信息。   
+> 在不同的情况下（比如使用不同的OCR引擎插件）， **第1步-上传文件** 时可以传入不同的参数。   
+> 通过 **参数查询接口** ，可以获取所有参数的定义、默认值、可选值等信息。   
 > 你可以调用查询接口来确认信息，也可以通过查询接口返回的字典来自动化生成前端UI。   
 
 
@@ -64,12 +64,10 @@ URL：`/api/doc/get_options`
 
 ### 0.2. 响应格式
 
-返回 `json` 字典，记录**文档上传接口**的参数定义。
-
-以PaddleOCR引擎插件为例，返回值为：
+返回一个json字符串，记录 **[文档上传接口](#/api/doc/upload)** 的参数定义。
 
 <details>
-<summary>展开</summary>
+<summary>以PaddleOCR引擎插件为例，返回值格式化后为：（点击展开）</summary>
 
 ```json
 {
@@ -181,11 +179,9 @@ URL：`/api/doc/get_options`
 }
 ```
 
-上述返回值示例中，拥有12个根元素，表示12个参数。
-
 </details></br>
 
-返回值中，每个参数有这些属性：
+上述返回值中，每个参数有这些属性：
 
 - `title`：参数名称。
 - `toolTip`：参数说明。
@@ -194,16 +190,30 @@ URL：`/api/doc/get_options`
   - `enum`：枚举。参数值必须为 `optionsList` 中某一项的 `[0]` 。
   - `boolean`：布尔。参数值必须为 `true/false` 。
   - `text`：字符串。
-  - `number`：数字。如何属性`isInt==true`，那么必须为整数。
+  - `number`：数字。如果属性`isInt==true`，那么必须为整数。
   - `var`：特殊类型，具体见 `toolTip` 的说明。
 
-部分参数的具体说明，可参考： [图片OCR参数查询](api_ocr.md#/api/ocr/options_info) 。
+所有参数都是可选的。任一参数不填时，将被设为默认值。
+<a id="/api/doc/get_options/table"></a>
+对上述参数的完整解释：
+
+| 键                      | 默认值                        | 类型                                                                                                                                                                                                                 | 说明                                                                                                                                                                                     |
+| ----------------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ocr.language`          | `"models/config_chinese.txt"` | 枚举，可选值为字符串：`"models/config_chinese.txt"`、 `"models/config_en.txt"`、 `"models/config_chinese_cht(v2).txt"`、 `"models/config_japan.txt"`、 `"models/config_korean.txt"`、 `"models/config_cyrillic.txt"` | 语言/模型库：加载 `./UmiOCR-data/plugins/PaddleOCR-json/models`目录中的引擎配置文件，可切换不同语言的配置。**注意，RapidOCR插件的可选值与这里不同！请自行调用参数查询接口获取。**        |
+| `ocr.cls`               | `false`                       | 布尔，可选`true`/`false`                                                                                                                                                                                             | 纠正文本方向：填`true`时启用方向分类，识别倾斜或倒置的文本。可能降低识别速度。**注意，RapidOCR插件的可选值与这里不同！**                                                                 |
+| `ocr.limit_side_len`    | `960`                         | 枚举，可选值为整数： `960`、 `2880`、 `4320`、 `999999`                                                                                                                                                              | 限制图像边长：将边长大于该值的图片进行压缩。较低的限制值可以提高识别速度，较高的限制可以提供大图的识别精度。**注意，RapidOCR插件的可选值与这里不同！**                                   |
+| `tbpu.parser`           | `"multi_para"`                | 枚举，可选值为字符串：`"multi_para"`、 `"multi_line"`、 `"multi_none"`、 `"single_para"`、 `"single_line"`、 `"single_none"`、 `"single_code"`、 `"none"`                                                            | 排版解析方案：按什么方式，解析和排序图片中的文字块。可选值的含义请见上方折叠内容`tbpu.parser`块的`optionsList`。                                                                         |
+| `tbpu.ignoreArea`       | `[]`                          | 嵌套整数列表                                                                                                                                                                                                         | 忽略区域：处于任意一个忽略区域内的OCR文本块将被舍弃。每个忽略区域用矩形坐标`[[左上角x,y],[右下角x,y]]`表示。总列表中可存放多个忽略区域，示例：`[[[0,0],[100,50]], [[10,100],[110,150]]]` |
+| `tbpu.ignoreRangeStart` | `1`                           | 整数                                                                                                                                                                                                                 | 忽略区域生效的页数范围起始。从1开始。                                                                                                                                                    |
+| `tbpu.ignoreRangeEnd`   | `-1`                          | 整数                                                                                                                                                                                                                 | 忽略区域生效的页数范围结束。可以用负数`-X`表示倒数第X页。                                                                                                                                |
+| `pageRangeStart`        | `1`                           | 整数                                                                                                                                                                                                                 | OCR的页数范围起始。从1开始。生成结果文件（如双层PDF）时，只会生成OCR范围内的页数。                                                                                                       |
+| `pageRangeEnd`          | `-1`                          | 整数                                                                                                                                                                                                                 | OCR的页数范围结束。可以用负数`-X`表示倒数第X页。                                                                                                                                         |
+| `pageList`              | `[]`                          | 整数列表                                                                                                                                                                                                             | 页数列表：可指定单个或多个页数。例：`[1,2,5]`表示仅对第1、2、5页进行OCR。如果与页数范围（pageRangeStart、pageRangeEnd）同时填写，则 pageList 优先。                                      |
+| `password`              | `""`                          | 字符串                                                                                                                                                                                                               | 如果文档已加密，则填写文档密码。                                                                                                                                                         |
+| `doc.extractionMode`    | `"mixed"`                     | 枚举，可选值为字符串： `mixed`、 `fullPage`、 `imageOnly`、 `textOnly`                                                                                                                                               | 内容提取模式：若一页文档既存在图片又存在文本，如何进行处理。可选值的含义依次为：`混合OCR/原文本`、`整页强制OCR`、`仅OCR图片`、`仅拷贝原有文本`                                           |
 
 
-对于上述返回值示例，可以组装出这样的参数字典：
-
-<details>
-<summary>展开</summary>
+对于上述参数示例，可以组装出以下的设置字典，最终这些设置将在 **第1步：上传待识别文档** 时发送给服务器。**注意，以下部分参数仅适用于PaddleOCR插件！别的OCR插件请自行调用查询接口获取参数规则。**
 
 ```json
 {
@@ -211,13 +221,12 @@ URL：`/api/doc/get_options`
     "ocr.cls": true,
     "ocr.limit_side_len": 4320,
     "tbpu.parser": "multi_none",
+    "tbpu.ignoreArea": [[[0,0],[100,50]], [[10,100],[110,150]], [[200,50],[300,80]]],
     "pageRangeStart": 1,
     "pageRangeEnd": 10,
     "doc.extractionMode": "fullPage",
 }
 ```
-
-</details></br>
 
 ### 0.3. 参数查询 示例代码
 
@@ -253,15 +262,15 @@ print(json.dumps(res_dict, indent=4, ensure_ascii=False))
 手动调用：
 - 确保 Umi-OCR 已在运行。
 - 浏览器访问 http://127.0.0.1:1224/api/doc/get_options
-- 复制全部内容，粘贴到在线json格式化工具里转换为可读文本。
+- 复制全部内容，粘贴到 [在线JSON解析工具](https://www.x-json.cn/) 里转换为可读文本。
 
 <a id="/api/doc/upload"></a>
 
 ---
 
-## 1. 文档识别：上传
+## 第1步：上传待识别文档
 
-上传一个文档文件，启动识别任务，返回任务ID。
+上传一个文档文件（及配置参数），启动识别任务，返回任务ID。
 
 URL：`/api/doc/upload`
 
@@ -271,10 +280,10 @@ URL：`/api/doc/upload`
 
 方法：`POST`
 
-参数：表单 `formData` ，值为：
+参数：表单 `formData` ，具有两个键值：
 
 - **file** ：必填。要上传的文件。
-- **json** ：可选。参数字典（json字符串），详情见查询接口。
+- **json** ：可选。设置参数字典（json字符串），详情见 [查询接口](#/api/doc/get_options/table) 。
 
 
 
@@ -282,14 +291,16 @@ URL：`/api/doc/upload`
 <summary>JavaScript 示例：（点击展开）</summary>
 
 ```JavaScript
-    const fileInput = document.getElementById('file_path').files[0];
-    const missionOptions = {
+    const fileInput = document.getElementById('file_path').files[0]; // 文件对象
+    const missionOptions = { // 配置参数字典
         "doc.extractionMode": "mixed",
     };
-
+    // 必须要将字典转换为json字符串
+    const missionOptionsJSON = JSON.stringify(missionOptions)
+    // 组装表单
     const formData = new FormData();
     formData.append('file', fileInput);
-    formData.append('json', JSON.stringify(missionOptions));
+    formData.append('json', missionOptionsJSON);
 
     let response = await fetch("http://127.0.0.1:1224/api/doc/upload", {
         method: 'POST',
@@ -301,7 +312,7 @@ URL：`/api/doc/upload`
 
 ### 1.2. 响应格式
 
-返回 `json` 字典，内容为：
+返回json字符串，内容为一个字典，键值为：
 
 - **code** ：（int）任务状态码。`100`为上传成功，其余为失败。
 - **data** ：（string）如果上传成功，则为任务ID。失败，则为失败原因。
@@ -310,9 +321,9 @@ URL：`/api/doc/upload`
 
 ---
 
-## 2. 文档识别：查询任务状态
+## 第2步：查询任务状态
 
-传入任务ID，返回任务执行状态和识别文本。
+传入任务ID，返回任务的当前执行状态（进行中/已完成）和识别文本。
 
 URL：`/api/doc/result`
 
@@ -322,7 +333,7 @@ URL：`/api/doc/result`
 
 方法：`POST`
 
-参数： `json` 字典，键值为：
+参数： json字符串，内容为一个字典，键值为：
 
 - **id** ：必填，字符串。文件上传接口执行成功后，返回的任务ID。
 - **is_data** ：布尔值。非必填。
@@ -337,7 +348,7 @@ URL：`/api/doc/result`
 
 ### 2.2. 响应格式
 
-返回 `json` 字典，内容为：
+返回json字符串，内容为一个字典，键值为：
 
 - **code** ：（int）任务状态码。`100`为查询成功，其余为失败。
 - **data** ：（string）如果查询失败，则为失败原因。如果查询成功且`is_data=true`，则为识别内容。如果查询成功且`is_data=false`，则为空数组。
@@ -354,7 +365,7 @@ URL：`/api/doc/result`
 
 ---
 
-## 3. 文档识别：获取下载链接
+## 第3步：获取结果下载链接
 
 必须在任务成功结束后才能调用，即第2步查询得知 `is_done==true && state=="success"` 。
 
@@ -368,7 +379,7 @@ URL：`/api/doc/download`
 
 方法：`POST`
 
-参数： `json` 字典，键值为：
+参数： json字符串，内容为一个字典，键值为：
 
 - **id** ：必填，字符串。任务ID。
 - **file_types** ：数组，每一项为字符串。只填写一个值时，返回单个文件的下载链接。填写多个值时，返回单个zip压缩包下载链接，其中打包了多个文件。
@@ -385,7 +396,7 @@ URL：`/api/doc/download`
 
 ### 3.2. 响应格式
 
-返回 `json` 字典，内容为：
+返回json字符串，内容为一个字典，键值为：
 
 - **code** ：（int）任务状态码。`100`为成功生成目标文件，其余为无法生成目标文件。
 - **data** ：（string）如果成功，则为下载链接。如果失败，则为失败原因。
@@ -395,7 +406,7 @@ URL：`/api/doc/download`
 
 ---
 
-## 4. 文档识别：下载链接
+## 第4步：通过链接下载结果文件
 
 第3步获取的下载链接，可通过get请求下载，或者直接用浏览器打开下载。
 
@@ -405,7 +416,7 @@ URL：`/api/doc/download`
 
 ---
 
-## 5. 文档识别：任务清理
+## 第5步：任务清理
 
 在URL中拼接任务ID，清理对应的任务。
 
@@ -419,18 +430,18 @@ URL：`/api/doc/clear/<id>`
 
 ### 5.2. 响应格式
 
-返回 `json` 字典，内容为：
+返回json字符串，内容为一个字典，键值为：
 
 - **code** ：（int）状态码。`100`为清理成功，其余为清理失败（或者不存在对应任务）。
 - **data** ：（string）原因。
 
 ### 5.3. 关于清理的说明
 
-清理：指强制终止任务（如果任务进行中），并删除此任务对应的临时文件。
+任务清理将删除此任务存放在服务器上的所有临时文件（包括上传的文件）。如果任务进行中时执行清理，将强制终止任务。
 
 一个任务被清理后，无法再获取任务状态、访问下载链接。
 
-建议调用者在每次完成任务后手动清理任务，以便及时释放服务器资源。如果不手动清理，任务会在24小时后自动清理。
+建议调用者在每次完成任务后手动清理任务，以便及时释放服务器资源。如果不手动清理，**任务会在24小时后自动清理**。
 
 - 如果任务上传后一直在进行，那么最长持续运行24小时。
 - 如果任务已完成，那么从完成的时候开始算，最长保留24小时。
