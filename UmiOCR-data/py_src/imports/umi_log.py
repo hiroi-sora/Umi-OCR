@@ -84,7 +84,7 @@ class _LevelFormatter(logging.Formatter):
         return super().format(record)
 
 
-# json 文件处理器
+# json 日志文件处理器
 class _JsonRotatingFileHandler(RotatingFileHandler):
     # 日志信息转字典
     def _record_to_dict(self, record: LogRecord):
@@ -128,6 +128,9 @@ class _JsonRotatingFileHandler(RotatingFileHandler):
 
     # 发送日志
     def emit(self, record: LogRecord):
+        # 跳过忽略等级
+        if record.levelno < Save_Log_Level:
+            return
         # 检查文件大小并进行轮转
         if self.shouldRollover(record):
             self.doRollover()
@@ -137,13 +140,12 @@ class _JsonRotatingFileHandler(RotatingFileHandler):
         except Exception:
             self.handleError(record)
         # 输出到日志文件
-        if record.levelno >= Save_Log_Level:
-            try:
-                with open(self.baseFilename, "a", encoding=self.encoding) as f:
-                    json.dump(log_dict, f, ensure_ascii=False)
-                    f.write("\n")
-            except Exception:
-                self.handleError(record)
+        try:
+            with open(self.baseFilename, "a", encoding=self.encoding) as f:
+                json.dump(log_dict, f, ensure_ascii=False)
+                f.write("\n")
+        except Exception:
+            self.handleError(record)
         # TODO: 输出到UI界面
 
 
@@ -166,7 +168,7 @@ class _LogManager:
             os.makedirs(Logs_Dir)
         # 获取当前日期
         current_date = datetime.now().strftime("%Y-%m-%d")
-        # 构造错误日志文件路径
+        # 构造日志文件路径
         log_file = os.path.join(Logs_Dir, f"log_{current_date}.jsonl.txt")
         # 创建json处理器
         json_handler = _JsonRotatingFileHandler(

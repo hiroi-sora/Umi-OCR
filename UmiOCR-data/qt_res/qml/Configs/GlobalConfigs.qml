@@ -237,7 +237,7 @@ Configs {
             },
         },
 
-        // 服务
+        // 日志
         "logs": {
             "title": qsTr("日志"),
             "type": "group",
@@ -257,11 +257,11 @@ Configs {
                 "default": "ERROR",
                 "optionsList": [
                     ["NONE", "Close"],
-                    ["DEBUG","DEBUG"],
-                    ["INFO","INFO"],
-                    ["WARNING","WARNING"],
-                    ["ERROR","ERROR"],
-                    ["CRITICAL","CRITICAL"],
+                    ["DEBUG", "DEBUG"],
+                    ["INFO", "INFO"],
+                    ["WARNING", "WARNING"],
+                    ["ERROR", "ERROR"],
+                    ["CRITICAL", "CRITICAL"],
                 ],
                 "onChanged": (val, old)=>{
                     // 调整级别，如果修改失败则不动UI
