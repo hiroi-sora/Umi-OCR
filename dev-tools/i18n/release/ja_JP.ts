@@ -26,7 +26,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/About/About.qml" line="55"/>
         <source>插件拓展</source>
-        <translation type="unfinished">プラグイン</translation>
+        <translation>プラグイン</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/About/About.qml" line="56"/>
@@ -70,7 +70,8 @@
         <location filename="../../../UmiOCR-data/qt_res/qml/MainWindow/AsynFilesLoader.qml" line="9"/>
         <source>正在载入 %1 个文件：
 %2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 個のファイルを読み込み中:
+%2</translation>
     </message>
 </context>
 <context>
@@ -1033,7 +1034,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="242"/>
         <source>日志</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ログ</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="246"/>
@@ -1043,17 +1044,17 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="249"/>
         <source>打开日志保存目录</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ログ保存ディレクトリを開く</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="256"/>
         <source>保存的日志级别</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">保存対象ログレベル</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="271"/>
         <source>已禁用日志文件保存</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ログファイル保存は無効です</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="341"/>
@@ -1563,7 +1564,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="53"/>
         <source>没有可用的 OCR 插件。</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">利用可能なOCRプラグインがありません。</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="61"/>
