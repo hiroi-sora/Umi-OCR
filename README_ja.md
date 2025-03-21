@@ -105,12 +105,6 @@ Umi-OCR は、インターフェースの複数の言語をサポートしてい
 
 <p align="center"><img src="https://tupian.li/images/2023/11/19/65599c3f9e600.png" alt="1-タイトル-1.png" style="width: 80%;"></p>
 
-### 翻訳を手伝ってください
-
-Weblate オンラインで翻訳作業に参加できます:
-
-https://hosted.weblate.org/engage/umi-ocr/
-
 ## タブインターフェース
 
 Umi-OCR v2 は、一連の柔軟で使いやすい**タブインターフェース**で構成されています。好みに応じて必要なタブインターフェースを開くことができます。

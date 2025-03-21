@@ -76,30 +76,6 @@
 
 ![1-标题-2.png](https://tupian.li/images/2023/11/19/6559909fdeeba.png)
 
-## Usage:
-
-- [Usage:](#usage)
-- [Using the Source Code:](#using-the-source-code)
-- [Download Releases:](#download-releases)
-- [Getting Started](#getting-started)
-- [Interface Language](#interface-language)
-  - [Help us translate / 帮助我们翻译！](#help-us-translate--帮助我们翻译)
-- [Tabbed Interface](#tabbed-interface)
-  - [Screenshot OCR](#screenshot-ocr)
-    - [Paragraph Merge](#paragraph-merge)
-  - [Batch OCR](#batch-ocr)
-    - [Ignore Regions](#ignore-regions)
-  - [Batch Documents OCR](#batch-documents-ocr)
-  - [QR Code](#qr-code)
-  - [Global Settings](#global-settings)
-- [API Usage:](#api-usage)
-- [About Project Structure](#about-project-structure)
-  - [Repositories:](#repositories)
-- [Build the Project](#build-the-project)
-- [Software Localization:](#software-localization)
-- [Star History](#star-history)
-- [CHANGE LOG](#change-log)
-
 ## Using the Source Code:
 
 Developers should read [Building the Project](#Build-the-Project) before proceeding.
@@ -108,7 +84,7 @@ Developers should read [Building the Project](#Build-the-Project) before proceed
 
 - **GitHub** https://github.com/hiroi-sora/Umi-OCR/releases/latest
 - **Source Forge** https://sourceforge.net/projects/umi-ocr
-- **Lanzou (蓝奏云)** https://hiroi-sora.lanzoul.com/s/umi-ocr
+- **Lanzou** https://hiroi-sora.lanzoul.com/s/umi-ocr
 
 <details>
 <summary><b>•&nbsp;&nbsp;Scoop Installer</b> (Click to expand)</summary>
@@ -149,12 +125,6 @@ Umi-OCR supports multiple languages for its interface. When you open the softwar
 If you need to manually switch languages, please refer to the following figure, `全局设置`→`语言/Language` .
 
 <p align="center"><img src="https://tupian.li/images/2023/11/19/65599c3f9e600.png" alt="1-标题-1.png" style="width: 80%;"></p>
-
-### Help us translate / 帮助我们翻译！
-
-You can participate in translation work online on Weblate:
-
-https://hosted.weblate.org/engage/umi-ocr/
 
 ## Tabbed Interface
 
