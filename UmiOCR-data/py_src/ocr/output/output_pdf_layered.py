@@ -95,8 +95,8 @@ class OutputPdfLayered(Output):
         isInsertFont = False  # 当前是否进行过字体注入
         # 插入文本，用shape.insert_text（可编辑）或page.insert_text（不可编辑）
         for tb in res["data"]:
-            if "from" in tb and tb["from"] == "text":
-                continue  # 跳过直接提取的文本，只写入OCR文本
+            if self.opacity == 0 and "from" in tb and tb["from"] == "text":
+                continue  # 双层（透明文字）模式下，跳过直接提取的文本，只写入OCR文本
             if not isInsertFont:  # 页面插入字体
                 self.isInsertFont = isInsertFont = True
                 page.insert_font(fontname="cjk", fontbuffer=self.font.buffer)
