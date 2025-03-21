@@ -161,7 +161,7 @@ class _MissionDocClass(Mission):
         # =============== 提取图片和原文本 ===============
         imgs = []  # 待OCR的图片列表
         tbs = []  # text box 文本块列表
-        rotation_page = page.rotation  # 获取页面的旋转角度
+        page_rotation = page.rotation  # 获取页面的旋转角度
         if extractionMode == "fullPage":  # 模式：整页强制OCR
             # 检查页面边长，如果低于阈值，则增加放大系数，以提高渲染清晰度
             rect = page.rect
@@ -191,8 +191,8 @@ class _MissionDocClass(Mission):
                 ):
                     # 提取图片相对旋转角，加上页面旋转角，得到图片绝对旋转角
                     transform = t["transform"]
-                    rotation_img = transform_to_rotation(transform)
-                    rotation_abs = round(rotation_page+rotation_img) % 360
+                    img_rotation = transform_to_rotation(transform)
+                    abs_rotation = round(page_rotation+img_rotation) % 360
                     img_bytes = t["image"]  # 图片字节
                     bbox = t["bbox"]  # 图片包围盒
                     # 图片视觉大小、原始大小、缩放比例
@@ -205,9 +205,9 @@ class _MissionDocClass(Mission):
                     scale_w = w1 / w2
                     scale_h = h1 / h2
                     # 如果图片有绝对旋转，则逆向旋转图片字节
-                    if rotation_page != 0 or rotation_img != 0:
-                        logger.debug(f"P{pno}-{len(imgs)} 旋转：页面{rotation_page}°，图片{rotation_img}°，绝对{rotation_abs}°")
-                    if rotation_abs != 0:
+                    if page_rotation != 0 or img_rotation != 0:
+                        logger.debug(f"P{pno}-{len(imgs)} 旋转：页面{page_rotation}°，图片{img_rotation}°，绝对{abs_rotation}°")
+                    if abs_rotation != 0:
                         try:
                             with Image.open(BytesIO(img_bytes)) as pimg:
                                 # 记录原图格式
@@ -215,7 +215,7 @@ class _MissionDocClass(Mission):
                                 if not format:
                                     format = "PNG"
                                 # PDF的旋转是顺时针，需要逆时针旋转图片
-                                pimg = pimg.rotate(-rotation_abs, expand=True)
+                                pimg = pimg.rotate(-abs_rotation, expand=True)
                                 # 将旋转后的图片转回bytes
                                 buffered = BytesIO()
                                 pimg.save(buffered, format=format)
@@ -239,18 +239,39 @@ class _MissionDocClass(Mission):
                 ):
                     l = len(t["lines"]) - 1
                     for index, line in enumerate(t["lines"]):  # 遍历每一行
+                        # 拼接该行所有子文本块的内容
                         text = ""
-                        for span in line["spans"]:  # 遍历每一文本块
+                        for span in line["spans"]:
                             text += span["text"]
+                        # 提取其他信息，组装为OCR文本块格式
                         if text:
+                            # 获取该行的的包围盒
                             b = line["bbox"]
-                            tb = {
-                                "box": [
+                            if page_rotation == 0:  # 页面没有旋转，直接提取
+                                box = [
                                     [b[0], b[1]],
                                     [b[2], b[1]],
                                     [b[2], b[3]],
                                     [b[0], b[3]],
-                                ],
+                                ]
+                            else:  # 页面有旋转，默认文本行无相对旋转，则反向消除文本的绝对旋转
+                                # https://pymupdf.readthedocs.io/en/latest/page.html#Page.derotation_matrix
+                                rotation_matrix = page.rotation_matrix
+                                b01 = fitz.Point(b[0], b[1]) * rotation_matrix
+                                b23 = fitz.Point(b[2], b[3]) * rotation_matrix
+                                x0 = min(b01.x, b23.x)
+                                x1 = max(b01.x, b23.x)
+                                y0 = min(b01.y, b23.y)
+                                y1 = max(b01.y, b23.y)
+                                box = [
+                                    [x0, y0],
+                                    [x1, y0],
+                                    [x1, y1],
+                                    [x0, y1],
+                                ]
+                            # 组装文本块
+                            tb = {
+                                "box": box,
                                 "text": text,
                                 "score": 1,
                                 "end": "\n" if index == l else "",  # 结尾符
