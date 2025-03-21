@@ -214,29 +214,48 @@ Umi-OCR v2 は、一連の柔軟で使いやすい**タブインターフェー�
 
 ### リポジトリ:
 
-- [メインリポジトリ](https://github.com/hiroi-sora/Umi-OCR) 👈
-- [プラグインリポジトリ](https://github.com/hiroi-sora/Umi-OCR_plugins)
-- [Win ランタイムライブラリ](https://github.com/hiroi-sora/Umi-OCR_runtime_windows)
+- [Main Repository](https://github.com/hiroi-sora/Umi-OCR) 👈
+- [Plugin Repository](https://github.com/hiroi-sora/Umi-OCR_plugins)
+- [Windows Runtime Library](https://github.com/hiroi-sora/Umi-OCR_runtime_windows)
+- [Linux Runtime Library](https://github.com/hiroi-sora/Umi-OCR_runtime_linux)
 
 ## プロジェクトのビルド
 
-### ステップ 0: (オプション) このプロジェクトをフォークする
-
-### ステップ 1: コードをダウンロードする
-
-以下のいずれかを選択してください:
-
-- フォークしたリポジトリをローカルマシンにプルする
-- このリポジトリの zip ソースコードパッケージをダウンロードする
-- このリポジトリをクローンする
-
-### 次のステップ:
-
-対応するプラットフォームの開発/ランタイム環境デプロイメントを完了するには、以下のリポジトリに進んでください。
-
-このプロジェクトには、非常にシンプルなワンクリックパッケージングスクリプトもあり、以下のリポジトリで見つけることができます。
-
 - [Windows](https://github.com/hiroi-sora/Umi-OCR_runtime_windows)
-- クロスプラットフォームサポートは開発中です。
+- [Linux](https://github.com/hiroi-sora/Umi-OCR_runtime_linux)
+
+---
+
+## ソフトウェアのローカライゼーション:
+
+本プロジェクトはUIのローカライズ作業にWeblateプラットフォームを利用しています。翻訳者による協力を歓迎します。[Weblate: Umi-OCR](https://hosted.weblate.org/engage/umi-ocr/) にアクセスし、既存言語の校正・補完や新規言語の追加が可能です。
+
+以下に、Umi-OCRのローカライゼーションに貢献いただいた翻訳者の皆様を感謝とともに掲載します:
+
+| 翻訳者                                                                               | 対応言語                  |
+| ------------------------------------------------------------------------------------ | ------------------------- |
+| [bob](https://hosted.weblate.org/user/q021)                                          | English, 繁體中文, 日本語 |
+| [Qingzheng Gao](https://github.com/QZGao)                                            | English, 繁體中文         |
+| [Weng, Chia-Ling](https://hosted.weblate.org/user/ChiaLingWeng)                      | English, 繁體中文         |
+| [linzow](https://hosted.weblate.org/user/linzow)                                     | English, 繁體中文         |
+| [Marcos i](https://hosted.weblate.org/user/ultramarkorj9)                            | English, Português        |
+| [Eric Guo](https://hosted.weblate.org/user/qwedc001)                                 | English                   |
+| [steven0081](https://hosted.weblate.org/user/steven0081)                             | English                   |
+| [Brandon Cagle](https://hosted.weblate.org/user/random4t4x14)                        | English                   |
+| [plum7x](https://hosted.weblate.org/user/plum7x)                                     | 繁體中文                  |
+| [hugoalh](https://hosted.weblate.org/user/hugoalh)                                   | 繁體中文                  |
+| [Anarkiisto](https://hosted.weblate.org/user/Anarkiisto)                             | 繁體中文                  |
+| [ドコモ光](https://hosted.weblate.org/user/umren190402)                              | 日本語                    |
+| [杨鹏](https://hosted.weblate.org/user/ypf)                                          | Português                 |
+| [Вячеслав Анатольевич Малышев](https://hosted.weblate.org/user/1969)                 | Russian                   |
+| [Muhammadyusuf Kurbonov](https://hosted.weblate.org/user/muhammadyusuf.kurbonov2002) | Russian                   |
+
+情報の誤りや記載漏れがありましたら、[こちらのディスカッション](https://github.com/hiroi-sora/Umi-OCR/discussions/449) までご連絡ください。
+
+---
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=hiroi-sora/Umi-OCR&type=Date)](https://star-history.com/#hiroi-sora/Umi-OCR&Date)
 
 ## [変更ログ](CHANGE_LOG.md)

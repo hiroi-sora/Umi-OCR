@@ -96,9 +96,8 @@
 - [About Project Structure](#about-project-structure)
   - [Repositories:](#repositories)
 - [Build the Project](#build-the-project)
-  - [Step 0: (Optional) Fork this project](#step-0-optional-fork-this-project)
-  - [Step 1: Download the code](#step-1-download-the-code)
-  - [Next Steps:](#next-steps)
+- [Software Localization:](#software-localization)
+- [Star History](#star-history)
 - [CHANGE LOG](#change-log)
 
 ## Using the Source Code:
@@ -262,27 +261,46 @@ About **OCR Text Post-Processing - Ignore Regions**: This is a special function 
 
 - [Main Repository](https://github.com/hiroi-sora/Umi-OCR) 👈
 - [Plugin Repository](https://github.com/hiroi-sora/Umi-OCR_plugins)
-- [Win Runtime Library](https://github.com/hiroi-sora/Umi-OCR_runtime_windows)
+- [Windows Runtime Library](https://github.com/hiroi-sora/Umi-OCR_runtime_windows)
+- [Linux Runtime Library](https://github.com/hiroi-sora/Umi-OCR_runtime_linux)
 
 ## Build the Project
 
-### Step 0: (Optional) Fork this project
-
-### Step 1: Download the code
-
-Choose one of the following:
-
-- Pull your forked repository to your local machine
-- Download the zip source code package of this repository
-- Clone this repository
-
-### Next Steps:
-
-Please go to the following repositories to complete the development/runtime environment deployment for the corresponding platform.
-
-This project also has a very simple one-click packaging script, which can be found in the following repositories.
-
 - [Windows](https://github.com/hiroi-sora/Umi-OCR_runtime_windows)
-- Cross-platform support is under development.
+- [Linux](https://github.com/hiroi-sora/Umi-OCR_runtime_linux)
+
+---
+
+## Software Localization:
+
+This project uses the Weblate platform for collaborative localization of the UI interface. We welcome translators to participate in the translation work. Please visit [Weblate: Umi-OCR](https://hosted.weblate.org/engage/umi-ocr/) to proofread and supplement existing languages, or add new languages online.
+
+We extend our gratitude to the following translators for contributing to the localization of Umi-OCR:
+
+| Translator                                                                           | Contributed Languages     |
+| ------------------------------------------------------------------------------------ | ------------------------- |
+| [bob](https://hosted.weblate.org/user/q021)                                          | English, 繁體中文, 日本語 |
+| [Qingzheng Gao](https://github.com/QZGao)                                            | English, 繁體中文         |
+| [Weng, Chia-Ling](https://hosted.weblate.org/user/ChiaLingWeng)                      | English, 繁體中文         |
+| [linzow](https://hosted.weblate.org/user/linzow)                                     | English, 繁體中文         |
+| [Marcos i](https://hosted.weblate.org/user/ultramarkorj9)                            | English, Português        |
+| [Eric Guo](https://hosted.weblate.org/user/qwedc001)                                 | English                   |
+| [steven0081](https://hosted.weblate.org/user/steven0081)                             | English                   |
+| [Brandon Cagle](https://hosted.weblate.org/user/random4t4x14)                        | English                   |
+| [plum7x](https://hosted.weblate.org/user/plum7x)                                     | 繁體中文                  |
+| [hugoalh](https://hosted.weblate.org/user/hugoalh)                                   | 繁體中文                  |
+| [Anarkiisto](https://hosted.weblate.org/user/Anarkiisto)                             | 繁體中文                  |
+| [ドコモ光](https://hosted.weblate.org/user/umren190402)                              | 日本語                    |
+| [杨鹏](https://hosted.weblate.org/user/ypf)                                          | Português                 |
+| [Вячеслав Анатольевич Малышев](https://hosted.weblate.org/user/1969)                 | Russian                   |
+| [Muhammadyusuf Kurbonov](https://hosted.weblate.org/user/muhammadyusuf.kurbonov2002) | Russian                   |
+
+If you find any errors in the information or missing contributors, please reply in [this discussion](https://github.com/hiroi-sora/Umi-OCR/discussions/449).
+
+---
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=hiroi-sora/Umi-OCR&type=Date)](https://star-history.com/#hiroi-sora/Umi-OCR&Date)
 
 ## [CHANGE LOG](CHANGE_LOG.md)

@@ -251,30 +251,6 @@ Umi-OCR v2 由一系列灵活好用的**标签页**组成。您可按照自己�
 - [命令行手册](docs/README_CLI.md)
 - [HTTP接口手册](docs/http/README.md)
 
---- 
-
-## 软件本地化翻译：
-
-感谢以下译者，为 Umi-OCR 贡献了本地化翻译工作：（排名不分先后）
-
-| 译者                                                            | 贡献语言                  |
-| --------------------------------------------------------------- | ------------------------- |
-| [bob](https://hosted.weblate.org/user/q021)                     | English, 繁體中文, 日本語 |
-| [Qingzheng Gao](https://github.com/QZGao)                       | English, 繁體中文         |
-| [Weng, Chia-Ling](https://hosted.weblate.org/user/ChiaLingWeng) | English, 繁體中文         |
-| [linzow](https://hosted.weblate.org/user/linzow)                | English, 繁體中文         |
-| [Eric Guo](https://hosted.weblate.org/user/qwedc001)            | English                   |
-| [steven0081](https://hosted.weblate.org/user/steven0081)        | English                   |
-| [Marcos i](https://hosted.weblate.org/user/ultramarkorj9)       | English                   |
-| [plum7x](https://hosted.weblate.org/user/plum7x)                | 繁體中文                  |
-| [hugoalh](https://hosted.weblate.org/user/hugoalh)              | 繁體中文                  |
-| [ドコモ光](https://hosted.weblate.org/user/umren190402)         | 日本語                    |
-| [杨鹏](https://hosted.weblate.org/user/ypf)                     | Português                 |
-
-如果有信息错误或人员缺漏，请在 [这个讨论](https://github.com/hiroi-sora/Umi-OCR/discussions/449) 中回复。
-
-本项目使用在线平台 [Weblate: Umi-OCR](https://hosted.weblate.org/engage/umi-ocr/) 进行本地化翻译协作。我们欢迎任何用户参与翻译工作，您可校对、补充现有语言，或添加新语言。
-
 ---
 
 ## 关于项目结构
@@ -318,18 +294,38 @@ Umi-OCR
 
 ## 构建项目
 
-### 第零步：（可选）fork本项目
-
-### 第一步：下载代码
-
-请参考 [更新日志](CHANGE_LOG.md) 开头的说明。
-
-### 后续步骤：
-
 请跳转下述仓库，完成对应平台的开发/运行环境部署。
 
 - [Windows](https://github.com/hiroi-sora/Umi-OCR_runtime_windows)
 - [Linux](https://github.com/hiroi-sora/Umi-OCR_runtime_linux)
+
+--- 
+
+## 软件本地化翻译：
+
+本项目使用 Weblate 平台进行UI界面的本地化翻译协作。我们欢迎任何译者参与翻译工作，您可进入此链接 [Weblate: Umi-OCR](https://hosted.weblate.org/engage/umi-ocr/) ，在线校对、补充现有语言，或添加新语言。
+
+感谢以下译者，为 Umi-OCR 贡献了本地化翻译工作：
+
+| 译者                                                                                 | 贡献语言                  |
+| ------------------------------------------------------------------------------------ | ------------------------- |
+| [bob](https://hosted.weblate.org/user/q021)                                          | English, 繁體中文, 日本語 |
+| [Qingzheng Gao](https://github.com/QZGao)                                            | English, 繁體中文         |
+| [Weng, Chia-Ling](https://hosted.weblate.org/user/ChiaLingWeng)                      | English, 繁體中文         |
+| [linzow](https://hosted.weblate.org/user/linzow)                                     | English, 繁體中文         |
+| [Marcos i](https://hosted.weblate.org/user/ultramarkorj9)                            | English, Português        |
+| [Eric Guo](https://hosted.weblate.org/user/qwedc001)                                 | English                   |
+| [steven0081](https://hosted.weblate.org/user/steven0081)                             | English                   |
+| [Brandon Cagle](https://hosted.weblate.org/user/random4t4x14)                        | English                   |
+| [plum7x](https://hosted.weblate.org/user/plum7x)                                     | 繁體中文                  |
+| [hugoalh](https://hosted.weblate.org/user/hugoalh)                                   | 繁體中文                  |
+| [Anarkiisto](https://hosted.weblate.org/user/Anarkiisto)                             | 繁體中文                  |
+| [ドコモ光](https://hosted.weblate.org/user/umren190402)                              | 日本語                    |
+| [杨鹏](https://hosted.weblate.org/user/ypf)                                          | Português                 |
+| [Вячеслав Анатольевич Малышев](https://hosted.weblate.org/user/1969)                 | Russian                   |
+| [Muhammadyusuf Kurbonov](https://hosted.weblate.org/user/muhammadyusuf.kurbonov2002) | Russian                   |
+
+如果有信息错误或人员缺漏，请在 [这个讨论](https://github.com/hiroi-sora/Umi-OCR/discussions/449) 中回复。
 
 ---
 
