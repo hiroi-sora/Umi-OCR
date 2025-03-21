@@ -6,6 +6,7 @@
 
 import fitz  # PyMuPDF
 import time
+import math
 from PIL import Image
 from io import BytesIO
 
@@ -40,6 +41,29 @@ class FitzOpen:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self._doc.close()
+
+
+# https://pymupdf.readthedocs.io/en/latest/matrix.html#matrix
+# 从变换矩阵中提取角度值，返回0~359整数
+def transform_to_rotation(matrix):
+    # [1, 0, 0, 1, 0, 0] -> [cos(deg), sin(deg), -sin(deg), cos(deg), 0, 0].
+    a, b, c, d, _, _ = matrix
+    # 处理缩放和反射
+    scale = math.sqrt(a**2 + b**2)
+    if scale < 1e-6:
+        return 0
+    # 归一化以消除缩放影响
+    cos_theta = a / scale
+    sin_theta = b / scale
+    # 检查反射
+    determinant = a * d - b * c
+    if determinant < 0:
+        # 反射情况，调整角度计算
+        cos_theta = -cos_theta
+    theta_rad = math.atan2(sin_theta, cos_theta)
+    theta_deg = math.degrees(theta_rad)
+    rounded_deg = round(theta_deg) % 360
+    return rounded_deg
 
 
 class _MissionDocClass(Mission):
@@ -137,7 +161,7 @@ class _MissionDocClass(Mission):
         # =============== 提取图片和原文本 ===============
         imgs = []  # 待OCR的图片列表
         tbs = []  # text box 文本块列表
-        protation = page.rotation  # 获取页面的旋转角度
+        rotation_page = page.rotation  # 获取页面的旋转角度
         if extractionMode == "fullPage":  # 模式：整页强制OCR
             # 检查页面边长，如果低于阈值，则增加放大系数，以提高渲染清晰度
             rect = page.rect
@@ -157,13 +181,18 @@ class _MissionDocClass(Mission):
             )
         else:
             # 获取元素 https://pymupdf.readthedocs.io/en/latest/_images/img-textpage.png
+            # https://pymupdf.readthedocs.io/en/latest/textpage.html#structure-of-dictionary-outputs
             # 确保越界图像能被采集 https://github.com/pymupdf/PyMuPDF/issues/3171
             p = page.get_text("dict", clip=fitz.INFINITE_RECT())
             for t in p["blocks"]:  # 遍历区块（段落）
-                # 图片
+                # ========== 获取图片 ==========
                 if t["type"] == 1 and (
                     extractionMode == "imageOnly" or extractionMode == "mixed"
                 ):
+                    # 提取图片相对旋转角，加上页面旋转角，得到图片绝对旋转角
+                    transform = t["transform"]
+                    rotation_img = transform_to_rotation(transform)
+                    rotation_abs = round(rotation_page+rotation_img) % 360
                     img_bytes = t["image"]  # 图片字节
                     bbox = t["bbox"]  # 图片包围盒
                     # 图片视觉大小、原始大小、缩放比例
@@ -175,9 +204,10 @@ class _MissionDocClass(Mission):
                     # 单独计算宽高的缩放比例
                     scale_w = w1 / w2
                     scale_h = h1 / h2
-                    # 如果页面有旋转，逆向旋转图片字节
-                    if protation != 0:
-                        logger.debug(f"P{pno} - 旋转 {protation} °")
+                    # 如果图片有绝对旋转，则逆向旋转图片字节
+                    if rotation_page != 0 or rotation_img != 0:
+                        logger.debug(f"P{pno}-{len(imgs)} 旋转：页面{rotation_page}°，图片{rotation_img}°，绝对{rotation_abs}°")
+                    if rotation_abs != 0:
                         try:
                             with Image.open(BytesIO(img_bytes)) as pimg:
                                 # 记录原图格式
@@ -185,7 +215,7 @@ class _MissionDocClass(Mission):
                                 if not format:
                                     format = "PNG"
                                 # PDF的旋转是顺时针，需要逆时针旋转图片
-                                pimg = pimg.rotate(-protation, expand=True)
+                                pimg = pimg.rotate(-rotation_abs, expand=True)
                                 # 将旋转后的图片转回bytes
                                 buffered = BytesIO()
                                 pimg.save(buffered, format=format)
@@ -203,7 +233,7 @@ class _MissionDocClass(Mission):
                             "scale_h": scale_h,
                         }
                     )
-                # 文本
+                # ========== 获取文本块 ==========
                 elif t["type"] == 0 and (
                     extractionMode == "textOnly" or extractionMode == "mixed"
                 ):
