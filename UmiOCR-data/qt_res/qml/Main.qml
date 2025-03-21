@@ -29,8 +29,8 @@ Window {
 
     width: 800
     height: 500
-    minimumWidth: 400
-    minimumHeight: 400
+    minimumWidth: 300
+    minimumHeight: 300
     color: "#00000000"
     title: UmiAbout.fullname
     

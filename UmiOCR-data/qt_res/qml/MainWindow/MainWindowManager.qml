@@ -15,8 +15,8 @@ Item {
     property int mw: mainWin.width
     property int mh: mainWin.height
     // 最小宽高
-    property int minW: 400
-    property int minH: 400
+    property int minW: 300
+    property int minH: 300
 
     // ========================= 【保存量】 =========================
     
