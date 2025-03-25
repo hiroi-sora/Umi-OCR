@@ -657,111 +657,111 @@
 <context>
     <name>Configs</name>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="171"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="186"/>
         <source>%1 处理配置项异常：
 %2枚举列表为空。</source>
         <translation>%1 處理組態項目異常：
 %2枚舉列表為空。</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="457"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="472"/>
         <source>重置</source>
         <translation>重置</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="458"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="473"/>
         <source>重置本页上的设定</source>
         <translation>重置本頁上的設定</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="461"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="476"/>
         <source>重置设定</source>
         <translation>重置設定</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="463"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="478"/>
         <source>要重置本页的设定吗？</source>
         <translation>要重置本頁的設定嗎？</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="471"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="486"/>
         <source>高级</source>
         <translation>進階</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="472"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="487"/>
         <source>显示更多高级选项。它们标有 * 号。
 请谨慎修改高级选项。</source>
         <translation>顯示更多進階選項。它們標有 * 號。
 請謹慎修改進階選項。</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="649"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="664"/>
         <source>展开</source>
         <translation>展開</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="649"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="664"/>
         <source>折叠</source>
         <translation>折疊</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="787"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="802"/>
         <source>必须为整数</source>
         <translation>必須為整數</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="791"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="806"/>
         <source>不能超过</source>
         <translation>不能超過</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="794"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="809"/>
         <source>不能低于</source>
         <translation>不能低於</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="801"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="816"/>
         <source>必须为数字</source>
         <translation>必須為數字</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1108"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1123"/>
         <source>已取消%1的快捷键。</source>
         <translation>已取消%1的快速鍵。</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1118"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1133"/>
         <source>更新热键成功</source>
         <translation>更新熱鍵成功</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1118"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1133"/>
         <source>%1的快捷键为 %2</source>
         <translation>%1的快速鍵為 %2</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1126"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1141"/>
         <source>%1 快捷键%2已被注册，请尝试另外的按键组合。</source>
         <translation>%1 快速鍵%2已被註冊，請嘗試另外的按鍵組合。</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1129"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1144"/>
         <source>%1 快捷键%2无法注册，请尝试另外的按键组合。</source>
         <translation>%1 快速鍵%2無法註冊，請嘗試另外的按鍵組合。</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1138"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1153"/>
         <source>请按下快捷键组合。按【Esc】退出。</source>
         <translation>請按下快速鍵組合。按【Esc】退出。</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1151"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1166"/>
         <source>当前快捷键录制已在进行，不能同时录制！</source>
         <translation>目前快速鍵錄制已在進行，不能同時錄制！</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1153"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1168"/>
         <source>无法录制快捷键</source>
         <translation>無法錄制快速鍵</translation>
     </message>
@@ -1095,16 +1095,6 @@
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="386"/>
         <source>没有找到可移除的快捷方式。</source>
         <translation>沒有找到可移除的捷徑。</translation>
-    </message>
-    <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="394"/>
-        <source>立刻关闭软件</source>
-        <translation>立刻關閉軟體</translation>
-    </message>
-    <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="394"/>
-        <source>稍后</source>
-        <translation>稍後</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="434"/>

@@ -311,7 +311,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="117"/>
         <source>p.txt 纯文字格式</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">p.txt எளிய உரை வடிவம்</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="118"/>
@@ -657,111 +657,111 @@
 <context>
     <name>Configs</name>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="171"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="186"/>
         <source>%1 处理配置项异常：
 %2枚举列表为空。</source>
         <translation>%1 உள்ளமைவு உருப்படி விதிவிலக்கைக் கையாளுகிறது:
  %2 கணக்கீட்டு பட்டியல் காலியாக உள்ளது.</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="457"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="472"/>
         <source>重置</source>
         <translation>மீட்டமை</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="458"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="473"/>
         <source>重置本页上的设定</source>
         <translation>இந்த பக்கத்தில் அமைப்புகளை மீட்டமைக்கவும்</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="461"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="476"/>
         <source>重置设定</source>
         <translation>அமைப்புகளை மீட்டமைக்கவும்</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="463"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="478"/>
         <source>要重置本页的设定吗？</source>
         <translation>இந்த பக்கத்தில் உள்ள அமைப்புகளை மீட்டமைக்க விரும்புகிறீர்களா?</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="471"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="486"/>
         <source>高级</source>
         <translation>மேம்பட்டது</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="472"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="487"/>
         <source>显示更多高级选项。它们标有 * 号。
 请谨慎修改高级选项。</source>
         <translation>மேலும் மேம்பட்ட விருப்பங்களைக் காட்டு. அவை குறிக்கப்பட்டுள்ளன *.
  மேம்பட்ட விருப்பங்களை எச்சரிக்கையுடன் மாற்றவும்.</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="649"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="664"/>
         <source>展开</source>
         <translation>விரிவாக்கு</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="649"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="664"/>
         <source>折叠</source>
         <translation>மடிப்பு</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="787"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="802"/>
         <source>必须为整数</source>
         <translation>ஒரு முழு எண்ணாக இருக்க வேண்டும்</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="791"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="806"/>
         <source>不能超过</source>
         <translation>மீற முடியாது</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="794"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="809"/>
         <source>不能低于</source>
         <translation>விட குறைவாக இருக்க முடியாது</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="801"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="816"/>
         <source>必须为数字</source>
         <translation>ஒரு எண்ணாக இருக்க வேண்டும்</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1108"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1123"/>
         <source>已取消%1的快捷键。</source>
         <translation>%1 க்கான குறுக்குவழி விசை ரத்து செய்யப்பட்டுள்ளது.</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1118"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1133"/>
         <source>更新热键成功</source>
         <translation>ஆட்ச்கி வெற்றிகரமாக புதுப்பிக்கப்பட்டது</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1118"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1133"/>
         <source>%1的快捷键为 %2</source>
         <translation>%1 க்கான குறுக்குவழி விசை %2 ஆகும்</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1126"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1141"/>
         <source>%1 快捷键%2已被注册，请尝试另外的按键组合。</source>
         <translation>%1 குறுக்குவழி விசை %2 பதிவு செய்யப்பட்டுள்ளது, தயவுசெய்து மற்றொரு முக்கிய கலவையை முயற்சிக்கவும்.</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1129"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1144"/>
         <source>%1 快捷键%2无法注册，请尝试另外的按键组合。</source>
         <translation>%1 குறுக்குவழி விசை %2 ஐ பதிவு செய்ய முடியாது, தயவுசெய்து மற்றொரு முக்கிய கலவையை முயற்சிக்கவும்.</translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1138"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1153"/>
         <source>请按下快捷键组合。按【Esc】退出。</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1151"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1166"/>
         <source>当前快捷键录制已在进行，不能同时录制！</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1153"/>
+        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1168"/>
         <source>无法录制快捷键</source>
         <translation>குறுக்குவழி விசைகளை பதிவு செய்ய முடியாது</translation>
     </message>
@@ -1094,16 +1094,6 @@
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="386"/>
         <source>没有找到可移除的快捷方式。</source>
         <translation>நீக்கக்கூடிய குறுக்குவழி எதுவும் காணப்படவில்லை.</translation>
-    </message>
-    <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="394"/>
-        <source>立刻关闭软件</source>
-        <translation>மென்பொருளை உடனடியாக மூடு</translation>
-    </message>
-    <message>
-        <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="394"/>
-        <source>稍后</source>
-        <translation>பின்னர்</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="434"/>
