@@ -390,10 +390,10 @@ URL：`/api/doc/download`
     - `"txtPlain"` ：只含识别文本的txt文件。
     - `"jsonl"` ：与 `result` 接口， `format="dict"` 的格式类似。每行为一个json对象。
     - `"csv"` ：表格，每行为一页的识别文本。
-- **ingore_blank** ：布尔值。是否忽略空页（没有文字的页数）。
+- **ignore_blank** ：布尔值。是否忽略空页（没有文字的页数）。
   - `true` （默认）：如 txt、csv 等文件中，会跳过空页。
   - `false` ：不跳过空页，文件中空页的内容记为空字符串。
-> 注： `ingore_blank` 是一个拼写错误。如果您使用 Umi-OCR v2.1.4 及以前的版本，请使用此错误拼写。如果您使用最新代码构建的 Umi-OCR ，请使用修复后的拼写 `ignore_blank` 。
+> 注： Umi-OCR `v2.1.4` 及以前的版本， `ignore_blank` 参数存在问题，请使用最新版本。
 
 ### 3.2. 响应格式
 

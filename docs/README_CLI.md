@@ -25,6 +25,10 @@
 
 **关闭软件**：`umi-ocr --quit`
 
+**重新加载配置文件**：`umi-ocr --reload` （`v2.1.5`以上版本支持）
+
+> Umi-OCR 的配置文件是 `./UmiOCR-data/.settings` ，ini格式；软件界面上设置的参数将会保存到此文件。允许手动修改配置文件，然后使用 `--reload` 指令来重新加载该配置文件并刷新软件设置界面。
+
 ### OCR指令
 
 **鼠标截屏**：`umi-ocr --screenshot`
