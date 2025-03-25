@@ -4,8 +4,8 @@
         "major": 2,
         "minor": 1,
         "patch": 5,
-        "prerelease": "dev",
-        "prereleaseNumber": 1,
+        "prerelease": "",
+        "prereleaseNumber": 0,
         "string": "自动生成"
     },
     "fullname": "自动生成",
