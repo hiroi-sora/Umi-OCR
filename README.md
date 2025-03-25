@@ -322,8 +322,9 @@ Umi-OCR
 | [Anarkiisto](https://hosted.weblate.org/user/Anarkiisto)                             | 繁體中文                  |
 | [ドコモ光](https://hosted.weblate.org/user/umren190402)                              | 日本語                    |
 | [杨鹏](https://hosted.weblate.org/user/ypf)                                          | Português                 |
-| [Вячеслав Анатольевич Малышев](https://hosted.weblate.org/user/1969)                 | Russian                   |
-| [Muhammadyusuf Kurbonov](https://hosted.weblate.org/user/muhammadyusuf.kurbonov2002) | Russian                   |
+| [Вячеслав Анатольевич Малышев](https://hosted.weblate.org/user/1969)                 | Русский                   |
+| [Muhammadyusuf Kurbonov](https://hosted.weblate.org/user/muhammadyusuf.kurbonov2002) | Русский                   |
+| [தமிழ்நேரம்](https://hosted.weblate.org/user/TamilNeram/)                                | தமிழ்                       |
 
 如果有信息错误或人员缺漏，请在 [这个讨论](https://github.com/hiroi-sora/Umi-OCR/discussions/449) 中回复。
 

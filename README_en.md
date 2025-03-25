@@ -262,8 +262,9 @@ We extend our gratitude to the following translators for contributing to the loc
 | [Anarkiisto](https://hosted.weblate.org/user/Anarkiisto)                             | 繁體中文                  |
 | [ドコモ光](https://hosted.weblate.org/user/umren190402)                              | 日本語                    |
 | [杨鹏](https://hosted.weblate.org/user/ypf)                                          | Português                 |
-| [Вячеслав Анатольевич Малышев](https://hosted.weblate.org/user/1969)                 | Russian                   |
-| [Muhammadyusuf Kurbonov](https://hosted.weblate.org/user/muhammadyusuf.kurbonov2002) | Russian                   |
+| [Вячеслав Анатольевич Малышев](https://hosted.weblate.org/user/1969)                 | Русский                   |
+| [Muhammadyusuf Kurbonov](https://hosted.weblate.org/user/muhammadyusuf.kurbonov2002) | Русский                   |
+| [தமிழ்நேரம்](https://hosted.weblate.org/user/TamilNeram/)                                | தமிழ்                       |
 
 If you find any errors in the information or missing contributors, please reply in [this discussion](https://github.com/hiroi-sora/Umi-OCR/discussions/449).
 
