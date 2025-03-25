@@ -8,35 +8,61 @@ from plugin_i18n import setLangCode
 from umi_log import logger
 
 I18nDir = "i18n"  # 翻译文件 目录
-DefaultLang = "zh_CN"  # 默认语言
-# 语言表。每个语种只有第一个代号是有效代号，剩下的会映射到第一个。如zh_HK会映射到zh_TW。
+DefaultLang = "zh_CN"  # 默认语言，项目中qsTr()标记的原生语言，无翻译文件。
+
+# 语言表。每个语种只有第一个语言代码是有效的（对应到翻译文件.qm），
+# 其余的语言代码会映射到第一个。如zh_HK会映射到zh_TW，en_CA映射到en_US。
+# https://www.science.co.il/language/Locale-codes.php
 LanguageCodes = {
-    "zh_CN": "简体中文",  # 简中
+    # ===== 简中 =====
+    "zh_CN": "简体中文",
     "zh": "简体中文",
-    "zh_TW": "繁體中文",  # 繁中
-    "zh_HK": "繁體中文",
-    "en_US": "English",  # 英语
+    # ===== 繁中 =====
+    "zh_TW": "繁體中文",  # 中国台湾
+    "zh_HK": "繁體中文",  # 中国香港
+    "zh_MO": "繁體中文",  # 中国澳门
+    "zh_SG": "繁體中文",  # 新加坡
+    # ===== 英语 =====
+    "en_US": "English",  # 美国
     "en": "English",
-    "en_GB": "English",
-    "en_CA": "English",
-    "es_ES": "Español",  # 西班牙语
-    "es_MX": "Español",
-    "fr_FR": "Français",  # 法语
+    "en_GB": "English",  # 英国
+    "en_AU": "English",  # 澳大利亚
+    "en_CA": "English",  # 加拿大
+    # ===== 日语 =====
+    "ja_JP": "日本語",  # 日本
+    # ===== 俄语 =====
+    "ru_RU": "Русский",  # 俄罗斯
+    "ru": "Русский",
+    # ===== 葡萄牙语 =====
+    "pt": "Português",
+    "pt_BR": "Português",  # 巴西
+    "pt_PT": "Português",  # 葡萄牙
+    # ===== 泰米尔语 =====
+    "ta": "தமிழ்",
+    "ta_TA": "தமிழ்",
+}
+
+""" 暂未启用的语言
+    # ===== 韩语 =====
+    "ko_KR": "한국어",  # 韩国
+    # ===== 法语 =====
+    "fr_FR": "Français",  # 法国
     "fr": "Français",
-    "fr_CA": "Français",
-    "de_DE": "Deutsch",  # 德语
+    "fr_CA": "Français",  # 加拿大（魁北克）
+    "fr_BE": "Français",  # 比利时
+    # ===== 意大利语 =====
+    "it_IT": "Italiano",
+    # ===== 挪威语 =====
+    "nb_NO": "norsk",
+    # ===== 德语 =====
+    "de_DE": "Deutsch",
     "de": "Deutsch",
     "de_AT": "Deutsch",
     "de_CH": "Deutsch",
-    "ja_JP": "日本語",  # 日语
-    "ko_KR": "한국어",  # 韩语
-    "ru_RU": "Русский",  # 俄语
-    "pt": "Português",  # 葡萄牙语
-    "pt_BR": "Português",
-    "pt_PT": "Português",
-    "it_IT": "Italiano",  # 意大利语
-    "nb_NO": "norsk",  # 挪威语
-}
+    # ===== 西班牙语 Spanish =====
+    "es_ES": "Español",
+    "es_MX": "Español",
+"""
 
 
 class _I18n:

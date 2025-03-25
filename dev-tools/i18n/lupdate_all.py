@@ -7,14 +7,15 @@ import sys
 import xml.etree.ElementTree as ET
 
 LangList = [
-    "en_US",  # 英语（美国）
-    "zh_TW",  # 中文（繁体）
-    "ja_JP",  # 日语
-    "fr_FR",  # 法语
-    "pt",  # 葡萄牙语
-    "ru_RU",  # 俄语
+    "en_US",  # 英语（美国） | English
+    "zh_TW",  # 中文（繁体） | 繁體中文
+    "ja_JP",  # 日语 | 日本語
+    "fr_FR",  # 法语 | Français
+    "pt",  # 葡萄牙语 | Português
+    "ru_RU",  # 俄语 | Русский
     "uz",  # 乌兹别克语
     "vi",  # 越南语
+    "ta",  # 泰米尔语 | தமிழ்
     # "nb_NO",
     # "it_IT",
     # "es_ES",
