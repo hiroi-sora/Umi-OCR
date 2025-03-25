@@ -38,6 +38,7 @@ git clone --single-branch --branch [分支名] https://github.com/hiroi-sora/Umi
 - 修复：Linux版本截图后，主窗口的位置与操作前不一致。
 - 优化：图片/文档的异步加载机制。现在可以流畅地加载含有数万个子文件的文件夹，且能预览加载进度。 (#710)
 - Windows 版本更新第三方依赖库：`PyMuPDF 1.24.11` ,`fontTools 4.56.0` ,`Pillow 10.4.0` ,`psutil 10.4.0` ,`pynput 1.8.0` ,`zxing-cpp 2.3.0`
+- 新增UI语言：俄语 `Português` ，译者：[Вячеслав Анатольевич Малышев](https://hosted.weblate.org/user/1969)、[Muhammadyusuf Kurbonov](https://hosted.weblate.org/user/muhammadyusuf.kurbonov2002)。泰米尔语 `தமிழ்` ，译者：[தமிழ்நேரம்](https://hosted.weblate.org/user/TamilNeram/)。
 
 
 ### [v2.1.4](https://github.com/hiroi-sora/Umi-OCR/tree/release/2.1.4) `2024.8.31`
