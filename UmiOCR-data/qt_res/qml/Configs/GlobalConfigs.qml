@@ -391,7 +391,7 @@ Configs {
     // 询问重启软件
     function askRebootApp(msg) {
         const callback = (flag)=>{ flag&&Qt.quit() }
-        const argd = {yesText: qsTr("立刻关闭软件"), noText: qsTr("稍后")}
+        const argd = {yesText: "Quit Umi-OCR", noText: "Later"}
         qmlapp.popup.dialog("", msg, callback, "", argd)
     }
 
