@@ -147,7 +147,11 @@ Item {
 
         // 截图前等待时间
         let wait = 0
+        // 需要隐藏主窗口
         if(qmlapp.globalConfigs.getValue("screenshot.hideWindow")) {
+            // 若主窗口可见，则记录位置，避免linux隐藏→显示主窗口后位置偏移。
+            if(qmlapp.mainWin.getVisibility())
+                qmlapp.mainWin.saveGeometry()
             qmlapp.mainWin.setVisibility(false)
             wait = qmlapp.globalConfigs.getValue("screenshot.hideWindowTime")
         }

@@ -76,9 +76,16 @@ TabPage {
 
     // 弹出主窗口
     function popMainWindow() {
+        // 若主窗口已经可见，则不处理
+        if(qmlapp.mainWin.getVisibility())
+            return
         // 等一回合再弹，防止与收回截图窗口相冲突
-        if(configsComp.getValue("action.popMainWindow"))
-            Qt.callLater(()=>qmlapp.mainWin.setVisibility(true))
+        if(configsComp.getValue("action.popMainWindow")) {
+            Qt.callLater(()=>{
+                qmlapp.mainWin.loadGeometry()
+                qmlapp.mainWin.setVisibility(true)
+            })
+        }
     }
 
     // 生成二维码
