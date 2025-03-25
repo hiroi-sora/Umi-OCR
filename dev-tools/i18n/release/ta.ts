@@ -311,7 +311,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="117"/>
         <source>p.txt 纯文字格式</source>
-        <translation>p.txt 纯文字格式</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="118"/>
@@ -753,12 +753,12 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1138"/>
         <source>请按下快捷键组合。按【Esc】退出。</source>
-        <translation>请按下快捷键组合。按【Esc】退出。</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1151"/>
         <source>当前快捷键录制已在进行，不能同时录制！</source>
-        <translation>当前快捷键录制已在进行，不能同时录制！</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1153"/>
@@ -771,7 +771,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/DropArea_.qml" line="11"/>
         <source>松手放入文件</source>
-        <translation>松手放入文件</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -797,8 +797,7 @@
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/GlobalConfigsPage/FontPanel.qml" line="219"/>
         <source>内容字体：
 识别结果内容的字体。</source>
-        <translation>内容字体：
-识别结果内容的字体。</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -806,7 +805,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="20"/>
         <source>快捷方式</source>
-        <translation>快捷方式</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="24"/>
@@ -816,7 +815,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="32"/>
         <source>开始菜单</source>
-        <translation>开始菜单</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="40"/>
@@ -1848,7 +1847,7 @@
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRCode/QRCode.qml" line="100"/>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRCode/QRCode.qml" line="103"/>
         <source>生成二维码失败</source>
-        <translation>生成二维码失败</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRCode/QRCode.qml" line="159"/>
@@ -2435,7 +2434,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="11"/>
         <source>任务完成后的操作</source>
-        <translation>任务完成后的操作</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="15"/>
