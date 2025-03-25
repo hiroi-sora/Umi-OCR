@@ -22,7 +22,7 @@ Item {
     
     // 主窗口属性初始化
     Component.onCompleted: {
-        loadGeometry() // 恢复上次大小位置
+        loadGeometry(true) // 恢复上次大小位置
         // 启动时可见
         const visi = !qmlapp.globalConfigs.getValue("window.startupInvisible")
         setVisibility(visi)
@@ -42,13 +42,13 @@ Item {
     }
     // 保存
     function saveGeometry() {
-        let xywh = checkGeometry(mx, my, mw, mh)
+        let xywh = [mx, my, mw, mh]
         xywh = xywh.join(",")
         qmlapp.globalConfigs.setValue("window.geometry", xywh, false, true)
         console.log("保存窗口位置", xywh)
     }
-    // 读取
-    function loadGeometry() {
+    // 读取。isCheck==true时进行位置安全检查，避免窗口出现在屏幕外
+    function loadGeometry(isCheck=false) {
         let xywh = qmlapp.globalConfigs.getValue("window.geometry")
         xywh = xywh.split(",")
         if(xywh.length < 4) {
@@ -57,7 +57,10 @@ Item {
         }
         for(let i=0; i<4; i++)
             xywh[i] = parseInt(xywh[i])
-        let [x, y, w, h] = checkGeometry(xywh[0], xywh[1], xywh[2], xywh[3])
+        let [x, y, w, h] = xywh
+        // 安全检查，避免窗口出现在屏幕外
+        if(isCheck)
+            [x, y, w, h] = checkGeometry(xywh[0], xywh[1], xywh[2], xywh[3])
         mainWin.x = x
         mainWin.y = y
         mainWin.width = w
@@ -72,7 +75,7 @@ Item {
                 }
         }
         mainWin.screen = Qt.application.screens[screenIndex]
-        console.log("读取窗口位置", x, y, w, h, screenIndex)
+        console.log("读取窗口位置", x, y, w, h, screenIndex, isCheck)
     }
     // 检查窗口位置，返回检查后的值
     function checkGeometry(x, y, w, h) {
