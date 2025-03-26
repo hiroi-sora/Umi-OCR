@@ -24,21 +24,21 @@ git clone --single-branch --branch [分支名] https://github.com/hiroi-sora/Umi
 
 分支名：`main`
 
-- 新增：**日志机制**。在命令行中启动 Umi-OCR 可查看实时日志。高于指定级别（默认为ERROR）的日志被保存到 `Umi-OCR/UmiOCR-data/logs` 目录中，保存级别可以在全局设置标签页中更改。
+- 新增：日志机制。在命令行中启动 Umi-OCR 可查看实时日志。指定级别以上（默认为ERROR）的日志被保存到 `Umi-OCR/UmiOCR-data/logs` 目录中，保存级别可以在全局设置标签页中更改。
 - 新增：大部分标签页能手动切换左右/上下双栏模式。 (#789)
-- 新增：Esc键隐藏主窗口。
+- 新增：Esc键隐藏主窗口。 (#652)
 - 新增：调整二维码生成相关参数后，自动刷新二维码生成。 (#690)
 - 新增：命令行指令 `--reload` ，用于重新加载配置文件。 👉 [文档](https://github.com/hiroi-sora/Umi-OCR/blob/main/docs/README_CLI.md#软件操控指令)
 - 修复：文档识别提取PDF自带的文本内容时，未考虑页面旋转的影响。 (#785)
 - 修复：文档识别生成单层PDF时，未写入原PDF自带的文本内容。
 - 修复：OCR结果展示列表的一些显示Bug和鼠标划选Bug。
-- 修复：调整标签页顺序或删除标签页后，未及时保存标签页顺序。
+- 修复：调整标签页顺序或删除标签页后，未及时保存顺序信息。
 - 修复：HTTP接口 `/api/doc/download` 参数 `ignore_blank` 的错误。
 - 修复：Linux版本截图时，系统任务栏推移顶层窗口，导致截图位置偏移。 (#778)
 - 修复：Linux版本截图后，主窗口的位置与操作前不一致。
 - 优化：图片/文档的异步加载机制。现在可以流畅地加载含有数万个子文件的文件夹，且能预览加载进度。 (#710)
 - Windows 版本更新第三方依赖库：`PyMuPDF 1.24.11` ,`fontTools 4.56.0` ,`Pillow 10.4.0` ,`psutil 10.4.0` ,`pynput 1.8.0` ,`zxing-cpp 2.3.0`
-- 新增UI语言：俄语 `Português` ，译者：[Вячеслав Анатольевич Малышев](https://hosted.weblate.org/user/1969)、[Muhammadyusuf Kurbonov](https://hosted.weblate.org/user/muhammadyusuf.kurbonov2002)。泰米尔语 `தமிழ்` ，译者：[தமிழ்நேரம்](https://hosted.weblate.org/user/TamilNeram/)。
+- 新增UI语言：俄语 `Русский` ，译者：[Вячеслав Анатольевич Малышев](https://hosted.weblate.org/user/1969)、[Muhammadyusuf Kurbonov](https://hosted.weblate.org/user/muhammadyusuf.kurbonov2002)。泰米尔语 `தமிழ்` ，译者：[தமிழ்நேரம்](https://hosted.weblate.org/user/TamilNeram/)。
 
 
 ### [v2.1.4](https://github.com/hiroi-sora/Umi-OCR/tree/release/2.1.4) `2024.8.31`
