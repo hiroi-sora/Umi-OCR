@@ -100,12 +100,12 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="82"/>
         <source>排队</source>
-        <translation type="unfinished"></translation>
+        <translation>Esperar en la cola</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="120"/>
         <source>依然关闭</source>
-        <translation type="unfinished"></translation>
+        <translation>Permanece cerrado</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="127"/>
