@@ -3,6 +3,7 @@
 // ==============================================
 
 import QtQuick 2.15
+import QtQuick.Controls 2.15
 
 import ".."
 import "../../Widgets"
@@ -12,7 +13,7 @@ import "../../Widgets/ImageViewer"
 TabPage {
     id: tabPage
     // 配置
-    configsComp: ScreenshotOcrConfigs {} 
+    configsComp: ScreenshotOcrConfigs {}
     property string msnState: "none" // OCR任务状态， none run
 
     // ========================= 【逻辑】 =========================
@@ -149,7 +150,7 @@ TabPage {
         qmlapp.pubSub.subscribeGroup("<<reScreenshot>>", this, "reScreenshot", ctrlKey)
         qmlapp.pubSub.subscribeGroup("<<screenshot>>", this, "screenshot", ctrlKey)
         qmlapp.pubSub.subscribeGroup("<<paste>>", this, "paste", ctrlKey)
-        qmlapp.systemTray.addMenuItem("<<screenshot>>", qsTr("屏幕截图"), screenshot)
+        qmlapp.systemTray.addMenuItem("<<screenshot>>", qsTr("屏幕功能"), screenshot)
         qmlapp.systemTray.addMenuItem("<<paste>>", qsTr("粘贴图片"), paste)
     }
     // 取消订阅事件
@@ -160,7 +161,7 @@ TabPage {
     }
 
     // ========================= 【python调用qml】 =========================
-    
+
     // 设置任务状态
     function setMsnState(flag) {
         msnState = flag
@@ -180,7 +181,7 @@ TabPage {
             tabPanel.currentIndex = 1
         // 复制到剪贴板
         const copy = configsComp.getValue("action.copy")
-        if(copy && resText!="") 
+        if(copy && resText!="")
             qmlapp.utilsConnector.copyText(resText)
         // 弹出通知
         showSimple(res, resText, copy)
@@ -210,7 +211,7 @@ TabPage {
         resText = resText.replace(/\n/g, " ") // 换行符替换空格
         if(code === 100 || code === 101) { // 成功时，不发送内部弹窗
             if(simpleType==="inside" || simpleType==="onlyInside")
-                if(qmlapp.mainWin.getVisibility()) 
+                if(qmlapp.mainWin.getVisibility())
                     return
         }
         if(code === 100) {
@@ -240,6 +241,23 @@ TabPage {
         visible: doubleLayout.isRow && doubleLayout.hideAB === 1
         anchors.leftMargin: visible ? size_.smallSpacing : 0
         width: visible ? size_.line * 1.5 : 0
+
+
+        Menu {
+            id: modeMenu
+            parent: Qt.application.activeWindow
+            width: 60
+
+            MenuItem {
+                text: qsTr("拖动截屏")
+                onTriggered: qmlapp.imageManager.screenshotManager.selectMode = "drag"
+            }
+            MenuItem {
+                text: qsTr("点击截屏")
+                onTriggered: qmlapp.imageManager.screenshotManager.selectMode = "click"
+            }
+        }
+
 
         Column {
             anchors.top: parent.top
@@ -388,6 +406,15 @@ TabPage {
                         anchors.top: parent.top
                         anchors.bottom: parent.bottom
                         btnList: [
+                            {   icon: "camera-rear",
+                                onClicked: function() {
+                                    const pos = mapToItem(null, 0, height - 25)
+                                    modeMenu.popup(pos)
+                                },
+                                color: theme.textColor,
+                                bgColor: theme.bgColor,
+                                toolTip: tr("截图模式"),
+                            },
                             {
                                 icon: "screenshot",
                                 onClicked: tabPage.screenshot,

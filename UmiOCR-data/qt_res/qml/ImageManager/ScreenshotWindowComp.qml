@@ -32,8 +32,13 @@ Window {
     property int clipW: -1
     property int clipH: -1
 
+    property string selectionMode: "drag"    // 模式："drag" 或 "click"
+    property real firstClickX: -1            // 记录首次点击的X
+    property real firstClickY: -1            // 记录首次点击的Y
+    property bool hasFirstClick: false       // 是否已完成第一次点击
+
     flags: Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint // 无边框+置顶
-    
+
     Component.onCompleted: {
         image.showImgID(imgID)
         visible = true // 窗口可见
@@ -55,10 +60,10 @@ Window {
             }
             argd = {
                 screenName: screenName,
-                imgID: imgID, 
-                clipX: clipX, 
-                clipY: clipY, 
-                clipW: clipW, 
+                imgID: imgID,
+                clipX: clipX,
+                clipY: clipY,
+                clipW: clipW,
                 clipH: clipH,
             }
         }
@@ -66,8 +71,9 @@ Window {
             argd = {clipX:-1, clipY:-1, clipW:-1, clipH:-1}
         }
         // 向父级回报
-        win.screenshotEnd(argd) 
+        win.screenshotEnd(argd)
     }
+
 
     // 底层，图片
     Image_ {
@@ -109,7 +115,10 @@ Window {
     // 十字指示器， mouseStatus==0 时启用
     Item {
         anchors.fill: parent
-        visible: mouseArea.containsMouse && mouseStatus==0
+        visible: mouseArea.containsMouse && (
+                (selectionMode === "drag" && mouseStatus === 0) ||
+                (selectionMode === "click" && mouseStatus === 0)
+             )
         Rectangle { // 水平
             anchors.left: parent.left
             anchors.right: parent.right
@@ -124,6 +133,24 @@ Window {
             width: lineWidth
             x: mouseX-lineWidth
         }
+        // ✅ 固定点击点的十字线（仅 click 模式第一次点击后）
+        Rectangle { // 横线
+            anchors.left: parent.left
+            anchors.right: parent.right
+            color: crossLineColor
+            height: lineWidth
+            visible: selectionMode === "click" && hasFirstClick
+            y: firstClickY - lineWidth
+        }
+
+        Rectangle { // 竖线
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            color: crossLineColor
+            width: lineWidth
+            visible: selectionMode === "click" && hasFirstClick
+            x: firstClickX - lineWidth
+        }
     }
     // 鼠标触控层
     MouseArea {
@@ -136,6 +163,14 @@ Window {
 
         // 按下
         onPressed: {
+            if (win.selectionMode === "click") {
+                if (mouse.button === Qt.RightButton) {
+                    win.hasFirstClick = false
+                    ssEnd(false)  // 取消截图
+                }
+                // 若首次点击尚未完成，不做拖拽处理
+                return
+            }
             if (mouse.button === Qt.RightButton) {
                 return
             }
@@ -149,6 +184,11 @@ Window {
         }
         // 移动
         onPositionChanged: {
+            if (win.selectionMode === "click"){
+                win.mouseX = mouse.x
+                win.mouseY = mouse.y
+                return
+            }
             // 正常移动
             if(mouseStatus == 0) {
                 win.mouseX = mouse.x
@@ -192,12 +232,44 @@ Window {
         }
         // 松开
         onReleased: {
+            // addnew
+            if (win.selectionMode === "click") {
+                // 点击模式，首次单击后不立即结束
+                return
+            }
             if (mouse.button === Qt.RightButton) {
                 ssEnd(false)
                 return
             }
             if(mouseStatus == 1) {
                 ssEnd(true)
+            }
+        }
+        // adnew
+        // 点击模式使用 onClicked 进行两次点击逻辑
+        onClicked: {
+            if (win.selectionMode !== "click") return
+            if (mouse.button === Qt.LeftButton) {
+                if (!win.hasFirstClick) {
+                    // 第一次点击：记录起点
+                    win.firstClickX = mouse.x; win.firstClickY = mouse.y
+                    win.clipX = win.firstClickX; win.clipY = win.firstClickY
+                    win.clipW = 0; win.clipH = 0
+                    win.hasFirstClick = true
+                } else {
+                    // 第二次点击：计算矩形并完成截图
+                    var x2 = mouse.x, y2 = mouse.y
+                    win.clipX = Math.min(win.firstClickX, x2)
+                    win.clipY = Math.min(win.firstClickY, y2)
+                    win.clipW = Math.abs(x2 - win.firstClickX)
+                    win.clipH = Math.abs(y2 - win.firstClickY)
+                    win.hasFirstClick = false
+                    ssEnd(true)
+                }
+            } else if (mouse.button === Qt.RightButton) {
+                // 右键取消截图
+                win.hasFirstClick = false
+                ssEnd(false)
             }
         }
     }

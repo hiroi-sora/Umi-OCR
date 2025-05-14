@@ -7,7 +7,6 @@ import QtQuick.Window 2.15
 
 Item {
     id: ssWinRoot
-
     // ==================== 【接口】 ====================
 
     // 开始一次截图。传入回调函数。
@@ -49,8 +48,10 @@ Item {
                 y: screen.virtualY,
                 width: screen.width,
                 height: screen.height,
+                selectionMode: selectMode,
                 screenshotEnd: ssWinRoot.ssEnd // 关闭函数
             }
+            console.log("即将传入 ssWinComp 参数：", JSON.stringify(argds))
             argds.push(argd)
         }
         // 记录回调
@@ -205,7 +206,7 @@ Item {
     property var lastCallback: undefined // 截图完毕的回调，得到 clipImgID
     property var winDict: {} // 存放当前已打开的窗口
     property QtObject imageConn: qmlapp.imageManager.imageConnector
-
+    property string selectMode: "drag"
     Component {
         id: ssWinComp
         ScreenshotWindowComp { }
