@@ -471,6 +471,19 @@ def init(UmiWeb):
                     "code": 107,
                     "data": f"[Error] Invalid JSON format: {options} | {e}",
                 }
+
+            # 检查忽略区域参数是否存在, 若存在则补全坐标 (兼容桌面程序)
+            if "tbpu.ignoreArea" in options:
+                ignore_area = list()
+                for area in options["tbpu.ignoreArea"]:
+                    ignore_area.append([
+                        [area[0][0], area[0][1]],  # 左上角
+                        [area[1][0], area[0][1]],  # 右上角
+                        [area[1][0], area[1][1]],  # 右下角
+                        [area[0][0], area[1][1]],  # 左下角
+                    ])
+                options["tbpu.ignoreArea"] = ignore_area
+
         if not isinstance(options, dict):
             options = {}
 
