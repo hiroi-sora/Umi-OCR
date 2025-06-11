@@ -311,7 +311,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="117"/>
         <source>p.txt 纯文字格式</source>
-        <translation type="unfinished">p.txt எளிய உரை வடிவம்</translation>
+        <translation>p.txt எளிய உரை வடிவம்</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="118"/>
@@ -336,7 +336,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="128"/>
         <source>每行为一条json数据，便于第三方程序读取操作</source>
-        <translation>ஒவ்வொரு நடத்தையும் ஒரு சாதொபொகு தரவு, இது மூன்றாம் தரப்பு நிரல்களைப் படிக்கவும் செயல்படவும் வசதியானது.</translation>
+        <translation>ஒவ்வொரு நடத்தையும் ஒரு சாதொபொகு தரவு, இது மூன்றாம் தரப்பு நிரல்களைப் படிக்கவும் செயல்படவும் வசதியானது</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="134"/>
@@ -346,12 +346,12 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="135"/>
         <source>若某一页没有文字或识别失败，也不会输出错误提示信息</source>
-        <translation>ஒரு குறிப்பிட்ட பக்கத்தில் உரை இல்லை அல்லது ஏற்பு தோல்வியுற்றால், பிழை செய்தி வெளியீடாக இருக்காது.</translation>
+        <translation>ஒரு குறிப்பிட்ட பக்கத்தில் உரை இல்லை அல்லது ஏற்பு தோல்வியுற்றால், பிழை செய்தி வெளியீடாக இருக்காது</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="63"/>
         <source>递归读取子文件夹</source>
-        <translation>மீண்டும் மீண்டும் துணை கோப்புறைகளைப் படியுங்கள்</translation>
+        <translation>மறுநிகழ்வு துணை கோப்புறைகளைப் படியுங்கள்</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="23"/>
@@ -372,13 +372,13 @@
 举例：[OCR]_%name%range_%date
 生成：[OCR]_文档A(p2-10)_20230901_1213.txt
 添加占位符可以避免旧文件被新文件覆盖。</source>
-        <translation>நீட்டிப்பு பெயரை நிரப்ப தேவையில்லை. பின்வரும் ஒதுக்கிடங்களை செருகுவதை ஆதரிக்கவும்:
- %தேதி தேதி நேரம்
- %பெயர் அசல் ஆவண பெயர்
- %வரம்பு பக்க எண்ணிக்கை வரம்பை அடையாளம் காட்டுகிறது. பக்கங்களின் எண்ணிக்கை அடையாளம் காணப்பட்டால் மட்டுமே அது காண்பிக்கப்படும்.
+        <translation>நீட்டிப்பு பெயரை நிரப்பத் தேவையில்லை. பின்வரும் ஒதுக்கிடங்களை செருகுவதை ஆதரிக்கவும்:
+ %date தேதிநேரம்
+ %name அசல் ஆவண பெயர்
+ %range பக்க எண்ணிக்கை வரம்பை அடையாளம் காட்டுகிறது. பக்கங்களின் எண்ணிக்கை அடையாளம் காணப்பட்டால் மட்டுமே அது காண்பிக்கப்படும்.
  எடுத்துக்காட்டு: [OCR] _%பெயர்%வரம்பு_%தேதி
  உருவாக்கு: [OCR] ஆவணம் (_D) A (P2-10) _20230901_1213.txt
- பிளேச்ஓல்டர்களைச் சேர்ப்பது பழைய கோப்புகளை புதிய கோப்புகளால் மேலெழுதப்படுவதைத் தடுக்கலாம்.</translation>
+ பிளேச்ஓல்டர்களைச் சேர்ப்பது பழைய கோப்புகளைப் புதிய கோப்புகளால் மேலெழுதப்படுவதைத் தடுக்கலாம்.</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="103"/>
@@ -538,12 +538,12 @@
 举例：[OCR]_%name_%date
 生成：[OCR]_我的图片_2023-09-01_12-13.txt
 添加占位符可以避免旧文件被新文件覆盖。</source>
-        <translation>நீட்டிப்பு பெயரை நிரப்ப தேவையில்லை. பின்வரும் ஒதுக்கிடங்களை செருகுவதை ஆதரிக்கவும்:
- %தேதி தேதி நேரம்
- %பெயர் அசல் கோப்புறை பெயர்/கோப்பு பெயர்
+        <translation>நீட்டிப்பு பெயரை நிரப்பத் தேவையில்லை. பின்வரும் ஒதுக்கிடங்களை செருகுவதை ஆதரிக்கவும்:
+ %date தேதி நேரம்
+ %name அசல் கோப்புறை பெயர்/கோப்புப் பெயர்
  எடுத்துக்காட்டு: [OCR] _%பெயர்_%தேதி
  உருவாக்கு: [OCR] _my picture_2023-09-01_12-13.txt
- பிளேச்ஓல்டர்களைச் சேர்ப்பது பழைய கோப்புகளை புதிய கோப்புகளால் மேலெழுதப்படுவதைத் தடுக்கலாம்.</translation>
+ பிளேச்ஓல்டர்களைச் சேர்ப்பது பழைய கோப்புகளைப் புதிய கோப்புகளால் மேலெழுதப்படுவதைத் தடுக்கலாம்.</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="66"/>
@@ -596,7 +596,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="90"/>
         <source>对每张图片，生成同名txt文件，仅输出识别文字</source>
-        <translation>ஒவ்வொரு படத்திற்கும், அதே பெயரின் TXT கோப்பை உருவாக்கவும், அடையாளம் காணும் உரை மட்டுமே வெளியீடு.</translation>
+        <translation>ஒவ்வொரு படத்திற்கும், அதே பெயரின் TXT கோப்பை உருவாக்கவும், அடையாளம் காணும் உரை மட்டுமே வெளியீடு</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="94"/>
@@ -626,7 +626,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="105"/>
         <source>每行为一条json数据，便于第三方程序读取操作</source>
-        <translation>ஒவ்வொரு நடத்தையும் ஒரு சாதொபொகு தரவு, இது மூன்றாம் தரப்பு நிரல்களைப் படிக்கவும் செயல்படவும் வசதியானது.</translation>
+        <translation>ஒவ்வொரு நடத்தையும் ஒரு சாதொபொகு தரவு, இது மூன்றாம் தரப்பு நிரல்களைப் படிக்கவும் செயல்படவும் வசதியானது</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="111"/>
@@ -636,12 +636,12 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="112"/>
         <source>若图片没有文字或识别失败，也不会输出错误提示信息</source>
-        <translation>படத்திற்கு உரை இல்லை அல்லது ஏற்பு தோல்வியுற்றால், பிழை செய்தி வெளியீடாக இருக்காது.</translation>
+        <translation>படத்திற்கு உரை இல்லை அல்லது ஏற்பு தோல்வியுற்றால், பிழை செய்தி வெளியீடாக இருக்காது</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="40"/>
         <source>递归读取子文件夹</source>
-        <translation>மீண்டும் மீண்டும் துணை கோப்புறைகளைப் படியுங்கள்</translation>
+        <translation>மீண்டும்மீண்டும் துணை கோப்புறைகளைப் படியுங்கள்</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="41"/>
@@ -753,12 +753,12 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1153"/>
         <source>请按下快捷键组合。按【Esc】退出。</source>
-        <translation type="unfinished"></translation>
+        <translation>குறுக்குவழி விசை கலவையை அழுத்தவும். வெளியேற [ESC] ஐ அழுத்தவும்.</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1166"/>
         <source>当前快捷键录制已在进行，不能同时录制！</source>
-        <translation type="unfinished"></translation>
+        <translation>குறுக்குவழி விசைகளின் பதிவு தற்போது நடந்து வருகிறது, அதே நேரத்தில் பதிவு செய்ய முடியாது!</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="1168"/>
@@ -771,7 +771,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/DropArea_.qml" line="11"/>
         <source>松手放入文件</source>
-        <translation type="unfinished"></translation>
+        <translation>கோப்பை விட்டுவிடுங்கள்</translation>
     </message>
 </context>
 <context>
@@ -797,7 +797,8 @@
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/GlobalConfigsPage/FontPanel.qml" line="219"/>
         <source>内容字体：
 识别结果内容的字体。</source>
-        <translation type="unfinished"></translation>
+        <translation>உள்ளடக்க எழுத்துரு:
+முடிவு உள்ளடக்கத்தை அடையாளம் காணும் எழுத்துரு.</translation>
     </message>
 </context>
 <context>
@@ -805,7 +806,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="20"/>
         <source>快捷方式</source>
-        <translation type="unfinished"></translation>
+        <translation>குறுக்குவழிகள்</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="24"/>
@@ -815,7 +816,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="32"/>
         <source>开始菜单</source>
-        <translation type="unfinished"></translation>
+        <translation>தொடக்க பட்டியல்</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="40"/>
@@ -865,7 +866,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="107"/>
         <source>若出现界面闪烁、元素错位等界面异常，尝试切换渲染器或者关闭硬件加速</source>
-        <translation>இடைமுக ஒளிரும், உறுப்பு தவறாக வடிவமைத்தல் மற்றும் பிற இடைமுக அசாதாரணங்கள் ஏற்பட்டால், ரெண்டரரை மாற்ற முயற்சிக்கவும் அல்லது வன்பொருள் முடுக்கம் அணைக்கவும்.</translation>
+        <translation>இடைமுக ஒளிரும், உறுப்பு தவறாக வடிவமைத்தல் மற்றும் பிற இடைமுக அசாதாரணங்கள் ஏற்பட்டால், ரெண்டரரை மாற்ற முயற்சிக்கவும் அல்லது வன்பொருள் முடுக்கம் அணைக்கவும்</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="113"/>
@@ -948,13 +949,13 @@
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="162"/>
         <source>若要弹出位于后台的软件窗口，请在文件管理器中重复启动软件。
 若要彻底退出软件，请从任务管理器中结束进程。</source>
-        <translation>பின்னணியில் அமைந்துள்ள மென்பொருள் சாளரத்தை பாப் செய்ய, கோப்பு மேலாளரில் மென்பொருளை மீண்டும் மீண்டும் மறுதொடக்கம் செய்யுங்கள்.
+        <translation>பின்னணியில் அமைந்துள்ள மென்பொருள் சாளரத்தைப் பாப் செய்ய, கோப்பு மேலாளரில் மென்பொருளை மீண்டும்மீண்டும் மறுதொடக்கம் செய்யுங்கள்.
  மென்பொருளை முழுவதுமாக வெளியேற, பணி மேலாளரிடமிருந்து செயல்முறையை முடிக்கவும்.</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="183"/>
         <source>截图</source>
-        <translation>திரை காட்சி</translation>
+        <translation>திரைகாட்சி</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="187"/>
@@ -1287,7 +1288,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageWithText.qml" line="276"/>
         <source>复制&#x3000;&#x3000;（Ctrl+C）</source>
-        <translation>நகலெடு (Ctrl+C)</translation>
+        <translation>நகலெடு&#x3000;&#x3000;(Ctrl+C)</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageWithText.qml" line="277"/>
@@ -1837,7 +1838,7 @@
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRCode/QRCode.qml" line="100"/>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRCode/QRCode.qml" line="103"/>
         <source>生成二维码失败</source>
-        <translation type="unfinished"></translation>
+        <translation>QR குறியீட்டை உருவாக்குவதில் தோல்வி</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRCode/QRCode.qml" line="159"/>
@@ -2004,7 +2005,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRCode/QRCodeConfigs.qml" line="87"/>
         <source>识图后，如果主窗口最小化或处于后台，则弹到前台</source>
-        <translation>படத்தை அங்கீகரித்த பிறகு, முதன்மையான சாளரம் குறைக்கப்பட்டால் அல்லது பின்னணியில் இருந்தால், அது முன்புறத்தில் தோன்றும்.</translation>
+        <translation>படத்தை அங்கீகரித்தபிறகு, முதன்மையான சாளரம் குறைக்கப்பட்டால் அல்லது பின்னணியில் இருந்தால், அது முன்புறத்தில் தோன்றும்</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRCode/QRCodeConfigs.qml" line="93"/>
@@ -2130,7 +2131,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ResultLayout/ResultsTableView.qml" line="453"/>
         <source>复制&#x3000;&#x3000;&#x3000;&#x3000;（Ctrl+C）</source>
-        <translation>நகலெடு (Ctrl+C)</translation>
+        <translation>நகலெடு&#x3000;&#x3000;&#x3000;&#x3000;（Ctrl+C)</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ResultLayout/ResultsTableView.qml" line="454"/>
@@ -2200,7 +2201,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ImageManager/ScreenshotManager.qml" line="107"/>
         <source>重复截图失败</source>
-        <translation>மீண்டும் மீண்டும் திரைக்காட்சி தோல்வியடைந்தது</translation>
+        <translation>மீண்டும்மீண்டும் திரைக்காட்சி தோல்வியடைந்தது</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ImageManager/ScreenshotManager.qml" line="106"/>
@@ -2372,7 +2373,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOcrConfigs.qml" line="61"/>
         <source>识图后，如果主窗口最小化或处于后台，则弹到前台</source>
-        <translation>படத்தை அங்கீகரித்த பிறகு, முதன்மையான சாளரம் குறைக்கப்பட்டால் அல்லது பின்னணியில் இருந்தால், அது முன்புறத்தில் தோன்றும்.</translation>
+        <translation>படத்தை அங்கீகரித்தபிறகு, முதன்மையான சாளரம் குறைக்கப்பட்டால் அல்லது பின்னணியில் இருந்தால், அது முன்புறத்தில் தோன்றும்</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOcrConfigs.qml" line="67"/>
@@ -2424,7 +2425,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="11"/>
         <source>任务完成后的操作</source>
-        <translation type="unfinished"></translation>
+        <translation>பணி முடிந்ததும் செயல்பாடு</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="15"/>
