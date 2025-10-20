@@ -46,12 +46,12 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/About/About.qml" line="78"/>
         <source>作者</source>
-        <translation type="unfinished"></translation>
+        <translation>Ameskar</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/About/About.qml" line="86"/>
         <source>译者</source>
-        <translation type="unfinished"></translation>
+        <translation>Imsuqal</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/About/About.qml" line="112"/>
@@ -61,7 +61,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/About/About.qml" line="117"/>
         <source>复制</source>
-        <translation type="unfinished"></translation>
+        <translation>Nɣel</translation>
     </message>
 </context>
 <context>
@@ -78,7 +78,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="48"/>
         <source>加密</source>
-        <translation type="unfinished"></translation>
+        <translation>Awgelhen</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="60"/>
@@ -104,7 +104,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="174"/>
         <source>失败</source>
-        <translation type="unfinished"></translation>
+        <translation>Tuccḍa</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="89"/>
@@ -126,12 +126,12 @@
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="243"/>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="252"/>
         <source>文档</source>
-        <translation type="unfinished"></translation>
+        <translation>Isemliyen</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="245"/>
         <source>状态</source>
-        <translation type="unfinished"></translation>
+        <translation>Addad</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="248"/>
@@ -146,7 +146,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="249"/>
         <source>清空</source>
-        <translation type="unfinished"></translation>
+        <translation>Sfeḍ</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="166"/>
@@ -161,7 +161,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="246"/>
         <source>页数</source>
-        <translation type="unfinished"></translation>
+        <translation>Igburen</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="251"/>
@@ -171,12 +171,12 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="281"/>
         <source>设置</source>
-        <translation type="unfinished"></translation>
+        <translation>Iɣewwaren</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOC.qml" line="286"/>
         <source>记录</source>
-        <translation type="unfinished"></translation>
+        <translation>Amazray</translation>
     </message>
 </context>
 <context>
@@ -375,7 +375,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="144"/>
         <source>其它</source>
-        <translation type="unfinished"></translation>
+        <translation>Wiyyaḍ</translation>
     </message>
 </context>
 <context>
@@ -420,7 +420,7 @@
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="241"/>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="250"/>
         <source>图片</source>
-        <translation type="unfinished"></translation>
+        <translation>Tugna</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="243"/>
@@ -430,7 +430,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="244"/>
         <source>状态</source>
-        <translation type="unfinished"></translation>
+        <translation>Addad</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="246"/>
@@ -445,7 +445,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="247"/>
         <source>清空</source>
-        <translation type="unfinished"></translation>
+        <translation>Sfeḍ</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="249"/>
@@ -455,12 +455,12 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="279"/>
         <source>设置</source>
-        <translation type="unfinished"></translation>
+        <translation>Iɣewwaren</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="284"/>
         <source>记录</source>
-        <translation type="unfinished"></translation>
+        <translation>Amazray</translation>
     </message>
 </context>
 <context>
@@ -478,7 +478,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="25"/>
         <source>进入设置</source>
-        <translation type="unfinished"></translation>
+        <translation>Ldi iɣewwaren</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="36"/>
@@ -628,7 +628,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="121"/>
         <source>其它</source>
-        <translation type="unfinished"></translation>
+        <translation>Wiyyaḍ</translation>
     </message>
 </context>
 <context>
@@ -662,7 +662,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="486"/>
         <source>高级</source>
-        <translation type="unfinished"></translation>
+        <translation>Leqqayen</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/Configs.qml" line="487"/>
@@ -754,12 +754,12 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/GlobalConfigsPage/FontPanel.qml" line="107"/>
         <source>界面</source>
-        <translation type="unfinished"></translation>
+        <translation>Agrudem</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/GlobalConfigsPage/FontPanel.qml" line="115"/>
         <source>内容</source>
-        <translation type="unfinished"></translation>
+        <translation>Agbur</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/GlobalConfigsPage/FontPanel.qml" line="211"/>
@@ -784,7 +784,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="24"/>
         <source>桌面</source>
-        <translation type="unfinished"></translation>
+        <translation>Tanarit</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="32"/>
@@ -804,7 +804,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="56"/>
         <source>主题</source>
-        <translation type="unfinished"></translation>
+        <translation>Asentel</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="61"/>
@@ -814,7 +814,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="65"/>
         <source>字体</source>
-        <translation type="unfinished"></translation>
+        <translation>Tasefsit</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="68"/>
@@ -865,7 +865,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="129"/>
         <source>窗口</source>
-        <translation type="unfinished"></translation>
+        <translation>Asfaylu</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="133"/>
@@ -926,7 +926,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="183"/>
         <source>截图</source>
-        <translation type="unfinished"></translation>
+        <translation>Tuṭṭfa n ugdil</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="187"/>
@@ -952,7 +952,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="203"/>
         <source>服务</source>
-        <translation type="unfinished"></translation>
+        <translation>Amezlu</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="207"/>
@@ -999,17 +999,17 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="228"/>
         <source>端口</source>
-        <translation type="unfinished"></translation>
+        <translation>Tawwurt</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="242"/>
         <source>日志</source>
-        <translation type="unfinished"></translation>
+        <translation>Aɣmis</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="246"/>
         <source>操作</source>
-        <translation type="unfinished"></translation>
+        <translation>Tigawt</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="249"/>
@@ -1142,12 +1142,12 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/IconButtonBar.qml" line="32"/>
         <source>截图</source>
-        <translation type="unfinished"></translation>
+        <translation>Tuṭṭfa n ugdil</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/IconButtonBar.qml" line="33"/>
         <source>粘贴</source>
-        <translation type="unfinished"></translation>
+        <translation>Senṭeḍ</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/IconButtonBar.qml" line="34"/>
@@ -1191,7 +1191,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/IgnoreArea/IgnoreArea.qml" line="164"/>
         <source>清空</source>
-        <translation type="unfinished"></translation>
+        <translation>Sfeḍ</translation>
     </message>
 </context>
 <context>
@@ -1304,7 +1304,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/MarkdownView.qml" line="66"/>
         <source>链接</source>
-        <translation type="unfinished"></translation>
+        <translation>URL</translation>
     </message>
 </context>
 <context>
@@ -1312,12 +1312,12 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Popup_/MessageBox.qml" line="28"/>
         <source>取消</source>
-        <translation type="unfinished"></translation>
+        <translation>Semmet</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Popup_/MessageBox.qml" line="29"/>
         <source>确定</source>
-        <translation type="unfinished"></translation>
+        <translation>Ih</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Popup_/MessageBox.qml" line="38"/>
@@ -1332,7 +1332,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Popup_/MessageBox.qml" line="117"/>
         <source>复制</source>
-        <translation type="unfinished"></translation>
+        <translation>Nɣel</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Popup_/MessageBox.qml" line="122"/>
@@ -1355,7 +1355,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Popup_/MessageBoxWin.qml" line="113"/>
         <source>确定</source>
-        <translation type="unfinished"></translation>
+        <translation>Ih</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Popup_/MessageBoxWin.qml" line="149"/>
@@ -1429,7 +1429,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ModalLayer.qml" line="32"/>
         <source>返回</source>
-        <translation type="unfinished"></translation>
+        <translation>Uɣal</translation>
     </message>
 </context>
 <context>
@@ -1490,7 +1490,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="18"/>
         <source>操作</source>
-        <translation type="unfinished"></translation>
+        <translation>Tigawt</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="20"/>
@@ -1626,12 +1626,12 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="50"/>
         <source>全局设置</source>
-        <translation type="unfinished"></translation>
+        <translation>Iɣewwaren imuta</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="55"/>
         <source>关于</source>
-        <translation type="unfinished"></translation>
+        <translation>Ɣef</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="56"/>
@@ -1644,12 +1644,12 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Popup_/PopupManager.qml" line="12"/>
         <source>确认</source>
-        <translation type="unfinished"></translation>
+        <translation>Sentem</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Popup_/PopupManager.qml" line="13"/>
         <source>取消</source>
-        <translation type="unfinished"></translation>
+        <translation>Semmet</translation>
     </message>
 </context>
 <context>
@@ -1657,7 +1657,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="81"/>
         <source>加密</source>
-        <translation type="unfinished"></translation>
+        <translation>D awgelhan</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="148"/>
@@ -1726,7 +1726,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="403"/>
         <source>清空</source>
-        <translation type="unfinished"></translation>
+        <translation>Sfeḍ</translation>
     </message>
 </context>
 <context>
@@ -1734,7 +1734,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/PreviewImage.qml" line="59"/>
         <source>文字</source>
-        <translation type="unfinished"></translation>
+        <translation>Aḍris</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/PreviewImage.qml" line="60"/>
@@ -1810,7 +1810,7 @@
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRCode/QRCode.qml" line="368"/>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRCode/QRCode.qml" line="434"/>
         <source>设置</source>
-        <translation type="unfinished"></translation>
+        <translation>Iɣewwaren</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRCode/QRCode.qml" line="381"/>
@@ -1835,12 +1835,12 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRCode/QRCode.qml" line="439"/>
         <source>记录</source>
-        <translation type="unfinished"></translation>
+        <translation>Amazray</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRCode/QRCode.qml" line="444"/>
         <source>生成</source>
-        <translation type="unfinished"></translation>
+        <translation>Sarew</translation>
     </message>
 </context>
 <context>
@@ -1947,7 +1947,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRCode/QRCodeConfigs.qml" line="97"/>
         <source>类型</source>
-        <translation type="unfinished"></translation>
+        <translation>Amasal</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRCode/QRCodeConfigs.qml" line="98"/>
@@ -2000,12 +2000,12 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRCode/QRCodeConfigs.qml" line="162"/>
         <source>自动</source>
-        <translation type="unfinished"></translation>
+        <translation>Awurman</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRCode/QRCodeConfigs.qml" line="175"/>
         <source>其它</source>
-        <translation type="unfinished"></translation>
+        <translation>Wiyyaḍ</translation>
     </message>
 </context>
 <context>
@@ -2013,7 +2013,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ResultLayout/ResultTextContainer.qml" line="120"/>
         <source>复制</source>
-        <translation type="unfinished"></translation>
+        <translation>Nɣel</translation>
     </message>
 </context>
 <context>
@@ -2225,7 +2225,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="317"/>
         <source>文字</source>
-        <translation type="unfinished"></translation>
+        <translation>Aḍris</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="318"/>
@@ -2241,7 +2241,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="459"/>
         <source>设置</source>
-        <translation type="unfinished"></translation>
+        <translation>Iɣewwaren</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="464"/>
@@ -2361,7 +2361,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="18"/>
         <source>无</source>
-        <translation type="unfinished"></translation>
+        <translation>Ula yiwen</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="19"/>
