@@ -70,7 +70,8 @@
         <location filename="../../../UmiOCR-data/qt_res/qml/MainWindow/AsynFilesLoader.qml" line="9"/>
         <source>正在载入 %1 个文件：
 %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Chargement de %1 fichier(s):
+%2</translation>
     </message>
 </context>
 <context>
@@ -302,7 +303,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="96"/>
         <source>保存文件类型</source>
-        <translation type="unfinished"></translation>
+        <translation>Format du fichier de sortie</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="102"/>
@@ -367,7 +368,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="134"/>
         <source>忽略空白页</source>
-        <translation type="unfinished"></translation>
+        <translation>Ignorer les pages vides</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/BatchDOCConfigs.qml" line="135"/>
@@ -438,7 +439,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="246"/>
         <source>打开图片</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir l&apos;image</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="247"/>
@@ -453,7 +454,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="249"/>
         <source>请选择图片</source>
-        <translation type="unfinished"></translation>
+        <translation>Veuillez sélectionner une image</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCR.qml" line="279"/>
@@ -476,12 +477,12 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="23"/>
         <source>忽略区域</source>
-        <translation type="unfinished"></translation>
+        <translation>Ignorer la région</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="25"/>
         <source>进入设置</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir les réglages</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="36"/>
@@ -501,12 +502,12 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="45"/>
         <source>保存到</source>
-        <translation type="unfinished"></translation>
+        <translation>Enregistrer sous</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="47"/>
         <source>图片原目录</source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoire d&apos;origine</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="48"/>
@@ -527,7 +528,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="60"/>
         <source>文件名格式</source>
-        <translation type="unfinished"></translation>
+        <translation>Format du nom de fichier</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="61"/>
@@ -556,7 +557,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="73"/>
         <source>保存文件类型</source>
-        <translation type="unfinished"></translation>
+        <translation>Format du fichier de sortie</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchOCR/BatchOCRConfigs.qml" line="79"/>
@@ -757,12 +758,12 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/GlobalConfigsPage/FontPanel.qml" line="107"/>
         <source>界面</source>
-        <translation type="unfinished"></translation>
+        <translation>Interface</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/GlobalConfigsPage/FontPanel.qml" line="115"/>
         <source>内容</source>
-        <translation type="unfinished"></translation>
+        <translation>Contenu</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/GlobalConfigsPage/FontPanel.qml" line="211"/>
@@ -802,7 +803,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="51"/>
         <source>界面和外观</source>
-        <translation type="unfinished"></translation>
+        <translation>Interface et apparence</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="56"/>
@@ -812,7 +813,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="61"/>
         <source>切换主题</source>
-        <translation type="unfinished"></translation>
+        <translation>Basculer de thème</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="65"/>
@@ -822,12 +823,12 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="68"/>
         <source>修改字体</source>
-        <translation type="unfinished"></translation>
+        <translation>Changer de fonte</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="83"/>
         <source>界面与文字大小</source>
-        <translation type="unfinished"></translation>
+        <translation>Interface et taille de la fonte</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="99"/>
@@ -837,7 +838,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="103"/>
         <source>关闭硬件加速</source>
-        <translation type="unfinished"></translation>
+        <translation>Désactiver l&apos;accélération matérielle</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="107"/>
@@ -847,7 +848,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="113"/>
         <source>禁用美化效果</source>
-        <translation type="unfinished"></translation>
+        <translation>Désactiver les effets visuels</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="115"/>
@@ -883,7 +884,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="138"/>
         <source>窗口置顶</source>
-        <translation type="unfinished"></translation>
+        <translation>Fenêtre toujours au dessus</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="140"/>
@@ -960,7 +961,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="207"/>
         <source>允许HTTP服务</source>
-        <translation type="unfinished"></translation>
+        <translation>Autoriser le service HTTP</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="208"/>
@@ -1007,7 +1008,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="242"/>
         <source>日志</source>
-        <translation type="unfinished"></translation>
+        <translation>Journal</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="246"/>
@@ -1047,7 +1048,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="373"/>
         <source>成功添加快捷方式</source>
-        <translation type="unfinished"></translation>
+        <translation>Le raccourci a été ajouté avec succès</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="376"/>
@@ -1077,7 +1078,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="441"/>
         <source>端口号不合法</source>
-        <translation type="unfinished"></translation>
+        <translation>Numéro de port non valide</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/GlobalConfigs.qml" line="446"/>
@@ -1104,7 +1105,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/GlobalConfigsPage/GlobalConfigsPage.qml" line="21"/>
         <source>小贴士</source>
-        <translation type="unfinished"></translation>
+        <translation>Astuces</translation>
     </message>
 </context>
 <context>
@@ -1112,7 +1113,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabBar_/HTabBar.qml" line="47"/>
         <source>窗口置顶</source>
-        <translation type="unfinished"></translation>
+        <translation>Fenêtre toujours au dessus</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabBar_/HTabBar.qml" line="252"/>
@@ -1150,7 +1151,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/IconButtonBar.qml" line="33"/>
         <source>粘贴</source>
-        <translation type="unfinished"></translation>
+        <translation>Coller</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/IconButtonBar.qml" line="34"/>
@@ -1179,12 +1180,12 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/IgnoreArea/IgnoreArea.qml" line="143"/>
         <source>图像尺寸：</source>
-        <translation type="unfinished"></translation>
+        <translation>Taille de l&apos;image:</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/IgnoreArea/IgnoreArea.qml" line="150"/>
         <source>区域数量：</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre de régions&#xa0;:</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/IgnoreArea/IgnoreArea.qml" line="156"/>
@@ -1212,7 +1213,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageScale.qml" line="74"/>
         <source>打开图片</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir image</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageScale.qml" line="76"/>
@@ -1251,22 +1252,22 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageWithText.qml" line="276"/>
         <source>复制&#x3000;&#x3000;（Ctrl+C）</source>
-        <translation type="unfinished"></translation>
+        <translation>Copier (Ctrl+C)</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageWithText.qml" line="277"/>
         <source>全选&#x3000;&#x3000;（Ctrl+A）</source>
-        <translation type="unfinished"></translation>
+        <translation>Tout sélectionner (Ctrl+A)</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageWithText.qml" line="278"/>
         <source>复制图片（Ctrl+X）</source>
-        <translation type="unfinished"></translation>
+        <translation>Copier l&apos;image (Ctrl+X)</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageWithText.qml" line="279"/>
         <source>保存图片（Ctrl+S）</source>
-        <translation type="unfinished"></translation>
+        <translation>Enregistrer l&apos;image (Ctrl+S)</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageWithText.qml" line="280"/>
@@ -1281,7 +1282,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ImageViewer/ImageWithText.qml" line="282"/>
         <source>删除图片（Ctrl+D）</source>
-        <translation type="unfinished"></translation>
+        <translation>Supprimer l&apos;image (Ctrl+D)</translation>
     </message>
 </context>
 <context>
@@ -1289,7 +1290,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/MainWindow/MainWindowManager.qml" line="30"/>
         <source>欢迎使用 Umi-OCR</source>
-        <translation type="unfinished"></translation>
+        <translation>Bienvenue sur Umi-OCR</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/MainWindow/MainWindowManager.qml" line="30"/>
@@ -1302,12 +1303,12 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/MarkdownView.qml" line="60"/>
         <source>打开网页</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir la page web</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/MarkdownView.qml" line="66"/>
         <source>链接</source>
-        <translation type="unfinished"></translation>
+        <translation>URL</translation>
     </message>
 </context>
 <context>
@@ -1376,7 +1377,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/MissionCtrlPanel.qml" line="81"/>
         <source>开始任务</source>
-        <translation type="unfinished"></translation>
+        <translation>Démarrer la tâche</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/MissionCtrlPanel.qml" line="96"/>
@@ -1399,12 +1400,12 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/MissionCtrlPanel.qml" line="220"/>
         <source>正在运行</source>
-        <translation type="unfinished"></translation>
+        <translation>En cours d&apos;exécution</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/MissionCtrlPanel.qml" line="222"/>
         <source>正在保存</source>
-        <translation type="unfinished"></translation>
+        <translation>Entregistrement</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/MissionCtrlPanel.qml" line="226"/>
@@ -1419,7 +1420,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/MissionCtrlPanel.qml" line="235"/>
         <source>任务完成</source>
-        <translation type="unfinished"></translation>
+        <translation>Tâche terminée</translation>
     </message>
 </context>
 <context>
@@ -1432,7 +1433,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ModalLayer.qml" line="32"/>
         <source>返回</source>
-        <translation type="unfinished"></translation>
+        <translation>Retour</translation>
     </message>
 </context>
 <context>
@@ -1440,7 +1441,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/Navigation/Navigation.qml" line="23"/>
         <source>欢迎使用 Umi-OCR</source>
-        <translation type="unfinished"></translation>
+        <translation>Bienvenue sur Umi-OCR</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/Navigation/Navigation.qml" line="26"/>
@@ -1539,7 +1540,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="93"/>
         <source>当前API为【%1】</source>
-        <translation type="unfinished"></translation>
+        <translation>API actuelle&#xa0;: 【%1】</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="97"/>
@@ -1634,12 +1635,12 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="55"/>
         <source>关于</source>
-        <translation type="unfinished"></translation>
+        <translation>À propos</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="56"/>
         <source># 关于</source>
-        <translation type="unfinished"></translation>
+        <translation># À propos</translation>
     </message>
 </context>
 <context>
@@ -1675,7 +1676,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="159"/>
         <source>密码正确</source>
-        <translation type="unfinished"></translation>
+        <translation>Mot de passe correct</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="168"/>
@@ -1693,7 +1694,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="217"/>
         <source>密码：</source>
-        <translation type="unfinished"></translation>
+        <translation>Mot de passe&#xa0;:</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/BatchDOC/PreviewDoc.qml" line="251"/>
@@ -1802,7 +1803,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRCode/QRCode.qml" line="192"/>
         <source>扫描二维码</source>
-        <translation type="unfinished"></translation>
+        <translation>Scanner le code QR</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRCode/QRCode.qml" line="328"/>
@@ -1904,7 +1905,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRCode/QRCodeConfigs.qml" line="63"/>
         <source>转为灰度</source>
-        <translation type="unfinished"></translation>
+        <translation>Conversion en mode niveau de gris</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRCode/QRCodeConfigs.qml" line="64"/>
@@ -1930,7 +1931,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRCode/QRCodeConfigs.qml" line="82"/>
         <source>复制结果</source>
-        <translation type="unfinished"></translation>
+        <translation>Copier le résultat</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/QRCode/QRCodeConfigs.qml" line="86"/>
@@ -2065,7 +2066,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ResultLayout/ResultsTableView.qml" line="453"/>
         <source>复制&#x3000;&#x3000;&#x3000;&#x3000;（Ctrl+C）</source>
-        <translation type="unfinished"></translation>
+        <translation>Copier (Ctrl+C)</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Widgets/ResultLayout/ResultsTableView.qml" line="454"/>
@@ -2224,7 +2225,7 @@ Do you want to end the task and close the page?</translation>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="275"/>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="407"/>
         <source>停止任务</source>
-        <translation type="unfinished"></translation>
+        <translation>Arrêter la tâche</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOCR.qml" line="317"/>
@@ -2293,7 +2294,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOcrConfigs.qml" line="56"/>
         <source>复制结果</source>
-        <translation type="unfinished"></translation>
+        <translation>Copier le résultat</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/ScreenshotOCR/ScreenshotOcrConfigs.qml" line="60"/>
@@ -2324,12 +2325,12 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/MainWindow/SystemTray.qml" line="103"/>
         <source>打开主窗口</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir la fenêtre principale</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/MainWindow/SystemTray.qml" line="107"/>
         <source>退出 Umi-OCR</source>
-        <translation type="unfinished"></translation>
+        <translation>Quitter Umi-OCR</translation>
     </message>
 </context>
 <context>
@@ -2337,12 +2338,12 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Themes/Theme.qml" line="47"/>
         <source>珍珠白</source>
-        <translation type="unfinished"></translation>
+        <translation>Clair</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Themes/Theme.qml" line="62"/>
         <source>云墨黑</source>
-        <translation type="unfinished"></translation>
+        <translation>Sombre</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Themes/Theme.qml" line="109"/>
@@ -2360,7 +2361,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="15"/>
         <source>系统</source>
-        <translation type="unfinished"></translation>
+        <translation>Système</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="18"/>
@@ -2390,12 +2391,12 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="43"/>
         <source>取消%1</source>
-        <translation type="unfinished"></translation>
+        <translation>Annuler %1</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="48"/>
         <source>系统即将%1</source>
-        <translation type="unfinished"></translation>
+        <translation>Le système va %1</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="55"/>
@@ -2465,7 +2466,7 @@ Do you want to end the task and close the page?</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="77"/>
         <source>禁用所有通知</source>
-        <translation type="unfinished"></translation>
+        <translation>Désactiver toutes les notifications</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/Configs/UtilsConfigDicts.qml" line="79"/>
