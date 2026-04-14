@@ -156,4 +156,4 @@ class Api:
     # 用系统默认应用打开一个文件或目录，不堵塞当前进程
     @staticmethod
     def startfile(path):
-        os.startfile(path)
+        subprocess.Popen(["xdg-open", path])

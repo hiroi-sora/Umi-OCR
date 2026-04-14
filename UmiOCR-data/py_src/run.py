@@ -71,6 +71,9 @@ def runQml(engineAddImportPath):
     qtApp.setApplicationName(UmiAbout["name"])
     qtApp.setOrganizationName(UmiAbout["authors"][0]["name"])
     qtApp.setOrganizationDomain(UmiAbout["url"]["home"])
+    # macOS: 关闭所有窗口后不退出应用（保持 Dock 图标和菜单栏托盘运行）
+    if sys.platform == "darwin":
+        qtApp.setQuitOnLastWindowClosed(False)
 
     # ==================== 3. OpenGlES 兼容性检查 ====================
     app_opengl.checkOpengl()
@@ -111,6 +114,11 @@ def runQml(engineAddImportPath):
 
     # ==================== 6. 启动qml引擎 ====================
     engine = QQmlApplicationEngine()
+    # macOS: add Qt5 compat QML overlay FIRST so versioned imports (e.g. 1.3) resolve
+    if sys.platform == "darwin":
+        qt5compat = os.path.join(os.getcwd(), "qt5compat_qml")
+        if os.path.isdir(qt5compat):
+            engine.addImportPath(qt5compat)
     if engineAddImportPath:
         engine.addImportPath(engineAddImportPath)  # 相对路径重新导入包
     engine.addImageProvider("pixmapprovider", PixmapProvider)  # 注册图片提供器

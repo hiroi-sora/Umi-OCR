@@ -1,3 +1,5 @@
+import sys
+
 from pynput import keyboard
 from PySide2.QtCore import QMutex
 from time import time
@@ -126,6 +128,15 @@ class _HotkeyController:
     # 第一次注册热键时，启动监听
     def _start(self):
         if not self._listener:
+            # macOS 辅助功能权限检查
+            if sys.platform == "darwin":
+                if not Platform.checkAccessibilityPermission():
+                    logger.warning(
+                        "macOS 辅助功能权限未授权，全局快捷键可能不可用。"
+                        "请前往 系统设置 > 隐私与安全性 > 辅助功能 中授权本应用。\n"
+                        "Accessibility permission not granted. Global hotkeys may not work. "
+                        "Please grant access in System Settings > Privacy & Security > Accessibility."
+                    )
             self._listener = keyboard.Listener(
                 on_press=self._onPress, on_release=self._onRelease
             )

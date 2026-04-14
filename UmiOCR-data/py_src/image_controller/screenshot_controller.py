@@ -5,6 +5,7 @@
 from ..image_controller.image_provider import PixmapProvider  # 图片提供器
 from ..utils.file_finder import findFiles
 
+import sys
 import time
 from PySide2.QtGui import QGuiApplication, QClipboard, QImage, QPixmap  # 截图 剪贴板
 
@@ -25,6 +26,17 @@ class _ScreenshotControllerClass:
         """
         if wait > 0:
             time.sleep(wait)
+        # macOS 屏幕录制权限检查
+        if sys.platform == "darwin":
+            from ..platform import Platform
+
+            if not Platform.checkScreenRecordingPermission():
+                return [
+                    {
+                        "imgID": "[Error] macOS 需要屏幕录制权限。请前往 系统设置 > 隐私与安全性 > 屏幕录制 中授权本应用。\n"
+                        "[Error] Screen Recording permission required. Please grant access in System Settings > Privacy & Security > Screen Recording."
+                    }
+                ]
         try:
             grabList = []
             screensList = QGuiApplication.screens()

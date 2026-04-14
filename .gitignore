@@ -2,6 +2,7 @@
 命名规范.md
 Temp
 build
+dist
 PyStand_for_UmiOCR/build
 .vscode
 *.exe
@@ -29,6 +30,8 @@ UmiOCR-data/site-packages*
 UmiOCR-data/runtime
 UmiOCR-data/lib
 UmiOCR-data/plugins/*/
+# Track macOS plugin during development (will move to runtime repo later)
+!UmiOCR-data/plugins/darwin_RapidOCR-json/
 UmiOCR-data/temp
 UmiOCR-data/temp_doc
 # 允许运行环境压缩包
@@ -37,3 +40,6 @@ UmiOCR-data/temp_doc
 # 排除缓存
 **__pycache__**
 UmiOCR-data/i18n/_
+
+# macOS
+.DS_Store

@@ -30,22 +30,21 @@ SOFTWARE.
 
 
 """
-======================================================
-========== Umi-OCR Windows 运行环境初始化入口 ==========
-======================================================
+=============================================
+========== Umi-OCR 运行环境初始化入口 ==========
+=============================================
 
 说明：
-本文件负责 Windows + PyStand 运行环境的初始化，主要涉及：
+本文件负责运行环境的初始化，主要涉及：
 - 创建底层弹窗接口 os.MessageBox
 - 重定向标准输入输出流
 - 指定工作目录为 "/UmiOCR-data"
 - 添加Python库搜索目录 "site-packages"
 - 添加PySide2插件搜索目录 "PySide2/plugins"
 
-环境初始化后，调用正式入口 py_src/run.py 启动软件。
+支持平台：Windows (PyStand), Linux, macOS
 
-耗时分析：
-runtime/python.exe -X importtime main.py
+环境初始化后，调用正式入口 py_src/run.py 启动软件。
 """
 
 
@@ -66,22 +65,26 @@ def MessageBox(msg, type_="error"):
     elif type_ == "warning":
         info = "【警告】 Umi-OCR Warning"
     try:
-        # 通过 ctypes 发起弹窗
-        import ctypes
+        if sys.platform == "win32":
+            import ctypes
 
-        ctypes.windll.user32.MessageBoxW(None, str(msg), str(info), 0)
+            ctypes.windll.user32.MessageBoxW(None, str(msg), str(info), 0)
+        elif sys.platform == "darwin":
+            # macOS: 使用 osascript 显示弹窗
+            escaped = str(msg).replace("\\", "\\\\").replace('"', '\\"')
+            subprocess.Popen(
+                [
+                    "osascript",
+                    "-e",
+                    f'display dialog "{escaped}" with title "{info}" buttons {{"OK"}} default button "OK"',
+                ]
+            )
+        else:
+            # Linux 及其他: 打印到 stderr
+            print(f"{info}: {msg}", file=sys.stderr)
     except Exception:
-        # 部分系统，连ctypes也用不了。转为在新的控制台窗口中打印信息。
-        msg_cmd = (
-            msg.replace("^", "^^")
-            .replace("&", "^&")
-            .replace("<", "^<")
-            .replace(">", "^>")
-            .replace("|", "^|")
-            .replace("\n\n", "___")
-            .replace("\n", "___")
-        )
-        subprocess.Popen(["start", "cmd", "/k", f"echo {info}: {msg_cmd}"], shell=True)
+        # 最后防线：打印到 stderr
+        print(f"{info}: {msg}", file=sys.stderr)
     return 0
 
 
@@ -92,16 +95,23 @@ def initRuntimeEnvironment():
     """初始化运行环境"""
 
     # 尝试获取控制台的输出对象
-    try:
-        fd = os.open("CONOUT$", os.O_RDWR | os.O_BINARY)
-        fp = os.fdopen(fd, "w", encoding="utf-8")
-    except Exception as e:
-        fp = open(os.devnull, "w", encoding="utf-8")
-    # 输出流不存在时，重定向到控制台
-    if not sys.stdout:
-        sys.stdout = fp
-    if not sys.stderr:
-        sys.stderr = fp
+    if sys.platform == "win32":
+        # Windows: PyStand 环境下 stdout/stderr 可能为空，需要重定向到控制台
+        try:
+            fd = os.open("CONOUT$", os.O_RDWR | os.O_BINARY)
+            fp = os.fdopen(fd, "w", encoding="utf-8")
+        except Exception as e:
+            fp = open(os.devnull, "w", encoding="utf-8")
+        if not sys.stdout:
+            sys.stdout = fp
+        if not sys.stderr:
+            sys.stderr = fp
+    else:
+        # Unix (macOS/Linux): stdout/stderr 通常可用，仅在缺失时兜底
+        if not sys.stdout:
+            sys.stdout = open(os.devnull, "w", encoding="utf-8")
+        if not sys.stderr:
+            sys.stderr = open(os.devnull, "w", encoding="utf-8")
     # def except_hook(cls, exception, traceback):
     #     sys.__excepthook__(cls, exception, traceback)
     # sys.excepthook = except_hook
@@ -117,7 +127,11 @@ def initRuntimeEnvironment():
     # 初始化Qt搜索路径为相对路径，避免上层目录存在中文编码
     from PySide2.QtCore import QCoreApplication
 
-    QCoreApplication.addLibraryPath("./site-packages/PySide2/plugins")
+    if sys.platform == "darwin":
+        # macOS uses PySide6 via compatibility shim — plugins are at a different path
+        QCoreApplication.addLibraryPath("./site-packages/PySide6/Qt/plugins")
+    else:
+        QCoreApplication.addLibraryPath("./site-packages/PySide2/plugins")
 
 
 if __name__ == "__main__":
@@ -141,7 +155,11 @@ if __name__ == "__main__":
         # 启动正式入口
         from py_src.run import main
 
-        main(app_path=app_path, engineAddImportPath="./site-packages/PySide2/qml")
+        if sys.platform == "darwin":
+            qml_path = "./site-packages/PySide6/Qt/qml"
+        else:
+            qml_path = "./site-packages/PySide2/qml"
+        main(app_path=app_path, engineAddImportPath=qml_path)
     except Exception:
         err = traceback.format_exc()
         from py_src.imports.umi_log import logger, Logs_Dir

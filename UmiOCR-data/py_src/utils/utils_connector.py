@@ -5,6 +5,7 @@ from PySide2.QtCore import QObject, Slot
 
 from . import utils
 from . import file_finder  # 文件搜索器
+from . import ocr_installer  # OCR引擎安装器
 from ..platform import Platform  # 跨平台
 from .thread_pool import threadRun  # 异步执行函数
 
@@ -61,3 +62,14 @@ class UtilsConnector(QObject):
     @Slot("QVariant", result="QVariant")
     def QUrl2String(self, fileUrls):
         return utils.QUrl2String(fileUrls)
+
+    # 检查OCR引擎是否已安装
+    @Slot(result=bool)
+    def isOcrInstalled(self):
+        return ocr_installer.is_ocr_installed()
+
+    # 异步安装OCR引擎（通过 pubsub 事件返回进度和结果）
+    # 事件: "ocr_install_progress" (msg), "ocr_install_done" (success, msg)
+    @Slot()
+    def installOcrEngine(self):
+        threadRun(ocr_installer.install_ocr_engine)

@@ -112,7 +112,7 @@ class OutputPdfLayered(Output):
             page.insert_text(
                 point,
                 text,
-                fontsize,
+                fontsize=fontsize,
                 fontname="cjk",
                 rotate=protation,  # 文本角度设定
                 stroke_opacity=self.opacity,  # 描边透明度

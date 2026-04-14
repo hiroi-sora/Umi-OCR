@@ -322,6 +322,8 @@ Configs {
         if(configDict.ocr)
             ocrManager.init2()
         console.log("GlobalConfig 初始化全局配置完毕！")
+        // macOS: 检查OCR引擎是否已安装，未安装则提示下载
+        Qt.callLater(checkOcrInstall)
         // 延迟执行
         Qt.callLater(()=>{
             setQmlToCmd()  // 将qml模块字典传入cmd执行模块
@@ -363,6 +365,54 @@ Configs {
             if(pluginInfos.options.ocr)
                 ocrManager.init1(pluginInfos.options.ocr)
         }
+    }
+
+    // macOS: OCR引擎安装完成的回调（由 pubsub 事件 "ocr_install_done" 触发）
+    function onOcrInstallDone(success, msg) {
+        qmlapp.popup.hideMask("ocr_install")
+        qmlapp.pubSub.unsubscribe("ocr_install_done", gRoot, "onOcrInstallDone")
+        if (success) {
+            qmlapp.popup.message(qsTr("安装成功"), msg +
+                "\n\n" + qsTr("请重新启动应用以使用 OCR 功能。"), "")
+        } else {
+            qmlapp.popup.message(qsTr("安装失败"), msg, "error")
+        }
+    }
+
+    // macOS: 检查OCR引擎是否已安装
+    function checkOcrInstall() {
+        if (Qt.platform.os !== "osx") return
+        if (qmlapp.utilsConnector.isOcrInstalled()) return
+
+        // 订阅安装完成事件
+        qmlapp.pubSub.subscribe("ocr_install_done", gRoot, "onOcrInstallDone")
+
+        // 显示下载提示对话框
+        const msg = qsTr("OCR 识别引擎尚未安装，是否立即下载？") +
+            "\nOCR engine is not installed. Download now?" +
+            "\n\n" + qsTr("下载大小约 100 MB，安装后约占 400 MB。") +
+            "\nDownload: ~100 MB, installed: ~400 MB."
+
+        const argd = {
+            yesText: qsTr("立即下载"),
+            noText: qsTr("稍后再说"),
+        }
+        qmlapp.popup.dialog(
+            qsTr("安装 OCR 引擎"),
+            msg,
+            function(confirmed) {
+                if (confirmed) {
+                    qmlapp.popup.showMask(
+                        qsTr("正在下载并安装 OCR 引擎，请稍候...") +
+                        "\nDownloading OCR engine, please wait...",
+                        "ocr_install"
+                    )
+                    qmlapp.utilsConnector.installOcrEngine()
+                }
+            },
+            "",
+            argd
+        )
     }
 
     // 添加/删除快捷方式

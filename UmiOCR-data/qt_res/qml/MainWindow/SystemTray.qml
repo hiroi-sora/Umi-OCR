@@ -110,7 +110,9 @@ SystemTrayIcon {
     }
 
     onActivated: {
-        if(reason == SystemTrayIcon.DoubleClick)
+        // macOS 菜单栏图标惯例为单击打开，Windows/Linux 为双击
+        if(reason == SystemTrayIcon.DoubleClick ||
+           (reason == SystemTrayIcon.Trigger && Qt.platform.os === "osx"))
             qmlapp.mainWin.setVisibility(true) // 主窗可见
     }
 }

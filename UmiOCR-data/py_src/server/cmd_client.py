@@ -93,6 +93,18 @@ def _clip(text):
             finally:
                 os.unlink(temp_file_name)  # 删除临时文件
             print("\nSuccess copy to clipboard.")
+        elif os_type == "Darwin":
+            subprocess.run(
+                ["pbcopy"], input=text.encode("utf-8"), check=True
+            )
+            print("\nSuccess copy to clipboard.")
+        elif os_type == "Linux":
+            subprocess.run(
+                ["xclip", "-selection", "clipboard"],
+                input=text.encode("utf-8"),
+                check=True,
+            )
+            print("\nSuccess copy to clipboard.")
         else:
             print(f"[Error] clip unsupported OS: {os_type}")
     except Exception as e:

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleName</key>
+    <string>Umi-OCR</string>
+
+    <key>CFBundleDisplayName</key>
+    <string>Umi-OCR</string>
+
+    <key>CFBundleIdentifier</key>
+    <string>com.hiroi-sora.umi-ocr</string>
+
+    <key>CFBundleVersion</key>
+    <string>2.1.5</string>
+
+    <key>CFBundleShortVersionString</key>
+    <string>2.1.5</string>
+
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+
+    <key>CFBundleSignature</key>
+    <string>????</string>
+
+    <key>CFBundleExecutable</key>
+    <string>umi-ocr</string>
+
+    <key>CFBundleIconFile</key>
+    <string>umiocr</string>
+
+    <key>LSMinimumSystemVersion</key>
+    <string>12.0</string>
+
+    <key>NSHighResolutionCapable</key>
+    <true/>
+
+    <key>LSUIElement</key>
+    <false/>
+
+    <key>NSSupportsAutomaticGraphicsSwitching</key>
+    <true/>
+
+    <!-- Permission descriptions -->
+    <key>NSScreenCaptureUsageDescription</key>
+    <string>Umi-OCR needs screen recording permission to capture screenshots for OCR text recognition.</string>
+
+    <key>NSAppleEventsUsageDescription</key>
+    <string>Umi-OCR needs Accessibility permission to register global hotkeys for screenshot capture.</string>
+
+    <key>NSCameraUsageDescription</key>
+    <string>Umi-OCR does not use the camera.</string>
+
+    <!-- Supported file types for drag-and-drop -->
+    <key>CFBundleDocumentTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleTypeName</key>
+            <string>Image</string>
+            <key>CFBundleTypeRole</key>
+            <string>Viewer</string>
+            <key>LSItemContentTypes</key>
+            <array>
+                <string>public.image</string>
+            </array>
+        </dict>
+        <dict>
+            <key>CFBundleTypeName</key>
+            <string>PDF Document</string>
+            <key>CFBundleTypeRole</key>
+            <string>Viewer</string>
+            <key>LSItemContentTypes</key>
+            <array>
+                <string>com.adobe.pdf</string>
+            </array>
+        </dict>
+    </array>
+</dict>
+</plist>

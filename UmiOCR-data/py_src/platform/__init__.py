@@ -8,7 +8,7 @@ if _plat.startswith("win32"):
 elif _plat.startswith("linux"):
     from .linux.linux_api import Api as _Platform
 elif _plat.startswith("darwin"):
-    raise ImportError("尚未支持macos系统！")
+    from .darwin.darwin_api import Api as _Platform
 else:
     raise ImportError(f"未知系统：{_plat}")
 

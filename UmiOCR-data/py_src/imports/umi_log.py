@@ -29,6 +29,7 @@ import os
 import sys
 import json
 import logging
+import subprocess
 from datetime import datetime
 from logging.handlers import RotatingFileHandler
 from logging import LogRecord
@@ -267,4 +268,11 @@ def change_save_log_level(levelname):
 
 # 打开日志保存目录
 def open_logs_dir():
-    os.startfile(Logs_Dir)
+    import sys
+
+    if sys.platform == "win32":
+        os.startfile(Logs_Dir)
+    elif sys.platform == "darwin":
+        subprocess.Popen(["open", Logs_Dir])
+    else:
+        subprocess.Popen(["xdg-open", Logs_Dir])

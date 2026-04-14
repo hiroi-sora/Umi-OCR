@@ -1,0 +1,3 @@
+module QtQuick.Dialogs
+FileDialog 1.0 FileDialog.qml
+FileDialog 1.3 FileDialog.qml
