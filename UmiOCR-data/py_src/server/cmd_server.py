@@ -163,15 +163,31 @@ class _Actuator:
         help += f"Usage: Umi-OCR --call_qml {moduleName} --func [function name]\n"
         return help
 
+    # 验证函数名是否允许被外部调用
+    @staticmethod
+    def _validate_func_name(funcName):
+        """Block access to private/dunder methods and known dangerous builtins."""
+        if not isinstance(funcName, str):
+            return False
+        # Reject private and dunder methods (e.g. __init__, __class__, _internal)
+        if funcName.startswith("_"):
+            return False
+        return True
+
     # 调用一个模块函数。type: py / qml , thread: True 同步在子线程 / False 异步在主线程
     def call(self, moduleName, type_, funcName, thread, *paras):
         module, moduleName = self.getModuleFromName(moduleName, type_)
         typeStr = "Python" if type_ == "py" else "qml"
         if not module:
             return f'[Error] {typeStr} module "{moduleName}" non-existent.'
+        # Validate that the function name is safe to call externally
+        if not self._validate_func_name(funcName):
+            return f'[Error] func "{funcName}" is not allowed to be called externally. Only public functions (not starting with "_") are permitted.'
         func = getattr(module, funcName, None)
         if not func:
             return f'[Error] func "{funcName}" not exist in {typeStr} module "{moduleName}".'
+        if not callable(func):
+            return f'[Error] "{funcName}" in {typeStr} module "{moduleName}" is not callable.'
         try:
             if thread:  # 在子线程执行，返回结果
                 return func(*paras)
