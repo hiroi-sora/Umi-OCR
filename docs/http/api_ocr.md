@@ -125,7 +125,7 @@ URL：`/api/ocr/get_options`
   - `enum`：枚举。参数值必须为 `optionsList` 中某一项的 `[0]` 。
   - `boolean`：布尔。参数值必须为 `true/false` 。
   - `text`：字符串。
-  - `number`：数字。如何属性`isInt==true`，那么必须为整数。
+  - `number`：数字。如果属性`isInt==true`，那么必须为整数。
   - `var`：特殊类型，具体见 `toolTip` 的说明。
 
 所有参数都是可选的。任一参数不填时，将被设为默认值。
