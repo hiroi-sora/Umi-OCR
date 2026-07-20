@@ -48,17 +48,44 @@ def _umiocr():
     return UmiAbout["fullname"]
 
 
+# 判断 Host 请求头是否为回环地址。用于防御 DNS rebinding 攻击。
+# Validate the Host header points to a loopback address, to defend
+# against DNS rebinding attacks originating from a malicious web page
+# that resolves an attacker-controlled domain to 127.0.0.1.
+def _isLoopbackHostHeader():
+    host_header = request.environ.get("HTTP_HOST", "")
+    if not host_header:
+        # 没有 Host 头（HTTP/1.0 等），本地命令行客户端使用 urllib 会带该头。
+        # 缺失时保守拒绝，避免被利用。
+        return False
+    # 去除端口
+    hostname = host_header.rsplit(":", 1)[0].strip().lower()
+    # 去除 IPv6 括号
+    if hostname.startswith("[") and hostname.endswith("]"):
+        hostname = hostname[1:-1]
+    return hostname in ("127.0.0.1", "localhost", "::1")
+
+
 # 跨进程接收命令行参数
 @UmiWeb.route("/argv", method="POST")
 def _argv():
     addr = request.environ.get("REMOTE_ADDR")
-    if addr == "127.0.0.1":
-        data = request.json
-        res = CmdServer.execute(data)
-        return res
-    else:
+    if addr != "127.0.0.1":
         msg = "Unauthorized access. Only local requests are allowed.\n此接口只允许本机访问。"
         return HTTPResponse(msg, status=401)
+    # 校验 Host 头，防止 DNS rebinding 通过浏览器跨源调用 /argv 触发任意函数执行
+    # (CWE-94 / CWE-350) —— 该接口可通过 --call_py / --call_qml 调用任意已注册
+    # Python / QML 模块方法，若被恶意网页借助 DNS rebinding 命中，将造成本机
+    # 代码执行。此处仅接受回环主机名的 Host 头。
+    if not _isLoopbackHostHeader():
+        msg = (
+            "Forbidden: invalid Host header.\n"
+            "此接口只允许 Host 为 127.0.0.1 / localhost 的本地请求。"
+        )
+        return HTTPResponse(msg, status=403)
+    data = request.json
+    res = CmdServer.execute(data)
+    return res
 
 
 ocr_server.init(UmiWeb)
