@@ -1544,22 +1544,22 @@ Abbandona il contenuto non completato.</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="22"/>
         <source>应用修改</source>
-        <translation type="unfinished"></translation>
+        <translation>Applica le modifiche</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="26"/>
         <source>当前接口</source>
-        <translation type="unfinished"></translation>
+        <translation>Interfaccia corrente</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="53"/>
         <source>没有可用的 OCR 插件。</source>
-        <translation type="unfinished"></translation>
+        <translation>Nessun plugin OCR disponibile.</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="61"/>
         <source>OCR API 列表中不存在%1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 non è presente nell&apos;elenco delle API OCR</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="72"/>
