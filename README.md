@@ -1,4 +1,5 @@
 <p align="left">
+[![Featured on AppWK](https://appwk.cn/badges/featured-dark.svg)](https://appwk.cn/apps/umi-ocr)
     <span>
         <b>中文</b>
     </span>
