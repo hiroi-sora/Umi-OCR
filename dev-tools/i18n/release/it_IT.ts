@@ -1564,27 +1564,27 @@ Abbandona il contenuto non completato.</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="72"/>
         <source>当前已有%1组任务队列、共%2个任务正在执行。您可【强制终止任务】后修改API。</source>
-        <translation type="unfinished"></translation>
+        <translation>Sono già in esecuzione %1 code di attività, per un totale di %2 attività. Puoi modificare l&apos;API dopo aver selezionato 【Forza l&apos;interruzione dell&apos;attività】.</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="73"/>
         <source>无法修改 文字识别接口设置</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile modificare le impostazioni dell&apos;interfaccia di riconoscimento del testo</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="93"/>
         <source>文字识别接口应用成功</source>
-        <translation type="unfinished"></translation>
+        <translation>Impostazioni dell&apos;interfaccia di riconoscimento del testo applicate correttamente</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="93"/>
         <source>当前API为【%1】</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;API attuale è 【%1】</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="97"/>
         <source>文字识别接口应用失败</source>
-        <translation type="unfinished"></translation>
+        <translation>Applicazione delle impostazioni dell&apos;interfaccia di riconoscimento del testo non riuscita</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="106"/>
