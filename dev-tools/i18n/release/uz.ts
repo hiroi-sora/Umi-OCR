@@ -1564,27 +1564,27 @@ Tugallanmagan kontentdan voz kechish.</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="72"/>
         <source>当前已有%1组任务队列、共%2个任务正在执行。您可【强制终止任务】后修改API。</source>
-        <translation type="unfinished"></translation>
+        <translation>Hozirda jami %2 ta vazifa bajarilayotgan %1 ta vazifa navbati mavjud. 【Vazifani majburan to‘xtatish】ni tanlaganingizdan so‘ng API’ni o‘zgartirishingiz mumkin.</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="73"/>
         <source>无法修改 文字识别接口设置</source>
-        <translation type="unfinished"></translation>
+        <translation>Matnni aniqlash interfeysi sozlamalarini o‘zgartirib bo‘lmaydi</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="93"/>
         <source>文字识别接口应用成功</source>
-        <translation type="unfinished"></translation>
+        <translation>Matnni aniqlash interfeysi sozlamalari muvaffaqiyatli qo‘llandi</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="93"/>
         <source>当前API为【%1】</source>
-        <translation type="unfinished"></translation>
+        <translation>Joriy API: 【%1】</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="97"/>
         <source>文字识别接口应用失败</source>
-        <translation type="unfinished"></translation>
+        <translation>Matnni aniqlash interfeysi sozlamalarini qo‘llab bo‘lmadi</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="106"/>
