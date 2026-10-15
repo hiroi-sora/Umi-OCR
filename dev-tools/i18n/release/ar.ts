@@ -1564,27 +1564,27 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="72"/>
         <source>当前已有%1组任务队列、共%2个任务正在执行。您可【强制终止任务】后修改API。</source>
-        <translation type="unfinished"></translation>
+        <translation>توجد حاليًا %1 قوائم انتظار للمهام، تضم إجمالًا %2 مهمة قيد التنفيذ. يمكنك تعديل API بعد اختيار 【فرض إنهاء المهمة】.</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="73"/>
         <source>无法修改 文字识别接口设置</source>
-        <translation type="unfinished"></translation>
+        <translation>تعذّر تعديل إعدادات واجهة التعرّف على النص</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="93"/>
         <source>文字识别接口应用成功</source>
-        <translation type="unfinished"></translation>
+        <translation>تم تطبيق إعدادات واجهة التعرّف على النص بنجاح</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="93"/>
         <source>当前API为【%1】</source>
-        <translation type="unfinished"></translation>
+        <translation>واجهة API الحالية هي 【%1】</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="97"/>
         <source>文字识别接口应用失败</source>
-        <translation type="unfinished"></translation>
+        <translation>فشل تطبيق إعدادات واجهة التعرّف على النص</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="106"/>
