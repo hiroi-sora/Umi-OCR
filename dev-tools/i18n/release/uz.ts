@@ -1589,13 +1589,14 @@ Tugallanmagan kontentdan voz kechish.</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="106"/>
         <source>当前没有运行中的任务</source>
-        <translation type="unfinished"></translation>
+        <translation>Hozirda bajarilayotgan vazifalar yo‘q</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/ApiManager/OcrManager.qml" line="113"/>
         <source>当前已有%1组任务队列、共%2个任务正在执行。
 要强制终止全部任务吗？</source>
-        <translation type="unfinished"></translation>
+        <translation>Hozirda jami %2 ta vazifa bajarilayotgan %1 ta vazifa navbati mavjud.
+Barcha vazifalarni majburan to‘xtatmoqchimisiz?</translation>
     </message>
 </context>
 <context>
@@ -1603,12 +1604,12 @@ Tugallanmagan kontentdan voz kechish.</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="18"/>
         <source>新标签页</source>
-        <translation type="unfinished"></translation>
+        <translation>Yangi varaq</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="24"/>
         <source>截图OCR</source>
-        <translation type="unfinished"></translation>
+        <translation>Skrinshot OCR</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="25"/>
