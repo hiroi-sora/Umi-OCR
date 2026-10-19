@@ -1616,7 +1616,9 @@
         <source># 截图OCR
 
 屏幕截图，快捷转文字。也支持粘贴图片。</source>
-        <translation type="unfinished"></translation>
+        <translation>OCR ภาพหน้าจอ
+
+จับภาพหน้าจอแล้วแปลงเป็นข้อความอย่างรวดเร็ว รองรับการวางรูปภาพด้วย</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="51"/>
