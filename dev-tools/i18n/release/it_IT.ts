@@ -1616,7 +1616,9 @@ Vuoi forzare l&apos;interruzione di tutte le attività?</translation>
         <source># 截图OCR
 
 屏幕截图，快捷转文字。也支持粘贴图片。</source>
-        <translation type="unfinished"></translation>
+        <translation>OCR dello screenshot
+
+Screenshot dello schermo, conversione rapida in testo. Supporta anche l’incollamento di immagini.</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="51"/>
