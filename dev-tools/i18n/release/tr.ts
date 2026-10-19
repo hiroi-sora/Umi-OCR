@@ -1616,7 +1616,9 @@ Tüm görevleri zorla sonlandırmak istiyor musunuz?</translation>
         <source># 截图OCR
 
 屏幕截图，快捷转文字。也支持粘贴图片。</source>
-        <translation type="unfinished"></translation>
+        <translation>Ekran görüntüsü OCR
+
+Ekran görüntüsü alıp hızlıca metne dönüştürün. Görsel yapıştırma da desteklenir.</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="51"/>
