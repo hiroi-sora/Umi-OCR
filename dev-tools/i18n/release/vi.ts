@@ -1616,7 +1616,9 @@ Bạn có muốn buộc dừng tất cả tác vụ không?</translation>
         <source># 截图OCR
 
 屏幕截图，快捷转文字。也支持粘贴图片。</source>
-        <translation type="unfinished"></translation>
+        <translation>OCR ảnh chụp màn hình
+
+Chụp ảnh màn hình và chuyển nhanh thành văn bản. Cũng hỗ trợ dán hình ảnh.</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="51"/>
