@@ -1616,7 +1616,9 @@
         <source># 截图OCR
 
 屏幕截图，快捷转文字。也支持粘贴图片。</source>
-        <translation type="unfinished"></translation>
+        <translation>تشخیص متن تصویر صفحه
+
+از صفحهٔ نمایش عکس بگیرید و متن را به‌سرعت استخراج کنید. چسباندن تصویر نیز پشتیبانی می‌شود.</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="51"/>
