@@ -1616,7 +1616,9 @@ Barcha vazifalarni majburan to‘xtatmoqchimisiz?</translation>
         <source># 截图OCR
 
 屏幕截图，快捷转文字。也支持粘贴图片。</source>
-        <translation type="unfinished"></translation>
+        <translation>Skrinshot OCR
+
+Ekran tasvirini olib, tezda matnga aylantiring. Rasmni joylashtirish ham qo‘llab-quvvatlanadi.</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="51"/>
