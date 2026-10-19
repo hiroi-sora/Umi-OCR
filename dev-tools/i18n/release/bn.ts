@@ -1616,7 +1616,9 @@
         <source># 截图OCR
 
 屏幕截图，快捷转文字。也支持粘贴图片。</source>
-        <translation type="unfinished"></translation>
+        <translation>স্ক্রিনশট OCR
+
+স্ক্রিনশট নিয়ে দ্রুত টেক্সটে রূপান্তর করুন। ছবি পেস্ট করাও সমর্থিত।</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="51"/>
