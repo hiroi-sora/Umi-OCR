@@ -1625,12 +1625,14 @@ Screenshot dello schermo, conversione rapida in testo. Supporta anche l’incoll
         <source># 全局设置
 
 调节全局设置项，对所有页面生效。</source>
-        <translation type="unfinished"></translation>
+        <translation>Impostazioni globali
+
+Regola le impostazioni globali, applicandole a tutte le pagine.</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="30"/>
         <source>批量OCR</source>
-        <translation type="unfinished"></translation>
+        <translation>OCR in batch</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="31"/>
@@ -1639,7 +1641,11 @@ Screenshot dello schermo, conversione rapida in testo. Supporta anche l’incoll
 导入本地图片或文件夹，批量转换文字。
 
 支持格式：</source>
-        <translation type="unfinished"></translation>
+        <translation>OCR in batch
+
+Importa immagini locali o cartelle per convertire il testo in batch.
+
+Formati supportati:</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="37"/>
