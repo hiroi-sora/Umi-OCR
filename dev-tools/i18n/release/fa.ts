@@ -1625,12 +1625,14 @@
         <source># 全局设置
 
 调节全局设置项，对所有页面生效。</source>
-        <translation type="unfinished"></translation>
+        <translation>تنظیمات سراسری
+
+تنظیمات سراسری را تغییر دهید تا در همهٔ صفحات اعمال شوند.</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="30"/>
         <source>批量OCR</source>
-        <translation type="unfinished"></translation>
+        <translation>تشخیص متن دسته‌ای</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="31"/>
@@ -1639,7 +1641,11 @@
 导入本地图片或文件夹，批量转换文字。
 
 支持格式：</source>
-        <translation type="unfinished"></translation>
+        <translation>تشخیص متن دسته‌ای
+
+تصاویر محلی یا پوشه‌ها را وارد کنید تا متن آن‌ها به‌صورت دسته‌ای استخراج شود.
+
+قالب‌های پشتیبانی‌شده:</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="37"/>
