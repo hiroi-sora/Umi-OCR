@@ -1625,12 +1625,14 @@ Chụp ảnh màn hình và chuyển nhanh thành văn bản. Cũng hỗ trợ d
         <source># 全局设置
 
 调节全局设置项，对所有页面生效。</source>
-        <translation type="unfinished"></translation>
+        <translation>Cài đặt chung
+
+Điều chỉnh các cài đặt chung áp dụng cho tất cả các trang.</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="30"/>
         <source>批量OCR</source>
-        <translation type="unfinished"></translation>
+        <translation>OCR hàng loạt</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="31"/>
@@ -1639,7 +1641,11 @@ Chụp ảnh màn hình và chuyển nhanh thành văn bản. Cũng hỗ trợ d
 导入本地图片或文件夹，批量转换文字。
 
 支持格式：</source>
-        <translation type="unfinished"></translation>
+        <translation>OCR hàng loạt
+
+Nhập hình ảnh hoặc thư mục trên máy tính để chuyển đổi văn bản hàng loạt.
+
+Định dạng được hỗ trợ:</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="37"/>
