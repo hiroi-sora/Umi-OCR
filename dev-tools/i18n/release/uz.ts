@@ -1625,12 +1625,14 @@ Ekran tasvirini olib, tezda matnga aylantiring. Rasmni joylashtirish ham qo‘ll
         <source># 全局设置
 
 调节全局设置项，对所有页面生效。</source>
-        <translation type="unfinished"></translation>
+        <translation>Umumiy sozlamalar
+
+Barcha sahifalarda amal qiladigan umumiy sozlamalarni sozlang.</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="30"/>
         <source>批量OCR</source>
-        <translation type="unfinished"></translation>
+        <translation>Ommaviy OCR</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="31"/>
@@ -1639,7 +1641,11 @@ Ekran tasvirini olib, tezda matnga aylantiring. Rasmni joylashtirish ham qo‘ll
 导入本地图片或文件夹，批量转换文字。
 
 支持格式：</source>
-        <translation type="unfinished"></translation>
+        <translation>Ommaviy OCR
+
+Matnni ommaviy ravishda aylantirish uchun mahalliy rasmlar yoki papkalarni import qiling.
+
+Qo‘llab-quvvatlanadigan formatlar:</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="37"/>
