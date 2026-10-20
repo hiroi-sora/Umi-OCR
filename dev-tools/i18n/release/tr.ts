@@ -1625,12 +1625,14 @@ Ekran görüntüsü alıp hızlıca metne dönüştürün. Görsel yapıştırma
         <source># 全局设置
 
 调节全局设置项，对所有页面生效。</source>
-        <translation type="unfinished"></translation>
+        <translation>Genel ayarlar
+
+Tüm sayfalarda geçerli olacak genel ayarları düzenleyin.</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="30"/>
         <source>批量OCR</source>
-        <translation type="unfinished"></translation>
+        <translation>Toplu OCR</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="31"/>
@@ -1639,7 +1641,11 @@ Ekran görüntüsü alıp hızlıca metne dönüştürün. Görsel yapıştırma
 导入本地图片或文件夹，批量转换文字。
 
 支持格式：</source>
-        <translation type="unfinished"></translation>
+        <translation>Toplu OCR
+
+Metinleri toplu olarak dönüştürmek için yerel görselleri veya klasörleri içe aktarın.
+
+Desteklenen biçimler:</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="37"/>
