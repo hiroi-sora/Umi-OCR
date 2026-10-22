@@ -1650,7 +1650,7 @@ Nhập hình ảnh hoặc thư mục trên máy tính để chuyển đổi văn
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="37"/>
         <source>批量文档</source>
-        <translation type="unfinished"></translation>
+        <translation>Tài liệu hàng loạt</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="38"/>
@@ -1659,7 +1659,11 @@ Nhập hình ảnh hoặc thư mục trên máy tính để chuyển đổi văn
 批量导入文档，提取文字，或生成双层可搜索PDF。
 
 支持格式：</source>
-        <translation type="unfinished"></translation>
+        <translation>Nhận dạng tài liệu hàng loạt
+
+Nhập nhiều tài liệu cùng lúc để trích xuất văn bản hoặc tạo PDF hai lớp có thể tìm kiếm.
+
+Định dạng được hỗ trợ:</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="44"/>
