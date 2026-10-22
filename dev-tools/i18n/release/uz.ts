@@ -1650,7 +1650,7 @@ Qo‘llab-quvvatlanadigan formatlar:</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="37"/>
         <source>批量文档</source>
-        <translation type="unfinished"></translation>
+        <translation>Ommaviy hujjatlar</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="38"/>
@@ -1659,7 +1659,11 @@ Qo‘llab-quvvatlanadigan formatlar:</translation>
 批量导入文档，提取文字，或生成双层可搜索PDF。
 
 支持格式：</source>
-        <translation type="unfinished"></translation>
+        <translation>Hujjatlarni ommaviy tanib olish
+
+Matnni ajratib olish yoki ikki qatlamli, qidirish mumkin bo‘lgan PDF fayllarini yaratish uchun hujjatlarni ommaviy import qiling.
+
+Qo‘llab-quvvatlanadigan formatlar:</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="44"/>
