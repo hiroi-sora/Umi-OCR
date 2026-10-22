@@ -1650,7 +1650,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="37"/>
         <source>批量文档</source>
-        <translation type="unfinished"></translation>
+        <translation>เอกสารแบบกลุ่ม</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="38"/>
@@ -1659,7 +1659,11 @@
 批量导入文档，提取文字，或生成双层可搜索PDF。
 
 支持格式：</source>
-        <translation type="unfinished"></translation>
+        <translation>การรู้จำเอกสารแบบกลุ่ม
+
+นำเข้าเอกสารหลายไฟล์พร้อมกันเพื่อดึงข้อความหรือสร้างไฟล์ PDF สองชั้นที่ค้นหาข้อความได้
+
+รูปแบบที่รองรับ:</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="44"/>
