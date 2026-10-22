@@ -1650,7 +1650,7 @@ Formati supportati:</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="37"/>
         <source>批量文档</source>
-        <translation type="unfinished"></translation>
+        <translation>Documenti in batch</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="38"/>
@@ -1659,7 +1659,11 @@ Formati supportati:</translation>
 批量导入文档，提取文字，或生成双层可搜索PDF。
 
 支持格式：</source>
-        <translation type="unfinished"></translation>
+        <translation>Riconoscimento batch dei documenti
+
+Importa documenti in batch per estrarne il testo o generare PDF ricercabili a doppio livello.
+
+Formati supportati:</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="44"/>
