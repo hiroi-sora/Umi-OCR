@@ -1650,7 +1650,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="37"/>
         <source>批量文档</source>
-        <translation type="unfinished"></translation>
+        <translation>اسناد دسته‌ای</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="38"/>
@@ -1659,7 +1659,11 @@
 批量导入文档，提取文字，或生成双层可搜索PDF。
 
 支持格式：</source>
-        <translation type="unfinished"></translation>
+        <translation>تشخیص دسته‌ای اسناد
+
+اسناد را به‌صورت دسته‌ای وارد کنید تا متن آن‌ها استخراج شود یا فایل‌های PDF دو‌لایه و قابل جست‌وجو ایجاد شوند.
+
+قالب‌های پشتیبانی‌شده:</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="44"/>
