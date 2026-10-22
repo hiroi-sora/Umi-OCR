@@ -1650,7 +1650,7 @@ Desteklenen biçimler:</translation>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="37"/>
         <source>批量文档</source>
-        <translation type="unfinished"></translation>
+        <translation>Toplu belgeler</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="38"/>
@@ -1659,7 +1659,11 @@ Desteklenen biçimler:</translation>
 批量导入文档，提取文字，或生成双层可搜索PDF。
 
 支持格式：</source>
-        <translation type="unfinished"></translation>
+        <translation>Toplu belge tanıma
+
+Metinleri çıkarmak veya iki katmanlı, aranabilir PDF dosyaları oluşturmak için belgeleri toplu olarak içe aktarın.
+
+Desteklenen biçimler:</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="44"/>
