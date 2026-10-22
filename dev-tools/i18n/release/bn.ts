@@ -1650,7 +1650,7 @@
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="37"/>
         <source>批量文档</source>
-        <translation type="unfinished"></translation>
+        <translation>ব্যাচ ডকুমেন্ট</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="38"/>
@@ -1659,7 +1659,11 @@
 批量导入文档，提取文字，或生成双层可搜索PDF。
 
 支持格式：</source>
-        <translation type="unfinished"></translation>
+        <translation>ব্যাচ ডকুমেন্ট শনাক্তকরণ
+
+একসঙ্গে একাধিক ডকুমেন্ট আমদানি করে লেখা বের করুন অথবা দুই স্তরবিশিষ্ট অনুসন্ধানযোগ্য PDF তৈরি করুন।
+
+সমর্থিত ফরম্যাট:</translation>
     </message>
     <message>
         <location filename="../../../UmiOCR-data/qt_res/qml/TabPages/PagesManager.qml" line="44"/>
