@@ -3,12 +3,15 @@
 # ========================================
 
 from PySide2.QtGui import QClipboard  # 截图 剪贴板
+from threading import Event
 
 from umi_log import logger
 from .page import Page  # 页基类
 from ..image_controller.image_provider import PixmapProvider  # 图片提供器
 from ..mission.mission_ocr import MissionOCR  # 任务管理器
 from ..event_bus.pubsub_service import PubSubService  # 发布/订阅管理器
+from ..utils.thread_pool import threadRun
+from ..utils.translation import translate, TranslationError
 
 # 只要触发了截图/粘贴/图片识图任务，并结束任务（无论是否成功），都发送 <<ScreenshotOcrEnd>> 事件。
 
@@ -20,8 +23,31 @@ class ScreenshotOCR(Page):
         super().__init__(*args)
         self.msnDict = {}
         self.recentResult = []  # 缓存本轮任务的识别结果，提交给 <<ScreenshotOcrEnd>>
+        self._translationCancel = Event()
 
     # ========================= 【qml调用python】 =========================
+
+    # 异步翻译；每页只接收最后一次请求的结果。
+    def cancelTranslation(self):
+        self._translationCancel.set()
+
+    def translateText(self, requestID, text, source, target, provider, useCache=True):
+        self.cancelTranslation()
+        cancel = Event()
+        self._translationCancel = cancel
+
+        def run():
+            try:
+                result = translate(text, source, target, provider, cancel, use_cache=useCache)
+                error = ""
+            except TranslationError as exc:
+                result, error = "", str(exc)
+            except Exception:
+                result, error = "", "翻译失败，请稍后重试或切换服务。"
+            if not cancel.is_set():
+                self.callQmlInMain("onTranslationGet", requestID, result, error)
+
+        threadRun(run)
 
     # 对一个imgID进行OCR
     def ocrImgID(self, imgID, configDict):

@@ -7,6 +7,27 @@ import "../../Configs"
 
 Configs {
     category_: "ScreenshotOCR"
+    property bool translationEnabled: false
+    property string translationSource: "en"
+    property string translationTarget: "zh-CN"
+    property string translationProvider: "google"
+    signal translationOptionsChanged()
+    function languageName(code) {
+        if(code === "auto") return qsTr("自动检测")
+        for(let i = 0; i < translationLanguages.length; i++) {
+            if(translationLanguages[i][0] === code) return translationLanguages[i][1]
+        }
+        return code
+    }
+    property var translationLanguages: [
+        ["en", qsTr("英语")], ["zh-CN", qsTr("简体中文")],
+        ["zh-TW", qsTr("繁体中文")], ["ja", qsTr("日语")],
+        ["ko", qsTr("韩语")], ["fr", qsTr("法语")],
+        ["de", qsTr("德语")], ["es", qsTr("西班牙语")],
+        ["ru", qsTr("俄语")], ["pt", qsTr("葡萄牙语")],
+        ["it", qsTr("意大利语")], ["ar", qsTr("阿拉伯语")],
+        ["vi", qsTr("越南语")], ["th", qsTr("泰语")]
+    ]
 
     configDict: {
         // OCR参数
@@ -18,6 +39,35 @@ Configs {
             "type": "group",
 
             "parser": qmlapp.globalConfigs.utilsDicts.getTbpuParser(),
+        },
+
+        "translation": {
+            "title": qsTr("识别后翻译（联网）"),
+            "type": "group",
+            "enabled": {
+                "title": qsTr("启用翻译"),
+                "toolTip": qsTr("开启后将识别文字发送至所选在线翻译服务，在译文页显示结果。"),
+                "default": false,
+                "onChanged": (value) => { translationEnabled = value; translationOptionsChanged() },
+            },
+            "source": {
+                "title": qsTr("源语言"),
+                "default": "en",
+                "optionsList": [["auto", qsTr("自动检测")]].concat(translationLanguages),
+                "onChanged": (value) => { translationSource = value; translationOptionsChanged() },
+            },
+            "target": {
+                "title": qsTr("目标语言"),
+                "default": "zh-CN",
+                "optionsList": translationLanguages,
+                "onChanged": (value) => { translationTarget = value; translationOptionsChanged() },
+            },
+            "provider": {
+                "title": qsTr("免费翻译服务"),
+                "optionsList": [["google", "Google"], ["mymemory", "MyMemory"]],
+                "toolTip": qsTr("Google 免费端点需要可访问的网络；MyMemory 有每日免费额度且需指定源语言。"),
+                "onChanged": (value) => { translationProvider = value; translationOptionsChanged() },
+            },
         },
 
         "hotkey": {

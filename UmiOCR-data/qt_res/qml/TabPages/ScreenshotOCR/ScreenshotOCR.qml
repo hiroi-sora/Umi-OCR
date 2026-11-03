@@ -4,6 +4,7 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQml.Models 2.15
 
 import ".."
 import "../../Widgets"
@@ -15,6 +16,46 @@ TabPage {
     // 配置
     configsComp: ScreenshotOcrConfigs {}
     property string msnState: "none" // OCR任务状态， none run
+    property string originalText: ""
+    property string translatedText: ""
+    property string translationError: ""
+    property bool translating: false
+    property int translationRequest: 0
+    property bool translationUseCache: true
+
+    function refreshTranslation(force=false) {
+        translationRequest++
+        translationTimer.stop()
+        tabPage.callPy("cancelTranslation")
+        translating = false
+        translatedText = ""
+        translationError = ""
+        translationUseCache = !force
+        if(configsComp.translationEnabled && originalText.trim().length > 0) {
+            translating = true
+            translationTimer.restart()
+        }
+    }
+    function onTranslationGet(requestID, text, error) {
+        if(requestID !== translationRequest || !configsComp.translationEnabled) return
+        translating = false
+        translatedText = text
+        translationError = error
+    }
+    Connections {
+        target: configsComp
+        function onTranslationOptionsChanged() {
+            // Configuration callbacks also run while the page is being created.
+            Qt.callLater(tabPage.refreshTranslation)
+        }
+    }
+    Timer {
+        id: translationTimer
+        interval: 150
+        onTriggered: tabPage.callPy("translateText", translationRequest, originalText,
+            configsComp.translationSource, configsComp.translationTarget, configsComp.translationProvider,
+            translationUseCache)
+    }
 
     // ========================= 【逻辑】 =========================
 
@@ -155,6 +196,8 @@ TabPage {
     }
     // 取消订阅事件
     function eventUnsub() {
+        translationTimer.stop()
+        tabPage.callPy("cancelTranslation")
         qmlapp.pubSub.unsubscribeGroup(ctrlKey)
         qmlapp.systemTray.delMenuItem("<<screenshot>>")
         qmlapp.systemTray.delMenuItem("<<paste>>")
@@ -171,6 +214,8 @@ TabPage {
     function onOcrGet(res, imgID="", imgPath="") {
         // 添加到结果
         const resText = resultsTableView.addOcrResult(res)
+        originalText = res.code === 100 ? resText : ""
+        refreshTranslation()
         if(imgID) // 图片类型
             imageText.showImgID(imgID)
         else if(imgPath) // 地址类型
@@ -179,6 +224,8 @@ TabPage {
         // 若tabPanel面板的下标没有变化过，则切换到记录页
         if(tabPanel.indexChangeNum < 2)
             tabPanel.currentIndex = 1
+        if(configsComp.translationEnabled && originalText.length > 0)
+            tabPanel.currentIndex = 2
         // 复制到剪贴板
         const copy = configsComp.getValue("action.copy")
         if(copy && resText!="")
@@ -324,17 +371,87 @@ TabPage {
                 anchors.right: parent.right
                 anchors.margins: size_.spacing
                 anchors.bottomMargin: 0
-                height: size_.line * 1.5
+                property bool twoRows: width < dLeftTopL.width + dLeftTopR.width + size_.smallSpacing
+                height: size_.line * 1.5 * (twoRows ? 2 : 1) + (twoRows ? size_.smallSpacing : 0)
                 clip: true
 
                 // 靠右
                 Row {
                     id: dLeftTopR
                     anchors.top: parent.top
+                    anchors.topMargin: dLeftTop.twoRows ? size_.line * 1.5 + size_.smallSpacing : 0
                     anchors.right: parent.right
                     anchors.bottom: parent.bottom
                     spacing: size_.smallSpacing
 
+                    CheckButton {
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        text_: qsTr("翻译")
+                        checked: configsComp.translationEnabled
+                        enabledAnime: true
+                        toolTip: qsTr("识别后翻译；开启后将文字发送到在线服务。右侧箭头可选语言。")
+                        onClicked: {
+                            configsComp.setValue("translation.enabled", checked, true, true)
+                            if(checked) tabPanel.currentIndex = 2
+                        }
+                    }
+                    Button_ {
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        text_: "▾"
+                        width: height * 0.8
+                        toolTip: qsTr("翻译语言与服务")
+                        onClicked: translationMenu.popup()
+                        Menu {
+                            id: translationMenu
+                            Menu {
+                                id: sourceLanguageMenu
+                                title: qsTr("源语言")
+                                Instantiator {
+                                    model: [["auto", qsTr("自动检测")]].concat(configsComp.translationLanguages)
+                                    delegate: MenuItem {
+                                        text: modelData[1]
+                                        checkable: true
+                                        checked: configsComp.translationSource === modelData[0]
+                                        onTriggered: configsComp.setValue("translation.source", modelData[0], true, true)
+                                    }
+                                    onObjectAdded: sourceLanguageMenu.insertItem(index, object)
+                                    onObjectRemoved: sourceLanguageMenu.removeItem(object)
+                                }
+                            }
+                            Menu {
+                                id: targetLanguageMenu
+                                title: qsTr("目标语言")
+                                Instantiator {
+                                    model: configsComp.translationLanguages
+                                    delegate: MenuItem {
+                                        text: modelData[1]
+                                        checkable: true
+                                        checked: configsComp.translationTarget === modelData[0]
+                                        onTriggered: configsComp.setValue("translation.target", modelData[0], true, true)
+                                    }
+                                    onObjectAdded: targetLanguageMenu.insertItem(index, object)
+                                    onObjectRemoved: targetLanguageMenu.removeItem(object)
+                                }
+                            }
+                            Menu {
+                                title: qsTr("翻译服务")
+                                MenuItem {
+                                    text: "Google"
+                                    checkable: true
+                                    checked: configsComp.translationProvider === "google"
+                                    onTriggered: configsComp.setValue("translation.provider", "google", true, true)
+                                }
+                                MenuItem {
+                                    text: "MyMemory"
+                                    checkable: true
+                                    checked: configsComp.translationProvider === "mymemory"
+                                    onTriggered: configsComp.setValue("translation.provider", "mymemory", true, true)
+                                }
+                            }
+                        }
+                    }
                     // 显示文字
                     CheckButton {
                         anchors.top: parent.top
@@ -346,6 +463,7 @@ TabPage {
                         onCheckedChanged: imageText.showOverlay = checked
                     }
                     IconButtonBar {
+                        visible: dLeftTop.width >= size_.line * 14
                         anchors.top: parent.top
                         anchors.bottom: parent.bottom
                         btnList: [
@@ -373,13 +491,14 @@ TabPage {
                     }
                     // 百分比显示
                     Text_ {
+                        visible: dLeftTop.width >= size_.line * 18
                         anchors.top: parent.top
                         anchors.bottom: parent.bottom
                         verticalAlignment: Text.AlignVCenter
                         horizontalAlignment: Text.AlignRight
                         text: (imageText.scale*100).toFixed(0) + "%"
                         color: theme.subTextColor
-                        width: size_.line * 2.5
+                        width: visible ? size_.line * 2.5 : 0
                     }
                 }
 
@@ -387,7 +506,7 @@ TabPage {
                 Rectangle { // 背景
                     anchors.left: parent.left
                     anchors.top: parent.top
-                    anchors.bottom: parent.bottom
+                    height: size_.line * 1.5
                     width: dLeftTopL.width
                     color: theme.bgColor
                     Rectangle {
@@ -399,7 +518,7 @@ TabPage {
                     id: dLeftTopL
                     anchors.left: parent.left
                     anchors.top: parent.top
-                    anchors.bottom: parent.bottom
+                    height: size_.line * 1.5
                     spacing: size_.smallSpacing
 
                     IconButtonBar {
@@ -487,6 +606,21 @@ TabPage {
                     visible: false
                 }
 
+                TranslationResult {
+                    id: translationResult
+                    anchors.fill: parent
+                    visible: false
+                    original: tabPage.originalText
+                    translated: tabPage.translatedText
+                    errorText: tabPage.translationError
+                    busy: tabPage.translating
+                    translationEnabled: configsComp.translationEnabled
+                    languageSummary: configsComp.languageName(configsComp.translationSource)
+                        + " → " + configsComp.languageName(configsComp.translationTarget)
+                        + " · " + (configsComp.translationProvider === "google" ? "Google" : "MyMemory")
+                    onRetry: tabPage.refreshTranslation(true)
+                }
+
                 tabsModel: [
                     {
                         "key": "configs",
@@ -497,6 +631,11 @@ TabPage {
                         "key": "ocrResult",
                         "title": qsTr("记录"),
                         "component": resultsTableView,
+                    },
+                    {
+                        "key": "translation",
+                        "title": qsTr("译文"),
+                        "component": translationResult,
                     },
                 ]
             }

@@ -1,0 +1,30 @@
+name: Translation adapters
+
+on:
+  push:
+    paths:
+      - UmiOCR-data/py_src/utils/translation.py
+      - tests/test_translation.py
+      - .github/workflows/translation-tests.yml
+  pull_request:
+    paths:
+      - UmiOCR-data/py_src/utils/translation.py
+      - tests/test_translation.py
+      - .github/workflows/translation-tests.yml
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ['3.8', '3.12']
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m unittest discover -s tests -v
